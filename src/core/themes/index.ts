@@ -46,4 +46,36 @@ export const theme = createTheme({
         light: '#CCCCCC'
     }
   },
+  typography: {
+    fontFamily: 'Open Sans, sans-serif',
+    h1: {
+      fontWeight: 700, // Bold
+      fontStyle: 'normal',
+      fontSize: 80
+    },
+    h2: {
+      fontWeight: 600, // SemiBold
+      fontStyle: 'normal',
+    },
+    body1: {
+      fontWeight: 400, // Regular
+      fontStyle: 'normal',
+    },
+    body2: {
+      fontWeight: 500, // Medium
+      fontStyle: 'normal',
+    },
+    subtitle1: {
+      fontWeight: 300, // Light
+      fontStyle: 'normal',
+    },
+    subtitle2: {
+      fontWeight: 300, // LightItalic
+      fontStyle: 'italic',
+    },
+    button: {
+      fontWeight: 600, // SemiBold
+      textTransform: 'none', // Evita que los botones estén en mayúsculas
+    },
+  },
 });

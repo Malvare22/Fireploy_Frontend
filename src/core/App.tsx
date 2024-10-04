@@ -1,8 +1,8 @@
 import { RouterProvider } from "react-router-dom"
 import { router } from "./router/router"
-import './fonts/fonts.css'
 import { ThemeProvider } from "@emotion/react"
 import { theme } from "./themes"
+import './fonts/Open Sans/fonts.css'
 
 function App() {
 

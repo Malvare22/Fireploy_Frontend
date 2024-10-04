@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 export default function Test() {
   return (
@@ -10,7 +10,8 @@ export default function Test() {
       justifyContent: 'center'
 
     }}>
-        Hola mundo
+       <Typography variant="h1">Test</Typography>
+       <h1>Test</h1>
     </Box>
   )
 }
