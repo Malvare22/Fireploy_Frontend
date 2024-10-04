@@ -1,8 +1,12 @@
+import { Box } from "@mui/material";
+
 export default function Test() {
   return (
-    <div style={{
+    <Box sx={{
+      border: 'black 1px solid',
+
     }}>
-      Hola mundo
-    </div>
+      
+    </Box>
   )
 }
