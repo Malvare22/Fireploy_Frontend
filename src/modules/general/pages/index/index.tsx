@@ -5,12 +5,21 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import LogoFireploy from '../../assets/LogoFireploy.png'
 
 export default function Test() {
-  return (<>
-      <Box sx={styles.container}>
+  return (<Box sx={styles.container}>
+      <Box sx={styles.imgContainer}>
+        <Box sx={styles.polygon}></Box>
+        <Box sx={styles.img}>
+          <img style={{
+            'width': '400px'
+          }} src={LogoFireploy}></img>
+        </Box>
+      </Box>
+      <Box sx={styles.formContainer}>
+        
 
         <Typography variant="h1" color="white" sx={styles.title}>{LoginLabel.title}</Typography>
 
-        <Box sx={styles.formContainer}>
+        <Box sx={styles.form}>
           <Typography variant="h6">{LoginLabel.email}</Typography>
           <Typography variant="h6"><Input sx={styles.input}></Input></Typography>
           <Typography variant="h6">{LoginLabel.password}</Typography>
@@ -25,11 +34,7 @@ export default function Test() {
         </Box>
 
       </Box>
-      <Box>
-        <Box>
-          <img src={logoFireploy}></img>
-        </Box>
+      
       </Box>
-      </>
   )
 }

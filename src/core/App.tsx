@@ -3,6 +3,7 @@ import { router } from "./router/router"
 import { ThemeProvider } from "@emotion/react"
 import { theme } from "./themes"
 import './fonts/Open Sans/fonts.css'
+import './app.css'
 
 function App() {
 

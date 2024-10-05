@@ -1,16 +1,20 @@
 import { SxProps } from "@mui/material";
 
-export const styles : Record<'input' | 'container' | 'footer' | 'button' | 'title' | 'formContainer', SxProps> = {
+export const styles : Record<'input' | 'container' | 'footer' | 'button' | 'title' | 'form' | 'formContainer' | 'polygon' | 'imgContainer' | 'img', SxProps> = {
     input: {
         backgroundColor: 'white',
         width: '100%',
         // fontSize: 14
     },
     container: {
-        padding: 6,
-        backgroundColor: 'customBlue.main',
-        color: 'white',
-        width: '30%'
+        display: {md: 'flex'},
+        justifyContent: 'center',
+        alignItems: 'center',
+        border: '1px solid black',
+        height: '90vh',
+        backgroundColor: 'secondary.light'
+        // width: '100vw',
+        // alignItems: 'center'
     },
     footer:{
         display: 'flex',
@@ -18,19 +22,59 @@ export const styles : Record<'input' | 'container' | 'footer' | 'button' | 'titl
         justifyContent: 'center',
         alignItems: 'center',
         '> *':{
-            margin: 0.5
-        }
+            marginBottom: 2
+        },
+        marginBottom: 4
     },
     button: {
         borderRadius: '50px'
     },
     title: {
+        marginTop: 4,
         textAlign: 'center'
     },
-    formContainer: {
-        margin: 1,
+    form: {
+        padding: 4,
         '> *':{
-            margin: 0.5
+            marginTop: 2
         }
+    },
+    formContainer:{
+        backgroundColor: 'customBlue.main',
+        color: 'white',
+        height: {md : '90%'},
+        width: {xs: '100%', md: '35%'},
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between'
+    },
+    imgContainer:{
+        position: 'relative',
+        display: {xs: 'none', md: 'flex'},
+        visibility: {xs: 'hidden', md: 'visible'},
+        alignContent: 'center',
+        justifyContent: 'center',
+        margin: '6%',
+    },
+
+    polygon: {
+        
+        backgroundColor: 'secondary.main',
+        clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)',
+        width: '500px',
+        height: '450px',
+        justifyContent: 'center',
+        alignItems: 'center',
+        animation: 'girar 18s linear infinite',
+
+    },
+    img: {
+        
+        position: 'absolute', // Hace que el contenido esté en la misma posición
+        top: '50%', // Centra el contenido verticalmente
+        left: '50%', // Centra el contenido horizontalmente
+        transform: 'translate(-50%, -50%)', // Ajusta la posición para centrar
+        zIndex: 1, // Asegura que el contenido esté encima
+        
     }
 } 
