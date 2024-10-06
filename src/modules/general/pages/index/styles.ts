@@ -1,6 +1,6 @@
 import { SxProps } from "@mui/material";
 
-export const styles : Record<'input' | 'container' | 'footer' | 'button' | 'title' | 'form' | 'formContainer' | 'polygon' | 'imgContainer' | 'img', SxProps> = {
+export const styles : Record<'input' | 'container' | 'footer' | 'button' | 'title' | 'form' | 'formContainer' | 'polygon' | 'imgContainer' | 'img' | 'googleButton' | 'buttonsContainer', SxProps> = {
     input: {
         backgroundColor: 'white',
         width: '100%',
@@ -27,7 +27,14 @@ export const styles : Record<'input' | 'container' | 'footer' | 'button' | 'titl
         marginBottom: 4
     },
     button: {
-        borderRadius: '50px'
+        borderRadius: '50px',
+        height: '50px',
+        width: '200px'
+    },
+    googleButton: {
+        borderRadius: '50px',
+        backgroundColor: 'white',
+        height: '50px'
     },
     title: {
         marginTop: 4,
@@ -36,8 +43,18 @@ export const styles : Record<'input' | 'container' | 'footer' | 'button' | 'titl
     form: {
         padding: 4,
         '> *':{
-            marginTop: 2
+            marginBottom: 2.5
         }
+    },
+    buttonsContainer: {
+        textAlign: 'center',
+        display: {md: 'flex'},
+        justifyContent: 'center',
+        alignContent: 'center',
+        '> *': {
+            margin: 2
+        },
+        marginTop: 2
     },
     formContainer:{
         backgroundColor: 'customBlue.main',
