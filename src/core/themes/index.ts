@@ -57,6 +57,10 @@ export const theme = createTheme({
       fontWeight: 600, // SemiBold
       fontStyle: 'normal',
     },
+    h5: {
+      fontWeight: 600, // SemiBold
+      fontStyle: 'normal',
+    },
     body1: {
       fontWeight: 400, // Regular
       fontStyle: 'normal',
