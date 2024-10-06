@@ -23,10 +23,10 @@ export default function Test() {
         <Typography variant="h1" color="white" sx={styles.title}>{LoginLabel.title}</Typography>
 
         <Box sx={styles.form}>
-          <Typography variant="h6">{LoginLabel.email}</Typography>
-          <Typography variant="h6"><Input sx={styles.input}></Input></Typography>
-          <Typography variant="h6">{LoginLabel.password}</Typography>
-          <Typography variant="h6"><Input sx={styles.input}></Input></Typography>
+          <Typography variant="h6" sx={{marginTop: 2}}>{LoginLabel.email}</Typography>
+          <Typography variant="h6" sx={{marginTop: 2}}><Input sx={styles.input}></Input></Typography>
+          <Typography variant="h6" sx={{marginTop: 2}}>{LoginLabel.password}</Typography>
+          <Typography variant="h6" sx={{marginTop: 2}}><Input sx={styles.input}></Input></Typography>
           <Box sx={styles.buttonsContainer}>
             <Button startIcon={<GoogleIcon/>} sx={styles.googleButton} variant="contained">{LoginLabel.googleText}</Button>
             <Button sx={styles.button} endIcon={<ArrowForwardIosIcon/>} variant="contained" color="error">{LoginLabel.startSession}</Button>
@@ -42,7 +42,6 @@ export default function Test() {
       </Box>
       
       </Box>
-      <Footer></Footer>
       
       </>
   )

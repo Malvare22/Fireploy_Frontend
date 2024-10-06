@@ -11,7 +11,7 @@ export const styles : Record<'input' | 'container' | 'footer' | 'button' | 'titl
         justifyContent: 'center',
         alignItems: 'center',
         border: '1px solid black',
-        height: '90vh',
+        height: {md: '100vh'},
         backgroundColor: 'secondary.light'
         // width: '100vw',
         // alignItems: 'center'
@@ -29,7 +29,8 @@ export const styles : Record<'input' | 'container' | 'footer' | 'button' | 'titl
     button: {
         borderRadius: '50px',
         height: '50px',
-        width: '200px'
+        width: '200px',
+        marginLeft: 2
     },
     googleButton: {
         borderRadius: '50px',
@@ -42,24 +43,19 @@ export const styles : Record<'input' | 'container' | 'footer' | 'button' | 'titl
     },
     form: {
         padding: 4,
-        '> *':{
-            marginBottom: 2.5
-        }
     },
     buttonsContainer: {
         textAlign: 'center',
         display: {md: 'flex'},
         justifyContent: 'center',
         alignContent: 'center',
-        '> *': {
-            margin: 2
-        },
-        marginTop: 2
+        marginTop: 4
+        
     },
     formContainer:{
         backgroundColor: 'customBlue.main',
         color: 'white',
-        height: {md : '90%'},
+        height: {xs: '100vh', md : '90%'},
         width: {xs: '100%', md: '35%'},
         display: 'flex',
         flexDirection: 'column',

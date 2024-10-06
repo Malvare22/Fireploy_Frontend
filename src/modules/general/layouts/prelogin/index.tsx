@@ -1,18 +1,16 @@
 import { Box, Grid2 as Grid } from "@mui/material"
+import Footer from "../../components/footer"
+import React from "react"
+import { styles } from "./styles"
 
-function PreLogin() {
+function PreLogin({children} : {children: React.ReactNode}) {
   return (
-    <Grid container>
-      <Grid size={4}>
-
-      </Grid>
-      <Grid size={4}>
-
-      </Grid>
-      <Grid size={4}>
-
-      </Grid>
-    </Grid>
+    <>
+      <Box sx={styles.container}>
+        {children}
+      </Box>
+      <Footer></Footer>
+    </>
   )
 }
 
