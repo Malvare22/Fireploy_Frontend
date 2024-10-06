@@ -4,7 +4,7 @@ export const styles : Record<'container' | 'colum', SxProps> = {
     container: {
         backgroundColor: 'customBlue.main',
         color: 'white',
-        height: {md: '200px'},
+        height: {md: '240px'},
         padding: {
             xs: 4
         },
