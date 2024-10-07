@@ -47,4 +47,6 @@ export const registerSchema = z.object(
     }
 );
 
+export const RegisterNotification = ['Error al registrar al usuario', 'Usuario registrado con éxito'];
+
 export type RegisterSchemaType = z.infer<typeof registerSchema>;
