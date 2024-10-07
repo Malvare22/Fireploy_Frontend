@@ -1,13 +1,27 @@
-import { Box, Button, Card, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, FormControl, MenuItem, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { styles } from './styles';
 import InfoIcon from '@mui/icons-material/Info';
 import { RegisterLabel } from '../../enums';
-import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { RegisterSchemaType, registerSchema } from '../../utils/validations/registerSchema';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { mappedGenres } from '../../utils/validations/genre';
 
 function Register() {
 
   const nT = 6;
+
+  const {register, handleSubmit, formState: {errors}} = useForm<RegisterSchemaType>({
+    resolver: zodResolver(registerSchema)
+  });
+
+  const genreOptions = Object.entries(mappedGenres).map(([key, value], i) => (<MenuItem key={i} value={key}>{value}</MenuItem>))
+
+  const onSend = () => {
+    
+  }
 
   return (
     <Box sx={{
@@ -23,18 +37,20 @@ function Register() {
           width: '90%',
           backgroundColor: 'primary.light'
         }}>
+          <form onSubmit={handleSubmit(data => console.log(data))}>
           <Grid container sx={{ height: '100%', padding: 4 }}>
 
             <Grid item xs={12} md={7}> 
 
-              <Grid container alignContent={'center'} alignItems={'center'} sx={{paddingRight: {md: 12}}} >
+              <Grid container alignContent={'center'} sx={{paddingRight: {md: 12}}} >
 
                 {/* Fila */}
                 <Grid item md={5} xs={12}>
                   <Typography variant='label'>{RegisterLabel.name}</Typography>
                 </Grid>
                 <Grid item md={7} xs={12} >
-                  <TextField variant='outlined' sx={styles.input}></TextField>
+                  <TextField variant='outlined' sx={styles.input} {...register('name')}></TextField>
+                  {errors.name?.message && <Typography variant='inputMessage'>{errors.name.message}</Typography>}
                 </Grid>
 
                 {/* Fila */}
@@ -42,7 +58,8 @@ function Register() {
                   <Typography variant='label'>{RegisterLabel.lastName}</Typography>
                 </Grid>
                 <Grid item md={7} xs={12} sx={{marginTop: nT}}>
-                  <TextField variant='outlined' sx={styles.input}></TextField>
+                <TextField variant='outlined' sx={styles.input} {...register('lastName')}></TextField>
+                {errors.lastName?.message && <Typography variant='inputMessage'>{errors.lastName.message}</Typography>}
                 </Grid>
 
                 {/* Fila */}
@@ -50,7 +67,8 @@ function Register() {
                   <Typography variant='label'>{RegisterLabel.email}</Typography>
                 </Grid>
                 <Grid item md={7} xs={12} sx={{marginTop: nT}}>
-                  <TextField variant='outlined' sx={styles.input}></TextField>
+                  <TextField variant='outlined' sx={styles.input} {...register('email')}></TextField>
+                  {errors.email?.message && <Typography variant='inputMessage'>{errors.email.message}</Typography>}
                 </Grid>
 
                 {/* Fila */}
@@ -58,7 +76,8 @@ function Register() {
                   <Typography variant='label'>{RegisterLabel.date}</Typography>
                 </Grid>
                 <Grid item md={7} xs={12} sx={{marginTop: nT}}>
-                  <TextField variant='outlined' sx={styles.input}></TextField>
+                  <TextField variant='outlined' type='date' sx={styles.input} {...register('date')}></TextField>
+                  {errors.date?.message && <Typography variant='inputMessage'>{errors.date.message}</Typography>}
                 </Grid>
 
 
@@ -67,7 +86,8 @@ function Register() {
                   <Typography variant='label'>{RegisterLabel.password}</Typography>
                 </Grid>
                 <Grid item md={7} xs={12} sx={{marginTop: nT}}>
-                  <TextField variant='outlined' sx={styles.input}></TextField>
+                  <TextField variant='outlined' type='password' sx={styles.input} {...register('password')}></TextField>
+                  {errors.password?.message && <Typography variant='inputMessage'>{errors.password.message}</Typography>}
                 </Grid>
 
 
@@ -76,7 +96,8 @@ function Register() {
                   <Typography variant='label'>{RegisterLabel.repeatPassword}</Typography>
                 </Grid>
                 <Grid item md={7} xs={12} sx={{marginTop: nT}}>
-                  <TextField variant='outlined' sx={styles.input}></TextField>
+                  <TextField variant='outlined' type='password' sx={styles.input} {...register('passwordConfirm')}></TextField>
+                  {errors.passwordConfirm?.message && <Typography variant='inputMessage'>{errors.passwordConfirm.message}</Typography>}
                 </Grid>
 
                 {/* Fila */}
@@ -84,7 +105,9 @@ function Register() {
                   <Typography variant='label'>{RegisterLabel.genre}</Typography>
                 </Grid>
                 <Grid item md={7} xs={12} sx={{marginTop: nT}}>
-                  <TextField variant='outlined' sx={styles.input}></TextField>
+                  <Select variant='outlined' defaultValue={'M'} {...register('genre')} sx={styles.input}>
+                    {genreOptions}
+                  </Select>
                 </Grid>
 
               </Grid>
@@ -112,12 +135,13 @@ function Register() {
               </Card>
               
             </Grid>
-            <Grid xs={12} sx={styles.buttonContainer}>
+            <Box sx={styles.buttonContainer}>
               <Button variant='cancel' href='/
               '>{RegisterLabel.cancel}</Button>
-              <Button variant='action'>{RegisterLabel.register}</Button>
-            </Grid>
+              <Button variant='action' type='submit'>{RegisterLabel.register}</Button>
+            </Box>
           </Grid>
+          </form>
         </Card>
       </Box>
     </Box>

@@ -38,11 +38,13 @@ declare module '@mui/material/Button' {
 declare module '@mui/material/styles' {
   interface TypographyVariants {
     label: React.CSSProperties;
+    inputMessage: React.CSSProperties;
   }
 
   // allow configuration using `createTheme`
   interface TypographyVariantsOptions {
     label?: React.CSSProperties;
+    inputMessage: React.CSSProperties;
   }
 }
 
@@ -50,6 +52,7 @@ declare module '@mui/material/styles' {
   declare module '@mui/material/Typography' {
     interface TypographyPropsVariantOverrides {
       label: true;
+      inputMessage: true;
     }
   }
 
@@ -127,9 +130,16 @@ export const theme = createTheme({
       fontSize: '26px',
       fontStyle: 'normal',
       fontFamily: 'Open Sans, sans-serif',
-
-
     },
+
+    inputMessage:{
+      fontWeight: 500,
+      fontSize: '18px',
+      fontStyle: 'normal',
+      fontFamily: 'Open Sans, sans-serif',
+      color: 'red',
+      wordWrap: 'break-word'
+    }
   },
 
   components: {

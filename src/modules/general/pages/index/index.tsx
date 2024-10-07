@@ -5,7 +5,6 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import LogoFireploy from '../../assets/LogoFireploy.png'
 import GoogleIcon from '@mui/icons-material/Google';
 import { Link } from "react-router-dom";
-import Footer from "../../components/footer";
 
 export default function Test() {
   return (<><Box sx={styles.container}>

@@ -13,6 +13,7 @@ export const styles : Record<'label'|'input' | 'buttonContainer', SxProps> = {
         display: 'flex',
         justifyContent: 'end',
         marginTop: 4,
-        marginBottom: 4
+        marginBottom: 4,
+        width: '100%'
     }
 } 
