@@ -178,5 +178,13 @@ export const theme = createTheme({
         },
       },
     },
+    MuiTextField:{
+      styleOverrides: {
+        root: {
+          border: 'solid 2px black',
+          width: '100%',
+        },
+      },
+    }
   },
 });

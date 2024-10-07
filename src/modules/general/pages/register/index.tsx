@@ -2,7 +2,6 @@ import { Box, Button, Card, FormControl, MenuItem, TextField, Typography } from 
 import Grid from '@mui/material/Grid';
 import { styles } from './styles';
 import InfoIcon from '@mui/icons-material/Info';
-import { RegisterLabel } from '../../enums';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterNotification, RegisterSchemaType, registerSchema } from '../../utils/validations/registerSchema';
@@ -10,6 +9,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { mappedGenres } from '../../utils/validations/genre';
 import NotificationMsg from '../../components/snackbar';
 import { useState } from 'react';
+import { RegisterLabel } from '../../enums';
 
 function Register() {
 

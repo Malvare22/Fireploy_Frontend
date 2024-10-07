@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export const passwordValidation = (password : string) : boolean =>  {
     const minLength = 8;
     const hasUpperCase = /[A-Z]/.test(password);
@@ -18,3 +20,27 @@ export const passwordRequirements = `Requisitos para una contraseña:
 
 
 export const passwordConfirmMessage = 'Ambas contraseñas deben coincidir';
+
+export const passwordSchema = z.object({
+    password: z.string().refine(
+    (data) => passwordValidation(data),
+    {
+        message: passwordRequirements
+    }),
+
+});
+
+
+export const passwordChangeSchema = z.object({
+
+    password: z.string().refine(
+        (data) => passwordValidation(data),
+        {
+            message: passwordRequirements
+        }),
+
+    passwordConfirm: z.string()
+})
+
+export type PasswordChangeSchemaType = z.infer<typeof passwordChangeSchema>;
+
