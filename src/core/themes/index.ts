@@ -45,6 +45,7 @@ declare module '@mui/material/styles' {
   interface TypographyVariantsOptions {
     label?: React.CSSProperties;
     inputMessage: React.CSSProperties;
+    cardLabel: React.CSSProperties;
   }
 }
 
@@ -53,6 +54,7 @@ declare module '@mui/material/styles' {
     interface TypographyPropsVariantOverrides {
       label: true;
       inputMessage: true;
+      cardLabel: true;
     }
   }
 
@@ -104,6 +106,8 @@ export const theme = createTheme({
     h5: {
       fontWeight: 600,
       fontStyle: 'normal',
+      wordWrap: 'break-word'
+
     },
     body1: {
       fontWeight: 400,
@@ -139,6 +143,14 @@ export const theme = createTheme({
       fontFamily: 'Open Sans, sans-serif',
       color: 'red',
       wordWrap: 'break-word'
+    },
+
+    cardLabel:{
+      fontWeight: 450,
+      fontSize: '19px',
+      fontStyle: 'normal',
+      fontFamily: 'Open Sans, sans-serif',
+      color: 'black',
     }
   },
 
@@ -181,10 +193,27 @@ export const theme = createTheme({
     MuiTextField:{
       styleOverrides: {
         root: {
-          border: 'solid 2px black',
+          // border: 'solid 1px black',
+          
           width: '100%',
         },
       },
-    }
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: 10, // Mantén el borde redondeado si es necesario
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'black', // Color del borde al hacer hover
+          },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'black', // Color del borde cuando está enfocado
+          },
+        },
+        notchedOutline: {
+          borderColor: 'black', // Borde por defecto cuando no hay hover ni foco
+        },
+      },
+    },
   },
 });

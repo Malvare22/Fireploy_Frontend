@@ -4,6 +4,8 @@ import PreLogin from "../../modules/general/layouts/prelogin";
 import Register from "../../modules/general/pages/register";
 import Generic from "../../modules/general/layouts/generic";
 import ForgetPassword from "../../modules/general/pages/forgetPassword";
+import Login from "../../modules/general/layouts/login";
+import MyProjects from "../../modules/projects/pages/myProjects";
 
 export const router = createBrowserRouter([
     {
@@ -19,6 +21,11 @@ export const router = createBrowserRouter([
     {
       path: "/forgetPassword",
       element: <PreLogin><Generic title="Recuperar Contraseña"><ForgetPassword/></Generic></PreLogin>,
+      
+    },
+    {
+      path: "/myProjects",
+      element: <Login><Generic title="Mis Proyectos Desplegados"><MyProjects/></Generic></Login>,
       
     },
     

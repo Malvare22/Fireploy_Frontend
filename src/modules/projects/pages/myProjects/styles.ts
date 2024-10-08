@@ -5,8 +5,8 @@ export const styles : Record<'label'|'input' | 'buttonContainer', SxProps> = {
        
     },
     input:{
-        // border: 'solid 2px black',
-        // width: '100%',
+        border: 'solid 2px black',
+        width: '100%',
     },
 
     buttonContainer:{
