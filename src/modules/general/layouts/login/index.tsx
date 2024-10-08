@@ -2,12 +2,12 @@ import { Box } from "@mui/material"
 import React from "react"
 import { styles } from "./styles"
 import Footer from "../../components/footer"
-import NavbarStudent from "../../components/navbar/student"
+import Navbar from "../../components/navbar"
 
 function Login({children} : {children: React.ReactNode}) {
   return (
     <>
-      <NavbarStudent/>
+      <Navbar  type={1}/>
       <Box sx={styles.container}>
         {children}
       </Box>

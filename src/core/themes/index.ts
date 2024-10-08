@@ -62,6 +62,7 @@ declare module '@mui/material/styles' {
     interface ButtonPropsVariantOverrides {
       action: true;
       cancel: true;
+      navbarOption: true;
     }
   }
 
@@ -184,6 +185,15 @@ export const theme = createTheme({
                 color: 'white',
                 minWidth: '100px',
                 marginRight: '24px'
+              },
+            },
+            {
+              props: { variant: 'navbarOption' },
+              style: {
+                height: '46px',
+                border: '1px white solid',
+                color: 'white',
+                fontSize: 20
               },
             },
           ],
