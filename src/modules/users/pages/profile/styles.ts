@@ -1,21 +1,22 @@
 import { SxProps } from "@mui/material";
 
-export const styles : Record<'container'| 'row' | 'label' | 'input' | 'hiddenInputFile' | 'buttonContainer', SxProps> = {
+export const styles : Record<'container'| 'row' | 'label' | 'input' | 'hiddenInputFile' | 'buttonContainer' | 'imgContainer' | 'img' | 'select', SxProps> = {
     container:{
-       width: 800,
-       padding: 8
+       width: {md: 1000, xs:'100%'},
+       padding: {md: 8, xs: 4},
+
     },
     row:{
         display: {md: 'flex'},
-        alignItems: 'center',
-        marginBottom: 4
+        marginBottom: 4,
     },
     label:{
         width: {md: '30%'},
         wordBreak: 'break-word'
     },
     input:{
-        width: '100%'
+        width: '100%',
+        fontSize: '30px',
     },
     hiddenInputFile:{
         display: 'none',
@@ -24,5 +25,17 @@ export const styles : Record<'container'| 'row' | 'label' | 'input' | 'hiddenInp
     buttonContainer:{
         display: 'flex',
         justifyContent: 'center'
+    },
+    imgContainer:{
+        display: 'flex',
+        justifyContent: 'center',
+        marginBottom: 4
+    },
+    img:{
+        width: 120,
+        height: 120
+    },
+    select:{
+        width: '100%'
     }
 } 

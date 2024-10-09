@@ -111,8 +111,9 @@ export const theme = createTheme({
 
     },
     body1: {
-      fontWeight: 400,
+      fontWeight: 450,
       fontStyle: 'normal',
+      fontSize: 24
     },
     body2: {
       fontWeight: 500,
@@ -213,6 +214,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 10, // Mantén el borde redondeado si es necesario
+          fontSize:20,
           '&:hover .MuiOutlinedInput-notchedOutline': {
             borderColor: 'black', // Color del borde al hacer hover
           },

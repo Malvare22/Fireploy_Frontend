@@ -31,7 +31,7 @@ export const router = createBrowserRouter([
     },
     {
       path: "/myProfile",
-      element: <Login><Generic title="Mi Perfil"><Profile/></Generic></Login>,
+      element: <Login><Generic title="Mi Perfil"><Profile ableToEdit={true}/></Generic></Login>,
       
     },
     
