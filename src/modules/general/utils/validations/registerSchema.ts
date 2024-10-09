@@ -1,30 +1,12 @@
 import {z} from 'zod';
-import { allowedGenres, genreSchema } from './genre';
+import { genreSchema } from './genre';
 import { passwordChangeSchema } from './password';
 import { emailSchema } from './email';
+import { nameSchema } from './name';
+import { lastNameSchema } from './lastName';
+import { dateSchema } from './date';
 
-export const registerSchema = z.object({
-    name: z.string().min(3,{
-        message: 'El nombre tener un largo mínimo de 3 caracteres'
-    }).max(20, {
-        message: 'El nombre tener un largo máximo de 20 caracteres'
-    }),
-
-    lastName: z.string().min(3,{
-        message: 'El apellido tener un largo mínimo de 3 caracteres'
-    }).max(20, {
-        message: 'El apellido tener un largo máximo de 20 caracteres'
-    }),
-
-    date: z.string().refine(
-        (data) => new Date(data) <= new Date(),
-        {
-            message: 'La fecha no es valida'
-        }
-    ),
-
-    
-}).merge(emailSchema).merge(genreSchema).merge(passwordChangeSchema)
+export const registerSchema = z.object({}).merge(emailSchema).merge(genreSchema).merge(passwordChangeSchema).merge(nameSchema).merge(lastNameSchema).merge(dateSchema);
 // , passwordChangeSchema, emailSchema, genreSchema
 //merge(passwordChangeSchema).merge(emailSchema).merge(genreSchema)
 
