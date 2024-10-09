@@ -6,6 +6,7 @@ import Generic from "../../modules/general/layouts/generic";
 import ForgetPassword from "../../modules/general/pages/forgetPassword";
 import Login from "../../modules/general/layouts/login";
 import MyProjects from "../../modules/projects/pages/myProjects";
+import Profile from "../../modules/users/pages/profile";
 
 export const router = createBrowserRouter([
     {
@@ -26,6 +27,11 @@ export const router = createBrowserRouter([
     {
       path: "/myProjects",
       element: <Login><Generic title="Mis Proyectos Desplegados"><MyProjects/></Generic></Login>,
+      
+    },
+    {
+      path: "/myProfile",
+      element: <Login><Generic title="Mi Perfil"><Profile/></Generic></Login>,
       
     },
     
