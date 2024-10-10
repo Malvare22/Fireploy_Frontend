@@ -25,6 +25,7 @@ import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 import TablePaginationActions from "../../../general/components/tablePaginationActions";
+import { studentsData } from "../../utils/dataDummy/studentsDummy";
 
 const titles = [
   UserListLabel.code,
@@ -34,7 +35,7 @@ const titles = [
 ];
 
 export default function StudentList() {
-  const [users, setUsers] = useState(dummyUsers);
+  const [users, setUsers] = useState(studentsData);
 
   const [search, setSearch] = useState("");
 

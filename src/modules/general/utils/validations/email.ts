@@ -5,3 +5,9 @@ export const emailSchema = z.string().email({
 });
 
 export type EmailSchemaType = z.infer<typeof emailSchema>;
+
+export const emailObjectSchema = z.object({
+  email: emailSchema
+})
+
+export type EmailSchemaObjectType = z.infer<typeof emailObjectSchema>;

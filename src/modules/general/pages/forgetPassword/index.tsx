@@ -1,4 +1,4 @@
-import { Box, Button, Card, Input, TextField, Typography } from "@mui/material"
+import { Button, Card, TextField, Typography } from "@mui/material"
 import { styles } from "./styles"
 import Grid from '@mui/material/Grid2';
 import { ForgetPasswordLabel } from "../../enums/forgetPasswordLabel"
@@ -6,7 +6,7 @@ import { inputSize, labelSize } from "../../components/styles/generalStyles";
 import { useForm } from "react-hook-form";
 import { PasswordChangeSchemaType, passwordChangeSchema } from "../../utils/validations/password";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EmailSchemaType, emailSchema } from "../../utils/validations/email";
+import { EmailSchemaObjectType, emailObjectSchema } from "../../utils/validations/email";
 import React, { useState } from "react";
 
 function ForgetPassword() {
@@ -50,8 +50,8 @@ function Phase2(){
 
 function Phase1({setPhase}: {setPhase: React.Dispatch<number>}){
 
-  const {register, handleSubmit, formState: {errors}} = useForm<EmailSchemaType>({
-    resolver: zodResolver(emailSchema)
+  const {register, handleSubmit, formState: {errors}} = useForm<EmailSchemaObjectType>({
+    resolver: zodResolver(emailObjectSchema)
   });
 
   return (<>
@@ -61,7 +61,7 @@ function Phase1({setPhase}: {setPhase: React.Dispatch<number>}){
               <Grid size={labelSize}><Typography variant='label'>{ForgetPasswordLabel.email}</Typography></Grid>
               <Grid size={inputSize}>
                 <TextField {...register('email')}></TextField>
-                {errors.email?.message && <Typography variant="inputMessage">{errors?.email.message}</Typography>}
+                {errors.email?.message && <Typography variant="inputMessage">{errors.email?.message}</Typography>}
               </Grid>
               <Grid size={12} justifyContent={'center'} textAlign={'center'}>
                 <Button variant="cancel" href="/">{ForgetPasswordLabel.back}</Button>

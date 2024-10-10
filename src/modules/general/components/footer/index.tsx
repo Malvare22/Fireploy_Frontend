@@ -1,4 +1,4 @@
-import { Box, Grid2 as Grid, Typography } from "@mui/material"
+import { Grid2 as Grid, Typography } from "@mui/material"
 import { styles } from "./styles"
 import { FooterLabel } from "../../enums"
 import LogoUFPS from '../../assets/LogoUFPS.png'
