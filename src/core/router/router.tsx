@@ -7,6 +7,7 @@ import ForgetPassword from "../../modules/general/pages/forgetPassword";
 import Login from "../../modules/general/layouts/login";
 import MyProjects from "../../modules/projects/pages/myProjects";
 import Profile from "../../modules/users/pages/profile";
+import StudentList from "../../modules/users/pages/students";
 
 export const router = createBrowserRouter([
     {
@@ -32,6 +33,11 @@ export const router = createBrowserRouter([
     {
       path: "/myProfile",
       element: <Login><Generic title="Mi Perfil"><Profile ableToEdit={true}/></Generic></Login>,
+      
+    },
+    {
+      path: "/students",
+      element: <Login><Generic title="Estudiantes"><StudentList/></Generic></Login>,
       
     },
     

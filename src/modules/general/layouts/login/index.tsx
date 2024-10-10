@@ -7,7 +7,7 @@ import Navbar from "../../components/navbar"
 function Login({children} : {children: React.ReactNode}) {
   return (
     <>
-      <Navbar  type={1}/>
+      <Navbar  type={0}/>
       <Box sx={styles.container}>
         {children}
       </Box>

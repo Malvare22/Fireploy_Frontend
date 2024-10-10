@@ -5,7 +5,7 @@ import { useState } from "react";
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { NavbarLabel } from "../../enums/navbarLabel";
-import { useNavigate, useNavigation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface Props{
   type: number,
