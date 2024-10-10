@@ -21,14 +21,11 @@ export const passwordRequirements = `Requisitos para una contraseña:
 
 export const passwordConfirmMessage = 'Ambas contraseñas deben coincidir';
 
-export const passwordSchema = z.object({
-    password: z.string().refine(
+export const passwordSchema = z.string().refine(
     (data) => passwordValidation(data),
     {
         message: passwordRequirements
-    }),
-
-});
+    });
 
 
 export const passwordChangeSchema = z.object({

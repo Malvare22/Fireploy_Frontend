@@ -187,7 +187,7 @@ function Profile({ ableToEdit, initEditing = false, isAdmin = false }: Props) {
             <Box sx={styles.input}>
               {isEditing ? (
                 <>
-                  <TextField type="text" {...register("code")} />
+                  <TextField type="number" {...register("code")} />
                   {errors.code?.message && (
                     <Typography variant="inputMessage">
                       {errors.code?.message}

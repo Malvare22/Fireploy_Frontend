@@ -1,16 +1,20 @@
-import {z} from 'zod';
-import { genreSchema } from './genre';
-import { passwordChangeSchema } from './password';
-import { emailSchema } from './email';
-import { nameSchema } from './name';
-import { lastNameSchema } from './lastName';
-import { dateSchema } from './date';
+import { z } from "zod";
+import { passwordChangeSchema } from "./password";
 
-export const registerSchema = z.object({}).merge(emailSchema).merge(genreSchema).merge(passwordChangeSchema).merge(nameSchema).merge(lastNameSchema).merge(dateSchema);
+import { userSchema } from "./userSchema";
+
+export const registerSchema = (userSchema
+  .merge(passwordChangeSchema))
+  .refine((data) => data.password == data.passwordConfirm, {
+    message: "Las contraseñas no coinciden",
+    path: ["passwordConfirm"], // Este es el campo que mostrará el error
+  });
 // , passwordChangeSchema, emailSchema, genreSchema
 //merge(passwordChangeSchema).merge(emailSchema).merge(genreSchema)
 
-
-export const RegisterNotification = ['Error al registrar al usuario', 'Usuario registrado con éxito'];
+export const RegisterNotification = [
+  "Error al registrar al usuario",
+  "Usuario registrado con éxito",
+];
 
 export type RegisterSchemaType = z.infer<typeof registerSchema>;
