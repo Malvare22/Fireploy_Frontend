@@ -6,7 +6,6 @@ import Generic from "../../modules/general/layouts/generic";
 import ForgetPassword from "../../modules/general/pages/forgetPassword";
 import Login from "../../modules/general/layouts/login";
 import MyProjects from "../../modules/projects/pages/myProjects";
-import Profile from "../../modules/users/pages/profile";
 import StudentList from "../../modules/users/pages/students";
 import ViewProfile from "../../modules/users/pages/view";
 
@@ -49,7 +48,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/myProfile",
-    element: <Login><Generic title="Mi Perfil"><ViewProfile/></Generic></Login>,
+    element: <Login><Generic title="Mi Perfil"><ViewProfile isMine={true}/></Generic></Login>,
 
   },
   {
@@ -67,7 +66,17 @@ export const router = createBrowserRouter([
     element: (
       <Login>
         <Generic title="Estudiante">
-          <ViewProfile />
+          <ViewProfile/>
+        </Generic>
+      </Login>
+    ),
+  },
+  {
+    path: "/students/edit",
+    element: (
+      <Login>
+        <Generic title="Estudiante">
+          <ViewProfile initEditing={true}/>
         </Generic>
       </Login>
     ),

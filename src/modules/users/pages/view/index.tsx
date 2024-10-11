@@ -1,26 +1,44 @@
-import {  useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import Profile from "../profile";
 import { useEffect, useState } from "react";
 import { UserSchemaType } from "../../../general/utils/validations/userSchema";
-import { studentsData } from "../../utils/dataDummy/studentsDummy";
+import { usersData } from "../../utils/dataDummy/usersDataDummy";
 
-function ViewProfile() {
-  const [searchParams, setSearchParams] = useSearchParams();
+interface Props {
+  isMine?: boolean;
+  initEditing?: boolean;
+}
+function ViewProfile({ isMine, initEditing = false}: Props) {
+  const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
 
-  const [user, setUser] = useState<UserSchemaType | null>(null);
+  const ableToEdit = isMine || (localStorage.getItem("rol") as string) == "A";
+
+
+  const [user, setUser] = useState<UserSchemaType | undefined>(undefined);
 
   useEffect(() => {
+    let current_id: number;
     if (!id) {
-      return;
-    }
-    const current_id = parseInt(id);
-    const u = studentsData.filter((s) => s.code == current_id);
-    setUser(u[0]);
+      if (!isMine) return;
+      current_id = parseInt(localStorage.getItem("code") as string);
+    } else current_id = parseInt(id);
+    console.log(current_id);
+    const u = usersData.find((s) => s.code == current_id);
+    setUser(u);
   }, [id]);
 
   return (
-    <>{user && <Profile ableToEdit={false} currentUser={user}></Profile>}</>
+    <>
+      {user && (
+        <Profile
+          ableToEdit={ableToEdit}
+          currentUser={user}
+          initEditing={ableToEdit && initEditing}
+          isAdmin={(localStorage.getItem("rol") as string) == "A"}
+        ></Profile>
+      )}
+    </>
   );
 }
 

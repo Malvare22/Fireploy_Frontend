@@ -41,12 +41,10 @@ interface Props {
   currentUser: UserSchemaType
 }
 
-function Profile({ ableToEdit, initEditing = false, isAdmin = false, currentUser }: Props) {
+function Profile({ ableToEdit, initEditing, isAdmin = false, currentUser }: Props) {
   const imgValue = useImgFileLoader();
 
-  const [isEditing, setIsEditing] = useState(true);
-
-  const [user, setUser] = useState(currentUser);
+  const [isEditing, setIsEditing] = useState(initEditing);
 
   const genreOptions = Object.entries(mappedGenres).map(([key, value], i) => (
     <MenuItem key={i} value={key}>
@@ -83,7 +81,7 @@ function Profile({ ableToEdit, initEditing = false, isAdmin = false, currentUser
     <Card sx={styles.container}>
         <form onSubmit={handleSubmit((d) => console.log(d))}>
         <Box sx={styles.imgContainer}>
-          <Box component={"img"} src={user.img} sx={styles.img}></Box>
+          <Box component={"img"} src={currentUser.img} sx={styles.img}></Box>
         </Box>
         <Box>
           <Box sx={styles.row}>
@@ -102,7 +100,7 @@ function Profile({ ableToEdit, initEditing = false, isAdmin = false, currentUser
                 </>
               ) : (
                 <Box>
-                  <Typography variant="body1">{user.name}</Typography>
+                  <Typography variant="body1">{currentUser.name}</Typography>
                 </Box>
               )}
             </Box>
@@ -124,7 +122,7 @@ function Profile({ ableToEdit, initEditing = false, isAdmin = false, currentUser
                 </>
               ) : (
                 <Box>
-                  <Typography variant="body1">{user.lastName}</Typography>
+                  <Typography variant="body1">{currentUser.lastName}</Typography>
                 </Box>
               )}
             </Box>
@@ -135,7 +133,7 @@ function Profile({ ableToEdit, initEditing = false, isAdmin = false, currentUser
               <Typography variant="label">{ProfileLabel.email}</Typography>
             </Box>
             <Box sx={styles.input}>
-              {isEditing ? (
+              {(isAdmin && isEditing) ? (
                 <>
                   <TextField type="text" {...register("email")} />
                   {errors.email?.message && (
@@ -146,7 +144,7 @@ function Profile({ ableToEdit, initEditing = false, isAdmin = false, currentUser
                 </>
               ) : (
                 <Box>
-                  <Typography variant="body1">{user.email}</Typography>
+                  <Typography variant="body1">{currentUser.email}</Typography>
                 </Box>
               )}
             </Box>
@@ -157,11 +155,11 @@ function Profile({ ableToEdit, initEditing = false, isAdmin = false, currentUser
               <Typography variant="label">{ProfileLabel.rol}</Typography>
             </Box>
             <Box sx={styles.input}>
-              {isEditing ? (
+              {(isAdmin && isEditing) ? (
                 <>
                   <Select
                     type="text"
-                    defaultValue={user.rol}
+                    defaultValue={currentUser.rol}
                     {...register("rol")}
                   >
                     {rolesOptions}
@@ -174,7 +172,7 @@ function Profile({ ableToEdit, initEditing = false, isAdmin = false, currentUser
                 </>
               ) : (
                 <Box>
-                  <Typography variant="body1">{mappedRoles[user.rol]}</Typography>
+                  <Typography variant="body1">{mappedRoles[currentUser.rol]}</Typography>
                 </Box>
               )}
             </Box>
@@ -185,7 +183,7 @@ function Profile({ ableToEdit, initEditing = false, isAdmin = false, currentUser
               <Typography variant="label">{ProfileLabel.code}</Typography>
             </Box>
             <Box sx={styles.input}>
-              {isEditing ? (
+              {(isAdmin && isEditing) ? (
                 <>
                   <TextField type="number" {...register("code")} />
                   {errors.code?.message && (
@@ -196,7 +194,7 @@ function Profile({ ableToEdit, initEditing = false, isAdmin = false, currentUser
                 </>
               ) : (
                 <Box>
-                  <Typography variant="body1">{user.code}</Typography>
+                  <Typography variant="body1">{currentUser.code}</Typography>
                 </Box>
               )}
             </Box>
@@ -218,7 +216,7 @@ function Profile({ ableToEdit, initEditing = false, isAdmin = false, currentUser
                 </>
               ) : (
                 <Box>
-                  <Typography variant="body1">{user.date}</Typography>
+                  <Typography variant="body1">{currentUser.date}</Typography>
                 </Box>
               )}
             </Box>
@@ -233,7 +231,7 @@ function Profile({ ableToEdit, initEditing = false, isAdmin = false, currentUser
                 <>
                   <Select
                     type="text"
-                    defaultValue={user.genre}
+                    defaultValue={currentUser.genre}
                     {...register("genre")}
                   >
                     {genreOptions}
@@ -246,7 +244,7 @@ function Profile({ ableToEdit, initEditing = false, isAdmin = false, currentUser
                 </>
               ) : (
                 <Box>
-                  <Typography variant="body1">{mappedGenres[user.genre]}</Typography>
+                  <Typography variant="body1">{mappedGenres[currentUser.genre]}</Typography>
                 </Box>
               )}
             </Box>

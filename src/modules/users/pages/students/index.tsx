@@ -24,8 +24,8 @@ import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 import TablePaginationActions from "../../../general/components/tablePaginationActions";
-import { studentsData } from "../../utils/dataDummy/studentsDummy";
 import ModalRemoveUser from "../../components/modalRemoveUser";
+import { usersData } from "../../utils/dataDummy/usersDataDummy";
 
 const titles = [
   UserListLabel.code,
@@ -35,7 +35,7 @@ const titles = [
 ];
 
 export default function StudentList() {
-  const [users, setUsers] = useState(studentsData);
+  const [users, _setUsers] = useState(usersData.filter((u)=> u.rol == 'E'));
 
   const [currentId, setCurrentId] = useState(-1);
 
@@ -66,7 +66,7 @@ export default function StudentList() {
       : 0;
 
   const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
+    _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);
@@ -81,7 +81,7 @@ export default function StudentList() {
 
   return (
     <Box sx={{ width: { md: "70%", xs: "90%" } }}>
-      <ModalRemoveUser open={open} setOpen={setOpen} id={currentId}/>
+      {users && <><ModalRemoveUser open={open} setOpen={setOpen} id={currentId}/>
       <Box sx={{ marginBottom: 4 }}>
         <Paper
           component="form"
@@ -107,7 +107,7 @@ export default function StudentList() {
           <TableHead>
             <TableRow>
               {titles.map((title, i) => (
-                <StyledTableCell
+                <StyledTableCell key={i}
                   align={i == titles.length - 1 ? "center" : "left"}
                 >
                   {title}
@@ -171,7 +171,7 @@ export default function StudentList() {
             </TableRow>
           </TableFooter>
         </Table>
-      </TableContainer>
+      </TableContainer></>}
     </Box>
   );
 }
