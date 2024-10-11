@@ -14,7 +14,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { mappedGenres } from "../../../general/utils/validations/genre";
 import { useState } from "react";
-import { dummyUsers } from "../../utils/dataDummy/usersDataDummy";
 import { mappedRoles } from "../../../general/utils/validations/rol";
 import {
   UserSchemaType,
@@ -39,14 +38,15 @@ interface Props {
   ableToEdit: boolean;
   initEditing?: boolean;
   isAdmin?: boolean;
+  currentUser: UserSchemaType
 }
 
-function Profile({ ableToEdit, initEditing = false, isAdmin = false }: Props) {
+function Profile({ ableToEdit, initEditing = false, isAdmin = false, currentUser }: Props) {
   const imgValue = useImgFileLoader();
 
   const [isEditing, setIsEditing] = useState(true);
 
-  const [user, setUser] = useState(dummyUsers[1]);
+  const [user, setUser] = useState(currentUser);
 
   const genreOptions = Object.entries(mappedGenres).map(([key, value], i) => (
     <MenuItem key={i} value={key}>
@@ -76,7 +76,7 @@ function Profile({ ableToEdit, initEditing = false, isAdmin = false }: Props) {
     reset
   } = useForm<UserSchemaType>({
     resolver: zodResolver(userSchema),
-    defaultValues: dummyUsers[1],
+    defaultValues: currentUser,
   });
 
   return (

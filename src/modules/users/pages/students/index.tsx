@@ -3,7 +3,6 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { dummyUsers } from "../../../users/utils/dataDummy/usersDataDummy";
 import { UserListLabel } from "../../../users/enums/userListLabel";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
@@ -26,6 +25,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 import TablePaginationActions from "../../../general/components/tablePaginationActions";
 import { studentsData } from "../../utils/dataDummy/studentsDummy";
+import ModalRemoveUser from "../../components/modalRemoveUser";
 
 const titles = [
   UserListLabel.code,
@@ -36,6 +36,8 @@ const titles = [
 
 export default function StudentList() {
   const [users, setUsers] = useState(studentsData);
+
+  const [currentId, setCurrentId] = useState(-1);
 
   const [search, setSearch] = useState("");
 
@@ -49,6 +51,13 @@ export default function StudentList() {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const [open, setOpen] = useState(false);
+
+  const handleRemove = (id: number) => {
+    setCurrentId(id);
+    setOpen(true);
+  };
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -72,6 +81,7 @@ export default function StudentList() {
 
   return (
     <Box sx={{ width: { md: "70%", xs: "90%" } }}>
+      <ModalRemoveUser open={open} setOpen={setOpen} id={currentId}/>
       <Box sx={{ marginBottom: 4 }}>
         <Paper
           component="form"
@@ -125,7 +135,7 @@ export default function StudentList() {
                     <IconButton component={Link} to={`edit?id=${row.code}`}>
                       <EditIcon />
                     </IconButton>
-                    <IconButton>
+                    <IconButton onClick={() => handleRemove(row.code)}>
                       <DeleteIcon />
                     </IconButton>
                   </Box>
