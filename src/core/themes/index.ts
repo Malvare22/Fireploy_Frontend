@@ -191,7 +191,7 @@ export const theme = createTheme({
             {
               props: { variant: 'navbarOption' },
               style: {
-                height: '46px',
+                minHeight: '46px',
                 border: '1px white solid',
                 color: 'white',
                 fontSize: 20

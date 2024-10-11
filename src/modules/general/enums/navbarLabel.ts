@@ -7,5 +7,8 @@ export const NavbarLabel = {
   subjects: 'Materias',
   teachers: 'Docentes',
   projects: 'Proyectos',
-  students: 'Estudiantes'
+  students: 'Estudiantes',
+  A: 'Administrador',
+  E: 'Estudiante',
+  D: 'Docente'
 };

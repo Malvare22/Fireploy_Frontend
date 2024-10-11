@@ -5,9 +5,10 @@ import Footer from "../../components/footer"
 import Navbar from "../../components/navbar"
 
 function Login({children} : {children: React.ReactNode}) {
+
   return (
     <>
-      <Navbar  type={0}/>
+      <Navbar/>
       <Box sx={styles.container}>
         {children}
       </Box>

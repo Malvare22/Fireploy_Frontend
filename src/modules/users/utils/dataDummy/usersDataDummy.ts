@@ -2,8 +2,8 @@ import { UserSchemaType } from "../../../general/utils/validations/userSchema";
 
 export const usersData: UserSchemaType[] = [
     {
-      name: 'John',
-      lastName: 'Doe',
+      name: 'Juan Alberto',
+      lastName: 'Jimnez Obrador',
       email: 'johndoe@example.com',
       date: '1990-05-15',
       genre: 'M',

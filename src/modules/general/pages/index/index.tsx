@@ -36,6 +36,7 @@ export default function Login() {
       localStorage.setItem("rol", user.rol);
       localStorage.setItem("email", user.email);
       localStorage.setItem("code", user.code.toString());
+      localStorage.setItem("userName", user.name + ' ' + user.lastName);
       setSuccess(true);
       setMessage("Bien :D");
       setView(true);
