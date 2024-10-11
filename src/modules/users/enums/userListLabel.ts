@@ -3,7 +3,8 @@ export enum UserListLabel{
     name = 'Nombre',
     lastName = 'Apellido',
     actions = 'Acciones',
-    confirm = '¿Está seguro de que desea eliminar al usuario?',
+    confirmDelete = '¿Está seguro de que desea eliminar al usuario?',
+    confirmAdd = '¿Está seguro de que desea cargar estos usuarios?',
     accept = 'Aceptar',
     cancel = 'Cancelar'
 }

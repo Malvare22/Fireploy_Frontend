@@ -5,11 +5,11 @@ import { UserListLabel } from "../../enums/userListLabel";
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<boolean>;
-  id: number;
   action?: void;
+  message: string
 }
 
-function ModalRemoveUser({ open, setOpen, id, action }: Props) {
+function ModalUsersList({ open, setOpen, message, action }: Props) {
   return (
     <CustomModal open={open} setOpen={setOpen}>
       <Box
@@ -18,7 +18,7 @@ function ModalRemoveUser({ open, setOpen, id, action }: Props) {
         }}
       >
         <Typography id="transition-modal-title" variant="h5" component="h2">
-          {`${UserListLabel.confirm} (${id})`}
+          {message}
         </Typography>
       </Box>
       <Box
@@ -41,4 +41,4 @@ function ModalRemoveUser({ open, setOpen, id, action }: Props) {
   );
 }
 
-export default ModalRemoveUser;
+export default ModalUsersList;
