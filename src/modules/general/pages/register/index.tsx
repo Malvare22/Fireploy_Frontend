@@ -7,7 +7,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterNotification, RegisterSchemaType, registerSchema } from '../../utils/validations/registerSchema';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { mappedGenres } from '../../utils/validations/genre';
-import NotificationMsg from '../../components/snackbar';
 import { useState } from 'react';
 import { RegisterLabel } from '../../enums';
 
@@ -35,7 +34,6 @@ function Register() {
       paddingTop: 4,
       paddingBottom: 4
     }}>
-      <NotificationMsg init={open} msg={RegisterNotification[0]} status={false}></NotificationMsg>
       <Box sx={{textAlign: 'center', marginBottom: 4}}><Typography variant='h2'>{RegisterLabel.title}</Typography></Box>
       <Box sx={{width: '100%', display: 'flex', justifyContent: 'center'}}>
         <Card sx={{

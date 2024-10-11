@@ -3,13 +3,12 @@ import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
 type Props = {
-  status: boolean,
-  init: boolean,
-  msg: string
+  view: boolean,
+  setView: React.Dispatch<boolean>,
+  message: string,
+  success: boolean
 }
-export default function NotificationMsg({status, init, msg}: Props) {
-  const [open, setOpen] = React.useState(init);
-
+export default function SnackBar({view, setView, message, success}: Props) {
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -19,18 +18,20 @@ export default function NotificationMsg({status, init, msg}: Props) {
       return;
     }
 
-    setOpen(false);
+    setView(false);
   };
 
+  const successV = () => (success == true ? 'success': 'error')
+
   return (
-    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+    <Snackbar open={view} autoHideDuration={6000} onClose={handleClose}>
       <Alert
         onClose={handleClose}
-        severity={status ? 'success': 'error'}
+        severity={successV()}
         variant="filled"
         sx={{ width: '100%' }}
       >
-        {msg}
+        {message}
       </Alert>
     </Snackbar>
   );

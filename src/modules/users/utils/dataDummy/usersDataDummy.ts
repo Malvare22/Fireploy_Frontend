@@ -1,6 +1,6 @@
 import { UserSchemaType } from "../../../general/utils/validations/userSchema";
 
-export const dummyUsers: UserSchemaType[] = [
+export const usersData: UserSchemaType[] = [
     {
       name: 'John',
       lastName: 'Doe',

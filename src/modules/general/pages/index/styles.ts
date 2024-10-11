@@ -30,7 +30,8 @@ export const styles : Record<'input' | 'container' | 'footer' | 'button' | 'titl
         borderRadius: '50px',
         height: '50px',
         width: '200px',
-        marginLeft: 2
+        marginLeft: {md: 2},
+        marginTop: {xs: 2, sm: 0}
     },
     googleButton: {
         borderRadius: '50px',
