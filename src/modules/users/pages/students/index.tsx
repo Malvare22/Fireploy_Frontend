@@ -24,13 +24,14 @@ import { Link } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-import { useState } from "react";
+import { useEffect } from "react";
 import TablePaginationActions from "../../../general/components/tablePaginationActions";
 import { usersData } from "../../utils/dataDummy/usersDataDummy";
 import ModalUsersList from "../../components/modalUsersList";
 import useModal from "../../../general/hooks/useModal";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import useTable from "../../../general/hooks/useTable";
 
 const titles = [
   UserListLabel.code,
@@ -40,55 +41,37 @@ const titles = [
 ];
 
 export default function StudentList() {
-  const [users, _setUsers] = useState(usersData.filter((u) => u.rol == "E"));
-
-  const [currentId, setCurrentId] = useState(-1);
-
-  const [search, setSearch] = useState("");
-
-  const filteredData = () => {
-    const searchLowerCase = search.toLowerCase();
-    return users.filter((user) => {
-      const total = user.code + "" + user.lastName + "" + user.name;
-      return total.toLowerCase().includes(searchLowerCase);
-    });
-  };
-
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-
+  
   const modalAddFile = useModal();
 
   const modalDelete = useModal();
+
+  const {
+    data,
+    setData,
+    currentId,
+    setCurrentId,
+    setSearch,
+    page,
+    rowsPerPage,
+    filteredData,
+    emptyRows,
+    handleChangePage,
+    handleChangeRowsPerPage,
+  } = useTable();
+
+  useEffect(() => {
+    setData(usersData.filter((d) => d.rol == "E"));
+  }, []);
 
   const handleRemove = (id: number) => {
     setCurrentId(id);
     modalDelete.setView(true);
   };
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0
-      ? Math.max(0, (1 + page) * rowsPerPage - filteredData().length)
-      : 0;
-
-  const handleChangePage = (
-    _event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
   return (
     <Box sx={{ width: { md: "70%", xs: "90%" } }}>
-      {users && (
+      {data && (
         <>
           <ModalUsersList
             open={modalDelete.view}
@@ -208,7 +191,7 @@ export default function StudentList() {
         <Box>
           <Button
             component="label"
-            variant="contained"
+            variant="action"
             sx={{
               marginRight: 4,
             }}
