@@ -8,6 +8,7 @@ import Login from "../../modules/general/layouts/login";
 import MyProjects from "../../modules/projects/pages/myProjects";
 import StudentList from "../../modules/users/pages/students";
 import ViewProfile from "../../modules/users/pages/view";
+import TeacherList from "../../modules/users/pages/teachers";
 
 export const router = createBrowserRouter([
   {
@@ -76,6 +77,36 @@ export const router = createBrowserRouter([
     element: (
       <Login>
         <Generic title="Estudiante">
+          <ViewProfile initEditing={true}/>
+        </Generic>
+      </Login>
+    ),
+  },
+  {
+    path: "/teachers",
+    element: (
+      <Login>
+        <Generic title="Docentes">
+          <TeacherList />
+        </Generic>
+      </Login>
+    ),
+  },
+  {
+    path: "/teachers/view",
+    element: (
+      <Login>
+        <Generic title="Docente">
+          <ViewProfile/>
+        </Generic>
+      </Login>
+    ),
+  },
+  {
+    path: "/teachers/edit",
+    element: (
+      <Login>
+        <Generic title="Docente">
           <ViewProfile initEditing={true}/>
         </Generic>
       </Login>
