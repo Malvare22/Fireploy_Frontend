@@ -27,11 +27,11 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useEffect } from "react";
 import TablePaginationActions from "../../../general/components/tablePaginationActions";
 import { usersData } from "../../utils/dataDummy/usersDataDummy";
-import ModalUsersList from "../../components/modalUsersList";
 import useModal from "../../../general/hooks/useModal";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import useTable from "../../../general/hooks/useTable";
+import ModalAlert from "../../../general/components/modalAlert";
 
 const titles = [
   UserListLabel.code,
@@ -79,12 +79,12 @@ export default function StudentList() {
     <Box sx={{ width: { md: "70%", xs: "90%" } }}>
       {data && (
         <>
-          <ModalUsersList
+          <ModalAlert
             open={modalDelete.view}
             setOpen={modalDelete.setView}
             message={`${UserListLabel.confirmDelete} (${currentId})`}
           />
-          <ModalUsersList
+          <ModalAlert
             open={modalAddFile.view}
             setOpen={modalAddFile.setView}
             message={`${UserListLabel.confirmAdd}`}

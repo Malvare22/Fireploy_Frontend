@@ -1,6 +1,5 @@
 import { Box, Button, Typography } from "@mui/material";
 import CustomModal from "../../../general/components/modal";
-import { UserListLabel } from "../../enums/userListLabel";
 
 interface Props {
   open: boolean;
@@ -9,7 +8,7 @@ interface Props {
   message: string
 }
 
-function ModalUsersList({ open, setOpen, message, action }: Props) {
+function ModalAlert({ open, setOpen, message, action }: Props) {
   return (
     <CustomModal open={open} setOpen={setOpen}>
       <Box
@@ -29,11 +28,11 @@ function ModalUsersList({ open, setOpen, message, action }: Props) {
         }}
       >
         <Box sx={{ marginRight: 4 }}>
-          <Button variant="action">{UserListLabel.accept}</Button>
+          <Button variant="action">{'Aceptar'}</Button>
         </Box>
         <Box>
           <Button variant="cancel" onClick={() => setOpen(false)}>
-            {UserListLabel.cancel}
+            {'Cancelar'}
           </Button>
         </Box>
       </Box>
@@ -41,4 +40,4 @@ function ModalUsersList({ open, setOpen, message, action }: Props) {
   );
 }
 
-export default ModalUsersList;
+export default ModalAlert;
