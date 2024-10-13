@@ -30,13 +30,13 @@ function Phase2(){
           <Grid container alignItems={'center'} alignContent={'center'}>
               <Grid size={labelSize}><Typography variant='label'>{ForgetPasswordLabel.newPassword}</Typography></Grid>
               <Grid size={inputSize}>
-                <TextField {...register('password')}></TextField>
-                {errors.password?.message && <Typography variant="inputMessage">{errors.password?.message}</Typography>}
+                <TextField {...register('passwords.password')}></TextField>
+                {errors.passwords?.password?.message && <Typography variant="inputMessage">{errors.passwords?.password?.message}</Typography>}
               </Grid>
               <Grid size={labelSize}><Typography variant='label'>{ForgetPasswordLabel.confirmPassword}</Typography></Grid>
               <Grid size={inputSize}>
-                <TextField {...register('passwordConfirm')}></TextField>
-                {errors.passwordConfirm?.message && <Typography variant="inputMessage">{errors.passwordConfirm?.message}</Typography>}
+                <TextField {...register('passwords.passwordConfirm')}></TextField>
+                {errors.passwords?.passwordConfirm?.message && <Typography variant="inputMessage">{errors.passwords?.passwordConfirm?.message}</Typography>}
               </Grid>
               <Grid size={12} justifyContent={'center'} textAlign={'center'}>
                 <Button variant="cancel" href="/">{ForgetPasswordLabel.back}</Button>

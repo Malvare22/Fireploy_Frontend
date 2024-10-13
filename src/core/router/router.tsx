@@ -7,8 +7,8 @@ import ForgetPassword from "../../modules/general/pages/forgetPassword";
 import Login from "../../modules/general/layouts/login";
 import MyProjects from "../../modules/projects/pages/myProjects";
 import StudentList from "../../modules/users/pages/students";
-import ViewProfile from "../../modules/users/pages/view";
 import TeacherList from "../../modules/users/pages/teachers";
+import ViewProfile from "../../modules/users/components/viewProfiel";
 
 export const router = createBrowserRouter([
   {

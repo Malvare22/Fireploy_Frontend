@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import Profile from "../profile";
+import Profile from "../../pages/profile";
 import { useEffect, useState } from "react";
 import { UserSchemaType } from "../../../general/utils/validations/userSchema";
 import { usersData } from "../../utils/dataDummy/usersDataDummy";

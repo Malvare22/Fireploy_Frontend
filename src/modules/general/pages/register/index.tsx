@@ -1,18 +1,15 @@
-import { Box, Button, Card, FormControl, MenuItem, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, MenuItem, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { styles } from './styles';
 import InfoIcon from '@mui/icons-material/Info';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { RegisterNotification, RegisterSchemaType, registerSchema } from '../../utils/validations/registerSchema';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import {  RegisterSchemaType, registerSchema } from '../../utils/validations/registerSchema';
+import Select from '@mui/material/Select';
 import { mappedGenres } from '../../utils/validations/genre';
-import { useState } from 'react';
 import { RegisterLabel } from '../../enums';
 
 function Register() {
-
-  const [open, setOpen] = useState(true);
 
   const nT = 6;
 
@@ -21,10 +18,6 @@ function Register() {
   });
 
   const genreOptions = Object.entries(mappedGenres).map(([key, value], i) => (<MenuItem key={i} value={key}>{value}</MenuItem>))
-
-  const onSend = () => {
-    
-  };
 
   return (
     <Box sx={{
@@ -89,8 +82,8 @@ function Register() {
                   <Typography variant='label'>{RegisterLabel.password}</Typography>
                 </Grid>
                 <Grid item md={7} xs={12} sx={{marginTop: nT}}>
-                  <TextField variant='outlined' type='password' sx={styles.input} {...register('password')}></TextField>
-                  {errors.password?.message && <Typography variant='inputMessage'>{errors.password.message}</Typography>}
+                  <TextField variant='outlined' type='password' sx={styles.input} {...register('passwords.password')}></TextField>
+                  {errors.passwords?.password?.message && <Typography variant='inputMessage'>{errors.passwords?.password?.message}</Typography>}
                 </Grid>
 
 
@@ -99,8 +92,8 @@ function Register() {
                   <Typography variant='label'>{RegisterLabel.repeatPassword}</Typography>
                 </Grid>
                 <Grid item md={7} xs={12} sx={{marginTop: nT}}>
-                  <TextField variant='outlined' type='password' sx={styles.input} {...register('passwordConfirm')}></TextField>
-                  {errors.passwordConfirm?.message && <Typography variant='inputMessage'>{errors.passwordConfirm.message}</Typography>}
+                  <TextField variant='outlined' type='password' sx={styles.input} {...register('passwords.passwordConfirm')}></TextField>
+                  {errors.passwords?.passwordConfirm?.message && <Typography variant='inputMessage'>{errors.passwords?.passwordConfirm?.message}</Typography>}
                 </Grid>
 
                 {/* Fila */}

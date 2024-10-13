@@ -1,43 +1,37 @@
 import { z } from "zod";
 
-export const passwordValidation = (password : string) : boolean =>  {
-    const minLength = 8;
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasNumbers = /[0-9]/.test(password);
-    const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+export const passwordSchema = z
+  .string()
+  .refine((data) => data.length >= 8, {
+    message: "La contraseña debe tener al menos 8 caracteres.",
+  })
+  .refine((data) => /[A-Z]/.test(data), {
+    message: "La contraseña debe incluir al menos una letra mayúscula (A-Z).",
+  })
+  .refine((data) => /[a-z]/.test(data), {
+    message: "La contraseña debe incluir al menos una letra minúscula (a-z).",
+  })
+  .refine((data) => /[0-9]/.test(data), {
+    message: "La contraseña debe incluir al menos un dígito (0-9).",
+  })
+  .refine((data) => /[!@#$%^&*(),.?":{}|<>]/.test(data), {
+    message:
+      "La contraseña debe incluir al menos un carácter especial (por ejemplo, !@#$%^&*).",
+  });
 
-    return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChars;
-}
+export const passwordConfirmMessage = "Ambas contraseñas deben coincidir";
 
-export const passwordRequirements = `Requisitos para una contraseña:
-1. Longitud mínima: Al menos 8 caracteres.
-2. Contiene mayúsculas: Debe incluir al menos una letra mayúscula (A-Z).
-3. Contiene minúsculas: Debe incluir al menos una letra minúscula (a-z).
-4. Contiene números: Debe incluir al menos un dígito (0-9).
-5. Contiene caracteres especiales: Debe incluir al menos un carácter especial (por ejemplo, !@#$%^&*).
-`;
+export const passwords = z
+  .object({
+    password: passwordSchema,
 
+    passwordConfirm: z.string(),
+  })
+  .refine((data) => data.password === data.passwordConfirm, {
+    message: "Las contraseñas no coinciden",
+    path: ["passwordConfirm"], // Este es el campo que mostrará el error
+  });
 
-export const passwordConfirmMessage = 'Ambas contraseñas deben coincidir';
-
-export const passwordSchema = z.string().refine(
-    (data) => passwordValidation(data),
-    {
-        message: passwordRequirements
-    });
-
-
-export const passwordChangeSchema = z.object({
-
-    password: z.string().refine(
-        (data) => passwordValidation(data),
-        {
-            message: passwordRequirements
-        }),
-
-    passwordConfirm: z.string()
-})
+export const passwordChangeSchema = z.object({ passwords });
 
 export type PasswordChangeSchemaType = z.infer<typeof passwordChangeSchema>;
-
