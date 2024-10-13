@@ -3,7 +3,7 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { UserListLabel } from "../../enums/userListLabel";
+import { UserListLabel } from "../../../users/enums/userListLabel";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -20,7 +20,7 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "../../../general/components/tableStyled";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
@@ -40,11 +40,13 @@ const titles = [
   UserListLabel.actions,
 ];
 
-export default function TeacherList() {
+export default function TeachersList() {
   
   const modalAddFile = useModal();
 
   const modalDelete = useModal();
+
+  const navigate = useNavigate();
 
   const {
     data,
@@ -67,6 +69,10 @@ export default function TeacherList() {
   const handleRemove = (id: number) => {
     setCurrentId(id);
     modalDelete.setView(true);
+  };
+
+  const handleRegister = () => {
+    navigate('register', { state: { from: '/teachers' } });
   };
 
   return (
@@ -207,7 +213,7 @@ export default function TeacherList() {
           </Button>
         </Box>
         <Box>
-          <Button variant="action" endIcon={<AddCircleIcon />}>
+          <Button variant="action" onClick={handleRegister} endIcon={<AddCircleIcon />}>
             {"Agregar"}
           </Button>
         </Box>

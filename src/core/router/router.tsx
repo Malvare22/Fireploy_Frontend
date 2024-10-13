@@ -83,6 +83,16 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: "/students/register",
+    element: (
+      <Login>
+        <Generic title="Registrar Usuario">
+          <ViewProfile toRegister={true} initEditing={true} rol={"E"}/>
+        </Generic>
+      </Login>
+    ),
+  },
+  {
     path: "/teachers",
     element: (
       <Login>
@@ -108,6 +118,16 @@ export const router = createBrowserRouter([
       <Login>
         <Generic title="Docente">
           <ViewProfile initEditing={true}/>
+        </Generic>
+      </Login>
+    ),
+  },
+  {
+    path: "/teachers/register",
+    element: (
+      <Login>
+        <Generic title="Registrar Usuario">
+          <ViewProfile toRegister={true} initEditing={true} rol={"D"}/>
         </Generic>
       </Login>
     ),

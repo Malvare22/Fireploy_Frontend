@@ -20,7 +20,7 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "../../../general/components/tableStyled";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
@@ -46,6 +46,8 @@ export default function StudentList() {
 
   const modalDelete = useModal();
 
+  const navigate = useNavigate();
+
   const {
     data,
     setData,
@@ -67,6 +69,10 @@ export default function StudentList() {
   const handleRemove = (id: number) => {
     setCurrentId(id);
     modalDelete.setView(true);
+  };
+
+  const handleRegister = () => {
+    navigate('register', { state: { from: '/students' } });
   };
 
   return (
@@ -207,7 +213,7 @@ export default function StudentList() {
           </Button>
         </Box>
         <Box>
-          <Button variant="action" endIcon={<AddCircleIcon />}>
+          <Button variant="action" onClick={handleRegister} endIcon={<AddCircleIcon />}>
             {"Agregar"}
           </Button>
         </Box>

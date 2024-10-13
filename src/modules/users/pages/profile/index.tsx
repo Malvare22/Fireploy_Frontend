@@ -19,6 +19,7 @@ import {
   UserSchemaType,
   userSchema,
 } from "../../../general/utils/validations/userSchema";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ProfileLabel = {
   name: "Nombre:",
@@ -38,13 +39,24 @@ interface Props {
   ableToEdit: boolean;
   initEditing?: boolean;
   isAdmin?: boolean;
-  currentUser: UserSchemaType
+  currentUser: UserSchemaType;
+  toRegister?: boolean;
 }
 
-function Profile({ ableToEdit, initEditing, isAdmin = false, currentUser }: Props) {
+function Profile({
+  ableToEdit,
+  initEditing,
+  isAdmin = false,
+  currentUser,
+  toRegister = false,
+}: Props) {
   const imgValue = useImgFileLoader();
 
   const [isEditing, setIsEditing] = useState(initEditing);
+
+  const navigate = useNavigate();
+
+  const location = useLocation();
 
   const genreOptions = Object.entries(mappedGenres).map(([key, value], i) => (
     <MenuItem key={i} value={key}>
@@ -59,10 +71,14 @@ function Profile({ ableToEdit, initEditing, isAdmin = false, currentUser }: Prop
   ));
 
   const handleEdit = () => {
+    if (initEditing) {
+      const from = location.state?.from || "/"; // Si no hay origen, ir al inicio
+      navigate(from);
+    }
+
     if (isEditing) {
       imgValue.setImg(null);
       reset();
-
     }
     setIsEditing(!isEditing);
   };
@@ -71,7 +87,7 @@ function Profile({ ableToEdit, initEditing, isAdmin = false, currentUser }: Prop
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm<UserSchemaType>({
     resolver: zodResolver(userSchema),
     defaultValues: currentUser,
@@ -79,10 +95,12 @@ function Profile({ ableToEdit, initEditing, isAdmin = false, currentUser }: Prop
 
   return (
     <Card sx={styles.container}>
-        <form onSubmit={handleSubmit((d) => console.log(d))}>
-        <Box sx={styles.imgContainer}>
-          <Box component={"img"} src={currentUser.img} sx={styles.img}></Box>
-        </Box>
+      <form onSubmit={handleSubmit((d) => console.log(d))}>
+        {currentUser.img != "" && (
+          <Box sx={styles.imgContainer}>
+            <Box component={"img"} src={currentUser.img} sx={styles.img}></Box>
+          </Box>
+        )}
         <Box>
           <Box sx={styles.row}>
             <Box sx={styles.label}>
@@ -122,7 +140,9 @@ function Profile({ ableToEdit, initEditing, isAdmin = false, currentUser }: Prop
                 </>
               ) : (
                 <Box>
-                  <Typography variant="body1">{currentUser.lastName}</Typography>
+                  <Typography variant="body1">
+                    {currentUser.lastName}
+                  </Typography>
                 </Box>
               )}
             </Box>
@@ -133,7 +153,7 @@ function Profile({ ableToEdit, initEditing, isAdmin = false, currentUser }: Prop
               <Typography variant="label">{ProfileLabel.email}</Typography>
             </Box>
             <Box sx={styles.input}>
-              {(isAdmin && isEditing) ? (
+              {isAdmin && isEditing ? (
                 <>
                   <TextField type="text" {...register("email")} />
                   {errors.email?.message && (
@@ -155,7 +175,7 @@ function Profile({ ableToEdit, initEditing, isAdmin = false, currentUser }: Prop
               <Typography variant="label">{ProfileLabel.rol}</Typography>
             </Box>
             <Box sx={styles.input}>
-              {(isAdmin && isEditing) ? (
+              {isAdmin && isEditing ? (
                 <>
                   <Select
                     type="text"
@@ -172,7 +192,9 @@ function Profile({ ableToEdit, initEditing, isAdmin = false, currentUser }: Prop
                 </>
               ) : (
                 <Box>
-                  <Typography variant="body1">{mappedRoles[currentUser.rol]}</Typography>
+                  <Typography variant="body1">
+                    {mappedRoles[currentUser.rol]}
+                  </Typography>
                 </Box>
               )}
             </Box>
@@ -183,7 +205,7 @@ function Profile({ ableToEdit, initEditing, isAdmin = false, currentUser }: Prop
               <Typography variant="label">{ProfileLabel.code}</Typography>
             </Box>
             <Box sx={styles.input}>
-              {(isAdmin && isEditing) ? (
+              {isAdmin && isEditing ? (
                 <>
                   <TextField type="number" {...register("code")} />
                   {errors.code?.message && (
@@ -244,7 +266,9 @@ function Profile({ ableToEdit, initEditing, isAdmin = false, currentUser }: Prop
                 </>
               ) : (
                 <Box>
-                  <Typography variant="body1">{mappedGenres[currentUser.genre]}</Typography>
+                  <Typography variant="body1">
+                    {mappedGenres[currentUser.genre]}
+                  </Typography>
                 </Box>
               )}
             </Box>
@@ -293,8 +317,8 @@ function Profile({ ableToEdit, initEditing, isAdmin = false, currentUser }: Prop
             )}
           </Box>
         </Box>
-        </form>
-      </Card>
+      </form>
+    </Card>
   );
 }
 
