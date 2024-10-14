@@ -1,4 +1,4 @@
-import ProjectCard, { AddProjectCard } from "../../components/projectCard"
+import ProjectCard, { AddProjectCard } from '@modules/projects/components/projectCard';
 import Grid from '@mui/material/Grid2';
 
 function MyProjects() {

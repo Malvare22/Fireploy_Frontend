@@ -17,7 +17,7 @@ const zLogin = z.object({
   password: z.string()
 });
 
-export default function Login() {
+export default function Index() {
   const {
     register,
     handleSubmit,

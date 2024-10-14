@@ -1,12 +1,14 @@
 import { RouterProvider } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
-import { theme } from "./themes";
+
 // import '@/core/fonts/Open Sans/fonts.css'
 import "@core/fonts/OpenSans/fonts.css";
+
+import SnackBar from "@modules/general/components/snackbar";
+import { theme } from "./themes";
+import { SnackBarContext } from "@modules/general/context/snackbarContext";
 import { router } from "./router/router";
-import { SnackBarContext } from "../modules/general/context/snackbarContext";
-import useSnackBar from "../modules/general/hooks/useSnackbar";
-import SnackBar from "../modules/general/components/snackbar";
+import useSnackBar from "@modules/general/hooks/useSnackbar";
 
 
 function App() {

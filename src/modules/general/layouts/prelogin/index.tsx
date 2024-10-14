@@ -1,4 +1,4 @@
-import { Box, Grid2 as Grid } from "@mui/material"
+import { Box } from "@mui/material"
 import React from "react"
 import { styles } from "./styles"
 import Footer from "../../components/footer"

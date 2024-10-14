@@ -48,7 +48,6 @@ function Profile({
   initEditing,
   isAdmin = false,
   currentUser,
-  toRegister = false,
 }: Props) {
   const imgValue = useImgFileLoader();
 

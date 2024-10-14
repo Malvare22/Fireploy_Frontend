@@ -14,9 +14,9 @@ import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 import { useEffect, useState } from "react";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { NavbarLabel } from "../../enums/navbarLabel";
 import { useNavigate } from "react-router-dom";
-import { usersData } from "../../../users/utils/dataDummy/usersDataDummy";
+import { NavbarLabel } from "@modules/general/enums/navbarLabel";
+import { usersData } from "@modules/users/utils/dataDummy/usersDataDummy";
 
 /**
  * type 0 administrator
@@ -45,7 +45,7 @@ function Navbar() {
         break;
     }
     setType(x);
-  });
+  }, []);
 
   return (
     <Box sx={styles.container}>
@@ -186,7 +186,7 @@ function ProfileSection() {
     const user = usersData.find((u) => u.code.toString() == code);
 
     if (user != undefined) setImg(user?.img);
-  });
+  }, []);
 
   const handleButton = () => {
     setOpen(!open);

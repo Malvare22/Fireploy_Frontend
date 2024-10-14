@@ -1,7 +1,7 @@
 import { Grid2 as Grid, Typography } from "@mui/material"
 import { styles } from "./styles"
-import { FooterLabel } from "../../enums"
-import LogoUFPS from '../../assets/LogoUFPS.png'
+import LogoUFPS from '@modules/general/assets/LogoUFPS.png'
+import { FooterLabel } from "@modules/general/enums"
 
 function Footer() {
   return (

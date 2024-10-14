@@ -1,4 +1,4 @@
-import { UserSchemaType } from "../../../general/utils/validations/userSchema";
+import { UserSchemaType } from "@modules/general/utils/validations/userSchema";
 
 export const usersData: UserSchemaType[] = [
     {

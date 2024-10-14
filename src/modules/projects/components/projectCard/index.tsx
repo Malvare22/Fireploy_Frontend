@@ -1,11 +1,9 @@
-import { Box, Card, IconButton, SxProps, Typography } from "@mui/material"
+import { Box, Card, IconButton, Typography } from "@mui/material"
 import Grid from '@mui/material/Grid2';
 import { styles } from "./styles"
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Link } from "react-router-dom";
 import CircleIcon from '@mui/icons-material/Circle';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { CSSProperties } from "react";
 
 function ProjectCard() {
 

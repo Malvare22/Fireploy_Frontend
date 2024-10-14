@@ -3,7 +3,6 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { UserListLabel } from "../../../users/enums/userListLabel";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -16,22 +15,22 @@ import {
   TableFooter,
   TablePagination,
 } from "@mui/material";
-import {
-  StyledTableCell,
-  StyledTableRow,
-} from "../../../general/components/tableStyled";
 import { Link, useNavigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect } from "react";
-import TablePaginationActions from "../../../general/components/tablePaginationActions";
-import { usersData } from "../../utils/dataDummy/usersDataDummy";
-import useModal from "../../../general/hooks/useModal";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import useTable from "../../../general/hooks/useTable";
-import ModalAlert from "../../../general/components/modalAlert";
+import { UserListLabel } from "@modules/users/enums/userListLabel";
+import useModal from "@modules/general/hooks/useModal";
+import useTable from "@modules/general/hooks/useTable";
+import { usersData } from "@modules/users/utils/dataDummy/usersDataDummy";
+import ModalAlert from "@modules/general/components/modalAlert";
+import { StyledTableCell, StyledTableRow } from "@modules/general/components/tableStyled";
+import TablePaginationActions from "@modules/general/components/tablePaginationActions";
+import { UserSchemaType } from "@modules/general/utils/validations/userSchema";
+
 
 const titles = [
   UserListLabel.code,
@@ -60,10 +59,11 @@ export default function StudentList() {
     emptyRows,
     handleChangePage,
     handleChangeRowsPerPage,
-  } = useTable();
+  } = useTable<UserSchemaType>();
 
   useEffect(() => {
     setData(usersData.filter((d) => d.rol == "E"));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleRemove = (id: number) => {

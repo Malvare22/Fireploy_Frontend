@@ -4,10 +4,11 @@ import { styles } from './styles';
 import InfoIcon from '@mui/icons-material/Info';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {  RegisterSchemaType, registerSchema } from '../../utils/validations/registerSchema';
 import Select from '@mui/material/Select';
-import { mappedGenres } from '../../utils/validations/genre';
-import { RegisterLabel } from '../../enums';
+import { RegisterLabel } from '@modules/general/enums';
+import { registerSchema, RegisterSchemaType } from '@modules/general/utils/validations/registerSchema';
+import { mappedGenres } from '@modules/general/utils/validations/genre';
+
 
 function Register() {
 

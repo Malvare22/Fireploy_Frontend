@@ -11,7 +11,7 @@ type Props = {
 export default function SnackBar({view, setView, message, success}: Props) {
 
   const handleClose = (
-    event?: React.SyntheticEvent | Event,
+    _event?: React.SyntheticEvent | Event,
     reason?: SnackbarCloseReason,
   ) => {
     if (reason === 'clickaway') {

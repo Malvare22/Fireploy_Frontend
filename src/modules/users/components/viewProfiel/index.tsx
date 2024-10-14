@@ -1,8 +1,8 @@
 import { useSearchParams } from "react-router-dom";
-import Profile from "../../pages/profile";
 import { useEffect, useState } from "react";
-import { UserSchemaType } from "../../../general/utils/validations/userSchema";
-import { usersData } from "../../utils/dataDummy/usersDataDummy";
+import Profile from "@modules/users/pages/profile";
+import { usersData } from "@modules/users/utils/dataDummy/usersDataDummy";
+import { UserSchemaType } from "@modules/general/utils/validations/userSchema";
 
 interface Props {
   isMine?: boolean;
@@ -46,6 +46,7 @@ function ViewProfile({
     console.log(current_id);
     const u = usersData.find((s) => s.code == current_id);
     setUser(u);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (

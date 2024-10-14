@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function useTable<T extends Record<string, any>>() {
+function useTable<T>() {
 
   const [data, setData] = useState<T[] | undefined>(undefined);
 

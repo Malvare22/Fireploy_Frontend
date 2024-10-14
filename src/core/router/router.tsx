@@ -1,21 +1,22 @@
+import Generic from "@modules/general/layouts/generic";
+import Login from "@modules/general/layouts/login";
+import PreLogin from "@modules/general/layouts/prelogin";
+import ForgetPassword from "@modules/general/pages/forgetPassword";
+import Index from "@modules/general/pages/index/index";
+import Register from "@modules/general/pages/register";
+import MyProjects from "@modules/projects/pages/myProjects";
+import ViewProfile from "@modules/users/components/viewProfiel";
+import StudentList from "@modules/users/pages/students";
+import TeachersList from "@modules/users/pages/teachers";
 import { createBrowserRouter } from "react-router-dom";
-import Test from "../../modules/general/pages/index/index";
-import PreLogin from "../../modules/general/layouts/prelogin";
-import Register from "../../modules/general/pages/register";
-import Generic from "../../modules/general/layouts/generic";
-import ForgetPassword from "../../modules/general/pages/forgetPassword";
-import Login from "../../modules/general/layouts/login";
-import MyProjects from "../../modules/projects/pages/myProjects";
-import StudentList from "../../modules/users/pages/students";
-import TeacherList from "../../modules/users/pages/teachers";
-import ViewProfile from "../../modules/users/components/viewProfiel";
+
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <PreLogin>
-        <Test></Test>
+        <Index></Index>
       </PreLogin>
     ),
   },
@@ -97,7 +98,7 @@ export const router = createBrowserRouter([
     element: (
       <Login>
         <Generic title="Docentes">
-          <TeacherList />
+          <TeachersList />
         </Generic>
       </Login>
     ),

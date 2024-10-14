@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from "@mui/material";
-import CustomModal from "../../../general/components/modal";
+import CustomModal from "../modal";
 
 interface Props {
   open: boolean;
@@ -8,7 +8,7 @@ interface Props {
   message: string
 }
 
-function ModalAlert({ open, setOpen, message, action }: Props) {
+function ModalAlert({ open, setOpen, message }: Props) {
   return (
     <CustomModal open={open} setOpen={setOpen}>
       <Box
