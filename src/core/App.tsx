@@ -2,7 +2,7 @@ import { RouterProvider } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
 import { theme } from "./themes";
 // import '@/core/fonts/Open Sans/fonts.css'
-import "@src/core/fonts/OpenSans/fonts.css";
+import "core/";
 import { router } from "./router/router";
 import { SnackBarContext } from "../modules/general/context/snackbarContext";
 import useSnackBar from "../modules/general/hooks/useSnackbar";
