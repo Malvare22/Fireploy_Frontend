@@ -21,6 +21,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import useTable from "@modules/general/hooks/useTable";
 import { useEffect } from "react";
 import { HeadCell } from "@core/type/headCell";
+import AddButton from "@modules/general/components/buttons/add";
+import LoadCSVButton from "@modules/general/components/buttons/loadCSV";
+import AddUserInput from "@modules/general/components/addUserInput";
 
 enum GroupStudentsLabel {
   title = "Estudiantes",
@@ -61,13 +64,16 @@ const headCells: readonly HeadCell<Type>[] = [
 ];
 
 function GroupStudents() {
+  // const [toRegister, setToRegister] = useState<string[]>([]);
+
+  // console.log(toRegister);
+
   const {
     setData,
     page,
     rowsPerPage,
     filteredData,
     emptyRows,
-
     order,
     orderBy,
     handleRequestSort,
@@ -81,60 +87,76 @@ function GroupStudents() {
   return (
     <Card sx={styles.container}>
       <Typography variant="h5">{GroupStudentsLabel.title}</Typography>
-      <TableContainer component={Paper} sx={{}}>
-        <Table sx={{ width: "40%" }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              {headCells.map((element, i) => (
-                <StyledTableCell key={i} align={"center"}>
-                  {element.sorteable ? (
-                    <TableSortLabel
-                      active={orderBy === element.id}
-                      direction={orderBy === element.id ? order : "asc"}
-                      onClick={() => {
-                        handleRequestSort(element.id);
-                      }}
-                    >
-                      {element.label}
-                    </TableSortLabel>
-                  ) : (
-                    <>{element.label}</>
-                  )}
-                </StyledTableCell>
-              ))}
-              <StyledTableCell>{GroupStudentsLabel.options}</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(rowsPerPage > 0
-              ? filteredData().slice(
-                  page * rowsPerPage,
-                  page * rowsPerPage + rowsPerPage
-                )
-              : filteredData()
-            ).map((row) => (
-              <StyledTableRow key={row.code}>
-                <StyledTableCell align="left">{row.code}</StyledTableCell>
-                <StyledTableCell>{row.name}</StyledTableCell>
-                <StyledTableCell align="center">
-                  <Box>
-                    <IconButton>
-                      <DeleteIcon />
-                    </IconButton>
-                  </Box>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Box sx={{ display: "flex", width: "100%" }}>
+        <Box sx={{ width: "50%" }}>
+          <TableContainer component={Paper} sx={{ width: "100%" }}>
+            <Table aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  {headCells.map((element, i) => (
+                    <StyledTableCell key={i} align={"center"}>
+                      {element.sorteable ? (
+                        <TableSortLabel
+                          active={orderBy === element.id}
+                          direction={orderBy === element.id ? order : "asc"}
+                          onClick={() => {
+                            handleRequestSort(element.id);
+                          }}
+                        >
+                          {element.label}
+                        </TableSortLabel>
+                      ) : (
+                        <>{element.label}</>
+                      )}
+                    </StyledTableCell>
+                  ))}
+                  <StyledTableCell>
+                    {GroupStudentsLabel.options}
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(rowsPerPage > 0
+                  ? filteredData().slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : filteredData()
+                ).map((row) => (
+                  <StyledTableRow key={row.code}>
+                    <StyledTableCell align="left">{row.code}</StyledTableCell>
+                    <StyledTableCell>{row.name}</StyledTableCell>
+                    <StyledTableCell align="center">
+                      <Box>
+                        <IconButton>
+                          <DeleteIcon />
+                        </IconButton>
+                      </Box>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+        <Box sx={{ marginLeft: 4, width: "50%" }}>
+          <AddUserInput/>
+          <Box>
+            <AddButton sx={{ marginTop: 2 }} />
+          </Box>
+          <Box>
+            <LoadCSVButton sx={{ marginTop: 2 }} />
+          </Box>
+        </Box>
+      </Box>
     </Card>
   );
 }
+
 
 export default GroupStudents;
