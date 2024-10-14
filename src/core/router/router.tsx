@@ -5,6 +5,8 @@ import ForgetPassword from "@modules/general/pages/forgetPassword";
 import Index from "@modules/general/pages/index/index";
 import Register from "@modules/general/pages/register";
 import MyProjects from "@modules/projects/pages/myProjects";
+import GroupStudents from "@modules/subjects/pages/group/students";
+import SubjectsList from "@modules/subjects/pages/subjects";
 import ViewProfile from "@modules/users/components/viewProfiel";
 import StudentList from "@modules/users/pages/students";
 import TeachersList from "@modules/users/pages/teachers";
@@ -129,6 +131,26 @@ export const router = createBrowserRouter([
       <Login>
         <Generic title="Registrar Usuario">
           <ViewProfile toRegister={true} initEditing={true} rol={"D"}/>
+        </Generic>
+      </Login>
+    ),
+  },
+  {
+    path: "/subjects",
+    element: (
+      <Login>
+        <Generic title="Materias">
+          <SubjectsList/>
+        </Generic>
+      </Login>
+    ),
+  },
+  {
+    path: "/test",
+    element: (
+      <Login>
+        <Generic title="Materias">
+          <GroupStudents/>
         </Generic>
       </Login>
     ),
