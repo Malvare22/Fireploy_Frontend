@@ -87,8 +87,8 @@ function GroupStudents() {
   return (
     <Card sx={styles.container}>
       <Typography variant="h5">{GroupStudentsLabel.title}</Typography>
-      <Box sx={{ display: "flex", width: "100%" }}>
-        <Box sx={{ width: "50%" }}>
+      <Box sx={{ display: {sm: "flex"}, width: "100%" }}>
+        <Box sx={{ width: {sm: "50%"} }}>
           <TableContainer component={Paper} sx={{ width: "100%" }}>
             <Table aria-label="customized table">
               <TableHead>
@@ -144,7 +144,7 @@ function GroupStudents() {
             </Table>
           </TableContainer>
         </Box>
-        <Box sx={{ marginLeft: 4, width: "50%" }}>
+        <Box sx={{ marginLeft: {sm: 4}, width: {sm: "50%"}, marginTop: {sm: 0, xs: 4} }}>
           <AddUserInput/>
           <Box>
             <AddButton sx={{ marginTop: 2 }} />

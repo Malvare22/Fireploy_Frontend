@@ -47,8 +47,8 @@ export default function AddUserInput() {
             setUsers([...users, {name: value, code: getCode.get(value) as number}]); 
           }
         }}
-        sx={{ width: "100%" }}
-        renderInput={(params) => <TextField {...params} />}
+        sx={{ width: "100%", fontSize: 2 }}
+        renderInput={(params) => <TextField sx={{fontSize: 2}} {...params} />}
       />
       <Grid container
         sx={{
@@ -61,7 +61,7 @@ export default function AddUserInput() {
         }}
       >
         {users.map((u) => (
-          <Grid size={4} height={1}><UserPreview user={u} handleClick={() => handleRemove(u.code)} /></Grid>
+          <Grid size={{md: 6, xl: 4, xs: 12}} height={1}><UserPreview user={u} handleClick={() => handleRemove(u.code)} /></Grid>
         ))}
       </Grid>
     </Box>
@@ -73,7 +73,7 @@ function UserPreview({user, handleClick}: {user: Type, handleClick: () => void})
     <Box
       sx={{
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "space-between",
         alignItems: "center",
         border: "1px solid black",
         padding: 2,

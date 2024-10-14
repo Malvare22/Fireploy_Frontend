@@ -3,7 +3,7 @@ export interface UserInputDataTestType {
     name: string;
   }
 
-export const userInputDataTest: userInputDataTestType[] = [
+export const userInputDataTest: UserInputDataTestType[] = [
     { code: 1, name: "Apple" },
     { code: 2, name: "Banana" },
     { code: 3, name: "Cherry" },
