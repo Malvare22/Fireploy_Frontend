@@ -5,6 +5,7 @@ import ForgetPassword from "@modules/general/pages/forgetPassword";
 import Index from "@modules/general/pages/index/index";
 import Register from "@modules/general/pages/register";
 import MyProjects from "@modules/projects/pages/myProjects";
+import GroupSections from "@modules/subjects/pages/group/sections";
 import GroupStudents from "@modules/subjects/pages/group/students";
 import SubjectsList from "@modules/subjects/pages/subjects";
 import ViewProfile from "@modules/users/components/viewProfiel";
@@ -146,12 +147,18 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/test",
+    path: "/subjects/students",
     element: (
       <Login>
-        <Generic title="Materias">
-          <GroupStudents/>
-        </Generic>
+        <GroupStudents/>
+      </Login>
+    ),
+  },
+  {
+    path: "/subjects/sections",
+    element: (
+      <Login>
+        <GroupSections/>
       </Login>
     ),
   },

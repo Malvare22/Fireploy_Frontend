@@ -10,6 +10,7 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
+  TextField,
   Typography,
 } from "@mui/material";
 import { styles } from "./styles";
@@ -22,34 +23,26 @@ import useTable from "@modules/general/hooks/useTable";
 import { useEffect, useState } from "react";
 import { HeadCell } from "@core/type/headCell";
 import AddButton from "@modules/general/components/buttons/add";
-import LoadCSVButton from "@modules/general/components/buttons/loadCSV";
-import AddUserInput from "@modules/general/components/addUserInput";
 import { useSearchParams } from "react-router-dom";
 import { subjectData } from "@modules/subjects/utils/data/subjectData";
-import { StudentType } from "@modules/subjects/types/subjectType";
+import { SectionType } from "@modules/subjects/types/subjectType";
 import Generic from "@modules/general/layouts/generic";
 
-enum GroupStudentsLabel {
-  title = "Estudiantes",
-  code = "Código",
+enum GroupSectionsLabel {
   name = "Nombre",
-  options = "Opciones",
+  title = 'Secciones',
+  options = 'Opciones'
 }
 
-const headCells: readonly HeadCell<StudentType>[] = [
-  {
-    id: "code",
-    label: GroupStudentsLabel.code,
-    sorteable: true,
-  },
+const headCells: readonly HeadCell<SectionType>[] = [
   {
     id: "name",
-    label: GroupStudentsLabel.name,
+    label: GroupSectionsLabel.name,
     sorteable: true,
   },
 ];
 
-function GroupStudents() {
+export default function GroupSections() {
   // const [toRegister, setToRegister] = useState<string[]>([]);
 
   // console.log(toRegister);
@@ -69,14 +62,14 @@ function GroupStudents() {
     order,
     orderBy,
     handleRequestSort,
-  } = useTable<StudentType>();
+  } = useTable<SectionType>();
 
   useEffect(() => {
     if (!id) return;
     const _id = parseInt(id);
     const _subject = subjectData.find((s) => s.code == _id);
     if(_subject){
-      setData(_subject?.students);
+      setData(_subject?.sections);
       setTitle(_subject.name + ' ' + _subject.group);
     }
     
@@ -86,8 +79,8 @@ function GroupStudents() {
   return (
     <Generic title={title}>
       <Card sx={styles.container}>
-        <Typography variant="h5">{GroupStudentsLabel.title}</Typography>
-        <Box sx={{ display: { sm: "flex" }, width: "100%", marginTop:2 }}>
+        <Typography variant="h5">{GroupSectionsLabel.title}</Typography>
+        <Box sx={{ display: { sm: "flex" }, width: "100%", marginTop: 2 }}>
           <Box sx={{ width: { sm: "50%" } }}>
             <TableContainer component={Paper} sx={{ width: "100%" }}>
               <Table aria-label="customized table">
@@ -110,8 +103,8 @@ function GroupStudents() {
                         )}
                       </StyledTableCell>
                     ))}
-                    <StyledTableCell>
-                      {GroupStudentsLabel.options}
+                    <StyledTableCell align="center">
+                      {GroupSectionsLabel.options}
                     </StyledTableCell>
                   </TableRow>
                 </TableHead>
@@ -123,15 +116,12 @@ function GroupStudents() {
                       )
                     : filteredData()
                   ).map((row) => (
-                    <StyledTableRow key={row.code}>
-                      <StyledTableCell align="left">{row.code}</StyledTableCell>
+                    <StyledTableRow key={row.name}>
                       <StyledTableCell>{row.name}</StyledTableCell>
                       <StyledTableCell align="center">
-                        <Box>
                           <IconButton>
                             <DeleteIcon />
                           </IconButton>
-                        </Box>
                       </StyledTableCell>
                     </StyledTableRow>
                   ))}
@@ -151,12 +141,11 @@ function GroupStudents() {
               marginTop: { sm: 0, xs: 4 },
             }}
           >
-            <AddUserInput />
+            <Box sx={{    display: 'flex', alignItems: 'center'}}>
+            <TextField></TextField>
             <Box>
-              <AddButton sx={{ marginTop: 2 }} />
+              <AddButton sx={{marginLeft: 2}}/>
             </Box>
-            <Box>
-              <LoadCSVButton sx={{ marginTop: 2 }} />
             </Box>
           </Box>
         </Box>
@@ -164,5 +153,3 @@ function GroupStudents() {
     </Generic>
   );
 }
-
-export default GroupStudents;

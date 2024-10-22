@@ -4,8 +4,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Box,
   Button,
@@ -14,6 +12,7 @@ import {
   TableCell,
   TableFooter,
   TablePagination,
+  TableSortLabel,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
@@ -24,23 +23,42 @@ import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import useModal from "@modules/general/hooks/useModal";
 import useTable from "@modules/general/hooks/useTable";
-import { usersData } from "@modules/users/utils/dataDummy/usersDataDummy";
 import ModalAlert from "@modules/general/components/modalAlert";
 import {
   StyledTableCell,
   StyledTableRow,
 } from "@modules/general/components/tableStyled";
-import { UserSchemaType } from "@modules/general/utils/validations/userSchema";
 import TablePaginationActions from "@modules/general/components/tablePaginationActions";
 import { SubjectListLabel } from "@modules/subjects/enums/subjectsListLabel";
+import { HeadCell } from "@core/type/headCell";
+import { SubjectType } from "@modules/subjects/types/subjectType";
+import { subjectData } from "@modules/subjects/utils/data/subjectData";
 
-const titles = [
-  SubjectListLabel.code,
-  SubjectListLabel.name,
-  SubjectListLabel.group,
-  SubjectListLabel.students,
-  SubjectListLabel.sections,
-  SubjectListLabel.projects,
+// const titles = [
+//   SubjectListLabel.code,
+//   SubjectListLabel.name,
+//   SubjectListLabel.group,
+//   SubjectListLabel.students,
+//   SubjectListLabel.sections,
+//   SubjectListLabel.projects,
+// ];
+
+const headCells: readonly HeadCell<SubjectType>[] = [
+  {
+    id: "code",
+    label: SubjectListLabel.code,
+    sorteable: true,
+  },
+  {
+    id: "name",
+    label: SubjectListLabel.name,
+    sorteable: true,
+  },
+  {
+    id: "group",
+    label: SubjectListLabel.group,
+    sorteable: true,
+  },
 ];
 
 export default function SubjectsList() {
@@ -53,8 +71,6 @@ export default function SubjectsList() {
   const {
     data,
     setData,
-    // currentId,
-    setCurrentId,
     setSearch,
     page,
     rowsPerPage,
@@ -62,17 +78,20 @@ export default function SubjectsList() {
     emptyRows,
     handleChangePage,
     handleChangeRowsPerPage,
-  } = useTable<UserSchemaType>();
+    order,
+    orderBy,
+    handleRequestSort,
+  } = useTable<SubjectType>();
 
   useEffect(() => {
-    setData(usersData.filter((d) => d.rol == "D"));
+    setData(subjectData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleRemove = (id: number) => {
-    setCurrentId(id);
-    modalDelete.setView(true);
-  };
+  // const handleRemove = (id: number) => {
+  //   setCurrentId(id);
+  //   modalDelete.setView(true);
+  // };
 
   const handleRegister = () => {
     navigate("register", { state: { from: "/teachers" } });
@@ -118,14 +137,26 @@ export default function SubjectsList() {
             <Table sx={{ width: "100%" }} aria-label="customized table">
               <TableHead>
                 <TableRow>
-                  {titles.map((title, i) => (
-                    <StyledTableCell
-                      key={i}
-                      align={i == titles.length - 1 ? "center" : "left"}
-                    >
-                      {title}
+                  {headCells.map((element, i) => (
+                    <StyledTableCell key={i} align={"center"}>
+                      {element.sorteable ? (
+                        <TableSortLabel
+                          active={orderBy === element.id}
+                          direction={orderBy === element.id ? order : "asc"}
+                          onClick={() => {
+                            handleRequestSort(element.id);
+                          }}
+                        >
+                          {element.label}
+                        </TableSortLabel>
+                      ) : (
+                        <>{element.label}</>
+                      )}
                     </StyledTableCell>
                   ))}
+                  <StyledTableCell>{SubjectListLabel.students}</StyledTableCell>
+                  <StyledTableCell>{SubjectListLabel.projects}</StyledTableCell>
+                  <StyledTableCell>{SubjectListLabel.sections}</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -138,20 +169,33 @@ export default function SubjectsList() {
                 ).map((row) => (
                   <StyledTableRow key={row.code}>
                     <StyledTableCell align="left">{row.code}</StyledTableCell>
-                    <StyledTableCell>{row.lastName}</StyledTableCell>
                     <StyledTableCell>{row.name}</StyledTableCell>
                     <StyledTableCell align="center">
-                      <Box>
-                        <IconButton component={Link} to={`view?id=${row.code}`}>
-                          <VisibilityIcon />
-                        </IconButton>
-                        <IconButton component={Link} to={`edit?id=${row.code}`}>
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton onClick={() => handleRemove(row.code)}>
-                          <DeleteIcon />
-                        </IconButton>
-                      </Box>
+                      {row.group}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      <IconButton
+                        component={Link}
+                        to={`students?id=${row.code}`}
+                      >
+                        <VisibilityIcon />
+                      </IconButton>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      <IconButton
+                        component={Link}
+                        to={`projects?id=${row.code}`}
+                      >
+                        <VisibilityIcon />
+                      </IconButton>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      <IconButton
+                        component={Link}
+                        to={`sections?id=${row.code}`}
+                      >
+                        <VisibilityIcon />
+                      </IconButton>
                     </StyledTableCell>
                   </StyledTableRow>
                 ))}
