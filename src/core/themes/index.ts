@@ -171,70 +171,87 @@ export const theme = createTheme({
     h1Bold: {
       fontSize: "61px",
       fontWeight: "bold",
+      fontFamily: 'Open Sans'
     },
     h2: {
       fontSize: "49px",
       fontWeight: "normal",
+      fontFamily: 'Open Sans'
     },
     h2Bold: {
       fontSize: "49px",
       fontWeight: "bold",
+      fontFamily: 'Open Sans'
     },
     h3: {
       fontSize: "39px",
       fontWeight: "normal",
+      fontFamily: 'Open Sans'
     },
     h3Bold: {
       fontSize: "39px",
       fontWeight: "bold",
+      fontFamily: 'Open Sans'
     },
     h4: {
       fontSize: "31px",
       fontWeight: "normal",
+      fontFamily: 'Open Sans'
     },
     h4Bold: {
       fontSize: "31px",
       fontWeight: "bold",
+      fontFamily: 'Open Sans'
     },
     h5: {
       fontSize: "25px",
       fontWeight: "normal",
+      fontFamily: 'Open Sans'
     },
     h5Bold: {
       fontSize: "25px",
       fontWeight: "bold",
+      fontFamily: 'Open Sans'
     },
     title: {
       fontSize: "20px",
       fontWeight: "normal",
+      fontFamily: 'Open Sans'
     },
     titleBold: {
       fontSize: "20px",
       fontWeight: "bold",
+      fontFamily: 'Open Sans'
     },
     title2: {
       fontSize: "16px",
       fontWeight: "normal",
+      fontFamily: 'Open Sans'
     },
     title2Bold: {
       fontSize: "16px",
       fontWeight: "bold",
+      fontFamily: 'Open Sans'
     },
     body: {
       fontSize: "13px",
       fontWeight: "normal",
+      fontFamily: 'Open Sans'
     },
     bodyBold: {
       fontSize: "13px",
       fontWeight: "bold",
+      fontFamily: 'Open Sans'
     },
     caption: {
       fontSize: "10px",
       fontWeight: "normal",
+      fontFamily: 'Open Sans'
     },
     captionBold: {
       fontSize: "10px",
       fontWeight: "bold",
+      fontFamily: 'Open Sans'
     },
   },
 
