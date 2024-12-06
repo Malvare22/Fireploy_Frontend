@@ -2,230 +2,312 @@ import { createTheme } from "@mui/material";
 
 declare module '@mui/material/styles' {
   interface Palette {
-    customBlue: {
+    backgroundX:{
+      primary: string;
+      secondary: string;
+      panel: string;
+    },
+    icon:{
+      primary: string;
+    },
+    customGrey:{
       main: string;
-    };
-    customRed: {
+    },
+    navbar:{
       main: string;
-    };
-    customGrey: {
-      dark: string;
-      light: string;
-    };
+    },
+    link:{
+      main: string;
+    }
+
   }
 
   interface PaletteOptions {
-    customBlue?: {
-      main: string;
+    backgroundX?: {
+      primary?: string;
+      secondary?: string;
+      panel?: string;
     };
-    customRed?: {
-      main: string;
+    icon?: {
+      primary?: string;
     };
     customGrey?: {
-      dark: string;
-      light: string;
+      main?: string;
+    };
+    navbar?: {
+      main?: string;
+    };
+    link?: {
+      main?: string;
     };
   }
   
 }
 
-declare module '@mui/material/Button' {
-  interface ButtonPropsColorOverrides {
-    customBlue: true;
-  }
+// declare module '@mui/material/Button' {
+//   interface ButtonPropsColorOverrides {
+//     customBlue: true;
+//   }
+// }
+0
+declare module '@mui/material/styles' {
+interface TypographyVariants {
+  // Variantes no bold
+  h1?: React.CSSProperties;
+  h2?: React.CSSProperties;
+  h3?: React.CSSProperties;
+  h4?: React.CSSProperties;
+  h5?: React.CSSProperties;
+  title?: React.CSSProperties;
+  title2?: React.CSSProperties;
+  body?: React.CSSProperties;
+  caption?: React.CSSProperties;
+
+  // Variantes bold
+  h1Bold?: React.CSSProperties;
+  h2Bold?: React.CSSProperties;
+  h3Bold?: React.CSSProperties;
+  h4Bold?: React.CSSProperties;
+  h5Bold?: React.CSSProperties;
+  titleBold?: React.CSSProperties;
+  title2Bold?: React.CSSProperties;
+  bodyBold?: React.CSSProperties;
+  captionBold?: React.CSSProperties;
 }
 
-declare module '@mui/material/styles' {
-  interface TypographyVariants {
-    label: React.CSSProperties;
-    inputMessage: React.CSSProperties;
-  }
 
   // allow configuration using `createTheme`
-  interface TypographyVariantsOptions {
-    label?: React.CSSProperties;
-    inputMessage: React.CSSProperties;
-    cardLabel: React.CSSProperties;
-  }
+interface TypographyVariantsOptions {
+  // Variantes no bold
+  h1?: React.CSSProperties;
+  h2?: React.CSSProperties;
+  h3?: React.CSSProperties;
+  h4?: React.CSSProperties;
+  h5?: React.CSSProperties;
+  title?: React.CSSProperties;
+  title2?: React.CSSProperties;
+  body?: React.CSSProperties;
+  caption?: React.CSSProperties;
+
+  // Variantes bold
+  h1Bold?: React.CSSProperties;
+  h2Bold?: React.CSSProperties;
+  h3Bold?: React.CSSProperties;
+  h4Bold?: React.CSSProperties;
+  h5Bold?: React.CSSProperties;
+  titleBold?: React.CSSProperties;
+  title2Bold?: React.CSSProperties;
+  bodyBold?: React.CSSProperties;
+  captionBold?: React.CSSProperties;
+}
+
 }
 
 // Update the Typography's variant prop options
   declare module '@mui/material/Typography' {
     interface TypographyPropsVariantOverrides {
-      label: true;
-      inputMessage: true;
-      cardLabel: true;
+      // Variantes normales
+      h1: true;
+      h2: true;
+      h3: true;
+      h4: true;
+      h5: true;
+      title: true;
+      title2: true;
+      body: true;
+      caption: true;
+    
+      // Variantes bold
+      h1Bold: true;
+      h2Bold: true;
+      h3Bold: true;
+      h4Bold: true;
+      h5Bold: true;
+      titleBold: true;
+      title2Bold: true;
+      bodyBold: true;
+      captionBold: true;
+
     }
+    
   }
 
-  declare module '@mui/material/Button' {
-    interface ButtonPropsVariantOverrides {
-      action: true;
-      cancel: true;
-      navbarOption: true;
-    }
-  }
+  // declare module '@mui/material/Button' {
+  //   interface ButtonPropsVariantOverrides {
+  //     action: true;
+  //     cancel: true;
+  //     navbarOption: true;
+  //   }
+  // }
 
 export const theme = createTheme({
   palette: {
-    primary: {
-      main: '#FFFFFF'
+    backgroundX: {
+      primary: "#EEF1F6",   // Color principal de fondo
+      secondary: "#D2DAED", // Color secundario de fondo
+      panel: "#EAEAEC",     // Color de panel
     },
-    secondary: {
-      main: '#EBE9F2',
-      light: '#F1FAEE'
-    },
-    success: {
-      main: '#66bb6a',
-    },
-    error: {
-      main: '#f44336',
-    },
-    customBlue: {
-      main: '#457B9D',
-    },
-    customRed: {
-      main: '#E63946'
+    icon: {
+      primary: "#6471A5",   // Color principal de íconos
     },
     customGrey: {
-      dark: '#49454F',
-      light: '#CCCCCC'
-    }
+      main: "#676262",      // Color gris personalizado
+    },
+    navbar: {
+      main: "#5D6E8C",      // Color principal de navbar
+    },
+    link: {
+      main: "#417CE3",      // Color principal de enlaces
+    },
+    success: {
+      main: "#6AAE72",      // Color principal para éxito
+    },
   },
   typography: {
-    fontFamily: 'Open Sans, sans-serif',
     h1: {
-      fontWeight: 700,
-      fontSize: '80px',
-      fontStyle: 'normal',
+      fontSize: "61px",
+      fontWeight: "normal",
+    },
+    h1Bold: {
+      fontSize: "61px",
+      fontWeight: "bold",
     },
     h2: {
-      fontWeight: 600,
-      fontSize: '50px',
-      fontStyle: 'normal',
+      fontSize: "49px",
+      fontWeight: "normal",
+    },
+    h2Bold: {
+      fontSize: "49px",
+      fontWeight: "bold",
+    },
+    h3: {
+      fontSize: "39px",
+      fontWeight: "normal",
+    },
+    h3Bold: {
+      fontSize: "39px",
+      fontWeight: "bold",
+    },
+    h4: {
+      fontSize: "31px",
+      fontWeight: "normal",
+    },
+    h4Bold: {
+      fontSize: "31px",
+      fontWeight: "bold",
     },
     h5: {
-      fontWeight: 600,
-      fontStyle: 'normal',
-      wordWrap: 'break-word'
-
+      fontSize: "25px",
+      fontWeight: "normal",
     },
-    body1: {
-      fontWeight: 450,
-      fontStyle: 'normal',
-      fontSize: 24
+    h5Bold: {
+      fontSize: "25px",
+      fontWeight: "bold",
     },
-    body2: {
-      fontWeight: 500,
-      fontStyle: 'normal',
+    title: {
+      fontSize: "20px",
+      fontWeight: "normal",
     },
-    subtitle1: {
-      fontWeight: 300,
-      fontStyle: 'normal',
+    titleBold: {
+      fontSize: "20px",
+      fontWeight: "bold",
     },
-    subtitle2: {
-      fontWeight: 300,
-      fontStyle: 'italic',
+    title2: {
+      fontSize: "16px",
+      fontWeight: "normal",
     },
-    button: {
-      fontWeight: 600,
-      textTransform: 'none', // Evita que los botones estén en mayúsculas
+    title2Bold: {
+      fontSize: "16px",
+      fontWeight: "bold",
     },
-    label: {
-      fontWeight: 600,
-      fontSize: '26px',
-      fontStyle: 'normal',
-      fontFamily: 'Open Sans, sans-serif',
+    body: {
+      fontSize: "13px",
+      fontWeight: "normal",
     },
-
-    inputMessage:{
-      fontWeight: 500,
-      fontSize: '18px',
-      fontStyle: 'normal',
-      fontFamily: 'Open Sans, sans-serif',
-      color: 'red',
-      wordWrap: 'break-word'
+    bodyBold: {
+      fontSize: "13px",
+      fontWeight: "bold",
     },
-
-    cardLabel:{
-      fontWeight: 450,
-      fontSize: '19px',
-      fontStyle: 'normal',
-      fontFamily: 'Open Sans, sans-serif',
-      color: 'black',
-    }
+    caption: {
+      fontSize: "10px",
+      fontWeight: "normal",
+    },
+    captionBold: {
+      fontSize: "10px",
+      fontWeight: "bold",
+    },
   },
 
-  components: {
-    // Name of the component
-    // MuiButtonBase: {
-    //   defaultProps: {
-    //     color: 'red',        
-    //   },
-    // },
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          variants: [
-            {
-              props: { variant: 'action' },
-              style: {
-                borderWidth: '30px',
-                fontSize: '20px',
-                backgroundColor: 'black',
-                color: 'white',
-                minWidth: '100px'
-              },
-            },
-            {
-              props: { variant: 'cancel' },
-              style: {
-                borderWidth: '30px',
-                fontSize: '20px',
-                backgroundColor: 'gray',
-                color: 'white',
-                minWidth: '100px',
-                marginRight: '24px'
-              },
-            },
-            {
-              props: { variant: 'navbarOption' },
-              style: {
-                minHeight: '46px',
-                border: '1px white solid',
-                color: 'white',
-                fontSize: 20
-              },
-            },
-          ],
-        },
-      },
-    },
-    MuiTextField:{
-      styleOverrides: {
-        root: {
-          // border: 'solid 1px black',
+  // components: {
+  //   // Name of the component
+  //   // MuiButtonBase: {
+  //   //   defaultProps: {
+  //   //     color: 'red',        
+  //   //   },
+  //   // },
+  //   MuiButton: {
+  //     styleOverrides: {
+  //       root: {
+  //         variants: [
+  //           {
+  //             props: { variant: 'action' },
+  //             style: {
+  //               borderWidth: '30px',
+  //               fontSize: '20px',
+  //               backgroundColor: 'black',
+  //               color: 'white',
+  //               minWidth: '100px'
+  //             },
+  //           },
+  //           {
+  //             props: { variant: 'cancel' },
+  //             style: {
+  //               borderWidth: '30px',
+  //               fontSize: '20px',
+  //               backgroundColor: 'gray',
+  //               color: 'white',
+  //               minWidth: '100px',
+  //               marginRight: '24px'
+  //             },
+  //           },
+  //           {
+  //             props: { variant: 'navbarOption' },
+  //             style: {
+  //               minHeight: '46px',
+  //               border: '1px white solid',
+  //               color: 'white',
+  //               fontSize: 20
+  //             },
+  //           },
+  //         ],
+  //       },
+  //     },
+  //   },
+  //   MuiTextField:{
+  //     styleOverrides: {
+  //       root: {
+  //         // border: 'solid 1px black',
           
-          width: '100%',
-        },
-      },
-    },
-    MuiOutlinedInput: {
-      styleOverrides: {
-        root: {
-          borderRadius: 10, // Mantén el borde redondeado si es necesario
-          fontSize:20,
-          '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'black', // Color del borde al hacer hover
-          },
-          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'black', // Color del borde cuando está enfocado
-          },
-        },
-        notchedOutline: {
-          borderColor: 'black', // Borde por defecto cuando no hay hover ni foco
-        },
-      },
-    },
-  },
+  //         width: '100%',
+  //       },
+  //     },
+  //   },
+  //   MuiOutlinedInput: {
+  //     styleOverrides: {
+  //       root: {
+  //         borderRadius: 10, // Mantén el borde redondeado si es necesario
+  //         fontSize:20,
+  //         '&:hover .MuiOutlinedInput-notchedOutline': {
+  //           borderColor: 'black', // Color del borde al hacer hover
+  //         },
+  //         '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+  //           borderColor: 'black', // Color del borde cuando está enfocado
+  //         },
+  //       },
+  //       notchedOutline: {
+  //         borderColor: 'black', // Borde por defecto cuando no hay hover ni foco
+  //       },
+  //     },
+  //   },
+  // },
 });
