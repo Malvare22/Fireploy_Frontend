@@ -1,68 +1,137 @@
-import { Box, Button, Link, Paper, TextField, Typography } from "@mui/material";
-import Grid from '@mui/material/Grid';
+import FormContainer from "@modules/general/components/formContainer";
+import {
+  Box,
+  Button,
+  Input,
+  Link,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
+import Grid from "@mui/material/Grid";
+import { gapi, loadAuth2 } from "gapi-script";
+import { useEffect } from "react";
+import GoogleLogin from "react-google-login";
+import Divider from "@mui/material/Divider";
+import { useNavigate } from "react-router-dom";
+import Logo from "@modules/general/assets/LogoFireploy.png";
 
 const Login = () => {
-    return (
+  const clientID =
+    "638667794967-iksel85rm915d7up5e8oq4f0ahusjmoq.apps.googleusercontent.com";
+
+  useEffect(() => {
+    loadAuth2(gapi, clientID, "");
+  }, []);
+
+  const onSuccess = (response: any) => {
+    console.log(response);
+  };
+
+  const navigate = useNavigate();
+
+  return (
+    <Box
+      sx={{ display: "flex", justifyContent: "center", alignContent: "center" }}
+    >
+      <FormContainer
+        sx={{
+          width: "60%",
+        }}
+      >
         <Box
           sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '100vh',
-            backgroundColor: '#f5f5f5',
+            display: "flex",
           }}
         >
-          <Paper elevation={3} sx={{ padding: 4, width: '400px' }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} textAlign="center">
-                <Typography variant="h5" component="h1" gutterBottom>
-                  Iniciar Sesión
-                </Typography>
-              </Grid>
-  
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Correo Electrónico"
-                  variant="outlined"
-                  type="email"
-                  required
-                  sx={{ marginBottom: 2 }}
-                />
-              </Grid>
-  
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Contraseña"
-                  variant="outlined"
-                  type="password"
-                  required
-                  sx={{ marginBottom: 2 }}
-                />
-              </Grid>
-  
-              <Grid item xs={12}>
-                <Button variant="contained" color="primary" fullWidth>
-                  Iniciar sesión
-                </Button>
-              </Grid>
-  
-              <Grid item xs={12} textAlign="center" sx={{ marginTop: 2 }}>
-                <Link href="#" variant="body2">
-                  Olvidé mi contraseña
-                </Link>
-              </Grid>
-  
-              <Grid item xs={12} textAlign="center" sx={{ marginTop: 2 }}>
-                <Link href="#" variant="body2">
+          {/* form */}
+          <Box
+            sx={{
+              width: "80%",
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            <Box>
+              <Typography variant="h5Bold">Correo Electrónico</Typography>
+            </Box>
+            <Box>
+              <Input />
+            </Box>
+            <Box>
+              <Typography variant="h5Bold">Contraseña</Typography>
+            </Box>
+            <Box>
+              <Input />
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Box>
+                <Button variant="primary">Iniciar Sesión</Button>
+              </Box>
+              <Box
+                sx={{
+                  "& button": {
+                    borderRadius: "50px !important",
+                    overflow: "hidden",
+                    marginLeft: 3
+                  },
+                }}
+              >
+                <GoogleLogin
+                  clientId={clientID}
+                  onSuccess={onSuccess}
+                  onFailure={() => alert("D:")}
+                  cookiePolicy="single_host_policy"
+                ></GoogleLogin>
+              </Box>
+            </Box>
+            <Divider />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                "& button": {
+                  textDecoration: "none",
+                  color: "black",
+                },
+              }}
+            >
+              <Box>
+                <Link
+                  component={"button"}
+                  onClick={() => navigate("/register")}
+                >
                   Crear una cuenta
                 </Link>
-              </Grid>
-            </Grid>
-          </Paper>
+              </Box>
+              <Box sx={{ marginLeft: 3 }}>
+                <Link
+                  component={"button"}
+                  onClick={() => navigate("/recovery")}
+                >
+                  Olvidé mi contraseña
+                </Link>
+              </Box>
+            </Box>
+          </Box>
+          {/* imagen */}
+          <Box
+            component={"img"}
+            sx={{
+              width: "30%",
+            }}
+            src={Logo}
+          ></Box>
         </Box>
-    );
-  };
-  
-  export default Login;
+      </FormContainer>
+    </Box>
+  );
+};
+
+export default Login;

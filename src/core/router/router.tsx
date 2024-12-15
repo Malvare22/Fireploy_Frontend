@@ -6,10 +6,10 @@ import { createBrowserRouter } from "react-router-dom";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <><Navbar/></>,
+    element: <><Navbar/><Home/></>,
   },
   {
     path: "login",
-    element: <Login />,
+    element:  <><Navbar/><Login/></>,
   },
 ]);

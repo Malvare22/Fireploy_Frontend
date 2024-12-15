@@ -1,6 +1,5 @@
 import { RouterProvider } from "react-router-dom";
-import { ThemeProvider } from "@emotion/react";
-import "@core/fonts/OpenSans/fonts.css";
+import { ThemeProvider } from '@mui/material/styles';
 
 import { theme } from "./themes";
 import { SnackBarContext } from "@modules/general/context/snackbarContext";

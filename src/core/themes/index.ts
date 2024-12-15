@@ -1,25 +1,24 @@
 import { createTheme } from "@mui/material";
 
-declare module '@mui/material/styles' {
+declare module "@mui/material/styles" {
   interface Palette {
-    backgroundX:{
+    backgroundX: {
       primary: string;
       secondary: string;
       panel: string;
-    },
-    icon:{
+    };
+    icon: {
       primary: string;
-    },
-    customGrey:{
+    };
+    customGrey: {
       main: string;
-    },
-    navbar:{
+    };
+    navbar: {
       main: string;
-    },
-    link:{
+    };
+    link: {
       main: string;
-    }
-
+    };
   }
 
   interface PaletteOptions {
@@ -30,6 +29,7 @@ declare module '@mui/material/styles' {
     };
     icon?: {
       primary?: string;
+      primaryDark?: string;
     };
     customGrey?: {
       main?: string;
@@ -41,7 +41,6 @@ declare module '@mui/material/styles' {
       main?: string;
     };
   }
-  
 }
 
 // declare module '@mui/material/Button' {
@@ -49,118 +48,116 @@ declare module '@mui/material/styles' {
 //     customBlue: true;
 //   }
 // }
-0
-declare module '@mui/material/styles' {
-interface TypographyVariants {
-  // Variantes no bold
-  h1?: React.CSSProperties;
-  h2?: React.CSSProperties;
-  h3?: React.CSSProperties;
-  h4?: React.CSSProperties;
-  h5?: React.CSSProperties;
-  title?: React.CSSProperties;
-  title2?: React.CSSProperties;
-  body?: React.CSSProperties;
-  caption?: React.CSSProperties;
+0;
+declare module "@mui/material/styles" {
+  interface TypographyVariants {
+    // Variantes no bold
+    h1?: React.CSSProperties;
+    h2?: React.CSSProperties;
+    h3?: React.CSSProperties;
+    h4?: React.CSSProperties;
+    h5?: React.CSSProperties;
+    title?: React.CSSProperties;
+    title2?: React.CSSProperties;
+    body?: React.CSSProperties;
+    caption?: React.CSSProperties;
 
-  // Variantes bold
-  h1Bold?: React.CSSProperties;
-  h2Bold?: React.CSSProperties;
-  h3Bold?: React.CSSProperties;
-  h4Bold?: React.CSSProperties;
-  h5Bold?: React.CSSProperties;
-  titleBold?: React.CSSProperties;
-  title2Bold?: React.CSSProperties;
-  bodyBold?: React.CSSProperties;
-  captionBold?: React.CSSProperties;
-}
-
+    // Variantes bold
+    h1Bold?: React.CSSProperties;
+    h2Bold?: React.CSSProperties;
+    h3Bold?: React.CSSProperties;
+    h4Bold?: React.CSSProperties;
+    h5Bold?: React.CSSProperties;
+    titleBold?: React.CSSProperties;
+    title2Bold?: React.CSSProperties;
+    bodyBold?: React.CSSProperties;
+    captionBold?: React.CSSProperties;
+  }
 
   // allow configuration using `createTheme`
-interface TypographyVariantsOptions {
-  // Variantes no bold
-  h1?: React.CSSProperties;
-  h2?: React.CSSProperties;
-  h3?: React.CSSProperties;
-  h4?: React.CSSProperties;
-  h5?: React.CSSProperties;
-  title?: React.CSSProperties;
-  title2?: React.CSSProperties;
-  body?: React.CSSProperties;
-  caption?: React.CSSProperties;
+  interface TypographyVariantsOptions {
+    // Variantes no bold
+    h1?: React.CSSProperties;
+    h2?: React.CSSProperties;
+    h3?: React.CSSProperties;
+    h4?: React.CSSProperties;
+    h5?: React.CSSProperties;
+    title?: React.CSSProperties;
+    title2?: React.CSSProperties;
+    body?: React.CSSProperties;
+    caption?: React.CSSProperties;
 
-  // Variantes bold
-  h1Bold?: React.CSSProperties;
-  h2Bold?: React.CSSProperties;
-  h3Bold?: React.CSSProperties;
-  h4Bold?: React.CSSProperties;
-  h5Bold?: React.CSSProperties;
-  titleBold?: React.CSSProperties;
-  title2Bold?: React.CSSProperties;
-  bodyBold?: React.CSSProperties;
-  captionBold?: React.CSSProperties;
-}
-
+    // Variantes bold
+    h1Bold?: React.CSSProperties;
+    h2Bold?: React.CSSProperties;
+    h3Bold?: React.CSSProperties;
+    h4Bold?: React.CSSProperties;
+    h5Bold?: React.CSSProperties;
+    titleBold?: React.CSSProperties;
+    title2Bold?: React.CSSProperties;
+    bodyBold?: React.CSSProperties;
+    captionBold?: React.CSSProperties;
+  }
 }
 
 // Update the Typography's variant prop options
-  declare module '@mui/material/Typography' {
-    interface TypographyPropsVariantOverrides {
-      // Variantes normales
-      h1: true;
-      h2: true;
-      h3: true;
-      h4: true;
-      h5: true;
-      title: true;
-      title2: true;
-      body: true;
-      caption: true;
-    
-      // Variantes bold
-      h1Bold: true;
-      h2Bold: true;
-      h3Bold: true;
-      h4Bold: true;
-      h5Bold: true;
-      titleBold: true;
-      title2Bold: true;
-      bodyBold: true;
-      captionBold: true;
+declare module "@mui/material/Typography" {
+  interface TypographyPropsVariantOverrides {
+    // Variantes normales
+    h1: true;
+    h2: true;
+    h3: true;
+    h4: true;
+    h5: true;
+    title: true;
+    title2: true;
+    body: true;
+    caption: true;
 
-    }
-    
+    // Variantes bold
+    h1Bold: true;
+    h2Bold: true;
+    h3Bold: true;
+    h4Bold: true;
+    h5Bold: true;
+    titleBold: true;
+    title2Bold: true;
+    bodyBold: true;
+    captionBold: true;
   }
+}
 
-  // declare module '@mui/material/Button' {
-  //   interface ButtonPropsVariantOverrides {
-  //     action: true;
-  //     cancel: true;
-  //     navbarOption: true;
-  //   }
-  // }
+declare module "@mui/material/Button" {
+  interface ButtonPropsVariantOverrides {
+    primary: true;
+  }
+  interface ButtonPropsColorOverrides {
+    icon: true; // Agregamos "icon" como una opción válida
+  }
+}
 
 export const theme = createTheme({
   palette: {
     backgroundX: {
-      primary: "#EEF1F6",   // Color principal de fondo
+      primary: "#EEF1F6", // Color principal de fondo
       secondary: "#D2DAED", // Color secundario de fondo
-      panel: "#EAEAEC",     // Color de panel
+      panel: "#EAEAEC", // Color de panel
     },
     icon: {
-      primary: "#6471A5",   // Color principal de íconos
+      primary: "#6471A5", // Color principal de íconos
+      primaryDark: "#445180",
     },
     customGrey: {
-      main: "#676262",      // Color gris personalizado
+      main: "#676262", // Color gris personalizado
     },
     navbar: {
-      main: "#5D6E8C",      // Color principal de navbar
+      main: "#5D6E8C", // Color principal de navbar
     },
     link: {
-      main: "#417CE3",      // Color principal de enlaces
+      main: "#417CE3", // Color principal de enlaces
     },
     success: {
-      main: "#6AAE72",      // Color principal para éxito
+      main: "#6AAE72", // Color principal para éxito
     },
   },
   typography: {
@@ -171,95 +168,125 @@ export const theme = createTheme({
     h1Bold: {
       fontSize: "61px",
       fontWeight: "bold",
-      fontFamily: 'Open Sans'
+      fontFamily: "Open Sans",
     },
     h2: {
       fontSize: "49px",
       fontWeight: "normal",
-      fontFamily: 'Open Sans'
+      fontFamily: "Open Sans",
     },
     h2Bold: {
       fontSize: "49px",
       fontWeight: "bold",
-      fontFamily: 'Open Sans'
+      fontFamily: "Open Sans",
     },
     h3: {
       fontSize: "39px",
       fontWeight: "normal",
-      fontFamily: 'Open Sans'
+      fontFamily: "Open Sans",
     },
     h3Bold: {
       fontSize: "39px",
       fontWeight: "bold",
-      fontFamily: 'Open Sans'
+      fontFamily: "Open Sans",
     },
     h4: {
       fontSize: "31px",
       fontWeight: "normal",
-      fontFamily: 'Open Sans'
+      fontFamily: "Open Sans",
     },
     h4Bold: {
       fontSize: "31px",
       fontWeight: "bold",
-      fontFamily: 'Open Sans'
+      fontFamily: "Open Sans",
     },
     h5: {
       fontSize: "25px",
       fontWeight: "normal",
-      fontFamily: 'Open Sans'
+      fontFamily: "Open Sans",
     },
     h5Bold: {
       fontSize: "25px",
       fontWeight: "bold",
-      fontFamily: 'Open Sans'
+      fontFamily: "Open Sans",
     },
     title: {
       fontSize: "20px",
       fontWeight: "normal",
-      fontFamily: 'Open Sans'
+      fontFamily: "Open Sans",
     },
     titleBold: {
       fontSize: "20px",
       fontWeight: "bold",
-      fontFamily: 'Open Sans'
+      fontFamily: "Open Sans",
     },
     title2: {
       fontSize: "16px",
       fontWeight: "normal",
-      fontFamily: 'Open Sans'
+      fontFamily: "Open Sans",
     },
     title2Bold: {
       fontSize: "16px",
       fontWeight: "bold",
-      fontFamily: 'Open Sans'
+      fontFamily: "Open Sans",
     },
     body: {
       fontSize: "13px",
       fontWeight: "normal",
-      fontFamily: 'Open Sans'
+      fontFamily: "Open Sans",
     },
     bodyBold: {
       fontSize: "13px",
       fontWeight: "bold",
-      fontFamily: 'Open Sans'
+      fontFamily: "Open Sans",
     },
     caption: {
       fontSize: "10px",
       fontWeight: "normal",
-      fontFamily: 'Open Sans'
+      fontFamily: "Open Sans",
     },
     captionBold: {
       fontSize: "10px",
       fontWeight: "bold",
-      fontFamily: 'Open Sans'
+      fontFamily: "Open Sans",
     },
   },
+
+  components: {
+    MuiButton: {
+      variants: [
+        {
+          props: { variant: "primary" },
+          style: ({ theme }: { theme: any }) => ({
+            borderRadius: 30,
+            textTransform: "none",
+            backgroundColor: theme.palette.icon.primary, // Usamos la paleta
+            color: theme.palette.common.white, // Color de texto
+            fontSize: theme.typography.titleBold.fontSize, // Otra fuente del tema
+            fontFamily: theme.typography.titleBold.fontFamily,
+            fontWeight: theme.typography.titleBold.fontWeight,
+            "&:hover": {
+              backgroundColor: theme.palette.icon.primaryDark, // Usamos el color oscuro
+            },
+          }),
+        },
+      ],
+    },
+    MuiInput:{
+      defaultProps:{
+        style:{
+          width: '100%'
+        }
+      }
+    }
+  },
+  
 
   // components: {
   //   // Name of the component
   //   // MuiButtonBase: {
   //   //   defaultProps: {
-  //   //     color: 'red',        
+  //   //     color: 'red',
   //   //   },
   //   // },
   //   MuiButton: {
@@ -304,7 +331,7 @@ export const theme = createTheme({
   //     styleOverrides: {
   //       root: {
   //         // border: 'solid 1px black',
-          
+
   //         width: '100%',
   //       },
   //     },

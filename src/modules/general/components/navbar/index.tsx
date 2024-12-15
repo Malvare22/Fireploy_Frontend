@@ -22,7 +22,7 @@ const Navbar: React.FC<NavbarProps> = ({ session }: NavbarProps) => {
     // return <>{!st ? <Open setState={setSt} /> : <Close setState={setSt} />}</>;
   return (
     <>
-      <Desktop session={true} />
+      <Desktop session={false} />
     </>
   );
 };
@@ -87,11 +87,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-import Drawner from "./components/drawer";
-import Drawer from "./components/drawer";
 import DrawerCustom from "./components/drawer";
 
 export function AccountMenu() {
