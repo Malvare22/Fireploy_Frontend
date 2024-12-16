@@ -11,9 +11,9 @@ import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
 
 function Home() {
   return (
-    <Box sx={{ padding: 10, boxShadow: 5 }}>
+    <Box sx={{ padding: 6, boxShadow: 5 }}>
       {/* Carta */}
-      <Grid
+      {/* <Grid
         container
         sx={{ backgroundColor: "backgroundX.primary", padding: 5, borderRadius: 20,  filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))' }}
       >
@@ -38,7 +38,7 @@ function Home() {
             sx={{ width: "100%", height: "auto" }} // Estilos opcionales
           />
         </Grid>
-      </Grid>
+      </Grid> */}
 
       <Box sx={{display: 'flex', justifyContent: 'center', margin: 4}}>
         <Typography variant="h4Bold">¿Por qué preferir Fireploy?</Typography>
@@ -66,7 +66,7 @@ function Home() {
         <Typography variant="h4Bold">Powered By</Typography>
       </Box>
 
-      <Box sx={{display: 'flex', justifyContent: 'space-between', paddingLeft: 60, paddingRight: 60, backgroundColor: "backgroundX.primary", marginLeft: -10, marginRight: -10, paddingTop: 5, paddingBottom: 5, filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'}}>
+      {/* <Box sx={{display: 'flex', justifyContent: 'space-between', paddingLeft: 60, paddingRight: 60, backgroundColor: "backgroundX.primary", marginLeft: -10, marginRight: -10, paddingTop: 5, paddingBottom: 5, filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))'}}>
         <Box
           component="img" // Renderiza como un <img>
           src={spring} // Define el source de la imagen
@@ -86,7 +86,7 @@ function Home() {
           sx={{ width: "10%", height: "auto" }} // Estilos opcionales
         />
 
-      </Box>
+      </Box> */}
     </Box>
   );
 }

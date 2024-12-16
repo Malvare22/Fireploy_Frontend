@@ -13,7 +13,7 @@ function LayoutBasic() {
           display: 'flex', 
           alignItems: 'center',
           backgroundColor: "backgroundX.secondary",
-          justifyContent: 'center'
+          justifyContent: 'center',
         }}
       >
         <Outlet />
