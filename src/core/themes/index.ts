@@ -262,9 +262,9 @@ export const theme = createTheme({
             textTransform: "none",
             backgroundColor: theme.palette.icon.primary, // Usamos la paleta
             color: theme.palette.common.white, // Color de texto
-            fontSize: theme.typography.titleBold.fontSize, // Otra fuente del tema
-            fontFamily: theme.typography.titleBold.fontFamily,
-            fontWeight: theme.typography.titleBold.fontWeight,
+            fontSize: theme.typography.title2Bold.fontSize, // Otra fuente del tema
+            fontFamily: theme.typography.title2Bold.fontFamily,
+            fontWeight: theme.typography.title2Bold.fontWeight,
             "&:hover": {
               backgroundColor: theme.palette.icon.primaryDark, // Usamos el color oscuro
             },

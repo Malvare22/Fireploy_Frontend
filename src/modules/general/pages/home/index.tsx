@@ -11,7 +11,7 @@ import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
 
 function Home() {
   return (
-    <Box sx={{ backgroundColor: "backgroundX.secondary", padding: 10, boxShadow: 5 }}>
+    <Box sx={{ padding: 10, boxShadow: 5 }}>
       {/* Carta */}
       <Grid
         container

@@ -31,106 +31,113 @@ const Login = () => {
   const navigate = useNavigate();
 
   return (
-    <Box
-      sx={{ display: "flex", justifyContent: "center", alignContent: "center" }}
+    <FormContainer
+      sx={{
+        width: "60%",
+      }}
     >
-      <FormContainer
+      <Box
         sx={{
-          width: "60%",
+          display: { md: "flex" },
         }}
       >
+        {/* form */}
         <Box
           sx={{
+            width: { md: "80%" },
             display: "flex",
+            flexDirection: "column",
+            gap: 3,
           }}
         >
-          {/* form */}
+          <Box>
+            <Typography variant="h5Bold">Correo Electrónico</Typography>
+          </Box>
+          <Box>
+            <Input />
+          </Box>
+          <Box>
+            <Typography variant="h5Bold">Contraseña</Typography>
+          </Box>
+          <Box>
+            <Input />
+          </Box>
           <Box
             sx={{
-              width: "80%",
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
+              display: { md: "flex" },
+              justifyContent: "center",
+              "& div": {
+                display: "flex",
+                justifyContent: "center",
+              },
             }}
           >
             <Box>
-              <Typography variant="h5Bold">Correo Electrónico</Typography>
-            </Box>
-            <Box>
-              <Input />
-            </Box>
-            <Box>
-              <Typography variant="h5Bold">Contraseña</Typography>
-            </Box>
-            <Box>
-              <Input />
+              <Button variant="primary">Iniciar Sesión</Button>
             </Box>
             <Box
               sx={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <Box>
-                <Button variant="primary">Iniciar Sesión</Button>
-              </Box>
-              <Box
-                sx={{
-                  "& button": {
-                    borderRadius: "50px !important",
-                    overflow: "hidden",
-                    marginLeft: 3
-                  },
-                }}
-              >
-                <GoogleLogin
-                  clientId={clientID}
-                  onSuccess={onSuccess}
-                  onFailure={() => alert("D:")}
-                  cookiePolicy="single_host_policy"
-                ></GoogleLogin>
-              </Box>
-            </Box>
-            <Divider />
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
                 "& button": {
-                  textDecoration: "none",
-                  color: "black",
+                  borderRadius: "50px !important",
+                  overflow: "hidden",
+                  marginLeft: { md: 3 },
+                  marginTop: { xs: 3, md: 0 },
                 },
               }}
             >
-              <Box>
-                <Link
-                  component={"button"}
-                  onClick={() => navigate("/register")}
-                >
-                  Crear una cuenta
-                </Link>
-              </Box>
-              <Box sx={{ marginLeft: 3 }}>
-                <Link
-                  component={"button"}
-                  onClick={() => navigate("/recovery")}
-                >
-                  Olvidé mi contraseña
-                </Link>
-              </Box>
+              <GoogleLogin
+                clientId={clientID}
+                onSuccess={onSuccess}
+                onFailure={() => alert("D:")}
+                cookiePolicy="single_host_policy"
+              ></GoogleLogin>
             </Box>
           </Box>
-          {/* imagen */}
+          <Divider />
+          <Box
+            sx={{
+              display: { md: "flex" },
+              justifyContent: "center",
+              "& button": {
+                textDecoration: "none",
+                color: "black",
+              },
+              "& div": {
+                display: "flex",
+                justifyContent: "center",
+              },
+            }}
+          >
+            <Box>
+              <Link component={"button"} onClick={() => navigate("/register")}>
+                Crear una cuenta
+              </Link>
+            </Box>
+            <Box sx={{ marginLeft: { md: 3 }, marginTop: { xs: 3, md: 0 } }}>
+              <Link component={"button"} onClick={() => navigate("/recovery")}>
+                Olvidé mi contraseña
+              </Link>
+            </Box>
+          </Box>
+        </Box>
+        {/* imagen */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignContent: "center",
+          }}
+        >
           <Box
             component={"img"}
             sx={{
-              width: "30%",
+              maxHeight: { md: 400, xs: 200 },
             }}
             src={Logo}
           ></Box>
         </Box>
-      </FormContainer>
-    </Box>
+      </Box>
+    </FormContainer>
   );
 };
 

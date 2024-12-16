@@ -1,4 +1,4 @@
-import Navbar from "@modules/general/components/navbar";
+import LayoutBasic from "@modules/general/layouts/basic";
 import Home from "@modules/general/pages/home";
 import Login from "@modules/general/pages/login";
 import { createBrowserRouter } from "react-router-dom";
@@ -6,10 +6,16 @@ import { createBrowserRouter } from "react-router-dom";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <><Navbar/><Home/></>,
-  },
-  {
-    path: "login",
-    element:  <><Navbar/><Login/></>,
+    element: <LayoutBasic />, // Usar el Layout para rutas que necesitan el Navbar
+    children: [
+      {
+        path: "/",
+        element: <Home />, // Página principal
+      },
+      {
+        path: "login",
+        element: <Login />, // Página de login
+      },
+    ],
   },
 ]);
