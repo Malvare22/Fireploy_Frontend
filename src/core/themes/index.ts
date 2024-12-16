@@ -19,6 +19,9 @@ declare module "@mui/material/styles" {
     link: {
       main: string;
     };
+    customRed: {
+      main: string;
+    }
   }
 
   interface PaletteOptions {
@@ -38,6 +41,9 @@ declare module "@mui/material/styles" {
       main?: string;
     };
     link?: {
+      main?: string;
+    };
+    customRed?: {
       main?: string;
     };
   }
@@ -159,6 +165,9 @@ export const theme = createTheme({
     success: {
       main: "#6AAE72", // Color principal para éxito
     },
+    customRed: {
+      main: '#803E3E',
+    }
   },
   typography: {
     h1: {

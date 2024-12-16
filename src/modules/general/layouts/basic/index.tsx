@@ -1,3 +1,4 @@
+import Footer from "@modules/general/components/footer";
 import Navbar from "@modules/general/components/navbar";
 import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
@@ -17,6 +18,7 @@ function LayoutBasic() {
       >
         <Outlet />
       </Box>
+      <Footer/>
     </div>
   );
 }
