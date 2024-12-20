@@ -31,6 +31,9 @@ function Register() {
         },
       }}
     >
+      <Box sx={{ textAlign: "center" }}>
+        <Typography variant="h3Bold">Registro de Usuario</Typography>
+      </Box>
       <Box>
         <Box>
           <Typography variant="h5Bold">Nombres</Typography>
