@@ -21,7 +21,7 @@ declare module "@mui/material/styles" {
     };
     customRed: {
       main: string;
-    }
+    };
   }
 
   interface PaletteOptions {
@@ -166,8 +166,8 @@ export const theme = createTheme({
       main: "#6AAE72", // Color principal para éxito
     },
     customRed: {
-      main: '#803E3E',
-    }
+      main: "#803E3E",
+    },
   },
   typography: {
     h1: {
@@ -271,9 +271,9 @@ export const theme = createTheme({
             textTransform: "none",
             backgroundColor: theme.palette.icon.primary, // Usamos la paleta
             color: theme.palette.common.white, // Color de texto
-            fontSize: theme.typography.title2Bold.fontSize, // Otra fuente del tema
-            fontFamily: theme.typography.title2Bold.fontFamily,
-            fontWeight: theme.typography.title2Bold.fontWeight,
+            fontSize: theme.typography.h6.fontSize,
+            fontFamily: theme.typography.h6.fontFamily,
+            fontWeight: theme.typography.h5Bold.fontWeight,
             "&:hover": {
               backgroundColor: theme.palette.icon.primaryDark, // Usamos el color oscuro
             },
@@ -281,86 +281,121 @@ export const theme = createTheme({
         },
       ],
     },
-    MuiInput:{
-      defaultProps:{
-        style:{
-          width: '100%'
-        }
-      }
-    }
+    MuiInput: {
+      styleOverrides: {
+        root: ({ theme }: { theme: any }) => ({
+          width: "100%",
+          fontSize: theme.typography.h5.fontSize,
+          fontFamily: theme.typography.h5.fontFamily,
+          fontWeight: theme.typography.h5.fontWeight,
+        }),
+      },
+    },
+    MuiLink: {
+      styleOverrides: {
+        root: ({ theme }: { theme: any }) => ({
+          textDecoration: "none",
+          color: "black",
+          fontSize: theme.typography.h6.fontSize,
+          fontFamily: theme.typography.h6.fontFamily,
+          fontWeight: theme.typography.h6.fontWeight,
+          cursor: 'pointer'
+        }),
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        root: ({ theme }: { theme: any }) => ({
+          width: "100%",
+          fontSize: theme.typography.h6.fontSize,
+          fontFamily: theme.typography.h6.fontFamily,
+          fontWeight: theme.typography.h6.fontWeight,
+        }),
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: ({ theme }: { theme: any }) => ({
+          width: "100%",
+          fontSize: theme.typography.h6.fontSize,
+          fontFamily: theme.typography.h6.fontFamily,
+          fontWeight: theme.typography.h6.fontWeight,
+        }),
+      },
+    },
   },
-  
-
-  // components: {
-  //   // Name of the component
-  //   // MuiButtonBase: {
-  //   //   defaultProps: {
-  //   //     color: 'red',
-  //   //   },
-  //   // },
-  //   MuiButton: {
-  //     styleOverrides: {
-  //       root: {
-  //         variants: [
-  //           {
-  //             props: { variant: 'action' },
-  //             style: {
-  //               borderWidth: '30px',
-  //               fontSize: '20px',
-  //               backgroundColor: 'black',
-  //               color: 'white',
-  //               minWidth: '100px'
-  //             },
-  //           },
-  //           {
-  //             props: { variant: 'cancel' },
-  //             style: {
-  //               borderWidth: '30px',
-  //               fontSize: '20px',
-  //               backgroundColor: 'gray',
-  //               color: 'white',
-  //               minWidth: '100px',
-  //               marginRight: '24px'
-  //             },
-  //           },
-  //           {
-  //             props: { variant: 'navbarOption' },
-  //             style: {
-  //               minHeight: '46px',
-  //               border: '1px white solid',
-  //               color: 'white',
-  //               fontSize: 20
-  //             },
-  //           },
-  //         ],
-  //       },
-  //     },
-  //   },
-  //   MuiTextField:{
-  //     styleOverrides: {
-  //       root: {
-  //         // border: 'solid 1px black',
-
-  //         width: '100%',
-  //       },
-  //     },
-  //   },
-  //   MuiOutlinedInput: {
-  //     styleOverrides: {
-  //       root: {
-  //         borderRadius: 10, // Mantén el borde redondeado si es necesario
-  //         fontSize:20,
-  //         '&:hover .MuiOutlinedInput-notchedOutline': {
-  //           borderColor: 'black', // Color del borde al hacer hover
-  //         },
-  //         '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-  //           borderColor: 'black', // Color del borde cuando está enfocado
-  //         },
-  //       },
-  //       notchedOutline: {
-  //         borderColor: 'black', // Borde por defecto cuando no hay hover ni foco
-  //       },
-  //     },
-  //   },
-  // },
 });
+
+// components: {
+//   // Name of the component
+//   // MuiButtonBase: {
+//   //   defaultProps: {
+//   //     color: 'red',
+//   //   },
+//   // },
+//   MuiButton: {
+//     styleOverrides: {
+//       root: {
+//         variants: [
+//           {
+//             props: { variant: 'action' },
+//             style: {
+//               borderWidth: '30px',
+//               fontSize: '20px',
+//               backgroundColor: 'black',
+//               color: 'white',
+//               minWidth: '100px'
+//             },
+//           },
+//           {
+//             props: { variant: 'cancel' },
+//             style: {
+//               borderWidth: '30px',
+//               fontSize: '20px',
+//               backgroundColor: 'gray',
+//               color: 'white',
+//               minWidth: '100px',
+//               marginRight: '24px'
+//             },
+//           },
+//           {
+//             props: { variant: 'navbarOption' },
+//             style: {
+//               minHeight: '46px',
+//               border: '1px white solid',
+//               color: 'white',
+//               fontSize: 20
+//             },
+//           },
+//         ],
+//       },
+//     },
+//   },
+//   MuiTextField:{
+//     styleOverrides: {
+//       root: {
+//         // border: 'solid 1px black',
+
+//         width: '100%',
+//       },
+//     },
+//   },
+//   MuiOutlinedInput: {
+//     styleOverrides: {
+//       root: {
+//         borderRadius: 10, // Mantén el borde redondeado si es necesario
+//         fontSize:20,
+//         '&:hover .MuiOutlinedInput-notchedOutline': {
+//           borderColor: 'black', // Color del borde al hacer hover
+//         },
+//         '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+//           borderColor: 'black', // Color del borde cuando está enfocado
+//         },
+//       },
+//       notchedOutline: {
+//         borderColor: 'black', // Borde por defecto cuando no hay hover ni foco
+//       },
+//     },
+//   },
+// },
+// });
