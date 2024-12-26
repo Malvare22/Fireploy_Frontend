@@ -6,7 +6,7 @@ import { Outlet } from "react-router-dom";
 function LayoutBasic() {
   return (
     <div>
-      <Navbar />
+      {/* <Navbar /> */}
       <Box
         sx={{
           minHeight: {md: "70vh", xs: '80vh'},
@@ -14,11 +14,12 @@ function LayoutBasic() {
           alignItems: 'center',
           backgroundColor: "backgroundX.secondary",
           justifyContent: 'center',
+          width: '100vw'
         }}
       >
         <Outlet />
       </Box>
-      <Footer/>
+      {/* <Footer/> */}
     </div>
   );
 }

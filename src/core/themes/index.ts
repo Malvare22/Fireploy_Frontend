@@ -169,97 +169,7 @@ export const theme = createTheme({
       main: "#803E3E",
     },
   },
-  typography: {
-    h1: {
-      fontSize: "61px",
-      fontWeight: "normal",
-    },
-    h1Bold: {
-      fontSize: "61px",
-      fontWeight: "bold",
-      fontFamily: "Open Sans",
-    },
-    h2: {
-      fontSize: "49px",
-      fontWeight: "normal",
-      fontFamily: "Open Sans",
-    },
-    h2Bold: {
-      fontSize: "49px",
-      fontWeight: "bold",
-      fontFamily: "Open Sans",
-    },
-    h3: {
-      fontSize: "39px",
-      fontWeight: "normal",
-      fontFamily: "Open Sans",
-    },
-    h3Bold: {
-      fontSize: "39px",
-      fontWeight: "bold",
-      fontFamily: "Open Sans",
-    },
-    h4: {
-      fontSize: "31px",
-      fontWeight: "normal",
-      fontFamily: "Open Sans",
-    },
-    h4Bold: {
-      fontSize: "31px",
-      fontWeight: "bold",
-      fontFamily: "Open Sans",
-    },
-    h5: {
-      fontSize: "25px",
-      fontWeight: "normal",
-      fontFamily: "Open Sans",
-    },
-    h5Bold: {
-      fontSize: "25px",
-      fontWeight: "bold",
-      fontFamily: "Open Sans",
-    },
-    title: {
-      fontSize: "20px",
-      fontWeight: "normal",
-      fontFamily: "Open Sans",
-    },
-    titleBold: {
-      fontSize: "20px",
-      fontWeight: "bold",
-      fontFamily: "Open Sans",
-    },
-    title2: {
-      fontSize: "16px",
-      fontWeight: "normal",
-      fontFamily: "Open Sans",
-    },
-    title2Bold: {
-      fontSize: "16px",
-      fontWeight: "bold",
-      fontFamily: "Open Sans",
-    },
-    body: {
-      fontSize: "13px",
-      fontWeight: "normal",
-      fontFamily: "Open Sans",
-    },
-    bodyBold: {
-      fontSize: "13px",
-      fontWeight: "bold",
-      fontFamily: "Open Sans",
-    },
-    caption: {
-      fontSize: "10px",
-      fontWeight: "normal",
-      fontFamily: "Open Sans",
-    },
-    captionBold: {
-      fontSize: "10px",
-      fontWeight: "bold",
-      fontFamily: "Open Sans",
-    },
-  },
+  
 
   components: {
     MuiButton: {
@@ -399,3 +309,119 @@ export const theme = createTheme({
 //   },
 // },
 // });
+
+
+// theme.typography.h1Bold = {
+//   [theme.breakpoints.up('md')]: {
+//     fontSize: '40px'
+//   }
+// }
+
+
+theme.typography.h1 = {
+    fontSize: "61px",
+    fontWeight: "normal",
+    [theme.breakpoints.down('md')]: {
+      fontSize: '2.6rem',
+    },
+  };
+  theme.typography.h1Bold = {
+    fontSize: "61px",
+    fontWeight: "bold",
+    fontFamily: "Open Sans",
+    [theme.breakpoints.down('md')]: {
+      fontSize: '2.6rem',
+    },
+  }
+  theme.typography.h2 = {
+    fontSize: "49px",
+    fontWeight: "normal",
+    fontFamily: "Open Sans",
+    [theme.breakpoints.down('md')]: {
+      fontSize: '2.4rem',
+    },
+  }
+  theme.typography.h2Bold = {
+    fontSize: "49px",
+    fontWeight: "bold",
+    fontFamily: "Open Sans",
+    [theme.breakpoints.down('md')]: {
+      fontSize: '2.4rem',
+    },
+  }
+  theme.typography.h3 = {
+    fontSize: "39px",
+    fontWeight: "normal",
+    fontFamily: "Open Sans",
+  }
+  theme.typography.h3Bold = {
+    fontSize: "39px",
+    fontWeight: "bold",
+    fontFamily: "Open Sans",
+  }
+  theme.typography.h4 = {
+    fontSize: "31px",
+    fontWeight: "normal",
+    fontFamily: "Open Sans",
+    [theme.breakpoints.down('md')]: {
+      fontSize: '1.6rem',
+    },
+  }
+  theme.typography.h4Bold = {
+    fontSize: "31px",
+    fontWeight: "bold",
+    fontFamily: "Open Sans",
+    [theme.breakpoints.down('md')]: {
+      fontSize: '1.6rem',
+    },
+  }
+  theme.typography.h5 = {
+    fontSize: "25px",
+    fontWeight: "normal",
+    fontFamily: "Open Sans",
+  }
+  theme.typography.h5Bold = {
+    fontSize: "25px",
+    fontWeight: "bold",
+    fontFamily: "Open Sans",
+  }
+  theme.typography.title = {
+    fontSize: "20px",
+    fontWeight: "normal",
+    fontFamily: "Open Sans",
+  }
+  theme.typography.titleBold = {
+    fontSize: "20px",
+    fontWeight: "bold",
+    fontFamily: "Open Sans",
+  }
+  theme.typography.title2 = {
+    fontSize: "16px",
+    fontWeight: "normal",
+    fontFamily: "Open Sans",
+  }
+  theme.typography.title2Bold = {
+    fontSize: "16px",
+    fontWeight: "bold",
+    fontFamily: "Open Sans",
+  }
+  theme.typography.body = {
+    fontSize: "13px",
+    fontWeight: "normal",
+    fontFamily: "Open Sans",
+  }
+  theme.typography.bodyBold = {
+    fontSize: "13px",
+    fontWeight: "bold",
+    fontFamily: "Open Sans",
+  }
+  theme.typography.caption = {
+    fontSize: "10px",
+    fontWeight: "normal",
+    fontFamily: "Open Sans",
+  }
+  theme.typography.captionBold = {
+    fontSize: "10px",
+    fontWeight: "bold",
+    fontFamily: "Open Sans",
+  }
