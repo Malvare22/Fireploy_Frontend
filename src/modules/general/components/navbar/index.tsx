@@ -1,25 +1,22 @@
-import { Box, Typography } from "@mui/material";
-import Logo from "@modules/general/assets/LogoFireploy.png";
+import { Box, Typography, ListItemButton, IconButton } from "@mui/material";
 import React, { CSSProperties, useState } from "react";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import MenuIcon from "@mui/icons-material/Menu";
+import { useNavigate } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import DrawerCustom from "./components/drawer";
+import { AccountMenu } from "./components/accountMenu";
+import Notificacions from "./components/notifications";
+import Logo from '@modules/general/assets/LogoFireploy.png'
 
 const hoverTypographyStyles: CSSProperties = {
   textAlign: "center",
   transition: "color 0.3s ease",
   cursor: "pointer",
-  // "&:hover": {
-  //   backgroundColor: { md: "navbar.main", xs: "customGrey.main" },
-  // },
 };
 
 const Navbar = () => {
   const [session, _setSession] = useState(true);
-
   const [open, setOpen] = useState(true);
 
-  // return <>{!st ? <Open setState={setSt} /> : <Close setState={setSt} />}</>;
   return (
     <>
       <Box
@@ -84,10 +81,13 @@ interface FirstContentProps {
   open: boolean;
   setOpen: React.Dispatch<boolean>;
 }
+
 const FirstContent: React.FC<FirstContentProps> = ({
   open,
   setOpen,
 }: FirstContentProps) => {
+  const navigate = useNavigate();
+
   const handleButton = () => {
     setOpen(!open);
   };
@@ -121,16 +121,21 @@ const FirstContent: React.FC<FirstContentProps> = ({
 
       {open && (
         <>
-          {" "}
-          <Box sx={hoverTypographyStyles}>
-            <Typography variant="h5Bold">Inicio</Typography>
-          </Box>
-          <Box sx={{ ...hoverTypographyStyles, minWidth: 160 }}>
-            <Typography variant="h5Bold">Equipo de desarrollo</Typography>
-          </Box>
-          <Box sx={hoverTypographyStyles}>
-            <Typography variant="h5Bold">Tecnologías soportadas</Typography>
-          </Box>
+          <ListItemButton onClick={() => navigate("/")}>
+            <Typography variant="h5Bold" sx={hoverTypographyStyles}>
+              Inicio
+            </Typography>
+          </ListItemButton>
+          <ListItemButton onClick={() => navigate("/team")}>
+            <Typography variant="h5Bold" sx={hoverTypographyStyles}>
+              Equipo de desarrollo
+            </Typography>
+          </ListItemButton>
+          <ListItemButton onClick={() => navigate("/technologies")}>
+            <Typography variant="h5Bold" sx={hoverTypographyStyles}>
+              Tecnologías soportadas
+            </Typography>
+          </ListItemButton>
         </>
       )}
     </>
@@ -142,174 +147,29 @@ interface SecondContentProps {
 }
 const SecondContent: React.FC<SecondContentProps> = ({
   session,
-}: SecondContentProps) => (
-  <>
-    {session ? (
-      <>
-        <Notificacions />
-        <AccountMenu />
-      </>
-    ) : (
-      <>
-        <Box>
-          <Typography variant="h5Bold">Iniciar Sesión</Typography>
-        </Box>
-        <Box>
-          <Typography variant="h5Bold">Registrarse</Typography>
-        </Box>
-      </>
-    )}
-  </>
-);
+}: SecondContentProps) => {
+  const navigate = useNavigate();
 
-interface ProfilePreviewProps {
-  nombre: string;
-  foto: string;
-}
-
-const ProfilePreview: React.FC<ProfilePreviewProps> = ({ nombre, foto }) => {
   return (
-    // container
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        color: "white",
-        marginTop: {
-          xs: -3,
-          lg: 0,
-        },
-      }}
-    >
-      <Box
-        sx={{
-          width: { sm: 300, xs: 200 },
-          textAlign: "center",
-          wordBreak: "break-word",
-          border: '1px solid black'
-        }}
-      >
-        <Typography variant="h5Bold" sx={{ marginRight: 1 }}>
-          {nombre}
-        </Typography>
-      </Box>
-      <Box
-        sx={{
-          width: 52,
-          height: 52,
-          backgroundColor: "gray",
-          borderRadius: 100,
-          marginLeft: 1,
-        }}
-      ></Box>
-    </Box>
+    <>
+      {session ? (
+        <>
+          <Notificacions />
+          <AccountMenu />
+        </>
+      ) : (
+        <>
+          <ListItemButton onClick={() => navigate("/login")}>
+            <Typography variant="h5Bold">Iniciar Sesión</Typography>
+          </ListItemButton>
+          <ListItemButton onClick={() => navigate("/register")}>
+            <Typography variant="h5Bold">Registrarse</Typography>
+          </ListItemButton>
+        </>
+      )}
+    </>
   );
 };
 
-const Notificacions = () => (
-  <Box
-    sx={{
-      ...hoverTypographyStyles,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      marginRight: { lg: 4 },
-    }}
-  >
-    <Typography variant="h5Bold" sx={{ marginRight: 1 }}>
-      Notificaciones
-    </Typography>
-    <NotificationsIcon />
-  </Box>
-);
-
-import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import Logout from "@mui/icons-material/Logout";
-import DrawerCustom from "./components/drawer";
-
-export function AccountMenu() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  return (
-    <React.Fragment>
-      <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-        <Tooltip title="Account settings">
-          <IconButton
-            onClick={handleClick}
-            size="large"
-            // sx={{ ml: 2 }}
-            aria-controls={open ? "account-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-          >
-            <ProfilePreview nombre="Rodrigo Malaver" foto="a" />
-            {/* <Avatar sx={{ width: 32, height: 32 }}>M</Avatar> */}
-          </IconButton>
-        </Tooltip>
-      </Box>
-      <Menu
-        anchorEl={anchorEl}
-        id="account-menu"
-        open={open}
-        onClose={handleClose}
-        onClick={handleClose}
-        slotProps={{
-          paper: {
-            elevation: 0,
-            sx: {
-              overflow: "visible",
-              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-              mt: 1.5,
-              "& .MuiAvatar-root": {
-                width: 32,
-                height: 32,
-                ml: -0.5,
-                mr: 1,
-              },
-              "&::before": {
-                content: '""',
-                display: "block",
-                position: "absolute",
-                top: 0,
-                right: "50%",
-                width: 10,
-                height: 10,
-                bgcolor: "background.paper",
-                transform: "translateY(-50%) rotate(45deg)",
-                zIndex: 0,
-              },
-            },
-          },
-        }}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-      >
-        <MenuItem onClick={handleClose} sx={{ width: 240 }}>
-          <Avatar /> Profile
-        </MenuItem>
-        <Divider />
-        <MenuItem onClick={handleClose} sx={{ width: 240 }}>
-          <ListItemIcon>
-            <Logout fontSize="small" />
-          </ListItemIcon>
-          Logout
-        </MenuItem>
-      </Menu>
-    </React.Fragment>
-  );
-}
 
 export default Navbar;
