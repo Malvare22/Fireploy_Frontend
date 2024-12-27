@@ -319,109 +319,164 @@ export const theme = createTheme({
 
 
 theme.typography.h1 = {
-    fontSize: "61px",
-    fontWeight: "normal",
-    [theme.breakpoints.down('md')]: {
-      fontSize: '2.6rem',
-    },
-  };
-  theme.typography.h1Bold = {
-    fontSize: "61px",
-    fontWeight: "bold",
-    fontFamily: "Open Sans",
-    [theme.breakpoints.down('md')]: {
-      fontSize: '2.6rem',
-    },
-  }
-  theme.typography.h2 = {
-    fontSize: "49px",
-    fontWeight: "normal",
-    fontFamily: "Open Sans",
-    [theme.breakpoints.down('md')]: {
-      fontSize: '2.4rem',
-    },
-  }
-  theme.typography.h2Bold = {
-    fontSize: "49px",
-    fontWeight: "bold",
-    fontFamily: "Open Sans",
-    [theme.breakpoints.down('md')]: {
-      fontSize: '2.4rem',
-    },
-  }
-  theme.typography.h3 = {
-    fontSize: "39px",
-    fontWeight: "normal",
-    fontFamily: "Open Sans",
-  }
-  theme.typography.h3Bold = {
-    fontSize: "39px",
-    fontWeight: "bold",
-    fontFamily: "Open Sans",
-  }
-  theme.typography.h4 = {
-    fontSize: "31px",
-    fontWeight: "normal",
-    fontFamily: "Open Sans",
-    [theme.breakpoints.down('md')]: {
-      fontSize: '1.6rem',
-    },
-  }
-  theme.typography.h4Bold = {
-    fontSize: "31px",
-    fontWeight: "bold",
-    fontFamily: "Open Sans",
-    [theme.breakpoints.down('md')]: {
-      fontSize: '1.6rem',
-    },
-  }
-  theme.typography.h5 = {
-    fontSize: "25px",
-    fontWeight: "normal",
-    fontFamily: "Open Sans",
-  }
-  theme.typography.h5Bold = {
-    fontSize: "25px",
-    fontWeight: "bold",
-    fontFamily: "Open Sans",
-  }
-  theme.typography.title = {
-    fontSize: "20px",
-    fontWeight: "normal",
-    fontFamily: "Open Sans",
-  }
-  theme.typography.titleBold = {
-    fontSize: "20px",
-    fontWeight: "bold",
-    fontFamily: "Open Sans",
-  }
-  theme.typography.title2 = {
-    fontSize: "16px",
-    fontWeight: "normal",
-    fontFamily: "Open Sans",
-  }
-  theme.typography.title2Bold = {
-    fontSize: "16px",
-    fontWeight: "bold",
-    fontFamily: "Open Sans",
-  }
-  theme.typography.body = {
-    fontSize: "13px",
-    fontWeight: "normal",
-    fontFamily: "Open Sans",
-  }
-  theme.typography.bodyBold = {
-    fontSize: "13px",
-    fontWeight: "bold",
-    fontFamily: "Open Sans",
-  }
-  theme.typography.caption = {
-    fontSize: "10px",
-    fontWeight: "normal",
-    fontFamily: "Open Sans",
-  }
-  theme.typography.captionBold = {
-    fontSize: "10px",
-    fontWeight: "bold",
-    fontFamily: "Open Sans",
-  }
+  fontSize: "3.8rem", // ~61px
+  fontWeight: "normal",
+  [theme.breakpoints.down('md')]: {
+    fontSize: '2.6rem',
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '2rem',
+  },
+};
+theme.typography.h1Bold = {
+  fontSize: '3.8rem', // ~61px
+  fontWeight: "bold",
+  fontFamily: "Open Sans",
+  [theme.breakpoints.down('md')]: {
+    fontSize: '2.6rem',
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '2rem',
+  },
+};
+theme.typography.h2 = {
+  fontSize: "3rem", // ~49px
+  fontWeight: "normal",
+  fontFamily: "Open Sans",
+  [theme.breakpoints.down('md')]: {
+    fontSize: '2.4rem',
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1.8rem',
+  },
+};
+theme.typography.h2Bold = {
+  fontSize: "3rem", // ~49px
+  fontWeight: "bold",
+  fontFamily: "Open Sans",
+  [theme.breakpoints.down('md')]: {
+    fontSize: '2.4rem',
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1.8rem',
+  },
+};
+theme.typography.h3 = {
+  fontSize: "2.4rem", // ~39px
+  fontWeight: "normal",
+  fontFamily: "Open Sans",
+  [theme.breakpoints.down('md')]: {
+    fontSize: '2rem',
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1.6rem',
+  },
+};
+theme.typography.h3Bold = {
+  fontSize: "2.4rem", // ~39px
+  fontWeight: "bold",
+  fontFamily: "Open Sans",
+  [theme.breakpoints.down('md')]: {
+    fontSize: '2rem',
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1.6rem',
+  },
+};
+theme.typography.h4 = {
+  fontSize: "2rem", // ~31px
+  fontWeight: "normal",
+  fontFamily: "Open Sans",
+  [theme.breakpoints.down('md')]: {
+    fontSize: '1.6rem',
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1.4rem',
+  },
+};
+theme.typography.h4Bold = {
+  fontSize: "2rem", // ~31px
+  fontWeight: "bold",
+  fontFamily: "Open Sans",
+  [theme.breakpoints.down('md')]: {
+    fontSize: '1.6rem',
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1.4rem',
+  },
+};
+theme.typography.h5 = {
+  fontSize: "1.6rem", // ~25px
+  fontWeight: "normal",
+  fontFamily: "Open Sans",
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1.4rem',
+  },
+};
+theme.typography.h5Bold = {
+  fontSize: "1.6rem", // ~25px
+  fontWeight: "bold",
+  fontFamily: "Open Sans",
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1.4rem',
+  },
+};
+theme.typography.title = {
+  fontSize: "1.25rem", // ~20px
+  fontWeight: "normal",
+  fontFamily: "Open Sans",
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1rem',
+  },
+};
+theme.typography.titleBold = {
+  fontSize: "1.25rem", // ~20px
+  fontWeight: "bold",
+  fontFamily: "Open Sans",
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1rem',
+  },
+};
+theme.typography.title2 = {
+  fontSize: "1rem", // ~16px
+  fontWeight: "normal",
+  fontFamily: "Open Sans",
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '0.875rem', // ~14px
+  },
+};
+theme.typography.title2Bold = {
+  fontSize: "1rem", // ~16px
+  fontWeight: "bold",
+  fontFamily: "Open Sans",
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '0.875rem',
+  },
+};
+theme.typography.body = {
+  fontSize: "0.8125rem", // ~13px
+  fontWeight: "normal",
+  fontFamily: "Open Sans",
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '0.75rem', // ~12px
+  },
+};
+theme.typography.bodyBold = {
+  fontSize: "0.8125rem", // ~13px
+  fontWeight: "bold",
+  fontFamily: "Open Sans",
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '0.75rem',
+  },
+};
+theme.typography.caption = {
+  fontSize: "0.625rem", // ~10px
+  fontWeight: "normal",
+  fontFamily: "Open Sans",
+};
+theme.typography.captionBold = {
+  fontSize: "0.625rem", // ~10px
+  fontWeight: "bold",
+  fontFamily: "Open Sans",
+};
+
