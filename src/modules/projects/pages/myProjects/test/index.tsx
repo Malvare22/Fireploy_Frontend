@@ -1,5 +1,4 @@
-import ProjectCard from "@modules/projects/components/projectCard";
-import MiniDrawer from "@modules/projects/components/projectFrame";
+import IconMenu from "@modules/projects/components/projectFrame/menu";
 import { projectsDummy } from "@modules/projects/utils/dataDummy/projects";
 import { Box, Button, Divider, Typography } from "@mui/material";
 
@@ -7,7 +6,7 @@ function ViewProject() {
   const proyectos = projectsDummy;
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", backgroundColor: 'white', border: '1px solid' }}>
       {/* <Box sx={{ textAlign: "center", margin: 2 }}>
         <Typography variant="h3Bold">Mi Proyecto!</Typography>
       </Box> */}
@@ -17,7 +16,7 @@ function ViewProject() {
 
         
       </Box> */}
-     <MiniDrawer/>
+     <IconMenu/>
     </Box>
   );
 }
