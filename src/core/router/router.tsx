@@ -3,6 +3,7 @@ import ChangePassword from "@modules/general/pages/changePassword";
 import Home from "@modules/general/pages/home";
 import Login from "@modules/general/pages/login";
 import Register from "@modules/general/pages/register";
+import MyProjects from "@modules/projects/pages/myProjects/all";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
       {
         path: "recovery",
         element: <ChangePassword />,
+      },
+      {
+        path: "myProjects/all",
+        element: <MyProjects />,
       },
     ],
   },
