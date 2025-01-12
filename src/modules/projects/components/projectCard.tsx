@@ -1,5 +1,7 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Tooltip, Typography } from "@mui/material";
 import { TypeProject } from "../utils/TypeProject";
+import Link from "@mui/material/Link";
+import { getStatusColor } from "../utils/getStatusColor";
 
 interface Props {
   proyecto: TypeProject;
@@ -7,13 +9,20 @@ interface Props {
 
 const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
   return (
-    <Box sx={{ backgroundColor: "white", padding: 2 }}>
-      <Box>
+    <Box sx={{ backgroundColor: "white", padding: 4, paddingX: { md: 14 } }}>
+      <Link href={`${proyecto.id}`}>
         <Typography variant="h5Bold" color="info">
           {proyecto.titulo}
         </Typography>
-      </Box>
-      <Box sx={{ display: "flex", flexDirection: {'xs': 'column', 'sm': 'row'}, alignItems: 'center', padding: 2 }}>
+      </Link>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
+          alignItems: "center",
+          padding: 2,
+        }}
+      >
         <Box
           component={"img"}
           sx={{
@@ -23,17 +32,27 @@ const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
           }}
         ></Box>
         <Box>
-          <Box sx={{ display: "flex", flexDirection: {'xs': 'column', 'sm': 'row'}, margin: 2, gap: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              margin: 2,
+              gap: 2,
+            }}
+          >
             {/* Estado */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <Typography variant="h6">Estado:</Typography>
-              <Box
-                sx={{
-                  width: 24,
-                  height: 24,
-                  backgroundColor: "black",
-                }}
-              />
+              <Tooltip title={proyecto.estado} placement="top">
+                <Box
+                  sx={{
+                    width: 24,
+                    height: 24,
+                    backgroundColor: getStatusColor(proyecto.estado),
+                    borderRadius: 1
+                  }}
+                />
+              </Tooltip>
             </Box>
 
             {/* Ultima Modificación */}
@@ -50,7 +69,15 @@ const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
           </Box>
 
           {/* Tecnlogías */}
-          <Box sx={{ display: {xs: "grid", sm: 'flex'}, gridTemplateColumns: "repeat(2, 1fr)", alignItems: "center", marginLeft: 2, gap: 3 }}>
+          <Box
+            sx={{
+              display: { xs: "grid", sm: "flex" },
+              gridTemplateColumns: "repeat(2, 1fr)",
+              alignItems: "center",
+              marginLeft: 2,
+              gap: 3,
+            }}
+          >
             {proyecto.tecnologias.map((tecnologia, index) => (
               <Tecnology tecnologia={tecnologia} key={index} />
             ))}
@@ -65,13 +92,13 @@ interface TecnlogyProps {
   tecnologia: TypeProject["tecnologias"][number];
 }
 const Tecnology: React.FC<TecnlogyProps> = ({ tecnologia }: TecnlogyProps) => (
-  <Box sx={{ display: "flex", alignItems: 'center' }}>
+  <Box sx={{ display: "flex", alignItems: "center" }}>
     <Box
       component={"img"}
       sx={{ width: 32, height: 32 }}
       src={tecnologia.imagen}
     ></Box>
-    <Box sx={{marginLeft: 1}}>
+    <Box sx={{ marginLeft: 1 }}>
       <Typography variant="h6">{tecnologia.nombre}</Typography>
     </Box>
   </Box>

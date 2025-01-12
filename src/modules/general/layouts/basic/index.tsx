@@ -11,7 +11,7 @@ function LayoutBasic() {
         sx={{
           minHeight: {md: "70vh", xs: '80vh'},
           display: 'flex', 
-          alignItems: 'center',
+          // alignItems: 'center',
           backgroundColor: "backgroundX.secondary",
           justifyContent: 'center',
           width: '100vw'
