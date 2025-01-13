@@ -8,7 +8,8 @@ import GridViewIcon from "@mui/icons-material/GridView";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import StorageIcon from "@mui/icons-material/Storage";
 import DescriptionIcon from "@mui/icons-material/Description";
-import { SvgIconProps } from "@mui/material";
+import { IconButton, SvgIconProps } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 
 interface TypeOption {
   icon: React.ReactElement<SvgIconProps>;
@@ -41,9 +42,23 @@ const optionsAside: TypeOption[] = [
 
 export default function IconMenu() {
   const [currentOption, setCurrentOption] = React.useState(0);
+  const [open, setOpen] = React.useState(false);
 
   return (
-    <Paper sx={{ width: 360, height: "100%" }}>
+    <Paper
+      sx={{
+        width: open ? 360 : 70,
+        height: "100%",
+        overflow: "hidden",
+        transition: "width 0.3s ease-in-out",
+      }}
+    >
+      <IconButton
+        sx={{ padding: 2, display: { sm: "none" } }}
+        onClick={() => setOpen(!open)}
+      >
+        <MenuIcon sx={{ fontSize: 32 }} />
+      </IconButton>
       <MenuList>
         {optionsAside.map((option) => (
           <MenuItem
@@ -69,7 +84,11 @@ export default function IconMenu() {
                   },
                 })}
             </ListItemIcon>
-            <Typography variant="h6">{option.text}</Typography>
+            {open && (
+              <Typography marginLeft={1} variant="h6">
+                {option.text}
+              </Typography>
+            )}
           </MenuItem>
         ))}
       </MenuList>
