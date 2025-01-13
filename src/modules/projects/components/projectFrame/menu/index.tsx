@@ -40,9 +40,12 @@ const optionsAside: TypeOption[] = [
   },
 ];
 
-export default function IconMenu() {
-  const [currentOption, setCurrentOption] = React.useState(0);
-  const [open, setOpen] = React.useState(false);
+interface MenuProps{
+  currentOption: number,
+  setCurrentOption: React.Dispatch<number>
+}
+const  MenuOptions: React.FC<MenuProps> = ({currentOption, setCurrentOption} : MenuProps) => {
+  const [open, setOpen] = React.useState(true);
 
   return (
     <Paper
@@ -95,3 +98,5 @@ export default function IconMenu() {
     </Paper>
   );
 }
+
+export default MenuOptions;
