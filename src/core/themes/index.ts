@@ -148,15 +148,6 @@ declare module "@mui/material/Input" {
   }
 }
 
-declare module "@mui/material/Select" {
-  interface SelectPropsVariantOverrides {
-    variant: {
-      primary: true;
-      secondary: true;
-    };
-  }
-}
-
 export const theme = createTheme({
   palette: {
     backgroundX: {
@@ -245,34 +236,6 @@ export const theme = createTheme({
           fontFamily: theme.typography.h6.fontFamily,
           fontWeight: theme.typography.h6.fontWeight,
           cursor: "pointer",
-        }),
-      },
-    },
-    MuiSelect: {
-      defaultProps: {
-        variant: "primary",
-      },
-      styleOverrides: {
-        root: ({ theme }: { theme: any }) => ({
-          width: "100%",
-          variants: [
-            {
-              props: { variant: "primary" },
-              style: {
-                fontSize: theme.typography.h6.fontSize,
-                fontFamily: theme.typography.h5.fontFamily,
-                fontWeight: theme.typography.h5.fontWeight,
-              },
-            },
-            {
-              props: { variant: "secondary" },
-              style: {
-                fontSize: theme.typography.h6.fontSize,
-                fontFamily: theme.typography.h6.fontFamily,
-                fontWeight: theme.typography.h6.fontWeight,
-              },
-            },
-          ],
         }),
       },
     },

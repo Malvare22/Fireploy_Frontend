@@ -42,15 +42,16 @@ const optionsAside: TypeOption[] = [
 
 interface MenuProps{
   currentOption: number,
-  setCurrentOption: React.Dispatch<number>
+  setCurrentOption: React.Dispatch<number>,
+  open: boolean,
+  setOpen: React.Dispatch<boolean>
 }
-const  MenuOptions: React.FC<MenuProps> = ({currentOption, setCurrentOption} : MenuProps) => {
-  const [open, setOpen] = React.useState(true);
+const  MenuOptions: React.FC<MenuProps> = ({currentOption, setCurrentOption, open, setOpen} : MenuProps) => {
 
   return (
     <Paper
       sx={{
-        width: open ? 360 : 70,
+        width: open ? {xs: '100%', sm: 300} : 80,
         height: "100%",
         overflow: "hidden",
         transition: "width 0.3s ease-in-out",

@@ -1,28 +1,23 @@
-import {
-  Box,
-  Divider,
-  Input,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
-import React from "react";
+import CustomSelect from "@modules/general/components/customSelect";
+import { technologiesDummy, TypeTechnology } from "@modules/projects/utils/dataDummy/projects";
+import { Box, Divider, Input, MenuItem, Typography } from "@mui/material";
+import React, { useState } from "react";
 
 interface ContentsProps {
   currentOption: number;
   setCurrentOption: React.Dispatch<number>;
 }
 
-const Repositories = () => {
-  return <RepositoryForm />;
-};
+// const Repositories = () => {
+//   return <RepositoryForm />;
+// };
 
 interface RepositoryFormProps {
-  type: "frontend" | "backend";
+  type: TypeTechnology['type'];
   currentUrl: string;
   setCurrentUrl: React.Dispatch<string>;
   currentTechnology: string;
-  technologies: { id: string; text: string }[];
+  technologies: TypeTechnology[];
   setCurrentTechnology: React.Dispatch<string>;
 }
 
@@ -53,7 +48,7 @@ const RepositoryForm: React.FC<RepositoryFormProps> = ({
         <Divider />
       </Box>
       <Box sx={{ display: "flex", alignItems: "center" }}>
-        <Typography variant="h6" marginRight={marginRight}>
+        <Typography variant="titleBold" marginRight={marginRight}>
           Repositorio
         </Typography>
         <Input
@@ -63,41 +58,45 @@ const RepositoryForm: React.FC<RepositoryFormProps> = ({
         />
       </Box>
       <Box sx={{ display: "flex", alignItems: "center" }}>
-        <Typography variant="h6" marginRight={marginRight}>
+        <Typography variant="titleBold" marginRight={marginRight}>
           Tecnología
         </Typography>
-        <Select
+        <CustomSelect
+          variantDelta="secondary"
           value={currentTechnology}
-          onChange={(e) => setCurrentTechnology(e.target.value)}
-          variant=""
+          onChange={(e) => setCurrentTechnology(e.target.value as string)}
         >
           {technologies?.map((technology, index) => (
-            <MenuItem key={index} value={technology.id}>
+            technology.type == type && <MenuItem key={index} value={technology.id}>
               {technology.text}
             </MenuItem>
           ))}
-        </Select>
+        </CustomSelect>
       </Box>
     </Box>
   );
 };
 
-const Contents: React.FC<ContentsProps> = ({
-  currentOption,
-  setCurrentOption,
-}: ContentsProps) => {
+const Contents: React.FC<ContentsProps> = () => {
+
+  const [currentUrlBackend, setCurrentUrlBackend] = useState('');
+  const [currentUrlFrontend, setCurrentUrlFrontend] = useState('');
+  const [currentBackend, setCurrentBackend] = useState(technologiesDummy[0].text);
+  const [currentFrontend, setCurrentFrontend] = useState(technologiesDummy[0].text);
+
+
   return (
     <Box
       sx={{
-        padding: {sm: 4, xs: 2},
+        margin: { sm: 4, xs: 2 },
         display: "flex",
         flexDirection: "column",
         gap: 4,
-        width: "100%",
       }}
     >
-      <Repositories />
-      <Repositories />
+      <RepositoryForm type="backend" technologies={technologiesDummy} currentUrl={currentUrlBackend} setCurrentUrl={setCurrentUrlBackend} currentTechnology={currentBackend} setCurrentTechnology={setCurrentBackend}/>
+      <RepositoryForm type="frontend" technologies={technologiesDummy} currentUrl={currentUrlFrontend} setCurrentUrl={setCurrentUrlFrontend} currentTechnology={currentFrontend} setCurrentTechnology={setCurrentFrontend}/>
+
     </Box>
   );
 };

@@ -114,3 +114,15 @@ export const projectsDummy: TypeProject[] = [
     },
   },
 ];
+
+export type TypeTechnology = {
+  id: string;
+  text: string;
+  type: "frontend" | "backend";
+};
+
+export const technologiesDummy: TypeTechnology[] = [
+  { id: "1", text: "JavaScript", type: "backend" },
+  { id: "2", text: "TypeScript", type: "backend" },
+  { id: "3", text: "React", type: "frontend" },
+];
