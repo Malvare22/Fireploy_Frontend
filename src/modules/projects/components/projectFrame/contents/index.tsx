@@ -59,6 +59,7 @@ const RepositoryForm: React.FC<RepositoryFormProps> = ({
         <Input
           value={currentUrl}
           onChange={(e) => setCurrentUrl(e.target.value)}
+          variant="secondary"
         />
       </Box>
       <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -68,6 +69,7 @@ const RepositoryForm: React.FC<RepositoryFormProps> = ({
         <Select
           value={currentTechnology}
           onChange={(e) => setCurrentTechnology(e.target.value)}
+          variant=""
         >
           {technologies?.map((technology, index) => (
             <MenuItem key={index} value={technology.id}>
@@ -87,7 +89,7 @@ const Contents: React.FC<ContentsProps> = ({
   return (
     <Box
       sx={{
-        padding: 4,
+        padding: {sm: 4, xs: 2},
         display: "flex",
         flexDirection: "column",
         gap: 4,

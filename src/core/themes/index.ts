@@ -142,6 +142,21 @@ declare module "@mui/material/Button" {
   }
 }
 
+declare module "@mui/material/Input" {
+  interface InputProps {
+    variant?: "primary" | "secondary";
+  }
+}
+
+declare module "@mui/material/Select" {
+  interface SelectPropsVariantOverrides {
+    variant: {
+      primary: true;
+      secondary: true;
+    };
+  }
+}
+
 export const theme = createTheme({
   palette: {
     backgroundX: {
@@ -172,7 +187,6 @@ export const theme = createTheme({
     //   main
     // }
   },
-  
 
   components: {
     MuiButton: {
@@ -195,12 +209,30 @@ export const theme = createTheme({
       ],
     },
     MuiInput: {
+      defaultProps: {
+        variant: "primary",
+      },
       styleOverrides: {
         root: ({ theme }: { theme: any }) => ({
           width: "100%",
-          fontSize: theme.typography.h5.fontSize,
-          fontFamily: theme.typography.h5.fontFamily,
-          fontWeight: theme.typography.h5.fontWeight,
+          variants: [
+            {
+              props: { variant: "primary" },
+              style: {
+                fontSize: theme.typography.h5.fontSize,
+                fontFamily: theme.typography.h5.fontFamily,
+                fontWeight: theme.typography.h5.fontWeight,
+              },
+            },
+            {
+              props: { variant: "secondary" },
+              style: {
+                fontSize: theme.typography.h6.fontSize,
+                fontFamily: theme.typography.h6.fontFamily,
+                fontWeight: theme.typography.h6.fontWeight,
+              },
+            },
+          ],
         }),
       },
     },
@@ -212,20 +244,39 @@ export const theme = createTheme({
           fontSize: theme.typography.h6.fontSize,
           fontFamily: theme.typography.h6.fontFamily,
           fontWeight: theme.typography.h6.fontWeight,
-          cursor: 'pointer'
+          cursor: "pointer",
         }),
       },
     },
     MuiSelect: {
+      defaultProps: {
+        variant: "primary",
+      },
       styleOverrides: {
         root: ({ theme }: { theme: any }) => ({
           width: "100%",
-          fontSize: theme.typography.h6.fontSize,
-          fontFamily: theme.typography.h6.fontFamily,
-          fontWeight: theme.typography.h6.fontWeight,
+          variants: [
+            {
+              props: { variant: "primary" },
+              style: {
+                fontSize: theme.typography.h6.fontSize,
+                fontFamily: theme.typography.h5.fontFamily,
+                fontWeight: theme.typography.h5.fontWeight,
+              },
+            },
+            {
+              props: { variant: "secondary" },
+              style: {
+                fontSize: theme.typography.h6.fontSize,
+                fontFamily: theme.typography.h6.fontFamily,
+                fontWeight: theme.typography.h6.fontWeight,
+              },
+            },
+          ],
         }),
       },
     },
+
     MuiMenuItem: {
       styleOverrides: {
         root: ({ theme }: { theme: any }) => ({
@@ -313,163 +364,161 @@ export const theme = createTheme({
 // },
 // });
 
-
 // theme.typography.h1Bold = {
 //   [theme.breakpoints.up('md')]: {
 //     fontSize: '40px'
 //   }
 // }
 
-
 theme.typography.h1 = {
   fontSize: "3.8rem", // ~61px
   fontWeight: "normal",
-  [theme.breakpoints.down('md')]: {
-    fontSize: '2.6rem',
+  [theme.breakpoints.down("md")]: {
+    fontSize: "2.6rem",
   },
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '2rem',
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "2rem",
   },
 };
 theme.typography.h1Bold = {
-  fontSize: '3.8rem', // ~61px
+  fontSize: "3.8rem", // ~61px
   fontWeight: "bold",
   fontFamily: "Open Sans",
-  [theme.breakpoints.down('md')]: {
-    fontSize: '2.6rem',
+  [theme.breakpoints.down("md")]: {
+    fontSize: "2.6rem",
   },
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '2rem',
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "2rem",
   },
 };
 theme.typography.h2 = {
   fontSize: "3rem", // ~49px
   fontWeight: "normal",
   fontFamily: "Open Sans",
-  [theme.breakpoints.down('md')]: {
-    fontSize: '2.4rem',
+  [theme.breakpoints.down("md")]: {
+    fontSize: "2.4rem",
   },
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '1.8rem',
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "1.8rem",
   },
 };
 theme.typography.h2Bold = {
   fontSize: "3rem", // ~49px
   fontWeight: "bold",
   fontFamily: "Open Sans",
-  [theme.breakpoints.down('md')]: {
-    fontSize: '2.4rem',
+  [theme.breakpoints.down("md")]: {
+    fontSize: "2.4rem",
   },
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '1.8rem',
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "1.8rem",
   },
 };
 theme.typography.h3 = {
   fontSize: "2.4rem", // ~39px
   fontWeight: "normal",
   fontFamily: "Open Sans",
-  [theme.breakpoints.down('md')]: {
-    fontSize: '2rem',
+  [theme.breakpoints.down("md")]: {
+    fontSize: "2rem",
   },
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '1.6rem',
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "1.6rem",
   },
 };
 theme.typography.h3Bold = {
   fontSize: "2.4rem", // ~39px
   fontWeight: "bold",
   fontFamily: "Open Sans",
-  [theme.breakpoints.down('md')]: {
-    fontSize: '2rem',
+  [theme.breakpoints.down("md")]: {
+    fontSize: "2rem",
   },
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '1.6rem',
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "1.6rem",
   },
 };
 theme.typography.h4 = {
   fontSize: "2rem", // ~31px
   fontWeight: "normal",
   fontFamily: "Open Sans",
-  [theme.breakpoints.down('md')]: {
-    fontSize: '1.6rem',
+  [theme.breakpoints.down("md")]: {
+    fontSize: "1.6rem",
   },
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '1.4rem',
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "1.4rem",
   },
 };
 theme.typography.h4Bold = {
   fontSize: "2rem", // ~31px
   fontWeight: "bold",
   fontFamily: "Open Sans",
-  [theme.breakpoints.down('md')]: {
-    fontSize: '1.6rem',
+  [theme.breakpoints.down("md")]: {
+    fontSize: "1.6rem",
   },
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '1.4rem',
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "1.4rem",
   },
 };
 theme.typography.h5 = {
   fontSize: "1.6rem", // ~25px
   fontWeight: "normal",
   fontFamily: "Open Sans",
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '1.4rem',
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "1.4rem",
   },
 };
 theme.typography.h5Bold = {
   fontSize: "1.6rem", // ~25px
   fontWeight: "bold",
   fontFamily: "Open Sans",
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '1.4rem',
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "1.4rem",
   },
 };
 theme.typography.title = {
   fontSize: "1.25rem", // ~20px
   fontWeight: "normal",
   fontFamily: "Open Sans",
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '1rem',
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "1rem",
   },
 };
 theme.typography.titleBold = {
   fontSize: "1.25rem", // ~20px
   fontWeight: "bold",
   fontFamily: "Open Sans",
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '1rem',
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "1rem",
   },
 };
 theme.typography.title2 = {
   fontSize: "1rem", // ~16px
   fontWeight: "normal",
   fontFamily: "Open Sans",
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '0.875rem', // ~14px
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.875rem", // ~14px
   },
 };
 theme.typography.title2Bold = {
   fontSize: "1rem", // ~16px
   fontWeight: "bold",
   fontFamily: "Open Sans",
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '0.875rem',
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.875rem",
   },
 };
 theme.typography.body = {
   fontSize: "0.8125rem", // ~13px
   fontWeight: "normal",
   fontFamily: "Open Sans",
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '0.75rem', // ~12px
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.75rem", // ~12px
   },
 };
 theme.typography.bodyBold = {
   fontSize: "0.8125rem", // ~13px
   fontWeight: "bold",
   fontFamily: "Open Sans",
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '0.75rem',
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.75rem",
   },
 };
 theme.typography.caption = {
@@ -482,4 +531,3 @@ theme.typography.captionBold = {
   fontWeight: "bold",
   fontFamily: "Open Sans",
 };
-
