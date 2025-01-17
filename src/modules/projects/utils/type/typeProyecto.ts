@@ -9,7 +9,7 @@ export interface TypeProyecto {
     id: number;
     url: string;
   };
-  repositorioBackend?: {
+  repositorioBackend: {
     id: number;
     url: string;
   };

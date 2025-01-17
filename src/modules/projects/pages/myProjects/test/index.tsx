@@ -12,6 +12,7 @@ function ViewProject() {
   const [currentOption, setCurrentOption] = useState(0);
   const [open, setOpen] = useState(true);
   const [proyecto, setProyecto] = useState<undefined | TypeProyecto>(undefined);
+  const [buffer, setBuffer] = useState<undefined | TypeProyecto>(undefined);
 
   const { id } = useParams();
 
@@ -19,10 +20,13 @@ function ViewProject() {
     const projectId = id ? parseInt(id) : 0;
     const proyecto = proyectosDummy.find((p) => p.id == projectId);
     setProyecto(proyecto);
+    setBuffer(proyecto);
   }, []);
 
   return (
-    <ProyectoContext.Provider value={proyecto}>
+    <ProyectoContext.Provider
+      value={{ proyecto: proyecto, buffer: buffer, setBuffer: setBuffer }}
+    >
       <Box
         sx={{
           width: "100%",
