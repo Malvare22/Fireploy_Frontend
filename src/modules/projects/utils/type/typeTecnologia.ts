@@ -1,3 +1,3 @@
 export interface TypeTecnologia{
-    id: number, text: string, type: "backend" | "frontend"
+    id: number, text: string, type: "backend" | "frontend" | "database"
 };

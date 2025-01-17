@@ -28,7 +28,7 @@ function ViewProject() {
           width: "100%",
           display: "flex",
           backgroundColor: "white",
-          border: "1px solid",
+          border: "1px solid red",
         }}
       >
         {/* <Box sx={{ textAlign: "center", margin: 2 }}>
@@ -47,14 +47,14 @@ function ViewProject() {
           setOpen={setOpen}
         />
         {!open && (
-          <Box sx={{ display: { sm: "none", width: "auto" } }}>
+          <Box sx={{ display: { sm: "none", width: "auto" }, width: "80%" }}>
             <Contents
               currentOption={currentOption}
               setCurrentOption={setCurrentOption}
             />
           </Box>
         )}
-        <Box sx={{ display: { sm: "block", xs: "none" }, width: "100%" }}>
+        <Box sx={{ display: { sm: "block", xs: "none" }, width: "70%" }}>
           <Contents
             currentOption={currentOption}
             setCurrentOption={setCurrentOption}

@@ -14,7 +14,6 @@ function LayoutBasic() {
           // alignItems: 'center',
           backgroundColor: "backgroundX.secondary",
           justifyContent: 'center',
-          width: '100vw'
         }}
       >
         <Outlet />

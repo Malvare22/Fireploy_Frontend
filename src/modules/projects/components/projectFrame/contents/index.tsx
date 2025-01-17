@@ -2,47 +2,41 @@ import { Box } from "@mui/material";
 import React from "react";
 import Collaborators from "./collaborators";
 import Repositories from "./repositories";
+import Database from "./database";
 
 interface ContentsProps {
   currentOption: number;
   setCurrentOption?: React.Dispatch<number>;
 }
 
-const Contents: React.FC<ContentsProps> = ({currentOption}) => {
-
+const Contents: React.FC<ContentsProps> = ({ currentOption }) => {
   const Content = () => {
     switch (currentOption) {
       case 0:
-        
-        return <Repositories/>
+        return <Repositories />;
 
-      case 3: 
-        return <Collaborators/>
-    
+      case 2:
+        return <Database />;
+
+      case 3:
+        return <Collaborators />;
+
       default:
         break;
     }
-  }
-
+  };
 
   return (
     <Box
       sx={{
-        margin: { sm: 4, xs: 2 },
+        padding: { sm: 4, xs: 2 },
         display: "flex",
-        
+        border: "1px green solid",
+        flexDirection: "column",
+        gap: 3,
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 3,
-          width: { md: "70%" },
-        }}
-      >
-        <Content/>
-      </Box>
+      <Content />
     </Box>
   );
 };

@@ -51,7 +51,7 @@ const  MenuOptions: React.FC<MenuProps> = ({currentOption, setCurrentOption, ope
   return (
     <Paper
       sx={{
-        width: open ? {xs: '100%', sm: 300} : 80,
+        width: open ? {xs: '100%', sm: 300} : '20%',
         height: "100%",
         overflow: "hidden",
         transition: "width 0.3s ease-in-out",
