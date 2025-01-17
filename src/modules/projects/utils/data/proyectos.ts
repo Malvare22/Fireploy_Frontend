@@ -13,19 +13,19 @@ export const proyectosDummy: TypeProyecto[] = [
     ],
     repositorioFrontend: {
       url: "https://github.com/example/task-manager-frontend",
-      tecnologia: 3,
+      id: 3,  // Reemplazado 'tecnologia' por 'id'
     },
     repositorioBackend: {
       url: "https://github.com/example/task-manager-backend",
-      tecnologia: 4,
+      id: 4,  // Reemplazado 'tecnologia' por 'id'
     },
     variablesEntorno: {
       API_URL: "https://api.taskmanager.com",
       NODE_ENV: "production",
     },
     baseDeDatos: {
-      url: "https://mongodb.example.com",
-      tipo: "MongoDB",
+      id: 11,  // Se refiere a MongoDB en tecnologiasDummy
+      url: "https://mongodb.example.com",  // Agregado campo URL
     },
   },
   {
@@ -39,19 +39,19 @@ export const proyectosDummy: TypeProyecto[] = [
     ],
     repositorioFrontend: {
       url: "https://github.com/example/ecommerce-frontend",
-      tecnologia: 5,
+      id: 5,  // Reemplazado 'tecnologia' por 'id'
     },
     repositorioBackend: {
       url: "https://github.com/example/ecommerce-backend",
-      tecnologia: 6,
+      id: 6,  // Reemplazado 'tecnologia' por 'id'
     },
     variablesEntorno: {
       PAYMENT_GATEWAY: "https://payments.example.com",
       NODE_ENV: "staging",
     },
     baseDeDatos: {
-      url: "https://sql.example.com",
-      tipo: "SQL",
+      id: 12,  // Se refiere a MySQL en tecnologiasDummy
+      url: "https://sql.example.com",  // Agregado campo URL
     },
   },
   {
@@ -65,19 +65,19 @@ export const proyectosDummy: TypeProyecto[] = [
     ],
     repositorioFrontend: {
       url: "https://github.com/example/blog-frontend",
-      tecnologia: 7,
+      id: 7,  // Reemplazado 'tecnologia' por 'id'
     },
     repositorioBackend: {
       url: "https://github.com/example/blog-backend",
-      tecnologia: 8,
+      id: 8,  // Reemplazado 'tecnologia' por 'id'
     },
     variablesEntorno: {
       DB_HOST: "127.0.0.1",
       DB_USER: "blog_user",
     },
     baseDeDatos: {
-      url: "https://mysql.example.com",
-      tipo: "MySQL",
+      id: 12,  // Se refiere a MySQL en tecnologiasDummy
+      url: "https://mysql.example.com",  // Agregado campo URL
     },
   },
   {
@@ -92,19 +92,19 @@ export const proyectosDummy: TypeProyecto[] = [
     ],
     repositorioFrontend: {
       url: "https://github.com/example/finance-frontend",
-      tecnologia: 3,
+      id: 3,  // Reemplazado 'tecnologia' por 'id'
     },
     repositorioBackend: {
       url: "https://github.com/example/finance-backend",
-      tecnologia: 10,
+      id: 10,  // Reemplazado 'tecnologia' por 'id'
     },
     variablesEntorno: {
       SECRET_KEY: "s3cr3t_k3y",
       DEBUG: "false",
     },
     baseDeDatos: {
-      url: "https://postgres.example.com",
-      tipo: "PostgreSQL",
+      id: 11,  // Se refiere a MongoDB en tecnologiasDummy
+      url: "https://postgres.example.com",  // Agregado campo URL
     },
   },
 ];

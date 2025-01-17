@@ -31,7 +31,6 @@ const Contents: React.FC<ContentsProps> = ({ currentOption }) => {
       sx={{
         padding: { sm: 4, xs: 2 },
         display: "flex",
-        border: "1px green solid",
         flexDirection: "column",
         gap: 3,
       }}

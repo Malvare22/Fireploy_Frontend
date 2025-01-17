@@ -11,5 +11,7 @@ export const tecnologiasDummy: TypeTecnologia[] = [
     { id: 8, text: "Laravel", type: "backend" },
     { id: 9, text: "Python", type: "backend" },
     { id: 10, text: "Django", type: "backend" },
+    { id: 11, text: "MongoDB", type: "database" },
+    { id: 12, text: "MySQL", type: "database" },
   ];
   
