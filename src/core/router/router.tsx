@@ -33,7 +33,7 @@ export const router = createBrowserRouter([
         element: <MyProjects />,
       },
       {
-        path: "myProjects/view",
+        path: "myProjects/view/:id",
         element: <ViewProject />,
       },
     ],

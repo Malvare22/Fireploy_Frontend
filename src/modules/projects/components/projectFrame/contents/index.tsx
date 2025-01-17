@@ -5,7 +5,7 @@ import Repositories from "./repositories";
 
 interface ContentsProps {
   currentOption: number;
-  setCurrentOption: React.Dispatch<number>;
+  setCurrentOption?: React.Dispatch<number>;
 }
 
 const Contents: React.FC<ContentsProps> = ({currentOption}) => {

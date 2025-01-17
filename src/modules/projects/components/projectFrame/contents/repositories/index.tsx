@@ -1,26 +1,22 @@
 import CustomSelect from "@modules/general/components/customSelect";
-import {
-  technologiesDummy,
-  TypeTechnology,
-} from "@modules/projects/utils/data/projects";
+import { ProyectoContext } from "@modules/projects/context/proyectoContext";
+import { tecnologiasDummy } from "@modules/projects/utils/data/tecnologias";
+import { TypeTecnologia } from "@modules/projects/utils/type/typeTecnologia";
 import { Box, Divider, Input, MenuItem, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 function Repositories() {
-  const [currentUrlBackend, setCurrentUrlBackend] = useState("");
-  const [currentUrlFrontend, setCurrentUrlFrontend] = useState("");
-  const [currentBackend, setCurrentBackend] = useState(
-    technologiesDummy[0].text
-  );
-  const [currentFrontend, setCurrentFrontend] = useState(
-    technologiesDummy[0].text
-  );
+  const proyecto  = useContext(ProyectoContext);
+  const [currentUrlBackend, setCurrentUrlBackend] = useState(proyecto?.repositorioBackend?.url || "");
+  const [currentUrlFrontend, setCurrentUrlFrontend] = useState(proyecto?.repositorioFrontend?.url || "");
+  const [currentBackend, setCurrentBackend] = useState(proyecto?.repositorioBackend?.tecnologia || 0);
+  const [currentFrontend, setCurrentFrontend] = useState(proyecto?.repositorioFrontend?.tecnologia || 0);
+  
 
   return (
-    <Box>
+    (proyecto && proyecto.repositorioBackend && proyecto.repositorioFrontend) ? <Box>
       <RepositoryForm
         type="backend"
-        technologies={technologiesDummy}
         currentUrl={currentUrlBackend}
         setCurrentUrl={setCurrentUrlBackend}
         currentTechnology={currentBackend}
@@ -28,23 +24,21 @@ function Repositories() {
       />
       <RepositoryForm
         type="frontend"
-        technologies={technologiesDummy}
         currentUrl={currentUrlFrontend}
         setCurrentUrl={setCurrentUrlFrontend}
         currentTechnology={currentFrontend}
         setCurrentTechnology={setCurrentFrontend}
       />
-    </Box>
+    </Box> : <></>
   );
 }
 
 interface RepositoryFormProps {
-  type: TypeTechnology["type"];
+  type: TypeTecnologia["type"];
   currentUrl: string;
   setCurrentUrl: React.Dispatch<string>;
-  currentTechnology: string;
-  technologies: TypeTechnology[];
-  setCurrentTechnology: React.Dispatch<string>;
+  currentTechnology: number;
+  setCurrentTechnology: React.Dispatch<number>;
 }
 
 const RepositoryForm: React.FC<RepositoryFormProps> = ({
@@ -53,13 +47,15 @@ const RepositoryForm: React.FC<RepositoryFormProps> = ({
   setCurrentUrl,
   currentTechnology,
   setCurrentTechnology,
-  technologies,
 }: RepositoryFormProps) => {
   const marginRight = 2;
 
+
   return (
-    <Box sx={{ display: 'flex' ,flexDirection: "column", gap: 4, marginBottom: 4 }}>
-      <Box >
+    <Box
+      sx={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 4 }}
+    >
+      <Box>
         <Typography variant="h3Bold">
           {type == "frontend" ? "Frontend" : "Backend"}
         </Typography>
@@ -83,13 +79,13 @@ const RepositoryForm: React.FC<RepositoryFormProps> = ({
         <CustomSelect
           variantDelta="secondary"
           value={currentTechnology}
-          onChange={(e) => setCurrentTechnology(e.target.value as string)}
+          onChange={(e) => setCurrentTechnology(e.target.value as number)}
         >
-          {technologies?.map(
-            (technology, index) =>
-              technology.type == type && (
-                <MenuItem key={index} value={technology.id}>
-                  {technology.text}
+          {tecnologiasDummy?.map(
+            (tecnologia, index) =>
+              tecnologia.type == type && (
+                <MenuItem key={index} value={tecnologia.id}>
+                  {tecnologia.text}
                 </MenuItem>
               )
           )}

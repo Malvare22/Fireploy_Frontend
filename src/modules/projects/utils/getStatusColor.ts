@@ -1,5 +1,5 @@
 import { theme } from "@core/themes";
-import { TypeProject } from "./type/TypeProject";
+import { TypeProject } from "./type/typeProyecto";
 
 export const getStatusColor = (status: TypeProject["estado"]): string => {
   switch (status) {

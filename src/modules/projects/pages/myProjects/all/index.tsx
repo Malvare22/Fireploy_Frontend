@@ -1,9 +1,9 @@
 import ProjectCard from "@modules/projects/components/projectCard";
-import { projectsDummy } from "@modules/projects/utils/data/projects";
+import { proyectosDummy } from "@modules/projects/utils/data/proyectos";
 import { Box, Button, Divider, Typography } from "@mui/material";
 
 function MyProjects() {
-  const proyectos = projectsDummy;
+  const proyectos = proyectosDummy;
 
   return (
     <Box sx={{ width: "100%" }}>
