@@ -1,3 +1,4 @@
+import AlertDialog from "@modules/general/components/alertDialog";
 import Contents from "@modules/projects/components/projectFrame/contents";
 import IconMenu from "@modules/projects/components/projectFrame/menu";
 // import { projectsDummy } from "@modules/projects/utils/dataDummy/projects";

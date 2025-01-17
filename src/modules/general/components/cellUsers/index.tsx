@@ -2,10 +2,9 @@ import { usersDummy } from "@core/test/data/users";
 import { Box, IconButton, Typography } from "@mui/material";
 import { FC } from "react";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-
 interface Props {
   usuario: (typeof usersDummy)[number];
-  type: "autocomplete" | "list";
+  type: "autocomplete" | "list" | "preview";
 }
 
 const CellUser: FC<Props> = ({ usuario, type }) => {
@@ -15,8 +14,8 @@ const CellUser: FC<Props> = ({ usuario, type }) => {
         component={"img"}
         src={usuario.fotoPerfil}
         sx={{
-          width: type == "autocomplete" ? 64 : 96,
-          height: type == "autocomplete" ? 64 : 96,
+          width: type == "autocomplete" ? 64 : 120,
+          height: type == "autocomplete" ? 64 : 120 ,
           marginRight: 2,
         }}
       />

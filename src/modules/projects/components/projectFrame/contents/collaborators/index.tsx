@@ -1,10 +1,20 @@
-import { usersDummy } from "@core/test/data/users";
+import { usersDummy, TypeUsuario } from "@core/test/data/users";
 import AutocompleteUsers from "@modules/general/components/autocompleteUsers";
 import CellUser from "@modules/general/components/cellUsers";
 import { Box, Divider, Typography } from "@mui/material";
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from "@mui/icons-material/Search";
+import { useState } from "react";
+import AlertDialog from "@modules/general/components/alertDialog";
 
 function Collaborators() {
+  const [userToAdd, setUserToAdd] = useState<TypeUsuario | undefined>(undefined);
+  const [open, setOpen] = useState(false);
+
+  const handleUser = (usuario: TypeUsuario) => {
+    setUserToAdd(usuario);
+    setOpen(true);
+  };
+
   return (
     <Box>
       <Typography variant="h3Bold">Colaboradores</Typography>
@@ -12,7 +22,7 @@ function Collaborators() {
       <Divider sx={{ marginBottom: 3 }} />
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 3 }}>
         <SearchIcon sx={{ marginRight: 2 }} />
-        <AutocompleteUsers />
+        <AutocompleteUsers onChange={handleUser} />
       </Box>
 
       <Box sx={{ backgroundColor: "backgroundX.panel" }}>
@@ -22,6 +32,9 @@ function Collaborators() {
           </Box>
         ))}
       </Box>
+      {userToAdd && <AlertDialog open={open} setOpen={setOpen} title="¿Desea agregar al TypeUsuario?">
+        <CellUser usuario={userToAdd} type="preview" />
+      </AlertDialog>}
     </Box>
   );
 }

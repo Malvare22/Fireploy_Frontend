@@ -2,7 +2,7 @@ import CustomSelect from "@modules/general/components/customSelect";
 import {
   technologiesDummy,
   TypeTechnology,
-} from "@modules/projects/utils/dataDummy/projects";
+} from "@modules/projects/utils/data/projects";
 import { Box, Divider, Input, MenuItem, Typography } from "@mui/material";
 import React, { useState } from "react";
 

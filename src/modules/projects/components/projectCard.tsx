@@ -1,5 +1,5 @@
 import { Box, Tooltip, Typography } from "@mui/material";
-import { TypeProject } from "../utils/TypeProject";
+import { TypeProject } from "../utils/type/TypeProject";
 import Link from "@mui/material/Link";
 import { getStatusColor } from "../utils/getStatusColor";
 

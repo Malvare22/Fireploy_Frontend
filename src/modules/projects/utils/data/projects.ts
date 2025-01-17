@@ -1,16 +1,20 @@
-import { TypeProject } from "../TypeProject";
+import { TypeProject } from "../type/TypeProject";
 
 export const projectsDummy: TypeProject[] = [
   {
-    id: "proj-001",
+    id: 1,
     titulo: "Gestor de Tareas",
     estado: "online",
     ultimaModificacion: "2025-01-07T14:30:00Z",
     tecnologias: [
-      { imagen: "https://example.com/react-logo.png", nombre: "React" },
-      { imagen: "https://example.com/nodejs-logo.png", nombre: "Node.js" },
+      { imagen: "https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg", nombre: "React" },
+      { imagen: "https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg", nombre: "Node.js" },
     ],
-    colaboradores: ["user-001", "user-002", "user-003"],
+    colaboradores: [
+      { id: 1, nombre: "user-001" },
+      { id: 2, nombre: "user-002" },
+      { id: 3, nombre: "user-003" }
+    ],
     repositorioFrontend: {
       url: "https://github.com/example/task-manager-frontend",
       tecnologia: "React",
@@ -30,15 +34,18 @@ export const projectsDummy: TypeProject[] = [
     },
   },
   {
-    id: "proj-002",
+    id: 2,
     titulo: "E-commerce",
     estado: "offline",
     ultimaModificacion: "2024-12-15T09:15:00Z",
     tecnologias: [
-      { imagen: "https://example.com/angular-logo.png", nombre: "Angular" },
-      { imagen: "https://example.com/spring-logo.png", nombre: "Spring Boot" },
+      { imagen: "https://angular.io/assets/images/logos/angular/angular.svg", nombre: "Angular" },
+      { imagen: "https://spring.io/images/spring-initializr-4291cc0115eb104348717b82161b0f50.svg", nombre: "Spring Boot" },
     ],
-    colaboradores: ["user-004", "user-005"],
+    colaboradores: [
+      { id: 4, nombre: "user-004" },
+      { id: 5, nombre: "user-005" }
+    ],
     repositorioFrontend: {
       url: "https://github.com/example/ecommerce-frontend",
       tecnologia: "Angular",
@@ -58,15 +65,18 @@ export const projectsDummy: TypeProject[] = [
     },
   },
   {
-    id: "proj-003",
+    id: 3,
     titulo: "Blog Personal",
     estado: "pausado",
     ultimaModificacion: "2024-11-20T19:45:00Z",
     tecnologias: [
-      { imagen: "https://example.com/vue-logo.png", nombre: "Vue.js" },
-      { imagen: "https://example.com/laravel-logo.png", nombre: "Laravel" },
+      { imagen: "https://upload.wikimedia.org/wikipedia/commons/9/95/Vue.js_Logo_2.svg", nombre: "Vue.js" },
+      { imagen: "https://upload.wikimedia.org/wikipedia/commons/9/9a/Laravel.svg", nombre: "Laravel" },
     ],
-    colaboradores: ["user-006", "user-007"],
+    colaboradores: [
+      { id: 6, nombre: "user-006" },
+      { id: 7, nombre: "user-007" }
+    ],
     repositorioFrontend: {
       url: "https://github.com/example/blog-frontend",
       tecnologia: "Vue.js",
@@ -86,15 +96,19 @@ export const projectsDummy: TypeProject[] = [
     },
   },
   {
-    id: "proj-004",
+    id: 4,
     titulo: "Aplicación de Finanzas",
     estado: "cargando",
     ultimaModificacion: "2025-01-01T08:00:00Z",
     tecnologias: [
-      { imagen: "https://example.com/python-logo.png", nombre: "Python" },
-      { imagen: "https://example.com/django-logo.png", nombre: "Django" },
+      { imagen: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg", nombre: "Python" },
+      { imagen: "https://upload.wikimedia.org/wikipedia/commons/7/75/Django_logo.svg", nombre: "Django" },
     ],
-    colaboradores: ["user-008", "user-009", "user-010"],
+    colaboradores: [
+      { id: 8, nombre: "user-008" },
+      { id: 9, nombre: "user-009" },
+      { id: 10, nombre: "user-010" }
+    ],
     repositorioFrontend: {
       url: "https://github.com/example/finance-frontend",
       tecnologia: "React",
@@ -116,13 +130,13 @@ export const projectsDummy: TypeProject[] = [
 ];
 
 export type TypeTechnology = {
-  id: string;
+  id: number;
   text: string;
   type: "frontend" | "backend";
 };
 
 export const technologiesDummy: TypeTechnology[] = [
-  { id: "1", text: "JavaScript", type: "backend" },
-  { id: "2", text: "TypeScript", type: "backend" },
-  { id: "3", text: "React", type: "frontend" },
+  { id: 1, text: "JavaScript", type: "backend" },
+  { id: 2, text: "TypeScript", type: "backend" },
+  { id: 3, text: "React", type: "frontend" },
 ];

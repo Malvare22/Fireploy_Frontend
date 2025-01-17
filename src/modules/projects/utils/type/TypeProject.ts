@@ -1,10 +1,9 @@
 export interface TypeProject {
-  id: string; // Identificador único del proyecto
+  id: number; // Identificador único del proyecto
   titulo: string;
   estado: "online" | "offline" | "pausado" | "cargando" | "error";
   ultimaModificacion: string;
   tecnologias: { imagen: string; nombre: string }[];
-  colaboradores: string[]; // IDs de usuarios colaboradores
   repositorioFrontend?: {
     url: string; // URL del repositorio frontend
     tecnologia: string; // Tecnología vinculada al frontend
@@ -19,4 +18,5 @@ export interface TypeProject {
     url: string; // URL de la base de datos
     tipo: string; // Tipo de base de datos (MongoDB, SQL, etc.)
   };
+  colaboradores: { id: number; nombre: string }[];
 }

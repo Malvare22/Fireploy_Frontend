@@ -5,7 +5,7 @@ interface RedSocial {
     x?: string; // Representa la red social "X" (anteriormente Twitter).
   }
   
-  interface Usuario {
+  export interface TypeUsuario {
     id: number; // Ahora es un número
     correo: string;
     fechaNacimiento: string; // Ahora es un string en formato "YYYY/MM/DD"
@@ -19,7 +19,7 @@ interface RedSocial {
     fotoPerfil: string;
   }
   
-  export const usersDummy: Usuario[] = [
+  export const usersDummy: TypeUsuario[] = [
     {
       id: 1,
       correo: "usuario1@example.com",

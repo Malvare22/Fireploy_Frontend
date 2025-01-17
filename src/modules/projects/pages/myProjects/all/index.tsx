@@ -1,5 +1,5 @@
 import ProjectCard from "@modules/projects/components/projectCard";
-import { projectsDummy } from "@modules/projects/utils/dataDummy/projects";
+import { projectsDummy } from "@modules/projects/utils/data/projects";
 import { Box, Button, Divider, Typography } from "@mui/material";
 
 function MyProjects() {
