@@ -6,7 +6,11 @@ import { Box, Button, Divider, MenuItem, Typography } from "@mui/material";
 import { useContext, useState } from "react";
 
 function Database() {
-  const proyecto = useContext(ProyectoContext);
+  const context = useContext(ProyectoContext);
+
+  if (!context) return <></>;
+
+  const { proyecto } = context;
 
   const [baseDatosId, setBaseDatosId] = useState<undefined | number>(
     proyecto?.baseDeDatos.id
