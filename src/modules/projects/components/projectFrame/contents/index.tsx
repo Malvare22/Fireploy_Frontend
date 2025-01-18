@@ -7,6 +7,7 @@ import { TypeProyecto } from "@modules/projects/utils/type/typeProyecto";
 import { useParams } from "react-router-dom";
 import { proyectosDummy } from "@modules/projects/utils/data/proyectos";
 import { ProyectoContext } from "@modules/projects/context/proyectoContext";
+import Logs from "./logs";
 
 interface ContentsProps {
   currentOption: number;
@@ -32,6 +33,9 @@ const Contents: React.FC<ContentsProps> = ({ currentOption }) => {
     switch (currentOption) {
       case 0:
         return <Repositories />;
+
+      case 1:
+        return <Logs/>
 
       case 2:
         return <Database />;

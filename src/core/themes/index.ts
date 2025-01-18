@@ -153,7 +153,7 @@ export const theme = createTheme({
     backgroundX: {
       primary: "#EEF1F6", // Color principal de fondo
       secondary: "#D2DAED", // Color secundario de fondo
-      panel: "#EAEAEC", // Color de panel
+      panel: "#F0F0F0", // Color de panel
     },
     icon: {
       primary: "#6471A5", // Color principal de íconos
@@ -441,15 +441,15 @@ theme.typography.title = {
   fontWeight: "normal",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
-    fontSize: "1rem",
+    fontSize: "0.9rem",
   },
 };
 theme.typography.titleBold = {
   fontSize: "1.25rem", // ~20px
-  fontWeight: "bold",
+  fontWeight: 600,
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
-    fontSize: "1rem",
+    fontSize: "0.9rem",
   },
 };
 theme.typography.title2 = {
@@ -469,19 +469,19 @@ theme.typography.title2Bold = {
   },
 };
 theme.typography.body = {
-  fontSize: "0.8125rem", // ~13px
+  fontSize: "1.10rem", // ~20px
   fontWeight: "normal",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.75rem", // ~12px
+    fontSize: "0.700rem",
   },
 };
 theme.typography.bodyBold = {
-  fontSize: "0.8125rem", // ~13px
+  fontSize: "1.10rem", // ~20px
   fontWeight: "bold",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.75rem",
+    fontSize: "0.700rem",
   },
 };
 theme.typography.caption = {
