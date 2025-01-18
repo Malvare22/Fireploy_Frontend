@@ -8,47 +8,39 @@ import React, { useContext, useMemo, useState } from "react";
 
 function Repositories() {
   const context = useContext(ProyectoContext);
+
   if (
     !(
       context &&
-      context.buffer &&
-      context.proyecto &&
-      context.setBuffer != undefined
+      context.setTest != undefined
     )
   ) {
     return <></>;
   }
 
-  const { proyecto, buffer, setBuffer } = context;
+  const { test, setTest } = context;
 
-  return proyecto &&
-    proyecto.repositorioBackend &&
-    proyecto.repositorioFrontend ? (
+  return (
     <Box>
-      <RepositoryForm type="backend" buffer={buffer} setBuffer={setBuffer} />
+      <RepositoryForm type="backend" buffer={test} setBuffer={setTest}/>
       {/* <RepositoryForm
         type="frontend"
         buffer={buffer}
         setBuffer={setBuffer}
       /> */}
     </Box>
-  ) : (
-    <></>
-  );
+  )
 }
 
 interface RepositoryFormProps {
   type: TypeTecnologia["type"];
-  buffer: TypeProyecto;
-  setBuffer: React.Dispatch<TypeProyecto>;
+  buffer: string;
+  setBuffer: React.Dispatch<string>;
 }
 
-const RepositoryForm: React.FC<RepositoryFormProps> = React.memo(
+const RepositoryForm: React.FC<RepositoryFormProps> = (
   ({ type, buffer, setBuffer }: RepositoryFormProps) => {
     const marginRight = 2;
-
-    const key: keyof TypeProyecto =
-      type == "backend" ? "repositorioBackend" : "repositorioFrontend";
 
     return (
       <Box
@@ -71,15 +63,9 @@ const RepositoryForm: React.FC<RepositoryFormProps> = React.memo(
             Repositorio
           </Typography>
           <Input
-            value={buffer[key]?.url}
+            value={buffer}
             onChange={(e) =>
-              setBuffer({
-                ...buffer,
-                [key]: {
-                  ...buffer[key],
-                  url: e.target.value,
-                },
-              })
+              setBuffer(e.currentTarget.value)
             }
             variant="secondary"
           />
@@ -90,16 +76,7 @@ const RepositoryForm: React.FC<RepositoryFormProps> = React.memo(
           </Typography>
           <CustomSelect
             variantDelta="secondary"
-            value={buffer[key]?.id}
-            onChange={(e) =>
-              setBuffer({
-                ...buffer,
-                [key]: {
-                  ...buffer[key],
-                  id: e.target.value as number,
-                },
-              })
-            }
+            
           >
             {tecnologiasDummy?.map(
               (tecnologia, index) =>
