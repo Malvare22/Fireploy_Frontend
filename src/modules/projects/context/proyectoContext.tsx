@@ -4,7 +4,8 @@ import { TypeProyecto } from "../utils/type/typeProyecto";
 export const ProyectoContext = createContext<
   | undefined
   | {
-      test: string,
-      setTest: React.Dispatch<string>
+      buffer: TypeProyecto | undefined,
+      setBuffer: React.Dispatch<TypeProyecto | undefined>,
+      proyecto: TypeProyecto | undefined
     }
 >(undefined);

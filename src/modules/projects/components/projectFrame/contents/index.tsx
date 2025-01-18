@@ -17,7 +17,6 @@ const Contents: React.FC<ContentsProps> = ({ currentOption }) => {
 
   const [proyecto, setProyecto] = useState<undefined | TypeProyecto>(undefined);
   const [buffer, setBuffer] = useState<undefined | TypeProyecto>(undefined);
-  const  [test, setTest] = useState<string>('');
 
 
   const { id } = useParams();
@@ -27,7 +26,6 @@ const Contents: React.FC<ContentsProps> = ({ currentOption }) => {
     const proyecto = proyectosDummy.find((p) => p.id == projectId);
     setProyecto(proyecto);
     setBuffer(proyecto);
-    setTest(proyecto?.repositorioBackend.url ? proyecto?.repositorioBackend.url :  '');
   }, []);
 
   const Content = useMemo(() => {
@@ -47,7 +45,7 @@ const Contents: React.FC<ContentsProps> = ({ currentOption }) => {
   }, [currentOption]);
 
   return (
-    <ProyectoContext.Provider value={{test: test, setTest: setTest}}><Box
+    <ProyectoContext.Provider value={{buffer: buffer, setBuffer: setBuffer, proyecto: proyecto}}><Box
       sx={{
         padding: { sm: 4, xs: 2 },
         display: "flex",

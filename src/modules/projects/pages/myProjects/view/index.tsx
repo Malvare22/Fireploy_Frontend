@@ -1,14 +1,9 @@
 import Contents from "@modules/projects/components/projectFrame/contents";
 import IconMenu from "@modules/projects/components/projectFrame/menu";
-import { ProyectoContext } from "@modules/projects/context/proyectoContext";
-import { proyectosDummy } from "@modules/projects/utils/data/proyectos";
-import { TypeProyecto } from "@modules/projects/utils/type/typeProyecto";
 import { Box } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 function ViewProject() {
-  // const proyectos = projectsDummy;
   const [currentOption, setCurrentOption] = useState(0);
   const [open, setOpen] = useState(true);
 

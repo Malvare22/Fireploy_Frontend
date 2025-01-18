@@ -1,16 +1,39 @@
 import { Box, Tooltip, Typography } from "@mui/material";
-import { TypeProject } from "../utils/type/typeProyecto";
 import Link from "@mui/material/Link";
-import { getStatusColor } from "../utils/getStatusColor";
+import { getStatusColor } from "../../utils/getStatusColor";
+import { TypeProyecto } from "@modules/projects/utils/type/typeProyecto";
+import { TypeTecnologia } from "@modules/projects/utils/type/typeTecnologia";
+import { useMemo } from "react";
+import { tecnologiasDummy } from "@modules/projects/utils/data/tecnologias";
 
 interface Props {
-  proyecto: TypeProject;
+  proyecto: TypeProyecto;
 }
 
 const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
+  const AllProyectTecnologies = useMemo(() => {
+    const frontend = tecnologiasDummy.find(
+      (t) => t.id == proyecto.repositorioFrontend?.id
+    );
+    const backend = tecnologiasDummy.find(
+      (t) => t.id == proyecto.repositorioBackend?.id
+    );
+    const dataBase = tecnologiasDummy.find(
+      (t) => t.id == proyecto.baseDeDatos?.id
+    );
+
+    return (
+      <>
+        {frontend && <Tecnology tecnologia={frontend} />}
+        {backend && <Tecnology tecnologia={backend} />}
+        {dataBase && <Tecnology tecnologia={dataBase} />}
+      </>
+    );
+  }, [proyecto]);
+
   return (
     <Box sx={{ backgroundColor: "white", padding: 4, paddingX: { md: 14 } }}>
-      <Link href={`${proyecto.id}`}>
+      <Link href={`view/${proyecto.id}`}>
         <Typography variant="h5Bold" color="info">
           {proyecto.titulo}
         </Typography>
@@ -49,7 +72,7 @@ const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
                     width: 24,
                     height: 24,
                     backgroundColor: getStatusColor(proyecto.estado),
-                    borderRadius: 1
+                    borderRadius: 1,
                   }}
                 />
               </Tooltip>
@@ -78,9 +101,7 @@ const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
               gap: 3,
             }}
           >
-            {proyecto.tecnologias.map((tecnologia, index) => (
-              <Tecnology tecnologia={tecnologia} key={index} />
-            ))}
+            {AllProyectTecnologies}
           </Box>
         </Box>
       </Box>
@@ -89,7 +110,7 @@ const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
 };
 
 interface TecnlogyProps {
-  tecnologia: TypeProject["tecnologias"][number];
+  tecnologia: TypeTecnologia;
 }
 const Tecnology: React.FC<TecnlogyProps> = ({ tecnologia }: TecnlogyProps) => (
   <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -99,7 +120,7 @@ const Tecnology: React.FC<TecnlogyProps> = ({ tecnologia }: TecnlogyProps) => (
       src={tecnologia.imagen}
     ></Box>
     <Box sx={{ marginLeft: 1 }}>
-      <Typography variant="h6">{tecnologia.nombre}</Typography>
+      <Typography variant="h6">{tecnologia.text}</Typography>
     </Box>
   </Box>
 );
