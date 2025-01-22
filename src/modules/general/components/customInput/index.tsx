@@ -1,13 +1,13 @@
 import React from "react";
 import { Box, Input, InputProps, Typography } from "@mui/material";
 
-const CustomInput: React.FC<InputProps & { errorMessage?: string }> = ({
-  errorMessage,
-  ...inputProps
-}) => {
+const CustomInput = React.forwardRef<
+  HTMLInputElement,
+  InputProps & { errorMessage?: string }
+>(({ errorMessage, ...inputProps }, ref) => {
   return (
     <Box width={"100%"}>
-      <Input {...inputProps} />
+      <Input {...inputProps} inputRef={ref} />
       {errorMessage && (
         <Box marginY={1}>
           <Typography variant="title2" color="error">
@@ -17,6 +17,6 @@ const CustomInput: React.FC<InputProps & { errorMessage?: string }> = ({
       )}
     </Box>
   );
-};
+});
 
 export default CustomInput;

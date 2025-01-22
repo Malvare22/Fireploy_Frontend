@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Box,
   TextareaAutosize,
@@ -5,16 +6,18 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React from "react";
 
-const CustomTextArea: React.FC<
+// Usamos forwardRef para pasar la referencia correctamente
+const CustomTextArea = React.forwardRef<
+  HTMLTextAreaElement,
   TextareaAutosizeProps & { errorMessage?: string }
-> = ({ errorMessage, ...inputProps }) => {
+>(({ errorMessage, ...inputProps }, ref) => {
   const theme = useTheme();
   return (
     <>
       <TextareaAutosize
         {...inputProps}
+        ref={ref} // Usamos `ref` aquí
         style={{
           fontFamily: theme.typography.title2?.fontFamily,
           fontSize: theme.typography.title2?.fontSize,
@@ -32,6 +35,6 @@ const CustomTextArea: React.FC<
       )}
     </>
   );
-};
+});
 
 export default CustomTextArea;
