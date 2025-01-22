@@ -1,5 +1,6 @@
-import { TypeTecnologia } from "../type/typeTecnologia";
-
+export interface TypeTecnologia{
+    id: number, text: string, type: "backend" | "frontend" | "database", imagen: string
+};
 export const tecnologiasDummy: TypeTecnologia[] = [
   {
     id: 1,

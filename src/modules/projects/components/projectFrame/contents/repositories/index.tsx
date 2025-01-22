@@ -1,9 +1,8 @@
 import CustomInput from "@modules/general/components/customInput";
 import CustomSelect from "@modules/general/components/customSelect";
+import { TypeProyecto } from "@modules/general/utils/data/proyectos";
+import { tecnologiasDummy, TypeTecnologia } from "@modules/general/utils/data/tecnologias";
 import { ProyectoContext } from "@modules/projects/context/proyectoContext";
-import { tecnologiasDummy } from "@modules/projects/utils/data/tecnologias";
-import { TypeProyecto } from "@modules/projects/utils/type/typeProyecto";
-import { TypeTecnologia } from "@modules/projects/utils/type/typeTecnologia";
 import { Box, Divider, MenuItem, Typography } from "@mui/material";
 import React, { useContext, useMemo } from "react";
 

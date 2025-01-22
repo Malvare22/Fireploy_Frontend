@@ -3,10 +3,10 @@ import React, { useMemo, useState } from "react";
 import Collaborators from "./collaborators";
 import Repositories from "./repositories";
 import Database from "./database";
-import { TypeProyecto } from "@modules/projects/utils/type/typeProyecto";
 import { ProyectoContext } from "@modules/projects/context/proyectoContext";
 import Logs from "./logs";
 import Adicionales from "./adicionales";
+import { TypeProyecto } from "@modules/general/utils/data/proyectos";
 
 interface ContentsProps {
   currentOption: number;

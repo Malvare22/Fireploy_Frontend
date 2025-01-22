@@ -1,10 +1,9 @@
 import { Box, Tooltip, Typography } from "@mui/material";
 import Link from "@mui/material/Link";
 import { getStatusColor } from "../../utils/getStatusColor";
-import { TypeProyecto } from "@modules/projects/utils/type/typeProyecto";
-import { TypeTecnologia } from "@modules/projects/utils/type/typeTecnologia";
 import { useMemo } from "react";
-import { tecnologiasDummy } from "@modules/projects/utils/data/tecnologias";
+import { tecnologiasDummy, TypeTecnologia } from "@modules/general/utils/data/tecnologias";
+import { TypeProyecto } from "@modules/general/utils/data/proyectos";
 
 interface Props {
   proyecto: TypeProyecto;

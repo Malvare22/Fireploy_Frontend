@@ -1,7 +1,6 @@
+import { proyectosDummy, TypeProyecto } from "@modules/general/utils/data/proyectos";
 import Contents from "@modules/projects/components/projectFrame/contents";
 import IconMenu from "@modules/projects/components/projectFrame/menu";
-import { proyectosDummy } from "@modules/projects/utils/data/proyectos";
-import { TypeProyecto } from "@modules/projects/utils/type/typeProyecto";
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
