@@ -1,45 +1,54 @@
 import CustomInput from "@modules/general/components/customInput";
 import CustomSelect from "@modules/general/components/customSelect";
 import { TypeProyecto } from "@modules/general/utils/data/proyectos";
-import { tecnologiasDummy, TypeTecnologia } from "@modules/general/utils/data/tecnologias";
+import {
+  tecnologiasDummy,
+  TypeTecnologia,
+} from "@modules/general/utils/data/tecnologias";
 import { ProyectoContext } from "@modules/projects/context/proyectoContext";
 import { Box, Divider, MenuItem, Typography } from "@mui/material";
 import React, { useContext, useMemo } from "react";
+import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
 
 function Repositories() {
   const context = useContext(ProyectoContext);
 
-  if (
-    !(
-      context &&
-      context.buffer &&
-      context.proyecto &&
-      context.setBuffer != undefined
-    )
-  ) {
+  if (!(context && context.proyecto)) {
     return <></>;
   }
 
-  const { buffer, setBuffer } = context;
+  const { errors, register, watch } = context;
 
   return (
     <Box>
-      <RepositoryForm type="frontend" buffer={buffer} setBuffer={setBuffer} />
-      <RepositoryForm type="backend" buffer={buffer} setBuffer={setBuffer} />
+      <RepositoryForm
+        type="frontend"
+        errors={errors}
+        register={register}
+        watch={watch}
+      />
+      <RepositoryForm
+        type="backend"
+        errors={errors}
+        register={register}
+        watch={watch}
+      />
     </Box>
   );
 }
 
 interface RepositoryFormProps {
   type: TypeTecnologia["type"];
-  buffer: TypeProyecto;
-  setBuffer: React.Dispatch<TypeProyecto>;
+  errors: FieldErrors<TypeProyecto>;
+  register: UseFormRegister<TypeProyecto>;
+  watch: UseFormWatch<TypeProyecto>;
 }
 
 const RepositoryForm: React.FC<RepositoryFormProps> = ({
+  errors,
+  register,
   type,
-  buffer,
-  setBuffer,
+  watch,
 }: RepositoryFormProps) => {
   const marginRight = 2;
 
@@ -52,15 +61,6 @@ const RepositoryForm: React.FC<RepositoryFormProps> = ({
     () => tecnologiasDummy.filter((tec) => tec.type === type),
     [type]
   );
-  const handleBufferChange = (field: "url" | "id", value: any) => {
-    setBuffer({
-      ...buffer,
-      [key]: {
-        ...buffer[key],
-        [field]: value,
-      },
-    });
-  };
 
   return (
     <Box
@@ -83,8 +83,14 @@ const RepositoryForm: React.FC<RepositoryFormProps> = ({
           Repositorio
         </Typography>
         <CustomInput
-          value={buffer[key]?.url}
-          onChange={(e) => handleBufferChange("url", e.target.value)}
+          {...(key === "repositorioBackend"
+            ? register("repositorioBackend.url")
+            : register("repositorioFrontend.url"))}
+          errorMessage={
+            key === "repositorioBackend"
+              ? errors.repositorioBackend?.url?.message
+              : errors.repositorioFrontend?.url?.message
+          }
           variant="secondary"
         />
       </Box>
@@ -94,8 +100,19 @@ const RepositoryForm: React.FC<RepositoryFormProps> = ({
         </Typography>
         <CustomSelect
           variantDelta="secondary"
-          value={buffer[key]?.id}
-          onChange={(e) => handleBufferChange("id", e.target.value)}
+          {...(key === "repositorioBackend"
+            ? register("repositorioBackend.id")
+            : register("repositorioFrontend.id"))}
+          errorMessage={
+            key === "repositorioBackend"
+              ? errors.repositorioBackend?.id?.message
+              : errors.repositorioFrontend?.id?.message
+          }
+          value={
+            key === "repositorioBackend"
+              ? watch("repositorioBackend.id")
+              : watch("repositorioFrontend.id")
+          }
         >
           {filteredTechnologies?.map((tecnologia, index) => (
             <MenuItem key={index} value={tecnologia.id}>

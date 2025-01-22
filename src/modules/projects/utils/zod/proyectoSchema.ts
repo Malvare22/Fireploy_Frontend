@@ -1,4 +1,3 @@
-import { TypeProyecto } from "@modules/general/utils/data/proyectos";
 import { z } from "zod";
 
 export const ProyectoSchema = z.object({
