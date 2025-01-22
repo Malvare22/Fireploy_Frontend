@@ -5,7 +5,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DrawerCustom from "./components/drawer";
 import { AccountMenu } from "./components/accountMenu";
 import Notificacions from "./components/notifications";
-import Logo from '@modules/general/assets/LogoFireploy.png'
+import Logo from "@modules/general/assets/LogoFireploy.png";
 
 const hoverTypographyStyles: CSSProperties = {
   textAlign: "center",
@@ -14,7 +14,7 @@ const hoverTypographyStyles: CSSProperties = {
 };
 
 const Navbar = () => {
-  const [session, _setSession] = useState(true);
+  const [session, _setSession] = useState(false);
   const [open, setOpen] = useState(true);
 
   return (
@@ -29,11 +29,12 @@ const Navbar = () => {
             xs: "column",
             xl: "row",
           },
-          alignContent: "center",
-          justifyContent: "center",
-          paddingLeft: { lg: 4 },
-          paddingRight: { lg: 6 },
-          paddingY: { xs: 2, xl: 0 },
+          gap: { lg: 4, xs: 2 },
+          padding: {xs: 2, xl: 0},
+          justifyContent: {
+            xs: "center",
+            xl: "space-between",
+          },
         }}
       >
         {/* Primera Parte */}
@@ -46,8 +47,8 @@ const Navbar = () => {
             },
             alignItems: "center",
             justifyContent: "center",
-            gap: { lg: 10, xs: 4 },
-            paddingX: { xs: 4, lg: 0 },
+            gap: { lg: 4, xs: 2 },
+            paddingX: 4,
           }}
         >
           <FirstContent open={open} setOpen={setOpen} />
@@ -63,10 +64,8 @@ const Navbar = () => {
                 xs: "column",
                 lg: "row",
               },
-              justifyContent: { xl: "end", xs: "center" },
-              width: "100%",
-              gap: { lg: 4, xs: 4 },
-              marginTop: { xs: 4, lg: 0 },
+              gap: { lg: 4, xs: 2 },
+              paddingX: 4,
             }}
           >
             <SecondContent session={session} />
@@ -170,6 +169,5 @@ const SecondContent: React.FC<SecondContentProps> = ({
     </>
   );
 };
-
 
 export default Navbar;
