@@ -422,19 +422,19 @@ theme.typography.h4Bold = {
   },
 };
 theme.typography.h5 = {
-  fontSize: "1.6rem", // ~25px
+  fontSize: "1.4rem", // ~25px
   fontWeight: "normal",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
-    fontSize: "1.4rem",
+    fontSize: "1.2rem",
   },
 };
 theme.typography.h5Bold = {
-  fontSize: "1.6rem", // ~25px
+  fontSize: "1.4rem", // ~25px
   fontWeight: "bold",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
-    fontSize: "1.4rem",
+    fontSize: "1.2rem",
   },
 };
 theme.typography.title = {
