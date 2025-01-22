@@ -38,6 +38,11 @@ const optionsAside: TypeOption[] = [
     text: "Colaboradores",
     id: 3,
   },
+  {
+    icon: <SupervisedUserCircleIcon />,
+    text: "Adicionales",
+    id: 4,
+  },
 ];
 
 interface MenuProps{

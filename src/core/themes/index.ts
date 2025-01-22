@@ -218,9 +218,9 @@ export const theme = createTheme({
             {
               props: { variant: "secondary" },
               style: {
-                fontSize: theme.typography.h6.fontSize,
-                fontFamily: theme.typography.h6.fontFamily,
-                fontWeight: theme.typography.h6.fontWeight,
+                fontSize: theme.typography.title.fontSize,
+                fontFamily: theme.typography.title.fontFamily,
+                fontWeight: theme.typography.title.fontWeight,
               },
             },
           ],
@@ -250,6 +250,7 @@ export const theme = createTheme({
         }),
       },
     },
+
   },
 });
 
