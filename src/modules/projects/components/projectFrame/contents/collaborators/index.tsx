@@ -1,10 +1,10 @@
-import { usersDummy, TypeUsuario } from "@core/test/data/users";
 import AutocompleteUsers from "@modules/general/components/autocompleteUsers";
 import CellUser from "@modules/general/components/cellUsers";
 import { Box, Divider, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 import AlertDialog from "@modules/general/components/alertDialog";
+import { TypeUsuario, usersDummy } from "@modules/general/utils/data/usuarios";
 
 function Collaborators() {
   const [userToAdd, setUserToAdd] = useState<TypeUsuario | undefined>(undefined);
