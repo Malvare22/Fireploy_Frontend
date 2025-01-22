@@ -1,8 +1,8 @@
+import CustomInput from "@modules/general/components/customInput";
 import FormContainer from "@modules/general/components/formContainer";
 import {
   Box,
   Button,
-  Input,
   Link,
   MenuItem,
   Select,
@@ -39,7 +39,7 @@ function Register() {
           <Typography variant="h5Bold">Nombres</Typography>
         </Box>
         <Box>
-          <Input type="text" />
+          <CustomInput type="text" />
         </Box>
       </Box>
       <Box>
@@ -47,7 +47,7 @@ function Register() {
           <Typography variant="h5Bold">Apellidos</Typography>
         </Box>
         <Box>
-          <Input type="text" />
+          <CustomInput type="text" />
         </Box>
       </Box>
       <Box>
@@ -55,7 +55,7 @@ function Register() {
           <Typography variant="h5Bold">Código Institucional</Typography>
         </Box>
         <Box>
-          <Input type="number" />
+          <CustomInput type="number" />
         </Box>
       </Box>
       <Box>
@@ -63,7 +63,7 @@ function Register() {
           <Typography variant="h5Bold">Correo Electrónico</Typography>
         </Box>
         <Box>
-          <Input type="email" />
+          <CustomInput type="email" />
         </Box>
       </Box>
       <Box>
@@ -71,7 +71,7 @@ function Register() {
           <Typography variant="h5Bold">Fecha de Nacimiento</Typography>
         </Box>
         <Box>
-          <Input type="date" />
+          <CustomInput type="date" />
         </Box>
       </Box>
       <Box>
@@ -91,7 +91,7 @@ function Register() {
           <Typography variant="h5Bold">Contraseña</Typography>
         </Box>
         <Box>
-          <Input type="password" />
+          <CustomInput type="password" />
         </Box>
       </Box>
       <Box>
@@ -99,7 +99,7 @@ function Register() {
           <Typography variant="h5Bold">Confirmar Contraseña</Typography>
         </Box>
         <Box>
-          <Input type="password" />
+          <CustomInput type="password" />
         </Box>
       </Box>
       <Box

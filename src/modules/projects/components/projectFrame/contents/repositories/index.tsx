@@ -1,9 +1,10 @@
+import CustomInput from "@modules/general/components/customInput";
 import CustomSelect from "@modules/general/components/customSelect";
 import { ProyectoContext } from "@modules/projects/context/proyectoContext";
 import { tecnologiasDummy } from "@modules/projects/utils/data/tecnologias";
 import { TypeProyecto } from "@modules/projects/utils/type/typeProyecto";
 import { TypeTecnologia } from "@modules/projects/utils/type/typeTecnologia";
-import { Box, Divider, Input, MenuItem, Typography } from "@mui/material";
+import { Box, Divider, MenuItem, Typography } from "@mui/material";
 import React, { useContext, useMemo } from "react";
 
 function Repositories() {
@@ -82,7 +83,7 @@ const RepositoryForm: React.FC<RepositoryFormProps> = ({
         <Typography variant="titleBold" marginRight={marginRight}>
           Repositorio
         </Typography>
-        <Input
+        <CustomInput
           value={buffer[key]?.url}
           onChange={(e) => handleBufferChange("url", e.target.value)}
           variant="secondary"

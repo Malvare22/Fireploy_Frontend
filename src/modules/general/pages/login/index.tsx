@@ -1,5 +1,5 @@
 import FormContainer from "@modules/general/components/formContainer";
-import { Box, Button, Input, Link, Typography } from "@mui/material";
+import { Box, Button, Link, Typography } from "@mui/material";
 import { gapi, loadAuth2 } from "gapi-script";
 import { useContext, useEffect } from "react";
 import GoogleLogin from "react-google-login";
@@ -7,6 +7,7 @@ import Divider from "@mui/material/Divider";
 import { useNavigate } from "react-router-dom";
 import Logo from "@modules/general/assets/LogoFireploy.png";
 import { SnackBarContext } from "@modules/general/context/snackbarContext";
+import CustomInput from "@modules/general/components/customInput";
 
 const Login = () => {
   const clientID =
@@ -55,13 +56,13 @@ const Login = () => {
               <Typography variant="h5Bold">Correo Electrónico</Typography>
             </Box>
             <Box>
-              <Input type="email" required />
+              <CustomInput type="email" required />
             </Box>
             <Box>
               <Typography variant="h5Bold">Contraseña</Typography>
             </Box>
             <Box>
-              <Input type="password" required />
+              <CustomInput type="password" required />
             </Box>
             <Box
               sx={{

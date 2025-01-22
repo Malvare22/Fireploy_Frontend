@@ -1,6 +1,7 @@
+import CustomInput from "@modules/general/components/customInput";
 import CustomSelect from "@modules/general/components/customSelect";
 import CustomTextArea from "@modules/general/components/customTextArea";
-import { Box, Divider, Input, SxProps, Typography } from "@mui/material";
+import { Box, Divider, SxProps, Typography } from "@mui/material";
 
 function Adicionales() {
   return (
@@ -37,7 +38,7 @@ const Content = () => (
       <Typography variant="titleBold" sx={labelSx}>
         Título
       </Typography>
-      <Input variant="secondary" />
+      <CustomInput variant="secondary" />
     </Box>
     <Box sx={columnSx}>
       <Typography variant="titleBold" sx={labelSx}>

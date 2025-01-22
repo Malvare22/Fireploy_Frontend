@@ -1,5 +1,6 @@
+import CustomInput from "@modules/general/components/customInput";
 import FormContainer from "@modules/general/components/formContainer";
-import { Box, Button, Input, Link, Typography } from "@mui/material";
+import { Box, Button, Link, Typography } from "@mui/material";
 import React, { useState } from "react";
 
 function ChangePassword() {
@@ -52,7 +53,7 @@ const Request: React.FC<RequestProps> = ({ setValue }: RequestProps) => {
             <Typography variant="h5Bold">Correo Electrónico</Typography>
           </Box>
           <Box>
-            <Input type="email" />
+            <CustomInput type="email" />
           </Box>
         </Box>
         <Box
@@ -90,7 +91,7 @@ const Change: React.FC<ChangeProps> = ({ setValue }: ChangeProps) => {
             <Typography variant="h5Bold">Correo Electrónico</Typography>
           </Box>
           <Box>
-            <Input type="email" />
+            <CustomInput type="email" />
           </Box>
         </Box>
         <Box>
@@ -98,7 +99,7 @@ const Change: React.FC<ChangeProps> = ({ setValue }: ChangeProps) => {
             <Typography variant="h5Bold">Código de Verificación</Typography>
           </Box>
           <Box>
-            <Input type="number" />
+            <CustomInput type="number" />
           </Box>
         </Box>
         <Box>
@@ -106,7 +107,7 @@ const Change: React.FC<ChangeProps> = ({ setValue }: ChangeProps) => {
             <Typography variant="h5Bold">Contraseña</Typography>
           </Box>
           <Box>
-            <Input type="password" />
+            <CustomInput type="password" />
           </Box>
         </Box>
         <Box>
@@ -114,7 +115,7 @@ const Change: React.FC<ChangeProps> = ({ setValue }: ChangeProps) => {
             <Typography variant="h5Bold">Confirmar Contraseña</Typography>
           </Box>
           <Box>
-            <Input type="password" />
+            <CustomInput type="password" />
           </Box>
         </Box>
 
