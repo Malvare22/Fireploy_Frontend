@@ -1,15 +1,26 @@
 import Contents from "@modules/projects/components/projectFrame/contents";
 import IconMenu from "@modules/projects/components/projectFrame/menu";
+import { proyectosDummy } from "@modules/projects/utils/data/proyectos";
+import { TypeProyecto } from "@modules/projects/utils/type/typeProyecto";
 import { Box } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 function ViewProject() {
   const [currentOption, setCurrentOption] = useState(0);
   const [open, setOpen] = useState(true);
+  const [proyecto, setProyecto] = useState<undefined | TypeProyecto>(undefined);
 
+  const { id } = useParams();
+
+  useEffect(() => {
+    const projectId = id ? parseInt(id) : 0;
+    const proyecto = proyectosDummy.find((p) => p.id == projectId);
+    setProyecto(proyecto);
+  }, []);
 
   return (
-
+    <>
       <Box
         sx={{
           width: "100%",
@@ -27,27 +38,36 @@ function ViewProject() {
 
         
       </Box> */}
-        <IconMenu
-          currentOption={currentOption}
-          setCurrentOption={setCurrentOption}
-          open={open}
-          setOpen={setOpen}
-        />
-        {!open && (
-          <Box sx={{ display: { sm: "none", width: "auto" }, width: "80%" }}>
-            <Contents
+        {proyecto && (
+          <>
+            <IconMenu
               currentOption={currentOption}
               setCurrentOption={setCurrentOption}
+              open={open}
+              setOpen={setOpen}
             />
-          </Box>
+            {!open && (
+              <Box
+                sx={{ display: { sm: "none", width: "auto" }, width: "80%" }}
+              >
+                <Contents
+                  currentOption={currentOption}
+                  setCurrentOption={setCurrentOption}
+                  proyecto={proyecto}
+                />
+              </Box>
+            )}
+            <Box sx={{ display: { sm: "block", xs: "none" }, width: "70%" }}>
+              <Contents
+                currentOption={currentOption}
+                setCurrentOption={setCurrentOption}
+                proyecto={proyecto}
+              />
+            </Box>
+          </>
         )}
-        <Box sx={{ display: { sm: "block", xs: "none" }, width: "70%" }}>
-          <Contents
-            currentOption={currentOption}
-            setCurrentOption={setCurrentOption}
-          />
-        </Box>
       </Box>
+    </>
   );
 }
 

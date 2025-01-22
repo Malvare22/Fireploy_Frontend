@@ -1,11 +1,9 @@
-import { Box } from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
+import { Box, Button } from "@mui/material";
+import React, { useMemo, useState } from "react";
 import Collaborators from "./collaborators";
 import Repositories from "./repositories";
 import Database from "./database";
 import { TypeProyecto } from "@modules/projects/utils/type/typeProyecto";
-import { useParams } from "react-router-dom";
-import { proyectosDummy } from "@modules/projects/utils/data/proyectos";
 import { ProyectoContext } from "@modules/projects/context/proyectoContext";
 import Logs from "./logs";
 import Adicionales from "./adicionales";
@@ -13,20 +11,17 @@ import Adicionales from "./adicionales";
 interface ContentsProps {
   currentOption: number;
   setCurrentOption?: React.Dispatch<number>;
+  proyecto: TypeProyecto | undefined;
 }
 
-const Contents: React.FC<ContentsProps> = ({ currentOption }) => {
-  const [proyecto, setProyecto] = useState<undefined | TypeProyecto>(undefined);
-  const [buffer, setBuffer] = useState<undefined | TypeProyecto>(undefined);
+const Contents: React.FC<ContentsProps> = ({ currentOption, proyecto }) => {
+  const [buffer, setBuffer] = useState<undefined | TypeProyecto>(proyecto);
 
-  const { id } = useParams();
+  const handleCancelar = () => setBuffer(proyecto);
 
-  useEffect(() => {
-    const projectId = id ? parseInt(id) : 0;
-    const proyecto = proyectosDummy.find((p) => p.id == projectId);
-    setProyecto(proyecto);
-    setBuffer(proyecto);
-  }, []);
+  const comparator = () => {
+    return JSON.stringify(buffer) == JSON.stringify(proyecto);
+  }
 
   const Content = useMemo(() => {
     switch (currentOption) {
@@ -63,6 +58,12 @@ const Contents: React.FC<ContentsProps> = ({ currentOption }) => {
         }}
       >
         {Content}
+        { !comparator() && 
+          <Box sx={{display: 'flex', justifyContent: 'end'}}>
+            <Button variant="contained" color="warning">Guardar</Button>
+            <Button variant="contained" sx={{marginLeft: 2}} onClick={handleCancelar}>Cancelar</Button>
+          </Box>
+        }
       </Box>
     </ProyectoContext.Provider>
   );

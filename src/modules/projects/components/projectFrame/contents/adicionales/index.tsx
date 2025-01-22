@@ -38,7 +38,7 @@ const Content = () => (
       <Typography variant="titleBold" sx={labelSx}>
         Título
       </Typography>
-      <CustomInput variant="secondary" />
+      <CustomInput variant="secondary" errorMessage="Epa"/>
     </Box>
     <Box sx={columnSx}>
       <Typography variant="titleBold" sx={labelSx}>

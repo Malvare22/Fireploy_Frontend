@@ -1,4 +1,5 @@
 import {
+  Box,
   TextareaAutosize,
   TextareaAutosizeProps,
   Typography,
@@ -23,9 +24,11 @@ const CustomTextArea: React.FC<
         minRows={4}
       />
       {errorMessage && (
-        <Typography variant="title" color="error">
-          {errorMessage}
-        </Typography>
+        <Box marginY={1}>
+          <Typography variant="title" color="error">
+            {errorMessage}
+          </Typography>
+        </Box>
       )}
     </>
   );
