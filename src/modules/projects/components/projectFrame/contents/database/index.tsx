@@ -3,20 +3,14 @@ import { tecnologiasDummy } from "@modules/general/utils/data/tecnologias";
 import { ProyectoContext } from "@modules/projects/context/proyectoContext";
 import { LabelDatabase } from "@modules/projects/enum/labelDatabase";
 import { Box, Button, Divider, MenuItem, Typography } from "@mui/material";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 function Database() {
   const context = useContext(ProyectoContext);
 
   if (!context) return <></>;
 
-  const { proyecto } = context;
-
-  const [baseDatosId, setBaseDatosId] = useState<undefined | number>(
-    proyecto?.baseDeDatos.id
-  );
-
-  if (!proyecto) return <></>;
+  const { register, watch } = context;
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -48,8 +42,9 @@ function Database() {
           <Box sx={{ width: "80%" }}>
             <CustomSelect
               variantDelta="secondary"
-              value={baseDatosId}
-              onChange={(e) => setBaseDatosId(e.target.value as number)}
+              value={watch('baseDeDatos.id')}
+              {...register('baseDeDatos.id')}
+              
             >
               {tecnologiasDummy.map(
                 (baseDeDatos) =>

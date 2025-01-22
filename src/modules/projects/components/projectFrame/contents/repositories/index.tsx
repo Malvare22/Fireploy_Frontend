@@ -21,12 +21,28 @@ function Repositories() {
 
   return (
     <Box>
-      <RepositoryForm
-        type="frontend"
-        errors={errors}
-        register={register}
-        watch={watch}
-      />
+      <Typography variant="h3Bold">Repositorios</Typography>
+      <Divider />
+      <Box sx={{ display: "flex", marginY: 3 }}>
+        <Typography variant="titleBold">Número de repositorios</Typography>
+        <CustomSelect
+          variantDelta="secondary"
+          {...register("numeroDeCapas")}
+          errorMessage={errors.numeroDeCapas?.message}
+          value={watch("numeroDeCapas")}
+        >
+          <MenuItem value="1">1</MenuItem>
+          <MenuItem value="2">2</MenuItem>
+        </CustomSelect>
+      </Box>
+      {watch("numeroDeCapas") != 1 && (
+        <RepositoryForm
+          type="frontend"
+          errors={errors}
+          register={register}
+          watch={watch}
+        />
+      )}
       <RepositoryForm
         type="backend"
         errors={errors}

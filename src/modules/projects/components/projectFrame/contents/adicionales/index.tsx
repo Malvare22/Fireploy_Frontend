@@ -154,21 +154,6 @@ const Content = () => {
           </CustomSelect>
         </Box>
       </Box>
-
-      <Box sx={columnSx}>
-        <Box sx={labelSx}>
-          <Typography variant="titleBold">Número de Capas</Typography>
-        </Box>
-        <CustomSelect
-          variantDelta="secondary"
-          {...register("numeroDeCapas")}
-          errorMessage={errors.numeroDeCapas?.message}
-          value={watch("numeroDeCapas")}
-        >
-          <MenuItem value="1">1</MenuItem>
-          <MenuItem value="2">2</MenuItem>
-        </CustomSelect>
-      </Box>
     </Box>
   );
 };

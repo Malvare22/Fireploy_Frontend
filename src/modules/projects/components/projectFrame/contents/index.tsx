@@ -49,11 +49,11 @@ const Contents: React.FC<ContentsProps> = ({ currentOption, proyecto }) => {
       case 0:
         return <Repositories />;
 
-      // case 1:
-      //   return <Logs />;
+      case 1:
+        return <Logs />;
 
-      // case 2:
-      //   return <Database />;
+      case 2:
+        return <Database />;
 
       // case 3:
       //   return <Collaborators />;
@@ -79,7 +79,7 @@ const Contents: React.FC<ContentsProps> = ({ currentOption, proyecto }) => {
             gap: 3,
           }}
         >
-          {JSON.stringify(watch(), null, 2)}
+          {/* {JSON.stringify(watch(), null, 2)} */}
           {Content}
           {comparator() && (
             <Box sx={{ display: "flex", justifyContent: "end" }}>
