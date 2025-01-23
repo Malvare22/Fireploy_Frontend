@@ -1,13 +1,16 @@
 import FormContainer from "@modules/general/components/formContainer";
 import { Box, Button, Link, Typography } from "@mui/material";
 import { gapi, loadAuth2 } from "gapi-script";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import GoogleLogin from "react-google-login";
 import Divider from "@mui/material/Divider";
 import { useNavigate } from "react-router-dom";
 import Logo from "@modules/general/assets/LogoFireploy.png";
 import { SnackBarContext } from "@modules/general/context/snackbarContext";
 import CustomInput from "@modules/general/components/customInput";
+import { usuariosDummy } from "@modules/general/utils/data/usuarios";
+import { LabelSesion } from "@modules/general/enums/snackbar";
+import { AccountContext } from "context/accountContext";
 
 const Login = () => {
   const clientID =
@@ -17,18 +20,41 @@ const Login = () => {
     loadAuth2(gapi, clientID, "");
   }, []);
 
-  const onSuccess = (response: any) => {
-    console.log(response);
-  };
-
   const navigate = useNavigate();
 
   const { setMessage, setSuccess, setView } = useContext(SnackBarContext);
 
-  const onSend = () => {
-    setMessage("A");
-    setSuccess(true);
+  const [cuenta, setCuenta] = useState({
+    correo: "",
+    contrasenia: "",
+  });
+
+  const iniciarSesion = () => {
+    const exist = usuariosDummy.find(
+      (usuario) =>
+        usuario.correo == cuenta.correo &&
+        usuario.contraseña == cuenta.contrasenia
+    );
+    if (exist) {
+      setMessage(LabelSesion.sesionIniciada);
+      setSuccess(true);
+      localStorage.setItem("Token", "true");
+      localStorage.setItem("Rol", exist.tipoUsuario);
+      navigate("/");
+      const context = useContext(AccountContext);
+      if (context) {
+        const { setSesion } = context;
+        setSesion(true);
+      }
+    } else {
+      setMessage(LabelSesion.sesionErrada);
+      setSuccess(false);
+    }
     setView(true);
+  };
+
+  const handleInput = (key: keyof typeof cuenta, value: string) => {
+    setCuenta({ ...cuenta, [key]: value });
   };
 
   return (
@@ -37,7 +63,12 @@ const Login = () => {
         width: "60%",
       }}
     >
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          iniciarSesion();
+        }}
+      >
         <Box
           sx={{
             display: { md: "flex" },
@@ -56,13 +87,23 @@ const Login = () => {
               <Typography variant="h5Bold">Correo Electrónico</Typography>
             </Box>
             <Box>
-              <CustomInput type="email" required />
+              <CustomInput
+                type="email"
+                required
+                value={cuenta["correo"]}
+                onChange={(e) => handleInput("correo", e.target.value)}
+              />
             </Box>
             <Box>
               <Typography variant="h5Bold">Contraseña</Typography>
             </Box>
             <Box>
-              <CustomInput type="password" required />
+              <CustomInput
+                type="password"
+                required
+                value={cuenta["contrasenia"]}
+                onChange={(e) => handleInput("contrasenia", e.target.value)}
+              />
             </Box>
             <Box
               sx={{
@@ -91,7 +132,7 @@ const Login = () => {
               >
                 <GoogleLogin
                   clientId={clientID}
-                  onSuccess={onSuccess}
+                  onSuccess={() => alert("modificante")}
                   onFailure={() => alert("D:")}
                   cookiePolicy="single_host_policy"
                 ></GoogleLogin>

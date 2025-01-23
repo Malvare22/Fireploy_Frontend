@@ -13,8 +13,7 @@ const hoverTypographyStyles: CSSProperties = {
   cursor: "pointer",
 };
 
-const Navbar = () => {
-  const [session, _setSession] = useState(false);
+const Navbar: React.FC<{sesion: boolean}> = ({sesion}) => {
   const [open, setOpen] = useState(true);
 
   return (
@@ -68,7 +67,7 @@ const Navbar = () => {
               paddingX: 4,
             }}
           >
-            <SecondContent session={session} />
+            <SecondContent sesion={sesion} />
           </Box>
         )}
       </Box>
@@ -142,16 +141,16 @@ const FirstContent: React.FC<FirstContentProps> = ({
 };
 
 interface SecondContentProps {
-  session: boolean;
+  sesion: boolean;
 }
 const SecondContent: React.FC<SecondContentProps> = ({
-  session,
+  sesion,
 }: SecondContentProps) => {
   const navigate = useNavigate();
 
   return (
     <>
-      {session ? (
+      {sesion ? (
         <>
           <Notificacions />
           <AccountMenu />
