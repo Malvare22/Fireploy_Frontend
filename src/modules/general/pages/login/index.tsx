@@ -10,7 +10,7 @@ import { SnackBarContext } from "@modules/general/context/snackbarContext";
 import CustomInput from "@modules/general/components/customInput";
 import { usuariosDummy } from "@modules/general/utils/data/usuarios";
 import { LabelSesion } from "@modules/general/enums/snackbar";
-import { AccountContext } from "context/accountContext";
+import { AccountContext } from "@core/context/accountContext";
 
 const Login = () => {
   const clientID =
@@ -29,6 +29,10 @@ const Login = () => {
     contrasenia: "",
   });
 
+  const context = useContext(AccountContext);
+
+  const setLocalUser = context != undefined ? context.setLocalUser : undefined;
+
   const iniciarSesion = () => {
     const exist = usuariosDummy.find(
       (usuario) =>
@@ -38,19 +42,18 @@ const Login = () => {
     if (exist) {
       setMessage(LabelSesion.sesionIniciada);
       setSuccess(true);
-      localStorage.setItem("Token", "true");
-      localStorage.setItem("Rol", exist.tipoUsuario);
-      navigate("/");
-      const context = useContext(AccountContext);
-      if (context) {
-        const { setSesion } = context;
-        setSesion(true);
+      localStorage.setItem("TOKEN", "true");
+      if (setLocalUser) {
+        setLocalUser(JSON.stringify(exist));
+        setView(true);
+        localStorage.setItem("USER", JSON.stringify(exist));
+        navigate("/");
       }
     } else {
       setMessage(LabelSesion.sesionErrada);
       setSuccess(false);
+      setView(true);
     }
-    setView(true);
   };
 
   const handleInput = (key: keyof typeof cuenta, value: string) => {

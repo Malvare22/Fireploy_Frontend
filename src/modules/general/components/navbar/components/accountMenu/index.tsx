@@ -5,12 +5,18 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import Logout from "@mui/icons-material/Logout";
-import { Fragment, useState } from "react";
+import { Fragment, useContext, useMemo, useState } from "react";
 import { Box, ListItemButton, Typography } from "@mui/material";
+import { TypeUsuario } from "@modules/general/utils/data/usuarios";
+import { breakLine } from "@modules/general/utils/breakLine";
+import { readBreakLine } from "@modules/general/utils/readBreakLine";
+import { useNavigate } from "react-router-dom";
+import { AccountContext } from "@core/context/accountContext";
 
 export const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -19,14 +25,39 @@ export const AccountMenu = () => {
     setAnchorEl(null);
   };
 
+  const context = useContext(AccountContext);
+  
+  if (!context) return <></>;
+  
+  const { localUser, setLocalUser } = context;
+  
+  const cerrarSesion = () => {
+    localStorage.clear();
+    setLocalUser(null);
+    navigate("/");
+  };
+
+  const userInfo = useMemo((): { nombres: string; foto: string } => {
+    if (!localUser) return { nombres: "", foto: "" };
+
+    try {
+      const user: TypeUsuario = JSON.parse(localUser) as TypeUsuario;
+      return {
+        nombres: `${user.nombres} ${user.apellidos}`,
+        foto: user.fotoPerfil,
+      };
+    } catch (error) {
+      console.error("Error al parsear el usuario:", error);
+      return { nombres: "", foto: "" };
+    }
+  }, [localUser]);
+
   return (
     <Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
         <Tooltip title="Account settings">
-          <ListItemButton
-            onClick={handleClick}
-          >
-            <ProfilePreview nombre="Rodrigo Malaver" foto="a" />
+          <ListItemButton onClick={handleClick}>
+            <ProfilePreview nombre={userInfo.nombres} foto={userInfo.foto} />
           </ListItemButton>
         </Tooltip>
       </Box>
@@ -67,11 +98,11 @@ export const AccountMenu = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleClose} sx={{ width: 240 }}>
+        <MenuItem onClick={() => navigate("perfil")} sx={{ width: 240 }}>
           <Avatar /> Profile
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose} sx={{ width: 240 }}>
+        <MenuItem onClick={cerrarSesion} sx={{ width: 240 }}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
@@ -110,18 +141,19 @@ const ProfilePreview: React.FC<ProfilePreviewProps> = ({ nombre, foto }) => {
           border: "1px solid black",
         }}
       >
-        <Typography variant="h5Bold" sx={{ marginRight: 1 }}>
-          {nombre}
+        <Typography variant="titleBold" sx={{ marginRight: 1 }}>
+          {readBreakLine(breakLine(nombre, 2))}
         </Typography>
       </Box>
       <Box
         sx={{
           width: 52,
           height: 52,
-          backgroundColor: "gray",
           borderRadius: 100,
           marginLeft: 1,
         }}
+        component={"img"}
+        src={foto}
       ></Box>
     </Box>
   );

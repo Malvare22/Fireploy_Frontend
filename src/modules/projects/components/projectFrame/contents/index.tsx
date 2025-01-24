@@ -62,13 +62,18 @@ const Contents: React.FC<ContentsProps> = ({ currentOption, proyecto }) => {
         return <Adicionales />;
 
       default:
-        return <Box/>;
+        return <Box />;
     }
   }, [currentOption]);
 
   return (
     <ProyectoContext.Provider
-      value={{ proyecto: proyecto, register: register, errors: errors, watch: watch }}
+      value={{
+        proyecto: proyecto,
+        register: register,
+        errors: errors,
+        watch: watch,
+      }}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box
