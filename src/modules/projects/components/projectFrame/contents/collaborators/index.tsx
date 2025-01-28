@@ -4,7 +4,7 @@ import { Box, Divider, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 import AlertDialog from "@modules/general/components/alertDialog";
-import { TypeUsuario, usersDummy } from "@modules/general/utils/data/usuarios";
+import { TypeUsuario, usersDummy } from "@modules/usuarios/test/data/usuarios.prueba";
 
 function Collaborators() {
   const [userToAdd, setUserToAdd] = useState<TypeUsuario | undefined>(undefined);

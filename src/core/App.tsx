@@ -7,7 +7,7 @@ import { router } from "./router/router";
 import SnackBar from "@modules/general/components/snackbar";
 import useSnackBar from "@modules/general/hooks/useSnackbar";
 import { useEffect, useState } from "react";
-import { AccountContext } from "./context/accountContext";
+import { AccountContext } from "../modules/context/accountContext";
 
 function App() {
   const { view, setView, message, setMessage, success, setSuccess } =

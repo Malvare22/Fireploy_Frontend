@@ -7,11 +7,11 @@ import Tooltip from "@mui/material/Tooltip";
 import Logout from "@mui/icons-material/Logout";
 import { Fragment, useContext, useMemo, useState } from "react";
 import { Box, ListItemButton, Typography } from "@mui/material";
-import { TypeUsuario } from "@modules/general/utils/data/usuarios";
 import { breakLine } from "@modules/general/utils/breakLine";
 import { readBreakLine } from "@modules/general/utils/readBreakLine";
 import { useNavigate } from "react-router-dom";
-import { AccountContext } from "@core/context/accountContext";
+import { AccountContext } from "@modules/context/accountContext";
+import { Usuario } from "@modules/usuarios/types/usuario";
 
 export const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -26,11 +26,11 @@ export const AccountMenu = () => {
   };
 
   const context = useContext(AccountContext);
-  
+
   if (!context) return <></>;
-  
+
   const { localUser, setLocalUser } = context;
-  
+
   const cerrarSesion = () => {
     localStorage.clear();
     setLocalUser(null);
@@ -41,10 +41,10 @@ export const AccountMenu = () => {
     if (!localUser) return { nombres: "", foto: "" };
 
     try {
-      const user: TypeUsuario = JSON.parse(localUser) as TypeUsuario;
+      const user: Usuario = JSON.parse(localUser) as Usuario;
       return {
         nombres: `${user.nombres} ${user.apellidos}`,
-        foto: user.fotoPerfil,
+        foto: user.fotoDePerfil,
       };
     } catch (error) {
       console.error("Error al parsear el usuario:", error);

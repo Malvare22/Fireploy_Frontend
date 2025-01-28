@@ -400,25 +400,25 @@ theme.typography.h3Bold = {
   },
 };
 theme.typography.h4 = {
-  fontSize: "2rem", // ~31px
+  fontSize: "1.7rem", // ~31px
   fontWeight: "normal",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("md")]: {
-    fontSize: "1.6rem",
+    fontSize: "1.5rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "1.4rem",
+    fontSize: "1.3rem",
   },
 };
 theme.typography.h4Bold = {
-  fontSize: "2rem", // ~31px
+  fontSize: "1.7rem", // ~31px
   fontWeight: "bold",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("md")]: {
-    fontSize: "1.6rem",
+    fontSize: "1.5rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "1.4rem",
+    fontSize: "1.3rem",
   },
 };
 theme.typography.h5 = {

@@ -3,7 +3,7 @@ import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
 import CellUser from "../cellUsers";
 import { FC } from "react";
-import { TypeUsuario, usersDummy } from "@modules/general/utils/data/usuarios";
+import { TypeUsuario, usersDummy } from "@modules/usuarios/test/data/usuarios.prueba";
 
 interface Props {
   onChange?: (value: TypeUsuario) => void;

@@ -1,11 +1,11 @@
-import { AccountContext } from "@core/context/accountContext";
+import { AccountContext } from "@modules/context/accountContext";
 import Footer from "@modules/general/components/footer";
 import Navbar from "@modules/general/components/navbar";
 import { Box } from "@mui/material";
 import { useContext } from "react";
 import { Outlet } from "react-router-dom";
 
-function LayoutBasic() {
+function LayoutStandard() {
   const context = useContext(AccountContext);
 
   if (!context) {
@@ -22,8 +22,9 @@ function LayoutBasic() {
           minHeight: { md: "70vh", xs: "80vh" },
           display: "flex",
           // alignItems: 'center',
-          backgroundColor: "backgroundX.secondary",
+          backgroundColor: "white",
           justifyContent: "center",
+          marginY: 4
         }}
       >
         <Outlet />
@@ -33,4 +34,4 @@ function LayoutBasic() {
   );
 }
 
-export default LayoutBasic;
+export default LayoutStandard;

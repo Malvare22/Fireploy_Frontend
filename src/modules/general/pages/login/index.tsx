@@ -8,9 +8,9 @@ import { useNavigate } from "react-router-dom";
 import Logo from "@modules/general/assets/LogoFireploy.png";
 import { SnackBarContext } from "@modules/general/context/snackbarContext";
 import CustomInput from "@modules/general/components/customInput";
-import { usuariosDummy } from "@modules/general/utils/data/usuarios";
 import { LabelSesion } from "@modules/general/enums/snackbar";
-import { AccountContext } from "@core/context/accountContext";
+import { AccountContext } from "@modules/context/accountContext";
+import { usuariosPrueba } from "@modules/usuarios/test/data/usuarios.prueba";
 
 const Login = () => {
   const clientID =
@@ -34,10 +34,10 @@ const Login = () => {
   const setLocalUser = context != undefined ? context.setLocalUser : undefined;
 
   const iniciarSesion = () => {
-    const exist = usuariosDummy.find(
+    const exist = usuariosPrueba.find(
       (usuario) =>
         usuario.correo == cuenta.correo &&
-        usuario.contraseña == cuenta.contrasenia
+        usuario.contrasenia == cuenta.contrasenia
     );
     if (exist) {
       setMessage(LabelSesion.sesionIniciada);
