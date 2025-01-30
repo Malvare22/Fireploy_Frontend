@@ -1,7 +1,7 @@
 import { EstadoUsuario } from "./usuario.estado";
 import {  RedSocialUsuario } from "./usuario.redSocial";
 import { SexoUsuario } from "./usuario.sexo";
-import { TiposUsuario } from "./usuarios.tipos";
+import { TiposUsuario } from "./usuario.tipos";
 
 export type Usuario = {
     correo: string;

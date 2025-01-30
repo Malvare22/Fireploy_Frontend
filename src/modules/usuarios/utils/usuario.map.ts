@@ -1,6 +1,6 @@
 import { EstadoUsuario } from "../types/usuario.estado";
 import { SexoUsuario } from "../types/usuario.sexo";
-import { TiposUsuario } from "../types/usuarios.tipos";
+import { TiposUsuario } from "../types/usuario.tipos";
 
 const sexoMapData = {
   M: "Masculino",

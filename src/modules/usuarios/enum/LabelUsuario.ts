@@ -13,5 +13,6 @@ export const LabelUsuario = {
   sexo: 'Sexo',
   redesSociales: 'Redes Sociales',
   correo: 'Correo Electrónico',
-  descripcion: 'Descripción'
+  descripcion: 'Descripción',
+  estado: 'Estado'
 };

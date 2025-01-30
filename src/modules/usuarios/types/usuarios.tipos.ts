@@ -1,1 +1,0 @@
-export type TiposUsuario = 'A' | 'D' | 'E'

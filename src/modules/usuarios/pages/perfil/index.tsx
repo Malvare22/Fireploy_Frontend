@@ -1,32 +1,23 @@
-import Modal, { useModal } from "@modules/general/components/modal";
-import { LabelGeneral } from "@modules/general/enums/labelGeneral";
-import AlertDialog from "@modules/general/components/alertDialog";
-import CustomInput from "@modules/general/components/customInput";
-import Label from "@modules/general/components/label";
-import Row from "@modules/general/components/row";
-import { breakLine } from "@modules/general/utils/breakLine";
-import { readBreakLine } from "@modules/general/utils/readBreakLine";
-import { LabelUsuario } from "@modules/usuarios/enum/LabelUsuario";
-import { Box, Button, Card, Input, MenuItem, Typography } from "@mui/material";
-import { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import { Usuario } from "@modules/usuarios/types/usuario";
+import { Box, Button, Card, SxProps, Typography } from "@mui/material";
+import ModalUsuario from "@modules/usuarios/components/modalUsuario";
+import { readBreakLine } from "@modules/general/utils/readBreakLine";
+import { breakLine } from "@modules/general/utils/breakLine";
+import { LabelGeneral } from "@modules/general/enums/labelGeneral";
+import { useModal } from "@modules/general/components/modal";
 import { usuariosPrueba } from "@modules/usuarios/test/data/usuarios.prueba";
 import { adaptarUsuario } from "@modules/usuarios/utils/usuario.adapter";
-import CustomSelect from "@modules/general/components/customSelect";
-import { obtenerTiposUsuario } from "@modules/usuarios/utils/usuario.map";
+import Row from "@modules/general/components/row";
+import { LabelUsuario } from "@modules/usuarios/enum/LabelUsuario";
+import RedSocialIcon from "@modules/general/components/redSocialIcon";
+import { LabelRedesSociales } from "@modules/usuarios/enum/LabelRedesSociales";
+import Label from "@modules/general/components/label";
+import Facebook from "@modules/general/assets/redesSociales/facebook.png";
+import Instagram from "@modules/general/assets/redesSociales/instagram.png";
+import Linkedin from "@modules/general/assets/redesSociales/linkedin.png";
 
 const VerPerfil = () => {
-  const obtenerUsuario = () => {
-    return usuariosPrueba[0];
-  };
-
-  const [usuario, _setUsuario] = useState<Usuario | null>(
-    adaptarUsuario(obtenerUsuario())
-  );
-  const { open, handleOpen, handleClose } = useModal();
-
-  if (!usuario) return <></>;
   return (
     <Box
       sx={{
@@ -34,21 +25,126 @@ const VerPerfil = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        border: "1px solid red",
         width: "100%",
       }}
     >
-      <Perfil usuario={usuario} />
-      <Modal handleClose={handleClose} sx={{width: {md: 900}}} open={true}>
-        <Cuerpo usuario={usuario}></Cuerpo>
-      </Modal>
+      <Perfil usuario={adaptarUsuario(usuariosPrueba[0])} />
     </Box>
   );
 };
 
 const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
+  const { open, handleOpen, handleClose } = useModal();
+
+
+  const Cuerpo = () => {
+    const styleRowRedSocial = {
+      flexDirection: "row",
+      alignItems: "center",
+    } as SxProps;
+
+    return (
+      <Card
+        sx={{
+          padding: 4,
+          backgroundColor: "white",
+          display: "flex",
+          flexDirection: "column",
+          gap: 4,
+          width: "80%",
+        }}
+      >
+        <ModalUsuario
+          open={open}
+          handleClose={handleClose}
+        />
+
+        {/* Correo */}
+        <Row>
+          <Label width={240}>{LabelUsuario.correo}</Label>
+          <Typography variant="title">{usuario.correo}</Typography>
+        </Row>
+
+        {/* Código */}
+        <Row>
+          <Label width={240}>{LabelUsuario.codigo}</Label>
+          <Typography variant="title">{usuario.id}</Typography>
+        </Row>
+
+        {/* Nombres */}
+        <Row>
+          <Label width={240}>{LabelUsuario.nombres}</Label>
+          <Typography variant="title">{usuario.nombres}</Typography>
+        </Row>
+
+        {/* Apellidos */}
+        <Row>
+          <Label width={240}>{LabelUsuario.apellidos}</Label>
+          <Typography variant="title">{usuario.apellidos}</Typography>
+        </Row>
+
+        {/* Rol */}
+        <Row>
+          <Label width={240}>{LabelUsuario.rol}</Label>
+          <Typography variant="title">{usuario.tipo}</Typography>
+        </Row>
+
+        {/* Estado */}
+        <Row>
+          <Label width={240}>{LabelUsuario.estado}</Label>
+          <Typography variant="title">{usuario.estado}</Typography>
+        </Row>
+
+        {/* Fecha de nacimiento */}
+        <Row>
+          <Label width={240}>{LabelUsuario.fechaNacimiento}</Label>
+          <Typography variant="title">{usuario.fechaDeNacimiento}</Typography>
+        </Row>
+
+        {/* Redes sociales */}
+        <Row sx={{ alignItems: "start" }}>
+          <Label width={240}>{LabelUsuario.redesSociales}</Label>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 3,
+            }}
+          >
+            <Row sx={styleRowRedSocial}>
+              <RedSocialIcon
+                imagen={Linkedin}
+                nombre={LabelRedesSociales.linkedin}
+                url={usuario.redSocial.linkedin}
+              />
+            </Row>
+            <Row sx={styleRowRedSocial}>
+              <RedSocialIcon
+                imagen={Facebook}
+                nombre={LabelRedesSociales.facebook}
+                url={usuario.redSocial.facebook}
+              />
+            </Row>
+            <Row sx={styleRowRedSocial}>
+              <RedSocialIcon
+                imagen={Instagram}
+                nombre={LabelRedesSociales.instagram}
+                url={usuario.redSocial.instagram}
+              />
+            </Row>
+          </Box>
+        </Row>
+
+        {/* Descripción */}
+        <Row>
+          <Label width={240}>{LabelUsuario.descripcion}</Label>
+          <Typography variant="title">{usuario.descripcion}</Typography>
+        </Row>
+      </Card>
+    );
+  };
+
   const Cuadro = () => (
-    <Card sx={{ padding: 4, backgroundColor: "customGrey.main", width: "70%" }}>
+    <Card sx={{ padding: 4, backgroundColor: "customGrey.main", width: "80%" }}>
       <Box
         sx={{
           display: "flex",
@@ -64,14 +160,19 @@ const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
             src={usuario.fotoDePerfil}
           ></Box>
         </Box>
-        <Box sx={{ width: 500 }}>
+        <Box sx={{ width: {md: 500} }}>
           <Typography variant="h4Bold" color="white">
             {readBreakLine(
               breakLine(`${usuario.nombres} ${usuario.apellidos}`, 2)
             )}
           </Typography>
-          <Box sx={{ marginTop: 1 }}>
-            <Button color="primary" variant="contained" endIcon={<EditIcon />}>
+          <Box sx={{ marginTop: 1, display: 'flex', justifyContent: {xs: 'center', sm: 'start'} }}>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={handleOpen}
+              endIcon={<EditIcon />}
+            >
               {LabelGeneral.editar}
             </Button>
           </Box>
@@ -79,71 +180,12 @@ const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
       </Box>
     </Card>
   );
-  return <Cuadro />;
-};
-
-const Cuerpo: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
-  const Cuadro = () => (
-    <Card
-      sx={{
-        padding: 4,
-        backgroundColor: "white",
-        display: "flex",
-        flexDirection: "column",
-        gap: 3,
-      }}
-    >
-      <Row>
-        <Label>{LabelUsuario.correo}</Label>
-        <Box sx={{ width: "100%" }}>
-          <img src={usuario.fotoDePerfil}></img>
-        </Box>
-      </Row>
-      <Row>
-        <Label>{LabelUsuario.codigo}</Label>
-        <CustomInput variant="secondary" />
-      </Row>
-      <Row>
-        <Label>{LabelUsuario.nombres}</Label>
-        <CustomInput variant="secondary" />
-      </Row>
-      <Row>
-        <Label>{LabelUsuario.apellidos}</Label>
-        <CustomInput
-          variant="secondary"
-          value={usuario.apellidos}
-        ></CustomInput>
-      </Row>
-      <Row>
-        <Label>{LabelUsuario.rol}</Label>
-        <CustomSelect variantDelta="secondary">
-          {Array.from(obtenerTiposUsuario.entries()).map(([valor, texto]) => (
-            <MenuItem value={valor}>{texto}</MenuItem>
-          ))}
-        </CustomSelect>
-      </Row>
-      <Row>
-        <Label>{LabelUsuario.fechaNacimiento}</Label>
-        <CustomInput variant="secondary" type="date"></CustomInput>
-      </Row>
-      <Row>
-        <Label>{LabelUsuario.redesSociales}</Label>
-      </Row>
-      <Row>
-        <Label>{LabelUsuario.descripcion}</Label>
-        <CustomInput variant="secondary"></CustomInput>
-      </Row>
-      <Row>
-        <Label>{LabelUsuario.contrasenia}</Label>
-        <CustomInput variant="secondary"></CustomInput>
-      </Row>
-      <Box sx={{display: 'flex', justifyContent: 'center', gap: 4}}>
-        <Button variant="contained" color='warning'>{LabelGeneral.guardar}</Button>
-        <Button variant="contained" color='inherit'>{LabelGeneral.cancelar}</Button>
-      </Box>
-    </Card>
+  return (
+    <>
+      <Cuadro />
+      <Cuerpo />
+    </>
   );
-  return <Cuadro />;
 };
 
 export default VerPerfil;

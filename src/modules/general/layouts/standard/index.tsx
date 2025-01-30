@@ -21,10 +21,11 @@ function LayoutStandard() {
         sx={{
           minHeight: { md: "70vh", xs: "80vh" },
           display: "flex",
-          // alignItems: 'center',
+          alignItems: 'center',
           backgroundColor: "white",
           justifyContent: "center",
-          marginY: 4
+          marginY: 4,
+          overflowX: 'auto',
         }}
       >
         <Outlet />

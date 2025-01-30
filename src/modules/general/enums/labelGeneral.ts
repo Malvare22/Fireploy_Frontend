@@ -1,5 +1,8 @@
 export const LabelGeneral = {
     guardar: 'Guardar',
     cancelar: 'Cancelar',
-    editar: 'Editar'
+    editar: 'Editar',
+    acciones: 'Acciones',
+    ver: 'Ver',
+    eliminar: 'Eliminar'
 };

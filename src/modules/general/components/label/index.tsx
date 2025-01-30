@@ -1,8 +1,8 @@
-import { Box, BoxProps, Typography } from "@mui/material";
+import { Box, BoxProps, Typography, TypographyProps } from "@mui/material";
 import { ReactNode } from "react";
 
 const Label: React.FC<
-  BoxProps & {
+  BoxProps & TypographyProps & {
     children: ReactNode;
     width?: number;
   }

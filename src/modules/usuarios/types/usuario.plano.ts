@@ -1,6 +1,6 @@
 import { EstadoUsuario } from "./usuario.estado";
 import { SexoUsuario } from "./usuario.sexo";
-import { TiposUsuario } from "./usuarios.tipos";
+import { TiposUsuario } from "./usuario.tipos";
 
 export type UsuarioPlano = {
     correo: string;

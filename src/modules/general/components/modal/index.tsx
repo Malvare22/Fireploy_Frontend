@@ -1,7 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { default as ModalBase, ModalProps } from "@mui/material/Modal";
-import { SxProps } from "@mui/material";
+import { Card, SxProps, Typography } from "@mui/material";
 
 export const useModal = () => {
   const [open, setOpen] = React.useState(false);
@@ -20,8 +20,10 @@ const Modal: React.FC<
     children: React.ReactNode;
     open: boolean;
     handleClose: () => void;
+    titulo?: string;
+    iconoTitulo?: React.ReactNode;
   }
-> = ({ children, open, handleClose, ...props }) => {
+> = ({ children, open, handleClose, titulo, iconoTitulo, ...props }) => {
   // Definir estilos base, puedes personalizarlos según sea necesario
   const style = {
     position: "absolute",
@@ -30,10 +32,10 @@ const Modal: React.FC<
     transform: "translate(-50%, -50%)",
     width: "70%",
     bgcolor: "background.paper",
-    border: "2px solid #000",
+    borderRadius: "1%",
     boxShadow: 24,
-    overflowY: 'auto',
-    maxHeight: {xs: '80vh', md: '90vh'}
+    overflowY: "auto",
+    maxHeight: { xs: "80vh", md: "90vh" },
   } as SxProps;
 
   // Aquí estamos fusionando los estilos base con los estilos pasados como props
@@ -47,7 +49,28 @@ const Modal: React.FC<
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={styles}>{children}</Box>
+        <Box sx={styles}>
+          {/* Encabezado */}
+          {titulo && (
+            <Card
+              sx={{
+                backgroundColor: "warning.main",
+                padding: 2,
+                marginBottom: 1,
+                display: "flex",
+                justifyContent: "center",
+                gap: 2,
+                alignItems: 'center'
+              }}
+            >
+              <Typography variant="h4Bold" color="white">
+                Editar Usuario
+              </Typography>
+              <Box sx={{color: 'white', fontSize: 48, display: 'flex', alignItems: 'center'}}>{iconoTitulo && iconoTitulo}</Box>
+            </Card>
+          )}
+          {children}
+        </Box>
       </ModalBase>
     </div>
   );
