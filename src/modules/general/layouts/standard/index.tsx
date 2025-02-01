@@ -21,10 +21,10 @@ function LayoutStandard() {
         sx={{
           minHeight: { md: "70vh", xs: "80vh" },
           display: "flex",
-          alignItems: 'center',
           backgroundColor: "white",
           justifyContent: "center",
           marginY: 4,
+          paddingX: {md: 10},
           overflowX: 'auto',
         }}
       >

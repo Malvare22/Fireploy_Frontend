@@ -4,5 +4,7 @@ export const LabelGeneral = {
     editar: 'Editar',
     acciones: 'Acciones',
     ver: 'Ver',
-    eliminar: 'Eliminar'
+    eliminar: 'Eliminar',
+    habilitar: 'Habilitar',
+    deshabilitar: 'Deshabilitar'
 };

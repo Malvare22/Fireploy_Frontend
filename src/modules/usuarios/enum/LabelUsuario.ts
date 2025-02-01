@@ -1,3 +1,5 @@
+import { Usuario } from "../types/usuario";
+
 export const LabelUsuario = {
   nombres: "Nombres",
   apellidos: "Apellidos",
@@ -14,5 +16,11 @@ export const LabelUsuario = {
   redesSociales: 'Redes Sociales',
   correo: 'Correo Electrónico',
   descripcion: 'Descripción',
-  estado: 'Estado'
+  estado: 'Estado',
+  deshabilitar: 'Deshabilitar',
+  habilitar: 'Habilitar'
 };
+
+export const obtenerHabilitarUsuario = (usuario: Usuario) => (`¿Está seguro de que desea habilitar al usuario ${usuario.apellidos} ${usuario.nombres}?`);
+
+export const obtenerDeshabilitarUsuario = (usuario: Usuario) => (`¿Está seguro de que desea deshabilitar al usuario ${usuario.apellidos} ${usuario.nombres}?`);

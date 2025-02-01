@@ -34,7 +34,7 @@ const CustomSelect = React.forwardRef<HTMLSelectElement, CustomSelectProps>(
   ({ variantDelta, children, errorMessage, ...props }, ref) => {
     return (
       <>
-        <StyledSelect ref={ref} variantDelta={variantDelta} {...props}>
+        <StyledSelect ref={ref} variantDelta={variantDelta} {...props} >
           {children}
         </StyledSelect>
         {errorMessage && (

@@ -16,6 +16,7 @@ import NoteAltIcon from "@mui/icons-material/NoteAlt";
 import CloudCircleIcon from "@mui/icons-material/CloudCircle";
 import ExploreIcon from "@mui/icons-material/Explore";
 import { useNavigate } from "react-router-dom";
+import { rutasUsuarios } from "@modules/usuarios/router/router";
 
 type PairIcons = {
   icon: React.ReactNode;
@@ -38,7 +39,7 @@ const myPortafolio: PairIcons = {
 const users: PairIcons = {
   icon: <SupervisedUserCircleIcon />,
   label: "Usuarios",
-  url: "users",
+  url: rutasUsuarios.listar,
 };
 
 const subjects: PairIcons = {

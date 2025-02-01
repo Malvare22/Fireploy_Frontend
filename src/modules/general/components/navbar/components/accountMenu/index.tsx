@@ -12,6 +12,7 @@ import { readBreakLine } from "@modules/general/utils/readBreakLine";
 import { useNavigate } from "react-router-dom";
 import { AccountContext } from "@modules/context/accountContext";
 import { Usuario } from "@modules/usuarios/types/usuario";
+import { rutasUsuarios } from "@modules/usuarios/router/router";
 
 export const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -98,8 +99,8 @@ export const AccountMenu = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={() => navigate("perfil")} sx={{ width: 240 }}>
-          <Avatar /> Profile
+        <MenuItem onClick={() => navigate(rutasUsuarios.perfil)} sx={{ width: 240 }}>
+          <Avatar /> Perfil
         </MenuItem>
         <Divider />
         <MenuItem onClick={cerrarSesion} sx={{ width: 240 }}>
