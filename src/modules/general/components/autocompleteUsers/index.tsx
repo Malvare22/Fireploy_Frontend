@@ -1,7 +1,7 @@
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
-import CellUser from "../cellUsers";
+import CellUser from "../../../usuarios/components/VistaPreviaUsuario";
 import { FC } from "react";
 import { TypeUsuario, usersDummy } from "@modules/usuarios/test/data/usuarios.prueba";
 

@@ -1,5 +1,5 @@
 import AutocompleteUsers from "@modules/general/components/autocompleteUsers";
-import CellUser from "@modules/general/components/cellUsers";
+import CellUser from "@modules/usuarios/components/VistaPreviaUsuario";
 import { Box, Divider, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";

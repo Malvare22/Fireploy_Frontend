@@ -1,10 +1,19 @@
 import { Box, IconButton, Tooltip } from "@mui/material";
 
-const RedSocialIcon: React.FC<{
+const IconoRedondo: React.FC<{
   imagen: string;
   nombre: string;
   url?: string | null;
-}> = ({ imagen, nombre, url }) => {
+  dimensiones?: {
+    height: number | string | { xs: number | string; md: number | string };
+    width: number | string | { xs: number | string; md: number | string };
+  };
+}> = ({
+  imagen,
+  nombre,
+  url,
+  dimensiones = { height: { md: 32, xs: 24 }, width: { md: 32, xs: 24 } },
+}) => {
   return (
     <Tooltip title={nombre}>
       <IconButton
@@ -15,8 +24,8 @@ const RedSocialIcon: React.FC<{
         <Box
           component={"img"}
           sx={{
-            height: { md: 32, xs: 16 },
-            width: { md: 32, xs: 16 },
+            height: dimensiones?.height,
+            width: dimensiones?.width,
             borderRadius: "100%",
           }}
           src={imagen}
@@ -26,4 +35,4 @@ const RedSocialIcon: React.FC<{
   );
 };
 
-export default RedSocialIcon;
+export default IconoRedondo;

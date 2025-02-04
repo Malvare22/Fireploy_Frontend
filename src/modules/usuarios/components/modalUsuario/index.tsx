@@ -20,7 +20,6 @@ import PreviewImage, {
   usePreviewImage,
 } from "@modules/general/components/previewImage";
 import { LabelRedesSociales } from "@modules/usuarios/enum/LabelRedesSociales";
-import RedSocialIcon from "@modules/general/components/redSocialIcon";
 import Facebook from "@modules/general/assets/redesSociales/facebook.png";
 import Instagram from "@modules/general/assets/redesSociales/instagram.png";
 import X from "@modules/general/assets/redesSociales/x.png";
@@ -28,6 +27,7 @@ import Linkedin from "@modules/general/assets/redesSociales/linkedin.png";
 import { obtenerFechaActual } from "@modules/general/utils/fechas";
 import { UsuarioBase } from "@modules/usuarios/utils/form/usuario.base";
 import BotonesBasicos from "@modules/general/components/botonesBasicos";
+import IconoRedondo from "@modules/general/components/iconoRedondo";
 
 interface Props {
   open: boolean;
@@ -213,7 +213,7 @@ const Cuerpo: React.FC<{
             }}
           >
             <Row sx={styleRowRedSocial}>
-              <RedSocialIcon
+              <IconoRedondo
                 imagen={Linkedin}
                 nombre={LabelRedesSociales.linkedin}
               />
@@ -223,7 +223,7 @@ const Cuerpo: React.FC<{
               ></CustomInput>
             </Row>
             <Row sx={styleRowRedSocial}>
-              <RedSocialIcon
+              <IconoRedondo
                 imagen={Facebook}
                 nombre={LabelRedesSociales.facebook}
               />
@@ -233,7 +233,7 @@ const Cuerpo: React.FC<{
               ></CustomInput>
             </Row>
             <Row sx={styleRowRedSocial}>
-              <RedSocialIcon
+              <IconoRedondo
                 imagen={Instagram}
                 nombre={LabelRedesSociales.instagram}
               />
@@ -243,7 +243,7 @@ const Cuerpo: React.FC<{
               ></CustomInput>
             </Row>
             {/* <Row sx={styleRowRedSocial}>
-              <RedSocialIcon imagen={X} nombre={LabelRedesSociales.x}/>
+              <IconoRedondo imagen={X} nombre={LabelRedesSociales.x}/>
               <CustomInput variant="secondary" {...register('redSocial.x')}></CustomInput>
             </Row> */}
           </Box>

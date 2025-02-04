@@ -148,37 +148,35 @@ declare module "@mui/material/Input" {
   }
 }
 
-export const theme = createTheme({
-  palette: {
-    backgroundX: {
-      primary: "#EEF1F6", // Color principal de fondo
-      secondary: "#D2DAED", // Color secundario de fondo
-      panel: "#F0F0F0", // Color de panel
-    },
-    icon: {
-      primary: "#6471A5", // Color principal de íconos
-      primaryDark: "#445180",
-    },
-    customGrey: {
-      main: "#676262", // Color gris personalizado
-    },
-    navbar: {
-      main: "#5D6E8C", // Color principal de navbar
-    },
-    link: {
-      main: "#417CE3", // Color principal de enlaces
-    },
-    success: {
-      main: "#6AAE72", // Color principal para éxito
-    },
-    customRed: {
-      main: "#803E3E",
-    },
-    // warning: {
-    //   main
-    // }
+export const palette = {
+  backgroundX: {
+    primary: "#EEF1F6", // Color principal de fondo
+    secondary: "#D2DAED", // Color secundario de fondo
+    panel: "#F0F0F0", // Color de panel
   },
+  icon: {
+    primary: "#6471A5", // Color principal de íconos
+    primaryDark: "#445180",
+  },
+  customGrey: {
+    main: "#676262", // Color gris personalizado
+  },
+  navbar: {
+    main: "#5D6E8C", // Color principal de navbar
+  },
+  link: {
+    main: "#417CE3", // Color principal de enlaces
+  },
+  success: {
+    main: "#6AAE72", // Color principal para éxito
+  },
+  customRed: {
+    main: "#803E3E",
+  },
+};
 
+export const theme = createTheme({
+  palette: palette,
   components: {
     MuiButton: {
       variants: [

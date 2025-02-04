@@ -9,13 +9,13 @@ import { useModal } from "@modules/general/components/modal";
 import { adaptarUsuario } from "@modules/usuarios/utils/usuario.adapter";
 import Row from "@modules/general/components/row";
 import { LabelUsuario } from "@modules/usuarios/enum/LabelUsuario";
-import RedSocialIcon from "@modules/general/components/redSocialIcon";
 import { LabelRedesSociales } from "@modules/usuarios/enum/LabelRedesSociales";
 import Label from "@modules/general/components/label";
 import Facebook from "@modules/general/assets/redesSociales/facebook.png";
 import Instagram from "@modules/general/assets/redesSociales/instagram.png";
 import Linkedin from "@modules/general/assets/redesSociales/linkedin.png";
 import { UsuarioPlano } from "@modules/usuarios/types/usuario.plano";
+import IconoRedondo from "@modules/general/components/iconoRedondo";
 
 interface Props {
   usuario: UsuarioPlano;
@@ -117,21 +117,21 @@ const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
             }}
           >
             <Row sx={styleRowRedSocial}>
-              <RedSocialIcon
+              <IconoRedondo
                 imagen={Linkedin}
                 nombre={LabelRedesSociales.linkedin}
                 url={usuario.redSocial.linkedin}
               />
             </Row>
             <Row sx={styleRowRedSocial}>
-              <RedSocialIcon
+              <IconoRedondo
                 imagen={Facebook}
                 nombre={LabelRedesSociales.facebook}
                 url={usuario.redSocial.facebook}
               />
             </Row>
             <Row sx={styleRowRedSocial}>
-              <RedSocialIcon
+              <IconoRedondo
                 imagen={Instagram}
                 nombre={LabelRedesSociales.instagram}
                 url={usuario.redSocial.instagram}
