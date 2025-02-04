@@ -20,9 +20,9 @@ function LayoutStandard() {
       <Box
         sx={{
           minHeight: { md: "70vh", xs: "80vh" },
-          display: "flex",
-          backgroundColor: "white",
-          justifyContent: "center",
+          // display: "flex",
+          backgroundColor: "backgroundX.primary",
+          // justifyContent: "center",
           marginY: 4,
           paddingX: {md: 10},
           overflowX: 'auto',

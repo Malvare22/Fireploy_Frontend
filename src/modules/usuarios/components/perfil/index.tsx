@@ -17,11 +17,11 @@ import Instagram from "@modules/general/assets/redesSociales/instagram.png";
 import Linkedin from "@modules/general/assets/redesSociales/linkedin.png";
 import { UsuarioPlano } from "@modules/usuarios/types/usuario.plano";
 
-interface Props{
-  usuario: UsuarioPlano
-};
+interface Props {
+  usuario: UsuarioPlano;
+}
 
-const VerPerfil: React.FC<Props> = ({usuario}) => {
+const VerPerfil: React.FC<Props> = ({ usuario }) => {
   return (
     <Box
       sx={{
@@ -39,7 +39,6 @@ const VerPerfil: React.FC<Props> = ({usuario}) => {
 
 const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
   const { open, handleOpen, handleClose } = useModal();
-
 
   const Cuerpo = () => {
     const styleRowRedSocial = {
@@ -61,7 +60,7 @@ const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
         <ModalUsuario
           open={open}
           handleClose={handleClose}
-          handleQuery={() => 'enviado'}
+          handleQuery={() => "enviado"}
           tipo="editar"
           usuario={usuario}
         />
@@ -150,47 +149,66 @@ const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
     );
   };
 
-  const Cuadro = () => (
-    <Card sx={{ padding: 4, backgroundColor: "customGrey.main", width: "80%" }}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
-          alignItems: "center",
-          gap: 4,
-        }}
-      >
-        <Box sx={{ padding: 0.7, backgroundColor: "white" }}>
-          <Box
-            sx={{ height: 120, width: 120 }}
-            component={"img"}
-            src={usuario.fotoDePerfil}
-          ></Box>
-        </Box>
-        <Box sx={{ width: {md: 500} }}>
-          <Typography variant="h4Bold" color="white">
-            {readBreakLine(
-              breakLine(`${usuario.nombres} ${usuario.apellidos}`, 2)
-            )}
-          </Typography>
-          <Box sx={{ marginTop: 1, display: 'flex', justifyContent: {xs: 'center', sm: 'start'} }}>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={handleOpen}
-              endIcon={<EditIcon />}
-            >
-              {LabelGeneral.editar}
-            </Button>
-          </Box>
-        </Box>
-      </Box>
-    </Card>
-  );
   return (
     <>
-      <Cuadro />
+      <CuadroPerfil usuario={usuario} handleOpen={handleOpen} tipo="editar"/>
       <Cuerpo />
+    </>
+  );
+};
+
+export const CuadroPerfil: React.FC<{
+  usuario: Usuario;
+  handleOpen?: () => void;
+  tipo?: "editar" | "ver";
+}> = ({ usuario, handleOpen, tipo = "ver" }) => {
+  return (
+    <>
+      <Card
+        sx={{ padding: 4, backgroundColor: "customGrey.main"}}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            alignItems: "center",
+            gap: 4,
+          }}
+        >
+          <Box sx={{ padding: 0.7, backgroundColor: "white" }}>
+            <Box
+              sx={{ height: 120, width: 120 }}
+              component={"img"}
+              src={usuario.fotoDePerfil}
+            ></Box>
+          </Box>
+          <Box sx={{ width: { md: 500 } }}>
+            <Typography variant="h4Bold" color="white">
+              {readBreakLine(
+                breakLine(`${usuario.nombres} ${usuario.apellidos}`, 2)
+              )}
+            </Typography>
+            {tipo == "editar" && (
+              <Box
+                sx={{
+                  marginTop: 1,
+                  display: "flex",
+                  justifyContent: { xs: "center", sm: "start" },
+                }}
+              >
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={handleOpen}
+                  endIcon={<EditIcon />}
+                >
+                  {LabelGeneral.editar}
+                </Button>
+              </Box>
+            )}
+          </Box>
+        </Box>
+      </Card>
     </>
   );
 };
