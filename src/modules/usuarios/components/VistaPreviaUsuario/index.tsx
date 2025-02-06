@@ -1,23 +1,30 @@
-import { Box, Card, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardActionArea,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import { FC } from "react";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { usuariosPrueba } from "@modules/usuarios/test/data/usuarios.prueba";
 import { palette } from "@core/themes";
 interface Props {
   usuario: (typeof usuariosPrueba)[number];
-  type: "autocomplete" | "list" | "preview";
+  type: "autocomplete" | "list" | "preview" | "portafolio";
+  url?: string
 }
 
-const VistaPreviaUsuario: FC<Props> = ({ usuario, type }) => {
-  return (
-    <Card
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        backgroundColor: palette.backgroundX.panel,
-        padding: 2,
-      }}
-    >
+const VistaPreviaUsuario: FC<Props> = ({ usuario, type, url }) => {
+
+  const handleUrl = () => {
+    if(url){
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+  };
+
+  const Contenido = () => (
+    <Box sx={{display: 'flex', padding: 2}}>
       <Box
         component={"img"}
         src={usuario.fotoDePerfil}
@@ -30,7 +37,6 @@ const VistaPreviaUsuario: FC<Props> = ({ usuario, type }) => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
         }}
       >
@@ -48,6 +54,22 @@ const VistaPreviaUsuario: FC<Props> = ({ usuario, type }) => {
           </Box>
         )}
       </Box>
+    </Box>
+  );
+
+  return (
+    <Card
+      sx={{
+        backgroundColor: palette.backgroundX.panel,
+      }}
+    >
+      {type == "portafolio" ? (
+        <CardActionArea onClick={handleUrl}>
+          <Contenido />
+        </CardActionArea>
+      ) : (
+        <Contenido />
+      )}
     </Card>
   );
 };

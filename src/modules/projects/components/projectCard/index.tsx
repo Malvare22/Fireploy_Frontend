@@ -1,6 +1,5 @@
 import { Box, Tooltip, Typography } from "@mui/material";
 import Link from "@mui/material/Link";
-import { getStatusColor } from "../../utils/getStatusColor";
 import { useMemo } from "react";
 import { tecnologiasDummy, TypeTecnologia } from "@modules/general/utils/data/tecnologias";
 import { TypeProyecto } from "@modules/general/utils/data/proyectos";

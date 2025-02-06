@@ -1,3 +1,4 @@
+import { palette } from "@core/themes";
 import { AccountContext } from "@modules/context/accountContext";
 import Footer from "@modules/general/components/footer";
 import Navbar from "@modules/general/components/navbar";
@@ -21,9 +22,9 @@ function LayoutStandard() {
         sx={{
           minHeight: { md: "70vh", xs: "80vh" },
           // display: "flex",
-          backgroundColor: "backgroundX.primary",
+          backgroundColor: palette.backgroundX.primary,
           // justifyContent: "center",
-          marginY: 4,
+          paddingY: 4,
           paddingX: {md: 10},
           overflowX: 'auto',
         }}

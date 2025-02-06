@@ -1,85 +1,47 @@
-import FormContainer from "@modules/general/components/formContainer";
 import { Proyecto } from "@modules/projects/types/proyecto";
 import { CuadroPerfil } from "@modules/usuarios/components/perfil";
 import { Usuario } from "@modules/usuarios/types/usuario";
-import { RedSocialUsuario } from "@modules/usuarios/types/usuario.redSocial";
-import {
-  Box,
-  Button,
-  Card,
-  CardActionArea,
-  Divider,
-  Typography,
-} from "@mui/material";
-import Facebook from "@modules/general/assets/redesSociales/facebook.png";
-import Instagram from "@modules/general/assets/redesSociales/instagram.png";
-import X from "@modules/general/assets/redesSociales/x.png";
-import Linkedin from "@modules/general/assets/redesSociales/linkedin.png";
-import { LabelRedesSociales } from "@modules/usuarios/enum/LabelRedesSociales";
-import React, { ReactNode } from "react";
-import { LabelUsuario } from "@modules/usuarios/enum/LabelUsuario";
+import { Box, Button, Card, Divider, Typography } from "@mui/material";
+
+import React, { useState } from "react";
 import Modal, { useModal } from "@modules/general/components/modal";
 import VistaPreviaUsuario from "@modules/usuarios/components/VistaPreviaUsuario";
 import { usuariosPrueba } from "@modules/usuarios/test/data/usuarios.prueba";
 import IconoRedondo from "@modules/general/components/iconoRedondo";
+import { TecnologiasPrueba } from "@modules/projects/test/data/tecnologias.prueba";
+import EstadoBoton from "@modules/usuarios/components/estadoBoton";
+import RedesSociales from "../redesSociales";
+import { LabelPortafolio } from "@modules/usuarios/enum/LabelPortafolio";
 
 interface Props {
   usuario: Usuario;
   proyectos: Proyecto[];
 }
 
-const VerPortafolioPorId: React.FC<Props> = ({ usuario, proyectos }: Props) => {
+const Portafolio: React.FC<Props> = ({ usuario, proyectos }: Props) => {
+
   const { handleClose, handleOpen, open } = useModal();
 
-  const RenderModal = () => (
-    <Modal open={open} handleClose={handleClose} sx={{ width: "90%" }}>
-      <CardProyecto proyecto={proyectos[0]} tipo="modal" />
-    </Modal>
+  const [modalProyecto, setModalProyecto] = useState<Proyecto | undefined>(
+    undefined
   );
 
-  const RenderRedesSociales = () => {
-    let redesSociales: ReactNode[] = [];
-    for (let key in usuario.redSocial) {
-      const validKey = key as keyof RedSocialUsuario;
-      let elemento: any;
-      switch (validKey) {
-        case "facebook":
-          elemento = (
-            <IconoRedondo
-              imagen={Facebook}
-              nombre={LabelRedesSociales.facebook}
-            />
-          );
-          break;
-
-        case "linkedin":
-          elemento = (
-            <IconoRedondo
-              imagen={Linkedin}
-              nombre={LabelRedesSociales.linkedin}
-            />
-          );
-          break;
-
-        case "instagram":
-          elemento = (
-            <IconoRedondo
-              imagen={Instagram}
-              nombre={LabelRedesSociales.instagram}
-            />
-          );
-          break;
-      }
-
-      redesSociales.push(elemento);
-    }
-
-    return redesSociales;
+  const handleModal = (proyecto: Proyecto) => {
+    setModalProyecto(proyecto);
+    handleOpen();
   };
+
+  const RenderModal = () =>
+    modalProyecto ? (
+      <Modal open={open} handleClose={handleClose} sx={{ width: "90%" }}>
+        <CardProyecto proyecto={modalProyecto} tipo="modal" />
+      </Modal>
+    ) : (
+      <></>
+    );
 
   return (
     <Box sx={{ border: "none", width: "70%" }}>
-      <Button onClick={handleOpen}>open</Button>
       <RenderModal />
       <CuadroPerfil usuario={usuario} tipo="ver" />
       <Card
@@ -92,8 +54,8 @@ const VerPortafolioPorId: React.FC<Props> = ({ usuario, proyectos }: Props) => {
           alignItems: "center",
         }}
       >
-        <Typography variant="h5">Redes Sociales</Typography>
-        <RenderRedesSociales />
+        <Typography variant="h5">{LabelPortafolio.redesSociales}</Typography>
+        <RedesSociales usuario={usuario} />
       </Card>
       <Card
         sx={{
@@ -106,7 +68,7 @@ const VerPortafolioPorId: React.FC<Props> = ({ usuario, proyectos }: Props) => {
       >
         <Box>
           {" "}
-          <Typography variant="title">{LabelUsuario.descripcion}</Typography>
+          <Typography variant="title">{LabelPortafolio.descripcion}</Typography>
         </Box>
         <Box>
           <Typography variant="title2">{usuario.descripcion}</Typography>
@@ -122,7 +84,12 @@ const VerPortafolioPorId: React.FC<Props> = ({ usuario, proyectos }: Props) => {
         }}
       >
         {proyectos.map((proyecto, i) => (
-          <CardProyecto key={i} proyecto={proyecto} tipo="básico" />
+          <CardProyecto
+            key={i}
+            proyecto={proyecto}
+            tipo="básico"
+            handleModal={handleModal}
+          />
         ))}
       </Card>
     </Box>
@@ -132,21 +99,30 @@ const VerPortafolioPorId: React.FC<Props> = ({ usuario, proyectos }: Props) => {
 export const CardProyecto: React.FC<{
   proyecto: Proyecto;
   tipo: "básico" | "modal";
-}> = ({ proyecto, tipo = "básico" }) => {
-  const Integrantes = () => (
-    <Box>
+  handleModal?: (proyecto: Proyecto) => void;
+}> = ({ proyecto, tipo = "básico", handleModal }) => {
+  const ContenidoModal = () => (
+    <>
       <Box>
-        <Typography variant="titleBold">Integrantes:</Typography>
+        <Typography variant="titleBold">
+          {LabelPortafolio.integrantes}
+        </Typography>
       </Box>
       <Box
-        sx={{ display: "grid", gridTemplateColumns: "repeat(1, 1fr)", gap: 3 }}
+        sx={{
+          display: { md: "grid", xs: "flex" },
+          flexDirection: "column",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: 3,
+          marginY: 2,
+        }}
       >
-        <VistaPreviaUsuario type="autocomplete" usuario={usuariosPrueba[0]} />
-        <VistaPreviaUsuario type="autocomplete" usuario={usuariosPrueba[0]} />
-        <VistaPreviaUsuario type="autocomplete" usuario={usuariosPrueba[0]} />
-        <VistaPreviaUsuario type="autocomplete" usuario={usuariosPrueba[0]} />
+        <VistaPreviaUsuario type="portafolio" usuario={usuariosPrueba[0]} />
+        <VistaPreviaUsuario type="portafolio" usuario={usuariosPrueba[1]} />
+        <VistaPreviaUsuario type="portafolio" usuario={usuariosPrueba[0]} />
+        <VistaPreviaUsuario type="portafolio" usuario={usuariosPrueba[1]} />
       </Box>
-    </Box>
+    </>
   );
 
   return (
@@ -159,19 +135,30 @@ export const CardProyecto: React.FC<{
           padding: tipo == "básico" ? 0 : 4,
         }}
       >
-        <Box>
-          <Typography variant="titleBold">{proyecto.titulo}</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            alignItems: "center",
+            justifyContent: tipo == "básico" ? "space-between" : "start",
+          }}
+        >
+          <Box>
+            <Typography variant={"titleBold"}>{proyecto.titulo}</Typography>
+          </Box>
+          <EstadoBoton estado={proyecto.estadoDeEjecucion} url={proyecto.url} />
         </Box>
         <Box
           sx={{
             display: "flex",
             flexDirection: { md: "row", xs: "column" },
             justifyContent: "center",
+            gap: 1,
           }}
         >
           <Box
             component={"img"}
-            sx={{ border: "1px solid red", width: { md: "30%", xs: "100%" } }}
+            sx={{ width: { md: "30%", xs: "100%" } }}
             src={proyecto.imagen}
           />
           <Box
@@ -192,7 +179,9 @@ export const CardProyecto: React.FC<{
           }}
         >
           <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-            <Typography variant="title2Bold">{"Tecnologías: "}</Typography>
+            <Typography variant={tipo == "básico" ? "title2Bold" : "titleBold"}>
+              {"Tecnologías "}
+            </Typography>
             {proyecto.repositorios.map((repositorio, i) => {
               return (
                 <IconoRedondo
@@ -210,20 +199,35 @@ export const CardProyecto: React.FC<{
                 />
               );
             })}
+            {
+              <IconoRedondo
+                key={0}
+                imagen={TecnologiasPrueba[2].logo}
+                nombre={TecnologiasPrueba[2].nombre}
+                dimensiones={
+                  tipo == "modal"
+                    ? {
+                        height: { xs: 24, md: 48 },
+                        width: { xs: 24, md: 48 },
+                      }
+                    : undefined
+                }
+              />
+            }
           </Box>
-          {tipo == "básico" && (
+          {tipo == "básico" && handleModal && (
             <Box>
-              <Button variant="contained">Ver más</Button>
+              <Button variant="contained" onClick={() => handleModal(proyecto)}>
+                {LabelPortafolio.verMas}
+              </Button>
             </Box>
           )}
         </Box>
-        {tipo == 'modal' && <>
-          <Integrantes></Integrantes>
-        </>}
+        {tipo == "modal" && <ContenidoModal />}
       </Box>
       <Divider />
     </>
   );
 };
 
-export default VerPortafolioPorId;
+export default Portafolio;

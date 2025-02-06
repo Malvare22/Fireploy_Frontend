@@ -19,7 +19,8 @@ export const adaptarUsuario = (usuario: UsuarioPlano): Usuario => {
         sexo: usuario.sexo,
         fotoDePerfil: usuario.fotoDePerfil,
         redSocial: adaptarRedSocial(usuario.redSocial),
-        descripcion: usuario.descripcion
+        descripcion: usuario.descripcion,
+        proyectos: usuario.proyectos
     };
     return usuarioNuevo;
 };

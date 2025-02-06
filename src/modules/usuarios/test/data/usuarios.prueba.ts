@@ -1,3 +1,4 @@
+import { proyectosPrueba } from "@modules/projects/test/data/proyectos.prueba";
 import { UsuarioPlano } from "@modules/usuarios/types/usuario.plano";
 
 export const usuariosPrueba: UsuarioPlano[] = [
@@ -11,9 +12,10 @@ export const usuariosPrueba: UsuarioPlano[] = [
     apellidos: "Malaver",
     contrasenia: "123",
     sexo: "M",
-    fotoDePerfil: "https://cdn-icons-png.flaticon.com/512/3577/3577429.png",
+    fotoDePerfil: "https://cdn-icons-png.flaticon.com/512/4086/4086679.png",
     redSocial: '{"facebook": "a", "instagram": "b", "linkedin": "c"}',
     descripcion: "Estudiante de ingeniería.",
+    proyectos: [proyectosPrueba[0], proyectosPrueba[1]],
   },
   {
     correo: "maria.lopez@hotmail.com",
@@ -25,9 +27,10 @@ export const usuariosPrueba: UsuarioPlano[] = [
     apellidos: "López",
     contrasenia: "securePass456",
     sexo: "F",
-    fotoDePerfil: "https://example.com/perfil/maria.jpg",
+    fotoDePerfil: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGwInl7EeKG-bICwQlqlzrceksbUhbwwHWAw&s",
     redSocial: '{"facebook": "", "instagram": "", "linkedin": ""}',
     descripcion: "Docente de matemáticas.",
+    proyectos: [proyectosPrueba[1], proyectosPrueba[2]],
   },
   {
     correo: "carlos.gomez@yahoo.com",
@@ -39,9 +42,10 @@ export const usuariosPrueba: UsuarioPlano[] = [
     apellidos: "Gómez",
     contrasenia: "admin789",
     sexo: "M",
-    fotoDePerfil: "https://example.com/perfil/carlos.jpg",
+    fotoDePerfil: "https://cdn-icons-png.flaticon.com/512/4086/4086679.png",
     redSocial: '{"facebook": "", "instagram": "", "linkedin": ""}',
     descripcion: "Administrador del sistema.",
+    proyectos: [proyectosPrueba[2], proyectosPrueba[1]],
   },
   {
     correo: "sofia.ramirez@gmail.com",
@@ -53,9 +57,10 @@ export const usuariosPrueba: UsuarioPlano[] = [
     apellidos: "Ramírez",
     contrasenia: "sofia123",
     sexo: "F",
-    fotoDePerfil: "https://example.com/perfil/sofia.jpg",
+    fotoDePerfil: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGwInl7EeKG-bICwQlqlzrceksbUhbwwHWAw&s",
     redSocial: '{"facebook": "", "instagram": "", "linkedin": ""}',
     descripcion: "Estudiante de literatura.",
+    proyectos: [proyectosPrueba[0], proyectosPrueba[2]],
   },
   {
     correo: "juan.perez@outlook.com",
@@ -67,9 +72,11 @@ export const usuariosPrueba: UsuarioPlano[] = [
     apellidos: "Pérez",
     contrasenia: "docenteJuan1",
     sexo: "M",
-    fotoDePerfil: "https://cdn-icons-png.flaticon.com/512/3577/3577429.png",
-    redSocial: '{"facebook": "juanperez", "instagram": "juan_inst", "linkedin": "juan-profesional"}',
+    fotoDePerfil: "https://cdn-icons-png.flaticon.com/512/4086/4086679.png",
+    redSocial:
+      '{"facebook": "juanperez", "instagram": "juan_inst", "linkedin": "juan-profesional"}',
     descripcion: "Docente de ciencias sociales.",
+    proyectos: [proyectosPrueba[0], proyectosPrueba[1]],
   },
   {
     correo: "ana.morales@gmail.com",
@@ -81,9 +88,10 @@ export const usuariosPrueba: UsuarioPlano[] = [
     apellidos: "Morales",
     contrasenia: "ana123",
     sexo: "F",
-    fotoDePerfil: "https://example.com/perfil/ana.jpg",
+    fotoDePerfil: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGwInl7EeKG-bICwQlqlzrceksbUhbwwHWAw&s",
     redSocial: '{"facebook": "", "instagram": "ana_life", "linkedin": ""}',
     descripcion: "Estudiante de psicología.",
+    proyectos: [proyectosPrueba[0], proyectosPrueba[1]],
   },
   {
     correo: "luis.martinez@yahoo.com",
@@ -95,9 +103,11 @@ export const usuariosPrueba: UsuarioPlano[] = [
     apellidos: "Martínez",
     contrasenia: "adminLuis20",
     sexo: "M",
-    fotoDePerfil: "https://example.com/perfil/luis.jpg",
-    redSocial: '{"facebook": "", "instagram": "", "linkedin": "luisMartinezAdmin"}',
+    fotoDePerfil: "https://cdn-icons-png.flaticon.com/512/4086/4086679.png",
+    redSocial:
+      '{"facebook": "", "instagram": "", "linkedin": "luisMartinezAdmin"}',
     descripcion: "Administrador del área de sistemas.",
+    proyectos: [proyectosPrueba[0], proyectosPrueba[1]],
   },
   {
     correo: "valeria.castillo@gmail.com",
@@ -109,9 +119,11 @@ export const usuariosPrueba: UsuarioPlano[] = [
     apellidos: "Castillo",
     contrasenia: "valeriaTeacher89",
     sexo: "F",
-    fotoDePerfil: "https://example.com/perfil/valeria.jpg",
-    redSocial: '{"facebook": "", "instagram": "valeria.castillo", "linkedin": ""}',
+    fotoDePerfil: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGwInl7EeKG-bICwQlqlzrceksbUhbwwHWAw&s",
+    redSocial:
+      '{"facebook": "", "instagram": "valeria.castillo", "linkedin": ""}',
     descripcion: "Docente de inglés.",
+    proyectos: [proyectosPrueba[0], proyectosPrueba[1]],
   },
   {
     correo: "martin.soto@live.com",
@@ -123,9 +135,10 @@ export const usuariosPrueba: UsuarioPlano[] = [
     apellidos: "Soto",
     contrasenia: "inactiveAdmin09",
     sexo: "M",
-    fotoDePerfil: "https://example.com/perfil/martin.jpg",
+    fotoDePerfil: "https://cdn-icons-png.flaticon.com/512/4086/4086679.png",
     redSocial: '{"facebook": "", "instagram": "", "linkedin": ""}',
     descripcion: "Administrador retirado del sistema.",
+    proyectos: [proyectosPrueba[0], proyectosPrueba[1]],
   },
   {
     correo: "paula.rojas@hotmail.com",
@@ -137,9 +150,10 @@ export const usuariosPrueba: UsuarioPlano[] = [
     apellidos: "Rojas",
     contrasenia: "paulaRojas1",
     sexo: "F",
-    fotoDePerfil: "https://example.com/perfil/paula.jpg",
+    fotoDePerfil: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGwInl7EeKG-bICwQlqlzrceksbUhbwwHWAw&s",
     redSocial: '{"facebook": "paulaR", "instagram": "", "linkedin": ""}',
     descripcion: "Estudiante de arte digital.",
+    proyectos: [proyectosPrueba[0], proyectosPrueba[1]],
   },
   {
     correo: "daniel.vargas@gmail.com",
@@ -151,9 +165,11 @@ export const usuariosPrueba: UsuarioPlano[] = [
     apellidos: "Vargas",
     contrasenia: "danielDocente1",
     sexo: "M",
-    fotoDePerfil: "https://example.com/perfil/daniel.jpg",
-    redSocial: '{"facebook": "", "instagram": "", "linkedin": "danielVargasEdu"}',
+    fotoDePerfil: "https://cdn-icons-png.flaticon.com/512/4086/4086679.png",
+    redSocial:
+      '{"facebook": "", "instagram": "", "linkedin": "danielVargasEdu"}',
     descripcion: "Docente de programación.",
+    proyectos: [proyectosPrueba[0], proyectosPrueba[1]],
   },
   {
     correo: "gabriela.mendoza@outlook.com",
@@ -165,8 +181,10 @@ export const usuariosPrueba: UsuarioPlano[] = [
     apellidos: "Mendoza",
     contrasenia: "gabriela98",
     sexo: "F",
-    fotoDePerfil: "https://example.com/perfil/gabriela.jpg",
-    redSocial: '{"facebook": "gabriela123", "instagram": "gaby_life", "linkedin": ""}',
+    fotoDePerfil: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGwInl7EeKG-bICwQlqlzrceksbUhbwwHWAw&s",
+    redSocial:
+      '{"facebook": "gabriela123", "instagram": "gaby_life", "linkedin": ""}',
     descripcion: "Estudiante de ingeniería ambiental.",
-  }
+    proyectos: [proyectosPrueba[0], proyectosPrueba[1]],
+  },
 ];

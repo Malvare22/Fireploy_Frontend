@@ -16,7 +16,7 @@ export const TecnologiasPrueba: TecnologiaRepositorio[] = [
   {
     nombre: "MongoDB",
     versiones: ["4.4", "5.0"],
-    logo: "https://upload.wikimedia.org/wikipedia/commons/4/47/MongoDB_logo.svg",
+    logo: "https://img.icons8.com/?size=512&id=74402&format=png",
     tipo: 'I'
   }
 ];

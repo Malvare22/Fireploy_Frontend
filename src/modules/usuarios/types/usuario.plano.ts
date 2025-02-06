@@ -1,3 +1,4 @@
+import { Proyecto } from "@modules/projects/types/proyecto";
 import { EstadoUsuario } from "./usuario.estado";
 import { SexoUsuario } from "./usuario.sexo";
 import { TiposUsuario } from "./usuario.tipos";
@@ -15,4 +16,5 @@ export type UsuarioPlano = {
     fotoDePerfil: string;
     redSocial: string;
     descripcion: string;
+    proyectos: Proyecto[]
 };
