@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import img from "@modules/general/assets/LogoFireploy.png";
-import react from "@modules/general/assets/react_logo.png";
-import spring from "@modules/general/assets/spring_logo.png";
-import nodejs from "@modules/general/assets/nodejs_logo.png";
+import react from "@modules/general/assets/tecnologias/react_logo.png";
+import spring from "@modules/general/assets/tecnologias/spring_logo.png";
+import nodejs from "@modules/general/assets/tecnologias/nodejs_logo.png";
 import Grid from "@mui/material/Grid2";
 import { ReactNode } from "react";
 import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";

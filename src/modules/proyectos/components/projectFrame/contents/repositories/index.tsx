@@ -5,7 +5,7 @@ import {
   tecnologiasDummy,
   TypeTecnologia,
 } from "@modules/general/utils/data/tecnologias";
-import { ProyectoContext } from "@modules/projects/context/proyectoContext";
+import { ProyectoContext } from "@modules/proyectos/context/proyectoContext";
 import { Box, Divider, MenuItem, Typography } from "@mui/material";
 import React, { useContext, useMemo } from "react";
 import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";

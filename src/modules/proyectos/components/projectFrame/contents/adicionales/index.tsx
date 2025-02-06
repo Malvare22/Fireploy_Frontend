@@ -2,7 +2,7 @@ import CustomInput from "@modules/general/components/customInput";
 import CustomSelect from "@modules/general/components/customSelect";
 import CustomTextArea from "@modules/general/components/customTextArea";
 import { materiasDummy } from "@modules/general/utils/data/materias";
-import { ProyectoContext } from "@modules/projects/context/proyectoContext";
+import { ProyectoContext } from "@modules/proyectos/context/proyectoContext";
 import { Box, Divider, MenuItem, SxProps, Typography } from "@mui/material";
 import { useContext, useMemo } from "react";
 

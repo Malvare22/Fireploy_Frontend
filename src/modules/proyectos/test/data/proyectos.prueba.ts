@@ -1,4 +1,4 @@
-import { Proyecto } from "@modules/projects/types/proyecto";
+import { Proyecto } from "@modules/proyectos/types/proyecto";
 import { TecnologiasPrueba } from "./tecnologias.prueba";
 
 export const proyectosPrueba: Proyecto[] = [

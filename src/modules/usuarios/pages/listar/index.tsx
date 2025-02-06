@@ -71,7 +71,11 @@ function ListarUsuarios() {
     undefined
   );
 
-  const {handleClose: estadoHandleClose, handleOpen: estadoHandleOpen, open: estadoOpen} = useModal();
+  const {
+    handleClose: estadoHandleClose,
+    handleOpen: estadoHandleOpen,
+    open: estadoOpen,
+  } = useModal();
 
   const { open, handleOpen, handleClose } = useModal();
 
@@ -85,11 +89,15 @@ function ListarUsuarios() {
     handleOpen();
   };
 
-  console.log(estadoOpen)
-
   return (
     <>
-      {selectUsuario != undefined && <ModalEstadoUsuario handleClose={estadoHandleClose} open={estadoOpen} usuario={selectUsuario}/>}
+      {selectUsuario != undefined && (
+        <ModalEstadoUsuario
+          handleClose={estadoHandleClose}
+          open={estadoOpen}
+          usuario={selectUsuario}
+        />
+      )}
       <ModalUsuario
         handleClose={handleClose}
         open={open}
@@ -159,7 +167,16 @@ function ListarUsuarios() {
                   </StyledTableCell>
                   <StyledTableCell align="center">
                     <Tooltip title={LabelTablaUsuarios.porfolio}>
-                      <IconButton>
+                      <IconButton
+                        onClick={() =>
+                          navigate(
+                            rutasUsuarios.verPortafolio.replace(
+                              ":id",
+                              usuario.id.toString()
+                            )
+                          )
+                        }
+                      >
                         <DocumentScannerIcon />
                       </IconButton>
                     </Tooltip>
@@ -177,8 +194,8 @@ function ListarUsuarios() {
                       }
                       editar={true}
                       handleEditar={() => handleEditar(usuario)}
-                      habilitar={usuario.estado == 'I'}
-                      deshabilitar={usuario.estado == 'A'}
+                      habilitar={usuario.estado == "I"}
+                      deshabilitar={usuario.estado == "A"}
                       handleEstado={() => handleVentanaEstado(usuario)}
                     />
                   </StyledTableCell>

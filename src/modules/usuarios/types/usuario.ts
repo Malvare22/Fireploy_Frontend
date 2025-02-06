@@ -1,4 +1,4 @@
-import { Proyecto } from "@modules/projects/types/proyecto";
+import { Proyecto } from "@modules/proyectos/types/proyecto";
 import { EstadoUsuario } from "./usuario.estado";
 import {  RedSocialUsuario } from "./usuario.redSocial";
 import { SexoUsuario } from "./usuario.sexo";

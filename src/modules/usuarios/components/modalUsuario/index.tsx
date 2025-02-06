@@ -19,15 +19,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import PreviewImage, {
   usePreviewImage,
 } from "@modules/general/components/previewImage";
-import { LabelRedesSociales } from "@modules/usuarios/enum/LabelRedesSociales";
-import Facebook from "@modules/general/assets/redesSociales/facebook.png";
-import Instagram from "@modules/general/assets/redesSociales/instagram.png";
-import X from "@modules/general/assets/redesSociales/x.png";
-import Linkedin from "@modules/general/assets/redesSociales/linkedin.png";
 import { obtenerFechaActual } from "@modules/general/utils/fechas";
 import { UsuarioBase } from "@modules/usuarios/utils/form/usuario.base";
 import BotonesBasicos from "@modules/general/components/botonesBasicos";
-import IconoRedondo from "@modules/general/components/iconoRedondo";
+import RedSocial from "@modules/proyectos/components/redSocial";
 
 interface Props {
   open: boolean;
@@ -213,9 +208,8 @@ const Cuerpo: React.FC<{
             }}
           >
             <Row sx={styleRowRedSocial}>
-              <IconoRedondo
-                imagen={Linkedin}
-                nombre={LabelRedesSociales.linkedin}
+              <RedSocial
+                nombre={'linkedin'}
               />
               <CustomInput
                 variant="secondary"
@@ -223,9 +217,8 @@ const Cuerpo: React.FC<{
               ></CustomInput>
             </Row>
             <Row sx={styleRowRedSocial}>
-              <IconoRedondo
-                imagen={Facebook}
-                nombre={LabelRedesSociales.facebook}
+              <RedSocial
+                nombre={'facebook'}
               />
               <CustomInput
                 variant="secondary"
@@ -233,19 +226,23 @@ const Cuerpo: React.FC<{
               ></CustomInput>
             </Row>
             <Row sx={styleRowRedSocial}>
-              <IconoRedondo
-                imagen={Instagram}
-                nombre={LabelRedesSociales.instagram}
+              <RedSocial
+                nombre={'instagram'}
               />
               <CustomInput
                 variant="secondary"
                 {...register("redSocial.instagram")}
               ></CustomInput>
             </Row>
-            {/* <Row sx={styleRowRedSocial}>
-              <IconoRedondo imagen={X} nombre={LabelRedesSociales.x}/>
-              <CustomInput variant="secondary" {...register('redSocial.x')}></CustomInput>
-            </Row> */}
+            <Row sx={styleRowRedSocial}>
+              <RedSocial
+                nombre={'x'}
+              />
+              <CustomInput
+                variant="secondary"
+                {...register("redSocial.x")}
+              ></CustomInput>
+            </Row>
           </Box>
         </Row>
 

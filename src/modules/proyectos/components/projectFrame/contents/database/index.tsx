@@ -1,7 +1,7 @@
 import CustomSelect from "@modules/general/components/customSelect";
 import { tecnologiasDummy } from "@modules/general/utils/data/tecnologias";
-import { ProyectoContext } from "@modules/projects/context/proyectoContext";
-import { LabelDatabase } from "@modules/projects/enum/labelDatabase";
+import { ProyectoContext } from "@modules/proyectos/context/proyectoContext";
+import { LabelDatabase } from "@modules/proyectos/enum/labelDatabase";
 import { Box, Button, Divider, MenuItem, Typography } from "@mui/material";
 import { useContext } from "react";
 

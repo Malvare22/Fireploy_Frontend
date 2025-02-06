@@ -2,8 +2,9 @@ import { TiposUsuario } from "@modules/usuarios/types/usuario.tipos";
 import { EstadoUsuario } from "@modules/usuarios/types/usuario.estado";
 import { SexoUsuario } from "@modules/usuarios/types/usuario.sexo";
 import { RedSocialUsuario } from "@modules/usuarios/types/usuario.redSocial";
+import { Usuario } from "@modules/usuarios/types/usuario";
 
-export const UsuarioBase = {
+export const UsuarioBase: Usuario = {
   correo: "",
   id: 0,
   fechaDeNacimiento: "",
@@ -20,4 +21,5 @@ export const UsuarioBase = {
     linkedin: "",
   } as RedSocialUsuario,
   descripcion: "",
+  proyectos: []
 };

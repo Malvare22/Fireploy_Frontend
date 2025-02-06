@@ -1,4 +1,4 @@
-import { Proyecto } from "@modules/projects/types/proyecto";
+import { Proyecto } from "@modules/proyectos/types/proyecto";
 
 export type SeccionCurso = {
     id: string,

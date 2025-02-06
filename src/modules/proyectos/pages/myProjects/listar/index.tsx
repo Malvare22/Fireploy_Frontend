@@ -1,19 +1,20 @@
-import { proyectosDummy } from "@modules/general/utils/data/proyectos";
-import ProjectCard from "@modules/projects/components/projectCard";
+import ProjectCard from "@modules/proyectos/components/projectCard";
+import { LabelProyecto } from "@modules/proyectos/enum/labelProyecto";
+import { proyectosPrueba } from "@modules/proyectos/test/data/proyectos.prueba";
 import { Box, Button, Divider, Typography } from "@mui/material";
 
-function MyProjects() {
-  const proyectos = proyectosDummy;
+function VerProyectos() {
+  const proyectos = proyectosPrueba;
 
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ textAlign: "center", margin: 2 }}>
-        <Typography variant="h3Bold">Mis Proyectos</Typography>
+        <Typography variant="h3Bold">{LabelProyecto.misProyectos}</Typography>
       </Box>
       {/* Project Container */}
       <Box sx={{paddingX: {md: 10, xs: 4}, marginY: 4}}>
         <Box sx={{ display: "flex", justifyContent: "end", marginY: 2 }}>
-          <Button variant="contained">Nuevo Proyecto</Button>
+          <Button variant="contained">{LabelProyecto.nuevoProyeco}</Button>
         </Box>
 
         {proyectos.map((proyecto, index) => (
@@ -27,4 +28,4 @@ function MyProjects() {
   );
 }
 
-export default MyProjects;
+export default VerProyectos;
