@@ -1,13 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import img from "@modules/general/assets/LogoFireploy.png";
-import react from "@modules/general/assets/tecnologias/react_logo.png";
-import spring from "@modules/general/assets/tecnologias/spring_logo.png";
-import nodejs from "@modules/general/assets/tecnologias/nodejs_logo.png";
 import Grid from "@mui/material/Grid2";
 import { ReactNode } from "react";
 import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
 import CloudCircleIcon from "@mui/icons-material/CloudCircle";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
+import { imagenes } from "@modules/general/enums/imagenes";
 
 function Home() {
   return (
@@ -111,19 +109,19 @@ function Home() {
       >
         <Box
           component="img" // Renderiza como un <img>
-          src={spring} // Define el source de la imagen
+          src={imagenes.tecnologias.springBoot} // Define el source de la imagen
           alt="Descripción de la imagen" // Texto alternativo
           sx={{ width: 200, height: "auto" }} // Estilos opcionales
         />
         <Box
           component="img" // Renderiza como un <img>
-          src={nodejs} // Define el source de la imagen
+          src={imagenes.tecnologias.react} // Define el source de la imagen
           alt="Descripción de la imagen" // Texto alternativo
           sx={{ width: 200, height: "auto" }} // Estilos opcionales
         />
         <Box
           component="img" // Renderiza como un <img>
-          src={react} // Define el source de la imagen
+          src={imagenes.tecnologias.nodeJS} // Define el source de la imagen
           alt="Descripción de la imagen" // Texto alternativo
           sx={{ width: 100, height: "auto" }} // Estilos opcionales
         />

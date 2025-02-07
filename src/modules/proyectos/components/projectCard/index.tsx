@@ -4,6 +4,7 @@ import { obtenerColorEstado } from "@modules/proyectos/utils/obtenerColorEstado"
 import { Proyecto } from "@modules/proyectos/types/proyecto";
 import { obtenerEstado } from "@modules/proyectos/utils/obtenerEstado copy";
 import IconoRedondo from "@modules/general/components/iconoRedondo";
+import { obtenerInformacionTipoBaseDeDatos } from "@modules/proyectos/utils/obtenerInformacionTipoBaseDeDatos";
 
 interface Props {
   proyecto: Proyecto;
@@ -90,9 +91,15 @@ const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
               ></IconoRedondo>
             ))}
             <IconoRedondo
-                imagen={proyecto.baseDeDatos.tipo}
-                nombre={repositorio.tecnologia.nombre}
-              ></IconoRedondo>
+              nombre={
+                obtenerInformacionTipoBaseDeDatos[proyecto.baseDeDatos.tipo]
+                  .nombre
+              }
+              imagen={
+                obtenerInformacionTipoBaseDeDatos[proyecto.baseDeDatos.tipo]
+                  .imagen
+              }
+            ></IconoRedondo>
           </Box>
         </Box>
       </Box>
