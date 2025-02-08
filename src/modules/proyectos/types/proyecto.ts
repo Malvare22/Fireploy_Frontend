@@ -13,5 +13,6 @@ export type Proyecto = {
     estadoDeEjecucion: EstadoEjecucionProyecto,
     estadoDeProyecto: EstadoProyecto,
     baseDeDatos: BaseDeDatosProyecto,
-    repositorios: RepositorioProyecto[]
+    repositorios: RepositorioProyecto[],
+    numeroDeCapas: number;
 };

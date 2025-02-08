@@ -13,7 +13,7 @@ interface Props {
 const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
   return (
     <Box sx={{ backgroundColor: "white", padding: 4, paddingX: { md: 14 } }}>
-      <Link href={`view/${proyecto.id}`}>
+      <Link href={`ver/${proyecto.id}`}>
         <Typography variant="h5Bold" color="info">
           {proyecto.titulo}
         </Typography>

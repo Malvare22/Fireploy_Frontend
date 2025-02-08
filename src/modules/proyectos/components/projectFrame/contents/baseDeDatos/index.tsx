@@ -42,9 +42,8 @@ function Database() {
           <Box sx={{ width: "80%" }}>
             <CustomSelect
               variantDelta="secondary"
-              value={watch('baseDeDatos.id')}
-              {...register('baseDeDatos.id')}
-              
+              value={watch("baseDeDatos.id")}
+              {...register("baseDeDatos.id")}
             >
               {tecnologiasDummy.map(
                 (baseDeDatos) =>

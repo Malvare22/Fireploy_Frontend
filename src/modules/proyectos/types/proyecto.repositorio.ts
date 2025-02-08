@@ -1,4 +1,3 @@
-import { TecnologiaRepositorio } from "./repositorio.tecnologia";
 import { TipoRepositorio } from "./repositorio.tipo";
 
 export type RepositorioProyecto = {
@@ -7,5 +6,5 @@ export type RepositorioProyecto = {
     tipo: TipoRepositorio,
     versionDeTecnologia: string,
     variablesDeEntorno: string,
-    tecnologia: TecnologiaRepositorio
+    tecnologia: number
 };

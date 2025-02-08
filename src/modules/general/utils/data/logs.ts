@@ -6,7 +6,7 @@ export interface TypeLogs {
   }
   
 
-export const LogsDummy: TypeLogs[] = [
+export const LogsPrueba: TypeLogs[] = [
   {
     mensaje: "Se inició la aplicación correctamente.",
     instancia: "frontend",

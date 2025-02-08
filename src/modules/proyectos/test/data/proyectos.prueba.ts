@@ -1,5 +1,4 @@
 import { Proyecto } from "@modules/proyectos/types/proyecto";
-import { TecnologiasPrueba } from "./tecnologias.prueba";
 
 export const proyectosPrueba: Proyecto[] = [
   {
@@ -27,7 +26,7 @@ export const proyectosPrueba: Proyecto[] = [
         tipo: "F",
         versionDeTecnologia: "17.0",
         variablesDeEntorno: "APN_URL=https://api.mi-ecommerce.com",
-        tecnologia: TecnologiasPrueba[0],
+        tecnologia: 0,
       },
       {
         id: 102,
@@ -35,9 +34,10 @@ export const proyectosPrueba: Proyecto[] = [
         tipo: "B",
         versionDeTecnologia: "16.x",
         variablesDeEntorno: "DB_URL=https://database-ecommerce.com",
-        tecnologia: TecnologiasPrueba[1],
+        tecnologia: 1,
       },
     ],
+    numeroDeCapas: 2,
   },
   {
     id: 2,
@@ -45,7 +45,8 @@ export const proyectosPrueba: Proyecto[] = [
     descripcion:
       "Plataforma avanzada para publicar artículos, noticias y contenido multimedia. Este proyecto permite a los usuarios registrarse, escribir y gestionar sus propios artículos a través de un sistema de edición intuitivo. Los visitantes del blog tienen la capacidad de leer, comentar y compartir el contenido publicado, lo que fomenta una comunidad activa. Además, el sistema incluye funcionalidades robustas de categorías y etiquetado para una navegación más efectiva, junto con herramientas de búsqueda avanzadas. La administración del contenido está respaldada por un sistema de moderación que permite gestionar comentarios, artículos y la configuración general del sitio, brindando a los administradores total control sobre el contenido publicado.",
     calificacion: 4.0,
-    imagen: "https://www.techgames.com.mx/wp-content/uploads/2019/06/Rosado-Patricio-Estrella-Amarillo-Bob-Esponja.jpg",
+    imagen:
+      "https://www.techgames.com.mx/wp-content/uploads/2019/06/Rosado-Patricio-Estrella-Amarillo-Bob-Esponja.jpg",
     url: "https://mi-blog.com",
     estadoDeEjecucion: "F",
     estadoDeProyecto: "A",
@@ -63,7 +64,7 @@ export const proyectosPrueba: Proyecto[] = [
         tipo: "F",
         versionDeTecnologia: "18.0",
         variablesDeEntorno: "APN_URL=https://api.mi-blog.com",
-        tecnologia: TecnologiasPrueba[0],
+        tecnologia: 0,
       },
       {
         id: 202,
@@ -71,9 +72,10 @@ export const proyectosPrueba: Proyecto[] = [
         tipo: "B",
         versionDeTecnologia: "14.x",
         variablesDeEntorno: "DB_URL=https://database-blog.com",
-        tecnologia: TecnologiasPrueba[1],
+        tecnologia: 1,
       },
     ],
+    numeroDeCapas: 2,
   },
   {
     id: 3,
@@ -81,7 +83,8 @@ export const proyectosPrueba: Proyecto[] = [
     descripcion:
       "Sistema integral para la administración de personal en empresas. Permite gestionar nóminas, vacaciones, evaluaciones de desempeño y procesos de contratación. Incluye módulos avanzados para generación de reportes y paneles de control con estadísticas clave, facilitando una mejor toma de decisiones para el departamento de recursos humanos.",
     calificacion: 4.8,
-    imagen: "https://www.pockettactics.com/wp-content/sites/pockettactics/2023/01/mario-wallpapers-5.jpg",
+    imagen:
+      "https://www.pockettactics.com/wp-content/sites/pockettactics/2023/01/mario-wallpapers-5.jpg",
     url: "https://gestion-recursos-humanos.com",
     estadoDeEjecucion: "E",
     estadoDeProyecto: "A",
@@ -99,7 +102,7 @@ export const proyectosPrueba: Proyecto[] = [
         tipo: "F",
         versionDeTecnologia: "17.x",
         variablesDeEntorno: "API_URL=https://api.rrhh.com",
-        tecnologia: TecnologiasPrueba[0],
+        tecnologia: 0,
       },
       {
         id: 302,
@@ -107,9 +110,10 @@ export const proyectosPrueba: Proyecto[] = [
         tipo: "B",
         versionDeTecnologia: "16.x",
         variablesDeEntorno: "DB_URL=https://database-rrhh.com",
-        tecnologia: TecnologiasPrueba[1],
+        tecnologia: 1,
       },
     ],
+    numeroDeCapas: 2,
   },
   {
     id: 4,
@@ -117,7 +121,8 @@ export const proyectosPrueba: Proyecto[] = [
     descripcion:
       "Aplicación para la gestión de reservas en restaurantes, hoteles o espacios de coworking. Ofrece una interfaz amigable para los clientes y un sistema de administración robusto para los negocios, que permite gestionar horarios, disponibilidad y notificaciones automáticas por correo o SMS.",
     calificacion: 4.3,
-    imagen: "https://w0.peakpx.com/wallpaper/213/730/HD-wallpaper-halo-halo-4-master-chief.jpg",
+    imagen:
+      "https://w0.peakpx.com/wallpaper/213/730/HD-wallpaper-halo-halo-4-master-chief.jpg",
     url: "https://sistema-reservas.com",
     estadoDeEjecucion: "N",
     estadoDeProyecto: "A",
@@ -135,7 +140,7 @@ export const proyectosPrueba: Proyecto[] = [
         tipo: "F",
         versionDeTecnologia: "18.x",
         variablesDeEntorno: "API_URL=https://api.reservas.com",
-        tecnologia: TecnologiasPrueba[0],
+        tecnologia: 0,
       },
       {
         id: 402,
@@ -143,9 +148,10 @@ export const proyectosPrueba: Proyecto[] = [
         tipo: "B",
         versionDeTecnologia: "14.x",
         variablesDeEntorno: "DB_URL=https://database-reservas.com",
-        tecnologia: TecnologiasPrueba[1],
+        tecnologia: 1,
       },
     ],
+    numeroDeCapas: 2,
   },
   {
     id: 5,
@@ -171,7 +177,7 @@ export const proyectosPrueba: Proyecto[] = [
         tipo: "F",
         versionDeTecnologia: "18.x",
         variablesDeEntorno: "API_URL=https://api.educacion.com",
-        tecnologia: TecnologiasPrueba[0],
+        tecnologia: 0,
       },
       {
         id: 502,
@@ -179,9 +185,9 @@ export const proyectosPrueba: Proyecto[] = [
         tipo: "B",
         versionDeTecnologia: "15.x",
         variablesDeEntorno: "DB_URL=https://database-education.com",
-        tecnologia: TecnologiasPrueba[1],
+        tecnologia: 1,
       },
     ],
+    numeroDeCapas: 2,
   },
 ];
-

@@ -1,20 +1,21 @@
-import { proyectosDummy, TypeProyecto } from "@modules/general/utils/data/proyectos";
 import Contents from "@modules/proyectos/components/projectFrame/contents";
 import IconMenu from "@modules/proyectos/components/projectFrame/menu";
+import { proyectosPrueba } from "@modules/proyectos/test/data/proyectos.prueba";
+import { Proyecto } from "@modules/proyectos/types/proyecto";
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-function ViewProject() {
+function VerProyecto() {
   const [currentOption, setCurrentOption] = useState(0);
   const [open, setOpen] = useState(true);
-  const [proyecto, setProyecto] = useState<undefined | TypeProyecto>(undefined);
+  const [proyecto, setProyecto] = useState<undefined | Proyecto>(undefined);
 
   const { id } = useParams();
 
   useEffect(() => {
     const projectId = id ? parseInt(id) : 0;
-    const proyecto = proyectosDummy.find((p) => p.id == projectId);
+    const proyecto = proyectosPrueba.find((p) => p.id == projectId);
     setProyecto(proyecto);
   }, []);
 
@@ -70,4 +71,4 @@ function ViewProject() {
   );
 }
 
-export default ViewProject;
+export default VerProyecto;

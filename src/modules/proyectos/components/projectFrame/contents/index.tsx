@@ -1,21 +1,19 @@
 import { Box, Button } from "@mui/material";
-import React, { useMemo, useState } from "react";
-import Collaborators from "./collaborators";
-import Repositories from "./repositories";
-import Database from "./database";
+import React, { useMemo } from "react";
+import Database from "./baseDeDatos";
 import { ProyectoContext } from "@modules/proyectos/context/proyectoContext";
 import Logs from "./logs";
 import Adicionales from "./adicionales";
-import { TypeProyecto } from "@modules/general/utils/data/proyectos";
 import { ProyectoSchema } from "@modules/proyectos/utils/zod/proyectoSchema";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Repositorios from "./repositorios";
+import { Proyecto } from "@modules/proyectos/types/proyecto";
 
 interface ContentsProps {
   currentOption: number;
   setCurrentOption?: React.Dispatch<number>;
-  proyecto: TypeProyecto | undefined;
+  proyecto: Proyecto;
 }
 
 const Contents: React.FC<ContentsProps> = ({ currentOption, proyecto }) => {
@@ -27,13 +25,14 @@ const Contents: React.FC<ContentsProps> = ({ currentOption, proyecto }) => {
     reset,
     watch,
     formState: { errors, isDirty },
-  } = useForm<TypeProyecto>({
+    setValue
+  } = useForm<Proyecto>({
     resolver: zodResolver(formSchema),
     defaultValues: proyecto,
   });
 
   // Manejo del envío del formulario
-  const onSubmit: SubmitHandler<TypeProyecto> = (data) => {
+  const onSubmit: SubmitHandler<Proyecto> = (data) => {
     console.log("Datos enviados:", data);
     alert("Formulario enviado con éxito");
   };
@@ -47,7 +46,7 @@ const Contents: React.FC<ContentsProps> = ({ currentOption, proyecto }) => {
   const Content = useMemo(() => {
     switch (currentOption) {
       case 0:
-        return <Repositories />;
+        return <Repositorios />;
 
       case 1:
         return <Logs />;
@@ -73,6 +72,7 @@ const Contents: React.FC<ContentsProps> = ({ currentOption, proyecto }) => {
         register: register,
         errors: errors,
         watch: watch,
+        setValue: setValue
       }}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
