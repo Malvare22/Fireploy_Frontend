@@ -4,5 +4,6 @@ export const LabelPortafolio = {
     redesSociales : LabelUsuario.redesSociales,
     descripcion : LabelUsuario.descripcion,
     integrantes: "Integrantes:",
-    verMas: "Ver Más"
+    verMas: "Ver Más",
+    explorarPortafolios: 'Explorar Portafolios'
 };

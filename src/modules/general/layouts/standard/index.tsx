@@ -25,7 +25,7 @@ function LayoutStandard() {
           backgroundColor: palette.backgroundX.primary,
           // justifyContent: "center",
           paddingY: 4,
-          paddingX: {md: 10},
+          paddingX: {md: 10, xs: 2},
           overflowX: 'auto',
         }}
       >

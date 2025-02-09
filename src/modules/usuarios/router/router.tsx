@@ -4,6 +4,7 @@ import Perfil from "../pages/perfil";
 import PerfilPorId from "../pages/id";
 import VerPortafolioPorId from "../pages/portafolio";
 import LayoutStandard from "@modules/general/layouts/standard";
+import BuscarPortafolio from "../pages/buscarPortafolio";
 
 const rutaBase = "/usuarios";
 
@@ -11,7 +12,8 @@ export enum rutasUsuarios{
   perfil = rutaBase + "/perfil",
   verPerfilPorId = rutaBase + "/perfil/:id",
   listar = rutaBase + "/listar",
-  verPortafolio = rutaBase + "/portafolio/:id"
+  verPortafolio = rutaBase + "/portafolios/:id",
+  buscarPortafolio = rutaBase + "/portafolios"
 };
 
 export const routerUsuarios: RouteObject = 
@@ -35,6 +37,10 @@ export const routerUsuarios: RouteObject =
       path: rutasUsuarios.verPortafolio,
       element: <VerPortafolioPorId/>,
     },
+    {
+      path: rutasUsuarios.buscarPortafolio,
+      element: <BuscarPortafolio/>,
+    }
   ]
 };
 

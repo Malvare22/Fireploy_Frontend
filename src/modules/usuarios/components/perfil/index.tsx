@@ -16,6 +16,7 @@ import Instagram from "@modules/general/assets/redesSociales/instagram.png";
 import Linkedin from "@modules/general/assets/redesSociales/linkedin.png";
 import { UsuarioPlano } from "@modules/usuarios/types/usuario.plano";
 import IconoRedondo from "@modules/general/components/iconoRedondo";
+import { palette } from "@core/themes";
 
 interface Props {
   usuario: UsuarioPlano;
@@ -55,6 +56,7 @@ const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
           flexDirection: "column",
           gap: 4,
           width: "80%",
+          marginTop: 2
         }}
       >
         <ModalUsuario
@@ -151,7 +153,9 @@ const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
 
   return (
     <>
-      <CuadroPerfil usuario={usuario} handleOpen={handleOpen} tipo="editar"/>
+      <Box sx={{ width: "84%" }}>
+        <CuadroPerfil usuario={usuario} handleOpen={handleOpen} tipo="editar" />
+      </Box>
       <Cuerpo />
     </>
   );
@@ -164,9 +168,7 @@ export const CuadroPerfil: React.FC<{
 }> = ({ usuario, handleOpen, tipo = "ver" }) => {
   return (
     <>
-      <Card
-        sx={{ padding: 4, backgroundColor: "customGrey.main"}}
-      >
+      <Card sx={{ padding: 4, backgroundColor: palette.customGrey.main }}>
         <Box
           sx={{
             display: "flex",

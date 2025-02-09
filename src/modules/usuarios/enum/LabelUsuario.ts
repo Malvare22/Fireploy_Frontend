@@ -20,7 +20,9 @@ export const LabelUsuario = {
   deshabilitar: 'Deshabilitar',
   habilitar: 'Habilitar',
   confirmarContrasenia: 'Confirmar Contraseña',
-  registrarUsuario: 'Registrar Usuario'
+  registrarUsuario: 'Registrar Usuario',
+  verPerfil: 'Ver Perfil',
+  verPortafolio: 'Ver Portafolio'
 };
 
 export const obtenerHabilitarUsuario = (usuario: Usuario) => (`¿Está seguro de que desea habilitar al usuario ${usuario.apellidos} ${usuario.nombres}?`);
