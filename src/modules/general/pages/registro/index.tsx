@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 
-function Register() {
+function Registrar() {
   return (
     <FormContainer
       sx={{
@@ -113,4 +113,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default Registrar;

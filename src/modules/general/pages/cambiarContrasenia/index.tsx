@@ -3,7 +3,7 @@ import FormContainer from "@modules/general/components/formContainer";
 import { Box, Button, Link, Typography } from "@mui/material";
 import React, { useState } from "react";
 
-function ChangePassword() {
+function CambiarContrasenia() {
   const [value, setValue] = useState(false);
 
   return (
@@ -26,18 +26,18 @@ function ChangePassword() {
       }}
     >
       {!value ? (
-        <Request setValue={setValue} />
+        <Solicitar setValue={setValue} />
       ) : (
-        <Change setValue={setValue} />
+        <Cambiar setValue={setValue} />
       )}
     </FormContainer>
   );
 }
 
-interface RequestProps {
+interface SolicitarProps {
   setValue: React.Dispatch<boolean>;
 }
-const Request: React.FC<RequestProps> = ({ setValue }: RequestProps) => {
+const Solicitar: React.FC<SolicitarProps> = ({ setValue }: SolicitarProps) => {
   const changeValue = () => {
     setValue(true);
   };
@@ -76,10 +76,10 @@ const Request: React.FC<RequestProps> = ({ setValue }: RequestProps) => {
   );
 };
 
-interface ChangeProps {
+interface CambiarProps {
   setValue: React.Dispatch<boolean>;
 }
-const Change: React.FC<ChangeProps> = ({ setValue }: ChangeProps) => {
+const Cambiar: React.FC<CambiarProps> = ({ setValue }: CambiarProps) => {
   return (
     <>
       <form>
@@ -137,4 +137,4 @@ const Change: React.FC<ChangeProps> = ({ setValue }: ChangeProps) => {
   );
 };
 
-export default ChangePassword;
+export default CambiarContrasenia;

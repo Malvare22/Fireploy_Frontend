@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { AccountContext } from "@modules/context/accountContext";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { rutasGeneral } from "@modules/general/router/router";
 
 export const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -35,7 +36,7 @@ export const AccountMenu = () => {
   const cerrarSesion = () => {
     localStorage.clear();
     setLocalUser(null);
-    navigate("/");
+    navigate(rutasGeneral.home);
   };
 
   const userInfo = useMemo((): { nombres: string; foto: string } => {

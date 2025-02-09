@@ -6,6 +6,7 @@ import DrawerCustom from "./components/drawer";
 import { AccountMenu } from "./components/accountMenu";
 import Notificacions from "./components/notifications";
 import Logo from "@modules/general/assets/LogoFireploy.png";
+import { rutasGeneral } from "@modules/general/router/router";
 
 const hoverTypographyStyles: CSSProperties = {
   textAlign: "center",
@@ -119,7 +120,7 @@ const FirstContent: React.FC<FirstContentProps> = ({
 
       {open && (
         <>
-          <ListItemButton onClick={() => navigate("/")}>
+          <ListItemButton onClick={() => navigate(rutasGeneral.home)}>
             <Typography variant="h5Bold" sx={hoverTypographyStyles}>
               Inicio
             </Typography>
@@ -157,10 +158,10 @@ const SecondContent: React.FC<SecondContentProps> = ({
         </>
       ) : (
         <>
-          <ListItemButton onClick={() => navigate("/login")}>
+          <ListItemButton onClick={() => navigate(rutasGeneral.login)}>
             <Typography variant="h5Bold">Iniciar Sesión</Typography>
           </ListItemButton>
-          <ListItemButton onClick={() => navigate("/register")}>
+          <ListItemButton onClick={() => navigate(rutasGeneral.registrar)}>
             <Typography variant="h5Bold">Registrarse</Typography>
           </ListItemButton>
         </>

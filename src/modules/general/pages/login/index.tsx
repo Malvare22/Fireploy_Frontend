@@ -11,6 +11,7 @@ import CustomInput from "@modules/general/components/customInput";
 import { LabelSesion } from "@modules/general/enums/snackbar";
 import { AccountContext } from "@modules/context/accountContext";
 import { usuariosPrueba } from "@modules/usuarios/test/data/usuarios.prueba";
+import { rutasGeneral } from "@modules/general/router/router";
 
 const Login = () => {
   const clientID =
@@ -47,7 +48,7 @@ const Login = () => {
         setLocalUser(JSON.stringify(exist));
         setView(true);
         localStorage.setItem("USER", JSON.stringify(exist));
-        navigate("/");
+        navigate(rutasGeneral.home);
       }
     } else {
       setMessage(LabelSesion.sesionErrada);
@@ -159,7 +160,7 @@ const Login = () => {
               <Box>
                 <Link
                   component={"button"}
-                  onClick={() => navigate("/register")}
+                  onClick={() => navigate(rutasGeneral.registrar)}
                 >
                   Crear una cuenta
                 </Link>
@@ -167,7 +168,7 @@ const Login = () => {
               <Box sx={{ marginLeft: { md: 3 }, marginTop: { xs: 3, md: 0 } }}>
                 <Link
                   component={"button"}
-                  onClick={() => navigate("/recovery")}
+                  onClick={() => navigate(rutasGeneral.recuperar)}
                 >
                   Olvidé mi contraseña
                 </Link>
