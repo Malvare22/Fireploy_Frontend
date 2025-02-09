@@ -24,7 +24,7 @@ function LayoutContentCenter() {
           display: "flex",
           backgroundColor: palette.backgroundX.secondary,
           justifyContent: "center",
-          paddingY: 4,
+          paddingY: 2,
           paddingX: {md: 10},
           overflowX: 'auto',
           

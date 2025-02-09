@@ -1,115 +1,151 @@
+import { palette } from "@core/themes";
+import { zodResolver } from "@hookform/resolvers/zod";
 import CustomInput from "@modules/general/components/customInput";
+import CustomSelect from "@modules/general/components/customSelect";
 import FormContainer from "@modules/general/components/formContainer";
-import {
-  Box,
-  Button,
-  Link,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
+import { rutasGeneral } from "@modules/general/router/router";
+import { LabelUsuario } from "@modules/usuarios/enum/LabelUsuario";
+import RegistroSchema from "@modules/usuarios/utils/form/registro.schema";
+import { obtenerSexo } from "@modules/usuarios/utils/usuario.map";
+import { Box, Button, Link, MenuItem, Typography } from "@mui/material";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { z } from "zod";
 
 function Registrar() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<z.infer<typeof RegistroSchema>>({
+    resolver: zodResolver(RegistroSchema),
+  });
+
+  const navigate = useNavigate();
+
+  const onSubmit = (data: any) => {
+    console.log("Formulario enviado con éxito:", data);
+  };
+
   return (
-    <FormContainer
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 8,
-        width: { md: "50%", xs: "90%" },
-        "& > div": {
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      style={{ width: "100%", display: "flex", justifyContent: "center" }}
+    >
+      <FormContainer
+        sx={{
           display: "flex",
           flexDirection: "column",
-          gap: 1,
-        },
-        "& > div.unique": {
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: 4,
-        },
-      }}
-    >
-      <Box sx={{ textAlign: "center" }}>
-        <Typography variant="h3Bold">Registro de Usuario</Typography>
-      </Box>
-      <Box>
-        <Box>
-          <Typography variant="h5Bold">Nombres</Typography>
-        </Box>
-        <Box>
-          <CustomInput type="text" />
-        </Box>
-      </Box>
-      <Box>
-        <Box>
-          <Typography variant="h5Bold">Apellidos</Typography>
-        </Box>
-        <Box>
-          <CustomInput type="text" />
-        </Box>
-      </Box>
-      <Box>
-        <Box>
-          <Typography variant="h5Bold">Código Institucional</Typography>
-        </Box>
-        <Box>
-          <CustomInput type="number" />
-        </Box>
-      </Box>
-      <Box>
-        <Box>
-          <Typography variant="h5Bold">Correo Electrónico</Typography>
-        </Box>
-        <Box>
-          <CustomInput type="email" />
-        </Box>
-      </Box>
-      <Box>
-        <Box>
-          <Typography variant="h5Bold">Fecha de Nacimiento</Typography>
-        </Box>
-        <Box>
-          <CustomInput type="date" />
-        </Box>
-      </Box>
-      <Box>
-        <Box>
-          <Typography variant="h5Bold">Género</Typography>
-        </Box>
-        <Box>
-          <Select defaultValue={1}>
-            <MenuItem value={1}>Hombre</MenuItem>
-            <MenuItem value={10}>Mujer</MenuItem>
-            <MenuItem value={10}>Otro</MenuItem>
-          </Select>
-        </Box>
-      </Box>
-      <Box>
-        <Box>
-          <Typography variant="h5Bold">Contraseña</Typography>
-        </Box>
-        <Box>
-          <CustomInput type="password" />
-        </Box>
-      </Box>
-      <Box>
-        <Box>
-          <Typography variant="h5Bold">Confirmar Contraseña</Typography>
-        </Box>
-        <Box>
-          <CustomInput type="password" />
-        </Box>
-      </Box>
-      <Box
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-        className="unique"
+          gap: 8,
+          width: { md: "60%", xs: "90%" },
+          "& > div": {
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+          },
+        }}
       >
-        <Link sx={{ marginRight: 4 }}>Volver</Link>
-        <Button variant="primary">Registrar</Button>
-      </Box>
-    </FormContainer>
+        <Box>
+          <Typography variant="h5Bold">{LabelUsuario.nombres}</Typography>
+          <CustomInput
+            type="text"
+            errorMessage={errors.nombres?.message}
+            {...register("nombres")}
+          />
+        </Box>
+        <Box>
+          <Typography variant="h5Bold">{LabelUsuario.apellidos}</Typography>
+          <CustomInput
+            type="text"
+            errorMessage={errors.apellidos?.message}
+            {...register("apellidos")}
+          />
+        </Box>
+        <Box>
+          <Typography variant="h5Bold">{LabelUsuario.codigo}</Typography>
+          <CustomInput
+            type="text"
+            errorMessage={errors.id?.message}
+            {...register("id")}
+          />
+        </Box>
+        <Box>
+          <Typography variant="h5Bold">{LabelUsuario.correo}</Typography>
+          <CustomInput
+            type="email"
+            errorMessage={errors.correo?.message}
+            {...register("correo")}
+          />
+        </Box>
+        <Box>
+          <Typography variant="h5Bold">
+            {LabelUsuario.fechaNacimiento}
+          </Typography>
+          <CustomInput
+            type="date"
+            errorMessage={errors.fechaDeNacimiento?.message}
+            {...register("fechaDeNacimiento")}
+          />
+        </Box>
+        <Box>
+          <Typography variant="h5Bold">{LabelUsuario.sexo}</Typography>
+          <CustomSelect
+            {...register("sexo")}
+            variantDelta="primary"
+            defaultValue={""}
+            errorMessage={errors.sexo?.message}
+          >
+            {Array.from(obtenerSexo.entries()).map(([valor, texto]) => (
+              <MenuItem key={valor} value={valor}>
+                {texto}
+              </MenuItem>
+            ))}
+          </CustomSelect>
+        </Box>
+        <Box>
+          <Typography variant="h5Bold">{LabelUsuario.contrasenia}</Typography>
+          <CustomInput
+            type="password"
+            errorMessage={errors.contrasenia?.message}
+            {...register("contrasenia")}
+          />
+        </Box>
+        <Box>
+          <Typography variant="h5Bold">
+            {LabelUsuario.confirmarContrasenia}
+          </Typography>
+          <CustomInput
+            type="password"
+            errorMessage={errors.confirmarContrasenia?.message}
+            {...register("confirmarContrasenia")}
+          />
+        </Box>
+        <Box sx={{ width: "100%" }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              gap: 4,
+              justifyContent: "center",
+            }}
+          >
+            <Button
+              variant="primary"
+              sx={{
+                backgroundColor: palette.customGrey.main,
+                width: 150,
+              }}
+              onClick={() => navigate(rutasGeneral.login)}
+            >
+              Volver
+            </Button>
+            <Button variant="primary" type="submit" sx={{ width: 150 }}>
+              Registrar
+            </Button>
+          </Box>
+        </Box>
+      </FormContainer>
+    </form>
   );
 }
 

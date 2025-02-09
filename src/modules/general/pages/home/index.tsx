@@ -12,8 +12,6 @@ function Home() {
     <Box
       sx={{
         padding: { xs: 2, sm: 6 },
-        boxShadow: 5,
-        border: "black 2px solid",
       }}
       className="hola"
     >
@@ -111,19 +109,19 @@ function Home() {
           component="img" // Renderiza como un <img>
           src={imagenes.tecnologias.springBoot} // Define el source de la imagen
           alt="Descripción de la imagen" // Texto alternativo
-          sx={{ width: 200, height: "auto" }} // Estilos opcionales
+          sx={{ height: 140 }} // Estilos opcionales
         />
         <Box
           component="img" // Renderiza como un <img>
           src={imagenes.tecnologias.react} // Define el source de la imagen
           alt="Descripción de la imagen" // Texto alternativo
-          sx={{ width: 200, height: "auto" }} // Estilos opcionales
+          sx={{ height: 140 }} // Estilos opcionales
         />
         <Box
           component="img" // Renderiza como un <img>
           src={imagenes.tecnologias.nodeJS} // Define el source de la imagen
           alt="Descripción de la imagen" // Texto alternativo
-          sx={{ width: 100, height: "auto" }} // Estilos opcionales
+          sx={{ height: 140 }} // Estilos opcionales
         />
       </Box>
     </Box>
