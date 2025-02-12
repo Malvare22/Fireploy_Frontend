@@ -1,0 +1,77 @@
+import { RepositorioProyecto } from "@modules/proyectos/types/proyecto.repositorio";
+import { TecnologiasPrueba } from "./tecnologias.prueba";
+
+export const RepositoriosPrueba: RepositorioProyecto[] = [
+  {
+    id: 501,
+    url: "https://github.com/educacion-frontend",
+    tipo: "F",
+    versionDeTecnologia: "18.0",
+    variablesDeEntorno: "API_URL=https://api.educacion.com",
+    tecnologia: TecnologiasPrueba[0],
+  },
+  {
+    id: 502,
+    url: "https://github.com/educacion-backend",
+    tipo: "B",
+    versionDeTecnologia: "16.x",
+    variablesDeEntorno: "DB_URL=https://database-education.com",
+    tecnologia: TecnologiasPrueba[0],
+  },
+  {
+    id: 401,
+    url: "https://github.com/reservas-frontend",
+    tipo: "F",
+    versionDeTecnologia: "18.x",
+    variablesDeEntorno: "API_URL=https://api.reservas.com",
+    tecnologia: TecnologiasPrueba[0],
+  },
+  {
+    id: 402,
+    url: "https://github.com/reservas-backend",
+    tipo: "B",
+    versionDeTecnologia: "14.x",
+    variablesDeEntorno: "DB_URL=https://database-reservas.com",
+    tecnologia: TecnologiasPrueba[0],
+  },
+  {
+    id: 301,
+    url: "https://github.com/hr-system-frontend",
+    tipo: "F",
+    versionDeTecnologia: "17.x",
+    variablesDeEntorno: "API_URL=https://api.rrhh.com",
+    tecnologia: TecnologiasPrueba[0],
+  },
+  {
+    id: 302,
+    url: "https://github.com/hr-system-backend",
+    tipo: "B",
+    versionDeTecnologia: "16.x",
+    variablesDeEntorno: "DB_URL=https://database-rrhh.com",
+    tecnologia: TecnologiasPrueba[0],
+  },
+  {
+    id: 201,
+    url: "https://github.com/mi-blog-frontend",
+    tipo: "F",
+    versionDeTecnologia: "18.0",
+    variablesDeEntorno: "APN_URL=https://api.mi-blog.com",
+    tecnologia: TecnologiasPrueba[2],
+  },
+  {
+    id: 202,
+    url: "https://github.com/mi-blog-backend",
+    tipo: "B",
+    versionDeTecnologia: "14.x",
+    variablesDeEntorno: "DB_URL=https://database-blog.com",
+    tecnologia: TecnologiasPrueba[1],
+  },
+  {
+    id: 202,
+    url: "https://github.com/mi-blog-backend",
+    tipo: "I",
+    versionDeTecnologia: "4.4",
+    variablesDeEntorno: "DB_URL=https://database-blog.com",
+    tecnologia: TecnologiasPrueba[2],
+  },
+];

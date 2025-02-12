@@ -1,4 +1,4 @@
-import { proyectosPrueba } from "@modules/proyectos/test/data/proyectos.prueba";
+import { proyectosPrueba } from "@modules/proyectos/test/datos/proyectos.prueba";
 import { UsuarioPlano } from "@modules/usuarios/types/usuario.plano";
 
 export const usuariosPrueba: UsuarioPlano[] = [

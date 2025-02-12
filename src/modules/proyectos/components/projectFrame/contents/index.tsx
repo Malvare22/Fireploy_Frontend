@@ -2,37 +2,38 @@ import { Box, Button } from "@mui/material";
 import React, { useMemo } from "react";
 import Database from "./baseDeDatos";
 import { ProyectoContext } from "@modules/proyectos/context/proyectoContext";
-import Logs from "./logs";
 import Adicionales from "./adicionales";
-import { ProyectoSchema } from "@modules/proyectos/utils/zod/proyectoSchema";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Repositorios from "./repositorios";
 import { Proyecto } from "@modules/proyectos/types/proyecto";
+import ArchivosLogs from "./archivosLogs";
+import { EdicionProyectoSchema } from "@modules/proyectos/utils/zod/proyecto.edicion.schema";
+import { adaptarProyectoAEdicion } from "@modules/proyectos/utils/zod/adaptar.proyecto.edicion";
 
 interface ContentsProps {
   currentOption: number;
   setCurrentOption?: React.Dispatch<number>;
-  proyecto: Proyecto;
+  proyecto: EdicionProyectoSchema;
 }
 
 const Contents: React.FC<ContentsProps> = ({ currentOption, proyecto }) => {
-  const formSchema = ProyectoSchema;
+  const formSchema = EdicionProyectoSchema;
 
   const {
     register,
     handleSubmit,
     reset,
-    watch,
     formState: { errors, isDirty },
-    setValue
-  } = useForm<Proyecto>({
+    setValue,
+    watch
+  } = useForm<EdicionProyectoSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: proyecto,
   });
 
   // Manejo del envío del formulario
-  const onSubmit: SubmitHandler<Proyecto> = (data) => {
+  const onSubmit: SubmitHandler<EdicionProyectoSchema> = (data) => {
     console.log("Datos enviados:", data);
     alert("Formulario enviado con éxito");
   };
@@ -48,17 +49,17 @@ const Contents: React.FC<ContentsProps> = ({ currentOption, proyecto }) => {
       case 0:
         return <Repositorios />;
 
-      case 1:
-        return <Logs />;
+      // case 1:
+      //   return <ArchivosLogs />;
 
-      case 2:
-        return <Database />;
+      // case 2:
+      //   return <Database />;
 
-      // case 3:
-      //   return <Collaborators />;
+      // // case 3:
+      // //   return <Collaborators />;
 
-      case 4:
-        return <Adicionales />;
+      // case 4:
+      //   return <Adicionales />;
 
       default:
         return <Box />;
@@ -71,8 +72,8 @@ const Contents: React.FC<ContentsProps> = ({ currentOption, proyecto }) => {
         proyecto: proyecto,
         register: register,
         errors: errors,
+        setValue: setValue,
         watch: watch,
-        setValue: setValue
       }}
     >
       <form onSubmit={handleSubmit(onSubmit)}>

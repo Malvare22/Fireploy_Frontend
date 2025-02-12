@@ -1,14 +1,14 @@
 import { createContext } from "react";
 import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch } from "react-hook-form";
-import { Proyecto } from "../types/proyecto";
+import { EdicionProyectoSchema } from "../utils/zod/proyecto.edicion.schema";
 
 export const ProyectoContext = createContext<
   | undefined
   | {
-      register: UseFormRegister<Proyecto>;
-      proyecto: Proyecto | undefined;
-      errors: FieldErrors<Proyecto>;
-      watch: UseFormWatch<Proyecto>;
-      setValue: UseFormSetValue<Proyecto>
+      register: UseFormRegister<EdicionProyectoSchema>;
+      proyecto: EdicionProyectoSchema | undefined;
+      errors: FieldErrors<EdicionProyectoSchema>;
+      watch: UseFormWatch<EdicionProyectoSchema>;
+      setValue: UseFormSetValue<EdicionProyectoSchema>
     }
 >(undefined);

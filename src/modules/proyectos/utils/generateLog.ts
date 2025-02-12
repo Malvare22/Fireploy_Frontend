@@ -1,6 +1,6 @@
-import { TypeLogs } from "./type/typeLogs"
+import { ArchivoLog } from "../types/archivoLog.tipo";
 
-export const generateLog = (log: TypeLogs): void => {
+export const generateLog = (log: ArchivoLog): void => {
     const activator: HTMLAnchorElement = document.createElement('a');
     
     let content: string = '';

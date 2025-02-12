@@ -2,9 +2,12 @@ import { Box, Tooltip, Typography } from "@mui/material";
 import Link from "@mui/material/Link";
 import { obtenerColorEstado } from "@modules/proyectos/utils/obtenerColorEstado";
 import { Proyecto } from "@modules/proyectos/types/proyecto";
-import { obtenerEstado } from "@modules/proyectos/utils/obtenerEstado copy";
+import { obtenerEstado } from "@modules/proyectos/utils/obtenerEstado";
 import IconoRedondo from "@modules/general/components/iconoRedondo";
 import { obtenerInformacionTipoBaseDeDatos } from "@modules/proyectos/utils/obtenerInformacionTipoBaseDeDatos";
+import { RepositoriosPrueba } from "@modules/proyectos/test/datos/repositorios.prueba";
+import { BasesDeDatosPrueba } from "@modules/proyectos/test/datos/baseDeDatos.prueba";
+import { rutasProyectos } from "@modules/proyectos/router";
 
 interface Props {
   proyecto: Proyecto;
@@ -13,7 +16,7 @@ interface Props {
 const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
   return (
     <Box sx={{ backgroundColor: "white", padding: 4, paddingX: { md: 14 } }}>
-      <Link href={`ver/${proyecto.id}`}>
+      <Link href={rutasProyectos.ver.replace(":id", proyecto.id.toString())}>
         <Typography variant="h5Bold" color="info">
           {proyecto.titulo}
         </Typography>
@@ -23,22 +26,22 @@ const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
           display: "flex",
           flexDirection: { xs: "column", sm: "row" },
           alignItems: "center",
-          padding: 2,
+          paddingY: 2,
         }}
       >
         <Box
           component={"img"}
+          src={proyecto.imagen}
           sx={{
-            backgroundColor: "blue",
-            width: 128,
-            height: 128,
+            width: 256,
+            height: 164,
           }}
         ></Box>
         <Box>
           <Box
             sx={{
               display: "flex",
-              flexDirection: { xs: "column", sm: "row" },
+              flexDirection: "column",
               margin: 2,
               gap: 2,
             }}
@@ -69,7 +72,9 @@ const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
                 <Typography variant="h6">Última Modificación:</Typography>
               </Box>
               <Box>
-                <Typography variant="h6">{"proyecto."}</Typography>
+                <Typography variant="h6">
+                  {proyecto.fechaUltimaModificacion}
+                </Typography>
               </Box>
             </Box>
           </Box>
@@ -84,20 +89,22 @@ const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
               gap: 3,
             }}
           >
-            {proyecto.repositorios.map((repositorio) => (
+            {proyecto.repositorios.map((indice) => (
               <IconoRedondo
-                imagen={repositorio.tecnologia.logo}
-                nombre={repositorio.tecnologia.nombre}
+                imagen={RepositoriosPrueba[indice].tecnologia.logo}
+                nombre={RepositoriosPrueba[indice].tecnologia.nombre}
               ></IconoRedondo>
             ))}
             <IconoRedondo
               nombre={
-                obtenerInformacionTipoBaseDeDatos[proyecto.baseDeDatos.tipo]
-                  .nombre
+                obtenerInformacionTipoBaseDeDatos[
+                  BasesDeDatosPrueba[proyecto.baseDeDatos].tipo
+                ].nombre
               }
               imagen={
-                obtenerInformacionTipoBaseDeDatos[proyecto.baseDeDatos.tipo]
-                  .imagen
+                obtenerInformacionTipoBaseDeDatos[
+                  BasesDeDatosPrueba[proyecto.baseDeDatos].tipo
+                ].imagen
               }
             ></IconoRedondo>
           </Box>

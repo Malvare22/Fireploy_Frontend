@@ -4,5 +4,6 @@ export type Materia = {
     id: number,
     nombre: string,
     semestre: string,
-    cursos: CursoMateria[]
+    cursos: CursoMateria[],
+    cantidadDeCursos: number
 };

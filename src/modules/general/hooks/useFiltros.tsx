@@ -15,26 +15,21 @@ export const useFiltros = <T extends object>() => {
   );
 
   // Función para activar/desactivar un filtro
-  const toggleFilter = (key: keyof T, value: any) => {
+  const toggleFilter = (key: keyof T, value: unknown) => {
     setFilters((prev) => ({
       ...prev,
-      [key]: value, // Cambiar el valor booleano del filtro
+      [key]: value as T[keyof T], // Cambiar el valor booleano del filtro
     }));
   };
 
   const filterData = (data: T[]) => {
-    let bufferData = data;
-    for (const key in filters) {
-      if (filters.hasOwnProperty(key)) {
-        const value = filters[key];
-        bufferData = bufferData.filter(
-          (element) => value == undefined || element[key] == value
-        );
-      }
-    }
-
-    return bufferData;
+    return Object.entries(filters).reduce((filteredData, [key, value]) => {
+      return filteredData.filter(
+        (element) => value === undefined || element[key as keyof T] === value
+      );
+    }, data);
   };
+  
 
   const RenderFilters = () => {
     if (filterLabels)

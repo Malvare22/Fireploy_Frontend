@@ -1,3 +1,4 @@
+import { TipoRepositorio } from "@modules/proyectos/types/repositorio.tipo";
 import { z } from "zod";
 
 // Esquema para EstadoEjecucionProyecto
@@ -21,16 +22,6 @@ const TipoBaseDeDatosSchema = z.enum(["S", "N"], {
 
 // Base de Datos Proyecto Schema
 const BaseDeDatosProyectoSchema = z.object({
-  id: z.number().positive({ message: "El ID debe ser un número positivo." }),
-  usuario: z
-    .string()
-    .nonempty({ message: "El usuario de la base de datos es obligatorio." }),
-  url: z
-    .string()
-    .url({ message: "La URL de la base de datos debe ser válida." }),
-  contrasenia: z
-    .string()
-    .min(8, { message: "La contraseña debe tener al menos 8 caracteres." }),
   tipo: TipoBaseDeDatosSchema,
 });
 
@@ -47,38 +38,28 @@ const TecnologiaRepositorioSchema = z.object({
   nombre: z
     .string()
     .nonempty({ message: "El nombre de la tecnología es obligatorio." }),
-  versiones: z
-    .array(z.string())
-    .nonempty({ message: "Debe haber al menos una versión de tecnología." }),
-  logo: z
+  version: z
     .string()
-    .url({ message: "El logo de la tecnología debe ser una URL válida." }),
+    .nonempty({ message: "Debe seleccionar una tecnología y versión válida" }),
   tipo: z.enum(["F", "B", "I"], {
     errorMap: () => ({
       message:
-        "El tipo de tecnología debe ser F (Frontend), B (Backend) o I (Infraestructura).",
+        "El tipo de tecnología debe ser F (Frontend), B (Backend) o I (Integrado).",
     }),
   }),
+  nombreVersion: z.string()
 });
 
 // Esquema para RepositorioProyecto
 const RepositorioProyectoSchema = z.object({
-  id: z
-    .number()
-    .positive({
-      message: "El ID del repositorio debe ser un número positivo.",
-    }),
   url: z.string().url({ message: "La URL del repositorio debe ser válida." }),
   tipo: TipoRepositorioSchema,
-  versionDeTecnologia: z
-    .string()
-    .nonempty({ message: "La versión de la tecnología es obligatoria." }),
   variablesDeEntorno: z.string().optional(),
   tecnologia: TecnologiaRepositorioSchema,
 });
 
 // Esquema principal para Proyecto
-export const ProyectoSchema = z.object({
+export const EdicionProyectoSchema = z.object({
   id: z
     .number()
     .positive({ message: "El ID del proyecto debe ser un número positivo." }),
@@ -100,11 +81,52 @@ export const ProyectoSchema = z.object({
   estadoDeEjecucion: EstadoEjecucionProyectoSchema,
   estadoDeProyecto: EstadoProyectoSchema,
   baseDeDatos: BaseDeDatosProyectoSchema,
-  repositorios: z
-    .array(RepositorioProyectoSchema)
-    .nonempty({
-      message: "Debe haber al menos un repositorio en el proyecto.",
-    }),
-
-  numeroCapas: z.number({message: 'Ingrese una cantidad válida de capas'})
+  repositorios: z.array(RepositorioProyectoSchema),
+  numeroCapas: z.number({ message: "Ingrese una cantidad válida de capas" }),
 });
+
+export type EdicionProyectoSchema = z.infer<typeof EdicionProyectoSchema>;
+
+export const proyectoBaseEdicion: EdicionProyectoSchema = {
+  id: -1,
+  baseDeDatos: {
+    tipo: "N",
+  },
+  calificacion: 0,
+  descripcion: "",
+  estadoDeEjecucion: "N",
+  estadoDeProyecto: "I",
+  numeroCapas: 1,
+  repositorios: [
+    {
+      tipo: "I",
+      url: "",
+      tecnologia: {
+        nombre: "",
+        tipo: "I",
+        version: "",
+        nombreVersion: ""
+      },
+    },
+  ],
+  titulo: "",
+  url: "",
+  imagen: "",
+};
+
+export type RepositorioProyectoSchema = Zod.infer<typeof RepositorioProyectoSchema>;
+
+export const obtenerRepositorioBaseEdicion = (
+  tipo: TipoRepositorio
+): RepositorioProyectoSchema => {
+  return {
+    tecnologia: {
+      nombre: "",
+      tipo: tipo,
+      version: "",
+      nombreVersion: ""
+    },
+    tipo: tipo,
+    url: "",
+  };
+};

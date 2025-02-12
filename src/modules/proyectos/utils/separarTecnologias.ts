@@ -1,4 +1,4 @@
-import { TecnologiasPrueba } from "../test/data/tecnologias.prueba";
+import { TecnologiasPrueba } from "../test/datos/tecnologias.prueba";
 import { TecnologiaRepositorio } from "../types/repositorio.tecnologia";
 import { TipoTecnologia } from "../types/tecnologia.tipo";
 
@@ -26,7 +26,7 @@ export const obtenerOpcionesSelectTecnologia = () => {
     conjuntos.set(
       tec.tipo,
       tec.versiones.map((version) => {
-        return {texto: `${tec.nombre} ${version}`, value: `${tec.nombre}-${version}`};
+        return {texto: `${tec.nombre} ${version}`, value: `${tec.nombre} ${version}`};
       })
     );
   });

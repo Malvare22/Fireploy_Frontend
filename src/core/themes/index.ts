@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createTheme } from "@mui/material";
 
 declare module "@mui/material/styles" {
@@ -54,7 +55,6 @@ declare module "@mui/material/styles" {
 //     customBlue: true;
 //   }
 // }
-0;
 declare module "@mui/material/styles" {
   interface TypographyVariants {
     // Variantes no bold
@@ -333,7 +333,7 @@ export const theme = createTheme({
 // }
 
 theme.typography.h1 = {
-  fontSize: "3.8rem", // ~61px
+  fontSize: "2.8rem", // ~61px
   fontWeight: "normal",
   [theme.breakpoints.down("md")]: {
     fontSize: "2.6rem",
@@ -343,7 +343,7 @@ theme.typography.h1 = {
   },
 };
 theme.typography.h1Bold = {
-  fontSize: "3.8rem", // ~61px
+  fontSize: "2.8rem", // ~61px
   fontWeight: "bold",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("md")]: {
@@ -354,7 +354,7 @@ theme.typography.h1Bold = {
   },
 };
 theme.typography.h2 = {
-  fontSize: "3rem", // ~49px
+  fontSize: "2.25rem", // ~49px
   fontWeight: "normal",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("md")]: {
@@ -365,7 +365,7 @@ theme.typography.h2 = {
   },
 };
 theme.typography.h2Bold = {
-  fontSize: "3rem", // ~49px
+  fontSize: "2.25rem", // ~49px
   fontWeight: "bold",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("md")]: {
@@ -376,7 +376,7 @@ theme.typography.h2Bold = {
   },
 };
 theme.typography.h3 = {
-  fontSize: "2.4rem", // ~39px
+  fontSize: "1.75rem", // ~39px
   fontWeight: "normal",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("md")]: {
@@ -387,7 +387,7 @@ theme.typography.h3 = {
   },
 };
 theme.typography.h3Bold = {
-  fontSize: "2.4rem", // ~39px
+  fontSize: "1.75rem", // ~39px
   fontWeight: "bold",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("md")]: {
@@ -398,7 +398,7 @@ theme.typography.h3Bold = {
   },
 };
 theme.typography.h4 = {
-  fontSize: "1.7rem", // ~31px
+  fontSize: "1.5rem", // ~31px
   fontWeight: "normal",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("md")]: {
@@ -409,7 +409,7 @@ theme.typography.h4 = {
   },
 };
 theme.typography.h4Bold = {
-  fontSize: "1.7rem", // ~31px
+  fontSize: "1.5rem", // ~31px
   fontWeight: "bold",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("md")]: {
@@ -420,7 +420,7 @@ theme.typography.h4Bold = {
   },
 };
 theme.typography.h5 = {
-  fontSize: "1.4rem", // ~25px
+  fontSize: "1.25rem", // ~25px
   fontWeight: "normal",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
@@ -428,7 +428,7 @@ theme.typography.h5 = {
   },
 };
 theme.typography.h5Bold = {
-  fontSize: "1.4rem", // ~25px
+  fontSize: "1.25rem", // ~25px
   fontWeight: "bold",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
@@ -436,7 +436,7 @@ theme.typography.h5Bold = {
   },
 };
 theme.typography.title = {
-  fontSize: "1.25rem", // ~20px
+  fontSize: "1rem", // ~20px
   fontWeight: "normal",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
@@ -444,7 +444,7 @@ theme.typography.title = {
   },
 };
 theme.typography.titleBold = {
-  fontSize: "1.25rem", // ~20px
+  fontSize: "1rem", // ~20px
   fontWeight: 600,
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
@@ -452,7 +452,7 @@ theme.typography.titleBold = {
   },
 };
 theme.typography.title2 = {
-  fontSize: "1rem", // ~16px
+  fontSize: "0.75rem", // ~16px
   fontWeight: "normal",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
@@ -460,7 +460,7 @@ theme.typography.title2 = {
   },
 };
 theme.typography.title2Bold = {
-  fontSize: "1rem", // ~16px
+  fontSize: "0.75rem", // ~16px
   fontWeight: "bold",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
@@ -468,7 +468,7 @@ theme.typography.title2Bold = {
   },
 };
 theme.typography.body = {
-  fontSize: "1.10rem", // ~20px
+  fontSize: "0.50rem", // ~20px
   fontWeight: "normal",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
@@ -476,7 +476,7 @@ theme.typography.body = {
   },
 };
 theme.typography.bodyBold = {
-  fontSize: "1.10rem", // ~20px
+  fontSize: "0.50rem", // ~20px
   fontWeight: "bold",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
@@ -484,12 +484,12 @@ theme.typography.bodyBold = {
   },
 };
 theme.typography.caption = {
-  fontSize: "0.625rem", // ~10px
+  fontSize: "0.25rem", // ~10px
   fontWeight: "normal",
   fontFamily: "Open Sans",
 };
 theme.typography.captionBold = {
-  fontSize: "0.625rem", // ~10px
+  fontSize: "0.25rem", // ~10px
   fontWeight: "bold",
   fontFamily: "Open Sans",
 };

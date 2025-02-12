@@ -22,7 +22,7 @@ const Navbar: React.FC<{sesion: boolean}> = ({sesion}) => {
       <Box
         sx={{
           backgroundColor: "navbar.main",
-          height: { xl: 120, xs: "auto" },
+          height: { xs: "auto" },
           color: "white",
           display: "flex",
           flexDirection: {
@@ -104,7 +104,7 @@ const FirstContent: React.FC<FirstContentProps> = ({
         <Box>
           <DrawerCustom />
         </Box>
-        <Box component={"img"} src={Logo} sx={{ width: 100 }} />
+        <Box component={"img"} src={Logo} sx={{ width: 80 }} />
         <Box sx={{ visibility: { lg: "hidden" } }}>
           <IconButton onClick={handleButton}>
             <KeyboardArrowDownIcon

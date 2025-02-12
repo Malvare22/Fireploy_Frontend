@@ -1,6 +1,6 @@
 import { EstadoEjecucionProyecto } from "@modules/proyectos/types/proyecto.estadoEjecucion";
 import { obtenerColorEstado } from "@modules/proyectos/utils/obtenerColorEstado";
-import { obtenerEstado } from "@modules/proyectos/utils/obtenerEstado copy";
+import { obtenerEstado } from "@modules/proyectos/utils/obtenerEstado";
 import { obtenerIconoEstado } from "@modules/proyectos/utils/obtenerIconoEstado";
 import { Button } from "@mui/material";
 import React from "react";

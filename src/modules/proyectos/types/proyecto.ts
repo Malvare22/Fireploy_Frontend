@@ -1,3 +1,4 @@
+import { ArchivoLog } from "./archivoLog.tipo";
 import { BaseDeDatosProyecto } from "./proyecto.baseDeDatos";
 import { EstadoProyecto } from "./proyecto.estado";
 import { EstadoEjecucionProyecto } from "./proyecto.estadoEjecucion";
@@ -14,5 +15,10 @@ export type Proyecto = {
     estadoDeProyecto: EstadoProyecto,
     baseDeDatos: BaseDeDatosProyecto,
     repositorios: RepositorioProyecto[],
+
     numeroDeCapas: number;
+    archivosLogs: ArchivoLog[],
+    materia: number,
+    fechaUltimaModificacion: string;
+
 };
