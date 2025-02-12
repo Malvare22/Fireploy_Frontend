@@ -354,7 +354,7 @@ theme.typography.h1Bold = {
   },
 };
 theme.typography.h2 = {
-  fontSize: "2.25rem", // ~49px
+  fontSize: "2.2rem", // ~49px
   fontWeight: "normal",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("md")]: {
@@ -365,7 +365,7 @@ theme.typography.h2 = {
   },
 };
 theme.typography.h2Bold = {
-  fontSize: "2.25rem", // ~49px
+  fontSize: "2.2rem", // ~49px
   fontWeight: "bold",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("md")]: {
@@ -376,7 +376,7 @@ theme.typography.h2Bold = {
   },
 };
 theme.typography.h3 = {
-  fontSize: "1.75rem", // ~39px
+  fontSize: "1.8rem", // ~39px
   fontWeight: "normal",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("md")]: {
@@ -387,7 +387,7 @@ theme.typography.h3 = {
   },
 };
 theme.typography.h3Bold = {
-  fontSize: "1.75rem", // ~39px
+  fontSize: "1.8rem", // ~39px
   fontWeight: "bold",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("md")]: {
@@ -398,7 +398,7 @@ theme.typography.h3Bold = {
   },
 };
 theme.typography.h4 = {
-  fontSize: "1.5rem", // ~31px
+  fontSize: "1.4rem", // ~31px
   fontWeight: "normal",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("md")]: {
@@ -409,7 +409,7 @@ theme.typography.h4 = {
   },
 };
 theme.typography.h4Bold = {
-  fontSize: "1.5rem", // ~31px
+  fontSize: "1.4rem", // ~31px
   fontWeight: "bold",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("md")]: {
@@ -420,7 +420,7 @@ theme.typography.h4Bold = {
   },
 };
 theme.typography.h5 = {
-  fontSize: "1.25rem", // ~25px
+  fontSize: "1.3rem", // ~25px
   fontWeight: "normal",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
@@ -428,7 +428,7 @@ theme.typography.h5 = {
   },
 };
 theme.typography.h5Bold = {
-  fontSize: "1.25rem", // ~25px
+  fontSize: "1.3rem", // ~25px
   fontWeight: "bold",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
@@ -436,7 +436,7 @@ theme.typography.h5Bold = {
   },
 };
 theme.typography.title = {
-  fontSize: "1rem", // ~20px
+  fontSize: "1.1rem", // ~20px
   fontWeight: "normal",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
@@ -444,7 +444,7 @@ theme.typography.title = {
   },
 };
 theme.typography.titleBold = {
-  fontSize: "1rem", // ~20px
+  fontSize: "1.1rem", // ~20px
   fontWeight: 600,
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
@@ -452,7 +452,7 @@ theme.typography.titleBold = {
   },
 };
 theme.typography.title2 = {
-  fontSize: "0.75rem", // ~16px
+  fontSize: "1rem", // ~16px
   fontWeight: "normal",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
@@ -460,7 +460,7 @@ theme.typography.title2 = {
   },
 };
 theme.typography.title2Bold = {
-  fontSize: "0.75rem", // ~16px
+  fontSize: "1rem", // ~16px
   fontWeight: "bold",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
@@ -468,7 +468,7 @@ theme.typography.title2Bold = {
   },
 };
 theme.typography.body = {
-  fontSize: "0.50rem", // ~20px
+  fontSize: "0.9rem", // ~20px
   fontWeight: "normal",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
@@ -476,7 +476,7 @@ theme.typography.body = {
   },
 };
 theme.typography.bodyBold = {
-  fontSize: "0.50rem", // ~20px
+  fontSize: "0.9rem", // ~20px
   fontWeight: "bold",
   fontFamily: "Open Sans",
   [theme.breakpoints.down("sm")]: {
@@ -484,12 +484,12 @@ theme.typography.bodyBold = {
   },
 };
 theme.typography.caption = {
-  fontSize: "0.25rem", // ~10px
+  fontSize: "0.8rem", // ~10px
   fontWeight: "normal",
   fontFamily: "Open Sans",
 };
 theme.typography.captionBold = {
-  fontSize: "0.25rem", // ~10px
+  fontSize: "0.8rem", // ~10px
   fontWeight: "bold",
   fontFamily: "Open Sans",
 };

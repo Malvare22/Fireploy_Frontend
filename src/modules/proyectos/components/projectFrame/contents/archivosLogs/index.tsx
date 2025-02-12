@@ -25,7 +25,7 @@ function ArchivosLogs() {
         <Divider />
       </Box>
       <Box>
-        <Typography variant="title">{LabelLogs.parrafo}</Typography>
+        <Typography variant="body">{LabelLogs.parrafo}</Typography>
       </Box>
       <Container />
     </Box>

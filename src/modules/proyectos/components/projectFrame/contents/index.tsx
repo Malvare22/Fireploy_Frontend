@@ -49,8 +49,8 @@ const Contents: React.FC<ContentsProps> = ({ currentOption, proyecto }) => {
       case 0:
         return <Repositorios />;
 
-      // case 1:
-      //   return <ArchivosLogs />;
+      case 1:
+        return <ArchivosLogs />;
 
       // case 2:
       //   return <Database />;
