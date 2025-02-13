@@ -28,5 +28,6 @@ export const adaptarProyectoAEdicion = (
     titulo: proyecto.titulo,
     url: proyecto.url,
     imagen: proyecto.imagen,
+    materiaInformacion: proyecto.materiaInformacion
   };
 };

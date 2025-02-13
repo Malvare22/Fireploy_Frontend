@@ -1,7 +1,7 @@
 import CustomSelect from "@modules/general/components/customSelect";
-import { tecnologiasDummy } from "@modules/general/utils/data/tecnologias";
 import { ProyectoContext } from "@modules/proyectos/context/proyectoContext";
 import { LabelDatabase } from "@modules/proyectos/enum/labelDatabase";
+import { obtenerTipoBaseDatos } from "@modules/proyectos/utils/baseDeDatos.map";
 import { Box, Button, Divider, MenuItem, Typography } from "@mui/material";
 import { useContext } from "react";
 
@@ -42,17 +42,14 @@ function Database() {
           <Box sx={{ width: "80%" }}>
             <CustomSelect
               variantDelta="secondary"
-              value={watch("baseDeDatos.id")}
-              {...register("baseDeDatos.id")}
+              value={watch("baseDeDatos.tipo")}
+              {...register("baseDeDatos.tipo")}
             >
-              {tecnologiasDummy.map(
-                (baseDeDatos) =>
-                  baseDeDatos.type == "database" && (
-                    <MenuItem key={baseDeDatos.id} value={baseDeDatos.id}>
-                      {baseDeDatos.text}
-                    </MenuItem>
-                  )
-              )}
+              {Array.from(obtenerTipoBaseDatos).map(([clave, valor]) => (
+                <MenuItem key={clave} value={clave}>
+                  {valor}
+                </MenuItem>
+              ))}
             </CustomSelect>
           </Box>
         </Box>

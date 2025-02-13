@@ -4,6 +4,12 @@ import { EstadoProyecto } from "./proyecto.estado";
 import { EstadoEjecucionProyecto } from "./proyecto.estadoEjecucion";
 import { RepositorioProyecto } from "./proyecto.repositorio";
 
+type MateriaInformacion = {
+    materia: number,
+    curso: string,
+    seccion: string
+};
+
 export type Proyecto = {
     id: number,
     titulo: string,
@@ -18,7 +24,7 @@ export type Proyecto = {
 
     numeroDeCapas: number;
     archivosLogs: ArchivoLog[],
-    materia: number,
+    materiaInformacion: MateriaInformacion,
     fechaUltimaModificacion: string;
 
 };

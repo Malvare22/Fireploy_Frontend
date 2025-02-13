@@ -19,7 +19,7 @@ export const proyectosPrueba: Proyecto[] = [
     repositorios: [RepositoriosPrueba[1], RepositoriosPrueba[0]],
     numeroDeCapas: 2,
     archivosLogs: archivosLogsPrueba,
-    materia: 0,
+    materiaInformacion: { materia: 1, curso: "A", seccion: "S01" },
     fechaUltimaModificacion: "2002/04/22",
   },
   {
@@ -37,7 +37,7 @@ export const proyectosPrueba: Proyecto[] = [
     repositorios: [RepositoriosPrueba[0]],
     numeroDeCapas: 2,
     archivosLogs: archivosLogsPrueba,
-    materia: 1,
+    materiaInformacion: { materia: 0, curso: "A", seccion: "S01" },
     fechaUltimaModificacion: "2002/04/22",
   },
   {
@@ -55,7 +55,7 @@ export const proyectosPrueba: Proyecto[] = [
     repositorios: [RepositoriosPrueba[0]],
     numeroDeCapas: 2,
     archivosLogs: archivosLogsPrueba,
-    materia: 2,
+    materiaInformacion: { materia: 0, curso: "A", seccion: "S01" },
     fechaUltimaModificacion: "2002/04/22",
   },
   {
@@ -73,7 +73,7 @@ export const proyectosPrueba: Proyecto[] = [
     repositorios: [RepositoriosPrueba[0]],
     numeroDeCapas: 2,
     archivosLogs: archivosLogsPrueba,
-    materia: 0,
+    materiaInformacion: { materia: 0, curso: "A", seccion: "S01" },
     fechaUltimaModificacion: "2002/04/22",
   },
   {
@@ -90,7 +90,7 @@ export const proyectosPrueba: Proyecto[] = [
     repositorios: [RepositoriosPrueba[0]],
     numeroDeCapas: 2,
     archivosLogs: archivosLogsPrueba,
-    materia: 0,
+    materiaInformacion: { materia: 0, curso: "A", seccion: "S01" },
     fechaUltimaModificacion: "2002/04/22",
   },
 ];

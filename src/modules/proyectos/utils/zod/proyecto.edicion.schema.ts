@@ -47,7 +47,7 @@ const TecnologiaRepositorioSchema = z.object({
         "El tipo de tecnología debe ser F (Frontend), B (Backend) o I (Integrado).",
     }),
   }),
-  nombreVersion: z.string()
+  nombreVersion: z.string(),
 });
 
 // Esquema para RepositorioProyecto
@@ -83,6 +83,11 @@ export const EdicionProyectoSchema = z.object({
   baseDeDatos: BaseDeDatosProyectoSchema,
   repositorios: z.array(RepositorioProyectoSchema),
   numeroCapas: z.number({ message: "Ingrese una cantidad válida de capas" }),
+  materiaInformacion: z.object({
+    materia: z.number(),
+    curso: z.string(),
+    seccion: z.string(),
+  }),
 });
 
 export type EdicionProyectoSchema = z.infer<typeof EdicionProyectoSchema>;
@@ -105,16 +110,23 @@ export const proyectoBaseEdicion: EdicionProyectoSchema = {
         nombre: "",
         tipo: "I",
         version: "",
-        nombreVersion: ""
+        nombreVersion: "",
       },
     },
   ],
   titulo: "",
   url: "",
   imagen: "",
+  materiaInformacion: {
+    materia: 0,
+    curso: "",
+    seccion: "",
+  },
 };
 
-export type RepositorioProyectoSchema = Zod.infer<typeof RepositorioProyectoSchema>;
+export type RepositorioProyectoSchema = Zod.infer<
+  typeof RepositorioProyectoSchema
+>;
 
 export const obtenerRepositorioBaseEdicion = (
   tipo: TipoRepositorio
@@ -124,7 +136,7 @@ export const obtenerRepositorioBaseEdicion = (
       nombre: "",
       tipo: tipo,
       version: "",
-      nombreVersion: ""
+      nombreVersion: "",
     },
     tipo: tipo,
     url: "",

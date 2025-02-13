@@ -52,14 +52,14 @@ const Contents: React.FC<ContentsProps> = ({ currentOption, proyecto }) => {
       case 1:
         return <ArchivosLogs />;
 
-      // case 2:
-      //   return <Database />;
+      case 2:
+        return <Database />;
 
       // // case 3:
       // //   return <Collaborators />;
 
-      // case 4:
-      //   return <Adicionales />;
+      case 4:
+        return <Adicionales />;
 
       default:
         return <Box />;

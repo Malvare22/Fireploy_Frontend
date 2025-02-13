@@ -1,7 +1,7 @@
 import CustomInput from "@modules/general/components/customInput";
 import CustomSelect from "@modules/general/components/customSelect";
 import CustomTextArea from "@modules/general/components/customTextArea";
-import { materiasDummy } from "@modules/general/utils/data/materias";
+import { materiasPrueba } from "@modules/materias/utils/data/materias.prueba";
 import { ProyectoContext } from "@modules/proyectos/context/proyectoContext";
 import { Box, Divider, MenuItem, SxProps, Typography } from "@mui/material";
 import { useContext, useMemo } from "react";
@@ -20,14 +20,12 @@ function Adicionales() {
 
 const columnSx = {
   display: "flex",
-  flexDirection: { xs: "column", sm: "row" },
+  flexDirection: { xs: "column", xl: "row" },
   gap: 2,
-  alignContent: { sm: "center" },
+  alignContent: { md: "center" },
 } as SxProps;
 
 const labelSx = {
-  minWidth: 160,
-  maxWidth: 160,
   display: "flex",
   alignItems: "center",
 } as SxProps;
@@ -40,28 +38,31 @@ const Content = () => {
   const { proyecto, register, errors, watch } = context;
 
   const allMaterias = () => {
-    return materiasDummy;
+    return materiasPrueba;
   };
 
-  const currentMateria = watch("materia");
+  const currentMateria = watch("materiaInformacion.materia");
 
-  const getMateria = materiasDummy.find(
-    (materia) => materia.id == watch("materia")
+  const getMateria = allMaterias().find(
+    (materia) => materia.id == watch("materiaInformacion.materia")
   );
 
   const getGrupos = useMemo(() => {
     if (getMateria != undefined) {
-      return getMateria.grupos;
+      return getMateria.cursos;
     }
 
     return [];
   }, [currentMateria]);
 
-  const currentGrupo = watch("grupo");
+  const currentGrupo = watch("materiaInformacion.curso");
 
   const getSecciones = useMemo(() => {
+    if (getGrupos == undefined) {
+      return [];
+    }
     return getGrupos?.find((grupo) => grupo.id == currentGrupo)?.secciones;
-  }, [currentGrupo]);
+  }, [currentMateria, currentGrupo]);
 
   if (!proyecto) return <></>;
 
@@ -87,7 +88,7 @@ const Content = () => {
         />
       </Box>
 
-      <Box sx={columnSx}>
+      <Box sx={{display:'flex', flexDirection: 'column', gap: 2}}>
         <Box sx={labelSx}>
           <Typography variant="titleBold">Descripción</Typography>
         </Box>
@@ -104,9 +105,12 @@ const Content = () => {
           </Box>
           <CustomSelect
             variantDelta="secondary"
-            {...register("materia")}
-            errorMessage={errors.materia?.message}
-            value={watch("materia")}
+            {...register("materiaInformacion.materia")}
+            errorMessage={errors.materiaInformacion?.materia?.message}
+            value={watch("materiaInformacion.materia")}
+            sx={{
+              width: {xl: 200}
+            }}
           >
             {allMaterias().map((materia, key) => (
               <MenuItem value={materia.id} key={key}>
@@ -122,9 +126,12 @@ const Content = () => {
           </Box>
           <CustomSelect
             variantDelta="secondary"
-            {...register("grupo")}
-            errorMessage={errors.grupo?.message}
-            value={watch("grupo")}
+            {...register("materiaInformacion.curso")}
+            errorMessage={errors.materiaInformacion?.curso?.message}
+            value={watch("materiaInformacion.curso")}
+            sx={{
+              width: {xl: 70}
+            }}
           >
             {getGrupos &&
               getGrupos.map((grupo, key) => (
@@ -141,9 +148,12 @@ const Content = () => {
           </Box>
           <CustomSelect
             variantDelta="secondary"
-            {...register("seccion")}
-            errorMessage={errors.seccion?.message}
-            value={watch("seccion")}
+            {...register("materiaInformacion.seccion")}
+            errorMessage={errors.materiaInformacion?.seccion?.message}
+            value={watch("materiaInformacion.seccion")}
+            sx={{
+              width: {xl: 300}
+            }}
           >
             {getSecciones &&
               getSecciones.map((seccion, key) => (

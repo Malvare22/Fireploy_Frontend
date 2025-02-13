@@ -15,7 +15,7 @@ export const materiasPrueba: Materia[] = [
         grupo: "A",
         estudiantes: [usuariosPrueba[0], usuariosPrueba[1]],
         docente: usuariosPrueba[5],
-        secciones: [seccionesCursoPrueba[0]],
+        secciones: [seccionesCursoPrueba[0], seccionesCursoPrueba[1]],
       },
       {
         id: "B",
