@@ -53,16 +53,19 @@ function Database() {
             </CustomSelect>
           </Box>
         </Box>
-        <Box>
-          <Typography
-            variant="title2Bold"
-            sx={{ display: "inline", marginRight: 2 }}
-          >
-            {LabelDatabase.gestionar}
-          </Typography>
-          <Button variant="contained" color="warning">
-            Gestionar
-          </Button>
+        <Box sx={{
+          display: 'flex', flexDirection: {xs: 'column', sm: 'row'}, gap: 2, alignItems: {sm: 'center'}
+        }}>
+          <Box>
+            <Typography variant="title2Bold">
+              {LabelDatabase.gestionar}
+            </Typography>
+          </Box>
+          <Box>
+            <Button variant="contained" color="warning">
+              Gestionar
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Box>

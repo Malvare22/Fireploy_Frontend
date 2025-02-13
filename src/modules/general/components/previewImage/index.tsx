@@ -6,18 +6,22 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 interface PreviewImageProps {
   image: string;
   setImage: React.Dispatch<string>;
+  type?: "proyecto" | "usuario";
 }
 
 export const usePreviewImage = (initialValue?: string) => {
-  const [image, setImage] = useState<string>(initialValue ? initialValue : '');
+  const [image, setImage] = useState<string>(initialValue ? initialValue : "");
   return {
     image,
     setImage,
   };
 };
 
-const PreviewImage: React.FC<PreviewImageProps> = ({ image, setImage }) => {
-
+const PreviewImage: React.FC<PreviewImageProps> = ({
+  image,
+  setImage,
+  type = "usuario",
+}) => {
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]; // Obtenemos el primer archivo seleccionado
 
@@ -30,12 +34,12 @@ const PreviewImage: React.FC<PreviewImageProps> = ({ image, setImage }) => {
       reader.readAsDataURL(file); // Leemos el archivo como URL de datos
     } else {
       alert("Por favor, selecciona un archivo de imagen.");
-      setImage('');
+      setImage("");
     }
   };
 
   const handleRemoveImage = () => {
-    setImage(''); // Limpiar la imagen
+    setImage(""); // Limpiar la imagen
     if (ref.current) {
       ref.current.value = ""; // Limpiar la selección del archivo en el input
     }
@@ -48,7 +52,12 @@ const PreviewImage: React.FC<PreviewImageProps> = ({ image, setImage }) => {
   const ref = useRef<null | HTMLInputElement>(null);
 
   return (
-    <Box sx={{ width: "100%", border: "solid 1px rgba(0,0,0, .2)", padding: {md: 2} }}>
+    <Box
+      sx={{
+        width: "100%",
+        // border: "solid 1px rgba(0,0,0, .2)",
+      }}
+    >
       <input
         ref={ref}
         type="file"
@@ -58,8 +67,25 @@ const PreviewImage: React.FC<PreviewImageProps> = ({ image, setImage }) => {
       />
 
       {image ? (
-        <Box sx={{ display: "flex", alignItems: "center", gap: 3, justifyContent: {xs: 'center', md: 'start'}, paddingY: {xs: 2, md: 0} }}>
-          <img src={image} alt="Vista previa" height={96} width={96} />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection:
+              type == "proyecto" ? { xs: "column", md: "row" } : "row",
+            alignItems: "center",
+            gap: 3,
+            justifyContent: { xs: "center", md: "start" },
+          }}
+        >
+          <Box
+          component={'img'}
+            src={image}
+            alt="Vista previa"
+            sx={{
+              width: type != 'proyecto' ?  96 : {xs: 178, md: 256},
+              height: type != 'proyecto' ?  96 : {xs: 112, md: 156},
+            }}
+          />
           <Tooltip title="Borrar Imagen">
             <IconButton onClick={handleRemoveImage}>
               <DeleteIcon sx={{ fontSize: 48 }} />

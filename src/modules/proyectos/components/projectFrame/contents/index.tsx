@@ -80,14 +80,15 @@ const Contents: React.FC<ContentsProps> = ({ currentOption, proyecto }) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box
           sx={{
-            padding: { sm: 4, xs: 2 },
+            // padding: { sm: 4, xs: 2 },
             display: "flex",
             flexDirection: "column",
             gap: 3,
+            flex: 1
           }}
         >
           {/* {JSON.stringify(watch(), null, 2)} */}
-          {Content}
+          <Box flex={1} padding={2}>{Content}</Box>
           {comparator() && (
             <Box sx={{ display: "flex", justifyContent: "end" }}>
               <Button variant="contained" color="warning" type="submit">

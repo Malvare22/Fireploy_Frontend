@@ -103,7 +103,7 @@ const Content = () => {
         <Box sx={labelSx}>
           <Typography variant="titleBold">Imagen</Typography>
         </Box>
-        <PreviewImage image={watch("imagen") || ""} setImage={setImage} />
+        <PreviewImage image={watch("imagen") || ""} setImage={setImage} type="proyecto"/>
       </Box>
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>

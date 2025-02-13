@@ -21,7 +21,6 @@ function ArchivosLogs() {
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
       <Box>
         <Typography variant="h3Bold">{LabelLogs.titulo}</Typography>
-
         <Divider />
       </Box>
       <Box>
@@ -52,7 +51,6 @@ const Container = () => {
   return (
     <Box
       sx={{
-        width: "90%",
         border: "1px rgb(0,0,0,.2) solid",
         minHeight: 400,
         backgroundColor: "backgroundX.panel",

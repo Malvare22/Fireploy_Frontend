@@ -3,7 +3,7 @@ import IconMenu from "@modules/proyectos/components/projectFrame/menu";
 import { proyectosPrueba } from "@modules/proyectos/test/datos/proyectos.prueba";
 import { adaptarProyectoAEdicion } from "@modules/proyectos/utils/zod/adaptar.proyecto.edicion";
 import { EdicionProyectoSchema } from "@modules/proyectos/utils/zod/proyecto.edicion.schema";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -11,6 +11,15 @@ function VerProyecto() {
   const [currentOption, setCurrentOption] = useState(0);
   const [open, setOpen] = useState(true);
   const [proyecto, setProyecto] = useState<undefined | EdicionProyectoSchema>(undefined);
+
+  const theme = useTheme();
+  const isBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
+
+  useEffect(
+    () => {
+      setOpen(true);
+    }, [isBreakpoint]
+  );
 
   const { id } = useParams();
 
@@ -31,7 +40,6 @@ function VerProyecto() {
           width: "100%",
           display: "flex",
           backgroundColor: "white",
-          border: "1px solid red",
         }}
       >
         {/* <Box sx={{ textAlign: "center", margin: 2 }}>
@@ -53,7 +61,7 @@ function VerProyecto() {
             />
             {!open && (
               <Box
-                sx={{ display: { sm: "none", width: "auto" }, width: "80%" }}
+                sx={{ display: { sm: "none" },  flex: 1}}
               >
                 <Contents
                   currentOption={currentOption}
@@ -62,7 +70,7 @@ function VerProyecto() {
                 />
               </Box>
             )}
-            <Box sx={{ display: { sm: "block", xs: "none" }, width: "70%" }}>
+            <Box sx={{ display: { sm: "block", xs: "none" }, flex: 1 }}>
               <Contents
                 currentOption={currentOption}
                 setCurrentOption={setCurrentOption}

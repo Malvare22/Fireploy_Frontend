@@ -56,14 +56,13 @@ const  MenuOptions: React.FC<MenuProps> = ({currentOption, setCurrentOption, ope
   return (
     <Paper
       sx={{
-        width: open ? {xs: '100%', sm: 300} : '20%',
-        height: "100%",
+        width: open ? {xs: '100%', sm: 300} : 64,
         overflow: "hidden",
         transition: "width 0.3s ease-in-out",
       }}
     >
       <IconButton
-        sx={{ padding: 2, display: { sm: "none" } }}
+        sx={{ padding: 2, display: { md: "none" } }}
         onClick={() => setOpen(!open)}
       >
         <MenuIcon sx={{ fontSize: 32 }} />
