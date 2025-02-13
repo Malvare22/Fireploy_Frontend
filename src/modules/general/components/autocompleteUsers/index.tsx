@@ -3,10 +3,12 @@ import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
 import CellUser from "../../../usuarios/components/VistaPreviaUsuario";
 import { FC } from "react";
-import { TypeUsuario, usersDummy } from "@modules/usuarios/test/data/usuarios.prueba";
+import { usuariosPrueba } from "@modules/usuarios/test/data/usuarios.prueba";
+import { UsuarioPlano } from "@modules/usuarios/types/usuario.plano";
+import { Box } from "@mui/material";
 
 interface Props {
-  onChange?: (value: TypeUsuario) => void;
+  onChange?: (value: UsuarioPlano) => void;
 }
 
 const AutocompleteUsers: FC<Props> = ({onChange}) => {
@@ -14,10 +16,10 @@ const AutocompleteUsers: FC<Props> = ({onChange}) => {
     <Stack spacing={2} sx={{ width: "100%" }}>
       <Autocomplete
         freeSolo
-        options={usersDummy}
+        options={usuariosPrueba}
         renderOption={(props, option) => (
           <li {...props}>
-            <CellUser usuario={option} type="autocomplete" />
+            <Box sx={{flex: 1}}><CellUser usuario={option} type="autocomplete" /></Box>
           </li>
         )}
         getOptionLabel={(option) =>
@@ -25,7 +27,7 @@ const AutocompleteUsers: FC<Props> = ({onChange}) => {
         }
         renderInput={(params) => <TextField {...params} />}
         onChange={(_e, value) => {
-          if(onChange) onChange(value as TypeUsuario);
+          if(onChange) onChange(value as UsuarioPlano);
         }}
       />
     </Stack>

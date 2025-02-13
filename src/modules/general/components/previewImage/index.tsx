@@ -8,8 +8,8 @@ interface PreviewImageProps {
   setImage: React.Dispatch<string>;
 }
 
-export const usePreviewImage = () => {
-  const [image, setImage] = useState<string>('');
+export const usePreviewImage = (initialValue?: string) => {
+  const [image, setImage] = useState<string>(initialValue ? initialValue : '');
   return {
     image,
     setImage,

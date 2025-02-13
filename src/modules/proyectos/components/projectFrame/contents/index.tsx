@@ -6,10 +6,9 @@ import Adicionales from "./adicionales";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Repositorios from "./repositorios";
-import { Proyecto } from "@modules/proyectos/types/proyecto";
 import ArchivosLogs from "./archivosLogs";
 import { EdicionProyectoSchema } from "@modules/proyectos/utils/zod/proyecto.edicion.schema";
-import { adaptarProyectoAEdicion } from "@modules/proyectos/utils/zod/adaptar.proyecto.edicion";
+import Colaboradores from "./colaboradores";
 
 interface ContentsProps {
   currentOption: number;
@@ -38,7 +37,9 @@ const Contents: React.FC<ContentsProps> = ({ currentOption, proyecto }) => {
     alert("Formulario enviado con éxito");
   };
 
-  const handleCancelar = () => reset(proyecto);
+  const handleCancelar = () => {
+    reset(proyecto);
+  };
 
   const comparator = () => {
     return isDirty;
@@ -55,8 +56,8 @@ const Contents: React.FC<ContentsProps> = ({ currentOption, proyecto }) => {
       case 2:
         return <Database />;
 
-      // // case 3:
-      // //   return <Collaborators />;
+      case 3:
+        return <Colaboradores />;
 
       case 4:
         return <Adicionales />;

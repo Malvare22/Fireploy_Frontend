@@ -61,8 +61,7 @@ const RepositorioProyectoSchema = z.object({
 // Esquema principal para Proyecto
 export const EdicionProyectoSchema = z.object({
   id: z
-    .number()
-    .positive({ message: "El ID del proyecto debe ser un número positivo." }),
+    .number(),
   titulo: z
     .string()
     .min(1, { message: "El título del proyecto es obligatorio." }),

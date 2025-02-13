@@ -17,6 +17,8 @@ import CloudCircleIcon from "@mui/icons-material/CloudCircle";
 import ExploreIcon from "@mui/icons-material/Explore";
 import { useNavigate } from "react-router-dom";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { rutasProyectos } from "@modules/proyectos/router";
+import { rutasMaterias } from "@modules/materias/router/router";
 
 type PairIcons = {
   icon: React.ReactNode;
@@ -45,19 +47,19 @@ const users: PairIcons = {
 const subjects: PairIcons = {
   icon: <NoteAltIcon />,
   label: "Materias y Cursos",
-  url: "subjects",
+  url: rutasMaterias.listar,
 };
 
 const projects: PairIcons = {
   icon: <CloudCircleIcon />,
   label: "Proyectos",
-  url: "projects",
+  url: rutasProyectos.listar,
 };
 
 const safari: PairIcons = {
   icon: <ExploreIcon />,
   label: "Explorar Portafolios",
-  url: "portafolios",
+  url: rutasUsuarios.buscarPortafolio,
 };
 
 const admin: PairIcons[] = [

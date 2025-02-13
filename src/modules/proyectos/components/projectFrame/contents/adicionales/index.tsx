@@ -1,12 +1,15 @@
 import CustomInput from "@modules/general/components/customInput";
 import CustomSelect from "@modules/general/components/customSelect";
 import CustomTextArea from "@modules/general/components/customTextArea";
+import PreviewImage, {
+  usePreviewImage,
+} from "@modules/general/components/previewImage";
 import { materiasPrueba } from "@modules/materias/utils/data/materias.prueba";
 import { ProyectoContext } from "@modules/proyectos/context/proyectoContext";
 import { Box, Divider, MenuItem, SxProps, Typography } from "@mui/material";
-import { useContext, useMemo } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 
-function Adicionales() {
+const Adicionales = () => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
       <Box>
@@ -16,7 +19,7 @@ function Adicionales() {
       <Content />
     </Box>
   );
-}
+};
 
 const columnSx = {
   display: "flex",
@@ -35,7 +38,15 @@ const Content = () => {
 
   if (!context) return <></>;
 
-  const { proyecto, register, errors, watch } = context;
+  const { proyecto, register, errors, watch, setValue } = context;
+
+  const { image, setImage } = usePreviewImage(watch("imagen"));
+
+  useEffect(() => {
+    setValue("imagen", image, { shouldDirty: true });
+  }, [image]);
+
+  const handleImage = () => {};
 
   const allMaterias = () => {
     return materiasPrueba;
@@ -88,7 +99,14 @@ const Content = () => {
         />
       </Box>
 
-      <Box sx={{display:'flex', flexDirection: 'column', gap: 2}}>
+      <Box sx={columnSx}>
+        <Box sx={labelSx}>
+          <Typography variant="titleBold">Imagen</Typography>
+        </Box>
+        <PreviewImage image={watch("imagen") || ""} setImage={setImage} />
+      </Box>
+
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <Box sx={labelSx}>
           <Typography variant="titleBold">Descripción</Typography>
         </Box>
@@ -109,7 +127,7 @@ const Content = () => {
             errorMessage={errors.materiaInformacion?.materia?.message}
             value={watch("materiaInformacion.materia")}
             sx={{
-              width: {xl: 200}
+              width: { xl: 200 },
             }}
           >
             {allMaterias().map((materia, key) => (
@@ -130,7 +148,7 @@ const Content = () => {
             errorMessage={errors.materiaInformacion?.curso?.message}
             value={watch("materiaInformacion.curso")}
             sx={{
-              width: {xl: 70}
+              width: { xl: 70 },
             }}
           >
             {getGrupos &&
@@ -152,7 +170,7 @@ const Content = () => {
             errorMessage={errors.materiaInformacion?.seccion?.message}
             value={watch("materiaInformacion.seccion")}
             sx={{
-              width: {xl: 300}
+              width: { xl: 300 },
             }}
           >
             {getSecciones &&

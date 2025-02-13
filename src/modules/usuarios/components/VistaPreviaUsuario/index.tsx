@@ -3,6 +3,7 @@ import {
   Card,
   CardActionArea,
   IconButton,
+  Link,
   Typography,
 } from "@mui/material";
 import { FC } from "react";
@@ -12,10 +13,11 @@ import { palette } from "@core/themes";
 interface Props {
   usuario: (typeof usuariosPrueba)[number];
   type: "autocomplete" | "list" | "preview" | "portafolio";
-  url?: string
+  url?: string,
+  deleteAction?: () => void
 }
 
-const VistaPreviaUsuario: FC<Props> = ({ usuario, type, url }) => {
+const VistaPreviaUsuario: FC<Props> = ({ usuario, type, url, deleteAction }) => {
 
   const handleUrl = () => {
     if(url){
@@ -38,18 +40,23 @@ const VistaPreviaUsuario: FC<Props> = ({ usuario, type, url }) => {
         sx={{
           display: "flex",
           alignItems: "center",
+          justifyContent: type == 'list' ? 'space-between' : 'start',
+          flex: 1
         }}
       >
         <Box>
-          <Typography
+          <Link component={'div'} onClick={handleUrl}><Typography
             variant={type != "autocomplete" ? "titleBold" : "body"}
             color={type != "autocomplete" ? "info.main" : ""}
-          >{`${usuario.nombres} ${usuario.apellidos}`}</Typography>
+            sx={{
+              cursor: 'pointer'
+            }}
+          >{`${usuario.nombres} ${usuario.apellidos}`}</Typography></Link>
         </Box>
         {type == "list" && (
           <Box>
-            <IconButton>
-              <DeleteOutlineIcon sx={{ fontSize: 32 }} />
+            <IconButton onClick={deleteAction}>
+              <DeleteOutlineIcon sx={{ fontSize: 32 }}/>
             </IconButton>
           </Box>
         )}
