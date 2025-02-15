@@ -1,6 +1,7 @@
 import { Box, ListItemButton, Typography } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useNavigate } from "react-router-dom";
+import { LabelNavbar } from "@modules/general/enums/labelNavbar";
 
 // Componente de Notificaciones
 const Notificacions = () => {
@@ -11,7 +12,6 @@ const Notificacions = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        marginRight: { lg: 4 },
         cursor: "pointer",
         transition: "color 0.3s ease",
         // "&:hover": {
@@ -24,8 +24,8 @@ const Notificacions = () => {
           navigate("notifications");
         }}
       >
-        <Typography variant="h5Bold" sx={{ marginRight: 1 }}>
-          Notificaciones
+        <Typography variant="titleBold" sx={{ marginRight: 1 }}>
+          {LabelNavbar.notificaciones}
         </Typography>
         <NotificationsIcon sx={{ fontSize: 24 }} />
       </ListItemButton>

@@ -7,7 +7,7 @@ export const usuariosPrueba: UsuarioPlano[] = [
     id: 1,
     fechaDeNacimiento: "2002-04-22",
     estado: "A",
-    tipo: "E",
+    tipo: "A",
     nombres: "Rodrigo",
     apellidos: "Malaver",
     contrasenia: "123",

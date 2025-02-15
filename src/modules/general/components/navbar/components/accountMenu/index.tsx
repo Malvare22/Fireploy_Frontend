@@ -14,6 +14,7 @@ import { AccountContext } from "@modules/context/accountContext";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { rutasGeneral } from "@modules/general/router/router";
+import { LabelNavbar } from "@modules/general/enums/labelNavbar";
 
 export const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -56,12 +57,12 @@ export const AccountMenu = () => {
 
   return (
     <Fragment>
-      <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-        <Tooltip title="Account settings">
-          <ListItemButton onClick={handleClick}>
-            <ProfilePreview nombre={userInfo.nombres} foto={userInfo.foto} />
-          </ListItemButton>
-        </Tooltip>
+      <Box sx={{ display: "flex", alignItems: "end", textAlign: "center" }}>
+          <Tooltip title="Account settings" sx={{border: '1px solid white', borderRadius: 4}}>
+            <ListItemButton onClick={handleClick}>
+              <ProfilePreview nombre={userInfo.nombres} foto={userInfo.foto} />
+            </ListItemButton>
+          </Tooltip>
       </Box>
       <Menu
         anchorEl={anchorEl}
@@ -100,15 +101,19 @@ export const AccountMenu = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={() => navigate(rutasUsuarios.perfil)} sx={{ width: 240 }}>
-          <Avatar /> Perfil
+        <MenuItem
+          onClick={() => navigate(rutasUsuarios.perfil)}
+          sx={{ width: 200 }}
+        >
+          <Avatar />
+          <Typography variant="title2">{LabelNavbar.perfil}</Typography>
         </MenuItem>
         <Divider />
-        <MenuItem onClick={cerrarSesion} sx={{ width: 240 }}>
+        <MenuItem onClick={cerrarSesion}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
-          Logout
+          <Typography variant="title2">{LabelNavbar.cerrarSesion}</Typography>
         </MenuItem>
       </Menu>
     </Fragment>
@@ -129,28 +134,23 @@ const ProfilePreview: React.FC<ProfilePreviewProps> = ({ nombre, foto }) => {
         alignItems: "center",
         justifyContent: "center",
         color: "white",
-        marginTop: {
-          xs: -3,
-          lg: 0,
-        },
       }}
     >
       <Box
         sx={{
-          width: { sm: 300, xs: 200 },
+          width: 150,
           textAlign: "center",
           wordBreak: "break-word",
-          border: "1px solid black",
         }}
       >
-        <Typography variant="titleBold" sx={{ marginRight: 1 }}>
+        <Typography variant="bodyBold" sx={{ marginRight: 1 }}>
           {readBreakLine(breakLine(nombre, 2))}
         </Typography>
       </Box>
       <Box
         sx={{
-          width: 52,
-          height: 52,
+          width: 32,
+          height: 32,
           borderRadius: 100,
           marginLeft: 1,
         }}

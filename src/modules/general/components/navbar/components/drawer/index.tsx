@@ -82,7 +82,7 @@ export default function DrawerCustom() {
 
   const DrawerList = (
     <Box
-      sx={{ width: { xs: 240, md: 360 } }}
+      sx={{ width: { xs: 240, md: 280 } }}
       role="presentation"
       onClick={toggleDrawer(false)}
     >
@@ -100,7 +100,7 @@ export default function DrawerCustom() {
                 {option.icon}
               </ListItemIcon>
               <ListItemText
-                primary={<Typography variant="h6">{option.label}</Typography>}
+                primary={<Typography variant="title2">{option.label}</Typography>}
               />
             </ListItemButton>
           </ListItem>
