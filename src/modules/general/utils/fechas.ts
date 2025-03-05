@@ -14,6 +14,6 @@ export const obtenerFechaActual = () => {
 };
 
 export const adaptarFechaBackend = (fecha: string) => {
-    let _fecha = fecha.split('-');
-    return `${}/${}/${}`
+    const _fecha = fecha.split('-');
+    return `${_fecha[0]}-${_fecha[1]}-${_fecha[2].slice(0,2)}`
 };

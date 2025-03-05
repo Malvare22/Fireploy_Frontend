@@ -191,6 +191,7 @@ const Cuerpo: React.FC<{
             type="date"
             errorMessage={errors.fechaDeNacimiento?.message}
             inputProps={{ max: obtenerFechaActual() }}
+            {...register("fechaDeNacimiento")}
           />
         </Row>
 
@@ -257,7 +258,7 @@ const Cuerpo: React.FC<{
         </Row>
 
         {/* Contraseña */}
-        <Row>
+        {/* <Row>
           <Label>{LabelUsuario.contrasenia}</Label>
           <CustomInput
             variant="secondary"
@@ -265,7 +266,7 @@ const Cuerpo: React.FC<{
             type="password"
             errorMessage={errors.contrasenia?.message} // Mensaje de error
           />
-        </Row>
+        </Row> */}
 
         {/* Botones */}
         <BotonesBasicos cancelar={handleClose} />

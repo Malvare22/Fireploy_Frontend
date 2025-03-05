@@ -25,22 +25,22 @@ export const routerUsuarios: RouteObject =
       path: rutasUsuarios.perfil,
       element: <Perfil />, // Página principal
     },
-    {
-      path: rutasUsuarios.verPerfilPorId,
-      element: <PerfilPorId />, // Ver perfil estudiante
-    },
-    {
-      path: rutasUsuarios.listar,
-      element: <ListarUsuarios />,
-    },
-    {
-      path: rutasUsuarios.verPortafolio,
-      element: <VerPortafolioPorId/>,
-    },
-    {
-      path: rutasUsuarios.buscarPortafolio,
-      element: <BuscarPortafolio/>,
-    }
+    // {
+    //   path: rutasUsuarios.verPerfilPorId,
+    //   element: <PerfilPorId />, // Ver perfil estudiante
+    // },
+    // {
+    //   path: rutasUsuarios.listar,
+    //   element: <ListarUsuarios />,
+    // },
+    // {
+    //   path: rutasUsuarios.verPortafolio,
+    //   element: <VerPortafolioPorId/>,
+    // },
+    // {
+    //   path: rutasUsuarios.buscarPortafolio,
+    //   element: <BuscarPortafolio/>,
+    // }
   ]
 };
 
