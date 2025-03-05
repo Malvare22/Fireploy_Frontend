@@ -6,7 +6,6 @@ import { readBreakLine } from "@modules/general/utils/readBreakLine";
 import { breakLine } from "@modules/general/utils/breakLine";
 import { LabelGeneral } from "@modules/general/enums/labelGeneral";
 import { useModal } from "@modules/general/components/modal";
-import { adaptarUsuario } from "@modules/usuarios/utils/usuario.adapter";
 import Row from "@modules/general/components/row";
 import { LabelUsuario } from "@modules/usuarios/enum/LabelUsuario";
 import { LabelRedesSociales } from "@modules/usuarios/enum/LabelRedesSociales";
@@ -14,12 +13,12 @@ import Label from "@modules/general/components/label";
 import Facebook from "@modules/general/assets/redesSociales/facebook.png";
 import Instagram from "@modules/general/assets/redesSociales/instagram.png";
 import Linkedin from "@modules/general/assets/redesSociales/linkedin.png";
-import { UsuarioPlano } from "@modules/usuarios/types/usuario.plano";
 import IconoRedondo from "@modules/general/components/iconoRedondo";
 import { palette } from "@core/themes";
+import { obtenerEstadoUsuario, obtenerTiposUsuario } from "@modules/usuarios/utils/usuario.map";
 
 interface Props {
-  usuario: UsuarioPlano;
+  usuario: Usuario;
 }
 
 const VerPerfil: React.FC<Props> = ({ usuario }) => {
@@ -33,7 +32,7 @@ const VerPerfil: React.FC<Props> = ({ usuario }) => {
         width: "100%",
       }}
     >
-      <Perfil usuario={adaptarUsuario(usuario)} />
+      <Perfil usuario={(usuario)} />
     </Box>
   );
 };
@@ -94,13 +93,13 @@ const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
         {/* Rol */}
         <Row>
           <Label width={240}>{LabelUsuario.rol}</Label>
-          <Typography variant="title">{usuario.tipo}</Typography>
+          <Typography variant="title">{obtenerTiposUsuario.get(usuario.tipo)}</Typography>
         </Row>
 
         {/* Estado */}
         <Row>
           <Label width={240}>{LabelUsuario.estado}</Label>
-          <Typography variant="title">{usuario.estado}</Typography>
+          <Typography variant="title">{obtenerEstadoUsuario.get(usuario.estado)}</Typography>
         </Row>
 
         {/* Fecha de nacimiento */}

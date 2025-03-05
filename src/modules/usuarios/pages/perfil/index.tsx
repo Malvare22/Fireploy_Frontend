@@ -1,29 +1,42 @@
 import VerPerfil from "@modules/usuarios/components/perfil";
-import { useEffect, useState } from "react";
-import { UsuarioPlano } from "@modules/usuarios/types/usuario.plano";
-import { usuariosPrueba } from "@modules/usuarios/test/data/usuarios.prueba";
+import { useContext, useEffect, useState } from "react";
+import { AccountContext } from "@modules/general/context/accountContext";
+import { LoaderContext } from "@modules/general/context/loaderContext";
+import { obtenerUsuarioPorId } from "@modules/usuarios/services/obtenerUsuarioPorId";
+import { Usuario } from "@modules/usuarios/types/usuario";
+import { adaptarUsuario } from "@modules/usuarios/utils/adaptar.usuario";
 
 function Perfil() {
-  const id = () => {
-    const usuarioString = localStorage.getItem("USER");
-    if (usuarioString != null) {
-      const usuario = JSON.parse(usuarioString) as UsuarioPlano;
-      return usuario.id;
-    }
+  
+  const [usuario, setUsuario] = useState<Usuario | undefined>(undefined);
 
-    return undefined;
-  };
+  const setLoader = useContext(LoaderContext)?.setLoading;
 
-  if (!id()) return <></>;
+  const localUser = useContext(AccountContext)?.localUser;
 
-  const [usuario, setUsuario] = useState<UsuarioPlano | undefined>(undefined);
-
+  
   useEffect(() => {
-    const _usuario = usuariosPrueba.find((_usuario) => {
-      return _usuario.id == id();
-    });
-    setUsuario(_usuario);
-  }, [id]);
+        
+    if (!localUser) return;
+
+    const _id = localUser.id;
+    const _token = localUser.token; 
+    
+    // setLoader(true);
+
+    const consulta = async () => {
+      const _usuario = await obtenerUsuarioPorId(_id, _token);
+
+      if(_usuario.data) setUsuario(adaptarUsuario(_usuario.data));
+    };
+
+    consulta();
+
+    return () => {
+      // setLoader(false);
+    };
+
+  }, [localUser?.id]);
 
   return <>{usuario != undefined ? <VerPerfil usuario={usuario} /> : <></>}</>;
 }

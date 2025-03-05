@@ -9,9 +9,14 @@ import Logo from "@modules/general/assets/LogoFireploy.png";
 import { SnackBarContext } from "@modules/general/context/snackbarContext";
 import CustomInput from "@modules/general/components/customInput";
 import { LabelSesion } from "@modules/general/enums/snackbar";
-import { AccountContext } from "@modules/context/accountContext";
-import { usuariosPrueba } from "@modules/usuarios/test/data/usuarios.prueba";
 import { rutasGeneral } from "@modules/general/router/router";
+import {
+  AccountContext,
+  AccountInformation,
+} from "@modules/general/context/accountContext";
+import { queryIniciarSesion } from "@modules/general/services/iniciarSesion";
+import { obtenerLetraTiposUsuario } from "@modules/usuarios/utils/usuario.map";
+import { TiposUsuario } from "@modules/usuarios/types/usuario.tipos";
 
 const Login = () => {
   const clientID =
@@ -34,20 +39,29 @@ const Login = () => {
 
   const setLocalUser = context != undefined ? context.setLocalUser : undefined;
 
-  const iniciarSesion = () => {
-    const exist = usuariosPrueba.find(
-      (usuario) =>
-        usuario.correo == cuenta.correo &&
-        usuario.contrasenia == cuenta.contrasenia
-    );
-    if (exist) {
+  const iniciarSesion = async () => {
+    const exist = await queryIniciarSesion(cuenta.correo, cuenta.contrasenia);
+    if (exist.error == undefined && exist.data) {
       setMessage(LabelSesion.sesionIniciada);
       setSuccess(true);
-      localStorage.setItem("TOKEN", "true");
+      const {
+        nombre: _nombre,
+        access_token: _access_token,
+        tipo: _tipo,
+        foto: _foto,
+        id: _id,
+      } = exist.data;
+      const accountInformation: AccountInformation = {
+        nombre: _nombre,
+        token: _access_token,
+        tipo: obtenerLetraTiposUsuario.get(_tipo) as TiposUsuario,
+        foto: _foto,
+        id: _id
+      };
       if (setLocalUser) {
-        setLocalUser(JSON.stringify(exist));
+        setLocalUser(accountInformation);
         setView(true);
-        localStorage.setItem("USER", JSON.stringify(exist));
+        localStorage.setItem("ACCOUNT", JSON.stringify(accountInformation));
         navigate(rutasGeneral.home);
       }
     } else {

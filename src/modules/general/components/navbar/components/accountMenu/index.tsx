@@ -10,11 +10,10 @@ import { Box, ListItemButton, Typography } from "@mui/material";
 import { breakLine } from "@modules/general/utils/breakLine";
 import { readBreakLine } from "@modules/general/utils/readBreakLine";
 import { useNavigate } from "react-router-dom";
-import { AccountContext } from "@modules/context/accountContext";
-import { Usuario } from "@modules/usuarios/types/usuario";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { rutasGeneral } from "@modules/general/router/router";
 import { LabelNavbar } from "@modules/general/enums/labelNavbar";
+import { AccountContext } from "@modules/general/context/accountContext";
 
 export const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -44,10 +43,9 @@ export const AccountMenu = () => {
     if (!localUser) return { nombres: "", foto: "" };
 
     try {
-      const user: Usuario = JSON.parse(localUser) as Usuario;
       return {
-        nombres: `${user.nombres} ${user.apellidos}`,
-        foto: user.fotoDePerfil,
+        nombres: localUser.nombre,
+        foto: localUser.foto,
       };
     } catch (error) {
       console.error("Error al parsear el usuario:", error);

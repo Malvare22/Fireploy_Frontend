@@ -1,7 +1,7 @@
 import { palette } from "@core/themes";
-import { AccountContext } from "@modules/context/accountContext";
 import Footer from "@modules/general/components/footer";
 import Navbar from "@modules/general/components/navbar";
+import { AccountContext } from "@modules/general/context/accountContext";
 import { Box } from "@mui/material";
 import { useContext } from "react";
 import { Outlet } from "react-router-dom";

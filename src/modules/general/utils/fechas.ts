@@ -11,4 +11,9 @@ export const validarFechaConLaActual = (fecha: string) => {
 export const obtenerFechaActual = () => {
     const fechaActual = ((new Date())).toISOString().slice(0,10);
     return fechaActual;
-}
+};
+
+export const adaptarFechaBackend = (fecha: string) => {
+    let _fecha = fecha.split('-');
+    return `${}/${}/${}`
+};

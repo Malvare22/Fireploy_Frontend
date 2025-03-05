@@ -9,4 +9,8 @@ export default defineConfig({
       "@modules" : "/src/modules",
     },
   },
+  // server:{
+  //   cors: config
+  // }
+  
 });

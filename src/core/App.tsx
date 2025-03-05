@@ -7,30 +7,40 @@ import { router } from "./router/router";
 import SnackBar from "@modules/general/components/snackbar";
 import useSnackBar from "@modules/general/hooks/useSnackbar";
 import { useEffect, useState } from "react";
-import { AccountContext } from "../modules/context/accountContext";
+import {
+  AccountContext,
+  AccountInformation,
+} from "@modules/general/context/accountContext";
 
 function App() {
   const { view, setView, message, setMessage, success, setSuccess } =
     useSnackBar();
 
-  const [localUser, setLocalUser] = useState<string | null>(
-    localStorage.getItem("USER")
-  );
+  const [localUser, setLocalUser] = useState<AccountInformation | null>(null);
 
   useEffect(() => {
     const handleStorageChange = () => {
-      setLocalUser(localStorage.getItem("USER"));
+      if (localStorage.getItem("ACCOUNT")) {
+        const user = JSON.parse(
+          localStorage.getItem("ACCOUNT") as string
+        ) as AccountInformation;
+        setLocalUser(user);
+      }
     };
+
+    handleStorageChange();
 
     window.addEventListener("storage", handleStorageChange);
 
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
+    // return () => {
+    //   window.removeEventListener("storage", handleStorageChange);
+    // };
   }, []);
 
   return (
-    <AccountContext.Provider value={{ localUser: localUser, setLocalUser: setLocalUser }}>
+    <AccountContext.Provider
+      value={{ localUser: localUser, setLocalUser: setLocalUser }}
+    >
       <ThemeProvider theme={theme}>
         <SnackBarContext.Provider
           value={{ view, setView, message, setMessage, success, setSuccess }}
