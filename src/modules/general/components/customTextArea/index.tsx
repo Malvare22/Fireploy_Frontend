@@ -23,6 +23,7 @@ const CustomTextArea = React.forwardRef<
           fontSize: theme.typography.title2?.fontSize,
           fontWeight: theme.typography.title2?.fontWeight,
           width: "100%",
+          resize: "vertical",
         }}
         minRows={4}
       />

@@ -20,7 +20,7 @@ const apiClient: AxiosInstance = axios.create({
 });
 
 // Función genérica para manejar peticiones
-type MetodoConsulta = "get" | "post" | "put" | "delete";
+type MetodoConsulta = "get" | "post" | "put" | "delete" | "patch";
 const fetchData = async <T>(
   method: MetodoConsulta,
   url: string,
@@ -34,10 +34,10 @@ const fetchData = async <T>(
       url,
       data,
       params,
-      headers:{
+      headers: {
         ...apiClient.defaults.headers.common,
-        ...(headers || {})
-      }
+        ...(headers || {}),
+      },
     };
     const response: ApiResponse<T> = await apiClient(config);
     return response;
@@ -47,19 +47,35 @@ const fetchData = async <T>(
       "Error en la petición:",
       error.response?.data || error.message
     );
-    return {error: error.response?.data || error.message};
+    return { error: error.response?.data || error.message };
   }
 };
 
-export const getData = <T>(url: string, params?: Record<string, unknown>, headers?: Record<string, string>) =>
-  fetchData<T>("get", url, undefined, params, headers);
+export const getData = <T>(
+  url: string,
+  params?: Record<string, unknown>,
+  headers?: Record<string, string>
+) => fetchData<T>("get", url, undefined, params, headers);
 
-export const postData = <T>(url: string, data: unknown, headers?: Record<string, string>) =>
-  fetchData<T>("post", url, data, headers);
+export const postData = <T>(
+  url: string,
+  data: unknown,
+  headers?: Record<string, string>
+) => fetchData<T>("post", url, data, headers);
 
-export const putData = <T>(url: string, data: unknown, headers?: Record<string, string>) =>
-  fetchData<T>("put", url, data, headers);
+export const putData = <T>(
+  url: string,
+  data: unknown,
+  headers?: Record<string, string>
+) => fetchData<T>("put", url, data, headers);
 
-export const deleteData = <T>(url: string, headers: Record<string, string>) => fetchData<T>("delete", url, headers);
+export const deleteData = <T>(url: string, headers: Record<string, string>) =>
+  fetchData<T>("delete", url, headers);
+
+export const patchData = <T>(
+  url: string,
+  data: unknown,
+  headers?: Record<string, string>
+) => fetchData<T>("patch", url, data, {}, headers);
 
 export default apiClient;

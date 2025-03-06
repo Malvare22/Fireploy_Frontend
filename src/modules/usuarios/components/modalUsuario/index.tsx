@@ -1,11 +1,11 @@
-import Modal from "@modules/general/components/modal";
+import Modal, { useModal } from "@modules/general/components/modal";
 import CustomInput from "@modules/general/components/customInput";
 import Label from "@modules/general/components/label";
 import Row from "@modules/general/components/row";
 
 import { LabelUsuario } from "@modules/usuarios/enum/LabelUsuario";
 import { Box, Card, MenuItem, SxProps } from "@mui/material";
-import { useEffect } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import CustomSelect from "@modules/general/components/customSelect";
@@ -20,22 +20,29 @@ import PreviewImage, {
   usePreviewImage,
 } from "@modules/general/components/previewImage";
 import { obtenerFechaActual } from "@modules/general/utils/fechas";
-import { UsuarioBase } from "@modules/usuarios/utils/form/usuario.base";
 import BotonesBasicos from "@modules/general/components/botonesBasicos";
 import RedSocial from "@modules/proyectos/components/redSocial";
+import { UsuarioEditarDefaultSchema } from "@modules/usuarios/utils/form/usuario.editar.default.schema";
+import { AccountContext } from "@modules/general/context/accountContext";
+import { modificarUsuario } from "@modules/usuarios/services/modificarUsuario";
+import CustomTextArea from "@modules/general/components/customTextArea";
+import { LabelDialog } from "@modules/general/enums/LabelDialog";
+import useSnackBar from "@modules/general/hooks/useSnackbar";
+import SnackBar from "@modules/general/components/snackbar";
+import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import AlertDialog from "@modules/general/components/alertDialog";
 
-interface Props {
+type Props = {
   open: boolean;
   handleClose: () => void;
-  usuario?: Usuario;
-  handleQuery: () => void;
-  tipo: "crear" | "editar";
-}
+  tipo: "editarEspecial" | "editar" | "crear";
+  usuario: Usuario;
+};
+
 const ModalUsuario: React.FC<Props> = ({
   open,
   handleClose,
-  usuario = UsuarioBase,
-  handleQuery,
+  usuario,
   tipo,
 }) => {
   return (
@@ -47,9 +54,9 @@ const ModalUsuario: React.FC<Props> = ({
       open={open}
     >
       <Cuerpo
-        query={handleQuery}
         defaultValue={usuario}
         handleClose={handleClose}
+        tipo={tipo}
       ></Cuerpo>
     </Modal>
   );
@@ -57,10 +64,21 @@ const ModalUsuario: React.FC<Props> = ({
 
 const Cuerpo: React.FC<{
   defaultValue: Usuario;
-  query: () => void;
   handleClose: () => void;
-}> = ({ defaultValue, query, handleClose }) => {
+  tipo: "crear" | "editar" | "editarEspecial";
+}> = ({ defaultValue, handleClose, tipo }) => {
   const { image, setImage } = usePreviewImage();
+
+  const id = useContext(AccountContext)?.localUser?.id;
+
+  const token = useContext(AccountContext)?.localUser?.token;
+
+  const resolver = () => {
+    if (tipo == "crear" || tipo == "editarEspecial") {
+      return UsuarioSchema;
+    }
+    return UsuarioEditarDefaultSchema;
+  };
 
   const {
     register,
@@ -70,8 +88,31 @@ const Cuerpo: React.FC<{
     formState: { errors },
   } = useForm<Usuario>({
     defaultValues: defaultValue,
-    resolver: zodResolver(UsuarioSchema),
+    resolver: zodResolver(resolver()),
   });
+
+  console.log(errors);
+
+  const { open, setOpen, defaultTitle, message, setMessage } = useAlertDialog();
+
+  const query = async (data: Usuario) => {
+    const editar = async () => {
+      if (id && token) {
+        const response = await modificarUsuario(id, token, data);
+        if (response.error) {
+          setMessage(LabelDialog.seHaPresentadoUnError + response.error);
+          setOpen(true);
+          // setLoader(true);
+        } else {
+          setMessage(LabelDialog.guardadoExitoso);
+          setOpen(true);
+          // setLoader(true);
+        }
+      }
+    };
+
+    if (tipo == "editar") await editar();
+  };
 
   useEffect(() => {
     setImage(getValues().fotoDePerfil);
@@ -88,25 +129,49 @@ const Cuerpo: React.FC<{
     alignItems: "center",
   } as SxProps;
 
-  return (
-    <form onSubmit={handleSubmit(query)}>
-      <Card
-        sx={{
-          padding: 4,
-          backgroundColor: "white",
-          display: "flex",
-          flexDirection: "column",
-          gap: 3,
-        }}
-      >
-        {/* Foto de perfil */}
-        <Row>
-          <Label>{LabelUsuario.fotoPerfil}</Label>
-          <PreviewImage image={image} setImage={setImage} />
-        </Row>
+  const ref = useRef<HTMLButtonElement>(null);
 
-        {/* Correo */}
-        <Row>
+  const handleQuery = () => {
+    if (ref) {
+      ref.current?.click();
+    }
+  };
+
+  return (
+    <>
+      <AlertDialog
+        open={open}
+        titulo={defaultTitle}
+        cuerpo={message}
+        setOpen={setOpen}
+        reloader={true}
+      />
+
+      <form onSubmit={handleSubmit(query)}>
+        <Box
+          component={"button"}
+          onClick={handleQuery}
+          type="submit"
+          sx={{ display: "none" }}
+          ref={ref}
+        ></Box>
+        <Card
+          sx={{
+            padding: 4,
+            backgroundColor: "white",
+            display: "flex",
+            flexDirection: "column",
+            gap: 3,
+          }}
+        >
+          {/* Foto de perfil */}
+          <Row>
+            <Label>{LabelUsuario.fotoPerfil}</Label>
+            <PreviewImage image={image} setImage={setImage} />
+          </Row>
+
+          {/* Correo */}
+          {/* <Row>
           <Label>{LabelUsuario.correo}</Label>
           <Box sx={{ width: "100%" }}>
             <CustomInput
@@ -115,40 +180,40 @@ const Cuerpo: React.FC<{
               errorMessage={errors.correo?.message} // Mensaje de error
             />
           </Box>
-        </Row>
+        </Row> */}
 
-        {/* Código */}
-        <Row>
+          {/* Código */}
+          {/* <Row>
           <Label>{LabelUsuario.codigo}</Label>
           <CustomInput
             variant="secondary"
             {...register("id")} // Registrar el campo
             errorMessage={errors.id?.message} // Mensaje de error
           />
-        </Row>
+        </Row> */}
 
-        {/* Nombres */}
-        <Row>
-          <Label>{LabelUsuario.nombres}</Label>
-          <CustomInput
-            variant="secondary"
-            {...register("nombres")}
-            errorMessage={errors.nombres?.message} // Mensaje de error
-          />
-        </Row>
+          {/* Nombres */}
+          <Row>
+            <Label>{LabelUsuario.nombres}</Label>
+            <CustomInput
+              variant="secondary"
+              {...register("nombres")}
+              errorMessage={errors.nombres?.message} // Mensaje de error
+            />
+          </Row>
 
-        {/* Apellidos */}
-        <Row>
-          <Label>{LabelUsuario.apellidos}</Label>
-          <CustomInput
-            variant="secondary"
-            {...register("apellidos")}
-            errorMessage={errors.apellidos?.message} // Mensaje de error
-          />
-        </Row>
+          {/* Apellidos */}
+          <Row>
+            <Label>{LabelUsuario.apellidos}</Label>
+            <CustomInput
+              variant="secondary"
+              {...register("apellidos")}
+              errorMessage={errors.apellidos?.message} // Mensaje de error
+            />
+          </Row>
 
-        {/* Rol */}
-        <Row>
+          {/* Rol */}
+          {/* <Row>
           <Label>{LabelUsuario.rol}</Label>
           <CustomSelect
             variantDelta="secondary"
@@ -162,10 +227,10 @@ const Cuerpo: React.FC<{
               </MenuItem>
             ))}
           </CustomSelect>
-        </Row>
+        </Row> */}
 
-        {/* Estado */}
-        <Row>
+          {/* Estado */}
+          {/* <Row>
           <Label>{LabelUsuario.estado}</Label>
           <CustomSelect
             variantDelta="secondary"
@@ -181,84 +246,79 @@ const Cuerpo: React.FC<{
               )
             )}
           </CustomSelect>
-        </Row>
+        </Row> */}
 
-        {/* Fecha de nacimiento */}
-        <Row>
-          <Label>{LabelUsuario.fechaNacimiento}</Label>
-          <CustomInput
-            variant="secondary"
-            type="date"
-            errorMessage={errors.fechaDeNacimiento?.message}
-            inputProps={{ max: obtenerFechaActual() }}
-            {...register("fechaDeNacimiento")}
-          />
-        </Row>
+          {/* Fecha de nacimiento */}
+          <Row>
+            <Label>{LabelUsuario.fechaNacimiento}</Label>
+            <CustomInput
+              variant="secondary"
+              type="date"
+              errorMessage={errors.fechaDeNacimiento?.message}
+              inputProps={{ max: obtenerFechaActual() }}
+              {...register("fechaDeNacimiento")}
+            />
+          </Row>
 
-        {/* Redes sociales */}
-        <Row sx={{ alignItems: "start" }}>
-          <Label>{LabelUsuario.redesSociales}</Label>
-          <Box
-            sx={{
-              width: "100%",
-              border: { md: "solid 1px rgba(0,0,0, .2)" },
-              padding: { md: 2 },
-              display: "flex",
-              flexDirection: "column",
-              gap: 1,
-            }}
-          >
-            <Row sx={styleRowRedSocial}>
-              <RedSocial
-                nombre={'linkedin'}
-              />
-              <CustomInput
-                variant="secondary"
-                {...register("redSocial.linkedin")}
-              ></CustomInput>
-            </Row>
-            <Row sx={styleRowRedSocial}>
-              <RedSocial
-                nombre={'facebook'}
-              />
-              <CustomInput
-                variant="secondary"
-                {...register("redSocial.facebook")}
-              ></CustomInput>
-            </Row>
-            <Row sx={styleRowRedSocial}>
-              <RedSocial
-                nombre={'instagram'}
-              />
-              <CustomInput
-                variant="secondary"
-                {...register("redSocial.instagram")}
-              ></CustomInput>
-            </Row>
-            <Row sx={styleRowRedSocial}>
-              <RedSocial
-                nombre={'x'}
-              />
-              <CustomInput
-                variant="secondary"
-                {...register("redSocial.x")}
-              ></CustomInput>
-            </Row>
-          </Box>
-        </Row>
+          {/* Redes sociales */}
+          <Row sx={{ alignItems: "start" }}>
+            <Label>{LabelUsuario.redesSociales}</Label>
+            <Box
+              sx={{
+                width: "100%",
+                border: { md: "solid 1px rgba(0,0,0, .2)" },
+                padding: { md: 2 },
+                display: "flex",
+                flexDirection: "column",
+                gap: 1,
+              }}
+            >
+              <Row sx={styleRowRedSocial}>
+                <RedSocial nombre={"linkedin"} />
+                <CustomInput
+                  variant="secondary"
+                  {...register("redSocial.linkedin")}
+                  errorMessage={errors.redSocial?.linkedin?.message}
+                ></CustomInput>
+              </Row>
+              <Row sx={styleRowRedSocial}>
+                <RedSocial nombre={"facebook"} />
+                <CustomInput
+                  variant="secondary"
+                  {...register("redSocial.facebook")}
+                  errorMessage={errors.redSocial?.facebook?.message}
+                ></CustomInput>
+              </Row>
+              <Row sx={styleRowRedSocial}>
+                <RedSocial nombre={"instagram"} />
+                <CustomInput
+                  variant="secondary"
+                  {...register("redSocial.instagram")}
+                  errorMessage={errors.redSocial?.instagram?.message}
+                ></CustomInput>
+              </Row>
+              <Row sx={styleRowRedSocial}>
+                <RedSocial nombre={"x"} />
+                <CustomInput
+                  variant="secondary"
+                  {...register("redSocial.x")}
+                  errorMessage={errors.redSocial?.x?.message}
+                ></CustomInput>
+              </Row>
+            </Box>
+          </Row>
 
-        {/* Descripción */}
-        <Row>
-          <Label>{LabelUsuario.descripcion}</Label>
-          <CustomInput
-            variant="secondary"
-            {...register("descripcion")}
-            errorMessage={errors.descripcion?.message} // Mensaje de error
-          />
-        </Row>
+          {/* Descripción */}
+          <Row>
+            <Label>{LabelUsuario.descripcion}</Label>
+            <CustomTextArea
+              {...register("descripcion")}
+              errorMessage={errors.descripcion?.message} // Mensaje de error
+            />
+          </Row>
 
-        {/* Contraseña */}
-        {/* <Row>
+          {/* Contraseña */}
+          {/* <Row>
           <Label>{LabelUsuario.contrasenia}</Label>
           <CustomInput
             variant="secondary"
@@ -268,10 +328,11 @@ const Cuerpo: React.FC<{
           />
         </Row> */}
 
-        {/* Botones */}
-        <BotonesBasicos cancelar={handleClose} />
-      </Card>
-    </form>
+          {/* Botones */}
+          <BotonesBasicos cancelar={handleClose} aceptar={handleQuery} />
+        </Card>
+      </form>
+    </>
   );
 };
 

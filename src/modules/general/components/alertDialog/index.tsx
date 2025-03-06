@@ -4,14 +4,16 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 interface Props {
   titulo: string;
-  botones: React.ReactNode;
+  botones?: React.ReactNode;
   cuerpo: string | undefined;
   children?: React.ReactNode;
-  open: boolean
+  open: boolean;
+  setOpen?: React.Dispatch<boolean>;
+  reloader?: boolean
 }
 
 const AlertDialog: React.FC<Props> = ({
@@ -19,8 +21,15 @@ const AlertDialog: React.FC<Props> = ({
   cuerpo,
   botones,
   children,
-  open
+  open,
+  setOpen,
+  reloader = false
 }) => {
+
+  const handleClose = () => {
+    if(setOpen) setOpen(false);
+    if(reloader) window.location.reload();
+  }
 
   return (
     <React.Fragment>
@@ -39,7 +48,15 @@ const AlertDialog: React.FC<Props> = ({
           {children && <Box>{children}</Box>}
         </DialogContent>
         <DialogActions>
-          {botones}
+          {botones ? (
+            botones
+          ) : setOpen ? (
+            <Button variant="primary" onClick={handleClose}>
+              Aceptar
+            </Button>
+          ) : (
+            <></>
+          )}
         </DialogActions>
       </Dialog>
     </React.Fragment>

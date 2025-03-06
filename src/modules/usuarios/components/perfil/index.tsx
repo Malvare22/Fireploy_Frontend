@@ -59,10 +59,9 @@ const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
         }}
       >
         <ModalUsuario
+          tipo="editar"
           open={open}
           handleClose={handleClose}
-          handleQuery={() => "enviado"}
-          tipo="editar"
           usuario={usuario}
         />
 

@@ -12,7 +12,7 @@ export type Usuario = {
     tipo: TiposUsuario,
     nombres: string,
     apellidos: string,
-    contrasenia: string;
+    contrasenia?: string;
     sexo: SexoUsuario,
     fotoDePerfil: string;
     redSocial: RedSocialUsuario;

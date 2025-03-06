@@ -6,7 +6,6 @@ import GoogleLogin from "react-google-login";
 import Divider from "@mui/material/Divider";
 import { useNavigate } from "react-router-dom";
 import Logo from "@modules/general/assets/LogoFireploy.png";
-import { SnackBarContext } from "@modules/general/context/snackbarContext";
 import CustomInput from "@modules/general/components/customInput";
 import { LabelSesion } from "@modules/general/enums/snackbar";
 import { rutasGeneral } from "@modules/general/router/router";
@@ -17,6 +16,8 @@ import {
 import { queryIniciarSesion } from "@modules/general/services/iniciarSesion";
 import { obtenerLetraTiposUsuario } from "@modules/usuarios/utils/usuario.map";
 import { TiposUsuario } from "@modules/usuarios/types/usuario.tipos";
+import useSnackBar from "@modules/general/hooks/useSnackbar";
+import SnackBar from "@modules/general/components/snackbar";
 
 const Login = () => {
   const clientID =
@@ -28,7 +29,7 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const { setMessage, setSuccess, setView } = useContext(SnackBarContext);
+  const { setMessage, setSuccess, setView, message, success, view } = useSnackBar();
 
   const [cuenta, setCuenta] = useState({
     correo: "",
@@ -76,6 +77,8 @@ const Login = () => {
   };
 
   return (
+    <>
+    <SnackBar message={message} success={success} view={view} setView={setView}/>
     <FormContainer
       sx={{
         width: "60%",
@@ -207,7 +210,7 @@ const Login = () => {
           </Box>
         </Box>
       </form>
-    </FormContainer>
+    </FormContainer></>
   );
 };
 
