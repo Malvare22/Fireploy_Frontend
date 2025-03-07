@@ -8,6 +8,7 @@ import FolderZipIcon from "@mui/icons-material/FolderZip";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import {
   Box,
+  Button,
   IconButton,
   Paper,
   Table,
@@ -24,16 +25,20 @@ import {
   obtenerTiposUsuario,
 } from "@modules/usuarios/utils/usuario.map";
 import useTabla from "@modules/general/hooks/useTabla";
-import { UsuarioPlano } from "@modules/usuarios/types/usuario.plano";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Usuario } from "@modules/usuarios/types/usuario";
-import { adaptarUsuario } from "@modules/usuarios/utils/usuario.adapter";
 import { useModal } from "@modules/general/components/modal";
 import ModalUsuario from "@modules/usuarios/components/modalUsuario";
 import { filtrosUsuarios } from "@modules/usuarios/utils/filtrosUsuarios";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 import ModalEstadoUsuario from "@modules/usuarios/components/modalEstadoUsuario";
+import { getUsuariosPorTipo } from "@modules/usuarios/services/get.usuariosPorTipo";
+import { AccountContext } from "@modules/general/context/accountContext";
+import { adaptarUsuario } from "@modules/usuarios/utils/adaptar.usuario";
+import AlertDialog from "@modules/general/components/alertDialog";
+import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import { UsuarioBase } from "@modules/usuarios/utils/form/usuario.base";
 
 export const LabelTablaUsuarios = {
   codigo: "Código",
@@ -45,8 +50,6 @@ export const LabelTablaUsuarios = {
 };
 
 function ListarUsuarios() {
-  const usuarios = usuariosPrueba;
-
   const {
     handleRequestSort,
     order,
@@ -58,12 +61,28 @@ function ListarUsuarios() {
     RenderSearchInput,
     setFilterLabels,
     RenderFilters,
-  } = useTabla<UsuarioPlano>();
+  } = useTabla<Usuario>();
+
+  const localUser = useContext(AccountContext)?.localUser;
+
+  const {open: _open, message, setMessage, setOpen: _setOpen, title, setTitle} = useAlertDialog();
 
   useEffect(() => {
-    setData(usuarios);
+    const handleQuery = async () => {
+      if (localUser == undefined) return;
+      const _usuarios = await getUsuariosPorTipo("todos", localUser?.token);
+      console.log(_usuarios)
+      if (_usuarios.error){
+        setMessage(_usuarios.error.message[0]);
+        _setOpen(true);
+        setTitle(_usuarios.error.error);
+        return;
+      }
+      setData(_usuarios.data?.map((usuario) => adaptarUsuario(usuario)));
+    };
+    handleQuery();
     setFilterLabels(filtrosUsuarios());
-  }, []);
+  }, [localUser]);
 
   const navigate = useNavigate();
 
@@ -79,18 +98,28 @@ function ListarUsuarios() {
 
   const { open, handleOpen, handleClose } = useModal();
 
-  const handleVentanaEstado = (usuario: UsuarioPlano) => {
-    setSelectUsuario(adaptarUsuario(usuario));
+  const [modo, setModo] = useState<'crear' | 'editar'>('editar');
+
+  const handleVentanaEstado = (usuario: Usuario) => {
+    setSelectUsuario(usuario);
     estadoHandleOpen();
   };
 
-  const handleEditar = (usuario: UsuarioPlano) => {
-    setSelectUsuario(adaptarUsuario(usuario));
+  const handleEditar = (usuario: Usuario) => {
+    setSelectUsuario(usuario);
+    setModo('editar');
+    handleOpen();
+  };
+
+  const handleCrear = () => {
+    setSelectUsuario(UsuarioBase);
+    setModo('crear');
     handleOpen();
   };
 
   return (
     <>
+      <AlertDialog open={_open} setOpen={_setOpen} titulo={title} cuerpo={message}/>
       {selectUsuario != undefined && (
         <ModalEstadoUsuario
           handleClose={estadoHandleClose}
@@ -98,13 +127,14 @@ function ListarUsuarios() {
           usuario={selectUsuario}
         />
       )}
-      <ModalUsuario
-        handleClose={handleClose}
-        open={open}
-        handleQuery={() => alert(":D")}
-        tipo="editar"
-        usuario={selectUsuario}
-      />
+      {selectUsuario != undefined && (
+        <ModalUsuario
+          handleClose={handleClose}
+          open={open}
+          tipo={modo}
+          usuario={selectUsuario}
+        />
+      )}
       <Box sx={{ width: { md: "100%", xs: "90%" } }}>
         <Box
           sx={{ display: "flex", flexDirection: { xl: "row", xs: "column" } }}
@@ -209,6 +239,7 @@ function ListarUsuarios() {
           </Table>
         </TableContainer>
       </Box>
+      <Button color="warning" variant="contained" onClick={handleCrear}>Agregar Usuario</Button>
     </>
   );
 }

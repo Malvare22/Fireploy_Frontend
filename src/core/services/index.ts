@@ -6,7 +6,11 @@ interface ApiResponse<T> {
   data?: T;
   status?: number;
   message?: string;
-  error?: string;
+  error?: {
+    error: string;
+    message: string[];
+    statusCode: number;
+  };
   statusCode?: number;
 }
 

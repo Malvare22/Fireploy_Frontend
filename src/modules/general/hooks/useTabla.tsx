@@ -12,6 +12,7 @@ import InputDeBusqueda from "../components/inputDeBusqueda";
 import { useFiltros } from "./useFiltros";
 
 function useTabla<T extends object>() {
+
   const [data, setData] = useState<T[] | undefined>(undefined);
 
   const [currentId, setCurrentId] = useState(-1);

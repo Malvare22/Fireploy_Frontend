@@ -21,6 +21,6 @@ export const UsuarioBase: Usuario = {
     linkedin: "",
   } as RedSocialUsuario,
   descripcion: "",
-  proyectos: []
+  estFechaInicio: ""
 };
 

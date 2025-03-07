@@ -25,7 +25,7 @@ export const adaptarUsuario = (usuario: UsuarioService) => {
     fotoDePerfil: usuario.foto_perfil,
     redSocial: adaptarRedSocial(usuario.red_social),
     descripcion: usuario.descripcion,
-    proyectos: [],
+    estFechaInicio: usuario.est_fecha_inicio
   };
 
   return _usuario;
@@ -42,7 +42,7 @@ export const adaptarUsuarioSalida = (
       nombre: usuario.nombres,
       apellido: usuario.apellidos,
       sexo: usuario.sexo,
-      foto_perfil: usuario.fotoDePerfil,
+      foto_perfil: "https://cdn.pixabay.com/photo/2024/12/30/13/06/moped-9300285_1280.jpg",
       red_social: JSON.stringify(usuario.redSocial),
       descripcion: usuario.descripcion,
     };
@@ -50,19 +50,18 @@ export const adaptarUsuarioSalida = (
   }
 
   _usuario = {
-    fecha_nacimiento: usuario.fechaDeNacimiento,
     nombre: usuario.nombres,
     apellido: usuario.apellidos,
+    fecha_nacimiento: usuario.fechaDeNacimiento,
     sexo: usuario.sexo,
-    foto_perfil: usuario.fotoDePerfil,
-    red_social: "",
     descripcion: usuario.descripcion,
-    contrasenia: usuario.contrasenia,
     correo: usuario.correo,
-    est_fecha_inicio: "",
+    red_social: JSON.stringify(usuario.redSocial),
+    contrasenia: usuario.contrasenia,
+    foto_perfil: "https://cdn.pixabay.com/photo/2024/12/30/13/06/moped-9300285_1280.jpg",
     estado: usuario.estado,
-    id: usuario.id.toString(),
     tipo: usuario.tipo,
+    est_fecha_inicio: usuario.estFechaInicio,
   };
   return _usuario;
 };

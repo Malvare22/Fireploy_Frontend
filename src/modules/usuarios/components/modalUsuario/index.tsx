@@ -35,7 +35,7 @@ import AlertDialog from "@modules/general/components/alertDialog";
 type Props = {
   open: boolean;
   handleClose: () => void;
-  tipo: "editarEspecial" | "editar" | "crear";
+  tipo: "editar" | "crear";
   usuario: Usuario;
 };
 
@@ -65,16 +65,14 @@ const ModalUsuario: React.FC<Props> = ({
 const Cuerpo: React.FC<{
   defaultValue: Usuario;
   handleClose: () => void;
-  tipo: "crear" | "editar" | "editarEspecial";
+  tipo: "crear" | "editar";
 }> = ({ defaultValue, handleClose, tipo }) => {
   const { image, setImage } = usePreviewImage();
-
-  const id = useContext(AccountContext)?.localUser?.id;
 
   const token = useContext(AccountContext)?.localUser?.token;
 
   const resolver = () => {
-    if (tipo == "crear" || tipo == "editarEspecial") {
+    if (tipo == "crear") {
       return UsuarioSchema;
     }
     return UsuarioEditarDefaultSchema;
@@ -97,8 +95,8 @@ const Cuerpo: React.FC<{
 
   const query = async (data: Usuario) => {
     const editar = async () => {
-      if (id && token) {
-        const response = await modificarUsuario(id, token, data);
+      if (token) {
+        const response = await modificarUsuario(getValues().id, token, data);
         if (response.error) {
           setMessage(LabelDialog.seHaPresentadoUnError + response.error);
           setOpen(true);

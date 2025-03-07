@@ -60,13 +60,22 @@ const Modal: React.FC<
                 display: "flex",
                 justifyContent: "center",
                 gap: 2,
-                alignItems: 'center'
+                alignItems: "center",
               }}
             >
               <Typography variant="h4Bold" color="white">
-                Editar Usuario
+                {titulo}
               </Typography>
-              <Box sx={{color: 'white', fontSize: 48, display: 'flex', alignItems: 'center'}}>{iconoTitulo && iconoTitulo}</Box>
+              <Box
+                sx={{
+                  color: "white",
+                  fontSize: 48,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                {iconoTitulo && iconoTitulo}
+              </Box>
             </Card>
           )}
           {children}
