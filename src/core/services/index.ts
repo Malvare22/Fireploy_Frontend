@@ -2,7 +2,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 // Interfaz para la respuesta genérica
-interface ApiResponse<T> {
+export interface ApiResponse<T> {
   data?: T;
   status?: number;
   message?: string;
@@ -33,6 +33,7 @@ const fetchData = async <T>(
   headers?: Record<string, string>
 ): Promise<ApiResponse<T>> => {
   try {
+    console.log(headers)
     const config: AxiosRequestConfig = {
       method,
       url,
@@ -65,7 +66,7 @@ export const postData = <T>(
   url: string,
   data: unknown,
   headers?: Record<string, string>
-) => fetchData<T>("post", url, data, headers);
+) => fetchData<T>("post", url, data, {}, headers);
 
 export const putData = <T>(
   url: string,

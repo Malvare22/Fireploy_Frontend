@@ -3,7 +3,7 @@ import { EstadoUsuario } from "../types/usuario.estado";
 import { SexoUsuario } from "../types/usuario.sexo";
 import { TiposUsuario } from "../types/usuario.tipos";
 import { obtenerEstadoUsuario, obtenerSexo, obtenerTiposUsuario } from "./usuario.map";
-import { UsuarioPlano } from "../types/usuario.plano";
+import { Usuario } from "../types/usuario";
 
 export const filtrosUsuarios = () => {
     const valoresPosibles: {
@@ -16,7 +16,7 @@ export const filtrosUsuarios = () => {
       tipo: ["A", "E", "D"],
     };
 
-    const arregloFiltros: FilterLabels<UsuarioPlano>[] = [
+    const arregloFiltros: FilterLabels<Usuario>[] = [
       {
         key: "sexo",
         text: 'Sexo',

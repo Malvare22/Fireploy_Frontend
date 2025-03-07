@@ -19,6 +19,7 @@ export const UsuarioBase: Usuario = {
     facebook: "",
     instagram: "",
     linkedin: "",
+    x: ""
   } as RedSocialUsuario,
   descripcion: "",
   estFechaInicio: ""

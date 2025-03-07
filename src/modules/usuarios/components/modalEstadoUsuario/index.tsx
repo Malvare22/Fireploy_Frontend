@@ -1,7 +1,7 @@
 import AlertDialog from "@modules/general/components/alertDialog";
 import BotonesBasicos from "@modules/general/components/botonesBasicos";
 import { AccountContext } from "@modules/general/context/accountContext";
-import { LabelDialog } from "@modules/general/enums/LabelDialog";
+import { LabelDialog } from "@modules/general/enums/labelDialog";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import {
   LabelUsuario,

@@ -3,7 +3,6 @@ import {
   StyledTableRow,
 } from "@modules/general/components/tabla";
 import { LabelGeneral } from "@modules/general/enums/labelGeneral";
-import { usuariosPrueba } from "@modules/usuarios/test/data/usuarios.prueba";
 import FolderZipIcon from "@mui/icons-material/FolderZip";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import {
@@ -36,9 +35,9 @@ import ModalEstadoUsuario from "@modules/usuarios/components/modalEstadoUsuario"
 import { getUsuariosPorTipo } from "@modules/usuarios/services/get.usuariosPorTipo";
 import { AccountContext } from "@modules/general/context/accountContext";
 import { adaptarUsuario } from "@modules/usuarios/utils/adaptar.usuario";
-import AlertDialog from "@modules/general/components/alertDialog";
-import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import { UsuarioBase } from "@modules/usuarios/utils/form/usuario.base";
+import useQuery from "@modules/general/hooks/useQuery";
+import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 
 export const LabelTablaUsuarios = {
   codigo: "Código",
@@ -63,26 +62,29 @@ function ListarUsuarios() {
     RenderFilters,
   } = useTabla<Usuario>();
 
-  const localUser = useContext(AccountContext)?.localUser;
+  const token = useContext(AccountContext)?.localUser?.token ?? "";
 
-  const {open: _open, message, setMessage, setOpen: _setOpen, title, setTitle} = useAlertDialog();
+  const {RenderAlertDialog, init, responseData} = useQuery<UsuarioService[]>(() => getUsuariosPorTipo("todos", token), 'Consulta Usuarios', false);
 
   useEffect(() => {
     const handleQuery = async () => {
-      if (localUser == undefined) return;
-      const _usuarios = await getUsuariosPorTipo("todos", localUser?.token);
-      console.log(_usuarios)
-      if (_usuarios.error){
-        setMessage(_usuarios.error.message[0]);
-        _setOpen(true);
-        setTitle(_usuarios.error.error);
-        return;
-      }
-      setData(_usuarios.data?.map((usuario) => adaptarUsuario(usuario)));
+      
+      await init();
     };
     handleQuery();
     setFilterLabels(filtrosUsuarios());
-  }, [localUser]);
+  }, [token]);
+
+  useEffect(
+    () => {
+      if(responseData == undefined){
+        setData([]);
+      }
+      else{
+        setData(responseData?.map((usuario) => adaptarUsuario(usuario)));
+      }
+    }, [responseData]
+  )
 
   const navigate = useNavigate();
 
@@ -96,7 +98,7 @@ function ListarUsuarios() {
     open: estadoOpen,
   } = useModal();
 
-  const { open, handleOpen, handleClose } = useModal();
+  const {open, handleOpen, handleClose } = useModal();
 
   const [modo, setModo] = useState<'crear' | 'editar'>('editar');
 
@@ -119,7 +121,7 @@ function ListarUsuarios() {
 
   return (
     <>
-      <AlertDialog open={_open} setOpen={_setOpen} titulo={title} cuerpo={message}/>
+      <RenderAlertDialog/>
       {selectUsuario != undefined && (
         <ModalEstadoUsuario
           handleClose={estadoHandleClose}

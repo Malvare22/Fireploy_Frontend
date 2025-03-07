@@ -1,16 +1,5 @@
 import { z } from "zod";
-import { SexoUsuarioSchema } from "./usuario.schema";
-
-// Schema para redes sociales
-const msgRedSocial = 'Ingrese un link válido para la respectiva red social o deje en blanco'
-export const RedSocialUsuarioSchema = z
-  .object({
-    facebook: z.string().optional().refine((s) => s?.includes('facebook.com') || s?.length == 0, {message: msgRedSocial}),
-    instagram: z.string().optional().refine((s) => s?.includes('instagram.com') || s?.length == 0, {message: msgRedSocial}),
-    linkedin: z.string().optional().refine((s) => s?.includes('linkedin.com') || s?.length == 0, {message: msgRedSocial}),
-    x: z.string().optional().optional().refine((s) => s?.includes('x.com') || s?.length == 0, {message: msgRedSocial})
-  })
-  .strict();
+import { RedSocialUsuarioSchema, SexoUsuarioSchema } from "./usuario.schema";
 
 export const UsuarioEditarDefaultSchema = z.object({
   fechaDeNacimiento: z.string().refine((date) => !isNaN(Date.parse(date)), {

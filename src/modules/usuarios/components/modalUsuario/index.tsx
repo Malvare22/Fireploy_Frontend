@@ -1,18 +1,15 @@
-import Modal, { useModal } from "@modules/general/components/modal";
+import Modal from "@modules/general/components/modal";
 import CustomInput from "@modules/general/components/customInput";
 import Label from "@modules/general/components/label";
 import Row from "@modules/general/components/row";
 
 import { LabelUsuario } from "@modules/usuarios/enum/LabelUsuario";
 import { Box, Card, MenuItem, SxProps } from "@mui/material";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import CustomSelect from "@modules/general/components/customSelect";
-import {
-  obtenerEstadoUsuario,
-  obtenerTiposUsuario,
-} from "@modules/usuarios/utils/usuario.map";
+import { obtenerTiposUsuario } from "@modules/usuarios/utils/usuario.map";
 import { useForm } from "react-hook-form";
 import { UsuarioSchema } from "@modules/usuarios/utils/form/usuario.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,11 +23,10 @@ import { UsuarioEditarDefaultSchema } from "@modules/usuarios/utils/form/usuario
 import { AccountContext } from "@modules/general/context/accountContext";
 import { modificarUsuario } from "@modules/usuarios/services/modificarUsuario";
 import CustomTextArea from "@modules/general/components/customTextArea";
-import { LabelDialog } from "@modules/general/enums/LabelDialog";
-import useSnackBar from "@modules/general/hooks/useSnackbar";
-import SnackBar from "@modules/general/components/snackbar";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
+import { LabelDialog } from "@modules/general/enums/labelDialog";
+import { queryCrearUsuario } from "@modules/usuarios/services/crear.usuario";
 
 type Props = {
   open: boolean;
@@ -91,7 +87,7 @@ const Cuerpo: React.FC<{
 
   console.log(errors);
 
-  const { open, setOpen, defaultTitle, message, setMessage } = useAlertDialog();
+  const { open, setOpen, message, setMessage, title } = useAlertDialog();
 
   const query = async (data: Usuario) => {
     const editar = async () => {
@@ -100,16 +96,28 @@ const Cuerpo: React.FC<{
         if (response.error) {
           setMessage(LabelDialog.seHaPresentadoUnError + response.error);
           setOpen(true);
-          // setLoader(true);
         } else {
           setMessage(LabelDialog.guardadoExitoso);
           setOpen(true);
-          // setLoader(true);
+        }
+      }
+    };
+
+    const crear = async () => {
+      if (token) {
+        const response = await queryCrearUsuario(token, data);
+        if (response.error) {
+          setMessage(LabelDialog.seHaPresentadoUnError + response.error);
+          setOpen(true);
+        } else {
+          setMessage(LabelDialog.guardadoExitoso);
+          setOpen(true);
         }
       }
     };
 
     if (tipo == "editar") await editar();
+    else await crear();
   };
 
   useEffect(() => {
@@ -139,7 +147,7 @@ const Cuerpo: React.FC<{
     <>
       <AlertDialog
         open={open}
-        titulo={defaultTitle}
+        titulo={title}
         cuerpo={message}
         setOpen={setOpen}
         reloader={true}
@@ -168,28 +176,6 @@ const Cuerpo: React.FC<{
             <PreviewImage image={image} setImage={setImage} />
           </Row>
 
-          {/* Correo */}
-          {/* <Row>
-          <Label>{LabelUsuario.correo}</Label>
-          <Box sx={{ width: "100%" }}>
-            <CustomInput
-              variant="secondary"
-              {...register("correo")} // Registrar el campo
-              errorMessage={errors.correo?.message} // Mensaje de error
-            />
-          </Box>
-        </Row> */}
-
-          {/* Código */}
-          {/* <Row>
-          <Label>{LabelUsuario.codigo}</Label>
-          <CustomInput
-            variant="secondary"
-            {...register("id")} // Registrar el campo
-            errorMessage={errors.id?.message} // Mensaje de error
-          />
-        </Row> */}
-
           {/* Nombres */}
           <Row>
             <Label>{LabelUsuario.nombres}</Label>
@@ -210,22 +196,63 @@ const Cuerpo: React.FC<{
             />
           </Row>
 
-          {/* Rol */}
-          {/* <Row>
-          <Label>{LabelUsuario.rol}</Label>
-          <CustomSelect
-            variantDelta="secondary"
-            {...register("tipo")}
-            defaultValue={getValues().tipo}
-            errorMessage={errors.tipo?.message} // Mensaje de error
-          >
-            {Array.from(obtenerTiposUsuario.entries()).map(([valor, texto]) => (
-              <MenuItem key={valor} value={valor}>
-                {texto}
-              </MenuItem>
-            ))}
-          </CustomSelect>
-        </Row> */}
+          {tipo == "crear" && (
+            <>
+              {/* Correo */}
+              <Row>
+                <Label>{LabelUsuario.correo}</Label>
+                <Box sx={{ width: "100%" }}>
+                  <CustomInput
+                    variant="secondary"
+                    {...register("correo")} // Registrar el campo
+                    errorMessage={errors.correo?.message} // Mensaje de error
+                  />
+                </Box>
+              </Row>
+
+              {/* Fecha de Ingreso */}
+              <Row>
+                <Label>{LabelUsuario.fechaIngreso}</Label>
+                <CustomInput
+                  variant="secondary"
+                  type="date"
+                  errorMessage={errors.estFechaInicio?.message}
+                  inputProps={{ max: obtenerFechaActual() }}
+                  {...register("estFechaInicio")}
+                />
+              </Row>
+
+              {/* Contraseña */}
+              <Row>
+                <Label>{LabelUsuario.contrasenia}</Label>
+                <CustomInput
+                  variant="secondary"
+                  {...register("contrasenia")}
+                  type="password"
+                  errorMessage={errors.contrasenia?.message} // Mensaje de error
+                />
+              </Row>
+
+              {/* Rol */}
+              <Row>
+                <Label>{LabelUsuario.rol}</Label>
+                <CustomSelect
+                  variantDelta="secondary"
+                  {...register("tipo")}
+                  defaultValue={getValues().tipo}
+                  errorMessage={errors.tipo?.message} // Mensaje de error
+                >
+                  {Array.from(obtenerTiposUsuario.entries()).map(
+                    ([valor, texto]) => (
+                      <MenuItem key={valor} value={valor}>
+                        {texto}
+                      </MenuItem>
+                    )
+                  )}
+                </CustomSelect>
+              </Row>
+            </>
+          )}
 
           {/* Estado */}
           {/* <Row>
@@ -314,17 +341,6 @@ const Cuerpo: React.FC<{
               errorMessage={errors.descripcion?.message} // Mensaje de error
             />
           </Row>
-
-          {/* Contraseña */}
-          {/* <Row>
-          <Label>{LabelUsuario.contrasenia}</Label>
-          <CustomInput
-            variant="secondary"
-            {...register("contrasenia")}
-            type="password"
-            errorMessage={errors.contrasenia?.message} // Mensaje de error
-          />
-        </Row> */}
 
           {/* Botones */}
           <BotonesBasicos cancelar={handleClose} aceptar={handleQuery} />

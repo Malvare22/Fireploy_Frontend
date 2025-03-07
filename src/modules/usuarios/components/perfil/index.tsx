@@ -107,6 +107,12 @@ const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
           <Typography variant="title">{usuario.fechaDeNacimiento}</Typography>
         </Row>
 
+        {/* Fecha de Ingreso */}
+        <Row>
+          <Label width={240}>{LabelUsuario.fechaIngreso}</Label>
+          <Typography variant="title">{usuario.estFechaInicio}</Typography>
+        </Row>
+
         {/* Redes sociales */}
         <Row sx={{ alignItems: "start" }}>
           <Label width={240}>{LabelUsuario.redesSociales}</Label>

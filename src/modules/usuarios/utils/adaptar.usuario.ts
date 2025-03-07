@@ -7,6 +7,7 @@ import { SexoUsuario } from "../types/usuario.sexo";
 import { TiposUsuario } from "../types/usuario.tipos";
 import {
   obtenerLetraTiposUsuario,
+  obtenerTiposUsuario,
   TiposUsuarioStringCompleto,
 } from "./usuario.map";
 
@@ -60,7 +61,7 @@ export const adaptarUsuarioSalida = (
     contrasenia: usuario.contrasenia,
     foto_perfil: "https://cdn.pixabay.com/photo/2024/12/30/13/06/moped-9300285_1280.jpg",
     estado: usuario.estado,
-    tipo: usuario.tipo,
+    tipo: obtenerTiposUsuario.get(usuario.tipo),
     est_fecha_inicio: usuario.estFechaInicio,
   };
   return _usuario;

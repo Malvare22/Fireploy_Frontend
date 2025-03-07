@@ -6,5 +6,6 @@ export const LabelGeneral = {
     ver: 'Ver',
     eliminar: 'Eliminar',
     habilitar: 'Habilitar',
-    deshabilitar: 'Deshabilitar'
+    deshabilitar: 'Deshabilitar',
+    aceptar: 'Aceptar'
 };

@@ -19,23 +19,18 @@ export const SexoUsuarioSchema = z.enum(
 );
 
 // Schema para redes sociales
+const msgRedSocial = 'Ingrese un link válido para la respectiva red social o deje en blanco'
 export const RedSocialUsuarioSchema = z
   .object({
-    facebook: z.string().optional(),
-    instagram: z.string().optional(),
-    linkedin: z.string().optional(),
+    facebook: z.string().optional().refine((s) => s?.includes('facebook.com') || s?.length == 0, {message: msgRedSocial}),
+    instagram: z.string().optional().refine((s) => s?.includes('instagram.com') || s?.length == 0, {message: msgRedSocial}),
+    linkedin: z.string().optional().refine((s) => s?.includes('linkedin.com') || s?.length == 0, {message: msgRedSocial}),
+    x: z.string().optional().optional().refine((s) => s?.includes('x.com') || s?.length == 0, {message: msgRedSocial})
   })
   .strict();
 
 export const UsuarioSchema = z.object({
   correo: z.string().email({ message: "Debe ser un correo válido" }),
-  id: z.string().refine(
-    (val) => {
-      const condicion = !isNaN(parseInt(val));
-      return condicion && parseInt(val) > 0;
-    },
-    { message: "Solo se admiten enteros positivos" }
-  ),
   fechaDeNacimiento: z.string().refine((date) => !isNaN(Date.parse(date)), {
     message: "Debe ser una fecha válida (YYYY-MM-DD)",
   }),
@@ -50,6 +45,9 @@ export const UsuarioSchema = z.object({
   fotoDePerfil: z.string().url({ message: "Debe ser una URL válida" }),
   redSocial: RedSocialUsuarioSchema,
   descripcion: z.string().optional(),
+  estFechaInicio: z.string().refine((date) => !isNaN(Date.parse(date)), {
+    message: "Debe ser una fecha válida (YYYY-MM-DD)",
+  }),
 });
 
 export type Usuario = z.infer<typeof UsuarioSchema>;
