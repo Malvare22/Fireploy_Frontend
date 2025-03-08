@@ -25,10 +25,10 @@ export const routerUsuarios: RouteObject =
       path: rutasUsuarios.perfil,
       element: <Perfil />, // Página principal
     },
-    // {
-    //   path: rutasUsuarios.verPerfilPorId,
-    //   element: <PerfilPorId />, // Ver perfil estudiante
-    // },
+    {
+      path: rutasUsuarios.verPerfilPorId,
+      element: <PerfilPorId />, // Ver perfil estudiante
+    },
     {
       path: rutasUsuarios.listar,
       element: <ListarUsuarios />,

@@ -3,7 +3,7 @@ import { UsuarioService } from "../types/services.usuario";
 import { adaptarUsuarioSalida } from "../utils/adaptar.usuario";
 import { Usuario } from "../types/usuario";
 
-export const queryCrearUsuario = async (
+export const crearUsuarioService = async (
   token: string,
   data: Usuario
 ) => {

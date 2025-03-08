@@ -1,24 +1,44 @@
 import { useParams } from "react-router-dom";
 import VerPerfil from "@modules/usuarios/components/perfil";
-import { useEffect, useState } from "react";
-import { UsuarioPlano } from "@modules/usuarios/types/usuario.plano";
-import { usuariosPrueba } from "@modules/usuarios/test/data/usuarios.prueba";
+import { useContext, useEffect, useState } from "react";
+import useQuery from "@modules/general/hooks/useQuery";
+import { obtenerUsuarioPorIdService } from "@modules/usuarios/services/obtenerUsuarioPorId";
+import { AccountContext } from "@modules/general/context/accountContext";
+import { Usuario } from "@modules/usuarios/types/usuario";
+import { adaptarUsuario } from "@modules/usuarios/utils/adaptar.usuario";
 
 function PerfilPorId() {
   const { id } = useParams();
 
-  if (!id) return <></>;
+  const token = useContext(AccountContext)?.localUser?.token;
 
-  const [usuario, setUsuario] = useState<UsuarioPlano | undefined>(undefined);
+  const [usuario, setUsuario] = useState<Usuario | undefined>(undefined);
+
+  const { RenderAlertDialog, init, responseData } = useQuery(
+    () => obtenerUsuarioPorIdService(parseInt(id ?? "0") ?? 0, token ?? ""),
+    "Perfil Usuario",
+    false,
+    false
+  );
 
   useEffect(() => {
-    const _usuario = usuariosPrueba.find((_usuario) => {
-      return _usuario.id == parseInt(id);
-    });
-    setUsuario(_usuario);
-  }, []);
+    if (!id || !token) return;
+    const query = async () => {
+      await init();
+    };
+    query();
+  }, [id, token]);
 
-  return <>{usuario != undefined ? <VerPerfil usuario={usuario} /> : <></>}</>;
+  useEffect(() => {
+    if (responseData) setUsuario(adaptarUsuario(responseData));
+  }, [responseData]);
+
+  return (
+    <>
+      <RenderAlertDialog />
+      {usuario != undefined && <VerPerfil usuario={usuario} />}
+    </>
+  );
 }
 
 export default PerfilPorId;

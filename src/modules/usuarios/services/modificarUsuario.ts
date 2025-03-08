@@ -4,7 +4,7 @@ import { adaptarUsuarioSalida } from "../utils/adaptar.usuario";
 import { Usuario } from "../types/usuario";
 import { EstadoUsuario } from "../types/usuario.estado";
 
-export const modificarUsuario = async (
+export const modificarUsuarioService = async (
   id: number,
   token: string,
   data: Usuario

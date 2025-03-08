@@ -32,21 +32,13 @@ import ModalUsuario from "@modules/usuarios/components/modalUsuario";
 import { filtrosUsuarios } from "@modules/usuarios/utils/filtrosUsuarios";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 import ModalEstadoUsuario from "@modules/usuarios/components/modalEstadoUsuario";
-import { getUsuariosPorTipo } from "@modules/usuarios/services/get.usuariosPorTipo";
 import { AccountContext } from "@modules/general/context/accountContext";
 import { adaptarUsuario } from "@modules/usuarios/utils/adaptar.usuario";
 import { UsuarioBase } from "@modules/usuarios/utils/form/usuario.base";
 import useQuery from "@modules/general/hooks/useQuery";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
-
-export const LabelTablaUsuarios = {
-  codigo: "Código",
-  nombreCompleto: "Nombre Completo",
-  tipoUsuario: "Tipo de Usuario",
-  estado: "Estado",
-  proyectos: "Proyectos",
-  porfolio: "Portafolio",
-};
+import { LabelTablaUsuarios } from "@modules/usuarios/enum/LabelTablaUsuarios";
+import { obtenerUsuariosPorTipoService } from "@modules/usuarios/services/obtenerUsuariosPorTipo";
 
 function ListarUsuarios() {
   const {
@@ -64,9 +56,12 @@ function ListarUsuarios() {
 
   const token = useContext(AccountContext)?.localUser?.token ?? "";
 
-  const {RenderAlertDialog, init, responseData} = useQuery<UsuarioService[]>(() => getUsuariosPorTipo("todos", token), 'Consulta Usuarios', false);
+  const {RenderAlertDialog, init, responseData} = useQuery<UsuarioService[]>(() => obtenerUsuariosPorTipoService("todos", token), 'Consulta Usuarios', false, false);
 
   useEffect(() => {
+
+    if(token == "") return;
+
     const handleQuery = async () => {
       
       await init();
@@ -241,7 +236,7 @@ function ListarUsuarios() {
           </Table>
         </TableContainer>
       </Box>
-      <Button color="warning" variant="contained" onClick={handleCrear}>Agregar Usuario</Button>
+      <Button color="warning" variant="contained" onClick={handleCrear}>{LabelTablaUsuarios.agregarUsuario}</Button>
     </>
   );
 }

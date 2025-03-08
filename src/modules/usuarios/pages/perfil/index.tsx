@@ -2,15 +2,15 @@ import VerPerfil from "@modules/usuarios/components/perfil";
 import { useContext, useEffect, useState } from "react";
 import { AccountContext } from "@modules/general/context/accountContext";
 import { LoaderContext } from "@modules/general/context/loaderContext";
-import { obtenerUsuarioPorId } from "@modules/usuarios/services/obtenerUsuarioPorId";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { adaptarUsuario } from "@modules/usuarios/utils/adaptar.usuario";
+import { obtenerUsuarioPorIdService } from "@modules/usuarios/services/obtenerUsuarioPorId";
 
 function Perfil() {
   
   const [usuario, setUsuario] = useState<Usuario | undefined>(undefined);
 
-  const setLoader = useContext(LoaderContext)?.setLoading;
+  // const setLoader = useContext(LoaderContext)?.setLoading;
 
   const localUser = useContext(AccountContext)?.localUser;
 
@@ -25,7 +25,7 @@ function Perfil() {
     // setLoader(true);
 
     const consulta = async () => {
-      const _usuario = await obtenerUsuarioPorId(_id, _token);
+      const _usuario = await obtenerUsuarioPorIdService(_id, _token);
 
       if(_usuario.data) setUsuario(adaptarUsuario(_usuario.data));
     };

@@ -21,12 +21,15 @@ import BotonesBasicos from "@modules/general/components/botonesBasicos";
 import RedSocial from "@modules/proyectos/components/redSocial";
 import { UsuarioEditarDefaultSchema } from "@modules/usuarios/utils/form/usuario.editar.default.schema";
 import { AccountContext } from "@modules/general/context/accountContext";
-import { modificarUsuario } from "@modules/usuarios/services/modificarUsuario";
+import {
+  modificarUsuarioService,
+} from "@modules/usuarios/services/modificarUsuario";
 import CustomTextArea from "@modules/general/components/customTextArea";
-import useAlertDialog from "@modules/general/hooks/useAlertDialog";
-import AlertDialog from "@modules/general/components/alertDialog";
-import { LabelDialog } from "@modules/general/enums/labelDialog";
-import { queryCrearUsuario } from "@modules/usuarios/services/crear.usuario";
+import {
+  crearUsuarioService,
+} from "@modules/usuarios/services/crearUsuario";
+import useQuery from "@modules/general/hooks/useQuery";
+import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 
 type Props = {
   open: boolean;
@@ -85,41 +88,6 @@ const Cuerpo: React.FC<{
     resolver: zodResolver(resolver()),
   });
 
-  console.log(errors);
-
-  const { open, setOpen, message, setMessage, title } = useAlertDialog();
-
-  const query = async (data: Usuario) => {
-    const editar = async () => {
-      if (token) {
-        const response = await modificarUsuario(getValues().id, token, data);
-        if (response.error) {
-          setMessage(LabelDialog.seHaPresentadoUnError + response.error);
-          setOpen(true);
-        } else {
-          setMessage(LabelDialog.guardadoExitoso);
-          setOpen(true);
-        }
-      }
-    };
-
-    const crear = async () => {
-      if (token) {
-        const response = await queryCrearUsuario(token, data);
-        if (response.error) {
-          setMessage(LabelDialog.seHaPresentadoUnError + response.error);
-          setOpen(true);
-        } else {
-          setMessage(LabelDialog.guardadoExitoso);
-          setOpen(true);
-        }
-      }
-    };
-
-    if (tipo == "editar") await editar();
-    else await crear();
-  };
-
   useEffect(() => {
     setImage(getValues().fotoDePerfil);
   }, []);
@@ -130,12 +98,28 @@ const Cuerpo: React.FC<{
     } else setValue("fotoDePerfil", getValues().fotoDePerfil);
   }, [image]);
 
+  const ref = useRef<HTMLButtonElement>(null);
+
+  const consultaAEjecutar = (usuario: Usuario) => {
+    if (tipo == "editar")
+      return () =>
+        modificarUsuarioService(defaultValue.id, token ?? "", usuario);
+    return () => crearUsuarioService(token ?? "", usuario);
+  };
+
+  const { RenderAlertDialog, init } = useQuery<UsuarioService>(
+    consultaAEjecutar(getValues()),
+    "Gestión Usuario",
+    true,
+    true,
+    "Dale",
+    true
+  );
+
   const styleRowRedSocial = {
     flexDirection: "row",
     alignItems: "center",
   } as SxProps;
-
-  const ref = useRef<HTMLButtonElement>(null);
 
   const handleQuery = () => {
     if (ref) {
@@ -145,15 +129,8 @@ const Cuerpo: React.FC<{
 
   return (
     <>
-      <AlertDialog
-        open={open}
-        titulo={title}
-        cuerpo={message}
-        setOpen={setOpen}
-        reloader={true}
-      />
-
-      <form onSubmit={handleSubmit(query)}>
+      <RenderAlertDialog />
+      <form onSubmit={handleSubmit(init)}>
         <Box
           component={"button"}
           onClick={handleQuery}

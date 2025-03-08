@@ -12,8 +12,9 @@ export default function useQuery<T>(
   query: () => Promise<ApiResponse<T>>,
   title: string,
   withConfirmation: boolean,
+  withSuccessMessage: boolean,
   confirmationText?: string,
-  withReload?: boolean
+  withReload?: boolean,
 ) {
   const {
     message,
@@ -25,7 +26,6 @@ export default function useQuery<T>(
   } = useAlertDialog();
 
   /**
-   * -1 Momento No visible (no se llama a la consulta aún)
    * 0 Momento previo a la consulta (confirmación)
    * 1 Momento post ejecución
    */
@@ -53,14 +53,16 @@ export default function useQuery<T>(
   const queryResponse = async () => {
     const response = await query();
     setStage(1);
-    setOpen(true);
     setAlertClose(() => () => onCloseAlert(response.error?.statusCode));
     if (response.error) {
       setMessage(response.error.message[0]);
       setTitle(LabelDialog.seHaPresentadoUnError);
+      setOpen(true);
     } else {
       if (response.data) {
         setMessage(LabelDialog.guardadoExitoso);
+        if(withSuccessMessage) setOpen(true);
+        else setOpen(false);
         return setResposenData(response.data);
       }
     }
