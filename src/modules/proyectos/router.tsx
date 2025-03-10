@@ -15,14 +15,14 @@ export const routerProyectos: RouteObject = {
   path: "/",
   element: <LayoutStandard />, // Usar el Layout para rutas que necesitan el Navbar
   children: [
-    {
-      path: rutasProyectos.listar,
-      element: <VerProyectos/>,
-    },
-    {
-      path: rutasProyectos.ver,
-      element: <VerProyecto/>
-    }
+    // {
+    //   path: rutasProyectos.listar,
+    //   element: <VerProyectos/>,
+    // },
+    // {
+    //   path: rutasProyectos.ver,
+    //   element: <VerProyecto/>
+    // }
    
   ],
 };

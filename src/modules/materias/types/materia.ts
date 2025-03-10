@@ -1,9 +1,11 @@
 import { CursoMateria } from "./materia.curso";
+import { EstadoMateria } from "./materia.estado";
 
-export type Materia = {
+export type MateriaTabla = {
     id: number,
     nombre: string,
     semestre: string,
     cursos: CursoMateria[],
-    cantidadDeCursos: number
+    cantidadDeCursos: number,
+    estado: EstadoMateria
 };

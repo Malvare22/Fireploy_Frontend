@@ -14,7 +14,7 @@ function VerProyectos() {
       {/* Project Container */}
       <Box sx={{paddingX: {md: 10, xs: 4}, marginY: 4}}>
         <Box sx={{ display: "flex", justifyContent: "end", marginY: 2 }}>
-          <Button variant="contained">{LabelProyecto.nuevoProyeco}</Button>
+          <Button variant="contained">{LabelProyecto.nuevoProyecto}</Button>
         </Box>
 
         {proyectos.map((proyecto, index) => (

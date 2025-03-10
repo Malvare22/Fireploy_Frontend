@@ -1,9 +1,12 @@
-// const sexoMapData: Record<EstadoMate, string> = {
-//   M: "Masculino",
-//   F: "Femenino",
-//   O: "Otro",
-// } as const;
+import { EstadoMateria } from "../types/materia.estado";
 
-// export const obtenerSexo = new Map(
-//   Object.entries(sexoMapData) as [SexoUsuario, string][]
-// );
+const estadoMateriaMapData: Record<EstadoMateria, string> = {
+  A: 'Activo',
+  I: 'Inactivo'
+} as const;
+
+export const obtenerEstadoMateria = new Map(
+  Object.entries(estadoMateriaMapData) as [EstadoMateria, string][]
+);
+
+export const listaSemestresMaterias = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"] as const;
