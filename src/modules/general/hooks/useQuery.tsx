@@ -11,7 +11,6 @@ import { buttonTypes } from "../types/buttons";
 
 /**
  * Hook para manejar consultas asíncronas con opciones de confirmación y mensajes de éxito/error.
- *
  * @template T - Tipo de datos esperados en la respuesta.
  * @param {() => Promise<ApiResponse<T>>} query - Función que ejecuta la consulta.
  * @param {string} title - Título del cuadro de diálogo de confirmación.
@@ -19,7 +18,7 @@ import { buttonTypes } from "../types/buttons";
  * @param {boolean} withSuccessMessage - Indica si se debe mostrar un mensaje de éxito tras una consulta exitosa.
  * @param {string} confirmationText - Texto opcional para el mensaje de confirmación.
  * @param {boolean} withReload - Indica si se debe recargar la página después de cerrar el cuadro de diálogo.
- *
+ * @param {() => void} successAction - Corresponde a la función a realizar luego de que se ejecute de manera correcta la consulta.
  * @returns {{
  *   responseData: T | undefined;
  *   RenderAlertDialog: () => JSX.Element;
@@ -33,7 +32,8 @@ export default function useQuery<T>(
   withConfirmation: boolean,
   withSuccessMessage: boolean,
   confirmationText?: string,
-  withReload?: boolean
+  withReload?: boolean,
+  successAction?: () => void
 ) {
   const {
     message,
@@ -60,8 +60,9 @@ export default function useQuery<T>(
    */
   const onCloseAlert = (statusCode: number | undefined) => {
     setOpen(false);
-    if (statusCode == undefined && withReload) {
-      window.location.reload();
+    if (statusCode == undefined) {
+      if(withReload) window.location.reload();
+      if(successAction) successAction();
     }
     if (statusCode == 401) {
       navigate(rutasGeneral.login);

@@ -23,7 +23,8 @@ export const LabelUsuario = {
   registrarUsuario: 'Registrar Usuario',
   verPerfil: 'Ver Perfil',
   verPortafolio: 'Ver Portafolio',
-  fechaIngreso: "Fecha de Ingreso"
+  fechaIngreso: "Fecha de Ingreso a la Universidad",
+  registroExitoso: 'Usuario Registrado con éxito'
 };
 
 export const obtenerHabilitarUsuario = (usuario: Usuario) => (`¿Está seguro de que desea habilitar al usuario ${usuario.apellidos} ${usuario.nombres}?`);

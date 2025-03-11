@@ -18,3 +18,5 @@ export type Usuario = {
     descripcion: string;
     estFechaInicio: string;
 };
+
+export type UsuarioRegistro = Usuario & {confirmarContrasenia: string};

@@ -7,5 +7,7 @@ export const LabelGeneral = {
     eliminar: 'Eliminar',
     habilitar: 'Habilitar',
     deshabilitar: 'Deshabilitar',
-    aceptar: 'Aceptar'
+    aceptar: 'Aceptar',
+    registrar: 'Registrar',
+    volver: 'Volver'
 };

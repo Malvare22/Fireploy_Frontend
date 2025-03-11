@@ -1,12 +1,10 @@
 import CustomInput from "@modules/general/components/customInput";
 import FormContainer from "@modules/general/components/formContainer";
+import { LabelCambiarContrasenia } from "@modules/general/enums/labelCambiarContrasenia";
+import { LabelGeneral } from "@modules/general/enums/labelGeneral";
 import { Box, Button, Link, Typography } from "@mui/material";
 import React, { useState } from "react";
 
-/**
- * 
- * @returns 
- */
 function CambiarContrasenia() {
   const [value, setValue] = useState(false);
 
@@ -50,11 +48,11 @@ const Solicitar: React.FC<SolicitarProps> = ({ setValue }: SolicitarProps) => {
     <>
       <form>
         <Box sx={{ textAlign: "center" }}>
-          <Typography variant="h3Bold">Cambiar Contraseña</Typography>
+          <Typography variant="h3Bold">{LabelCambiarContrasenia.cambiarContrasenia}</Typography>
         </Box>
         <Box>
           <Box>
-            <Typography variant="h5Bold">Correo Electrónico</Typography>
+            <Typography variant="h5Bold">{LabelCambiarContrasenia.correoElectronico}</Typography>
           </Box>
           <Box>
             <CustomInput type="email" />
@@ -69,10 +67,10 @@ const Solicitar: React.FC<SolicitarProps> = ({ setValue }: SolicitarProps) => {
           className="unique"
         >
           <Link sx={{ marginRight: 4 }} href="login">
-            Volver
+            {LabelGeneral.volver}
           </Link>
           <Button variant="primary" onClick={changeValue}>
-            Registrar
+            {LabelGeneral.registrar}
           </Button>
         </Box>
       </form>
@@ -88,11 +86,11 @@ const Cambiar: React.FC<CambiarProps> = ({ setValue }: CambiarProps) => {
     <>
       <form>
         <Box sx={{ textAlign: "center" }}>
-          <Typography variant="h3Bold">Cambiar Contraseña</Typography>
+          <Typography variant="h3Bold">{LabelCambiarContrasenia.cambiarContrasenia}</Typography>
         </Box>
         <Box>
           <Box>
-            <Typography variant="h5Bold">Correo Electrónico</Typography>
+            <Typography variant="h5Bold">{LabelCambiarContrasenia.correoElectronico}</Typography>
           </Box>
           <Box>
             <CustomInput type="email" />
@@ -100,7 +98,7 @@ const Cambiar: React.FC<CambiarProps> = ({ setValue }: CambiarProps) => {
         </Box>
         <Box>
           <Box>
-            <Typography variant="h5Bold">Código de Verificación</Typography>
+            <Typography variant="h5Bold">{LabelCambiarContrasenia.codigoVerificacion}</Typography>
           </Box>
           <Box>
             <CustomInput type="number" />
@@ -108,7 +106,7 @@ const Cambiar: React.FC<CambiarProps> = ({ setValue }: CambiarProps) => {
         </Box>
         <Box>
           <Box>
-            <Typography variant="h5Bold">Contraseña</Typography>
+            <Typography variant="h5Bold">{LabelCambiarContrasenia.cambiarContrasenia}</Typography>
           </Box>
           <Box>
             <CustomInput type="password" />
@@ -116,7 +114,7 @@ const Cambiar: React.FC<CambiarProps> = ({ setValue }: CambiarProps) => {
         </Box>
         <Box>
           <Box>
-            <Typography variant="h5Bold">Confirmar Contraseña</Typography>
+            <Typography variant="h5Bold">{LabelCambiarContrasenia.confirmarContrasenia}</Typography>
           </Box>
           <Box>
             <CustomInput type="password" />
@@ -132,9 +130,9 @@ const Cambiar: React.FC<CambiarProps> = ({ setValue }: CambiarProps) => {
           className="unique"
         >
           <Link sx={{ marginRight: 4 }} onClick={() => {setValue(false)}}>
-            Volver
+            {LabelGeneral.volver}
           </Link>
-          <Button variant="primary">Registrar</Button>
+          <Button variant="primary">{LabelGeneral.registrar}</Button>
         </Box>
       </form>
     </>
