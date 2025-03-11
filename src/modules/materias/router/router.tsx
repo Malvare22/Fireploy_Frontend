@@ -2,8 +2,8 @@ import LayoutStandard from "@modules/general/layouts/standard";
 import { RouteObject } from "react-router-dom";
 // import ListarMaterias from "../pages/listar";
 import EditarMateria from "../pages/editar";
-import CrearMateria from "../pages/ver";
 import ListarMaterias from "../pages/listar";
+import GestionCurso from "../pages/ver";
 
 export const rutaBase = "/materias";
 
@@ -27,7 +27,7 @@ export const routerMaterias: RouteObject = {
     },
     {
       path: rutasMaterias.crear,
-      element: <CrearMateria/>
+      element: <GestionCurso/>
     },
   ],
 };

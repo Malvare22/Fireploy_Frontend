@@ -8,6 +8,7 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
     color: theme.palette.common.white,
     fontSize: theme.typography.titleBold?.fontSize,
     fontWeight: theme.typography.titleBold?.fontWeight,
+    padding: 6,
     [theme.breakpoints.down("sm")]: {
       fontSize: "0.9rem",
     },
@@ -15,6 +16,8 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontSize: theme.typography.title2?.fontSize,
     fontWeight: theme.typography.title2?.fontWeight,
+    padding: 6,
+
     [theme.breakpoints.down("sm")]: {
       fontSize: "0.9rem",
     },
