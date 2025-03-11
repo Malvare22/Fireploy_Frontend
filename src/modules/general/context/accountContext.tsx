@@ -9,6 +9,9 @@ export type AccountInformation = {
   id: number
 }
 
+/**
+ * Creación de contexto para la obtención de información básica de usuario
+ */
 export const AccountContext = createContext<
   | { localUser: AccountInformation | null; setLocalUser: React.Dispatch<AccountInformation | null> }
   | undefined

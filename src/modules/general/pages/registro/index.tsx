@@ -23,11 +23,13 @@ function Registrar() {
 
   const navigate = useNavigate();
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: RegistroS) => {
     console.log("Formulario enviado con éxito:", data);
   };
 
   return (
+    <Box sx={{border: '1px solid black', width: '100%'}}>
+      <Box sx={{display: 'flex', justifyContent: 'center'}}><Typography variant="h3Bold">Registro Usuario</Typography></Box>
     <form
       onSubmit={handleSubmit(onSubmit)}
       style={{ width: "100%", display: "flex", justifyContent: "center" }}
@@ -36,12 +38,12 @@ function Registrar() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: 8,
+          gap: 4,
           width: { md: "60%", xs: "90%" },
           "& > div": {
             display: "flex",
             flexDirection: "column",
-            gap: 1,
+            gap: 0,
           },
         }}
       >
@@ -59,14 +61,6 @@ function Registrar() {
             type="text"
             errorMessage={errors.apellidos?.message}
             {...register("apellidos")}
-          />
-        </Box>
-        <Box>
-          <Typography variant="h5Bold">{LabelUsuario.codigo}</Typography>
-          <CustomInput
-            type="text"
-            errorMessage={errors.id?.message}
-            {...register("id")}
           />
         </Box>
         <Box>
@@ -145,7 +139,7 @@ function Registrar() {
           </Box>
         </Box>
       </FormContainer>
-    </form>
+    </form></Box>
   );
 }
 

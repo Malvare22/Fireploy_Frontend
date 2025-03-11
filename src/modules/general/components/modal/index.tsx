@@ -54,7 +54,7 @@ const Modal: React.FC<
           {titulo && (
             <Card
               sx={{
-                backgroundColor: "warning.main",
+                backgroundColor: "#607d8b",
                 padding: 2,
                 marginBottom: 1,
                 display: "flex",

@@ -3,6 +3,10 @@ import FormContainer from "@modules/general/components/formContainer";
 import { Box, Button, Link, Typography } from "@mui/material";
 import React, { useState } from "react";
 
+/**
+ * 
+ * @returns 
+ */
 function CambiarContrasenia() {
   const [value, setValue] = useState(false);
 

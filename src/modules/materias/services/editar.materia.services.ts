@@ -24,9 +24,14 @@ export const editarEstadoMateriaService = async (
   token: string,
   data: Materia
 ) => {
+  const _data: Partial<Record<keyof Materia, string>> = {
+    estado: data.estado == "A" ? "I" : "A",
+    nombre: data.nombre,
+    semestre: data.semestre,
+  };
   const response = await patchData<MateriaService>(
     `/materia/${data.id}`,
-    { ...data, estado: data.estado == "A" ? "I" : "A" },
+    _data,
     {
       sessiontoken: token,
     }

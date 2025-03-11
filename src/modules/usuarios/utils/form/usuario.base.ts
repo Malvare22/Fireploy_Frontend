@@ -4,6 +4,9 @@ import { SexoUsuario } from "@modules/usuarios/types/usuario.sexo";
 import { RedSocialUsuario } from "@modules/usuarios/types/usuario.redSocial";
 import { Usuario } from "@modules/usuarios/types/usuario";
 
+/**
+ * Usuario por defecto a la hora de realizar la creación de Usuario
+ */
 export const UsuarioBase: Usuario = {
   correo: "",
   id: 0,
@@ -19,9 +22,8 @@ export const UsuarioBase: Usuario = {
     facebook: "",
     instagram: "",
     linkedin: "",
-    x: ""
+    x: "",
   } as RedSocialUsuario,
   descripcion: "",
-  estFechaInicio: ""
+  estFechaInicio: "",
 };
-

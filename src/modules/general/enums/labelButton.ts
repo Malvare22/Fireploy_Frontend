@@ -1,4 +1,5 @@
 export enum LabelButton{
     guardar = 'Guardar',
-    cancelar = 'Cancelar'
+    cancelar = 'Cancelar',
+    agregar = 'Agregar'
 };

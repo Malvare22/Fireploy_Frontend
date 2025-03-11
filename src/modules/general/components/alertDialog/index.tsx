@@ -4,7 +4,10 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
+import { palette } from "@core/themes";
+import GeneralButton from "../buttons";
+import { buttonTypes } from "@modules/general/types/buttons";
 
 interface Props {
   titulo: string;
@@ -38,7 +41,10 @@ const AlertDialog: React.FC<Props> = ({
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{titulo}</DialogTitle>
+        <Box sx={{
+          backgroundColor: palette.modalHeader.main,
+          color: 'white'
+        }}><DialogTitle id="alert-dialog-title">{titulo}</DialogTitle></Box>
         <DialogContent>
           {cuerpo && (
             <DialogContentText id="alert-dialog-description">
@@ -51,9 +57,7 @@ const AlertDialog: React.FC<Props> = ({
           {botones ? (
             botones
           ) : setOpen ? (
-            <Button variant="primary" onClick={handleClose}>
-              Aceptar
-            </Button>
+            <GeneralButton mode={buttonTypes.accept} onClick={handleClose}/>
           ) : (
             <></>
           )}

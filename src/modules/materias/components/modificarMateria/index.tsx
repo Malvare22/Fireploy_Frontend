@@ -13,7 +13,6 @@ import { crearMateriaService } from "@modules/materias/services/crear.materia.se
 import { useParams } from "react-router-dom";
 import { AccountContext } from "@modules/general/context/accountContext";
 import { MateriaBase } from "@modules/materias/utils/base.materia";
-import { obtenerMateriaPorIdService } from "@modules/materias/services/obtenerPorId.materia.services";
 import useQuery from "@modules/general/hooks/useQuery";
 import {
   Materia,
@@ -25,9 +24,13 @@ import {
   listaSemestresMaterias,
   obtenerEstadoMateria,
 } from "@modules/materias/utils/map.materias";
+import { obtenerMateriaPorIdService } from "@modules/materias/services/obtenerPorId.materia.services copy";
+import { buttonTypes } from "@modules/general/types/buttons";
 
 type ModalModificarMateriaProps = {
   tipo: "editar" | "crear";
+  handleClose: () => void;
+  open: boolean;
 };
 
 export enum ModificarCursoLabels {
@@ -40,9 +43,9 @@ export enum ModificarCursoLabels {
 
 export const ModalModificarMateria: React.FC<ModalModificarMateriaProps> = ({
   tipo,
+  handleClose,
+  open,
 }) => {
-  const { handleClose, handleOpen, open } = useModal();
-
   const {
     register,
     handleSubmit,
@@ -54,12 +57,6 @@ export const ModalModificarMateria: React.FC<ModalModificarMateriaProps> = ({
     resolver: zodResolver(MateriaSchema),
     defaultValues: MateriaBase,
   });
-
-  console.log(getValues());
-
-  useEffect(() => {
-    handleOpen();
-  }, []);
 
   const { id } = useParams();
 
@@ -75,7 +72,11 @@ export const ModalModificarMateria: React.FC<ModalModificarMateriaProps> = ({
   useEffect(() => {
     if (token == "" || id == undefined) return;
 
-    init();
+    const _consulta = async () => {
+      await init();
+    };
+
+    _consulta();
   }, [token, id]);
 
   useEffect(() => {
@@ -84,7 +85,6 @@ export const ModalModificarMateria: React.FC<ModalModificarMateriaProps> = ({
   }, [responseData]);
 
   const consulta = () => {
-    console.log(getValues());
     if (tipo == "crear") {
       return crearMateriaService(token, getValues());
     }
@@ -101,8 +101,8 @@ export const ModalModificarMateria: React.FC<ModalModificarMateriaProps> = ({
       true
     );
 
-  const onSubmit = () => {
-    accionInit();
+  const onSubmit = async () => {
+    await accionInit();
   };
 
   return (
@@ -183,10 +183,10 @@ export const ModalModificarMateria: React.FC<ModalModificarMateriaProps> = ({
             <Row>
               <ButtonContainer _justifyContent="center">
                 <Box>
-                  <GeneralButton deltaVariant="save" type="submit" />
+                  <GeneralButton mode={buttonTypes.save} type="submit" />
                 </Box>
                 <Box>
-                  <GeneralButton deltaVariant="cancel" onClick={handleClose} />
+                  <GeneralButton mode={buttonTypes.cancel} onClick={handleClose} />
                 </Box>
               </ButtonContainer>
             </Row>

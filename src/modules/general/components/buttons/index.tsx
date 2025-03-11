@@ -1,45 +1,78 @@
 import { Box, Button, ButtonProps } from "@mui/material";
 import SaveAsIcon from "@mui/icons-material/SaveAs";
-import { LabelButton } from "@modules/general/enums/labelButton";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
+import CheckIcon from '@mui/icons-material/Check';
+import { ReactNode } from "react";
+import { buttonTypes } from "@modules/general/types/buttons";
+import { palette } from "@core/themes";
 
-type ButtonVariant = "save" | "cancel"; // Puedes agregar más variantes si las necesitas.
+const iconMap = {
+  [buttonTypes.save]: <SaveAsIcon />,
+  [buttonTypes.cancel]: <CancelIcon />,
+  [buttonTypes.add]: <AddCircleIcon />,
+  [buttonTypes.accept]: <CheckIcon />,
+};
+
+const labelMap = {
+  [buttonTypes.save]: "guardar",
+  [buttonTypes.cancel]: "cancelar",
+  [buttonTypes.add]: "agregar",
+  [buttonTypes.accept]: "aceptar",
+};
 
 interface GeneralButtonProps extends ButtonProps {
-  deltaVariant: ButtonVariant;
+  mode: buttonTypes;
+  withIcon?: boolean;
+  icon?: ReactNode;
 }
 
-const GeneralButton: React.FC<GeneralButtonProps> = ({ deltaVariant, ...props }) => {
-  switch (deltaVariant) {
-    case "save":
-      return (
-        <Button {...props} startIcon={<SaveAsIcon />}>
-          {LabelButton.guardar}
-        </Button>
-      );
-    case "cancel":
-      return <Button {...props}>{LabelButton.cancelar}</Button>;
-    default:
-      return <Button {...props}>Button</Button>;
-  }
+const GeneralButton: React.FC<GeneralButtonProps> = ({
+  mode,
+  withIcon = true,
+  icon,
+  ...props
+}) => {
+  return (
+    <Button
+      {...props}
+      startIcon={withIcon && (icon || iconMap[mode])}
+      variant="contained"
+      sx={{
+        backgroundColor: mode == buttonTypes.cancel ? palette.customGrey.main : palette.navbar.main,
+      }}
+    >
+      {labelMap[mode]}
+    </Button>
+  );
 };
 
-type ButtonContainerProps = {
+interface ButtonContainerProps {
   children: React.ReactNode;
-  _justifyContent?: "flex-start" | "center" | "flex-end" | "space-between" | "space-around" | "space-evenly";
-  _spacing?: number; // Permite controlar el espacio entre los botones
-};
+  _justifyContent?:
+    | "flex-start"
+    | "center"
+    | "flex-end"
+    | "space-between"
+    | "space-around"
+    | "space-evenly";
+  _spacing?: number;
+}
+
 export const ButtonContainer: React.FC<ButtonContainerProps> = ({
   children,
-  _justifyContent = "flex-start", // Valor por defecto
-  _spacing = 2
+  _justifyContent = "flex-start",
+  _spacing = 2,
 }) => (
-  <Box sx={{
-    display: 'flex',
-    justifyContent: _justifyContent,
-    alignItems: 'center',
-    gap: _spacing,
-    width: '100%'
-  }}>
+  <Box
+    sx={{
+      display: "flex",
+      justifyContent: _justifyContent,
+      alignItems: "center",
+      gap: _spacing,
+      width: "100%",
+    }}
+  >
     {children}
   </Box>
 );

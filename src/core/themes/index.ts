@@ -173,6 +173,9 @@ export const palette = {
   customRed: {
     main: "#803E3E",
   },
+  modalHeader: {
+    main: "#607d8b",
+  },
 };
 
 export const theme = createTheme({

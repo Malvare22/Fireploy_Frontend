@@ -1,16 +1,18 @@
 import { z } from "zod";
-import { RedSocialUsuarioSchema, SexoUsuarioSchema } from "./usuario.schema";
+import { apellidosSchema, descripcionSchema, fotoDePerfilSchema, nombresSchema, redSocialUsuarioSchema, sexoUsuarioSchema, } from "./usuario.schema";
+import { fechaSchema } from "./fechaSchema";
 
+/**
+ * Plantilla de información para modificar perfil por parte del mismo usuario
+ */
 export const UsuarioEditarDefaultSchema = z.object({
-  fechaDeNacimiento: z.string().refine((date) => !isNaN(Date.parse(date)), {
-    message: "Debe ser una fecha válida (YYYY-MM-DD)",
-  }),
-  nombres: z.string().min(1, { message: "El nombre no puede estar vacío" }),
-  apellidos: z.string().min(1, { message: "El apellido no puede estar vacío" }),
-  sexo: SexoUsuarioSchema,
-  fotoDePerfil: z.string().url({ message: "Debe ser una URL válida" }),
-  redSocial: RedSocialUsuarioSchema,
-  descripcion: z.string().optional(),
+  fechaDeNacimiento: fechaSchema,
+  nombres: nombresSchema,
+  apellidos: apellidosSchema,
+  sexo: sexoUsuarioSchema,
+  fotoDePerfil: fotoDePerfilSchema,
+  redSocial: redSocialUsuarioSchema,
+  descripcion: descripcionSchema,
 });
 
 export type UsuarioEditarDefault = z.infer<typeof UsuarioEditarDefaultSchema>;

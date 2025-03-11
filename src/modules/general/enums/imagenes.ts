@@ -8,6 +8,9 @@ import NodeJS from "@modules/general/assets/tecnologias/nodeJS.png";
 import React from "@modules/general/assets/tecnologias/react.png";
 import SpringBoot from "@modules/general/assets/tecnologias/springBoot.png";
 
+/**
+ * Constante para la obtención de las imágenes de forma absoluta
+ */
 export const imagenes = {
   redesSociales: {
     facebook: Facebook,
