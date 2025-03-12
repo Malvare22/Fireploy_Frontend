@@ -196,6 +196,11 @@ export const theme = createTheme({
             "&:hover": {
               backgroundColor: theme.palette.icon.primaryDark, // Usamos el color oscuro
             },
+            [theme.breakpoints.down('sm')]: {
+              fontSize: theme.typography.caption.fontSize,
+            fontFamily: theme.typography.caption.fontFamily,
+            fontWeight: theme.typography.caption.fontWeight,
+            }
           }),
         },
       ],
@@ -254,86 +259,6 @@ export const theme = createTheme({
 
   },
 });
-
-// components: {
-//   // Name of the component
-//   // MuiButtonBase: {
-//   //   defaultProps: {
-//   //     color: 'red',
-//   //   },
-//   // },
-//   MuiButton: {
-//     styleOverrides: {
-//       root: {
-//         variants: [
-//           {
-//             props: { variant: 'action' },
-//             style: {
-//               borderWidth: '30px',
-//               fontSize: '20px',
-//               backgroundColor: 'black',
-//               color: 'white',
-//               minWidth: '100px'
-//             },
-//           },
-//           {
-//             props: { variant: 'cancel' },
-//             style: {
-//               borderWidth: '30px',
-//               fontSize: '20px',
-//               backgroundColor: 'gray',
-//               color: 'white',
-//               minWidth: '100px',
-//               marginRight: '24px'
-//             },
-//           },
-//           {
-//             props: { variant: 'navbarOption' },
-//             style: {
-//               minHeight: '46px',
-//               border: '1px white solid',
-//               color: 'white',
-//               fontSize: 20
-//             },
-//           },
-//         ],
-//       },
-//     },
-//   },
-//   MuiTextField:{
-//     styleOverrides: {
-//       root: {
-//         // border: 'solid 1px black',
-
-//         width: '100%',
-//       },
-//     },
-//   },
-//   MuiOutlinedInput: {
-//     styleOverrides: {
-//       root: {
-//         borderRadius: 10, // Mantén el borde redondeado si es necesario
-//         fontSize:20,
-//         '&:hover .MuiOutlinedInput-notchedOutline': {
-//           borderColor: 'black', // Color del borde al hacer hover
-//         },
-//         '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-//           borderColor: 'black', // Color del borde cuando está enfocado
-//         },
-//       },
-//       notchedOutline: {
-//         borderColor: 'black', // Borde por defecto cuando no hay hover ni foco
-//       },
-//     },
-//   },
-// },
-// });
-
-// theme.typography.h1Bold = {
-//   [theme.breakpoints.up('md')]: {
-//     fontSize: '40px'
-//   }
-// }
 
 theme.typography.h1 = {
   fontSize: "2.8rem", // ~61px

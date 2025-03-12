@@ -1,20 +1,14 @@
 import { FilterLabels } from "@modules/general/types/filterLabels";
-import { Materia } from "../types/materia";
+import { MateriaTabla } from "../types/materia.tabla";
 
-export const filtrosMaterias = (datos: Materia[]) => {
+export const filtrosMaterias = (datos: MateriaTabla[]) => {
   const setSemestres = new Set<string>();
 
   datos.forEach((materia) => {
     setSemestres.add(materia.semestre);
   });
 
-  const setCursos = new Set<number>();
-
-  datos.forEach((materia) => {
-    setCursos.add(materia.cantidadDeCursos);
-  });
-
-  const arregloFiltros: FilterLabels<Materia>[] = [
+  const arregloFiltros: FilterLabels<MateriaTabla>[] = [
     {
       key: "semestre",
       text: "Semestre",
@@ -22,16 +16,6 @@ export const filtrosMaterias = (datos: Materia[]) => {
         return {
           value: valor,
           text: valor,
-        };
-      }),
-    },
-    {
-      key: "cantidadDeCursos",
-      text: "Cantidad de Cursos",
-      labels: Array.from(setCursos).map((valor) => {
-        return {
-          value: valor,
-          text: valor.toString(),
         };
       }),
     },

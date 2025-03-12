@@ -19,7 +19,6 @@ interface Props {
 }
 
 const Portafolio: React.FC<Props> = ({ usuario, proyectos }: Props) => {
-
   const { handleClose, handleOpen, open } = useModal();
 
   const [modalProyecto, setModalProyecto] = useState<Proyecto | undefined>(
@@ -156,19 +155,19 @@ export const CardProyecto: React.FC<{
             gap: 1,
           }}
         >
-          <Box
-            component={"img"}
-            sx={{ width: { md: "30%", xs: "100%" } }}
-            src={proyecto.imagen}
-          />
+            <Box
+              component={"img"}
+              sx={{ width: 300, height: "auto" }}
+              src={proyecto.imagen}
+            />
           <Box
             sx={{
-              width: { md: "70%", xs: "auto" },
+              flexGrow: 1,
               border: "1px solid black",
               padding: 2,
             }}
           >
-            <Typography variant="title2">{proyecto.descripcion}</Typography>
+            <Typography variant="caption">{proyecto.descripcion}</Typography>
           </Box>
         </Box>
         <Box

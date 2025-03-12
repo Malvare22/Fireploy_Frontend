@@ -1,5 +1,5 @@
 import CustomInput from "@modules/general/components/customInput";
-import Modal, { useModal } from "@modules/general/components/modal";
+import Modal from "@modules/general/components/modal";
 import Row from "@modules/general/components/row";
 import { Box, MenuItem, Typography } from "@mui/material";
 import GeneralButton, {
@@ -14,18 +14,15 @@ import { useParams } from "react-router-dom";
 import { AccountContext } from "@modules/general/context/accountContext";
 import { MateriaBase } from "@modules/materias/utils/base.materia";
 import useQuery from "@modules/general/hooks/useQuery";
-import {
-  Materia,
-  MateriaSchema,
-} from "@modules/materias/utils/forms/schema.materias";
-import { adaptarMateriaServiceAMateria } from "@modules/materias/utils/adapters/adaptar.materiaService.materia";
 import { editarMateriaService } from "@modules/materias/services/editar.materia.services";
 import {
   listaSemestresMaterias,
   obtenerEstadoMateria,
 } from "@modules/materias/utils/map.materias";
-import { obtenerMateriaPorIdService } from "@modules/materias/services/obtenerPorId.materia.services copy";
+import { obtenerMateriaPorIdService } from "@modules/materias/services/obtenerPorId.materia.services";
 import { buttonTypes } from "@modules/general/types/buttons";
+import { MateriaModal, MateriaModalSchema } from "@modules/materias/utils/forms/schema.materias";
+import { adaptarMateriaModalServiceAMateria } from "@modules/materias/utils/adapters/adaptar.materiaService.materia";
 
 type ModalModificarMateriaProps = {
   tipo: "editar" | "crear";
@@ -53,8 +50,8 @@ export const ModalModificarMateria: React.FC<ModalModificarMateriaProps> = ({
     getValues,
     reset,
     watch,
-  } = useForm<Materia>({
-    resolver: zodResolver(MateriaSchema),
+  } = useForm<MateriaModal>({
+    resolver: zodResolver(MateriaModalSchema),
     defaultValues: MateriaBase,
   });
 
@@ -81,7 +78,7 @@ export const ModalModificarMateria: React.FC<ModalModificarMateriaProps> = ({
 
   useEffect(() => {
     if (responseData == undefined) return;
-    reset(adaptarMateriaServiceAMateria(responseData));
+    reset(adaptarMateriaModalServiceAMateria(responseData));
   }, [responseData]);
 
   const consulta = () => {

@@ -2,11 +2,8 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "@modules/general/components/tabla";
-import FolderZipIcon from "@mui/icons-material/FolderZip";
-import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import {
   Box,
-  IconButton,
   Paper,
   Stack,
   Table,
@@ -15,7 +12,6 @@ import {
   TableFooter,
   TableHead,
   TableSortLabel,
-  Tooltip,
 } from "@mui/material";
 import useTabla from "@modules/general/hooks/useTabla";
 import { useContext, useEffect, useState } from "react";
@@ -23,12 +19,12 @@ import { useNavigate } from "react-router-dom";
 import {
   labelAvisoCambioEstadoMateria,
   labelTablaMaterias,
-} from "@modules/materias/enums/tablaMaterias";
+} from "@modules/materias/enums/labelTablaMaterias";
 import { filtrosMaterias } from "@modules/materias/utils/filtros.materias";
 import {
   MateriaTabla,
   materiaTablaBase,
-} from "@modules/materias/types/materia";
+} from "@modules/materias/types/materia.tabla";
 import useQuery from "@modules/general/hooks/useQuery";
 import { AccountContext } from "@modules/general/context/accountContext";
 import { MateriaService } from "@modules/materias/types/materia.service";
@@ -185,17 +181,6 @@ function ListarMaterias() {
                 <StyledTableCell>{labelTablaMaterias.nombre}</StyledTableCell>
                 <StyledTableCell>{labelTablaMaterias.semestre}</StyledTableCell>
                 <StyledTableCell align="center">
-                  <TableSortLabel
-                    active={orderBy === "cantidadDeCursos"}
-                    direction={orderBy === "cantidadDeCursos" ? order : "asc"}
-                    onClick={() => {
-                      handleRequestSort("cantidadDeCursos");
-                    }}
-                  >
-                    {labelTablaMaterias.cursos}
-                  </TableSortLabel>
-                </StyledTableCell>
-                <StyledTableCell align="center">
                   {labelTablaMaterias.acciones}
                 </StyledTableCell>
               </StyledTableRow>
@@ -206,7 +191,6 @@ function ListarMaterias() {
                   <StyledTableCell>{materia.id}</StyledTableCell>
                   <StyledTableCell>{materia.nombre}</StyledTableCell>
                   <StyledTableCell>{materia.semestre}</StyledTableCell>
-                  <StyledTableCell>{materia.id}</StyledTableCell>
                   <StyledTableCell align="center">
                     {
                       <Stack

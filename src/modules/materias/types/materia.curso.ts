@@ -1,6 +1,7 @@
 import { EstadoCurso } from "./estado.curso";
 import { Usuario } from "@modules/usuarios/types/usuario";
-import { EstudianteEjemplo, estudiantesEjemplo } from "./estudiantes.ejemplo";
+import { EstudianteEjemplo } from "./estudiantes.ejemplo";
+import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 
 export type DocenteCurso = Pick<
   Usuario,
@@ -13,22 +14,22 @@ export type CursoMateria = {
   semestre: string;
   descripcion: string;
   estado: EstadoCurso;
-  docente: DocenteCurso;
+  docente: UsuarioService;
   estudiantes: EstudianteEjemplo[];
 };
 
-export const ejemploCurso: CursoMateria = {
-  id: "CURSO-123",
-  grupo: "Grupo A",
-  semestre: "2024-1",
-  descripcion: "Curso de Matemáticas Avanzadas",
-  estado: "A", // Asegúrate de que coincide con los valores de EstadoCurso
-  docente: {
-    id: 101,
-    nombres: "Carlos",
-    apellidos: "Ramírez",
-    correo: "carlos.ramirez@example.com",
-    fotoDePerfil: "https://example.com/foto-docente.jpg",
-  },
-  estudiantes: estudiantesEjemplo,
-};
+// export const ejemploCurso: CursoMateria = {
+//   id: "CURSO-123",
+//   grupo: "Grupo A",
+//   semestre: "2024-1",
+//   descripcion: "Curso de Matemáticas Avanzadas",
+//   estado: "A",
+//   docente: {
+//     id: 101,
+//     nombres: "Carlos",
+//     apellidos: "Ramírez",
+//     correo: "carlos.ramirez@example.com",
+//     fotoDePerfil: "https://example.com/foto-docente.jpg",
+//   },
+//   estudiantes: estudiantesEjemplo,
+// };

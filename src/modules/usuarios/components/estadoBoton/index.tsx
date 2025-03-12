@@ -10,7 +10,7 @@ const EstadoBoton: React.FC<{
   url: string;
 }> = ({ estado, url }) => {
   const abrirNuevaVentana = () => {
-    window.open(url, "_blank", "noopener,noreferrer");
+    if(estado != "N") window.open(url, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -19,9 +19,7 @@ const EstadoBoton: React.FC<{
       sx={{ backgroundColor: obtenerColorEstado(estado) }}
       endIcon={obtenerIconoEstado[estado]}
       disabled={estado != "N"}
-      onClick={() => {
-        estado == "N" ? abrirNuevaVentana() : null;
-      }}
+      onClick={abrirNuevaVentana}
     >
       {obtenerEstado[estado]}
     </Button>

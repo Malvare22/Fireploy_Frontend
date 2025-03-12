@@ -1,7 +1,6 @@
 import VerPerfil from "@modules/usuarios/components/perfil";
 import { useContext, useEffect, useState } from "react";
 import { AccountContext } from "@modules/general/context/accountContext";
-import { LoaderContext } from "@modules/general/context/loaderContext";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { adaptarUsuario } from "@modules/usuarios/utils/adaptar.usuario";
 import { obtenerUsuarioPorIdService } from "@modules/usuarios/services/obtenerUsuarioPorId";
