@@ -35,6 +35,7 @@ type ModalModificarCursoProps = {
   open: boolean;
   materiaId: number;
   curso?: CursoMateria;
+  totalCursos?: number;
 };
 const ModalModificarCurso: React.FC<ModalModificarCursoProps> = ({
   tipo,
@@ -42,6 +43,7 @@ const ModalModificarCurso: React.FC<ModalModificarCursoProps> = ({
   open,
   curso,
   materiaId,
+  totalCursos,
 }) => {
   const {
     register,
@@ -62,7 +64,7 @@ const ModalModificarCurso: React.FC<ModalModificarCursoProps> = ({
 
   const consulta = () => {
     if (tipo == "crear") {
-      return crearCursoService(token, getValues());
+      return crearCursoService(token, getValues(), materiaId, totalCursos ?? 0);
     }
     return editarCursoService(token, getValues(), curso?.id ?? "");
   };

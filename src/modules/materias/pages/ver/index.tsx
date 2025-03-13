@@ -34,6 +34,9 @@ import {
 import { CursoMateria } from "@modules/materias/types/materia.curso";
 import { useModal } from "@modules/general/components/modal";
 import ModalModificarMateria from "@modules/materias/components/modificarMateria";
+import ModalModificarCurso from "@modules/materias/components/modalModificarCurso";
+import GeneralButton from "@modules/general/components/buttons";
+import { buttonTypes } from "@modules/general/types/buttons";
 
 export const LabelConfirmarEliminarEstudianteCurso = (
   estudiante: EstudianteEjemplo
@@ -61,6 +64,8 @@ export const VistaGestionMateria = () => {
     false,
     false
   );
+
+  console.log(materia);
 
   const [currentGrupo, setCurrentGrupo] = useState<CursoMateria | undefined>(
     undefined
@@ -99,6 +104,12 @@ export const VistaGestionMateria = () => {
 
   const { handleClose, handleOpen, open } = useModal();
 
+  const {
+    handleClose: handleCloseAgregar,
+    handleOpen: handleOpenAgregar,
+    open: openAgregar,
+  } = useModal();
+
   return (
     <Box>
       <RenderGet />
@@ -107,7 +118,14 @@ export const VistaGestionMateria = () => {
           <ModalModificarMateria
             handleClose={handleClose}
             open={open}
-            tipo="editar"     
+            tipo="editar"
+          />
+          <ModalModificarCurso
+            handleClose={handleCloseAgregar}
+            open={openAgregar}
+            tipo="crear"
+            materiaId={materia.id}
+            totalCursos={materia.cursos?.length ?? 0}
           />
           <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
             {/* Contenido Materia */}
@@ -120,71 +138,89 @@ export const VistaGestionMateria = () => {
                 }}
               >
                 <Typography variant="h3Bold">{materia.nombre}</Typography>
-                <ActionButton mode={actionButtonTypes.editar} onClick={handleOpen}/>
+                <ActionButton
+                  mode={actionButtonTypes.editar}
+                  onClick={handleOpen}
+                />
               </Box>
             </Box>
             <Box sx={{ display: "flex", justifyContent: "center" }}>
-              <TableContainer component={Paper} sx={{ width: "80%" }}>
-                <Table>
-                  <TableHead>
-                    <StyledTableRow>
-                      <StyledTableCell>
-                        <TableSortLabel
-                          active={orderBy === "id"}
-                          direction={orderBy === "id" ? order : "asc"}
-                          onClick={() => {
-                            handleRequestSort("id");
-                          }}
-                        >
-                          {LabelGrupoTabla.id}
-                        </TableSortLabel>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        {LabelGrupoTabla.semestre}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        {LabelGrupoTabla.grupo}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        {LabelGrupoTabla.docente}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        {LabelGrupoTabla.cantidad}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        {LabelGrupoTabla.acciones}
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  </TableHead>
-                  <TableBody>
-                    {renderData.map((grupo, key) => (
-                      <StyledTableRow key={key}>
-                        <StyledTableCell align="center">
-                          {grupo.id}
+              <Box
+                sx={{
+                  width: "80%",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 3,
+                }}
+              >
+                <TableContainer component={Paper}>
+                  <Table>
+                    <TableHead>
+                      <StyledTableRow>
+                        <StyledTableCell>
+                          <TableSortLabel
+                            active={orderBy === "id"}
+                            direction={orderBy === "id" ? order : "asc"}
+                            onClick={() => {
+                              handleRequestSort("id");
+                            }}
+                          >
+                            {LabelGrupoTabla.id}
+                          </TableSortLabel>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          {LabelGrupoTabla.semestre}
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          {grupo.semestre}
+                          {LabelGrupoTabla.grupo}
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          {grupo.grupo}
+                          {LabelGrupoTabla.docente}
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          {grupo.docente}
+                          {LabelGrupoTabla.cantidad}
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          {grupo.cantidadEstudiantes}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          <ActionButton
-                            mode={actionButtonTypes.ver}
-                            onClick={() => handleGrupo(grupo.id)}
-                          />
+                          {LabelGrupoTabla.acciones}
                         </StyledTableCell>
                       </StyledTableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                      {renderData.map((grupo, key) => (
+                        <StyledTableRow key={key}>
+                          <StyledTableCell align="center">
+                            {grupo.id}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {grupo.semestre}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {grupo.grupo}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {grupo.docente}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {grupo.cantidadEstudiantes}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            <ActionButton
+                              mode={actionButtonTypes.ver}
+                              onClick={() => handleGrupo(grupo.id)}
+                            />
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <Box sx={{ display: "flex", justifyContent: "end" }}>
+                  <GeneralButton
+                    mode={buttonTypes.add}
+                    onClick={handleOpenAgregar}
+                  />
+                </Box>
+              </Box>
             </Box>
           </Box>
 

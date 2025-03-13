@@ -23,7 +23,7 @@ export const CursoModalSchema = z.object({
 export type CursoModal = z.infer<typeof CursoModalSchema>;
 
 export const cursoModalBase: CursoModal = {
-  docente: 0,
+  docente: -1,
   estado: "I",
   semestre: "2025-1",
   descripcion: "",
