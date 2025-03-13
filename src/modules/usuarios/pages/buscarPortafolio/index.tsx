@@ -1,7 +1,5 @@
 import InputDeBusqueda from "@modules/general/components/inputDeBusqueda";
 import { LabelUsuario } from "@modules/usuarios/enum/LabelUsuario";
-import { usuariosPrueba } from "@modules/usuarios/test/data/usuarios.prueba";
-import { UsuarioPlano } from "@modules/usuarios/types/usuario.plano";
 import { obtenerTiposUsuario } from "@modules/usuarios/utils/usuario.map";
 import {
   Box,
@@ -11,38 +9,61 @@ import {
   Pagination,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { LabelPortafolio } from "@modules/usuarios/enum/LabelPortafolio";
 import ExploreIcon from "@mui/icons-material/Explore";
 import usePaginacion from "@modules/general/hooks/usePaginacion";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { NavigateFunction, useNavigate } from "react-router-dom";
+import { Usuario } from "@modules/usuarios/types/usuario";
+import useQuery from "@modules/general/hooks/useQuery";
+import { obtenerUsuariosPorTipoService } from "@modules/usuarios/services/obtenerUsuariosPorTipo";
+import { UsuarioService } from "@modules/usuarios/types/services.usuario";
+import { AccountContext } from "@modules/general/context/accountContext";
+import { adaptarUsuario } from "@modules/usuarios/utils/adaptar.usuario";
 
 function BuscarPortafolio() {
-  const usuarios = usuariosPrueba;
+
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
 
   const [search, setSearch] = useState("");
 
   const filtradoUsuarios = () => {
     if (search != "") {
       return usuarios.filter((usuario) =>
-        (usuario.nombres + usuario.apellidos).toLowerCase().includes(search)
+        (usuario.nombres + usuario.apellidos).toLowerCase().includes(search.toLowerCase())
       );
     }
     return usuarios;
   };
 
-  const { mostrarDatos, setPagina, totalPaginas, setDatos } = usePaginacion(5);
+  const { mostrarDatos, setPagina, totalPaginas, setDatos } = usePaginacion<Usuario>(5);
 
   const navigate = useNavigate();
 
+  const token = useContext(AccountContext)?.localUser?.token;
+
+  const {RenderAlertDialog, init, responseData} = useQuery<UsuarioService[]>(() => obtenerUsuariosPorTipoService('todos', token ?? ''), 'Explorar Portafolios', false, false);
+
+  useEffect(() => {
+    if(!token) return;
+    const response = async () => await init();
+    response();
+  }, [token]);
+
+  useEffect(() => {
+    if(responseData)
+    setUsuarios(responseData.map((usuario) => adaptarUsuario(usuario)));
+  }, [responseData]);
+
   useEffect(() => {
     setDatos(filtradoUsuarios);
-  }, [, search]);
+  }, [search, usuarios]);
 
   return (
     <Box>
+      <RenderAlertDialog/>
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
         <Box>
           <Typography variant="h3Bold">
@@ -94,7 +115,7 @@ function BuscarPortafolio() {
 }
 
 interface PreviewUsuarioProps {
-  usuario: UsuarioPlano;
+  usuario: Usuario;
   navigate: NavigateFunction
 }
 export const PreviewUsuario: React.FC<PreviewUsuarioProps> = ({ usuario, navigate }) => {

@@ -1,5 +1,4 @@
 export const readBreakLine = (str: string) => {
-  console.log(str)
   const tmp = str.split("\n");
   let content: any[] = [];
   for (let i = 0; i < tmp.length; i++) {

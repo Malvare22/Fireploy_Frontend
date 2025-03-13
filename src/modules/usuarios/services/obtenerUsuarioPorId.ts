@@ -10,7 +10,5 @@ export const obtenerUsuarioPorIdService = async (id: number, token: string) => {
     }
   );
 
-  console.log(response)
-
   return response;
 };

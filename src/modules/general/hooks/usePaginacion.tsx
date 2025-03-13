@@ -10,11 +10,11 @@ import { useMemo, useState } from "react";
  * @returns {unknown[]} datos - datos mostrar en la tabla
  * @returns {Function} setDatos - modificador de los datos a mostrar
  */
-const usePaginacion = (cantidadPaginas: number) => {
+const usePaginacion = <T extends object>(cantidadPaginas: number) => {
 
   const [pagina, setPagina] = useState(1);
 
-  const [datos, setDatos] = useState<unknown[]>([]);
+  const [datos, setDatos] = useState<T[]>([]);
 
   /**
    * Estimación del total de páginas que va a tener la tabla

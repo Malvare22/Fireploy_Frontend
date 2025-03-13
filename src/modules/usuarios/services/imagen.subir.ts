@@ -9,7 +9,7 @@ export const subirImagenUsuario = async (
 ) => {
   const formData = new FormData();
 
-  const blob = urlToBlob(imgUrl);
+  const blob = await urlToBlob(imgUrl);
 
   formData.append("image", blob, `${id}.png`);
 

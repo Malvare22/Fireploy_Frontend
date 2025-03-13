@@ -50,7 +50,6 @@ const fetchData = async <T>(
   headers?: Record<string, string>
 ): Promise<ApiResponse<T>> => {
   try {
-    console.log(headers);
     const config: AxiosRequestConfig = {
       method,
       url,

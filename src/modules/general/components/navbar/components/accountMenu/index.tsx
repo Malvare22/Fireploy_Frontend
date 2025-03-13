@@ -11,9 +11,9 @@ import { breakLine } from "@modules/general/utils/breakLine";
 import { readBreakLine } from "@modules/general/utils/readBreakLine";
 import { useNavigate } from "react-router-dom";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
-import { rutasGeneral } from "@modules/general/router/router";
 import { LabelNavbar } from "@modules/general/enums/labelNavbar";
 import { AccountContext } from "@modules/general/context/accountContext";
+import { cerrarSession } from "@modules/general/utils/cerrarSesion";
 
 export const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -32,12 +32,6 @@ export const AccountMenu = () => {
   if (!context) return <></>;
 
   const { localUser, setLocalUser } = context;
-
-  const cerrarSesion = () => {
-    localStorage.clear();
-    setLocalUser(null);
-    navigate(rutasGeneral.home);
-  };
 
   const userInfo = useMemo((): { nombres: string; foto: string } => {
     if (!localUser) return { nombres: "", foto: "" };
@@ -107,7 +101,7 @@ export const AccountMenu = () => {
           <Typography variant="title2">{LabelNavbar.perfil}</Typography>
         </MenuItem>
         <Divider />
-        <MenuItem onClick={cerrarSesion}>
+        <MenuItem onClick={() => cerrarSession(navigate, setLocalUser)}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

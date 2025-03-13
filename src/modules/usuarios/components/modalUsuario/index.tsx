@@ -21,16 +21,14 @@ import BotonesBasicos from "@modules/general/components/botonesBasicos";
 import RedSocial from "@modules/proyectos/components/redSocial";
 import { UsuarioEditarDefaultSchema } from "@modules/usuarios/utils/form/usuario.editar.default.schema";
 import { AccountContext } from "@modules/general/context/accountContext";
-import {
-  modificarUsuarioService,
-} from "@modules/usuarios/services/modificarUsuario";
+import { modificarUsuarioService } from "@modules/usuarios/services/modificarUsuario";
 import CustomTextArea from "@modules/general/components/customTextArea";
-import {
-  crearUsuarioService,
-} from "@modules/usuarios/services/crearUsuario";
+import { crearUsuarioService } from "@modules/usuarios/services/crearUsuario";
 import useQuery from "@modules/general/hooks/useQuery";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 import { subirImagenUsuario } from "@modules/usuarios/services/imagen.subir";
+import { cerrarSession } from "@modules/general/utils/cerrarSesion";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   open: boolean;
@@ -67,9 +65,11 @@ const Cuerpo: React.FC<{
   handleClose: () => void;
   tipo: "crear" | "editar";
 }> = ({ defaultValue, handleClose, tipo }) => {
-  const { image, setImage } = usePreviewImage();
+  const { image, setImage } = usePreviewImage(defaultValue.fotoDePerfil);
 
   const token = useContext(AccountContext)?.localUser?.token;
+
+  const setLocalUser = useContext(AccountContext)?.setLocalUser;
 
   const resolver = () => {
     if (tipo == "crear") {
@@ -82,22 +82,11 @@ const Cuerpo: React.FC<{
     register,
     handleSubmit,
     getValues,
-    setValue,
     formState: { errors },
   } = useForm<Usuario>({
     defaultValues: defaultValue,
     resolver: zodResolver(resolver()),
   });
-
-  useEffect(() => {
-    setImage(getValues().fotoDePerfil);
-  }, []);
-
-  useEffect(() => {
-    if (image != "") {
-      setValue("fotoDePerfil", image);
-    } else setValue("fotoDePerfil", getValues().fotoDePerfil);
-  }, [image]);
 
   const ref = useRef<HTMLButtonElement>(null);
 
@@ -108,46 +97,50 @@ const Cuerpo: React.FC<{
     return () => crearUsuarioService(token ?? "", usuario);
   };
 
+  const condicionCambioImagen = image.startsWith("data:");
+
+  console.log(getValues())
+
   const { RenderAlertDialog, init, responseData } = useQuery<UsuarioService>(
     consultaAEjecutar(getValues()),
     "Gestión Usuario",
     true,
-    false,
+    !condicionCambioImagen,
     "Actualizar Datos",
-    false
+    false,
+    condicionCambioImagen && setLocalUser
+      ? () => {}
+      : () => {
+          if (setLocalUser) cerrarSession(navigate, setLocalUser);
+        }
   );
 
   const [id, setId] = useState(-1);
 
-  const { RenderAlertDialog: RenderAlertDialogImageUpdate, init: initImageUpdate, responseData: responseImage} = useQuery<UsuarioService>(
-    () => subirImagenUsuario(id, token ?? '', getValues('fotoDePerfil')),
+  const navigate = useNavigate();
+
+  const {
+    RenderAlertDialog: RenderAlertDialogImageUpdate,
+    init: initImageUpdate,
+  } = useQuery<UsuarioService>(
+    () => subirImagenUsuario(id, token ?? "", image),
     "Gestión Usuario",
     false,
     true,
     "Imagen Actualizada",
-    true
+    false,
+    setLocalUser ? () => cerrarSession(navigate, setLocalUser) : () => {}
   );
 
-  useEffect(
-    () => {
-      if(!responseData) return;
-      setId(responseData.id);
-    }, [responseData]
-  );
+  useEffect(() => {
+    if (!responseData) return;
+    setId(responseData.id);
+  }, [responseData]);
 
-  useEffect(
-    () => {
-      if(id == -1) return;
-      initImageUpdate();
-    }, [id]
-  );
-
-  useEffect(
-    () => {
-      if(!responseImage) return;
-        console.log(responseImage)
-    }, [responseImage]
-  );
+  useEffect(() => {
+    if (id == -1) return;
+    if (condicionCambioImagen) initImageUpdate();
+  }, [id]);
 
   const styleRowRedSocial = {
     flexDirection: "row",
@@ -163,7 +156,7 @@ const Cuerpo: React.FC<{
   return (
     <>
       <RenderAlertDialog />
-      <RenderAlertDialogImageUpdate/>
+      <RenderAlertDialogImageUpdate />
       <form onSubmit={handleSubmit(init)}>
         <Box
           component={"button"}

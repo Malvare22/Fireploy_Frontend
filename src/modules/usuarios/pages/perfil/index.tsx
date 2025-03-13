@@ -4,36 +4,42 @@ import { AccountContext } from "@modules/general/context/accountContext";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { adaptarUsuario } from "@modules/usuarios/utils/adaptar.usuario";
 import { obtenerUsuarioPorIdService } from "@modules/usuarios/services/obtenerUsuarioPorId";
+import useQuery from "@modules/general/hooks/useQuery";
+import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 
 function Perfil() {
-  
   const [usuario, setUsuario] = useState<Usuario | undefined>(undefined);
 
-  // const setLoader = useContext(LoaderContext)?.setLoading;
+  const token = useContext(AccountContext)?.localUser?.token;
 
-  const localUser = useContext(AccountContext)?.localUser;
+  const id = useContext(AccountContext)?.localUser?.id;
 
-  
+  const { RenderAlertDialog, init, responseData } = useQuery<UsuarioService>(
+    () => obtenerUsuarioPorIdService(id ?? -1, token ?? ""),
+    "Obtener Información del Perfil",
+    false,
+    false
+  );
+
   useEffect(() => {
-        
-    if (!localUser) return;
+    if (!token || !id) return;
 
-    const _id = localUser.id;
-    const _token = localUser.token;
-    
-    // setLoader(true);
+    const response = async () => await init();
 
-    const consulta = async () => {
-      const _usuario = await obtenerUsuarioPorIdService(_id, _token);
+    response();
+  }, [token, id]);
 
-      if(_usuario.data) setUsuario(adaptarUsuario(_usuario.data));
-    };
+  useEffect(() => {
+    if (!responseData) return;
+    setUsuario(adaptarUsuario(responseData));
+  }, [responseData]);
 
-    consulta();
-
-  }, [localUser?.id]);
-
-  return <>{usuario != undefined ? <VerPerfil usuario={usuario} /> : <></>}</>;
+  return (
+    <>
+      <RenderAlertDialog />
+      {usuario != undefined ? <VerPerfil usuario={usuario} /> : <></>}
+    </>
+  );
 }
 
 export default Perfil;
