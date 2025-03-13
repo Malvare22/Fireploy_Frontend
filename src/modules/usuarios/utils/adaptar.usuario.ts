@@ -24,7 +24,7 @@ export const adaptarUsuario = (usuario: UsuarioService) => {
     nombres: usuario.nombre,
     apellidos: usuario.apellido,
     sexo: usuario.sexo as SexoUsuario,
-    fotoDePerfil: usuario.foto_perfil,
+    fotoDePerfil: usuario.foto_perfil == '' ? 'https://cdn.pixabay.com/photo/2015/11/03/08/54/football-1019776_1280.jpg' : usuario.foto_perfil,
     redSocial: adaptarRedSocial(usuario.red_social),
     descripcion: usuario.descripcion,
     estFechaInicio: usuario.est_fecha_inicio

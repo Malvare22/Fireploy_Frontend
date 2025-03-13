@@ -5,7 +5,7 @@ import Row from "@modules/general/components/row";
 
 import { LabelUsuario } from "@modules/usuarios/enum/LabelUsuario";
 import { Box, Card, MenuItem, SxProps } from "@mui/material";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import CustomSelect from "@modules/general/components/customSelect";
@@ -30,6 +30,7 @@ import {
 } from "@modules/usuarios/services/crearUsuario";
 import useQuery from "@modules/general/hooks/useQuery";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
+import { subirImagenUsuario } from "@modules/usuarios/services/imagen.subir";
 
 type Props = {
   open: boolean;
@@ -107,13 +108,38 @@ const Cuerpo: React.FC<{
     return () => crearUsuarioService(token ?? "", usuario);
   };
 
-  const { RenderAlertDialog, init } = useQuery<UsuarioService>(
+  const { RenderAlertDialog, init, responseData } = useQuery<UsuarioService>(
     consultaAEjecutar(getValues()),
     "Gestión Usuario",
     true,
+    false,
+    "Actualizar Datos",
+    false
+  );
+
+  const [id, setId] = useState(-1);
+
+  const { RenderAlertDialog: RenderAlertDialogImageUpdate, init: initImageUpdate } = useQuery<UsuarioService>(
+    () => subirImagenUsuario(id, token ?? '', getValues('fotoDePerfil')),
+    "Gestión Usuario",
+    false,
     true,
-    "Dale",
+    "Imagen Actualizada",
     true
+  );
+
+  useEffect(
+    () => {
+      if(!responseData) return;
+      setId(responseData.id);
+    }, [responseData]
+  );
+
+  useEffect(
+    () => {
+      if(id == -1) return;
+      initImageUpdate();
+    }, [id]
   );
 
   const styleRowRedSocial = {
@@ -130,6 +156,7 @@ const Cuerpo: React.FC<{
   return (
     <>
       <RenderAlertDialog />
+      <RenderAlertDialogImageUpdate/>
       <form onSubmit={handleSubmit(init)}>
         <Box
           component={"button"}
