@@ -10,6 +10,7 @@ import {
   obtenerTiposUsuario,
   TiposUsuarioStringCompleto,
 } from "./usuario.map";
+import { UsuarioCampoBusqueda } from "@modules/general/components/searchUsers/hook";
 
 export const adaptarUsuario = (usuario: UsuarioService) => {
   const _usuario: Usuario = {
@@ -75,4 +76,13 @@ const adaptarRedSocial = (redSocialPlana: string) => {
   catch{
     return {};
   }
+};
+
+
+export function adaptarUsuarioServiceAUsuarioCampoDeBusqueda(usuario: UsuarioService): UsuarioCampoBusqueda{
+  return {
+    id: usuario.id,
+    foto: usuario.foto_perfil,
+    nombreCompleto: `${usuario.nombre} ${usuario.apellido}`
+  };
 };

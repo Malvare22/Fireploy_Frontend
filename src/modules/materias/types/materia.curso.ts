@@ -1,6 +1,5 @@
 import { EstadoCurso } from "./estado.curso";
 import { Usuario } from "@modules/usuarios/types/usuario";
-import { EstudianteEjemplo } from "./estudiantes.ejemplo";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 
 export type DocenteCurso = Pick<
@@ -15,7 +14,7 @@ export type CursoMateria = {
   descripcion: string;
   estado: EstadoCurso;
   docente: UsuarioService;
-  estudiantes: EstudianteEjemplo[];
+  estudiantes: UsuarioService[];
 };
 
 // export const ejemploCurso: CursoMateria = {

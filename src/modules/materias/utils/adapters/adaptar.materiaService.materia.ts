@@ -5,7 +5,6 @@ import { MateriaTabla } from "@modules/materias/types/materia.tabla";
 import { MateriaModal } from "../forms/schema.materias";
 import { Materia } from "@modules/materias/types/materia";
 import { CursoService } from "@modules/materias/types/curso.service";
-import { estudiantesEjemplo } from "@modules/materias/types/estudiantes.ejemplo";
 import { EstadoCurso } from "@modules/materias/types/estado.curso";
 
 export const adaptarMateriaModalServiceAMateria = (materia: MateriaService) => {
@@ -77,7 +76,7 @@ export const unirMateriaServiceConCursoService = (
       descripcion: curso.descripcion,
       docente: curso.docente,
       estado: curso.estado as EstadoCurso,
-      estudiantes: estudiantesEjemplo,
+      estudiantes: curso.estudiantes ?? [],
       grupo: curso.grupo,
       semestre: curso.semestre,
     })),

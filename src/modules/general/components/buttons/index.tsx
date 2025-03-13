@@ -6,12 +6,14 @@ import CheckIcon from '@mui/icons-material/Check';
 import { ReactNode } from "react";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { palette } from "@core/themes";
+import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 
 const iconMap = {
   [buttonTypes.save]: <SaveAsIcon />,
   [buttonTypes.cancel]: <CancelIcon />,
   [buttonTypes.add]: <AddCircleIcon />,
   [buttonTypes.accept]: <CheckIcon />,
+  [buttonTypes.remove]: <DeleteSweepIcon />,
 };
 
 const labelMap = {
@@ -19,6 +21,7 @@ const labelMap = {
   [buttonTypes.cancel]: "cancelar",
   [buttonTypes.add]: "agregar",
   [buttonTypes.accept]: "aceptar",
+  [buttonTypes.remove]: "eliminar",
 };
 
 interface GeneralButtonProps extends ButtonProps {

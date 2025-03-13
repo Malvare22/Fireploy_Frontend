@@ -33,7 +33,8 @@ export default function useQuery<T>(
   withSuccessMessage: boolean,
   confirmationText?: string,
   withReload?: boolean,
-  successAction?: () => void
+  successAction?: () => void,
+  customContent?: React.ReactNode
 ) {
   const {
     message,
@@ -61,8 +62,8 @@ export default function useQuery<T>(
   const onCloseAlert = (statusCode: number | undefined) => {
     setOpen(false);
     if (statusCode == undefined) {
-      if(withReload) window.location.reload();
-      if(successAction) successAction();
+      if (withReload) window.location.reload();
+      if (successAction) successAction();
     }
     if (statusCode == 401) {
       navigate(rutasGeneral.login);
@@ -135,7 +136,9 @@ export default function useQuery<T>(
               </Box>
             </ButtonContainer>
           }
-        />
+        >
+          {customContent}
+        </AlertDialog>
       </>
     );
   };
@@ -170,7 +173,7 @@ export default function useQuery<T>(
   };
 
   /**
-   * Condicionador de la ventana de dialogo pertinente 
+   * Condicionador de la ventana de dialogo pertinente
    * @returns {component} Ventana de dialogo a mostrar según la fase
    */
   const ValidationRender = () => (
@@ -178,7 +181,7 @@ export default function useQuery<T>(
   );
 
   /**
-   * Condicionador de renderizado de las ventanas de dialogo 
+   * Condicionador de renderizado de las ventanas de dialogo
    * @returns {component} Ventana de dialogo a mostrar según la fase
    */
   const RenderAlertDialog = () => <>{open && <ValidationRender />}</>;
