@@ -10,7 +10,7 @@ export const editarMateriaService = async (token: string, data: MateriaModal) =>
   };
 
   const response = await patchData<MateriaService>(
-    `/MateriaModal/${data.id ?? ""}`,
+    `/materia/${data.id ?? ""}`,
     _data,
     {
       sessiontoken: token,
@@ -30,7 +30,7 @@ export const editarEstadoMateriaService = async (
     semestre: data.semestre,
   };
   const response = await patchData<MateriaService>(
-    `/MateriaModal/${data.id}`,
+    `/materia/${data.id}`,
     _data,
     {
       sessiontoken: token,
