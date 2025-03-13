@@ -79,7 +79,7 @@ export default function useQuery<T>(
     setStage(1);
     setAlertClose(() => () => onCloseAlert(response.error?.statusCode));
     if (response.error) {
-      setMessage(response.error.message[0]);
+      setMessage(response.error.message);
       setTitle(LabelDialog.seHaPresentadoUnError);
       setOpen(true);
     } else {

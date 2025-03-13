@@ -36,7 +36,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Checkbox from "@mui/material/Checkbox";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
@@ -45,9 +45,10 @@ import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
  * @param estudiantes: Los estudiantes que se encuentran registrados en el curso
  * @returns
  */
-const SeccionEstudiantes: React.FC<{ estudiantes: UsuarioService[] }> = ({
-  estudiantes,
-}) => {
+const SeccionEstudiantes: React.FC<{
+  estudiantes: UsuarioService[];
+  cursoId: string;
+}> = ({ estudiantes, cursoId }) => {
   const {
     orderBy,
     order,
@@ -62,8 +63,6 @@ const SeccionEstudiantes: React.FC<{ estudiantes: UsuarioService[] }> = ({
   }, []);
 
   const navigate = useNavigate();
-
-  console.log(estudiantes)
 
   /**
    * Lista de estudiantes para eliminar
@@ -133,21 +132,6 @@ const SeccionEstudiantes: React.FC<{ estudiantes: UsuarioService[] }> = ({
     setAllStudents(adaptados);
   }, [responseEstudiantes]);
 
-  const Confirmation = () => (
-    <Box>
-      <Box>¿Está seguro de que desea eliminar a los usuarios de código:</Box>
-      <Box>
-        {selectStudentsRemove.map((student) => (
-          <>
-            <br></br>
-            {student}
-          </>
-        ))}
-        ?
-      </Box>
-    </Box>
-  );
-
   /**
    * Usuario seleccionado para ser agregado al buffer de agregar estudiantes
    */
@@ -161,6 +145,31 @@ const SeccionEstudiantes: React.FC<{ estudiantes: UsuarioService[] }> = ({
 
   const handleDelete = async () => {
     await initDelete();
+  };
+
+  const idsToAddStudents = useMemo(() => {
+    return selectStudentsAdd.map((student) => student.id);
+  }, [selectStudentsAdd]);
+
+  const { RenderAlertDialog: RenderAdd, init: initAdd } =
+    useQuery<CursoService>(
+      () =>
+        gestionarEstudiantesCursoService(
+          token ?? "",
+          idsToAddStudents,
+          "A",
+          cursoId
+        ),
+      "Agregar Estudiantes del Curso",
+      true,
+      true,
+      undefined,
+      true,
+      undefined
+    );
+
+  const handleAdd = async () => {
+    await initAdd();
   };
 
   /**
@@ -184,28 +193,37 @@ const SeccionEstudiantes: React.FC<{ estudiantes: UsuarioService[] }> = ({
           token ?? "",
           selectStudentsRemove,
           "D",
-          token ?? ""
+          cursoId
         ),
       "Eliminar Estudiantes del Curso",
       true,
       true,
       undefined,
       true,
-      undefined,
-      <Confirmation />
+      undefined
     );
 
   return (
     <Card sx={{ padding: 3 }}>
       <RenderDelete />
       <RenderObtenerEstudiantes />
+      <RenderAdd />
       <Box>
         <Typography variant="h3Bold">{LabelCurso.estudiantes}</Typography>
         <Divider />
       </Box>
-      <Box sx={{ width: {md: 500} }}>{RenderSearchInput}</Box>
-      <Box sx={{ display: "flex", flexDirection: {md: 'row', xs: 'column'}, gap: {md: 6, xs: 3} }}>
-        <TableContainer component={Paper} sx={{ width: {md: 500}, height: {md: 500} }}>
+      <Box sx={{ width: { md: 500 } }}>{RenderSearchInput}</Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { md: "row", xs: "column" },
+          gap: { md: 6, xs: 3 },
+        }}
+      >
+        <TableContainer
+          component={Paper}
+          sx={{ width: { md: 500 }, height: { md: 500 } }}
+        >
           <Table>
             <TableHead>
               <StyledTableRow>
@@ -264,19 +282,27 @@ const SeccionEstudiantes: React.FC<{ estudiantes: UsuarioService[] }> = ({
             </TableBody>
           </Table>
         </TableContainer>
-        <Box sx={{display: 'flex', flexDirection: 'column', gap: 3}}>
-          <Box><GeneralButton
-            mode={buttonTypes.remove}
-            onClick={handleDelete}
-            disabled={selectStudentsRemove.length == 0}
-          /></Box>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+          <Box>
+            <GeneralButton
+              mode={buttonTypes.remove}
+              onClick={handleDelete}
+              disabled={selectStudentsRemove.length == 0}
+            />
+          </Box>
           <SearchUsers
             selectUser={selectUser}
             setSelectUser={setSelectUser}
             users={allStudents}
           />
           {/* Campo Usuario a agregar */}
-          <Card sx={{ border: "1px solid black", width: {md: 400}, minHeight: 300 }}>
+          <Card
+            sx={{
+              border: "1px solid black",
+              width: { md: 400 },
+              minHeight: 300,
+            }}
+          >
             {selectStudentsAdd.map((student) => (
               <SelectUserFrame
                 user={student}
@@ -287,7 +313,7 @@ const SeccionEstudiantes: React.FC<{ estudiantes: UsuarioService[] }> = ({
           </Card>
           <GeneralButton
             mode={buttonTypes.add}
-            onClick={handleDelete}
+            onClick={handleAdd}
             disabled={selectStudentsAdd.length == 0}
           />
         </Box>

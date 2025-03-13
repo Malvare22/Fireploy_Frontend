@@ -92,7 +92,7 @@ const GestionCurso: React.FC<GestionCursoProps> = ({ curso, materiaId }) => {
         <Box sx={{ display: "flex" }}>
           <CustomTextArea value={curso.descripcion} disabled={true} />
         </Box>
-        <SeccionEstudiantes estudiantes={curso.estudiantes} />
+        <SeccionEstudiantes estudiantes={curso.estudiantes}  cursoId={curso.id}/>
         <Secciones secciones={secciones} cursoId={curso.id}/>
       </Box>
     </Box>
