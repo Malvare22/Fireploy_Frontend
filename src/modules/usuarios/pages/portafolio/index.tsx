@@ -1,8 +1,12 @@
+import { AccountContext } from "@modules/general/context/accountContext";
+import useQuery from "@modules/general/hooks/useQuery";
+import { proyectosPrueba } from "@modules/proyectos/test/datos/proyectos.prueba";
 import Portafolio from "@modules/usuarios/components/portafolio";
-import { usuariosPrueba } from "@modules/usuarios/test/data/usuarios.prueba";
+import { obtenerUsuarioPorIdService } from "@modules/usuarios/services/obtenerUsuarioPorId";
+import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 import { Usuario } from "@modules/usuarios/types/usuario";
-import { adaptarUsuario } from "@modules/usuarios/utils/usuario.adapter";
-import { useEffect, useState } from "react";
+import { adaptarUsuario } from "@modules/usuarios/utils/adaptar.usuario";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 function VerPortafolioPorId() {
@@ -10,22 +14,28 @@ function VerPortafolioPorId() {
 
   const [usuario, setUsuario] = useState<Usuario | undefined>(undefined);
 
+  const token = useContext(AccountContext)?.localUser?.token;
+
+  const {RenderAlertDialog, init, responseData} = useQuery<UsuarioService>(() => obtenerUsuarioPorIdService(parseInt(id ?? '0'), token ?? ''), 'Portafolios', false, false);
+
   useEffect(() => {
-    if (id) {
-      const _usuario = usuariosPrueba.find(
-        (usuario) => usuario.id == parseInt(id as string)
-      );
-      if (_usuario) {
-        setUsuario(adaptarUsuario(_usuario));
-      }
-      console.log(_usuario);
-    }
-  }, []);
+    if (!id || !token) return;
+    const response = async () => {
+     await init();
+    };
+    response();  
+  }, [id, token]);
+
+  useEffect(() => {
+    if (!responseData) return;
+    setUsuario(adaptarUsuario(responseData));
+  }, [responseData]);
 
   return (
     <>
+    <RenderAlertDialog/>
       {usuario != undefined && (
-        <Portafolio usuario={usuario} proyectos={usuario.proyectos} />
+        <Portafolio usuario={usuario} proyectos={proyectosPrueba} />
       )}
     </>
   );

@@ -119,7 +119,7 @@ const Cuerpo: React.FC<{
 
   const [id, setId] = useState(-1);
 
-  const { RenderAlertDialog: RenderAlertDialogImageUpdate, init: initImageUpdate } = useQuery<UsuarioService>(
+  const { RenderAlertDialog: RenderAlertDialogImageUpdate, init: initImageUpdate, responseData: responseImage} = useQuery<UsuarioService>(
     () => subirImagenUsuario(id, token ?? '', getValues('fotoDePerfil')),
     "Gestión Usuario",
     false,
@@ -140,6 +140,13 @@ const Cuerpo: React.FC<{
       if(id == -1) return;
       initImageUpdate();
     }, [id]
+  );
+
+  useEffect(
+    () => {
+      if(!responseImage) return;
+        console.log(responseImage)
+    }, [responseImage]
   );
 
   const styleRowRedSocial = {

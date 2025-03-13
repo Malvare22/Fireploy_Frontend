@@ -33,10 +33,10 @@ export const routerUsuarios: RouteObject =
       path: rutasUsuarios.listar,
       element: <ListarUsuarios />,
     },
-    // {
-    //   path: rutasUsuarios.verPortafolio,
-    //   element: <VerPortafolioPorId/>,
-    // },
+    {
+      path: rutasUsuarios.verPortafolio,
+      element: <VerPortafolioPorId/>,
+    },
     // {
     //   path: rutasUsuarios.buscarPortafolio,
     //   element: <BuscarPortafolio/>,

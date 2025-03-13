@@ -19,7 +19,7 @@ function Perfil() {
     if (!localUser) return;
 
     const _id = localUser.id;
-    const _token = localUser.token; 
+    const _token = localUser.token;
     
     // setLoader(true);
 
@@ -30,10 +30,6 @@ function Perfil() {
     };
 
     consulta();
-
-    return () => {
-      // setLoader(false);
-    };
 
   }, [localUser?.id]);
 

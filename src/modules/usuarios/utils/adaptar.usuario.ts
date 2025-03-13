@@ -44,7 +44,7 @@ export const adaptarUsuarioSalida = (
       nombre: usuario.nombres,
       apellido: usuario.apellidos,
       sexo: usuario.sexo,
-      foto_perfil: "https://cdn.pixabay.com/photo/2024/12/30/13/06/moped-9300285_1280.jpg",
+      foto_perfil: usuario.fotoDePerfil,
       red_social: JSON.stringify(usuario.redSocial),
       descripcion: usuario.descripcion,
     };
@@ -60,7 +60,7 @@ export const adaptarUsuarioSalida = (
     correo: usuario.correo,
     red_social: JSON.stringify(usuario.redSocial),
     contrasenia: usuario.contrasenia,
-    foto_perfil: "https://cdn.pixabay.com/photo/2024/12/30/13/06/moped-9300285_1280.jpg",
+    foto_perfil: usuario.fotoDePerfil,
     estado: usuario.estado,
     tipo: obtenerTiposUsuario.get(usuario.tipo),
     est_fecha_inicio: usuario.estFechaInicio,
