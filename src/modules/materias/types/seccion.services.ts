@@ -5,5 +5,5 @@ export type SeccionService = {
   fecha_fin: string
   estado: string
   cursoId: string
-  id: number
+  id?: number
 };

@@ -1,14 +1,16 @@
 import { postData } from "@core/services";
 import { SeccionCurso } from "../types/curso.seccion";
+import { SeccionService } from "../types/seccion.services";
+import { adaptarSeccionASeccionService } from "../utils/adapters/adaptar.seccion";
 
 export const crearSeccionService = async (
   token: string,
-  data: SeccionCurso,
-  cursoId: number
+  seccion: SeccionCurso,
+  cursoId: string
 ) => {
-  const response = await postData<SeccionCurso>(
+  const response = await postData<SeccionService>(
     `/seccion`,
-    { ...data, cursoId: cursoId },
+    { ...adaptarSeccionASeccionService(seccion), cursoId: cursoId },
     {
       sessiontoken: token,
     }

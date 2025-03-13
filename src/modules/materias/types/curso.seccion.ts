@@ -1,7 +1,7 @@
 import { EstadoMateria } from "./materia.estado";
 
 export type SeccionCurso = {
-    id: number,
+    id?: number,
     titulo: string,
     descripcion: string,
     fechaDeCierre: string,

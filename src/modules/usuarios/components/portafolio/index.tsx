@@ -157,7 +157,7 @@ export const CardProyecto: React.FC<{
         >
             <Box
               component={"img"}
-              sx={{ width: 300, height: "auto" }}
+              sx={{ width: {sm: 300, xs: '100%'}, height: "auto" }}
               src={proyecto.imagen}
             />
           <Box

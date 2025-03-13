@@ -28,7 +28,7 @@ type ModalSeccionProps = {
   tipo: "editar" | "crear";
   handleClose: () => void;
   open: boolean;
-  cursoId: number;
+  cursoId: string;
   seccion?: SeccionCurso;
 };
 const ModalSeccion: React.FC<ModalSeccionProps> = ({
