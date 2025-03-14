@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DrawerCustom from "./components/drawer";
 import { AccountMenu } from "./components/accountMenu";
-import Logo from "@modules/general/assets/LogoFireploy.png";
 import { rutasGeneral } from "@modules/general/router/router";
 import { LabelNavbar } from "@modules/general/enums/labelNavbar";
 import { palette } from "@core/themes";
+import { mapaImagenes } from "../iconoRedondo/utils";
 
 
 const Navbar: React.FC<{sesion: boolean}> = ({sesion}) => {
@@ -101,7 +101,7 @@ const FirstContent: React.FC<FirstContentProps> = ({
         <Box>
           <DrawerCustom />
         </Box>
-        <Box component={"img"} src={Logo} sx={{ width: 64 }} />
+        <Box component={"img"} src={mapaImagenes['logo_fireploy'].ruta} alt={mapaImagenes['logo_fireploy'].nombre} sx={{ width: 64 }} />
         <Box sx={{ visibility: { lg: "hidden" } }}>
           <IconButton onClick={handleButton}>
             <KeyboardArrowDownIcon

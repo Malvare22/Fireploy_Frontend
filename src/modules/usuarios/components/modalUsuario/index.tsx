@@ -13,12 +13,7 @@ import { obtenerTiposUsuario } from "@modules/usuarios/utils/usuario.map";
 import { useForm } from "react-hook-form";
 import { UsuarioSchema } from "@modules/usuarios/utils/form/usuario.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import PreviewImage, {
-  usePreviewImage,
-} from "@modules/general/components/previewImage";
 import { obtenerFechaActual } from "@modules/general/utils/fechas";
-import BotonesBasicos from "@modules/general/components/botonesBasicos";
-import RedSocial from "@modules/proyectos/components/redSocial";
 import { UsuarioEditarDefaultSchema } from "@modules/usuarios/utils/form/usuario.editar.default.schema";
 import { AccountContext } from "@modules/general/context/accountContext";
 import { modificarUsuarioService } from "@modules/usuarios/services/modificarUsuario";
@@ -29,6 +24,12 @@ import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 import { subirImagenUsuario } from "@modules/usuarios/services/imagen.subir";
 import { cerrarSession } from "@modules/general/utils/cerrarSesion";
 import { useNavigate } from "react-router-dom";
+import IconoRedondo from "@modules/general/components/iconoRedondo";
+import { mapaImagenes } from "@modules/general/components/iconoRedondo/utils";
+import PreviewImage from "@modules/general/components/previewImage";
+import { usePreviewImage } from "@modules/general/components/previewImage/hooks";
+import GeneralButton, { ButtonContainer } from "@modules/general/components/buttons";
+import { buttonTypes } from "@modules/general/types/buttons";
 
 type Props = {
   open: boolean;
@@ -303,7 +304,7 @@ const Cuerpo: React.FC<{
               }}
             >
               <Row sx={styleRowRedSocial}>
-                <RedSocial nombre={"linkedin"} />
+                <IconoRedondo imagen={mapaImagenes['linkedin_logo'].ruta} nombre={mapaImagenes['linkedin_logo'].nombre}/>
                 <CustomInput
                   variant="secondary"
                   {...register("redSocial.linkedin")}
@@ -311,24 +312,24 @@ const Cuerpo: React.FC<{
                 ></CustomInput>
               </Row>
               <Row sx={styleRowRedSocial}>
-                <RedSocial nombre={"facebook"} />
-                <CustomInput
+              <IconoRedondo imagen={mapaImagenes['facebook_logo'].ruta} nombre={mapaImagenes['facebook_logo'].nombre}/>
+              <CustomInput
                   variant="secondary"
                   {...register("redSocial.facebook")}
                   errorMessage={errors.redSocial?.facebook?.message}
                 ></CustomInput>
               </Row>
               <Row sx={styleRowRedSocial}>
-                <RedSocial nombre={"instagram"} />
-                <CustomInput
+              <IconoRedondo imagen={mapaImagenes['instagram_logo'].ruta} nombre={mapaImagenes['instagram_logo'].nombre}/>
+              <CustomInput
                   variant="secondary"
                   {...register("redSocial.instagram")}
                   errorMessage={errors.redSocial?.instagram?.message}
                 ></CustomInput>
               </Row>
               <Row sx={styleRowRedSocial}>
-                <RedSocial nombre={"x"} />
-                <CustomInput
+              <IconoRedondo imagen={mapaImagenes['x_logo'].ruta} nombre={mapaImagenes['x_logo'].nombre}/>
+              <CustomInput
                   variant="secondary"
                   {...register("redSocial.x")}
                   errorMessage={errors.redSocial?.x?.message}
@@ -347,7 +348,10 @@ const Cuerpo: React.FC<{
           </Row>
 
           {/* Botones */}
-          <BotonesBasicos cancelar={handleClose} aceptar={handleQuery} />
+          <ButtonContainer>
+            <GeneralButton mode={buttonTypes.accept} onClick={handleQuery}/>
+            <GeneralButton mode={buttonTypes.cancel} onClick={handleClose}/>
+          </ButtonContainer>
         </Card>
       </form>
     </>

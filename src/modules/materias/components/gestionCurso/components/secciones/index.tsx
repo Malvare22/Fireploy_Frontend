@@ -2,7 +2,6 @@ import AccordionUsage from "@modules/general/components/accordionUsage";
 import ActionButton from "@modules/general/components/actionButton";
 import GeneralButton from "@modules/general/components/buttons";
 import CustomTextArea from "@modules/general/components/customTextArea";
-import { useModal } from "@modules/general/components/modal";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { LabelCurso } from "@modules/materias/enums/labelCurso";
@@ -12,6 +11,7 @@ import { CardProyecto } from "@modules/usuarios/components/portafolio";
 import { Box, Card, Divider, Typography } from "@mui/material";
 import ModalSeccion from "../modalSecciones";
 import React, { useState } from "react";
+import { useModal } from "@modules/general/components/modal/hooks/useModal";
 
 type SeccionesProps = {
   secciones: SeccionCurso[];

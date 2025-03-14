@@ -1,8 +1,6 @@
-import ufps from "@modules/general/assets/LogoUFPS.png";
-import ingSistemas from "@modules/general/assets/ing_sistemas.png";
-import fireploy from "@modules/general/assets/LogoFireploy.png";
 import { Box, Typography } from "@mui/material";
 import { LabelFooter } from "@modules/general/enums/labelFooter";
+import { mapaImagenes } from "../iconoRedondo/utils";
 
 /**
  * Componente Footer que muestra información sobre Fireploy,
@@ -34,7 +32,11 @@ function Footer(): JSX.Element {
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <img src={fireploy} width={60} alt="Fireploy" />
+            <img
+              src={mapaImagenes["logo_fireploy"].ruta}
+              alt={mapaImagenes["logo_fireploy"].nombre}
+              width={60}
+            />
           </Box>
           <Box sx={{ marginLeft: 1 }}>
             <Typography variant="h5Bold">{LabelFooter.fireploy}</Typography>
@@ -114,9 +116,9 @@ function Footer(): JSX.Element {
           sx={{
             width: { lg: "50%", md: "80%", xs: 100 },
           }}
-          src={ufps}
+          src={mapaImagenes["ufps_logo"].ruta}
+          alt={mapaImagenes["ufps_logo"].nombre}
           width={"50%"}
-          alt="UFPS"
         />
       </Box>
 
@@ -137,9 +139,9 @@ function Footer(): JSX.Element {
           sx={{
             width: { lg: "50%", md: "80%", xs: 100 },
           }}
-          src={ingSistemas}
+          src={mapaImagenes["ing_sistemas_logo"].ruta}
+          alt={mapaImagenes["ing_sistemas_logo"].nombre}
           width={"50%"}
-          alt="Ingeniería de Sistemas"
         />
       </Box>
     </Box>

@@ -1,11 +1,10 @@
 import { Box, Typography } from "@mui/material";
-import img from "@modules/general/assets/LogoFireploy.png";
 import Grid from "@mui/material/Grid2";
 import { ReactNode } from "react";
 import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
 import CloudCircleIcon from "@mui/icons-material/CloudCircle";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
-import { imagenes } from "@modules/general/enums/imagenes";
+import { mapaImagenes } from "@modules/general/components/iconoRedondo/utils";
 
 function Home() {
   return (
@@ -50,8 +49,7 @@ function Home() {
           >
             <Box
               component="img" // Renderiza como un <img>
-              src={img} // Define el source de la imagen
-              alt="Descripción de la imagen" // Texto alternativo
+              src={mapaImagenes['logo_fireploy'].ruta} alt={mapaImagenes['logo_fireploy'].nombre}
               sx={{ width: { xs: 200, md: "100%" }, height: "auto" }} // Estilos opcionales
             />
           </Grid>
@@ -107,20 +105,17 @@ function Home() {
       >
         <Box
           component="img" // Renderiza como un <img>
-          src={imagenes.tecnologias.springBoot} // Define el source de la imagen
-          alt="Descripción de la imagen" // Texto alternativo
+          src={mapaImagenes['springboot'].ruta} alt={mapaImagenes['springboot'].nombre}
           sx={{ height: 140 }} // Estilos opcionales
         />
         <Box
           component="img" // Renderiza como un <img>
-          src={imagenes.tecnologias.react} // Define el source de la imagen
-          alt="Descripción de la imagen" // Texto alternativo
+          src={mapaImagenes['react'].ruta} alt={mapaImagenes['react'].nombre}
           sx={{ height: 140 }} // Estilos opcionales
         />
         <Box
           component="img" // Renderiza como un <img>
-          src={imagenes.tecnologias.nodeJS} // Define el source de la imagen
-          alt="Descripción de la imagen" // Texto alternativo
+          src={mapaImagenes['nodejs'].ruta} alt={mapaImagenes['nodejs'].nombre}
           sx={{ height: 140 }} // Estilos opcionales
         />
       </Box>

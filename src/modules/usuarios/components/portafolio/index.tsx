@@ -4,7 +4,7 @@ import { Usuario } from "@modules/usuarios/types/usuario";
 import { Box, Button, Card, Divider, Typography } from "@mui/material";
 
 import React, { useState } from "react";
-import Modal, { useModal } from "@modules/general/components/modal";
+import Modal from "@modules/general/components/modal";
 import VistaPreviaUsuario from "@modules/usuarios/components/VistaPreviaUsuario";
 import { usuariosPrueba } from "@modules/usuarios/test/data/usuarios.prueba";
 import IconoRedondo from "@modules/general/components/iconoRedondo";
@@ -12,6 +12,7 @@ import { TecnologiasPrueba } from "@modules/proyectos/test/datos/tecnologias.pru
 import EstadoBoton from "@modules/usuarios/components/estadoBoton";
 import RedesSociales from "../redesSociales";
 import { LabelPortafolio } from "@modules/usuarios/enum/LabelPortafolio";
+import { useModal } from "@modules/general/components/modal/hooks/useModal";
 
 interface Props {
   usuario: Usuario;

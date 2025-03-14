@@ -1,4 +1,3 @@
-import { useModal } from "@modules/general/components/modal";
 import { Box, Typography } from "@mui/material";
 import ModalModificarCurso from "../modalModificarCurso";
 import { CursoMateria } from "@modules/materias/types/materia.curso";
@@ -13,6 +12,7 @@ import { useContext, useEffect, useState } from "react";
 import { AccountContext } from "@modules/general/context/accountContext";
 import { SeccionCurso } from "@modules/materias/types/curso.seccion";
 import { adaptarSeccionServiceASeccion } from "@modules/materias/utils/adapters/adaptar.seccion";
+import { useModal } from "@modules/general/components/modal/hooks/useModal";
 
 type GestionCursoProps = {
   curso: CursoMateria;

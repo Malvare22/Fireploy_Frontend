@@ -5,7 +5,6 @@ import { useContext, useEffect, useState } from "react";
 import GoogleLogin from "react-google-login";
 import Divider from "@mui/material/Divider";
 import { useNavigate } from "react-router-dom";
-import Logo from "@modules/general/assets/LogoFireploy.png";
 import CustomInput from "@modules/general/components/customInput";
 import { LabelSesion } from "@modules/general/enums/snackbar";
 import { rutasGeneral } from "@modules/general/router/router";
@@ -18,6 +17,7 @@ import { obtenerLetraTiposUsuario } from "@modules/usuarios/utils/usuario.map";
 import { TiposUsuario } from "@modules/usuarios/types/usuario.tipos";
 import useSnackBar from "@modules/general/hooks/useSnackbar";
 import SnackBar from "@modules/general/components/snackbar";
+import { mapaImagenes } from "@modules/general/components/iconoRedondo/utils";
 
 const Login = () => {
   const clientID =
@@ -205,7 +205,7 @@ const Login = () => {
               sx={{
                 maxHeight: { md: 400, xs: 200 },
               }}
-              src={Logo}
+              src={mapaImagenes['logo_fireploy'].ruta} alt={mapaImagenes['logo_fireploy'].nombre}
             ></Box>
           </Box>
         </Box>

@@ -5,17 +5,17 @@ import ModalUsuario from "@modules/usuarios/components/modalUsuario";
 import { readBreakLine } from "@modules/general/utils/readBreakLine";
 import { breakLine } from "@modules/general/utils/breakLine";
 import { LabelGeneral } from "@modules/general/enums/labelGeneral";
-import { useModal } from "@modules/general/components/modal";
 import Row from "@modules/general/components/row";
 import { LabelUsuario } from "@modules/usuarios/enum/LabelUsuario";
-import { LabelRedesSociales } from "@modules/usuarios/enum/LabelRedesSociales";
 import Label from "@modules/general/components/label";
-import Facebook from "@modules/general/assets/redesSociales/facebook.png";
-import Instagram from "@modules/general/assets/redesSociales/instagram.png";
-import Linkedin from "@modules/general/assets/redesSociales/linkedin.png";
-import IconoRedondo from "@modules/general/components/iconoRedondo";
 import { palette } from "@core/themes";
-import { obtenerEstadoUsuario, obtenerTiposUsuario } from "@modules/usuarios/utils/usuario.map";
+import {
+  obtenerEstadoUsuario,
+  obtenerTiposUsuario,
+} from "@modules/usuarios/utils/usuario.map";
+import { useModal } from "@modules/general/components/modal/hooks/useModal";
+import IconoRedondo from "@modules/general/components/iconoRedondo";
+import { mapaImagenes } from "@modules/general/components/iconoRedondo/utils";
 
 interface Props {
   usuario: Usuario;
@@ -32,7 +32,7 @@ const VerPerfil: React.FC<Props> = ({ usuario }) => {
         width: "100%",
       }}
     >
-      <Perfil usuario={(usuario)} />
+      <Perfil usuario={usuario} />
     </Box>
   );
 };
@@ -55,7 +55,7 @@ const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
           flexDirection: "column",
           gap: 4,
           width: "80%",
-          marginTop: 2
+          marginTop: 2,
         }}
       >
         <ModalUsuario
@@ -92,13 +92,17 @@ const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
         {/* Rol */}
         <Row>
           <Label width={240}>{LabelUsuario.rol}</Label>
-          <Typography variant="title">{obtenerTiposUsuario.get(usuario.tipo)}</Typography>
+          <Typography variant="title">
+            {obtenerTiposUsuario.get(usuario.tipo)}
+          </Typography>
         </Row>
 
         {/* Estado */}
         <Row>
           <Label width={240}>{LabelUsuario.estado}</Label>
-          <Typography variant="title">{obtenerEstadoUsuario.get(usuario.estado)}</Typography>
+          <Typography variant="title">
+            {obtenerEstadoUsuario.get(usuario.estado)}
+          </Typography>
         </Row>
 
         {/* Fecha de nacimiento */}
@@ -122,27 +126,45 @@ const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
               gap: 3,
             }}
           >
-            <Row sx={styleRowRedSocial}>
-              <IconoRedondo
-                imagen={Linkedin}
-                nombre={LabelRedesSociales.linkedin}
-                url={usuario.redSocial.linkedin}
-              />
-            </Row>
-            <Row sx={styleRowRedSocial}>
-              <IconoRedondo
-                imagen={Facebook}
-                nombre={LabelRedesSociales.facebook}
-                url={usuario.redSocial.facebook}
-              />
-            </Row>
-            <Row sx={styleRowRedSocial}>
-              <IconoRedondo
-                imagen={Instagram}
-                nombre={LabelRedesSociales.instagram}
-                url={usuario.redSocial.instagram}
-              />
-            </Row>
+            {usuario.redSocial.facebook && (
+              <Row sx={styleRowRedSocial}>
+                <IconoRedondo
+                  imagen={mapaImagenes["facebook_logo"].ruta}
+                  nombre={mapaImagenes["facebook_logo"].nombre}
+                  url={usuario.redSocial.facebook}
+                />
+              </Row>
+            )}
+
+            {usuario.redSocial.x && (
+              <Row sx={styleRowRedSocial}>
+                <IconoRedondo
+                  imagen={mapaImagenes["x_logo"].ruta}
+                  nombre={mapaImagenes["x_logo"].nombre}
+                  url={usuario.redSocial.x}
+                />
+              </Row>
+            )}
+
+            {usuario.redSocial.instagram && (
+              <Row sx={styleRowRedSocial}>
+                <IconoRedondo
+                  imagen={mapaImagenes["instagram_logo"].ruta}
+                  nombre={mapaImagenes["instagram_logo"].nombre}
+                  url={usuario.redSocial.instagram}
+                />
+              </Row>
+            )}
+
+            {usuario.redSocial.linkedin && (
+              <Row sx={styleRowRedSocial}>
+                <IconoRedondo
+                  imagen={mapaImagenes["linkedin_logo"].ruta}
+                  nombre={mapaImagenes["linkedin_logo"].nombre}
+                  url={usuario.redSocial.linkedin}
+                />
+              </Row>
+            )}
           </Box>
         </Row>
 

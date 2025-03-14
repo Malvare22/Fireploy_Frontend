@@ -18,7 +18,6 @@ import {
   TableSortLabel,
   Tooltip,
 } from "@mui/material";
-import IconosAccionesBasicas from "@modules/general/components/iconosAccionesBasicas";
 import {
   obtenerEstadoUsuario,
   obtenerTiposUsuario,
@@ -27,7 +26,6 @@ import useTabla from "@modules/general/hooks/useTabla";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Usuario } from "@modules/usuarios/types/usuario";
-import { useModal } from "@modules/general/components/modal";
 import ModalUsuario from "@modules/usuarios/components/modalUsuario";
 import { filtrosUsuarios } from "@modules/usuarios/utils/filtrosUsuarios";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
@@ -39,6 +37,9 @@ import useQuery from "@modules/general/hooks/useQuery";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 import { LabelTablaUsuarios } from "@modules/usuarios/enum/LabelTablaUsuarios";
 import { obtenerUsuariosPorTipoService } from "@modules/usuarios/services/obtenerUsuariosPorTipo";
+import { useModal } from "@modules/general/components/modal/hooks/useModal";
+import ActionButton from "@modules/general/components/actionButton";
+import { actionButtonTypes } from "@modules/general/types/actionButtons";
 
 function ListarUsuarios() {
   const {
@@ -56,30 +57,30 @@ function ListarUsuarios() {
 
   const token = useContext(AccountContext)?.localUser?.token ?? "";
 
-  const {RenderAlertDialog, init, responseData} = useQuery<UsuarioService[]>(() => obtenerUsuariosPorTipoService("todos", token), 'Consulta Usuarios', false, false);
+  const { RenderAlertDialog, init, responseData } = useQuery<UsuarioService[]>(
+    () => obtenerUsuariosPorTipoService("todos", token),
+    "Consulta Usuarios",
+    false,
+    false
+  );
 
   useEffect(() => {
-
-    if(token == "") return;
+    if (token == "") return;
 
     const handleQuery = async () => {
-      
       await init();
     };
     handleQuery();
     setFilterLabels(filtrosUsuarios());
   }, [token]);
 
-  useEffect(
-    () => {
-      if(responseData == undefined){
-        setData([]);
-      }
-      else{
-        setData(responseData?.map((usuario) => adaptarUsuario(usuario)));
-      }
-    }, [responseData]
-  )
+  useEffect(() => {
+    if (responseData == undefined) {
+      setData([]);
+    } else {
+      setData(responseData?.map((usuario) => adaptarUsuario(usuario)));
+    }
+  }, [responseData]);
 
   const navigate = useNavigate();
 
@@ -93,9 +94,9 @@ function ListarUsuarios() {
     open: estadoOpen,
   } = useModal();
 
-  const {open, handleOpen, handleClose } = useModal();
+  const { open, handleOpen, handleClose } = useModal();
 
-  const [modo, setModo] = useState<'crear' | 'editar'>('editar');
+  const [modo, setModo] = useState<"crear" | "editar">("editar");
 
   const handleVentanaEstado = (usuario: Usuario) => {
     setSelectUsuario(usuario);
@@ -104,19 +105,19 @@ function ListarUsuarios() {
 
   const handleEditar = (usuario: Usuario) => {
     setSelectUsuario(usuario);
-    setModo('editar');
+    setModo("editar");
     handleOpen();
   };
 
   const handleCrear = () => {
     setSelectUsuario(UsuarioBase);
-    setModo('crear');
+    setModo("crear");
     handleOpen();
   };
 
   return (
     <>
-      <RenderAlertDialog/>
+      <RenderAlertDialog />
       {selectUsuario != undefined && (
         <ModalEstadoUsuario
           handleClose={estadoHandleClose}
@@ -209,9 +210,9 @@ function ListarUsuarios() {
                     </Tooltip>
                   </StyledTableCell>
                   <StyledTableCell>
-                    <IconosAccionesBasicas
-                      ver={true}
-                      handleVer={() =>
+                    <ActionButton
+                      mode={actionButtonTypes.ver}
+                      onClick={() =>
                         navigate(
                           rutasUsuarios.verPerfilPorId.replace(
                             ":id",
@@ -219,12 +220,26 @@ function ListarUsuarios() {
                           )
                         )
                       }
-                      editar={true}
-                      handleEditar={() => handleEditar(usuario)}
-                      habilitar={usuario.estado == "I"}
-                      deshabilitar={usuario.estado == "A"}
-                      handleEstado={() => handleVentanaEstado(usuario)}
                     />
+                    <ActionButton
+                      mode={actionButtonTypes.editar}
+                      onClick={() => handleEditar(usuario)}
+                    />
+                    <ActionButton
+                      mode={actionButtonTypes.editar}
+                      onClick={() => handleEditar(usuario)}
+                    />
+                    {usuario.estado == "I" ? (
+                      <ActionButton
+                        mode={actionButtonTypes.habilitarUsuario}
+                        onClick={() => handleVentanaEstado(usuario)}
+                      />
+                    ) : (
+                      <ActionButton
+                        mode={actionButtonTypes.deshabilitar}
+                        onClick={() => handleVentanaEstado(usuario)}
+                      />
+                    )}
                   </StyledTableCell>
                 </StyledTableRow>
               ))}
@@ -236,7 +251,9 @@ function ListarUsuarios() {
           </Table>
         </TableContainer>
       </Box>
-      <Button color="warning" variant="contained" onClick={handleCrear}>{LabelTablaUsuarios.agregarUsuario}</Button>
+      <Button color="warning" variant="contained" onClick={handleCrear}>
+        {LabelTablaUsuarios.agregarUsuario}
+      </Button>
     </>
   );
 }

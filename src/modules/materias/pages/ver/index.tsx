@@ -32,11 +32,11 @@ import {
   StyledTableRow,
 } from "@modules/general/components/tabla";
 import { CursoMateria } from "@modules/materias/types/materia.curso";
-import { useModal } from "@modules/general/components/modal";
 import ModalModificarMateria from "@modules/materias/components/modificarMateria";
 import ModalModificarCurso from "@modules/materias/components/modalModificarCurso";
 import GeneralButton from "@modules/general/components/buttons";
 import { buttonTypes } from "@modules/general/types/buttons";
+import { useModal } from "@modules/general/components/modal/hooks/useModal";
 
 export const LabelConfirmarEliminarEstudianteCurso = (
   estudiante: EstudianteEjemplo

@@ -36,12 +36,12 @@ import { obtenerMateriasService } from "@modules/materias/services/obtener.mater
 import SourceIcon from "@mui/icons-material/Source";
 import { rutasMaterias } from "@modules/materias/router/router";
 import GeneralButton from "@modules/general/components/buttons";
-import { useModal } from "@modules/general/components/modal";
 import ModalModificarMateria from "@modules/materias/components/modificarMateria";
 import { editarEstadoMateriaService } from "@modules/materias/services/editar.materia.services";
 import { buttonTypes } from "@modules/general/types/buttons";
 import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
+import { useModal } from "@modules/general/components/modal/hooks/useModal";
 
 export const LabelTablaMaterias = {
   codigo: "Código",

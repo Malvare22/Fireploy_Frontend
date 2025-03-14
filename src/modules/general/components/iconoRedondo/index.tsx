@@ -1,45 +1,6 @@
 import { capitalizeFirstLetter } from "@modules/general/utils/capitalCase";
 import { Box, IconButton, Tooltip } from "@mui/material";
 
-export enum Imagenes {
-  // Fireploy
-  logo_fireploy = "/assets/fireploy/LogoFireploy.png",
-
-  // Redes Sociales
-  facebook_logo = "/assets/redesSociales/facebookLogo.png",
-  instagram_logo = "/assets/redesSociales/instagramLogo.png",
-  linkedin_logo = "/assets/redesSociales/linkedinLogo.png",
-  x_logo = "/assets/redesSociales/xLogo.png",
-
-  // Tecnologías
-  mongodb = "/assets/tecnologias/mongoDB.png",
-  mysql = "/assets/tecnologias/mySQL.png",
-  nodejs = "/assets/tecnologias/nodeJS.png",
-  react = "/assets/tecnologias/react.png",
-  springboot = "/assets/tecnologias/springBoot.png",
-
-  // UFPS
-  ing_sistemas_logo = "/assets/ufps/ingSistemasLogo.png",
-  ufps_logo = "/assets/ufps/UFPSLogo.png",
-  ufps_logo_completo = "/assets/ufps/UFPSLogoCompleto.png",
-}
-
-/**
- * Obtiene la ruta de una imagen basada en el enum de imágenes.
- * 
- * @param nombre - El nombre de la imagen en formato `imagenes`
- * @returns La ruta de la imagen como una cadena de texto.
- */
-export const obtenerRutaImagen = (nombre: Imagenes): string => {
-  return nombre;
-};
-
-// Mapa para obtener las imágenes con sus rutas y nombres en minúscula
-export const mapaImagenes: Record<string, { nombre: string; ruta: string }> = Object.keys(Imagenes).reduce((mapa, clave) => {
-  return { ...mapa, [clave]: { nombre: capitalizeFirstLetter(clave), ruta: Imagenes[clave as keyof typeof Imagenes] } };
-}, {});
-
-
 export interface IconoRedondoProps{
   nombre: string;
   imagen: string;
