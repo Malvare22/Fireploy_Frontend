@@ -8,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Repositorios from "./repositorios";
 import ArchivosLogs from "./archivosLogs";
 import { EdicionProyectoSchema } from "@modules/proyectos/utils/zod/proyecto.edicion.schema";
-import Colaboradores from "./colaboradores";
 
 interface ContentsProps {
   currentOption: number;
