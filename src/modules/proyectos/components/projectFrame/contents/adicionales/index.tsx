@@ -1,10 +1,9 @@
 import CustomInput from "@modules/general/components/customInput";
 import CustomSelect from "@modules/general/components/customSelect";
 import CustomTextArea from "@modules/general/components/customTextArea";
-import PreviewImage, {
-  usePreviewImage,
-} from "@modules/general/components/previewImage";
-import { materiasPrueba } from "@modules/materias/utils/data/materias.prueba";
+import PreviewImage from "@modules/general/components/previewImage";
+import { usePreviewImage } from "@modules/general/components/previewImage/hooks";
+
 import { ProyectoContext } from "@modules/proyectos/context/proyectoContext";
 import { Box, Divider, MenuItem, SxProps, Typography } from "@mui/material";
 import React, { useContext, useEffect, useMemo } from "react";
@@ -49,7 +48,7 @@ const Content = () => {
   const handleImage = () => {};
 
   const allMaterias = () => {
-    return materiasPrueba;
+    return [];
   };
 
   const currentMateria = watch("materiaInformacion.materia");

@@ -1,7 +1,7 @@
 import { RepositorioProyecto } from "@modules/proyectos/types/proyecto.repositorio";
 import { TecnologiasPrueba } from "./tecnologias.prueba";
 
-export const RepositoriosPrueba: RepositorioProyecto[] = [
+export const repositoriosPrueba: RepositorioProyecto[] = [
   {
     id: 501,
     url: "https://github.com/educacion-frontend",

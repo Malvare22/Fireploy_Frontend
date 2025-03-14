@@ -56,8 +56,8 @@ const Contents: React.FC<ContentsProps> = ({ currentOption, proyecto }) => {
       case 2:
         return <Database />;
 
-      case 3:
-        return <Colaboradores />;
+      // case 3:
+      //   return <Colaboradores />;
 
       case 4:
         return <Adicionales />;

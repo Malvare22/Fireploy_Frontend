@@ -69,7 +69,7 @@ export const redSocialUsuarioSchema = z
  */
 export const nombresSchema = z.string().min(1, { message: "El nombre no puede estar vacío" });
 export const apellidosSchema = z.string().min(1, { message: "El apellido no puede estar vacío" });
-export const fotoDePerfilSchema = z.string().url({ message: "Debe ser una URL válida" });
+export const fotoDePerfilSchema = z.string().min(1, { message: "Es obligatorio agregar una imagen" });
 export const descripcionSchema = z.string().optional();
 export const correoSchema = z.string().email({ message: "Debe ser un correo válido" });
 

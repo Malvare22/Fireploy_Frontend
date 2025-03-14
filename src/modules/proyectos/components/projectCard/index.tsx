@@ -4,10 +4,9 @@ import { obtenerColorEstado } from "@modules/proyectos/utils/obtenerColorEstado"
 import { Proyecto } from "@modules/proyectos/types/proyecto";
 import { obtenerEstado } from "@modules/proyectos/utils/obtenerEstado";
 import IconoRedondo from "@modules/general/components/iconoRedondo";
-import { obtenerInformacionTipoBaseDeDatos } from "@modules/proyectos/utils/obtenerInformacionTipoBaseDeDatos";
-import { RepositoriosPrueba } from "@modules/proyectos/test/datos/repositorios.prueba";
-import { BasesDeDatosPrueba } from "@modules/proyectos/test/datos/baseDeDatos.prueba";
+import { repositoriosPrueba } from "@modules/proyectos/test/datos/repositorios.prueba";
 import { rutasProyectos } from "@modules/proyectos/router";
+import { mapaImagenes } from "@modules/general/components/iconoRedondo/utils";
 
 interface Props {
   proyecto: Proyecto;
@@ -89,23 +88,15 @@ const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
               gap: 3,
             }}
           >
-            {proyecto.repositorios.map((indice) => (
+            {proyecto.repositorios.map((_, indice) => (
               <IconoRedondo
-                imagen={RepositoriosPrueba[indice].tecnologia.logo}
-                nombre={RepositoriosPrueba[indice].tecnologia.nombre}
+                imagen={mapaImagenes[repositoriosPrueba[indice].tecnologia.logo].ruta}
+                nombre={mapaImagenes[repositoriosPrueba[indice].tecnologia.logo].nombre}
               ></IconoRedondo>
             ))}
             <IconoRedondo
-              nombre={
-                obtenerInformacionTipoBaseDeDatos[
-                  BasesDeDatosPrueba[proyecto.baseDeDatos].tipo
-                ].nombre
-              }
-              imagen={
-                obtenerInformacionTipoBaseDeDatos[
-                  BasesDeDatosPrueba[proyecto.baseDeDatos].tipo
-                ].imagen
-              }
+              imagen={mapaImagenes['mongodb'].ruta}
+              nombre={mapaImagenes['mongodb'].nombre}
             ></IconoRedondo>
           </Box>
         </Box>

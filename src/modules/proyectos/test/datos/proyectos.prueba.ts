@@ -1,7 +1,7 @@
 import { Proyecto } from "@modules/proyectos/types/proyecto";
 import { archivosLogsPrueba } from "./archivosLog.prueba";
 import { BasesDeDatosPrueba } from "./baseDeDatos.prueba";
-import { RepositoriosPrueba } from "./repositorios.prueba";
+import { repositoriosPrueba } from "./repositorios.prueba";
 
 export const proyectosPrueba: Proyecto[] = [
   {
@@ -16,7 +16,7 @@ export const proyectosPrueba: Proyecto[] = [
     estadoDeEjecucion: "N",
     estadoDeProyecto: "A",
     baseDeDatos: BasesDeDatosPrueba[0],
-    repositorios: [RepositoriosPrueba[1], RepositoriosPrueba[0]],
+    repositorios: [repositoriosPrueba[1], repositoriosPrueba[0]],
     numeroDeCapas: 2,
     archivosLogs: archivosLogsPrueba,
     materiaInformacion: { materia: 1, curso: "A", seccion: "S01" },
@@ -34,7 +34,7 @@ export const proyectosPrueba: Proyecto[] = [
     estadoDeEjecucion: "F",
     estadoDeProyecto: "A",
     baseDeDatos: BasesDeDatosPrueba[0],
-    repositorios: [RepositoriosPrueba[0]],
+    repositorios: [repositoriosPrueba[0]],
     numeroDeCapas: 2,
     archivosLogs: archivosLogsPrueba,
     materiaInformacion: { materia: 0, curso: "A", seccion: "S01" },
@@ -52,7 +52,7 @@ export const proyectosPrueba: Proyecto[] = [
     estadoDeEjecucion: "E",
     estadoDeProyecto: "A",
     baseDeDatos: BasesDeDatosPrueba[0],
-    repositorios: [RepositoriosPrueba[0]],
+    repositorios: [repositoriosPrueba[0]],
     numeroDeCapas: 2,
     archivosLogs: archivosLogsPrueba,
     materiaInformacion: { materia: 0, curso: "A", seccion: "S01" },
@@ -70,7 +70,7 @@ export const proyectosPrueba: Proyecto[] = [
     estadoDeEjecucion: "N",
     estadoDeProyecto: "A",
     baseDeDatos: BasesDeDatosPrueba[0],
-    repositorios: [RepositoriosPrueba[0]],
+    repositorios: [repositoriosPrueba[0]],
     numeroDeCapas: 2,
     archivosLogs: archivosLogsPrueba,
     materiaInformacion: { materia: 0, curso: "A", seccion: "S01" },
@@ -87,7 +87,7 @@ export const proyectosPrueba: Proyecto[] = [
     estadoDeEjecucion: "L",
     estadoDeProyecto: "A",
     baseDeDatos: BasesDeDatosPrueba[0],
-    repositorios: [RepositoriosPrueba[0]],
+    repositorios: [repositoriosPrueba[0]],
     numeroDeCapas: 2,
     archivosLogs: archivosLogsPrueba,
     materiaInformacion: { materia: 0, curso: "A", seccion: "S01" },

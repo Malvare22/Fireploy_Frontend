@@ -225,10 +225,6 @@ function ListarUsuarios() {
                       mode={actionButtonTypes.editar}
                       onClick={() => handleEditar(usuario)}
                     />
-                    <ActionButton
-                      mode={actionButtonTypes.editar}
-                      onClick={() => handleEditar(usuario)}
-                    />
                     {usuario.estado == "I" ? (
                       <ActionButton
                         mode={actionButtonTypes.habilitarUsuario}
@@ -236,7 +232,7 @@ function ListarUsuarios() {
                       />
                     ) : (
                       <ActionButton
-                        mode={actionButtonTypes.deshabilitar}
+                        mode={actionButtonTypes.deshabilitarUsuario}
                         onClick={() => handleVentanaEstado(usuario)}
                       />
                     )}

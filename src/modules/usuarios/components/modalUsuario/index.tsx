@@ -28,9 +28,18 @@ import IconoRedondo from "@modules/general/components/iconoRedondo";
 import { mapaImagenes } from "@modules/general/components/iconoRedondo/utils";
 import PreviewImage from "@modules/general/components/previewImage";
 import { usePreviewImage } from "@modules/general/components/previewImage/hooks";
-import GeneralButton, { ButtonContainer } from "@modules/general/components/buttons";
+import GeneralButton, {
+  ButtonContainer,
+} from "@modules/general/components/buttons";
 import { buttonTypes } from "@modules/general/types/buttons";
 
+/**
+ * @typedef Props
+ * @property {boolean} open - Indica si el modal está abierto.
+ * @property {() => void} handleClose - Función para cerrar el modal.
+ * @property {"editar" | "crear"} tipo - Tipo de acción a realizar en el modal.
+ * @property {Usuario} usuario - Datos del usuario a editar o valores por defecto en la creación.
+ */
 type Props = {
   open: boolean;
   handleClose: () => void;
@@ -38,6 +47,13 @@ type Props = {
   usuario: Usuario;
 };
 
+/**
+ * @component ModalUsuario
+ * @description Modal para la creación o edición de un usuario.
+ *
+ * @param {Props} props - Propiedades del componente.
+ * @returns {JSX.Element} El modal de gestión de usuario.
+ */
 const ModalUsuario: React.FC<Props> = ({
   open,
   handleClose,
@@ -66,12 +82,22 @@ const Cuerpo: React.FC<{
   handleClose: () => void;
   tipo: "crear" | "editar";
 }> = ({ defaultValue, handleClose, tipo }) => {
+  /** Estado para la imagen de perfil */
   const { image, setImage } = usePreviewImage(defaultValue.fotoDePerfil);
 
+  /** Token del usuario actual */
   const token = useContext(AccountContext)?.localUser?.token;
 
+  /** Función para actualizar el usuario local en el contexto */
   const setLocalUser = useContext(AccountContext)?.setLocalUser;
 
+  const localUser = useContext(AccountContext)?.localUser;
+
+  /**
+   * @function resolver
+   * @description Determina qué esquema de validación usar según el tipo de acción.
+   * @returns {ZodSchema} Esquema de validación correspondiente.
+   */
   const resolver = () => {
     if (tipo == "crear") {
       return UsuarioSchema;
@@ -79,18 +105,27 @@ const Cuerpo: React.FC<{
     return UsuarioEditarDefaultSchema;
   };
 
+  /** Hook para manejar el formulario */
   const {
     register,
     handleSubmit,
     getValues,
+    setValue,
     formState: { errors },
   } = useForm<Usuario>({
     defaultValues: defaultValue,
     resolver: zodResolver(resolver()),
   });
 
+  /** Referencia para el botón oculto de envío */
   const ref = useRef<HTMLButtonElement>(null);
 
+  /**
+   * @function consultaAEjecutar
+   * @description Determina qué servicio llamar según el tipo de acción.
+   * @param {Usuario} usuario - Datos del usuario.
+   * @returns {() => Promise<UsuarioService>} Función que ejecuta la consulta.
+   */
   const consultaAEjecutar = (usuario: Usuario) => {
     if (tipo == "editar")
       return () =>
@@ -98,28 +133,31 @@ const Cuerpo: React.FC<{
     return () => crearUsuarioService(token ?? "", usuario);
   };
 
+  /** Determina si la imagen ha cambiado */
   const condicionCambioImagen = image.startsWith("data:");
 
-  console.log(getValues())
+  /** Estado para el ID del usuario */
+  const [id, setId] = useState(-1);
+  
+  /**
+   * Determina si debe reiniciar la sesión de usuario
+   */
+  const condicionCerrarSesion = setLocalUser && localUser && localUser.id == id;
 
+  /** Hook para manejar la consulta principal */
   const { RenderAlertDialog, init, responseData } = useQuery<UsuarioService>(
     consultaAEjecutar(getValues()),
     "Gestión Usuario",
     true,
     !condicionCambioImagen,
-    "Actualizar Datos",
-    false,
-    condicionCambioImagen && setLocalUser
-      ? () => {}
-      : () => {
-          if (setLocalUser) cerrarSession(navigate, setLocalUser);
-        }
+    '¿Desea Actualizar la información?',
+    !condicionCambioImagen
   );
 
-  const [id, setId] = useState(-1);
+  // /** Hook de navegación */
+  // const navigate = useNavigate();
 
-  const navigate = useNavigate();
-
+  /** Hook para manejar la subida de imagen */
   const {
     RenderAlertDialog: RenderAlertDialogImageUpdate,
     init: initImageUpdate,
@@ -128,32 +166,37 @@ const Cuerpo: React.FC<{
     "Gestión Usuario",
     false,
     true,
-    "Imagen Actualizada",
-    false,
-    setLocalUser ? () => cerrarSession(navigate, setLocalUser) : () => {}
+    condicionCerrarSesion ? 'Información actualizada, se requiere volver a iniciar sesión' : 'Información actualizada',
+    true
   );
 
+  /** Efecto que actualiza el ID del usuario cuando la respuesta llega */
   useEffect(() => {
     if (!responseData) return;
     setId(responseData.id);
   }, [responseData]);
 
+  /** Efecto que inicia la actualización de imagen si se cambió */
   useEffect(() => {
     if (id == -1) return;
     if (condicionCambioImagen) initImageUpdate();
   }, [id]);
 
+  /** Estilos para la fila de redes sociales */
   const styleRowRedSocial = {
     flexDirection: "row",
     alignItems: "center",
   } as SxProps;
 
+  /**
+   * @function handleQuery
+   * @description Dispara la acción del formulario al hacer clic en el botón.
+   */
   const handleQuery = () => {
     if (ref) {
       ref.current?.click();
     }
   };
-
   return (
     <>
       <RenderAlertDialog />
@@ -304,7 +347,10 @@ const Cuerpo: React.FC<{
               }}
             >
               <Row sx={styleRowRedSocial}>
-                <IconoRedondo imagen={mapaImagenes['linkedin_logo'].ruta} nombre={mapaImagenes['linkedin_logo'].nombre}/>
+                <IconoRedondo
+                  imagen={mapaImagenes["linkedin_logo"].ruta}
+                  nombre={mapaImagenes["linkedin_logo"].nombre}
+                />
                 <CustomInput
                   variant="secondary"
                   {...register("redSocial.linkedin")}
@@ -312,24 +358,33 @@ const Cuerpo: React.FC<{
                 ></CustomInput>
               </Row>
               <Row sx={styleRowRedSocial}>
-              <IconoRedondo imagen={mapaImagenes['facebook_logo'].ruta} nombre={mapaImagenes['facebook_logo'].nombre}/>
-              <CustomInput
+                <IconoRedondo
+                  imagen={mapaImagenes["facebook_logo"].ruta}
+                  nombre={mapaImagenes["facebook_logo"].nombre}
+                />
+                <CustomInput
                   variant="secondary"
                   {...register("redSocial.facebook")}
                   errorMessage={errors.redSocial?.facebook?.message}
                 ></CustomInput>
               </Row>
               <Row sx={styleRowRedSocial}>
-              <IconoRedondo imagen={mapaImagenes['instagram_logo'].ruta} nombre={mapaImagenes['instagram_logo'].nombre}/>
-              <CustomInput
+                <IconoRedondo
+                  imagen={mapaImagenes["instagram_logo"].ruta}
+                  nombre={mapaImagenes["instagram_logo"].nombre}
+                />
+                <CustomInput
                   variant="secondary"
                   {...register("redSocial.instagram")}
                   errorMessage={errors.redSocial?.instagram?.message}
                 ></CustomInput>
               </Row>
               <Row sx={styleRowRedSocial}>
-              <IconoRedondo imagen={mapaImagenes['x_logo'].ruta} nombre={mapaImagenes['x_logo'].nombre}/>
-              <CustomInput
+                <IconoRedondo
+                  imagen={mapaImagenes["x_logo"].ruta}
+                  nombre={mapaImagenes["x_logo"].nombre}
+                />
+                <CustomInput
                   variant="secondary"
                   {...register("redSocial.x")}
                   errorMessage={errors.redSocial?.x?.message}
@@ -349,8 +404,8 @@ const Cuerpo: React.FC<{
 
           {/* Botones */}
           <ButtonContainer>
-            <GeneralButton mode={buttonTypes.accept} onClick={handleQuery}/>
-            <GeneralButton mode={buttonTypes.cancel} onClick={handleClose}/>
+            <GeneralButton mode={buttonTypes.accept} onClick={handleQuery} />
+            <GeneralButton mode={buttonTypes.cancel} onClick={handleClose} />
           </ButtonContainer>
         </Card>
       </form>

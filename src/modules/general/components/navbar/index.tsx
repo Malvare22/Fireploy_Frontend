@@ -1,5 +1,5 @@
 import { Box, Typography, ListItemButton, IconButton } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DrawerCustom from "./components/drawer";
@@ -8,9 +8,9 @@ import { rutasGeneral } from "@modules/general/router/router";
 import { LabelNavbar } from "@modules/general/enums/labelNavbar";
 import { palette } from "@core/themes";
 import { mapaImagenes } from "../iconoRedondo/utils";
+import { AccountContext } from "@modules/general/context/accountContext";
 
-
-const Navbar: React.FC<{sesion: boolean}> = ({sesion}) => {
+const Navbar: React.FC<{ sesion: boolean }> = ({ sesion }) => {
   const [open, setOpen] = useState(true);
 
   return (
@@ -31,7 +31,7 @@ const Navbar: React.FC<{sesion: boolean}> = ({sesion}) => {
           },
           paddingRight: 4,
           gap: 3,
-          paddingY: {xs: 2, xl: 1}
+          paddingY: { xs: 2, xl: 1 },
         }}
       >
         {/* Primera Parte */}
@@ -62,7 +62,7 @@ const Navbar: React.FC<{sesion: boolean}> = ({sesion}) => {
                 lg: "row",
               },
               justifyContent: "center",
-              gap: {xs: 3, xl: 1},
+              gap: { xs: 3, xl: 1 },
             }}
           >
             <SecondContent sesion={sesion} />
@@ -88,6 +88,8 @@ const FirstContent: React.FC<FirstContentProps> = ({
     setOpen(!open);
   };
 
+  const localUser = useContext(AccountContext)?.localUser;
+
   return (
     <>
       <Box
@@ -98,10 +100,17 @@ const FirstContent: React.FC<FirstContentProps> = ({
           justifyContent: { xs: "space-between" },
         }}
       >
-        <Box>
-          <DrawerCustom />
-        </Box>
-        <Box component={"img"} src={mapaImagenes['logo_fireploy'].ruta} alt={mapaImagenes['logo_fireploy'].nombre} sx={{ width: 64 }} />
+        {localUser && (
+          <Box>
+            <DrawerCustom />
+          </Box>
+        )}
+        <Box
+          component={"img"}
+          src={mapaImagenes["logo_fireploy"].ruta}
+          alt={mapaImagenes["logo_fireploy"].nombre}
+          sx={{ width: 64 }}
+        />
         <Box sx={{ visibility: { lg: "hidden" } }}>
           <IconButton onClick={handleButton}>
             <KeyboardArrowDownIcon
@@ -117,23 +126,31 @@ const FirstContent: React.FC<FirstContentProps> = ({
 
       {open && (
         <>
-          <ListItemButton onClick={() => navigate(rutasGeneral.home)} sx={{
-            display: 'flex', justifyContent: 'center'
-          }}>
-            <Typography variant="titleBold">
-              {LabelNavbar.inicio}
-            </Typography>
+          <ListItemButton
+            onClick={() => navigate(rutasGeneral.home)}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Typography variant="titleBold">{LabelNavbar.inicio}</Typography>
           </ListItemButton>
-          <ListItemButton onClick={() => navigate("/team")} sx={{
-            display: 'flex', justifyContent: 'center'
-          }}>
-            <Typography variant="titleBold">
-             {LabelNavbar.equipo}
-            </Typography>
+          <ListItemButton
+            onClick={() => navigate("/team")}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Typography variant="titleBold">{LabelNavbar.equipo}</Typography>
           </ListItemButton>
-          <ListItemButton onClick={() => navigate("/technologies")} sx={{
-            display: 'flex', justifyContent: 'center'
-          }}>
+          <ListItemButton
+            onClick={() => navigate("/technologies")}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
             <Typography variant="titleBold">
               {LabelNavbar.tecnologiasSoportadas}
             </Typography>
@@ -161,10 +178,14 @@ const SecondContent: React.FC<SecondContentProps> = ({
       ) : (
         <>
           <ListItemButton onClick={() => navigate(rutasGeneral.login)}>
-            <Typography variant="titleBold">{LabelNavbar.iniciarSesion}</Typography>
+            <Typography variant="titleBold">
+              {LabelNavbar.iniciarSesion}
+            </Typography>
           </ListItemButton>
           <ListItemButton onClick={() => navigate(rutasGeneral.registrar)}>
-            <Typography variant="titleBold">{LabelNavbar.registrarse}</Typography>
+            <Typography variant="titleBold">
+              {LabelNavbar.registrarse}
+            </Typography>
           </ListItemButton>
         </>
       )}

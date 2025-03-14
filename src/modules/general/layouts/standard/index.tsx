@@ -35,6 +35,8 @@ function LayoutStandard() {
           paddingY: 4,
           paddingX: {md: 10, xs: 2},
           overflowX: 'auto',
+          // display: {md: 'flex'},
+          // justifyContent: {md: 'center'}
         }}
       >
         <Outlet />
