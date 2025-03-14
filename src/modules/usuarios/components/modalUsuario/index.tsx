@@ -22,8 +22,6 @@ import { crearUsuarioService } from "@modules/usuarios/services/crearUsuario";
 import useQuery from "@modules/general/hooks/useQuery";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 import { subirImagenUsuario } from "@modules/usuarios/services/imagen.subir";
-import { cerrarSession } from "@modules/general/utils/cerrarSesion";
-import { useNavigate } from "react-router-dom";
 import IconoRedondo from "@modules/general/components/iconoRedondo";
 import { mapaImagenes } from "@modules/general/components/iconoRedondo/utils";
 import PreviewImage from "@modules/general/components/previewImage";
@@ -110,7 +108,6 @@ const Cuerpo: React.FC<{
     register,
     handleSubmit,
     getValues,
-    setValue,
     formState: { errors },
   } = useForm<Usuario>({
     defaultValues: defaultValue,

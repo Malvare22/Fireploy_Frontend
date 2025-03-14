@@ -7,7 +7,7 @@ import { Materia } from "@modules/materias/types/materia";
 
 import { ProyectoContext } from "@modules/proyectos/context/proyectoContext";
 import { Box, Divider, MenuItem, SxProps, Typography } from "@mui/material";
-import { useContext, useEffect, useMemo } from "react";
+import { useContext, useEffect } from "react";
 
 const Adicionales = () => {
   return (
@@ -52,28 +52,6 @@ const Content = () => {
     return [] as Materia[];
   };
 
-  const currentMateria = watch("materiaInformacion.materia");
-
-  const getMateria = allMaterias().find(
-    (materia) => materia.id == watch("materiaInformacion.materia")
-  );
-
-  const getGrupos = useMemo(() => {
-    if (getMateria != undefined) {
-      return getMateria.cursos;
-    }
-
-    return [];
-  }, [currentMateria]);
-
-  const currentGrupo = watch("materiaInformacion.curso");
-
-  const getSecciones = useMemo(() => {
-    if (getGrupos == undefined) {
-      return [];
-    }
-    return getGrupos?.find((grupo) => grupo.id == currentGrupo)?.secciones;
-  }, [currentMateria, currentGrupo]);
 
   if (!proyecto) return <></>;
 
@@ -151,12 +129,21 @@ const Content = () => {
               width: { xl: 70 },
             }}
           >
-            {getGrupos &&
+            <MenuItem value={"Calculo"} key={"Calculo"}>
+                  {"Calculo"}
+                </MenuItem>
+                <MenuItem value={"Bases de Datos"} key={"Bases de Datos"}>
+                  {"Bases de Datos"}
+                </MenuItem>
+                <MenuItem value={"POO"} key={"POO"}>
+                  {"POO"}
+                </MenuItem>
+            {/* {getGrupos &&
               getGrupos.map((grupo, key) => (
                 <MenuItem value={grupo.id} key={key}>
                   {grupo.id}
                 </MenuItem>
-              ))}
+              ))} */}
           </CustomSelect>
         </Box>
 
@@ -173,12 +160,15 @@ const Content = () => {
               width: { xl: 300 },
             }}
           >
-            {getSecciones &&
-              getSecciones.map((seccion, key) => (
-                <MenuItem value={seccion.id} key={key}>
-                  {seccion.titulo}
+            <MenuItem value={"Primera semana"} key={"Primera semana"}>
+                  {"Primera semana"}
                 </MenuItem>
-              ))}
+                <MenuItem value={"Segunda semana"} key={"Segunda semana"}>
+                  {"Segunda semana"}
+                </MenuItem>
+                <MenuItem value={"Tercera semana"} key={"Tercera semana"}>
+                  {"Tercera semana"}
+                </MenuItem>
           </CustomSelect>
         </Box>
       </Box>
