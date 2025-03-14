@@ -1,27 +1,37 @@
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 
+/**
+ * Propiedades del componente `PreviewImage`.
+ * 
+ * @property {string} image - URL o base64 de la imagen a mostrar.
+ * @property {React.Dispatch<string>} setImage - Función para actualizar la imagen.
+ * @property {"proyecto" | "usuario"} [type="usuario"] - Tipo de imagen, afecta el diseño.
+ */
 interface PreviewImageProps {
   image: string;
   setImage: React.Dispatch<string>;
   type?: "proyecto" | "usuario";
 }
 
-export const usePreviewImage = (initialValue?: string) => {
-  const [image, setImage] = useState<string>(initialValue ? initialValue : "");
-  return {
-    image,
-    setImage,
-  };
-};
-
+/**
+ * Componente `PreviewImage` que permite visualizar, agregar y eliminar una imagen.
+ * 
+ * @param {PreviewImageProps} props - Propiedades del componente.
+ * @returns {JSX.Element} Elemento JSX que muestra la imagen y botones de acción.
+ */
 const PreviewImage: React.FC<PreviewImageProps> = ({
   image,
   setImage,
   type = "usuario",
 }) => {
+  /**
+   * Maneja el cambio de imagen cuando el usuario selecciona un archivo.
+   * 
+   * @param {React.ChangeEvent<HTMLInputElement>} event - Evento de cambio del input de archivo.
+   */
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]; // Obtenemos el primer archivo seleccionado
 
@@ -38,6 +48,9 @@ const PreviewImage: React.FC<PreviewImageProps> = ({
     }
   };
 
+  /**
+   * Maneja la eliminación de la imagen actual.
+   */
   const handleRemoveImage = () => {
     setImage(""); // Limpiar la imagen
     if (ref.current) {
@@ -45,17 +58,20 @@ const PreviewImage: React.FC<PreviewImageProps> = ({
     }
   };
 
+  /**
+   * Activa el input de archivo para seleccionar una nueva imagen.
+   */
   const handleAddImage = () => {
     ref.current?.click();
   };
 
+  // Referencia al input de archivo
   const ref = useRef<null | HTMLInputElement>(null);
 
   return (
     <Box
       sx={{
         width: "100%",
-        // border: "solid 1px rgba(0,0,0, .2)",
       }}
     >
       <input
@@ -78,7 +94,7 @@ const PreviewImage: React.FC<PreviewImageProps> = ({
           }}
         >
           <Box
-          component={'img'}
+            component={'img'}
             src={image}
             alt="Vista previa"
             sx={{

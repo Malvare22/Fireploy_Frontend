@@ -15,46 +15,57 @@ import { LabelNavbar } from "@modules/general/enums/labelNavbar";
 import { AccountContext } from "@modules/general/context/accountContext";
 import { cerrarSession } from "@modules/general/utils/cerrarSesion";
 
+/**
+ * Componente que muestra el menú de la cuenta del usuario con opciones para ver el perfil y cerrar sesión.
+ * 
+ * @returns {JSX.Element} Un menú desplegable con opciones de la cuenta.
+ */
 export const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
 
+  /**
+   * Maneja el clic en el botón de usuario para abrir el menú.
+   * 
+   * @param {React.MouseEvent<HTMLElement>} event - Evento del clic.
+   */
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
+  /**
+   * Cierra el menú de la cuenta.
+   */
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  const context = useContext(AccountContext);
+  // Obtiene la información del usuario desde el contexto.
+  const localUser = useContext(AccountContext)?.localUser;
+  const setLocalUser = useContext(AccountContext)?.setLocalUser;
 
-  if (!context) return <></>;
-
-  const { localUser, setLocalUser } = context;
-
+  /**
+   * Obtiene la información del usuario de manera memorizada para evitar renders innecesarios.
+   * 
+   * @returns {object} Un objeto con el nombre y la foto del usuario.
+   */
   const userInfo = useMemo((): { nombres: string; foto: string } => {
     if (!localUser) return { nombres: "", foto: "" };
-
-    try {
-      return {
-        nombres: localUser.nombre,
-        foto: localUser.foto,
-      };
-    } catch (error) {
-      console.error("Error al parsear el usuario:", error);
-      return { nombres: "", foto: "" };
-    }
+    return {
+      nombres: localUser.nombre,
+      foto: localUser.foto,
+    };
   }, [localUser]);
 
   return (
     <Fragment>
       <Box sx={{ display: "flex", alignItems: "end", textAlign: "center" }}>
-          <Tooltip title="Account settings" sx={{border: '1px solid white', borderRadius: 4}}>
-            <ListItemButton onClick={handleClick}>
-              <ProfilePreview nombre={userInfo.nombres} foto={userInfo.foto} />
-            </ListItemButton>
-          </Tooltip>
+        <Tooltip title="Account settings" sx={{ border: '1px solid white', borderRadius: 4 }}>
+          <ListItemButton onClick={handleClick}>
+            <ProfilePreview nombre={userInfo.nombres} foto={userInfo.foto} />
+          </ListItemButton>
+        </Tooltip>
       </Box>
       <Menu
         anchorEl={anchorEl}
@@ -93,33 +104,44 @@ export const AccountMenu = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem
-          onClick={() => navigate(rutasUsuarios.perfil)}
-          sx={{ width: 200 }}
-        >
+        <MenuItem onClick={() => navigate(rutasUsuarios.perfil)} sx={{ width: 200 }}>
           <Avatar />
           <Typography variant="title2">{LabelNavbar.perfil}</Typography>
         </MenuItem>
         <Divider />
-        <MenuItem onClick={() => cerrarSession(navigate, setLocalUser)}>
-          <ListItemIcon>
-            <Logout fontSize="small" />
-          </ListItemIcon>
-          <Typography variant="title2">{LabelNavbar.cerrarSesion}</Typography>
-        </MenuItem>
+        {setLocalUser && (
+          <MenuItem onClick={() => cerrarSession(navigate, setLocalUser)}>
+            <ListItemIcon>
+              <Logout fontSize="small" />
+            </ListItemIcon>
+            <Typography variant="title2">{LabelNavbar.cerrarSesion}</Typography>
+          </MenuItem>
+        )}
       </Menu>
     </Fragment>
   );
 };
 
+/**
+ * Propiedades del componente `ProfilePreview`.
+ * 
+ * @property {string} nombre - Nombre del usuario.
+ * @property {string} foto - URL de la foto del usuario.
+ */
 interface ProfilePreviewProps {
   nombre: string;
   foto: string;
 }
 
+/**
+ * Componente que muestra un previsualizador del perfil del usuario con su nombre y foto.
+ * 
+ * @param {ProfilePreviewProps} props - Propiedades del componente.
+ * @returns {JSX.Element} Elemento visual del perfil del usuario.
+ */
 const ProfilePreview: React.FC<ProfilePreviewProps> = ({ nombre, foto }) => {
   return (
-    // container
+    // Contenedor principal del perfil del usuario.
     <Box
       sx={{
         display: "flex",

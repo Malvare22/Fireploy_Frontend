@@ -2,8 +2,15 @@ import ufps from "@modules/general/assets/LogoUFPS.png";
 import ingSistemas from "@modules/general/assets/ing_sistemas.png";
 import fireploy from "@modules/general/assets/LogoFireploy.png";
 import { Box, Typography } from "@mui/material";
+import { LabelFooter } from "@modules/general/enums/labelFooter";
 
-function Footer() {
+/**
+ * Componente Footer que muestra información sobre Fireploy,
+ * recursos, redes sociales, términos legales y logos institucionales.
+ *
+ * @returns {JSX.Element} Estructura del footer con la información distribuida en columnas.
+ */
+function Footer(): JSX.Element {
   return (
     <Box
       sx={{
@@ -16,7 +23,7 @@ function Footer() {
         color: "white",
       }}
     >
-      {/* columna */}
+      {/* Columna Fireploy */}
       <Box
         sx={{
           width: { md: "25%" },
@@ -27,10 +34,10 @@ function Footer() {
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <img src={fireploy} width={60}></img>
+            <img src={fireploy} width={60} alt="Fireploy" />
           </Box>
           <Box sx={{ marginLeft: 1 }}>
-            <Typography variant="h5Bold">Fireploy</Typography>
+            <Typography variant="h5Bold">{LabelFooter.fireploy}</Typography>
           </Box>
           <Box>
             <Typography variant="titleBold">®</Typography>
@@ -38,36 +45,40 @@ function Footer() {
         </Box>
         <Box>
           <Typography variant="title2Bold">
-            Software Web para la automatización de despliegues de proyectos web
-            gratuito y open source
+            {LabelFooter.descripcionFireploy}
           </Typography>
         </Box>
       </Box>
-      {/* columna */}
+
+      {/* Columna Recursos */}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <Box>
-          <Typography variant="titleBold">Recursos</Typography>
+          <Typography variant="titleBold">{LabelFooter.recursos}</Typography>
         </Box>
         <Box>
-          <Typography variant="title2">Documentación</Typography>
+          <Typography variant="title2">{LabelFooter.documentacion}</Typography>
         </Box>
         <Box>
-          <Typography variant="title2">Plantillas</Typography>
+          <Typography variant="title2">{LabelFooter.plantillas}</Typography>
         </Box>
       </Box>
-      {/* columna */}
+
+      {/* Columna Redes Sociales */}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <Box>
-          <Typography variant="titleBold">Redes Sociales</Typography>
+          <Typography variant="titleBold">
+            {LabelFooter.redesSociales}
+          </Typography>
         </Box>
         <Box>
-          <Typography variant="title2">Linkedin</Typography>
+          <Typography variant="title2">{LabelFooter.linkedin}</Typography>
         </Box>
         <Box>
-          <Typography variant="title2">Facebook</Typography>
+          <Typography variant="title2">{LabelFooter.facebook}</Typography>
         </Box>
       </Box>
-      {/* columna */}
+
+      {/* Columna Términos Legales */}
       <Box
         sx={{
           width: { md: "20%" },
@@ -77,16 +88,16 @@ function Footer() {
         }}
       >
         <Box>
-          <Typography variant="titleBold">Terminos Legales</Typography>
-        </Box>
-        <Box>
-          <Typography variant="title2Bold">
-            The content driving this site is licensed under the Creative Commons
-            Attribution-ShareAlike 4.0 license.
+          <Typography variant="titleBold">
+            {LabelFooter.terminosLegales}
           </Typography>
         </Box>
+        <Box>
+          <Typography variant="title2Bold">{LabelFooter.licencia}</Typography>
+        </Box>
       </Box>
-      {/* columna */}
+
+      {/* Logo UFPS */}
       <Box
         sx={{
           borderRadius: 4,
@@ -105,9 +116,11 @@ function Footer() {
           }}
           src={ufps}
           width={"50%"}
-        ></Box>
+          alt="UFPS"
+        />
       </Box>
-      {/* columna */}
+
+      {/* Logo Ingeniería de Sistemas */}
       <Box
         sx={{
           borderRadius: 4,
@@ -126,7 +139,8 @@ function Footer() {
           }}
           src={ingSistemas}
           width={"50%"}
-        ></Box>
+          alt="Ingeniería de Sistemas"
+        />
       </Box>
     </Box>
   );

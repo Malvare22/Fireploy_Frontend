@@ -1,9 +1,17 @@
 import { Box, SxProps, Theme } from "@mui/material";
 import React from "react";
 
+/**
+ * Contenedor de formulario estilizado con Material UI.
+ *
+ * @param {React.ReactNode} props.children - Elementos hijos dentro del contenedor.
+ * @param {SxProps<Theme>} [props.sx] - Estilos adicionales para personalizar el contenedor.
+ *
+ * @returns {JSX.Element} Contenedor estilizado para formularios.
+ */
 interface Props {
   children: React.ReactNode;
-  sx?: SxProps<Theme>; // Añadimos la prop sx
+  sx?: SxProps<Theme>;
 }
 const FormContainer: React.FC<Props> = ({ children, sx }: Props) => {
   return (

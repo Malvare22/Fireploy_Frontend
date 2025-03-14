@@ -3,6 +3,13 @@ import { UsuarioCampoBusqueda } from "../searchUsers/hook";
 import ActionButton from "../actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
 
+/**
+ * Componente que muestra la información de un usuario seleccionado con un botón de acción.
+ * 
+ * @param {UsuarioCampoBusqueda} user - Datos del usuario seleccionado.
+ * @param {() => void} onClick - Función que se ejecuta al hacer clic en el botón de acción.
+ * @returns {JSX.Element} Elemento JSX del componente.
+ */
 const SelectUserFrame: React.FC<{
   user: UsuarioCampoBusqueda;
   onClick: () => void;

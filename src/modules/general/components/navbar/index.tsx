@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DrawerCustom from "./components/drawer";
 import { AccountMenu } from "./components/accountMenu";
-import Notificacions from "./components/notifications";
 import Logo from "@modules/general/assets/LogoFireploy.png";
 import { rutasGeneral } from "@modules/general/router/router";
 import { LabelNavbar } from "@modules/general/enums/labelNavbar";
@@ -157,7 +156,6 @@ const SecondContent: React.FC<SecondContentProps> = ({
     <>
       {sesion ? (
         <>
-          <Notificacions />
           <AccountMenu />
         </>
       ) : (
