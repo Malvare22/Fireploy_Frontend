@@ -1,6 +1,6 @@
-import { Materia } from "./forms/schema.materias";
+import { MateriaModal } from "./forms/schema.materias";
 
-export const MateriaBase: Materia = {
+export const MateriaBase: MateriaModal = {
     nombre: '',
     semestre: 'I',
     estado: 'A',

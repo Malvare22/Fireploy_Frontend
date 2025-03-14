@@ -3,10 +3,11 @@ import CustomSelect from "@modules/general/components/customSelect";
 import CustomTextArea from "@modules/general/components/customTextArea";
 import PreviewImage from "@modules/general/components/previewImage";
 import { usePreviewImage } from "@modules/general/components/previewImage/hooks";
+import { Materia } from "@modules/materias/types/materia";
 
 import { ProyectoContext } from "@modules/proyectos/context/proyectoContext";
 import { Box, Divider, MenuItem, SxProps, Typography } from "@mui/material";
-import React, { useContext, useEffect, useMemo } from "react";
+import { useContext, useEffect, useMemo } from "react";
 
 const Adicionales = () => {
   return (
@@ -45,10 +46,10 @@ const Content = () => {
     setValue("imagen", image, { shouldDirty: true });
   }, [image]);
 
-  const handleImage = () => {};
+  // const handleImage = () => {};
 
   const allMaterias = () => {
-    return [];
+    return [] as Materia[];
   };
 
   const currentMateria = watch("materiaInformacion.materia");
