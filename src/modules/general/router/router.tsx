@@ -1,6 +1,7 @@
 import { RouteObject } from "react-router-dom";
 import Home from "../pages/home";
 import LayoutPrelogin from "../layouts/prelogin";
+import Login from "../pages/login";
 
 export const rutaBase = "/";
 
@@ -19,9 +20,9 @@ export const routerGeneral: RouteObject = {
       path: "/",
       element: <Home />, // Página principal
     },
-    // {
-    //   path: "login",
-    //   element: <Login />, // Página de login
+    {
+      path: "login",
+      element: <Login />} // Página de login
     // },
     // {
     //   path: "recuperar",

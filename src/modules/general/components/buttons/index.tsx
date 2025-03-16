@@ -6,6 +6,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { ReactNode } from "react";
 import { buttonTypes } from "@modules/general/types/buttons";
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+import LoginIcon from '@mui/icons-material/Login';
 
 /**
  * Mapa de iconos asociados a cada tipo de botón.
@@ -16,6 +17,7 @@ const iconMap = {
   [buttonTypes.add]: <AddCircleIcon />,
   [buttonTypes.accept]: <CheckIcon />,
   [buttonTypes.remove]: <DeleteSweepIcon />,
+  [buttonTypes.login]: <LoginIcon />,
 };
 
 /**
@@ -27,6 +29,7 @@ const labelMap = {
   [buttonTypes.add]: "agregar",
   [buttonTypes.accept]: "aceptar",
   [buttonTypes.remove]: "eliminar",
+  [buttonTypes.login]: "iniciar sesión",
 };
 
 /**

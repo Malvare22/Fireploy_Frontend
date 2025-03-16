@@ -1,6 +1,6 @@
-import { createTheme, PaletteMode } from '@mui/material';
+import { createTheme, PaletteMode, responsiveFontSizes } from '@mui/material';
 
-export const getTheme = (mode: PaletteMode) => createTheme( {
+export const getTheme = (mode: PaletteMode) => responsiveFontSizes(createTheme( {
   palette: {
     mode: mode,
     primary: {
@@ -9,6 +9,10 @@ export const getTheme = (mode: PaletteMode) => createTheme( {
     secondary: {
       main: '#fb6303',
     },
+    background: {
+      default: '#fafafa', // Fondo predeterminado
+      paper: '#ffffff',   // Fondo para componentes como Cards
+    }
   },
   typography: {
     fontFamily: 'Open Sans',
@@ -16,4 +20,5 @@ export const getTheme = (mode: PaletteMode) => createTheme( {
   shape: {
     borderRadius: 8,
   },
-});
+  
+}));

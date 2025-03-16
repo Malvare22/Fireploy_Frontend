@@ -1,7 +1,8 @@
-import { Box, Card, Stack, Typography, useTheme } from "@mui/material";
-import { Logro, UsuarioPortafolioCard } from "../projectCard";
+import { Box, Stack, Typography, useTheme } from "@mui/material";
 import React from "react";
-import ProjectCardAvatar from "../projectCard/avatar";
+import AnimatedCard from "../animatedCard";
+import { Logro, UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
+import ProjectCardAvatar from "../avatar";
 
 type Props = {
   usuario: UsuarioPortafolioCard;
@@ -9,7 +10,7 @@ type Props = {
 
 const PortafolioCard: React.FC<Props> = ({ usuario }) => {
   return (
-    <Card sx={{ padding: 2 }}>
+    <AnimatedCard sx={{ padding: 2 }}>
       <Box
         sx={{
           display: "flex",
@@ -43,7 +44,7 @@ const PortafolioCard: React.FC<Props> = ({ usuario }) => {
         </Box>
       </Box>
       <Box></Box>
-    </Card>
+    </AnimatedCard>
   );
 };
 

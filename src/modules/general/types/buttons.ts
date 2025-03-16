@@ -3,5 +3,6 @@ export enum buttonTypes {
   cancel = "cancelar",
   add = "agregar",
   accept = 'aceptar',
-  remove = 'eliminar'
+  remove = 'eliminar',
+  login = 'iniciar sesión'
 }
