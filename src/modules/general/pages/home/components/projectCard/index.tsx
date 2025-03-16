@@ -1,15 +1,18 @@
 import { Box, Card, Stack, Typography } from "@mui/material";
 import ProjectCardAvatar from "./avatar";
 import RoundedIcon from "@modules/general/components/roundedIcon";
-import { mapaImagenes } from "@modules/general/components/RoundedIcon/utils";
+import { mapaImagenes } from "@modules/general/components/roundedIcon/utils";
+import Score from "../rating";
 
-
+export type Logro = {
+  titulo: string; valor: string
+}
 
 export type UsuarioPortafolioCard = {
   nombres: string;
   foto: string;
   rol: string;
-  logros: { titulo: string; valor: string };
+  logros: Logro;
   id: string;
 };
 
@@ -21,6 +24,14 @@ type ProyectoCard = {
   tecnologias: { nombre: string; imagen: string }[];
   puntuacion: number;
   calificador: UsuarioPortafolioCard;
+};
+
+export const usuarioPrueba = {
+  nombres: "Carlos Pérez",
+  id: "1",
+  foto: "https://img.freepik.com/vector-premium/iconos-usuario-incluye-iconos-usuario-icones-personas-simbolos-elementos-diseno-grafico-calidad-premium_981536-526.jpg",
+  rol: "Desarrollador Full Stack",
+  logros: { titulo: "Repositorios en GitHub", valor: "50+" },
 };
 
 const proyecto1: ProyectoCard = {
@@ -71,14 +82,15 @@ export enum LabelProjectCard {
 
 export const ProjectCard: React.FC<Props> = ({ proyecto = proyecto1 }) => {
   return (
-    <Card>
-      <Stack direction={"column"} spacing={3}>
+    <Card sx={{maxWidth: 400, paddingBottom: 2}}>
+      <Stack direction={"column"} spacing={2}>
         <Box component={"img"} sx={{width: '100%', height: 200, border: '1px solid black'}} src={proyecto.imagen} />
-        <Box>
-          <Typography>{proyecto.titulo}</Typography>
+        <Box textAlign={'center'}>
+          <Typography variant="h4">{proyecto.titulo}</Typography>
+          <Score value={proyecto.puntuacion}/>
         </Box>
-        <Box>
-          <Typography>{LabelProjectCard.integrantes}</Typography>
+        <Box sx={{display: 'flex', flexDirection: 'column', justifyItems: 'center', alignItems: 'center'}}>
+          <Typography variant="h6">{LabelProjectCard.integrantes}</Typography>
           <Box>
             {
               proyecto.integrandes.map(
@@ -88,8 +100,8 @@ export const ProjectCard: React.FC<Props> = ({ proyecto = proyecto1 }) => {
           </Box>
         </Box>
         <Box>
-          <Box>
-            <Typography>{LabelProjectCard.tecnologias}</Typography>
+          <Box sx={{display: 'flex', flexDirection: 'column', justifyItems: 'center', alignItems: 'center'}}>
+            <Typography variant="h6">{LabelProjectCard.tecnologias}</Typography>
             <Box>
               {
                 proyecto.tecnologias.map(
@@ -98,12 +110,6 @@ export const ProjectCard: React.FC<Props> = ({ proyecto = proyecto1 }) => {
               }
             </Box>
           </Box>
-        </Box>
-        <Box>
-          <Box>
-            <Typography>{LabelProjectCard.integrantes}</Typography>
-          </Box>
-          <Box></Box>
         </Box>
       </Stack>
     </Card>

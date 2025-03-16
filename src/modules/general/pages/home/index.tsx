@@ -1,55 +1,62 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, Stack, Typography } from "@mui/material";
 import { LabelHome } from "./enums/label";
 import Carousel from "react-material-ui-carousel";
-import ProjectCard from "./components/projectCard";
+import ProjectCard, { usuarioPrueba } from "./components/projectCard";
+import PortafolioCard from "./components/portafolioCard";
+import AtomicModel from "@modules/general/components/animations/atomicModel";
 
 export default function Home() {
   return (
     <Box>
-      <Stack direction={"column"} spacing={3}>
+      <Stack direction={"column"} spacing={10}>
         <SeccionPrimera />
         <SeccionSegunda />
+        <SeccionTercera />
       </Stack>
     </Box>
   );
 }
 
-const items = [1,2,3,4,5];
+const items = [1, 2, 3, 4, 5];
 
 const SeccionPrimera = () => {
   return (
-    <Box>
-      <Stack direction={"column"} spacing={3}>
+    <Box  sx={{
+      display: "flex",
+      flexDirection: { md: "row", xs: "column" },
+      gap: 4,
+      justifyContent: 'center'    }}>
+      <Card sx={{padding: 4, width: {md: 700}}}><Stack direction={"column"} spacing={4}>
         <Box>
-          <Typography variant="h2">{LabelHome.seccionPrimeraTitulo}</Typography>
+          <Typography variant="h1">{LabelHome.seccionPrimeraTitulo}</Typography>
         </Box>
         <Box
           sx={{
-            border: "1px solid black",
-            width: { xs: "100%", md: 400 },
+            width: { xs: "100%"},
           }}
         >
-          <Typography variant="h5">{LabelHome.seccionPrimeraCuerpo}</Typography>
+          <Typography variant="h4">{LabelHome.seccionPrimeraCuerpo}</Typography>
         </Box>
         <Box>
           <Button variant="contained">{LabelHome.seccionPrimeraBoton}</Button>
         </Box>
-      </Stack>
-      <Box>
-        <Carousel sx={{border: '1px solid black'}}>
-            {
-              items.map((element) => <ProjectCard key={element}/>)
-            }
-        </Carousel>
-      </Box>
+      </Stack></Card>
+      <AtomicModel/>
     </Box>
   );
 };
 
 const SeccionSegunda = () => {
   return (
-    <Box>
-      <Stack direction={"column"} spacing={3}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: { md: "row", xs: "column" },
+        gap: 4,
+      }}
+    >
+      <Card sx={{padding: 3}}>
+      <Stack direction={"column"} spacing={5} sx={{ maxWidth: "600px" }}>
         <Box>
           <Typography variant="h3">{LabelHome.seccionSegundaTitulo}</Typography>
         </Box>
@@ -60,6 +67,50 @@ const SeccionSegunda = () => {
           <Button variant="contained">{LabelHome.seccionSegundaBoton}</Button>
         </Box>
       </Stack>
+      </Card>
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: { md: "row", xs: "column" },
+          gap: 2,
+        }}
+      >
+        <ProjectCard />
+        <ProjectCard />
+      </Box>
+    </Box>
+  );
+};
+
+const SeccionTercera = () => {
+  return (
+    <Box sx={{ display: "flex", flexDirection: { md: "row", xs: "column" } }}>
+      <Stack spacing={2} width={'70%'}>
+        <PortafolioCard usuario={usuarioPrueba} />
+        <PortafolioCard usuario={usuarioPrueba} />
+      </Stack>
+      <Card sx={{ marginLeft: { md: 4 }, flexGrow: 1, padding: 2 }}>
+        
+      <Stack
+        direction={"column"}
+        spacing={5}
+      >
+          <Box>
+            <Typography variant="h3">
+              {LabelHome.seccionTerceraTitulo}
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="h5">
+              {LabelHome.seccionTerceraCuerpo}
+            </Typography>
+          </Box>
+          <Box>
+            <Button variant="contained">{LabelHome.seccionTerceraBoton}</Button>
+          </Box>
+      </Stack>
+        </Card>
     </Box>
   );
 };

@@ -1,0 +1,86 @@
+/* Contenedor principal */
+.atom {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: orangered;
+    border-radius: 50%;
+}
+
+/* Sol en el centro */
+.sun {
+    width: 50px;
+    height: 50px;
+    background: yellow;
+    border-radius: 50%;
+    box-shadow: 0 0 20px yellow;
+    position: absolute;
+}
+
+/* Órbitas */
+.orbit1, .orbit2, .orbit3 {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Asteroides */
+.asteroid {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+}
+
+/* Primera órbita */
+.orbit1 {
+    width: 100px;
+    height: 100px;
+    animation: spin 3s linear infinite;
+}
+.orbit1 .asteroid {
+    background: blue;
+    top: 50%;
+    left: 0;
+    transform: translate(-50%, -50%);
+}
+
+/* Segunda órbita */
+.orbit2 {
+    width: 150px;
+    height: 150px;
+    animation: spin 5s linear infinite;
+}
+.orbit2 .asteroid {
+    background: green;
+    top: 50%;
+    right: 0;
+    transform: translate(50%, -50%);
+}
+
+/* Tercera órbita */
+.orbit3 {
+    width: 200px;
+    height: 200px;
+    animation: spin 7s linear infinite;
+}
+.orbit3 .asteroid {
+    background: red;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+}
+
+/* Animación de rotación */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

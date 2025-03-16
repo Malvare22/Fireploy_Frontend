@@ -8,7 +8,7 @@ function LayoutPrelogin() {
     <Box>
       <NavbarPrelogin />
       <Box
-        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center", paddingX: 2 }}
       >
         <Outlet />
       </Box>
