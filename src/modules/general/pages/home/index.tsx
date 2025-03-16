@@ -1,168 +1,65 @@
-import { Box, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid2";
-import { ReactNode } from "react";
-import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
-import CloudCircleIcon from "@mui/icons-material/CloudCircle";
-import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
-import { mapaImagenes } from "@modules/general/components/iconoRedondo/utils";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import { LabelHome } from "./enums/label";
+import Carousel from "react-material-ui-carousel";
+import ProjectCard from "./components/projectCard";
 
-function Home() {
+export default function Home() {
   return (
-    <Box
-      sx={{
-        padding: { xs: 2, sm: 6 },
-      }}
-      className="hola"
-    >
-      {/* Carta */}
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Grid
-          container
-          sx={{
-            backgroundColor: "backgroundX.primary",
-            padding: 5,
-            borderRadius: 20,
-            filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))",
-            width: "90%",
-          }}
-        >
-          <Grid size={{ sm: 7, xs: 12 }}>
-            <Box sx={{ marginBottom: { sm: 10, xs: 4 } }}>
-              <Typography variant="h1Bold">
-                Fireploy te permite despliegues al alcance de un click!
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="h4Bold">
-                Dale acceso al publico a tu proyecto mediante tu propio
-                smartphone
-              </Typography>
-            </Box>
-          </Grid>
-
-          <Grid
-            size={{ sm: 5, xs: 12 }}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <Box
-              component="img" // Renderiza como un <img>
-              src={mapaImagenes['logo_fireploy'].ruta} alt={mapaImagenes['logo_fireploy'].nombre}
-              sx={{ width: { xs: 200, md: "100%" }, height: "auto" }} // Estilos opcionales
-            />
-          </Grid>
-        </Grid>
-      </Box>
-
-      <Box sx={{ display: "flex", justifyContent: "center", margin: 4 }}>
-        <Typography variant="h4Bold">¿Por qué preferir Fireploy?</Typography>
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 4,
-        }}
-      >
-        <Card
-          title="Gestión de los proyectos web de tus materias"
-          text="Gestión de los proyectos web de tus materias"
-          icon={<AccessAlarmIcon />}
-        ></Card>
-        <Card
-          title="Despliegues"
-          text="Automatiza el proceso de despliegue de tu aplicativo web"
-          icon={<CloudCircleIcon />}
-        ></Card>
-        <Card
-          title="Portafolio"
-          text="Crea tu portafolio automaticamente y gestionalo con tus proyectos representativos"
-          icon={<DocumentScannerIcon />}
-        ></Card>
-      </Box>
-
-      <Box sx={{ display: "flex", justifyContent: "center", margin: 4 }}>
-        <Typography variant="h4Bold">Powered By</Typography>
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          backgroundColor: "backgroundX.primary",
-          paddingTop: 5,
-          paddingBottom: 5,
-          filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: { md: 30, xs: 6 },
-        }}
-      >
-        <Box
-          component="img" // Renderiza como un <img>
-          src={mapaImagenes['springboot'].ruta} alt={mapaImagenes['springboot'].nombre}
-          sx={{ height: 140 }} // Estilos opcionales
-        />
-        <Box
-          component="img" // Renderiza como un <img>
-          src={mapaImagenes['react'].ruta} alt={mapaImagenes['react'].nombre}
-          sx={{ height: 140 }} // Estilos opcionales
-        />
-        <Box
-          component="img" // Renderiza como un <img>
-          src={mapaImagenes['nodejs'].ruta} alt={mapaImagenes['nodejs'].nombre}
-          sx={{ height: 140 }} // Estilos opcionales
-        />
-      </Box>
+    <Box>
+      <Stack direction={"column"} spacing={3}>
+        <SeccionPrimera />
+        <SeccionSegunda />
+      </Stack>
     </Box>
   );
 }
 
-interface CardProps {
-  title: string;
-  text: string;
-  icon?: ReactNode;
-}
+const items = [1,2,3,4,5];
 
-const Card: React.FC<CardProps> = ({ icon, text, title }: CardProps) => {
+const SeccionPrimera = () => {
   return (
-    <Box
-      sx={{
-        backgroundColor: "backgroundX.primary",
-        padding: 3,
-        width: { lg: 400, sm: 200, xs: 300 },
-        filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))",
-        height: 200,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-      }}
-    >
-      <Box>
+    <Box>
+      <Stack direction={"column"} spacing={3}>
         <Box>
-          <Typography variant="h5Bold">{title}</Typography>
+          <Typography variant="h2">{LabelHome.seccionPrimeraTitulo}</Typography>
         </Box>
-        <Box sx={{ marginTop: 2, marginBottom: 2 }}>
-          <Typography variant="title2">{text}</Typography>
+        <Box
+          sx={{
+            border: "1px solid black",
+            width: { xs: "100%", md: 400 },
+          }}
+        >
+          <Typography variant="h5">{LabelHome.seccionPrimeraCuerpo}</Typography>
         </Box>
-      </Box>
-      <Box
-        sx={{
-          "& svg": { fontSize: 70 },
-          display: "flex",
-          justifyContent: "end",
-          color: "icon.primary",
-        }}
-      >
-        {icon}
+        <Box>
+          <Button variant="contained">{LabelHome.seccionPrimeraBoton}</Button>
+        </Box>
+      </Stack>
+      <Box>
+        <Carousel sx={{border: '1px solid black'}}>
+            {
+              items.map((element) => <ProjectCard key={element}/>)
+            }
+        </Carousel>
       </Box>
     </Box>
   );
 };
 
-export default Home;
+const SeccionSegunda = () => {
+  return (
+    <Box>
+      <Stack direction={"column"} spacing={3}>
+        <Box>
+          <Typography variant="h3">{LabelHome.seccionSegundaTitulo}</Typography>
+        </Box>
+        <Box>
+          <Typography variant="h5">{LabelHome.seccionSegundaCuerpo}</Typography>
+        </Box>
+        <Box>
+          <Button variant="contained">{LabelHome.seccionSegundaBoton}</Button>
+        </Box>
+      </Stack>
+    </Box>
+  );
+};

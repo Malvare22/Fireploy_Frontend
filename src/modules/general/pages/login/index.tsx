@@ -17,7 +17,7 @@ import { obtenerLetraTiposUsuario } from "@modules/usuarios/utils/usuario.map";
 import { TiposUsuario } from "@modules/usuarios/types/usuario.tipos";
 import useSnackBar from "@modules/general/hooks/useSnackbar";
 import SnackBar from "@modules/general/components/snackbar";
-import { mapaImagenes } from "@modules/general/components/iconoRedondo/utils";
+import { mapaImagenes } from "@modules/general/components/RoundedIcon/utils";
 
 const Login = () => {
   const clientID =

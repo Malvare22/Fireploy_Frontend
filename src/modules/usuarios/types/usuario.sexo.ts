@@ -1,1 +1,0 @@
-export type SexoUsuario = 'F' | 'M' | 'O';

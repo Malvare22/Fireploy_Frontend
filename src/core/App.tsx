@@ -1,7 +1,7 @@
 import { RouterProvider } from "react-router-dom";
-import { ThemeProvider } from "@mui/material/styles";
+import { PaletteMode, ThemeProvider } from "@mui/material/styles";
 import { useEffect, useState } from "react";
-import { theme } from "./themes";
+import { getTheme } from "./themes";
 import { router } from "./router/router";
 import {
   AccountContext,
@@ -24,6 +24,8 @@ function App(): JSX.Element {
    * Función para actualizar la información del usuario.
    */
   const [localUser, setLocalUser] = useState<AccountInformation | null>(null);
+
+  const [mode, setMode] = useState<PaletteMode>('light');
 
   /**
    * Efecto que escucha cambios en el almacenamiento local y actualiza la información del usuario en el estado.
@@ -59,7 +61,7 @@ function App(): JSX.Element {
       value={{ localUser: localUser, setLocalUser: setLocalUser }}
     >
       {/* Proveedor de tema para la aplicación */}
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={getTheme(mode)}>
         {/* Proveedor de enrutamiento para manejar la navegación */}
         <RouterProvider router={router} />
       </ThemeProvider>

@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { LabelFooter } from "@modules/general/enums/labelFooter";
-import { mapaImagenes } from "../iconoRedondo/utils";
+import { mapaImagenes } from "../RoundedIcon/utils";
 
 /**
  * Componente Footer que muestra información sobre Fireploy,

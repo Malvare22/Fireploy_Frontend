@@ -1,1 +1,0 @@
-export type TipoRepositorio = 'F' | 'B' | 'I';

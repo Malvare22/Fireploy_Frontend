@@ -5,7 +5,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Box } from "@mui/material";
-import { palette } from "@core/themes";
 import GeneralButton from "../buttons";
 import { buttonTypes } from "@modules/general/types/buttons";
 
@@ -73,7 +72,6 @@ const AlertDialog: React.FC<Props> = ({
         aria-describedby="alert-dialog-description"
       >
         <Box sx={{
-          backgroundColor: palette.modalHeader.main,
           color: 'white'
         }}>
           <DialogTitle id="alert-dialog-title">{titulo}</DialogTitle>

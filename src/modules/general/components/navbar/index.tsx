@@ -7,7 +7,7 @@ import { AccountMenu } from "./components/accountMenu";
 import { rutasGeneral } from "@modules/general/router/router";
 import { LabelNavbar } from "@modules/general/enums/labelNavbar";
 import { palette } from "@core/themes";
-import { mapaImagenes } from "../iconoRedondo/utils";
+import { mapaImagenes } from "../RoundedIcon/utils";
 import { AccountContext } from "@modules/general/context/accountContext";
 
 const Navbar: React.FC<{ sesion: boolean }> = ({ sesion }) => {

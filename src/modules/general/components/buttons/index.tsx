@@ -5,7 +5,6 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import CheckIcon from '@mui/icons-material/Check';
 import { ReactNode } from "react";
 import { buttonTypes } from "@modules/general/types/buttons";
-import { palette } from "@core/themes";
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 
 /**
@@ -67,9 +66,6 @@ const GeneralButton: React.FC<GeneralButtonProps> = ({
       {...props}
       startIcon={withIcon && (icon || iconMap[mode])}
       variant="contained"
-      sx={{
-        backgroundColor: mode == buttonTypes.cancel ? palette.customGrey.main : palette.navbar.main,
-      }}
     >
       {labelMap[mode]}
     </Button>
