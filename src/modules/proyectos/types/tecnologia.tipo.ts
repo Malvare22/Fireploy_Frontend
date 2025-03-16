@@ -1,0 +1,1 @@
+export type TipoTecnologia = 'F' | 'B' | 'I';
