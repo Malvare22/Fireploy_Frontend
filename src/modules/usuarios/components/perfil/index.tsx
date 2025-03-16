@@ -6,7 +6,7 @@ import { readBreakLine } from "@modules/general/utils/readBreakLine";
 import { breakLine } from "@modules/general/utils/breakLine";
 import { LabelGeneral } from "@modules/general/enums/labelGeneral";
 import Row from "@modules/general/components/row";
-import { LabelUsuario } from "@modules/usuarios/enum/LabelUsuario";
+import { LabelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
 import Label from "@modules/general/components/label";
 import { palette } from "@core/themes";
 import {

@@ -1,22 +1,31 @@
-import { palette } from "@core/themes";
 import { zodResolver } from "@hookform/resolvers/zod";
-import CustomInput from "@modules/general/components/customInput";
-import CustomSelect from "@modules/general/components/customSelect";
-import FormContainer from "@modules/general/components/formContainer";
 import { LabelGeneral } from "@modules/general/enums/labelGeneral";
 import useQuery from "@modules/general/hooks/useQuery";
 import { rutasGeneral } from "@modules/general/router/router";
 import { registrarUsuarioService } from "@modules/general/services/registrar.usuario";
 import { obtenerFechaActual } from "@modules/general/utils/fechas";
-import { LabelUsuario } from "@modules/usuarios/enum/LabelUsuario";
+import { labelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 import { UsuarioRegistro } from "@modules/usuarios/types/usuario";
 import RegistroSchema from "@modules/usuarios/utils/form/registro.schema";
 import { UsuarioBaseRegistro } from "@modules/usuarios/utils/form/usuario.base";
-import { obtenerSexo } from "@modules/usuarios/utils/usuario.map";
-import { Box, Button, MenuItem, Typography } from "@mui/material";
+import {
+  obtenerSexo,
+  obtenerTiposUsuario,
+} from "@modules/usuarios/utils/usuario.map";
+import {
+  Box,
+  Button,
+  Card,
+  MenuItem,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import TextFieldPassword from "@modules/general/components/textFieldPassword";
 
 function Registrar() {
   const {
@@ -37,10 +46,10 @@ function Registrar() {
 
   const { RenderAlertDialog, init } = useQuery<UsuarioService>(
     () => registrarUsuarioService(getValues()),
-    LabelUsuario.registrarUsuario,
+    labelUsuario.registrarUsuario,
     false,
     true,
-    LabelUsuario.registroExitoso,
+    labelUsuario.registroExitoso,
     false,
     successAction
   );
@@ -50,140 +59,152 @@ function Registrar() {
   };
 
   return (
-    <>
+    <Card sx={{ maxWidth: 900, padding: 4 }}>
       <RenderAlertDialog />
-      <Box sx={{ width: "100%" }}>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Typography variant="h3Bold">
-            {LabelUsuario.registrarUsuario}
+      <Stack spacing={3}>
+        <Stack spacing={1} direction={"row"} alignItems={"center"}>
+          <Typography variant="h4" textAlign={"center"}>
+            {labelUsuario.registrarUsuario}
           </Typography>
-        </Box>
+          <AssignmentIndIcon fontSize="large" />
+        </Stack>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          style={{ width: "100%", display: "flex", justifyContent: "center" }}
+          style={{
+            width: "100%",
+          }}
         >
-          <FormContainer
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 4,
-              width: { md: "60%", xs: "90%" },
-              "& > div": {
-                display: "flex",
-                flexDirection: "column",
-                gap: 0,
-              },
-            }}
-          >
-            <Box>
-              <Typography variant="h5Bold">{LabelUsuario.nombres}</Typography>
-              <CustomInput
+          {/* Fila 1: Nombres y Apellidos */}
+          <Stack spacing={4}>
+            <Stack direction="row" spacing={2}>
+              <TextField
+                label="Nombres"
                 type="text"
-                errorMessage={errors.nombres?.message}
+                error={!!errors.nombres}
+                helperText={errors.nombres?.message}
                 {...register("nombres")}
+                fullWidth
               />
-            </Box>
-            <Box>
-              <Typography variant="h5Bold">{LabelUsuario.apellidos}</Typography>
-              <CustomInput
+              <TextField
+                label="Apellidos"
                 type="text"
-                errorMessage={errors.apellidos?.message}
+                error={!!errors.apellidos}
+                helperText={errors.apellidos?.message}
                 {...register("apellidos")}
+                fullWidth
               />
-            </Box>
-            <Box>
-              <Typography variant="h5Bold">{LabelUsuario.correo}</Typography>
-              <CustomInput
+            </Stack>
+
+            {/* Fila 2: Correo y Fecha de Nacimiento */}
+            <Stack direction="row" spacing={2}>
+              <TextField
+                label="Correo"
                 type="email"
-                errorMessage={errors.correo?.message}
+                error={!!errors.correo}
+                helperText={errors.correo?.message}
                 {...register("correo")}
+                fullWidth
               />
-            </Box>
-            <Box>
-              <Typography variant="h5Bold">
-                {LabelUsuario.fechaNacimiento}
-              </Typography>
-              <CustomInput
-                type="date"
-                errorMessage={errors.fechaDeNacimiento?.message}
-                {...register("fechaDeNacimiento")}
-                inputProps={{ max: obtenerFechaActual() }}
-              />
-            </Box>
-            <Box>
-              <Typography variant="h5Bold">
-                {LabelUsuario.fechaIngreso}
-              </Typography>
-              <CustomInput
-                type="date"
-                errorMessage={errors.estFechaInicio?.message}
-                {...register("estFechaInicio")}
-                inputProps={{ max: obtenerFechaActual() }}
-              />
-            </Box>
-            <Box>
-              <Typography variant="h5Bold">{LabelUsuario.sexo}</Typography>
-              <CustomSelect
+              <TextField
+                label="Tipo de Usuario"
+                select
+                error={!!errors.sexo}
+                helperText={errors.sexo?.message}
                 {...register("sexo")}
-                variantDelta="primary"
-                defaultValue={""}
-                errorMessage={errors.sexo?.message}
+                fullWidth
+              >
+                {Array.from(obtenerTiposUsuario.entries()).map(
+                  ([valor, texto]) => {
+                    if (valor != "A")
+                      return (
+                        <MenuItem key={valor} value={valor}>
+                          {texto}
+                        </MenuItem>
+                      );
+                  }
+                )}
+              </TextField>
+              <TextField
+                label="Sexo"
+                select
+                error={!!errors.sexo}
+                helperText={errors.sexo?.message}
+                {...register("sexo")}
+                fullWidth
               >
                 {Array.from(obtenerSexo.entries()).map(([valor, texto]) => (
                   <MenuItem key={valor} value={valor}>
                     {texto}
                   </MenuItem>
                 ))}
-              </CustomSelect>
-            </Box>
-            <Box>
-              <Typography variant="h5Bold">
-                {LabelUsuario.contrasenia}
-              </Typography>
-              <CustomInput
+              </TextField>
+            </Stack>
+
+            {/* Fila 3: Fecha de Ingreso y Sexo */}
+            <Stack direction="row" spacing={2}>
+              <TextField
+                label="Fecha de Ingreso"
+                type="date"
+                error={!!errors.estFechaInicio}
+                helperText={errors.estFechaInicio?.message}
+                {...register("estFechaInicio")}
+                InputLabelProps={{ shrink: true }}
+                inputProps={{ max: obtenerFechaActual() }}
+                fullWidth
+              />
+              <TextField
+                label="Fecha de Nacimiento"
+                type="date"
+                error={!!errors.fechaDeNacimiento}
+                helperText={errors.fechaDeNacimiento?.message}
+                {...register("fechaDeNacimiento")}
+                InputLabelProps={{ shrink: true }}
+                inputProps={{ max: obtenerFechaActual() }}
+                fullWidth
+              />
+            </Stack>
+
+            {/* Fila 4: Contraseña y Confirmar Contraseña */}
+            <Stack direction="row" spacing={2}>
+              <TextFieldPassword
+                label="Contraseña"
                 type="password"
-                errorMessage={errors.contrasenia?.message}
+                error={!!errors.contrasenia}
+                helperText={errors.contrasenia?.message}
                 {...register("contrasenia")}
+                fullWidth
               />
-            </Box>
-            <Box>
-              <Typography variant="h5Bold">
-                {LabelUsuario.confirmarContrasenia}
-              </Typography>
-              <CustomInput
+              <TextFieldPassword/>
+              <TextFieldPassword
+                label="Confirmar Contraseña"
                 type="password"
-                errorMessage={errors.confirmarContrasenia?.message}
+                error={!!errors.confirmarContrasenia}
+                helperText={errors.confirmarContrasenia?.message}
                 {...register("confirmarContrasenia")}
+                fullWidth
               />
-            </Box>
-            <Box sx={{ width: "100%" }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: 4,
-                  justifyContent: "center",
-                }}
-              >
+            </Stack>
+
+            {/* Botones */}
+            <Stack spacing={2} direction="row" justifyContent="center">
+              <Box>
                 <Button
-                  variant="primary"
-                  sx={{
-                    backgroundColor: palette.customGrey.main,
-                    width: 150,
-                  }}
+                  variant="outlined"
                   onClick={() => navigate(rutasGeneral.login)}
                 >
                   {LabelGeneral.volver}
                 </Button>
-                <Button variant="primary" type="submit" sx={{ width: 150 }}>
+              </Box>
+              <Box>
+                <Button type="submit" variant="contained">
                   {LabelGeneral.registrar}
                 </Button>
               </Box>
-            </Box>
-          </FormContainer>
+            </Stack>
+          </Stack>
         </form>
-      </Box>
-    </>
+      </Stack>
+    </Card>
   );
 }
 

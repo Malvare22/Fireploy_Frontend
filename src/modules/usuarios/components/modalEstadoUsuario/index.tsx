@@ -8,7 +8,7 @@ import {
   LabelUsuario,
   obtenerDeshabilitarUsuario,
   obtenerHabilitarUsuario,
-} from "@modules/usuarios/enum/LabelUsuario";
+} from "@modules/usuarios/enum/labelGestionUsuarios";
 import { modificarEstadoUsuario } from "@modules/usuarios/services/modificarUsuario";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { useContext } from "react";

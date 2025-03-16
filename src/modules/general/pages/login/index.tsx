@@ -2,6 +2,7 @@ import { Avatar, Box, Button, Card, Container, CssBaseline, FormControlLabel, Gr
 import React from 'react';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { labelLogin } from '@modules/general/enums/labelLogin';
+import { rutasGeneral } from '@modules/general/router/router';
 
 function Copyright() {
   return (
@@ -68,7 +69,7 @@ const SignIn: React.FC = () => {
               <Link href="#" variant="body2">
                 {labelLogin.olvide}
               </Link>
-              <Link href="#" variant="body2">
+              <Link href={rutasGeneral.registrar} variant="body2">
                 {labelLogin.registrarse}
               </Link>
           </Stack>

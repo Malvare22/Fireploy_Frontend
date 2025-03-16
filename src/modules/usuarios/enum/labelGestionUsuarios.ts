@@ -1,6 +1,6 @@
 import { Usuario } from "../types/usuario";
 
-export const LabelUsuario = {
+export const labelUsuario = {
   nombres: "Nombres",
   apellidos: "Apellidos",
   fechaNacimiento: "Fecha Nacimiento",
@@ -24,9 +24,11 @@ export const LabelUsuario = {
   verPerfil: 'Ver Perfil',
   verPortafolio: 'Ver Portafolio',
   fechaIngreso: "Fecha de Ingreso a la Universidad",
-  registroExitoso: 'Usuario Registrado con éxito'
+  registroExitoso: 'Usuario Registrado con éxito',
+  seleccioneUnSexo: 'Seleccione un Sexo',
+  seleccioneUnTipo: 'Seleccione su tipo de usuario'
 };
 
-export const obtenerHabilitarUsuario = (usuario: Usuario) => (`¿Está seguro de que desea habilitar al usuario ${usuario.apellidos} ${usuario.nombres}?`);
+export const obtenerLabelHabilitarUsuario = (usuario: Usuario) => (`¿Está seguro de que desea habilitar al usuario ${usuario.apellidos} ${usuario.nombres}?`);
 
-export const obtenerDeshabilitarUsuario = (usuario: Usuario) => (`¿Está seguro de que desea deshabilitar al usuario ${usuario.apellidos} ${usuario.nombres}?`);
+export const obtenerLabelDeshabilitarUsuario = (usuario: Usuario) => (`¿Está seguro de que desea deshabilitar al usuario ${usuario.apellidos} ${usuario.nombres}?`);

@@ -2,6 +2,7 @@ import { RouteObject } from "react-router-dom";
 import Home from "../pages/home";
 import LayoutPrelogin from "../layouts/prelogin";
 import Login from "../pages/login";
+import Registrar from "../pages/registro";
 
 export const rutaBase = "/";
 
@@ -28,9 +29,9 @@ export const routerGeneral: RouteObject = {
     //   path: "recuperar",
     //   element: <CambiarContrasenia />, // Página de login
     // },
-    // {
-    //   path: "registrar",
-    //   element: <Registrar />, // Página de login
-    // },
+    ,{
+      path: "registrar",
+      element: <Registrar />, // Página de login
+    },
   ],
 };

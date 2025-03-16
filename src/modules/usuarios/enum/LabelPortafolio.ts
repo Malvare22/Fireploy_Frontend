@@ -1,4 +1,4 @@
-import { LabelUsuario } from "./LabelUsuario";
+import { LabelUsuario } from "./labelGestionUsuarios";
 
 export const LabelPortafolio = {
     redesSociales : LabelUsuario.redesSociales,

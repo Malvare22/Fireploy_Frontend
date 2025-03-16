@@ -1,5 +1,5 @@
 import InputDeBusqueda from "@modules/general/components/inputDeBusqueda";
-import { LabelUsuario } from "@modules/usuarios/enum/LabelUsuario";
+import { LabelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
 import { obtenerTiposUsuario } from "@modules/usuarios/utils/usuario.map";
 import {
   Box,

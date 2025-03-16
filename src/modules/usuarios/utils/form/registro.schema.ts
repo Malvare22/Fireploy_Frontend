@@ -6,6 +6,7 @@ import {
   correoSchema,
   nombresSchema,
   sexoUsuarioSchema,
+  tiposUsuarioSchema,
 } from "./usuario.schema";
 import { UsuarioRegistro } from "@modules/usuarios/types/usuario";
 
@@ -19,6 +20,7 @@ type RegistroKeys = Pick<
   | "sexo"
   | "contrasenia"
   | "confirmarContrasenia"
+  | 'tipo'
 >;
 
 /**
@@ -32,6 +34,7 @@ const RegistroSchema: z.ZodType<RegistroKeys> = z
     fechaDeNacimiento: fechaSchema,
     estFechaInicio: fechaSchema,
     sexo: sexoUsuarioSchema,
+    tipo: tiposUsuarioSchema,
     contrasenia: contraseniaSchema,
     confirmarContrasenia: z
       .string()

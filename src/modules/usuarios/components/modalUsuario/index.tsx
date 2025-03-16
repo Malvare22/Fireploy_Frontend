@@ -3,7 +3,7 @@ import CustomInput from "@modules/general/components/customInput";
 import Label from "@modules/general/components/label";
 import Row from "@modules/general/components/row";
 
-import { LabelUsuario } from "@modules/usuarios/enum/LabelUsuario";
+import { LabelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
 import { Box, Card, MenuItem, SxProps } from "@mui/material";
 import { useContext, useEffect, useRef, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";

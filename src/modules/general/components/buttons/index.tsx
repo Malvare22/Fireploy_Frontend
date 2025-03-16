@@ -84,14 +84,7 @@ const GeneralButton: React.FC<GeneralButtonProps> = ({
  */
 interface ButtonContainerProps {
   children: React.ReactNode;
-  _justifyContent?:
-    | "flex-start"
-    | "center"
-    | "flex-end"
-    | "space-between"
-    | "space-around"
-    | "space-evenly";
-  _spacing?: number;
+  
 }
 
 /**
@@ -108,15 +101,11 @@ interface ButtonContainerProps {
  */
 export const ButtonContainer: React.FC<ButtonContainerProps> = ({
   children,
-  _justifyContent = "flex-start",
-  _spacing = 2,
 }) => (
   <Box
     sx={{
       display: "flex",
-      justifyContent: _justifyContent,
       alignItems: "center",
-      gap: _spacing,
       width: "100%",
     }}
   >

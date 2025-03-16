@@ -24,9 +24,9 @@ export const obtenerEstadoUsuario = new Map(
 export type TiposUsuarioStringCompleto = 'Administrador' | 'Docente' | 'Estudiante';
 
 const tiposUsuarioMapData: Record<TiposUsuario, TiposUsuarioStringCompleto> = {
+  E: "Estudiante",
   A: "Administrador",
   D: "Docente",
-  E: "Estudiante",
 } as const;
 
 const tiposLetraUsuarioMapData: Record<TiposUsuarioStringCompleto, TiposUsuario> = {

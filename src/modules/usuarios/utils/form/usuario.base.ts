@@ -12,11 +12,11 @@ export const UsuarioBase: Usuario = {
   id: 0,
   fechaDeNacimiento: "",
   estado: "A" as EstadoUsuario,
-  tipo: "E" as TiposUsuario,
+  tipo: "" as TiposUsuario,
   nombres: "",
   apellidos: "",
   contrasenia: "",
-  sexo: "M" as SexoUsuario,
+  sexo: '' as SexoUsuario,
   fotoDePerfil: "https://cdn.pixabay.com/photo/2016/11/14/17/39/person-1824147_1280.png",
   redSocial: {
     facebook: "",
