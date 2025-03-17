@@ -4,11 +4,15 @@ export const getTheme = (mode: PaletteMode) => responsiveFontSizes(createTheme( 
   palette: {
     mode: mode,
     primary: {
-      main: 'rgba(63,133,181,0.67)',
+      main: '#7CB1CF',
+      contrastText: 'rgba(255,255,255,0.87)',
     },
     secondary: {
-      main: '#fb6303',
+      main: '#755993',
     },
+    background: mode === "dark" 
+      ? { default: "#121212", paper: "#1E1E1E" }
+      : { default: "#ffffff", paper: "#f5f5f5" }
   },
   typography: {
     fontFamily: 'Open Sans',

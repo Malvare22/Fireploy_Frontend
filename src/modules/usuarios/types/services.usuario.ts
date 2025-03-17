@@ -5,11 +5,11 @@ export interface UsuarioService {
     apellido: string;
     fecha_nacimiento: string;
     sexo: string;
-    descripcion: string;
+    descripcion: string | null;
     correo: string;
     contrasenia: string;
     red_social: string;
     foto_perfil: string;
     tipo: string;
-    est_fecha_inicio: string;
+    est_fecha_inicio?: string | null | undefined;
   }

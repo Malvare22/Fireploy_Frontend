@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Card, Container, CssBaseline, FormControlLabel, Grid2 as Grid, Link, makeStyles, Stack, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, Card, Container, CssBaseline, FormControlLabel, Grid2 as Grid, Link, makeStyles, Stack, TextField, Typography, useTheme } from '@mui/material';
 import React from 'react';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { labelLogin } from '@modules/general/enums/labelLogin';
@@ -20,12 +20,14 @@ function Copyright() {
 
 const SignIn: React.FC = () => {
 
+  const theme = useTheme();
+
   return (
         <Card sx={{padding: 2, maxWidth: 600}}>
       <CssBaseline />
       <div>
        <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3}}>
-       <Avatar >
+       <Avatar sx={{backgroundColor: theme.palette.secondary.main}} >
           <LockOpenIcon />
         </Avatar>
         <Typography component="h1" variant="h5">

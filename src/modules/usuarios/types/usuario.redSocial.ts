@@ -3,4 +3,5 @@ export type RedSocialUsuario = {
   instagram?: "" | null | string;
   linkedin?: "" | null | string;
   x?: "" | null | string;
+  github?: "" | null | string;
 };

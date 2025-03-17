@@ -3,6 +3,7 @@ import Home from "../pages/home";
 import LayoutPrelogin from "../layouts/prelogin";
 import Login from "../pages/login";
 import Registrar from "../pages/registro";
+import TablaUsuarios from "@modules/usuarios/components/tablaUsuarios";
 
 export const rutaBase = "/";
 
@@ -32,6 +33,10 @@ export const routerGeneral: RouteObject = {
     ,{
       path: "registrar",
       element: <Registrar />, // Página de login
+    },
+    {
+      path: "test",
+      element: <TablaUsuarios />, // Página de login
     },
   ],
 };
