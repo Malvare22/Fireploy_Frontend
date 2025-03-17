@@ -46,9 +46,11 @@ function App(): JSX.Element {
       }
 
       if (localStorage.getItem("MODE")) {
-        const colorMode = 
-          localStorage.getItem("MODE") as PaletteMode;
+        const colorMode = localStorage.getItem("MODE") as PaletteMode;
         setMode(colorMode);
+      } else {
+        localStorage.setItem("MODE", "light");
+        setMode("light");
       }
     };
 
@@ -68,12 +70,14 @@ function App(): JSX.Element {
       value={{ localUser: localUser, setLocalUser: setLocalUser }}
     >
       {/* Proveedor de tema para la aplicación */}
-      {mode && <ThemeProvider theme={getTheme(mode)}>
-        {/* Proveedor de enrutamiento para manejar la navegación */}
-        <ModeContext.Provider value={{ mode: mode, setMode: setMode }}>
-          <RouterProvider router={router} />
-        </ModeContext.Provider>
-      </ThemeProvider>}
+      {mode && (
+        <ThemeProvider theme={getTheme(mode)}>
+          {/* Proveedor de enrutamiento para manejar la navegación */}
+          <ModeContext.Provider value={{ mode: mode, setMode: setMode }}>
+            <RouterProvider router={router} />
+          </ModeContext.Provider>
+        </ThemeProvider>
+      )}
     </AccountContext.Provider>
   );
 }

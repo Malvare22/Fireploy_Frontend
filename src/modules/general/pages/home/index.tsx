@@ -14,7 +14,6 @@ import ProjectCard from "@modules/general/components/projectCard";
 import PortafolioCard from "@modules/general/components/portafolioCard";
 import { usuarioPrueba } from "@modules/usuarios/types/usuario.portafolio";
 
-
 export default function Home() {
   return (
     <Box>
@@ -76,7 +75,7 @@ const SeccionSegunda = () => {
         flexDirection: { xl: "row", xs: "column" },
         justifyContent: "center",
         flexGrow: 1,
-        gap: 3
+        gap: 3,
       }}
     >
       <AnimatedCard sx={{ padding: 3 }}>
@@ -155,10 +154,10 @@ const SeccionTercera = () => {
       sx={{
         display: "flex",
         flexDirection: { xl: "row", xs: "column-reverse" },
-        gap: 3
+        gap: 3,
       }}
     >
-      <Stack spacing={2} sx={{width: '100%'}}>
+      <Stack spacing={2} sx={{ width: "100%" }}>
         <Carousel
           autoPlay={true} // Desactiva el autoplay para que el usuario controle el cambio
           animation="fade" // Animación de deslizamiento
@@ -203,7 +202,7 @@ const SeccionTercera = () => {
                 ))}
         </Carousel>
       </Stack>
-      <AnimatedCard sx={{ marginLeft: { xl: 4 }, flexGrow: 1, padding: 2, }}>
+      <AnimatedCard sx={{ marginLeft: { xl: 4 }, flexGrow: 1, padding: 2 }}>
         <Stack direction={"column"} spacing={5}>
           <Box>
             <Typography variant="h3">
