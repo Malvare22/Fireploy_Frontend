@@ -7,6 +7,7 @@ import {
   AccountContext,
   AccountInformation,
 } from "@modules/general/context/accountContext";
+import { ModeContext } from "@modules/general/context/modeContext";
 
 /**
  * Componente principal de la aplicación.
@@ -25,7 +26,7 @@ function App(): JSX.Element {
    */
   const [localUser, setLocalUser] = useState<AccountInformation | null>(null);
 
-  const [mode, setMode] = useState<PaletteMode>('light');
+  const [mode, setMode] = useState<PaletteMode | undefined>(undefined);
 
   /**
    * Efecto que escucha cambios en el almacenamiento local y actualiza la información del usuario en el estado.
@@ -42,6 +43,12 @@ function App(): JSX.Element {
           localStorage.getItem("ACCOUNT") as string
         ) as AccountInformation;
         setLocalUser(user);
+      }
+
+      if (localStorage.getItem("MODE")) {
+        const colorMode = 
+          localStorage.getItem("MODE") as PaletteMode;
+        setMode(colorMode);
       }
     };
 
@@ -61,10 +68,12 @@ function App(): JSX.Element {
       value={{ localUser: localUser, setLocalUser: setLocalUser }}
     >
       {/* Proveedor de tema para la aplicación */}
-      <ThemeProvider theme={getTheme(mode)}>
+      {mode && <ThemeProvider theme={getTheme(mode)}>
         {/* Proveedor de enrutamiento para manejar la navegación */}
-        <RouterProvider router={router} />
-      </ThemeProvider>
+        <ModeContext.Provider value={{ mode: mode, setMode: setMode }}>
+          <RouterProvider router={router} />
+        </ModeContext.Provider>
+      </ThemeProvider>}
     </AccountContext.Provider>
   );
 }

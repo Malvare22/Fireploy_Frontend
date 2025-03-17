@@ -9,10 +9,6 @@ export const getTheme = (mode: PaletteMode) => responsiveFontSizes(createTheme( 
     secondary: {
       main: '#fb6303',
     },
-    background: {
-      default: '#fafafa', // Fondo predeterminado
-      paper: '#ffffff',   // Fondo para componentes como Cards
-    }
   },
   typography: {
     fontFamily: 'Open Sans',

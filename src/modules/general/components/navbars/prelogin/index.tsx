@@ -11,14 +11,18 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import React from "react";
+import React, { useContext } from "react";
 import GeneralButton from "../../buttons";
 import { buttonTypes } from "@modules/general/types/buttons";
-import { useTheme } from "@mui/material";
+import { Stack, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { rutasGeneral } from "@modules/general/router/router";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { ModeContext } from "@modules/general/context/modeContext";
 
-const pages = ["Products", "Pricing", "Blog"];
+const pages = ["Inicio", "Iniciar Sesión", "Registrarse"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function NavbarPrelogin() {
@@ -28,6 +32,9 @@ function NavbarPrelogin() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+
+  const [anchorElMoreVert, setAnchorElMoreVert] =
+    React.useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -44,9 +51,33 @@ function NavbarPrelogin() {
     setAnchorElUser(null);
   };
 
-  const theme = useTheme();
+  const handleOpenMoreVert = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElMoreVert(event.currentTarget);
+  };
+
+  const handleCloseMoreVert = () => {
+    setAnchorElMoreVert(null);
+  };
 
   const navigate = useNavigate();
+
+  const { mode, setMode } = useContext(ModeContext);
+
+  const moreVert = [
+    {
+      option: (
+        <Stack direction={'row'} spacing={1}>
+          <Typography>Cambiar Modo</Typography>
+          {mode == "light" ? <LightModeIcon /> : <DarkModeIcon />}
+        </Stack>
+      ),
+      action: () => {
+        const _mode = mode == "light" ? "dark" : "light";
+        setMode(_mode);
+        localStorage.setItem('MODE', _mode);
+      },
+    },
+  ];
 
   return (
     <AppBar position="static">
@@ -135,6 +166,63 @@ function NavbarPrelogin() {
               </Button>
             ))}
           </Box>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: 'flex',
+              justifyContent: "end",
+            }}
+          >
+             <Box>
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              href="#app-bar-with-responsive-menu"
+              sx={{
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              <GeneralButton
+                mode={buttonTypes.login}
+                color={"secondary"}
+                onClick={() => navigate(rutasGeneral.login)}
+              />
+            </Typography>
+          </Box>
+            <IconButton color="inherit" onClick={handleOpenMoreVert}>
+              <MoreVertIcon />
+            </IconButton>
+          </Box>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorElMoreVert}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            open={Boolean(anchorElMoreVert)}
+            onClose={handleCloseMoreVert}
+            sx={{ display: 'block' }}
+          >
+            {moreVert.map((item, key) => (
+              <MenuItem key={key} onClick={item.action}>
+                <Typography sx={{ textAlign: "center" }}>
+                  {item.option}
+                </Typography>
+              </MenuItem>
+            ))}
+          </Menu>
           {/* <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -166,24 +254,7 @@ function NavbarPrelogin() {
               ))}
             </Menu>
           </Box> */}
-          <Box>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-                  <GeneralButton mode={buttonTypes.login} color={'secondary'} onClick={() => navigate(rutasGeneral.login)}/>
-          </Typography>
-          </Box>
+         
         </Toolbar>
       </Container>
     </AppBar>

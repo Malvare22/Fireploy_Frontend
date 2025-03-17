@@ -21,7 +21,7 @@ function Copyright() {
 const SignIn: React.FC = () => {
 
   return (
-        <Card sx={{padding: 2, maxWidth: 1000}}>
+        <Card sx={{padding: 2, maxWidth: 600}}>
       <CssBaseline />
       <div>
        <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3}}>

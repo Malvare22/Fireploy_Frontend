@@ -59,7 +59,7 @@ function Registrar() {
   };
 
   return (
-    <Card sx={{ maxWidth: 900, padding: 4 }}>
+    <Card sx={{ maxWidth: 600, padding: 4 }}>
       <RenderAlertDialog />
       <Stack spacing={3}>
         <Stack spacing={1} direction={"row"} alignItems={"center"}>
@@ -76,7 +76,7 @@ function Registrar() {
         >
           {/* Fila 1: Nombres y Apellidos */}
           <Stack spacing={4}>
-            <Stack direction="row" spacing={2}>
+
               <TextField
                 label="Nombres"
                 type="text"
@@ -93,10 +93,9 @@ function Registrar() {
                 {...register("apellidos")}
                 fullWidth
               />
-            </Stack>
 
             {/* Fila 2: Correo y Fecha de Nacimiento */}
-            <Stack direction="row" spacing={2}>
+
               <TextField
                 label="Correo"
                 type="email"
@@ -138,10 +137,9 @@ function Registrar() {
                   </MenuItem>
                 ))}
               </TextField>
-            </Stack>
 
             {/* Fila 3: Fecha de Ingreso y Sexo */}
-            <Stack direction="row" spacing={2}>
+
               <TextField
                 label="Fecha de Ingreso"
                 type="date"
@@ -162,10 +160,9 @@ function Registrar() {
                 inputProps={{ max: obtenerFechaActual() }}
                 fullWidth
               />
-            </Stack>
 
             {/* Fila 4: Contraseña y Confirmar Contraseña */}
-            <Stack direction="row" spacing={2}>
+
               <TextFieldPassword
                 label="Contraseña"
                 type="password"
@@ -174,7 +171,6 @@ function Registrar() {
                 {...register("contrasenia")}
                 fullWidth
               />
-              <TextFieldPassword/>
               <TextFieldPassword
                 label="Confirmar Contraseña"
                 type="password"
@@ -183,7 +179,6 @@ function Registrar() {
                 {...register("confirmarContrasenia")}
                 fullWidth
               />
-            </Stack>
 
             {/* Botones */}
             <Stack spacing={2} direction="row" justifyContent="center">
