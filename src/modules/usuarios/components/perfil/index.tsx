@@ -15,7 +15,7 @@ import {
 } from "@modules/usuarios/utils/usuario.map";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import RoundedIcon from "@modules/general/components/RoundedIcon";
-import { mapaImagenes } from "@modules/general/components/RoundedIcon/utils";
+import { obtenerImagen } from "@modules/general/components/RoundedIcon/utils";
 
 interface Props {
   usuario: Usuario;
@@ -129,8 +129,8 @@ const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
             {usuario.redSocial.facebook && (
               <Row sx={styleRowRedSocial}>
                 <RoundedIcon
-                  imagen={mapaImagenes["facebook_logo"].ruta}
-                  nombre={mapaImagenes["facebook_logo"].nombre}
+                  imagen={obtenerImagen["facebook_logo"].ruta}
+                  nombre={obtenerImagen["facebook_logo"].nombre}
                   url={usuario.redSocial.facebook}
                 />
               </Row>
@@ -139,8 +139,8 @@ const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
             {usuario.redSocial.x && (
               <Row sx={styleRowRedSocial}>
                 <RoundedIcon
-                  imagen={mapaImagenes["x_logo"].ruta}
-                  nombre={mapaImagenes["x_logo"].nombre}
+                  imagen={obtenerImagen["x_logo"].ruta}
+                  nombre={obtenerImagen["x_logo"].nombre}
                   url={usuario.redSocial.x}
                 />
               </Row>
@@ -149,8 +149,8 @@ const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
             {usuario.redSocial.instagram && (
               <Row sx={styleRowRedSocial}>
                 <RoundedIcon
-                  imagen={mapaImagenes["instagram_logo"].ruta}
-                  nombre={mapaImagenes["instagram_logo"].nombre}
+                  imagen={obtenerImagen["instagram_logo"].ruta}
+                  nombre={obtenerImagen["instagram_logo"].nombre}
                   url={usuario.redSocial.instagram}
                 />
               </Row>
@@ -159,8 +159,8 @@ const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
             {usuario.redSocial.linkedin && (
               <Row sx={styleRowRedSocial}>
                 <RoundedIcon
-                  imagen={mapaImagenes["linkedin_logo"].ruta}
-                  nombre={mapaImagenes["linkedin_logo"].nombre}
+                  imagen={obtenerImagen["linkedin_logo"].ruta}
+                  nombre={obtenerImagen["linkedin_logo"].nombre}
                   url={usuario.redSocial.linkedin}
                 />
               </Row>

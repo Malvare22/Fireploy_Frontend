@@ -1,5 +1,6 @@
 import { ProjectCardAvatar } from "@modules/general/components/avatar";
 import PortafolioCard from "@modules/general/components/portafolioCard";
+import { Imagenes } from "@modules/general/components/roundedIcon/utils";
 import Score from "@modules/general/components/score";
 import { labelModalProyectoPortafolio } from "@modules/proyectos/enum/labelModalProyectoPortafolio";
 import {
@@ -9,6 +10,7 @@ import {
 import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import { Box, Card, Grid2, Stack, Typography } from "@mui/material";
 import React from "react";
+import CardTecnologia from "../cardTecnologia";
 
 type Props = {
   proyecto?: ProyectoCard;
@@ -40,9 +42,10 @@ const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto = proyecto1 }) => {
             seccion={proyecto.seccion}
             semestre={proyecto.semestre}
           />
-          <Stack>
-            <Typography  variant="h5" fontWeight={"bold"}>{labelModalProyectoPortafolio.tecnologias}</Typography>
-          </Stack>
+            <Typography variant="h5" fontWeight={"bold"}>{labelModalProyectoPortafolio.tecnologias}</Typography>
+            {
+                proyecto.tecnologias.map(tecnologia => <CardTecnologia tecnologia={tecnologia.imagen}/>)
+            }
         </Stack>
       </Stack>
 
@@ -63,6 +66,8 @@ const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto = proyecto1 }) => {
     </Stack>
   );
 };
+
+
 
 type CardCalificadorProps = {
   calificador: UsuarioPortafolioCard;

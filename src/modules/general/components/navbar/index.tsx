@@ -7,7 +7,7 @@ import { AccountMenu } from "./components/accountMenu";
 import { rutasGeneral } from "@modules/general/router/router";
 import { LabelNavbar } from "@modules/general/enums/labelNavbar";
 import { palette } from "@core/themes";
-import { mapaImagenes } from "../RoundedIcon/utils";
+import { obtenerImagen } from "../RoundedIcon/utils";
 import { AccountContext } from "@modules/general/context/accountContext";
 
 const Navbar: React.FC<{ sesion: boolean }> = ({ sesion }) => {
@@ -107,8 +107,8 @@ const FirstContent: React.FC<FirstContentProps> = ({
         )}
         <Box
           component={"img"}
-          src={mapaImagenes["logo_fireploy"].ruta}
-          alt={mapaImagenes["logo_fireploy"].nombre}
+          src={obtenerImagen["logo_fireploy"].ruta}
+          alt={obtenerImagen["logo_fireploy"].nombre}
           sx={{ width: 64 }}
         />
         <Box sx={{ visibility: { lg: "hidden" } }}>

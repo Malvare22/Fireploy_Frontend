@@ -8,7 +8,7 @@ import {
 } from "@modules/proyectos/types/proyecto.card";
 import React from "react";
 import RoundedIcon from "../roundedIcon";
-import { mapaImagenes } from "../roundedIcon/utils";
+import { obtenerImagen } from "../roundedIcon/utils";
 import { ProjectCardMembers } from "../avatar";
 import Status from "../status";
 
@@ -97,8 +97,8 @@ export const ProjectCardHome: React.FC<ProjectCardHomeProps> = ({
             <Box>
               {proyecto.tecnologias.map((_tecnologia) => (
                 <RoundedIcon
-                  imagen={mapaImagenes["nodejs"].ruta}
-                  nombre={mapaImagenes["nodejs"].nombre}
+                  imagen={obtenerImagen["nodejs"].ruta}
+                  nombre={obtenerImagen["nodejs"].nombre}
                 />
               ))}
             </Box>
@@ -177,8 +177,8 @@ export const ProjectCardPortafolio: React.FC<ProjectCardPortafolioProps> = ({
                 <Box>
                   {proyecto.tecnologias.map((_tecnologia) => (
                     <RoundedIcon
-                      imagen={mapaImagenes["nodejs"].ruta}
-                      nombre={mapaImagenes["nodejs"].nombre}
+                      imagen={obtenerImagen["nodejs"].ruta}
+                      nombre={obtenerImagen["nodejs"].nombre}
                     />
                   ))}
                 </Box>

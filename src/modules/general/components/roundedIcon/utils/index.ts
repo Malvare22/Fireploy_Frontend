@@ -38,18 +38,9 @@ export const Imagenes = {
   ufps_logo_completo: ufpsLogoCompleto,
 } as const; // "as const" asegura que los valores sean de solo lectura
 
-/**
- * Obtiene la ruta de una imagen basada en el enum de imágenes.
- * 
- * @param nombre - El nombre de la imagen en formato `imagenes`
- * @returns La ruta de la imagen como una cadena de texto.
- */
-export const obtenerRutaImagen = (nombre: keyof typeof Imagenes) => {
-  return Imagenes[nombre];
-};
 
 // Mapa para obtener las imágenes con sus rutas y nombres
-export const mapaImagenes: Record<keyof typeof Imagenes, { nombre: string; ruta: string }> =
+export const obtenerImagen: Record<keyof typeof Imagenes, { nombre: string; ruta: string }> =
   Object.keys(Imagenes).reduce((mapa, clave) => {
     return {
       ...mapa,

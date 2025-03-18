@@ -6,7 +6,7 @@ import { obtenerEstado } from "@modules/proyectos/utils/obtenerEstado";
 import RoundedIcon from "@modules/general/components/RoundedIcon";
 import { repositoriosPrueba } from "@modules/proyectos/test/datos/repositorios.prueba";
 import { rutasProyectos } from "@modules/proyectos/router";
-import { mapaImagenes } from "@modules/general/components/RoundedIcon/utils";
+import { obtenerImagen } from "@modules/general/components/RoundedIcon/utils";
 
 interface Props {
   proyecto: Proyecto;
@@ -90,13 +90,13 @@ const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
           >
             {proyecto.repositorios.map((_, indice) => (
               <RoundedIcon
-                imagen={mapaImagenes[repositoriosPrueba[indice].tecnologia.logo].ruta}
-                nombre={mapaImagenes[repositoriosPrueba[indice].tecnologia.logo].nombre}
+                imagen={obtenerImagen[repositoriosPrueba[indice].tecnologia.logo].ruta}
+                nombre={obtenerImagen[repositoriosPrueba[indice].tecnologia.logo].nombre}
               ></RoundedIcon>
             ))}
             <RoundedIcon
-              imagen={mapaImagenes['mongodb'].ruta}
-              nombre={mapaImagenes['mongodb'].nombre}
+              imagen={obtenerImagen['mongodb'].ruta}
+              nombre={obtenerImagen['mongodb'].nombre}
             ></RoundedIcon>
           </Box>
         </Box>

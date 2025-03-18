@@ -1,3 +1,4 @@
+import { Imagenes } from "@modules/general/components/roundedIcon/utils";
 import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 
 export type ProyectoCard = {
@@ -5,7 +6,7 @@ export type ProyectoCard = {
   descripcion: string;
   imagen: string;
   integrantes: UsuarioPortafolioCard[];
-  tecnologias: { nombre: string; imagen: string }[];
+  tecnologias: { nombre: string; imagen: keyof typeof Imagenes }[];
   puntuacion: number;
   calificador: UsuarioPortafolioCard;
   materia: string;
@@ -45,9 +46,9 @@ export const proyecto1: ProyectoCard = {
     
   ],
   tecnologias: [
-    { nombre: "React", imagen: "https://example.com/react.png" },
-    { nombre: "Node.js", imagen: "https://example.com/node.png" },
-    { nombre: "TensorFlow", imagen: "https://example.com/tensorflow.png" },
+    { nombre: "React", imagen: 'react' },
+    { nombre: "Node.js", imagen: 'nodejs' },
+    { nombre: "MongoDB", imagen: 'mongodb' },
   ],
   puntuacion: 5,
   calificador: {

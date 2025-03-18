@@ -23,7 +23,7 @@ import useQuery from "@modules/general/hooks/useQuery";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 import { subirImagenUsuario } from "@modules/usuarios/services/imagen.subir";
 import RoundedIcon from "@modules/general/components/RoundedIcon";
-import { mapaImagenes } from "@modules/general/components/RoundedIcon/utils";
+import { obtenerImagen } from "@modules/general/components/RoundedIcon/utils";
 import PreviewImage from "@modules/general/components/previewImage";
 import { usePreviewImage } from "@modules/general/components/previewImage/hooks";
 import GeneralButton, {
@@ -345,8 +345,8 @@ const Cuerpo: React.FC<{
             >
               <Row sx={styleRowRedSocial}>
                 <RoundedIcon
-                  imagen={mapaImagenes["linkedin_logo"].ruta}
-                  nombre={mapaImagenes["linkedin_logo"].nombre}
+                  imagen={obtenerImagen["linkedin_logo"].ruta}
+                  nombre={obtenerImagen["linkedin_logo"].nombre}
                 />
                 <CustomInput
                   variant="secondary"
@@ -356,8 +356,8 @@ const Cuerpo: React.FC<{
               </Row>
               <Row sx={styleRowRedSocial}>
                 <RoundedIcon
-                  imagen={mapaImagenes["facebook_logo"].ruta}
-                  nombre={mapaImagenes["facebook_logo"].nombre}
+                  imagen={obtenerImagen["facebook_logo"].ruta}
+                  nombre={obtenerImagen["facebook_logo"].nombre}
                 />
                 <CustomInput
                   variant="secondary"
@@ -367,8 +367,8 @@ const Cuerpo: React.FC<{
               </Row>
               <Row sx={styleRowRedSocial}>
                 <RoundedIcon
-                  imagen={mapaImagenes["instagram_logo"].ruta}
-                  nombre={mapaImagenes["instagram_logo"].nombre}
+                  imagen={obtenerImagen["instagram_logo"].ruta}
+                  nombre={obtenerImagen["instagram_logo"].nombre}
                 />
                 <CustomInput
                   variant="secondary"
@@ -378,8 +378,8 @@ const Cuerpo: React.FC<{
               </Row>
               <Row sx={styleRowRedSocial}>
                 <RoundedIcon
-                  imagen={mapaImagenes["x_logo"].ruta}
-                  nombre={mapaImagenes["x_logo"].nombre}
+                  imagen={obtenerImagen["x_logo"].ruta}
+                  nombre={obtenerImagen["x_logo"].nombre}
                 />
                 <CustomInput
                   variant="secondary"

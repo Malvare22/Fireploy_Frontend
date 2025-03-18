@@ -21,7 +21,7 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { ModeContext } from "@modules/general/context/modeContext";
-import { mapaImagenes } from "../../RoundedIcon/utils";
+import { obtenerImagen } from "../../RoundedIcon/utils";
 
 const pages = ["Inicio", "Iniciar Sesión", "Registrarse"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -84,7 +84,7 @@ function NavbarPrelogin() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* <Box component={'img'} src={mapaImagenes['logo_fireploy'].ruta} alt={mapaImagenes['logo_fireploy'].nombre} sx={{width: 48, height: 48}}/> */}
+          {/* <Box component={'img'} src={obtenerImagen['logo_fireploy'].ruta} alt={obtenerImagen['logo_fireploy'].nombre} sx={{width: 48, height: 48}}/> */}
           {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
           <Typography
             variant="h6"
