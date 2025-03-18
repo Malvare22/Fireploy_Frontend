@@ -36,11 +36,11 @@ const PortafolioCard: React.FC<Props> = ({ usuario }) => {
               <Typography variant="body1">{usuario.rol}</Typography>
             </Box>
           </Stack>
-          <Box sx={{display: {md: 'grid', xs: 'flex'}, flexDirection: {xs: 'column', md: 'row'}, gridTemplateColumns: 'repeat(2, 1fr)', gap: 2}}>
+          {/* <Box sx={{display: {md: 'grid', xs: 'flex'}, flexDirection: {xs: 'column', md: 'row'}, gridTemplateColumns: 'repeat(2, 1fr)', gap: 2}}>
             <Chart logro={usuario.logros} />
             <Chart logro={usuario.logros} />
             <Chart logro={usuario.logros} />
-          </Box>
+          </Box> */}
         </Box>
       </Box>
       <Box></Box>

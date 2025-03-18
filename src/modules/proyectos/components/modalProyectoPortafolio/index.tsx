@@ -36,13 +36,13 @@ const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto = proyecto1 }) => {
           {proyecto.titulo}
         </Typography>
       </Box>
-      <Stack direction={"row"} spacing={6}>
+      <Stack direction={{xl:"row"}} alignItems={'center'} spacing={6}>
         <Box
           component={"img"}
-          sx={{ width: { md: 550 } }}
+          sx={{ width: { md: 550, xs: '100%' } }}
           src={proyecto.imagen}
         />
-        <Stack spacing={2}>
+        <Stack spacing={2} marginTop={2} width={'100%'}>
           <Typography variant="h5" fontWeight={"bold"}>
             {labelModalProyectoPortafolio.calificador}
           </Typography>
@@ -75,9 +75,9 @@ const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto = proyecto1 }) => {
         <Typography variant="h5" fontWeight={"bold"}>
           {labelModalProyectoPortafolio.integrantes}
         </Typography>
-        <Grid2 container spacing={2}>
+        <Grid2 container spacing={2} paddingY={2}>
           {proyecto.integrantes.map((integrante) => (
-            <Grid2 size={{ md: 5 }}>
+            <Grid2 size={{ md: 4, sm: 6, xs:12 }}>
               <PortafolioCard usuario={integrante} key={integrante.id} />
             </Grid2>
           ))}
@@ -104,19 +104,18 @@ const CardCalificador: React.FC<CardCalificadorProps> = ({
   semestre,
 }) => {
   return (
-    <Card sx={{ padding: 3 }}>
+    <Card sx={{ padding: 2 }}>
       <Stack direction={"row"} alignItems={"center"} spacing={2}>
         <ProjectCardAvatar
           usuario={calificador}
           sx={{ width: 48, height: 48 }}
         />
         <Stack>
-          <Stack direction={"row"} spacing={2}>
-            {" "}
+          <Stack direction={{md:"row"}} spacing={2}>
             <Typography variant="h6">{calificador.nombres}</Typography>
             <Score value={puntuacion} />
           </Stack>
-          <Typography>{`${materia} / ${grupo} / ${seccion}`}</Typography>
+          <Box><Typography>{`${materia} / ${grupo} / ${seccion}`}</Typography></Box>
         </Stack>
       </Stack>
     </Card>
@@ -137,15 +136,15 @@ const CardEstado: React.FC<CardEstadoProps> = ({ estado }) => {
 
   function getLabel() {
     return (
-      <Stack direction={"row"} alignItems={"center"} spacing={1}>
+      <Stack direction={{md: "row", xs: 'column'}} alignItems={"center"} spacing={1}>
         {estado == "A" ? (
           <>
-            <Typography  fontWeight='bold'>{labelModalProyectoPortafolio.online}</Typography>
+            <Typography  fontWeight='bold' textAlign={'center'}>{labelModalProyectoPortafolio.online}</Typography>
             <CheckCircleOutlineIcon />
           </>
         ) : (
           <>
-            <Typography  fontWeight='bold'>{labelModalProyectoPortafolio.offline}</Typography>
+            <Typography  fontWeight='bold' textAlign={'center'}>{labelModalProyectoPortafolio.offline}</Typography>
             <CloudOffIcon />
           </>
         )}
@@ -155,10 +154,10 @@ const CardEstado: React.FC<CardEstadoProps> = ({ estado }) => {
 
   return (
     <Card sx={{ backgroundColor: getColor(), color: 'white', paddingY: 1 }}>
-      <Stack direction={"row"} alignItems={"center"} justifyContent={'center'} spacing={2}>
+      <Stack direction={{md: "row", sm: 'column'}} alignItems={"center"} justifyContent={'center'} spacing={2}>
         {getLabel()}
         {estado == "A" && (
-          <Button variant="outlined" color="inherit">{labelModalProyectoPortafolio.visitar}</Button>
+          <Box sx={{marginY: {xs: 1, md: 0}}}><Button variant="outlined" color="inherit">{labelModalProyectoPortafolio.visitar}</Button></Box>
         )}
       </Stack>
     </Card>

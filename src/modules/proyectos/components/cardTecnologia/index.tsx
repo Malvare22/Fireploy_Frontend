@@ -37,7 +37,7 @@ const CardTecnologia: React.FC<CardTecnologiaProps> = ({ tecnologia }) => {
         color: "white",
       }}
     >
-      <Stack direction={"row"} alignItems={"center"} spacing={2}>
+      <Stack direction={{md: "row"}} alignItems={"center"} spacing={2}>
         <Typography
           variant="body1"
           fontWeight={"bold"}
@@ -48,7 +48,7 @@ const CardTecnologia: React.FC<CardTecnologiaProps> = ({ tecnologia }) => {
         <Card
           sx={{
             padding: 1,
-            width: 48,
+            minWidth: 48,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
