@@ -4,10 +4,14 @@ export type ProyectoCard = {
   titulo: string;
   descripcion: string;
   imagen: string;
-  integrandes: UsuarioPortafolioCard[];
+  integrantes: UsuarioPortafolioCard[];
   tecnologias: { nombre: string; imagen: string }[];
   puntuacion: number;
   calificador: UsuarioPortafolioCard;
+  materia: string;
+  grupo: string;
+  seccion: string;
+  semestre: string;
 };
 
 
@@ -16,21 +20,29 @@ export const proyecto1: ProyectoCard = {
   descripcion:
     "Una plataforma interactiva basada en inteligencia artificial para ayudar a los estudiantes a mejorar sus habilidades.",
   imagen: "https://backiee.com/static/wallpapers/560x315/278140.jpg",
-  integrandes: [
+  integrantes: [
     {
       nombres: "Carlos Pérez",
       id: "1",
-      foto: "https://example.com/carlos.png",
+      foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnLAwnCxV26w3jNd5ARMQl_WXk9yn7IRAi5Q&s",
       rol: "Desarrollador Full Stack",
       logros: { titulo: "Repositorios en GitHub", valor: "50+" },
     },
     {
       nombres: "Ana Gómez",
       id: "1",
-      foto: "https://example.com/ana.png",
+      foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnLAwnCxV26w3jNd5ARMQl_WXk9yn7IRAi5Q&s",
       rol: "Diseñadora UI/UX",
       logros: { titulo: "Proyectos completados", valor: "30+" },
     },
+    {
+      nombres: "Ana Gómez",
+      id: "1",
+      foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnLAwnCxV26w3jNd5ARMQl_WXk9yn7IRAi5Q&s",
+      rol: "Diseñadora UI/UX",
+      logros: { titulo: "Proyectos completados", valor: "30+" },
+    },
+    
   ],
   tecnologias: [
     { nombre: "React", imagen: "https://example.com/react.png" },
@@ -41,8 +53,12 @@ export const proyecto1: ProyectoCard = {
   calificador: {
     id: "1",
     nombres: "Laura Martínez",
-    foto: "https://example.com/laura.png",
+    foto: "s",
     rol: "Gerente de Producto",
     logros: { titulo: "Años de experiencia", valor: "10+" },
   },
+  materia: 'Análisis de Algoritmos',
+  grupo: 'A',
+  seccion: 'Teoría de grafos',
+  semestre: '2025-1'
 };

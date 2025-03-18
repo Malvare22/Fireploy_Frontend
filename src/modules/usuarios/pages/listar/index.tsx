@@ -19,7 +19,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import {
-  obtenerEstadoUsuario,
+  obtenerEstado,
   obtenerTiposUsuario,
 } from "@modules/usuarios/utils/usuario.map";
 import useTabla from "@modules/general/hooks/useTabla";
@@ -35,7 +35,7 @@ import { adaptarUsuario } from "@modules/usuarios/utils/adaptar.usuario";
 import { UsuarioBase } from "@modules/usuarios/utils/form/usuario.base";
 import useQuery from "@modules/general/hooks/useQuery";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
-import { LabelTablaUsuarios } from "@modules/usuarios/enum/LabelTablaUsuarios";
+import { LabelTablaUsuarios } from "@modules/usuarios/enum/labelTablaUsuarios";
 import { obtenerUsuariosPorTipoService } from "@modules/usuarios/services/obtenerUsuariosPorTipo";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import ActionButton from "@modules/general/components/actionButton";
@@ -184,7 +184,7 @@ function ListarUsuarios() {
                     {obtenerTiposUsuario.get(usuario.tipo)}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    {obtenerEstadoUsuario.get(usuario.estado)}
+                    {obtenerEstado.get(usuario.estado)}
                   </StyledTableCell>
                   <StyledTableCell align="center">
                     <Tooltip title={LabelTablaUsuarios.proyectos}>

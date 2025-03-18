@@ -21,6 +21,7 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { ModeContext } from "@modules/general/context/modeContext";
+import { mapaImagenes } from "../../RoundedIcon/utils";
 
 const pages = ["Inicio", "Iniciar Sesión", "Registrarse"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -83,7 +84,8 @@ function NavbarPrelogin() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          {/* <Box component={'img'} src={mapaImagenes['logo_fireploy'].ruta} alt={mapaImagenes['logo_fireploy'].nombre} sx={{width: 48, height: 48}}/> */}
+          {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
           <Typography
             variant="h6"
             noWrap
@@ -99,7 +101,7 @@ function NavbarPrelogin() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            FIREPLOY
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>

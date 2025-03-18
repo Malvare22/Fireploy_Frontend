@@ -26,8 +26,8 @@ export const adaptarUsuario = (usuario: UsuarioService) => {
     sexo: usuario.sexo as SexoUsuario,
     fotoDePerfil: `${usuario.foto_perfil.replace(/\?t=.*/, "")}?t=${Date.now()}}`,
     redSocial: adaptarRedSocial(usuario.red_social),
-    descripcion: usuario.descripcion,
-    estFechaInicio: usuario.est_fecha_inicio
+    descripcion: usuario.descripcion ?? '',
+    estFechaInicio: usuario.est_fecha_inicio ?? ''
   };
 
   return _usuario;

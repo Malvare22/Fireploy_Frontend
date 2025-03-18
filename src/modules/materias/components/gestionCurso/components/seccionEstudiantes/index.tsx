@@ -17,7 +17,7 @@ import { buttonTypes } from "@modules/general/types/buttons";
 import { LabelCurso } from "@modules/materias/enums/labelCurso";
 import { gestionarEstudiantesCursoService } from "@modules/materias/services/gestionar.estudiantes.curso";
 import { CursoService } from "@modules/materias/types/curso.service";
-import { LabelTablaUsuarios } from "@modules/usuarios/enum/LabelTablaUsuarios";
+import { LabelTablaUsuarios } from "@modules/usuarios/enum/labelTablaUsuarios";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { obtenerUsuariosPorTipoService } from "@modules/usuarios/services/obtenerUsuariosPorTipo";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";

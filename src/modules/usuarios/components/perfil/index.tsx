@@ -10,7 +10,7 @@ import { LabelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
 import Label from "@modules/general/components/label";
 import { palette } from "@core/themes";
 import {
-  obtenerEstadoUsuario,
+  obtenerEstado,
   obtenerTiposUsuario,
 } from "@modules/usuarios/utils/usuario.map";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
@@ -101,7 +101,7 @@ const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
         <Row>
           <Label width={240}>{LabelUsuario.estado}</Label>
           <Typography variant="title">
-            {obtenerEstadoUsuario.get(usuario.estado)}
+            {obtenerEstado.get(usuario.estado)}
           </Typography>
         </Row>
 

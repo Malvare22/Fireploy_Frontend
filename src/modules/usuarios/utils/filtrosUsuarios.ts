@@ -2,7 +2,7 @@ import { FilterLabels } from "@modules/general/types/filterLabels";
 import { EstadoUsuario } from "../types/usuario.estado";
 import { SexoUsuario } from "../types/usuario.sexo";
 import { TiposUsuario } from "../types/usuario.tipos";
-import { obtenerEstadoUsuario, obtenerSexo, obtenerTiposUsuario } from "./usuario.map";
+import { obtenerEstado, obtenerSexo, obtenerTiposUsuario } from "./usuario.map";
 import { Usuario } from "../types/usuario";
 
 export const filtrosUsuarios = () => {
@@ -33,7 +33,7 @@ export const filtrosUsuarios = () => {
         labels: valoresPosibles.estado.map((valor) => {
           return {
             value: valor,
-            text: obtenerEstadoUsuario.get(valor),
+            text: obtenerEstado.get(valor),
           };
         }),
       },

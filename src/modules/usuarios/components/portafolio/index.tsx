@@ -1,232 +1,73 @@
-import { Proyecto } from "@modules/proyectos/types/proyecto";
-import { CuadroPerfil } from "@modules/usuarios/components/perfil";
-import { Usuario } from "@modules/usuarios/types/usuario";
-import { Box, Button, Card, Divider, Typography } from "@mui/material";
+import { proyecto1, ProyectoCard } from "@modules/proyectos/types/proyecto.card";
+import { Usuario, usuarioEjemplo } from "@modules/usuarios/types/usuario";
+import { showSocialNetworks } from "@modules/usuarios/utils/showSocialNetworks";
+import {
+  Box,
+  Button,
+  Card,
+  Divider,
+  Palette,
+  PaletteMode,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 
-import React, { useState } from "react";
-import Modal from "@modules/general/components/modal";
-import VistaPreviaUsuario from "@modules/usuarios/components/VistaPreviaUsuario";
-import { usuariosPrueba } from "@modules/usuarios/test/data/usuarios.prueba";
-import RoundedIcon from "@modules/general/components/RoundedIcon";
-import { TecnologiasPrueba } from "@modules/proyectos/test/datos/tecnologias.prueba";
-import EstadoBoton from "@modules/usuarios/components/estadoBoton";
-import RedesSociales from "../redesSociales";
-import { LabelPortafolio } from "@modules/usuarios/enum/LabelPortafolio";
-import { useModal } from "@modules/general/components/modal/hooks/useModal";
+import React, { useContext, useState } from "react";
+import SocialNetworkIcon from "../socialNetwork";
+import { ModeContext } from "@modules/general/context/modeContext";
+import { getTheme } from "@core/themes";
+import ProjectCard, {
+  ProjectCardPortafolio,
+} from "@modules/general/components/projectCard";
+import { labelPortafolio } from "@modules/usuarios/enum/labelPortafolio";
+import useSpringModal from "@modules/general/hooks/useSpringModal";
+import SpringModal from "@modules/general/components/springModal";
+import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyectoPortafolio";
 
-interface Props {
-  usuario: Usuario;
-  proyectos: Proyecto[];
-}
+// interface Props {
+//   usuario: Usuario;
+//   proyectos: ProyectoCard[];
+// }
 
-const Portafolio: React.FC<Props> = ({ usuario, proyectos }: Props) => {
-  const { handleClose, handleOpen, open } = useModal();
+const Portafolio = () => {
+  const usuario = usuarioEjemplo;
 
-  const [modalProyecto, setModalProyecto] = useState<Proyecto | undefined>(
-    undefined
-  );
+  const { mode } = useContext(ModeContext);
 
-  const handleModal = (proyecto: Proyecto) => {
-    setModalProyecto(proyecto);
-    handleOpen();
-  };
+  const theme = getTheme(mode as PaletteMode);
 
-  const RenderModal = () =>
-    modalProyecto ? (
-      <Modal open={open} handleClose={handleClose} sx={{ width: "90%" }}>
-        <CardProyecto proyecto={modalProyecto} tipo="modal" />
-      </Modal>
-    ) : (
-      <></>
-    );
-
-  return (
-    <Box sx={{ border: "none", width: "70%" }}>
-      <RenderModal />
-      <CuadroPerfil usuario={usuario} tipo="ver" />
-      <Card
-        sx={{
-          marginY: 2,
-          display: "flex",
-          justifyContent: "center",
-          gap: 4,
-          padding: 2,
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h5">{LabelPortafolio.redesSociales}</Typography>
-        <RedesSociales usuario={usuario} />
-      </Card>
-      <Card
-        sx={{
-          marginY: 2,
-          padding: 2,
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-        }}
-      >
-        <Box>
-          {" "}
-          <Typography variant="title">{LabelPortafolio.descripcion}</Typography>
-        </Box>
-        <Box>
-          <Typography variant="title2">{usuario.descripcion}</Typography>
-        </Box>
-      </Card>
-      <Card
-        sx={{
-          marginY: 2,
-          padding: 2,
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-        }}
-      >
-        {proyectos.map((proyecto, i) => (
-          <CardProyecto
-            key={i}
-            proyecto={proyecto}
-            tipo="básico"
-            handleModal={handleModal}
-          />
-        ))}
-      </Card>
-    </Box>
-  );
-};
-
-export const CardProyecto: React.FC<{
-  proyecto: Proyecto;
-  tipo: "básico" | "modal";
-  handleModal?: (proyecto: Proyecto) => void;
-}> = ({ proyecto, tipo = "básico", handleModal }) => {
-  const ContenidoModal = () => (
-    <>
-      <Box>
-        <Typography variant="titleBold">
-          {LabelPortafolio.integrantes}
-        </Typography>
-      </Box>
-      <Box
-        sx={{
-          display: { md: "grid", xs: "flex" },
-          flexDirection: "column",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 3,
-          marginY: 2,
-        }}
-      >
-        <VistaPreviaUsuario type="portafolio" usuario={usuariosPrueba[0]} />
-        <VistaPreviaUsuario type="portafolio" usuario={usuariosPrueba[1]} />
-        <VistaPreviaUsuario type="portafolio" usuario={usuariosPrueba[0]} />
-        <VistaPreviaUsuario type="portafolio" usuario={usuariosPrueba[1]} />
-      </Box>
-    </>
-  );
+  const { handleClose, handleOpen, open } = useSpringModal();
 
   return (
-    <>
-      <Box
+    <Box>
+      <SpringModal handleClose={handleClose} handleOpen={handleOpen} open={open}>
+        <ModalProyectoPortafolio/>
+      </SpringModal>
+      <Card
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          padding: tipo == "básico" ? 0 : 4,
+          padding: 6,
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            gap: 2,
-            alignItems: "center",
-            justifyContent: tipo == "básico" ? "space-between" : "start",
-          }}
-        >
-          <Box>
-            <Typography variant={"titleBold"}>{proyecto.titulo}</Typography>
-          </Box>
-          <EstadoBoton estado={proyecto.estadoDeEjecucion} url={proyecto.url} />
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: { md: "row", xs: "column" },
-            justifyContent: "center",
-            gap: 1,
-          }}
-        >
-            <Box
-              component={"img"}
-              sx={{ width: {sm: 300, xs: '100%'}, height: "auto" }}
-              src={proyecto.imagen}
-            />
+        <Stack spacing={3} alignItems={"center"}>
           <Box
-            sx={{
-              flexGrow: 1,
-              border: "1px solid black",
-              padding: 2,
-            }}
-          >
-            <Typography variant="caption">{proyecto.descripcion}</Typography>
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-            <Typography variant={tipo == "básico" ? "title2Bold" : "titleBold"}>
-              {"Tecnologías "}
-            </Typography>
-            {proyecto.repositorios.map((repositorio, i) => {
-              return (
-                <RoundedIcon
-                  key={i}
-                  imagen={repositorio.tecnologia.logo}
-                  nombre={repositorio.tecnologia.nombre}
-                  dimensiones={
-                    tipo == "modal"
-                      ? {
-                          height: { xs: 24, md: 48 },
-                          width: { xs: 24, md: 48 },
-                        }
-                      : undefined
-                  }
-                />
-              );
-            })}
-            {
-              <RoundedIcon
-                key={0}
-                imagen={TecnologiasPrueba[2].logo}
-                nombre={TecnologiasPrueba[2].nombre}
-                dimensiones={
-                  tipo == "modal"
-                    ? {
-                        height: { xs: 24, md: 48 },
-                        width: { xs: 24, md: 48 },
-                      }
-                    : undefined
-                }
-              />
-            }
-          </Box>
-          {tipo == "básico" && handleModal && (
-            <Box>
-              <Button variant="contained" onClick={() => handleModal(proyecto)}>
-                {LabelPortafolio.verMas}
-              </Button>
-            </Box>
-          )}
-        </Box>
-        {tipo == "modal" && <ContenidoModal />}
+            component={"img"}
+            sx={{ width: 96, heigth: 96 }}
+            src={usuario.fotoDePerfil}
+          />
+          <Stack spacing={4} direction={"row"}>
+            <Typography variant="h5">{labelPortafolio.proyectos}</Typography>
+            <Typography variant="h5">{labelPortafolio.acercaDe}</Typography>
+          </Stack>
+          <Stack direction="row" spacing={2}>
+            {showSocialNetworks(usuario.redSocial)}
+          </Stack>
+        </Stack>
+      </Card>
+      <Box>
+        <ProjectCard tipo="portafolio" handleOpen={handleOpen} />
       </Box>
-      <Divider />
-    </>
+    </Box>
   );
 };
 

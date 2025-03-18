@@ -4,6 +4,7 @@ import LayoutPrelogin from "../layouts/prelogin";
 import Login from "../pages/login";
 import Registrar from "../pages/registro";
 import TablaUsuarios from "@modules/usuarios/components/tablaUsuarios";
+import Portafolio from "@modules/usuarios/components/portafolio";
 
 export const rutaBase = "/";
 
@@ -37,6 +38,10 @@ export const routerGeneral: RouteObject = {
     {
       path: "test",
       element: <TablaUsuarios />, // Página de login
+    },
+    {
+      path: "test2",
+      element: <Portafolio/> // Página de login
     },
   ],
 };

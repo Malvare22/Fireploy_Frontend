@@ -17,7 +17,7 @@ const estadoUsuarioMapData: Record<EstadoUsuario, string> = {
   I: "Inactivo",
 } as const;
 
-export const obtenerEstadoUsuario = new Map(
+export const obtenerEstado = new Map(
   Object.entries(estadoUsuarioMapData) as [EstadoUsuario, string][]
 );
 

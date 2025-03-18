@@ -2,7 +2,7 @@ import { Box, Stack, Typography, useTheme } from "@mui/material";
 import React from "react";
 import AnimatedCard from "../animatedCard";
 import { Logro, UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
-import ProjectCardAvatar from "../avatar";
+import { ProjectCardAvatar } from "../avatar";
 
 type Props = {
   usuario: UsuarioPortafolioCard;

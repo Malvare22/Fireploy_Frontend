@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { LabelPortafolio } from "@modules/usuarios/enum/LabelPortafolio";
+import { LabelPortafolio } from "@modules/usuarios/enum/labelPortafolio";
 import ExploreIcon from "@mui/icons-material/Explore";
 import usePaginacion from "@modules/general/hooks/usePaginacion";
 import { rutasUsuarios } from "@modules/usuarios/router/router";

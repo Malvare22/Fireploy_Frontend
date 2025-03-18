@@ -4,82 +4,19 @@ import { Usuario } from "@modules/usuarios/types/usuario";
 import DataTable, { ConditionalStyles } from "react-data-table-component";
 import { TableColumn, TableStyles } from "react-data-table-component";
 import { adaptarUsuario } from "@modules/usuarios/utils/adaptar.usuario";
-import { Box, Button, Chip, Stack, useTheme } from "@mui/material";
+import { Box, Chip, Stack, useTheme } from "@mui/material";
 import { useMemo } from "react";
 import {
-  obtenerEstadoUsuario,
   obtenerTiposUsuario,
 } from "@modules/usuarios/utils/usuario.map";
 import SchoolIcon from "@mui/icons-material/School";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
-import { EstadoCurso } from "@modules/materias/types/estado.curso";
-import { RedSocialUsuario } from "@modules/usuarios/types/usuario.redSocial";
-import {
-  Facebook,
-  Instagram,
-  LinkedIn,
-  GitHub,
-  Twitter,
-} from "@mui/icons-material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import GeneralButton from "@modules/general/components/buttons";
-import { buttonTypes } from "@modules/general/types/buttons";
 import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
-
-type PropsEstado = {
-  estado: EstadoCurso;
-};
-
-const Estado: React.FC<PropsEstado> = ({ estado }) => {
-  const theme = useTheme();
-  return (
-    <Stack direction={"row"} alignItems={"center"} spacing={1}>
-      <Box
-        sx={{
-          width: 16,
-          height: 16,
-          backgroundColor:
-            estado == "A"
-              ? theme.palette.success.main
-              : theme.palette.error.main,
-          borderRadius: "100%",
-          animation: "blink 1s infinite alternate",
-          "@keyframes blink": {
-            "0%": { opacity: 1 },
-            "50%": { opacity: 0.7 },
-            "100%": { opacity: 1 },
-          },
-        }}
-      />
-      <Box>{obtenerEstadoUsuario.get(estado)}</Box>
-    </Stack>
-  );
-};
-
-type SocialProfileProps = {
-  redSocial: keyof RedSocialUsuario;
-};
-const SocialProfile: React.FC<SocialProfileProps> = ({ redSocial }) => {
-  const getSocialIcon = () => {
-    switch (redSocial) {
-      case "facebook":
-        return <Facebook />;
-      case "instagram":
-        return <Instagram />;
-      case "linkedin":
-        return <LinkedIn />;
-      case "x":
-        return <Twitter />;
-      case "github":
-        return <GitHub />;
-      default:
-        return null;
-    }
-  };
-  return <>{getSocialIcon()}</>;
-};
+import { showSocialNetworks } from "@modules/usuarios/utils/showSocialNetworks";
+import Status from "@modules/general/components/status";
 
 const columns: TableColumn<Usuario & { rowIndex: number }>[] = [
   {
@@ -133,7 +70,7 @@ const columns: TableColumn<Usuario & { rowIndex: number }>[] = [
 
   {
     name: labelUsuario.estado,
-    cell: (row) => <Estado estado={row.estado} />,
+    cell: (row) => <Status estado={row.estado} />,
     sortable: true,
     sortFunction: (rowA, rowB) => {
       return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
@@ -142,14 +79,8 @@ const columns: TableColumn<Usuario & { rowIndex: number }>[] = [
   {
     name: "Redes Sociales", // Nueva columna con un botón
     cell: (row) => {
-      const iconos = [];
-      for (const key in row.redSocial) {
-        const validKey = key as keyof RedSocialUsuario;
-        if (row.redSocial[validKey] && row.redSocial[validKey] != "") {
-          iconos.push(<SocialProfile redSocial={validKey} />);
-        }
-      }
-      if (iconos.length == 0)
+      const redesSociales = showSocialNetworks(row.redSocial);
+      if (redesSociales.length == 0)
         return (
           <Chip
             label="No dispone"
@@ -158,7 +89,7 @@ const columns: TableColumn<Usuario & { rowIndex: number }>[] = [
             sx={{ padding: 1, color: "white" }}
           />
         );
-      return iconos;
+      return redesSociales;
     },
   },
   {

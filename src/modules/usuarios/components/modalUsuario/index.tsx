@@ -308,7 +308,7 @@ const Cuerpo: React.FC<{
             defaultValue={getValues().estado}
             errorMessage={errors.estado?.message} // Mensaje de error
           >
-            {Array.from(obtenerEstadoUsuario.entries()).map(
+            {Array.from(obtenerEstado.entries()).map(
               ([valor, texto]) => (
                 <MenuItem key={valor} value={valor}>
                   {texto}

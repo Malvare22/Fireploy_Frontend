@@ -1,24 +1,41 @@
-import { createTheme, PaletteMode, responsiveFontSizes } from '@mui/material';
+import { createTheme, PaletteMode, responsiveFontSizes } from "@mui/material";
 
-export const getTheme = (mode: PaletteMode) => responsiveFontSizes(createTheme( {
-  palette: {
-    mode: mode,
-    primary: {
-      main: '#7CB1CF',
-      contrastText: 'rgba(255,255,255,0.87)',
-    },
-    secondary: {
-      main: '#755993',
-    },
-    background: mode === "dark" 
-      ? { default: "#121212", paper: "#1E1E1E" }
-      : { default: "#ffffff", paper: "#f5f5f5" }
-  },
-  typography: {
-    fontFamily: 'Open Sans',
-  },
-  shape: {
-    borderRadius: 8,
-  },
-  
-}));
+export const getTheme = (mode: PaletteMode) =>
+  responsiveFontSizes(
+    createTheme({
+      palette: {
+        mode: mode,
+        primary:
+          mode == "light"
+            ? {
+                main: "#0A192F",
+                contrastText: "rgba(255,255,255,0.87)",
+              }
+            : {
+                main: "#92AFE2",
+                contrastText: "rgba(255,255,255,0.87)",
+              },
+        secondary: {
+          main: '#8e3110',
+        },
+        info: {
+          main: "#5a727f",
+        },
+        warning: {
+          main: "#edad02",
+        },
+        success: {
+          main: "#59bd5c",
+        },
+        error: {
+          main: "#d05353",
+        },
+      },
+      typography: {
+        fontFamily: "Open Sans",
+      },
+      shape: {
+        borderRadius: 8,
+      },
+    })
+  );

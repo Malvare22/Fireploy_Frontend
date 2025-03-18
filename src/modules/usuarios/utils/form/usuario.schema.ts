@@ -1,6 +1,6 @@
 import { z } from "zod";
 import {
-  obtenerEstadoUsuario,
+  obtenerEstado,
   obtenerSexo,
   obtenerTiposUsuario,
 } from "../usuario.map";
@@ -10,7 +10,7 @@ import { fechaSchema } from "./fechaSchema";
  * Atributo Zod para la validación de Estados de Usuario
  */
 export const estadoUsuarioSchema = z.enum(
-  Array.from(obtenerEstadoUsuario.keys()) as ["A", "I"],
+  Array.from(obtenerEstado.keys()) as ["A", "I"],
   { message: "Ingrese un estado válido" }
 );
 
