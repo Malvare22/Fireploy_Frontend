@@ -1,5 +1,6 @@
 import { Imagenes } from "@modules/general/components/roundedIcon/utils";
 import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
+import { EstadoProyecto } from "./proyecto.estado";
 
 export type ProyectoCard = {
   titulo: string;
@@ -13,6 +14,7 @@ export type ProyectoCard = {
   grupo: string;
   seccion: string;
   semestre: string;
+  estado: EstadoProyecto;
 };
 
 
@@ -61,5 +63,6 @@ export const proyecto1: ProyectoCard = {
   materia: 'Análisis de Algoritmos',
   grupo: 'A',
   seccion: 'Teoría de grafos',
-  semestre: '2025-1'
+  semestre: '2025-1',
+  estado: 'I'
 };

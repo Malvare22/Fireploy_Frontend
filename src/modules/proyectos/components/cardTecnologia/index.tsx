@@ -1,3 +1,4 @@
+import AnimatedCard from "@modules/general/components/animatedCard";
 import {
   Imagenes,
   obtenerImagen,
@@ -27,7 +28,7 @@ const CardTecnologia: React.FC<CardTecnologiaProps> = ({ tecnologia }) => {
   }
 
   return (
-    <Card
+    <AnimatedCard
       sx={{
         display: "inline-block",
         width: "fit-content",
@@ -60,7 +61,7 @@ const CardTecnologia: React.FC<CardTecnologiaProps> = ({ tecnologia }) => {
           />
         </Card>
       </Stack>
-    </Card>
+    </AnimatedCard>
   );
 };
 

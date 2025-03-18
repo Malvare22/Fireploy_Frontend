@@ -30,6 +30,14 @@ export const getTheme = (mode: PaletteMode) =>
         error: {
           main: "#d05353",
         },
+        background:
+        mode=='light'? {
+          default: '#fffbfb',
+          paper: '#fff'
+        }: {
+          default: '#252323',
+          paper: '#121212'
+        }
       },
       typography: {
         fontFamily: "Open Sans",

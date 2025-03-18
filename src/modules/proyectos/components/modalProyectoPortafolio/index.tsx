@@ -1,6 +1,5 @@
 import { ProjectCardAvatar } from "@modules/general/components/avatar";
 import PortafolioCard from "@modules/general/components/portafolioCard";
-import { Imagenes } from "@modules/general/components/roundedIcon/utils";
 import Score from "@modules/general/components/score";
 import { labelModalProyectoPortafolio } from "@modules/proyectos/enum/labelModalProyectoPortafolio";
 import {
@@ -8,9 +7,19 @@ import {
   ProyectoCard,
 } from "@modules/proyectos/types/proyecto.card";
 import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
-import { Box, Card, Grid2, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  Grid2,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React from "react";
 import CardTecnologia from "../cardTecnologia";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import CloudOffIcon from "@mui/icons-material/CloudOff";
 
 type Props = {
   proyecto?: ProyectoCard;
@@ -18,18 +27,21 @@ type Props = {
 const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto = proyecto1 }) => {
   return (
     <Stack
-      width={"90vw"}
-      maxHeight={"80vh"}
-      sx={{ overflowY: "scroll" }}
-      spacing={2}
+      sx={{ overflowY: "scroll", width: { md: "80vw", xs: "70vw" }, maxHeight: '85vh', backgroundColor: 'none'}}
+      spacing={3}
     >
+      <Box><CardEstado estado={proyecto.estado} /></Box>
       <Box>
         <Typography variant="h4" fontWeight={"bold"}>
           {proyecto.titulo}
         </Typography>
       </Box>
       <Stack direction={"row"} spacing={6}>
-        <Box component={"img"} sx={{ width: 550 }} src={proyecto.imagen} />
+        <Box
+          component={"img"}
+          sx={{ width: { md: 550 } }}
+          src={proyecto.imagen}
+        />
         <Stack spacing={2}>
           <Typography variant="h5" fontWeight={"bold"}>
             {labelModalProyectoPortafolio.calificador}
@@ -42,19 +54,27 @@ const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto = proyecto1 }) => {
             seccion={proyecto.seccion}
             semestre={proyecto.semestre}
           />
-            <Typography variant="h5" fontWeight={"bold"}>{labelModalProyectoPortafolio.tecnologias}</Typography>
-            {
-                proyecto.tecnologias.map(tecnologia => <CardTecnologia tecnologia={tecnologia.imagen}/>)
-            }
+          <Typography variant="h5" fontWeight={"bold"}>
+            {labelModalProyectoPortafolio.tecnologias}
+          </Typography>
+          <Stack direction={"row"} spacing={2}>
+            {proyecto.tecnologias.map((tecnologia) => (
+              <CardTecnologia tecnologia={tecnologia.imagen} />
+            ))}
+          </Stack>
         </Stack>
       </Stack>
 
-      <Stack>
-        <Typography>{labelModalProyectoPortafolio.descripcion}</Typography>
+      <Stack spacing={1}>
+        <Typography variant="h5" fontWeight={"bold"}>
+          {labelModalProyectoPortafolio.descripcion}
+        </Typography>
         <Typography>{proyecto.descripcion}</Typography>
       </Stack>
-      <Stack>
-        <Typography>{labelModalProyectoPortafolio.integrantes}</Typography>
+      <Stack spacing={1}>
+        <Typography variant="h5" fontWeight={"bold"}>
+          {labelModalProyectoPortafolio.integrantes}
+        </Typography>
         <Grid2 container spacing={2}>
           {proyecto.integrantes.map((integrante) => (
             <Grid2 size={{ md: 5 }}>
@@ -66,8 +86,6 @@ const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto = proyecto1 }) => {
     </Stack>
   );
 };
-
-
 
 type CardCalificadorProps = {
   calificador: UsuarioPortafolioCard;
@@ -100,6 +118,48 @@ const CardCalificador: React.FC<CardCalificadorProps> = ({
           </Stack>
           <Typography>{`${materia} / ${grupo} / ${seccion}`}</Typography>
         </Stack>
+      </Stack>
+    </Card>
+  );
+};
+
+type CardEstadoProps = {
+  estado: ProyectoCard['estado'];
+};
+const CardEstado: React.FC<CardEstadoProps> = ({ estado }) => {
+  const theme = useTheme();
+
+  function getColor() {
+    return estado == "A"
+      ? theme.palette.success.light
+      : theme.palette.warning.light;
+  }
+
+  function getLabel() {
+    return (
+      <Stack direction={"row"} alignItems={"center"} spacing={1}>
+        {estado == "A" ? (
+          <>
+            <Typography  fontWeight='bold'>{labelModalProyectoPortafolio.online}</Typography>
+            <CheckCircleOutlineIcon />
+          </>
+        ) : (
+          <>
+            <Typography  fontWeight='bold'>{labelModalProyectoPortafolio.offline}</Typography>
+            <CloudOffIcon />
+          </>
+        )}
+      </Stack>
+    );
+  }
+
+  return (
+    <Card sx={{ backgroundColor: getColor(), color: 'white', paddingY: 1 }}>
+      <Stack direction={"row"} alignItems={"center"} justifyContent={'center'} spacing={2}>
+        {getLabel()}
+        {estado == "A" && (
+          <Button variant="outlined" color="inherit">{labelModalProyectoPortafolio.visitar}</Button>
+        )}
       </Stack>
     </Card>
   );

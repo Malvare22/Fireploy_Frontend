@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import { useSpring, animated } from "@react-spring/web";
-import { Card } from "@mui/material";
+import { Card, SxProps, useTheme } from "@mui/material";
 
 interface FadeProps {
   children: React.ReactElement<any>;
@@ -50,17 +50,6 @@ const Fade = React.forwardRef<HTMLDivElement, FadeProps>(function Fade(
   );
 });
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
 type Props = {
   children: React.ReactNode;
   open: boolean;
@@ -73,6 +62,19 @@ const SpringModal: React.FC<Props> = ({
   handleOpen,
   handleClose,
 }) => {
+  const theme = useTheme();
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: theme.palette.background.default,
+    boxShadow: 24,
+    paddingX: 4,
+    paddingY: 3,
+  } as SxProps;
+
   return (
     <div>
       <Button onClick={handleOpen}>Open modal</Button>
