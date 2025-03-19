@@ -58,9 +58,9 @@ const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto = proyecto1 }) => {
             {labelModalProyectoPortafolio.tecnologias}
           </Typography>
           <Stack direction={"row"} spacing={2}>
-            {proyecto.tecnologias.map((tecnologia) => (
-              <CardTecnologia tecnologia={tecnologia.imagen} />
-            ))}
+              <CardTecnologia tecnologia={proyecto.frontend.imagen} />
+              <CardTecnologia tecnologia={proyecto.backend.imagen} />
+              <CardTecnologia tecnologia={proyecto.dataBase.imagen} />
           </Stack>
         </Stack>
       </Stack>

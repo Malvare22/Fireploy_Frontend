@@ -27,15 +27,17 @@ export enum LabelProjectCard {
 export const ProjectCard: React.FC<ProjectCardProps> = ({
   proyecto = proyecto1,
   tipo = "home",
-  handleOpen = () => {}
+  handleOpen = () => {},
 }) => {
   function getCard() {
     switch (tipo) {
       case "home":
-        return <ProjectCardHome proyecto={proyecto} />
+        return <ProjectCardHome proyecto={proyecto} />;
 
       case "portafolio":
-        return <ProjectCardPortafolio handleOpen={handleOpen} proyecto={proyecto} />;
+        return (
+          <ProjectCardPortafolio handleOpen={handleOpen} proyecto={proyecto} />
+        );
     }
   }
 
@@ -95,12 +97,18 @@ export const ProjectCardHome: React.FC<ProjectCardHomeProps> = ({
           >
             <Typography variant="h6">{LabelProjectCard.tecnologias}</Typography>
             <Box>
-              {proyecto.tecnologias.map((_tecnologia) => (
-                <RoundedIcon
-                  imagen={obtenerImagen["nodejs"].ruta}
-                  nombre={obtenerImagen["nodejs"].nombre}
-                />
-              ))}
+              <RoundedIcon
+                imagen={obtenerImagen[proyecto.frontend.imagen].ruta}
+                nombre={obtenerImagen[proyecto.frontend.imagen].nombre}
+              />
+              <RoundedIcon
+                imagen={obtenerImagen[proyecto.backend.imagen].ruta}
+                nombre={obtenerImagen[proyecto.backend.imagen].nombre}
+              />
+              <RoundedIcon
+                imagen={obtenerImagen[proyecto.dataBase.imagen].ruta}
+                nombre={obtenerImagen[proyecto.dataBase.imagen].nombre}
+              />
             </Box>
           </Box>
         </Box>
@@ -111,7 +119,7 @@ export const ProjectCardHome: React.FC<ProjectCardHomeProps> = ({
 
 export const ProjectCardPortafolio: React.FC<ProjectCardPortafolioProps> = ({
   proyecto,
-  handleOpen
+  handleOpen,
 }) => {
   return (
     <AnimatedCard
@@ -175,12 +183,18 @@ export const ProjectCardPortafolio: React.FC<ProjectCardPortafolioProps> = ({
                   {LabelProjectCard.tecnologias}
                 </Typography>
                 <Box>
-                  {proyecto.tecnologias.map((_tecnologia) => (
-                    <RoundedIcon
-                      imagen={obtenerImagen["nodejs"].ruta}
-                      nombre={obtenerImagen["nodejs"].nombre}
-                    />
-                  ))}
+                  <RoundedIcon
+                    imagen={obtenerImagen[proyecto.frontend.imagen].ruta}
+                    nombre={obtenerImagen[proyecto.frontend.imagen].nombre}
+                  />
+                  <RoundedIcon
+                    imagen={obtenerImagen[proyecto.backend.imagen].ruta}
+                    nombre={obtenerImagen[proyecto.backend.imagen].nombre}
+                  />
+                  <RoundedIcon
+                    imagen={obtenerImagen[proyecto.dataBase.imagen].ruta}
+                    nombre={obtenerImagen[proyecto.dataBase.imagen].nombre}
+                  />
                 </Box>
               </Box>
             </Box>

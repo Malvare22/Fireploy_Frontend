@@ -11,6 +11,7 @@ import mysql from "@modules/general/assets/tecnologias/mySQL.png";
 import nodejs from "@modules/general/assets/tecnologias/nodeJS.png";
 import react from "@modules/general/assets/tecnologias/react.png";
 import springboot from "@modules/general/assets/tecnologias/springBoot.png";
+import angular from "@modules/general/assets/tecnologias/angular.png";
 import ingSistemasLogo from "@modules/general/assets/ufps/ingSistemasLogo.png";
 import ufpsLogo from "@modules/general/assets/ufps/UFPSLogo.png";
 import ufpsLogoCompleto from "@modules/general/assets/ufps/UFPSLogoCompleto.png";
@@ -31,6 +32,7 @@ export const Imagenes = {
   nodejs: nodejs,
   react: react,
   springboot: springboot,
+  angular: angular,
 
   // UFPS
   ing_sistemas_logo: ingSistemasLogo,

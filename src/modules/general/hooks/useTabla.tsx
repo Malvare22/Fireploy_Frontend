@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { StyledTableRow } from "../components/tabla";
 import TablePaginationActions from "@mui/material/TablePagination/TablePaginationActions";
 import InputDeBusqueda from "../components/inputDeBusqueda";
-import { useFiltros } from "./useFiltros";
+import { useFiltros } from "./useFilters";
 
 /**
  * Hook para manejar tablas con filtros, búsqueda, paginación y ordenamiento.
@@ -63,80 +63,7 @@ function useTabla<T extends object>() {
    */
   const [rowsPerPage, setRowsPerPage] = useState(-1);
 
-  type Order = "asc" | "desc";
-
-  /**
-   * Estado que define el ordenamiento de la tabla ("asc" o "desc").
-   */
-  const [order, setOrder] = useState<Order>("asc");
-
-  /**
-   * Estado que define la columna por la que se ordena la tabla.
-   */
-  const [orderBy, setOrderBy] = useState<keyof T | null>(null);
-
-  const { RenderFilters, filterData, setFilterLabels, toggleFilter } =
-    useFiltros<T>();
-
-  /**
-   * Comparador para ordenar los datos en orden descendente.
-   *
-   * @param {T} a - Primer elemento a comparar.
-   * @param {T} b - Segundo elemento a comparar.
-   * @param {keyof T} orderBy - Clave por la que se ordena.
-   * @returns {number} - Retorna -1 si `a < b`, 1 si `a > b`, 0 si son iguales.
-   */
-  function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-    if (b[orderBy] < a[orderBy]) {
-      return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-      return 1;
-    }
-    return 0;
-  }
-
-  /**
-   * Retorna una función de comparación basada en el orden seleccionado.
-   *
-   * @param {"asc" | "desc"} order - Orden de la tabla ("asc" o "desc").
-   * @param {keyof T} orderBy - Clave por la que se ordena.
-   * @returns {(a: T, b: T) => number} - Función de comparación.
-   */
-  function getComparator(
-    order: Order,
-    orderBy: keyof T
-  ): (a: T, b: T) => number {
-    return order === "desc"
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy);
-  }
-
-  /**
-   * Filtra y ordena los datos de la tabla en función de:
-   * - Búsqueda (convierte los datos a string y filtra coincidencias).
-   * - Ordenamiento (si `orderBy` no es `null`).
-   * - Filtros adicionales mediante `filterData`.
-   *
-   * @returns {T[]} - Datos filtrados y ordenados.
-   */
-  const filteredData = useMemo(() => {
-    const searchLowerCase = search.toLowerCase();
-    let bufferData = data ? data : [];
-    if (data != null && search != "")
-      bufferData = data.filter((d) => {
-        const total = JSON.stringify(d, null, 2);
-        return total.toLowerCase().includes(searchLowerCase);
-      });
-
-    if (orderBy != null) {
-      bufferData.sort(getComparator(order, orderBy));
-    }
-
-    bufferData = filterData(bufferData);
-
-    return bufferData;
-  }, [search, data, orderBy, order, toggleFilter]);
+  
 
   /**
    * Maneja el evento de ordenamiento al hacer clic en una cabecera de la tabla.
