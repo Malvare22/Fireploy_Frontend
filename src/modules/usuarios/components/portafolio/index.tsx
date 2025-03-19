@@ -33,6 +33,7 @@ import SpringModal from "@modules/general/components/springModal";
 import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyectoPortafolio";
 import { useFilters } from "@modules/general/hooks/useFilters";
 import useOrderSelect from "@modules/general/hooks/useOrderSelect";
+import { ShowGoal } from "@modules/general/components/portafolioCard";
 
 // interface Props {
 //   usuario: Usuario;
@@ -43,6 +44,8 @@ const Portafolio = () => {
   const usuario = usuarioEjemplo;
 
   const { mode } = useContext(ModeContext);
+
+  const [fase, setFase] = useState(0);
 
   const proyectos: ProyectoCard[] = [
     proyecto1,
@@ -103,6 +106,8 @@ const Portafolio = () => {
   const { handleRequestSort, orderBy, removeSortProperty, stableSort } =
     useOrderSelect<ProyectoCard>();
 
+  const logros = { titulo: "Repositorios en GitHub", valor: "50+" };
+
   return (
     <Box>
       <SpringModal
@@ -126,15 +131,24 @@ const Portafolio = () => {
             src={usuario.fotoDePerfil}
           />
           <Stack spacing={4} direction={"row"}>
-            <Typography variant="h5">{labelPortafolio.proyectos}</Typography>
-            <Typography variant="h5">{labelPortafolio.acercaDe}</Typography>
+            <Button variant="text" onClick={() => setFase(0)}>
+              <Typography variant="h5">{labelPortafolio.proyectos}</Typography>
+            </Button>
+            <Button variant="text" onClick={() => setFase(1)}>
+              <Typography variant="h5">{labelPortafolio.acercaDe}</Typography>
+            </Button>
           </Stack>
           <Stack direction="row" spacing={2}>
             {showSocialNetworks(usuario.redSocial)}
           </Stack>
         </Stack>
       </Card>
-      <Stack direction={{ md: "row", xs: "column" }} spacing={4} marginTop={3}>
+      <Stack
+        direction={{ md: "row", xs: "column" }}
+        spacing={4}
+        marginTop={3}
+        display={fase == 0 ? "flex" : "none"}
+      >
         <Box sx={{ width: { sm: 300, xs: "100%" } }}>
           <Stack spacing={2}>
             <InputLabel>
@@ -196,6 +210,26 @@ const Portafolio = () => {
             ))}
           </Grid2>
         </Box>
+      </Stack>
+      <Stack
+        alignItems={"center"}
+        marginTop={3}
+        spacing={4}
+        display={fase == 1 ? "flex" : "none"}
+      >
+        <Stack spacing={2}>
+          <Typography variant="h4" textAlign={"center"}>
+            {labelPortafolio.acercaDe}
+          </Typography>
+          <Typography variant="body1" textAlign={"center"} width={500}>
+            {usuario.descripcion}
+          </Typography>
+        </Stack>
+        <Stack direction={"row"} spacing={4}>
+          <ShowGoal logro={logros} />
+          <ShowGoal logro={logros} />
+          <ShowGoal logro={logros} />
+        </Stack>
       </Stack>
     </Box>
   );

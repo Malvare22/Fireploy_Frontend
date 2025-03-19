@@ -37,9 +37,9 @@ const PortafolioCard: React.FC<Props> = ({ usuario }) => {
             </Box>
           </Stack>
           {/* <Box sx={{display: {md: 'grid', xs: 'flex'}, flexDirection: {xs: 'column', md: 'row'}, gridTemplateColumns: 'repeat(2, 1fr)', gap: 2}}>
-            <Chart logro={usuario.logros} />
-            <Chart logro={usuario.logros} />
-            <Chart logro={usuario.logros} />
+            <ShowGoal logro={usuario.logros} />
+            <ShowGoal logro={usuario.logros} />
+            <ShowGoal logro={usuario.logros} />
           </Box> */}
         </Box>
       </Box>
@@ -48,11 +48,11 @@ const PortafolioCard: React.FC<Props> = ({ usuario }) => {
   );
 };
 
-type ChartProps = {
+type ShowGoalProps = {
   logro: Logro;
 };
 
-const Chart: React.FC<ChartProps> = ({ logro }) => {
+export const ShowGoal: React.FC<ShowGoalProps> = ({ logro }) => {
   const theme = useTheme();
 
   return (
