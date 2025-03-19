@@ -32,7 +32,7 @@ import useSpringModal from "@modules/general/hooks/useSpringModal";
 import SpringModal from "@modules/general/components/springModal";
 import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyectoPortafolio";
 import { useFilters } from "@modules/general/hooks/useFilters";
-import useOrderSelect from "@modules/general/hooks/useOrderSelect";
+import useOrderSelect, { Order } from "@modules/general/hooks/useOrderSelect";
 import { ShowGoal } from "@modules/general/components/portafolioCard";
 
 // interface Props {
@@ -149,8 +149,8 @@ const Portafolio = () => {
         marginTop={3}
         display={fase == 0 ? "flex" : "none"}
       >
-        <Box sx={{ width: { sm: 300, xs: "100%" } }}>
-          <Stack spacing={2}>
+        <Card sx={{ width: { md: 360, xs: "100%" }, height: "100%" }}>
+          <Stack spacing={2} sx={{ margin: 2, marginBottom: 4 }}>
             <InputLabel>
               <Typography variant="h6" fontWeight={"bold"}>
                 {labelPortafolio.ordenarPor}
@@ -160,34 +160,38 @@ const Portafolio = () => {
               <Typography variant="body1" fontWeight={"bold"}>
                 {labelPortafolio.puntuacion}
               </Typography>
-              <Select>
-                <MenuItem
-                  onClick={() => handleRequestSort("puntuacion", "asc")}
-                >
-                  {labelPortafolio.mayor}
-                </MenuItem>
-                <MenuItem
-                  onClick={() => handleRequestSort("puntuacion", "desc")}
-                >
-                  {labelPortafolio.menor}
-                </MenuItem>
+              <Select
+                onChange={(e) =>
+                  handleRequestSort(
+                    "puntuacion",
+                    (e.target.value as Order) ?? "asc"
+                  )
+                }
+                value={orderBy.puntuacion}
+              >
+                <MenuItem value="asc">{labelPortafolio.mayor}</MenuItem>
+                <MenuItem value="desc">{labelPortafolio.menor}</MenuItem>
               </Select>
             </Stack>
             <Stack>
               <Typography variant="body1" fontWeight={"bold"}>
                 {labelPortafolio.semestre}
               </Typography>
-              <Select>
-                <MenuItem onClick={() => handleRequestSort("semestre", "asc")}>
-                  {labelPortafolio.mayor}
-                </MenuItem>
-                <MenuItem onClick={() => handleRequestSort("semestre", "desc")}>
-                  {labelPortafolio.menor}
-                </MenuItem>
+              <Select
+                onChange={(e) =>
+                  handleRequestSort(
+                    "semestre",
+                    (e.target.value as Order) ?? "asc"
+                  )
+                }
+                value={orderBy.semestre}
+              >
+                <MenuItem value="asc">{labelPortafolio.mayor}</MenuItem>
+                <MenuItem value="desc">{labelPortafolio.menor}</MenuItem>
               </Select>
             </Stack>
           </Stack>
-        </Box>
+        </Card>
         <Box sx={{ flexGrow: 1 }}>
           <Grid2
             container

@@ -1,6 +1,6 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { LabelFooter } from "@modules/general/enums/labelFooter";
-import { obtenerImagen } from "../RoundedIcon/utils";
+import { obtenerImagen } from "../roundedIcon/utils";
 
 /**
  * Componente Footer que muestra información sobre Fireploy,
@@ -9,6 +9,9 @@ import { obtenerImagen } from "../RoundedIcon/utils";
  * @returns {JSX.Element} Estructura del footer con la información distribuida en columnas.
  */
 function Footer(): JSX.Element {
+
+  const theme = useTheme();
+
   return (
     <Box
       sx={{
@@ -17,8 +20,9 @@ function Footer(): JSX.Element {
         justifyContent: "center",
         gap: 8,
         padding: 5,
-        backgroundColor: "customRed.main",
+        backgroundColor: theme.palette.secondary.main,
         color: "white",
+        fontWeight: '550'
       }}
     >
       {/* Columna Fireploy */}
@@ -39,14 +43,14 @@ function Footer(): JSX.Element {
             />
           </Box>
           <Box sx={{ marginLeft: 1 }}>
-            <Typography variant="h5Bold">{LabelFooter.fireploy}</Typography>
+            <Typography variant="h5">{LabelFooter.fireploy}</Typography>
           </Box>
           <Box>
-            <Typography variant="titleBold">®</Typography>
+            <Typography variant="body1">®</Typography>
           </Box>
         </Box>
         <Box>
-          <Typography variant="title2Bold">
+          <Typography variant="body2">
             {LabelFooter.descripcionFireploy}
           </Typography>
         </Box>
@@ -55,28 +59,28 @@ function Footer(): JSX.Element {
       {/* Columna Recursos */}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <Box>
-          <Typography variant="titleBold">{LabelFooter.recursos}</Typography>
+          <Typography variant="h6">{LabelFooter.recursos}</Typography>
         </Box>
         <Box>
-          <Typography variant="title2">{LabelFooter.documentacion}</Typography>
+          <Typography variant="body2">{LabelFooter.documentacion}</Typography>
         </Box>
         <Box>
-          <Typography variant="title2">{LabelFooter.plantillas}</Typography>
+          <Typography variant="body2">{LabelFooter.plantillas}</Typography>
         </Box>
       </Box>
 
       {/* Columna Redes Sociales */}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <Box>
-          <Typography variant="titleBold">
+          <Typography variant="h6">
             {LabelFooter.redesSociales}
           </Typography>
         </Box>
         <Box>
-          <Typography variant="title2">{LabelFooter.linkedin}</Typography>
+          <Typography variant="body2">{LabelFooter.linkedin}</Typography>
         </Box>
         <Box>
-          <Typography variant="title2">{LabelFooter.facebook}</Typography>
+          <Typography variant="body2">{LabelFooter.facebook}</Typography>
         </Box>
       </Box>
 
@@ -90,12 +94,12 @@ function Footer(): JSX.Element {
         }}
       >
         <Box>
-          <Typography variant="titleBold">
+          <Typography variant="h6">
             {LabelFooter.terminosLegales}
           </Typography>
         </Box>
         <Box>
-          <Typography variant="title2Bold">{LabelFooter.licencia}</Typography>
+          <Typography variant="body2">{LabelFooter.licencia}</Typography>
         </Box>
       </Box>
 
@@ -114,7 +118,7 @@ function Footer(): JSX.Element {
         <Box
           component={"img"}
           sx={{
-            width: { lg: "50%", md: "80%", xs: 100 },
+            width: { sm: 90, xs: 100 },
           }}
           src={obtenerImagen["ufps_logo"].ruta}
           alt={obtenerImagen["ufps_logo"].nombre}
@@ -137,7 +141,7 @@ function Footer(): JSX.Element {
         <Box
           component={"img"}
           sx={{
-            width: { lg: "50%", md: "80%", xs: 100 },
+            width: { sm: 90, xs: 100 },
           }}
           src={obtenerImagen["ing_sistemas_logo"].ruta}
           alt={obtenerImagen["ing_sistemas_logo"].nombre}

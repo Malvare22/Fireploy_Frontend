@@ -13,6 +13,7 @@ function Score({ value, setValue }: ScoreProps) {
       onChange={(_event, newValue) => {
         if (setValue) setValue(newValue);
       }}
+      readOnly
     />
   );
 }

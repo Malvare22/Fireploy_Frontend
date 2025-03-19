@@ -15,6 +15,7 @@ import PortafolioCard from "@modules/general/components/portafolioCard";
 import { usuarioPrueba } from "@modules/usuarios/types/usuario.portafolio";
 
 export default function Home() {
+
   return (
     <Box>
       <Stack direction={"column"} spacing={{ xl: 10, xs: 4 }}>

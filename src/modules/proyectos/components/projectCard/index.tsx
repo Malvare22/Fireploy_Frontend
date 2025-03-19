@@ -1,25 +1,19 @@
 import { Box, Tooltip, Typography } from "@mui/material";
 import Link from "@mui/material/Link";
-import { obtenerColorEstado } from "@modules/proyectos/utils/obtenerColorEstado";
-import { Proyecto } from "@modules/proyectos/types/proyecto";
-import { obtenerEstado } from "@modules/proyectos/utils/obtenerEstado";
-import RoundedIcon from "@modules/general/components/RoundedIcon";
-import { repositoriosPrueba } from "@modules/proyectos/test/datos/repositorios.prueba";
-import { rutasProyectos } from "@modules/proyectos/router";
-import { obtenerImagen } from "@modules/general/components/RoundedIcon/utils";
+import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
+import RoundedIcon from "@modules/general/components/roundedIcon";
+import { obtenerImagen } from "@modules/general/components/roundedIcon/utils";
 
 interface Props {
-  proyecto: Proyecto;
+  proyecto: ProyectoCard;
 }
 
-const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
+const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
   return (
     <Box sx={{ backgroundColor: "white", padding: 4, paddingX: { md: 14 } }}>
-      <Link href={rutasProyectos.ver.replace(":id", proyecto.id.toString())}>
-        <Typography variant="h5Bold" color="info">
+        <Typography variant="h5" color="info">
           {proyecto.titulo}
         </Typography>
-      </Link>
       <Box
         sx={{
           display: "flex",
@@ -45,8 +39,8 @@ const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
               gap: 2,
             }}
           >
-            {/* Estado */}
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            Estado
+            {/* <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <Typography variant="h6">Estado:</Typography>
               <Tooltip
                 title={obtenerEstado[proyecto.estadoDeEjecucion]}
@@ -56,17 +50,15 @@ const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
                   sx={{
                     width: 24,
                     height: 24,
-                    backgroundColor: obtenerColorEstado(
-                      proyecto.estadoDeEjecucion
-                    ),
+                    backgroundColor: '',
                     borderRadius: 1,
                   }}
                 />
               </Tooltip>
-            </Box>
+            </Box> */}
 
             {/* Ultima Modificación */}
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            {/* <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <Box>
                 <Typography variant="h6">Última Modificación:</Typography>
               </Box>
@@ -75,7 +67,7 @@ const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
                   {proyecto.fechaUltimaModificacion}
                 </Typography>
               </Box>
-            </Box>
+            </Box> */}
           </Box>
 
           {/* Tecnlogías */}
@@ -88,12 +80,12 @@ const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
               gap: 3,
             }}
           >
-            {proyecto.repositorios.map((_, indice) => (
+            {/* {proyecto.repositorios.map((_, indice) => (
               <RoundedIcon
                 imagen={obtenerImagen[repositoriosPrueba[indice].tecnologia.logo].ruta}
                 nombre={obtenerImagen[repositoriosPrueba[indice].tecnologia.logo].nombre}
               ></RoundedIcon>
-            ))}
+            ))} */}
             <RoundedIcon
               imagen={obtenerImagen['mongodb'].ruta}
               nombre={obtenerImagen['mongodb'].nombre}
@@ -105,4 +97,4 @@ const ProjectCard: React.FC<Props> = ({ proyecto }: Props) => {
   );
 };
 
-export default ProjectCard;
+export default ProjectForList;

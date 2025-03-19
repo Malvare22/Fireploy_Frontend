@@ -1,7 +1,8 @@
 import { useState } from "react";
 
+export type Order = "asc" | "desc";
+
 function useOrderSelect<T extends object>() {
-  type Order = "asc" | "desc";
 
   // Estado: cada propiedad tiene su propio orden independiente
   const [orderBy, setOrderBy] = useState<Record<keyof T, Order>>({} as Record<keyof T, Order>);

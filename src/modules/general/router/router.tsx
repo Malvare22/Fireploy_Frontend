@@ -5,6 +5,9 @@ import Login from "../pages/login";
 import Registrar from "../pages/registro";
 import TablaUsuarios from "@modules/usuarios/components/tablaUsuarios";
 import Portafolio from "@modules/usuarios/components/portafolio";
+import LayoutAuthenticated from "../layouts/auth";
+import Dashboard from "../pages/dashboard";
+import MisProyectos from "@modules/proyectos/pages/misProyectos";
 
 export const rutaBase = "/";
 
@@ -45,3 +48,19 @@ export const routerGeneral: RouteObject = {
     },
   ],
 };
+
+export const authenticatedRoutes: RouteObject = {
+  path: "/app",
+  element: <LayoutAuthenticated />, // Layout para rutas privadas
+  children: [
+    {
+      path: "dashboard",
+      element: <Dashboard />, // Dashboard del usuario
+    },
+    {
+      path: "test1",
+      element: <MisProyectos />, // Dashboard del usuario
+    },
+  ],
+};
+

@@ -1,4 +1,4 @@
-import LayoutStandard from "@modules/general/layouts/standard";
+import LayoutStandard from "@modules/general/layouts/auth";
 import { RouteObject } from "react-router-dom";
 // import ListarMaterias from "../pages/listar";
 import ListarMaterias from "../pages/listar";
