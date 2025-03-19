@@ -14,7 +14,7 @@ function LayoutPrelogin() {
       <NavbarPrelogin />
       <Box
         sx={{
-          paddingX: { sm: 10, xs: 4 },
+          paddingX: { md: 10, xs: 4 },
           backgroundColor:
             mode == "light" ? "#fafafa" : theme.palette.background.default,
           paddingY: 5,

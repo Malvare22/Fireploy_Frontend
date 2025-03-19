@@ -10,6 +10,7 @@ import {
   Button,
   Card,
   Divider,
+  Grid2,
   InputLabel,
   MenuItem,
   Palette,
@@ -31,6 +32,7 @@ import useSpringModal from "@modules/general/hooks/useSpringModal";
 import SpringModal from "@modules/general/components/springModal";
 import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyectoPortafolio";
 import { useFilters } from "@modules/general/hooks/useFilters";
+import useOrderSelect from "@modules/general/hooks/useOrderSelect";
 
 // interface Props {
 //   usuario: Usuario;
@@ -42,7 +44,12 @@ const Portafolio = () => {
 
   const { mode } = useContext(ModeContext);
 
-  const proyectos: ProyectoCard[] = [proyecto1, proyecto2];
+  const proyectos: ProyectoCard[] = [
+    proyecto1,
+    proyecto2,
+    proyecto1,
+    proyecto2,
+  ];
 
   const [selectProyecto, setSelectProyecto] = useState<
     ProyectoCard | undefined
@@ -90,10 +97,11 @@ const Portafolio = () => {
       case "dataBase":
         toggleFilter("dataBase.nombre", value);
         return;
-
-        return;
     }
   };
+
+  const { handleRequestSort, orderBy, removeSortProperty, stableSort } =
+    useOrderSelect<ProyectoCard>();
 
   return (
     <Box>
@@ -126,60 +134,69 @@ const Portafolio = () => {
           </Stack>
         </Stack>
       </Card>
-      <Box>
-        <Box>
-          <InputLabel>
-            <Typography>{labelPortafolio.filtrarPor}</Typography>
-          </InputLabel>
-          <Stack>
-            <InputLabel>{labelPortafolio.semestre}</InputLabel>
-            <Select onChange={(e) => handleFiltro("semestre", e.target.value)}>
-              {proyectos.map((proyecto, key) => (
-                <MenuItem value={proyecto.semestre}>
-                  {proyecto.semestre}
+      <Stack direction={{ md: "row", xs: "column" }} spacing={4} marginTop={3}>
+        <Box sx={{ width: { sm: 300, xs: "100%" } }}>
+          <Stack spacing={2}>
+            <InputLabel>
+              <Typography variant="h6" fontWeight={"bold"}>
+                {labelPortafolio.ordenarPor}
+              </Typography>
+            </InputLabel>
+            <Stack>
+              <Typography variant="body1" fontWeight={"bold"}>
+                {labelPortafolio.puntuacion}
+              </Typography>
+              <Select>
+                <MenuItem
+                  onClick={() => handleRequestSort("puntuacion", "asc")}
+                >
+                  {labelPortafolio.mayor}
                 </MenuItem>
-              ))}
-            </Select>
-          </Stack>
-          <Stack>
-            <InputLabel>{labelPortafolio.frontend}</InputLabel>
-            <Select onChange={(e) => handleFiltro("frontend", e.target.value)}>
-              {proyectos.map((proyecto, key) => (
-                <MenuItem value={proyecto.frontend.nombre}>
-                  {proyecto.frontend.nombre}
+                <MenuItem
+                  onClick={() => handleRequestSort("puntuacion", "desc")}
+                >
+                  {labelPortafolio.menor}
                 </MenuItem>
-              ))}
-            </Select>
-          </Stack>
-          <Stack>
-            <InputLabel>{labelPortafolio.backend}</InputLabel>
-            <Select onChange={(e) => handleFiltro("backend", e.target.value)}>
-              {proyectos.map((proyecto, key) => (
-                <MenuItem value={proyecto.backend.nombre}>
-                  {proyecto.backend.nombre}
+              </Select>
+            </Stack>
+            <Stack>
+              <Typography variant="body1" fontWeight={"bold"}>
+                {labelPortafolio.semestre}
+              </Typography>
+              <Select>
+                <MenuItem onClick={() => handleRequestSort("semestre", "asc")}>
+                  {labelPortafolio.mayor}
                 </MenuItem>
-              ))}
-            </Select>
-          </Stack>
-          <Stack>
-            <InputLabel>{labelPortafolio.database}</InputLabel>
-            <Select onChange={(e) => handleFiltro("dataBase", e.target.value)}>
-              {proyectos.map((proyecto, key) => (
-                <MenuItem value={proyecto.dataBase.nombre}>
-                  {proyecto.dataBase.nombre}
+                <MenuItem onClick={() => handleRequestSort("semestre", "desc")}>
+                  {labelPortafolio.menor}
                 </MenuItem>
-              ))}
-            </Select>
+              </Select>
+            </Stack>
           </Stack>
         </Box>
-        {filterData(proyectos).map((proyecto) => (
-          <ProjectCard
-            tipo="portafolio"
-            handleOpen={() => handleCard(proyecto)}
-            proyecto={proyecto}
-          />
-        ))}
-      </Box>
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid2
+            container
+            spacing={1}
+            rowSpacing={4}
+            justifyContent={"space-between"}
+          >
+            {filterData(stableSort(proyectos)).map((proyecto) => (
+              <Grid2
+                size={{ xl: 4, sm: 6, xs: 12 }}
+                display={"flex"}
+                justifyContent={"center"}
+              >
+                <ProjectCard
+                  tipo="portafolio"
+                  handleOpen={() => handleCard(proyecto)}
+                  proyecto={proyecto}
+                />
+              </Grid2>
+            ))}
+          </Grid2>
+        </Box>
+      </Stack>
     </Box>
   );
 };

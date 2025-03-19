@@ -1,90 +1,81 @@
-import { useState } from 'react'
+import { useState } from "react";
 
 function useOrderSelect<T extends object>() {
-
-  const [data, setData] = useState<T[] | undefined>(undefined);
-
   type Order = "asc" | "desc";
 
-  const [order, setOrder] = useState<Order>("asc");
-
-  const [orderBy, setOrderBy] = useState<(keyof T)[]>([]);
+  // Estado: cada propiedad tiene su propio orden independiente
+  const [orderBy, setOrderBy] = useState<Record<keyof T, Order>>({} as Record<keyof T, Order>);
 
   /**
    * Comparador para ordenar los datos en orden descendente.
-   *
    * @param {T} a - Primer elemento a comparar.
    * @param {T} b - Segundo elemento a comparar.
-   * @param {keyof T} orderBy - Clave por la que se ordena.
+   * @param {keyof T} key - Clave por la que se ordena.
+   * @param {Order} order - Orden actual ("asc" o "desc").
    * @returns {number} - Retorna -1 si `a < b`, 1 si `a > b`, 0 si son iguales.
    */
-  function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-    if (b[orderBy] < a[orderBy]) {
-      return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-      return 1;
-    }
+  function comparator(a: T, b: T, key: keyof T, order: Order) {
+    if (a[key] < b[key]) return order === "asc" ? 1 : -1;
+    if (a[key] > b[key]) return order === "asc" ? -1 : 1;
     return 0;
   }
 
   /**
-   * Retorna una función de comparación basada en el orden seleccionado.
-   *
-   * @param {"asc" | "desc"} order - Orden de la tabla ("asc" o "desc").
-   * @param {keyof T[]} orderBy - Claves por las que se ordena.
+   * Retorna una función de comparación basada en múltiples criterios de ordenación.
+   * @param {Record<keyof T, Order>} orderBy - Objeto con claves y sus respectivos órdenes.
    * @returns {(a: T, b: T) => number} - Función de comparación.
    */
-  function getComparator(
-    order: Order,
-    orderBy: (keyof T)[]
-  ): (a: T, b: T) => number {
+  function getComparator(orderBy: Record<keyof T, Order>): (a: T, b: T) => number {
     return (a, b) => {
-      for (const key of orderBy) {
-        const comparison = descendingComparator(a, b, key);
-        if (comparison !== 0) {
-          return order === "desc" ? comparison : -comparison;
-        }
+      for (const key of Object.keys(orderBy) as (keyof T)[]) {
+        const order = orderBy[key];
+        const comparison = comparator(a, b, key, order);
+        if (comparison !== 0) return comparison;
       }
       return 0;
     };
   }
 
   /**
-   * Función para manejar el cambio de ordenación.
-   *
+   * Función para manejar el cambio de ordenación de una propiedad.
+   * Si la propiedad ya está ordenada, cambia entre "asc" y "desc".
+   * Si no está, se añade con "asc".
    * @param {keyof T} property - La propiedad por la que se ordena.
    */
-  const handleRequestSort = (property: keyof T) => {
-    const isAsc = orderBy.includes(property) && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
+  const handleRequestSort = (property: keyof T, order: Order) => {
+    setOrderBy((prevOrderBy) => ({
+      ...prevOrderBy,
+      [property]: order,
+    }));
+  };
+
+  /**
+   * Función para eliminar una propiedad de la ordenación.
+   * @param {keyof T} property - La propiedad a eliminar.
+   */
+  const removeSortProperty = (property: keyof T) => {
     setOrderBy((prevOrderBy) => {
-      if (prevOrderBy.includes(property)) {
-        return prevOrderBy.filter((key) => key !== property);
-      } else {
-        return [...prevOrderBy, property];
-      }
+      const newOrderBy = { ...prevOrderBy };
+      delete newOrderBy[property];
+      return newOrderBy;
     });
   };
 
   /**
    * Función para ordenar los datos.
-   *
    * @param {T[]} array - Los datos a ordenar.
    * @returns {T[]} - Los datos ordenados.
    */
   const stableSort = (array: T[]) => {
-    if (!orderBy.length) return array;
-    const comparator = getComparator(order, orderBy);
+    if (Object.keys(orderBy).length === 0) return array;
+    const comparator = getComparator(orderBy);
     return array.slice().sort(comparator);
   };
 
   return {
-    data,
-    setData,
-    order,
     orderBy,
     handleRequestSort,
+    removeSortProperty,
     stableSort,
   };
 }

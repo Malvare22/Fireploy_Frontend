@@ -96,7 +96,7 @@ export const proyecto2: ProyectoCard = {
   frontend: { nombre: "Angular", imagen: "angular" },
   backend: { nombre: "Springboot", imagen: "springboot" },
   dataBase: { nombre: "MySQL", imagen: "mysql" },
-  puntuacion: 5,
+  puntuacion: 3,
   calificador: {
     id: "1",
     nombres: "Laura Martínez",
