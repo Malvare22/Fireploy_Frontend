@@ -8,7 +8,6 @@ import { Outlet } from "react-router-dom";
 function LayoutPrelogin() {
   const theme = useTheme();
 
-  const { mode } = useContext(ModeContext);
   return (
     <Box>
       <NavbarPrelogin />
@@ -16,8 +15,9 @@ function LayoutPrelogin() {
         sx={{
           paddingX: { md: 10, xs: 4 },
           backgroundColor:
-            mode == "light" ? "#fafafa" : theme.palette.background.default,
+             theme.palette.background.default,
           paddingY: 5,
+          marginTop: 10,
           display: "flex",
           justifyContent: "center",
           "> div": { width: "100%" },

@@ -64,7 +64,7 @@ function NavbarPrelogin() {
   const navigate = useNavigate();
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed">
       <Container maxWidth="xl" sx={{paddingY: 1}}>
         <Toolbar disableGutters>
           {/* <Box component={'img'} src={obtenerImagen['logo_fireploy'].ruta} alt={obtenerImagen['logo_fireploy'].nombre} sx={{width: 48, height: 48}}/> */}

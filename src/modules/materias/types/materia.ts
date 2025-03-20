@@ -32,8 +32,8 @@ const cursoEjemplo = [
     secciones: seccionesCurso,
     docente: {
       id: 1,
-      nombres: "Juan",
-      apellidos: "Pérez",
+      nombres: "Marco Antonio",
+      apellidos: "Lopez Angarita",
       correo: "juan.perez@example.com",
       fechaDeNacimiento: "1980-05-15",
       estado: "A",

@@ -1,5 +1,19 @@
 import { createTheme, PaletteMode, responsiveFontSizes } from "@mui/material";
 
+declare module "@mui/material/styles" {
+  interface Palette {
+    terciary: {
+      main: string;
+    };
+  }
+
+  interface PaletteOptions {
+    terciary?: {
+      main: string;
+    };
+  }
+}
+
 export const getTheme = (mode: PaletteMode) =>
   responsiveFontSizes(
     createTheme({
@@ -17,6 +31,9 @@ export const getTheme = (mode: PaletteMode) =>
               },
         secondary: {
           main: '#8e3110',
+        },
+        terciary: {
+          main: '#757780'
         },
         info: {
           main: "#5a727f",

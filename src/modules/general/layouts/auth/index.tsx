@@ -18,6 +18,7 @@ function LayoutAuthenticated() {
           backgroundColor:
             mode == "light" ? "#fafafa" : theme.palette.background.default,
           paddingY: 2,
+          marginTop: 10,
           display: "flex",
           justifyContent: "center",
           "> div": { width: "100%" },

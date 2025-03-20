@@ -17,7 +17,7 @@ function ListarCursos() {
       <Typography variant="h4">{labelListarCursos.grupos}</Typography>
       <Grid2 container spacing={4}>
         {materia.cursos.map((curso, key) => (
-          <Grid2 size={{md: 4, sm: 6, xs: 12}}>
+          <Grid2 size={{md: 3, sm: 6, xs: 12}}>
             <CardCurso curso={curso} key={key} />
           </Grid2>
         ))}

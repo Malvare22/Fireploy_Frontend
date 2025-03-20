@@ -39,7 +39,7 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso }) => {
           <Card
             sx={{
               paddingX: 1,
-              backgroundColor: theme.palette.warning.main,
+              backgroundColor: theme.palette.terciary.main,
               color: "white",
               fontWeight: 500,
             }}

@@ -6,6 +6,7 @@ const AnimatedCard: React.FC<CardProps> = ({ children, sx, ...props }) => {
     "&:hover": {
       transform: "scale(1.05)",
     },
+    border: '1px solid rgba(0, 0, 0, 0.3)'
   };
 
   return (
