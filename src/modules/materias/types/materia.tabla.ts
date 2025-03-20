@@ -1,5 +1,4 @@
-import { EstadoMateria } from "./materia.estado";
-import { SemestreMateria } from "./materia.semestre";
+import { EstadoMateria, SemestreMateria } from "./materia";
 
 export type MateriaTabla = {
     id: number,

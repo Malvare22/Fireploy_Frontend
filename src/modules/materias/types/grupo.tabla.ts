@@ -12,7 +12,7 @@ export function adaptarGruposMateria(materia: Materia): GrupoTabla[] {
   if (!materia.cursos) return [];
   return materia.cursos.map((curso) => ({
     cantidadEstudiantes: curso.estudiantes.length,
-    docente: `${curso.docente.nombre} ${curso.docente.apellido}`,
+    docente: `${curso.docente.nombres} ${curso.docente.apellidos}`,
     grupo: curso.grupo,
     id: curso.id,
     semestre: curso.semestre,

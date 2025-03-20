@@ -1,16 +1,13 @@
 import { adaptarFechaBackend } from "@modules/general/utils/fechas";
 import { UsuarioService } from "../types/services.usuario";
-import { Usuario } from "../types/usuario";
-import { EstadoUsuario } from "../types/usuario.estado";
-import { RedSocialUsuario } from "../types/usuario.redSocial";
-import { SexoUsuario } from "../types/usuario.sexo";
-import { TiposUsuario } from "../types/usuario.tipos";
+import { EstadoUsuario, RedSocialUsuario, SexoUsuario, TiposUsuario, Usuario } from "../types/usuario";
 import {
   obtenerLetraTiposUsuario,
   obtenerTiposUsuario,
   TiposUsuarioStringCompleto,
 } from "./usuario.map";
 import { UsuarioCampoBusqueda } from "@modules/general/components/searchUsers/hook";
+import { UsuarioPortafolioCard } from "../types/usuario.portafolio";
 
 export const adaptarUsuario = (usuario: UsuarioService) => {
   const _usuario: Usuario = {
@@ -84,5 +81,15 @@ export function adaptarUsuarioServiceAUsuarioCampoDeBusqueda(usuario: UsuarioSer
     id: usuario.id,
     foto: usuario.foto_perfil,
     nombreCompleto: `${usuario.nombre} ${usuario.apellido}`
+  };
+};
+
+export function adaptarUsuarioAUsuarioCardPortafolio(usuario: Usuario): UsuarioPortafolioCard{
+  return {
+    foto: usuario.fotoDePerfil,
+    nombres: `${usuario.nombres} ${usuario.apellidos}`,
+    id: usuario.id.toString(),
+    rol: usuario.tipo,
+    logros: [{titulo: 'Ejemplo', valor: 'X'}]
   };
 };
