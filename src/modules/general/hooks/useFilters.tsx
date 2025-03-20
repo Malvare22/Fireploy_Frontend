@@ -41,5 +41,5 @@ export const useFilters = <T extends object>() => {
     }, data);
   };
 
-  return { toggleFilter, filterData };
+  return { toggleFilter, filterData, filters };
 };

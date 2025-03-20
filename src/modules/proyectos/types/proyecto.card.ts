@@ -1,6 +1,6 @@
 import { Imagenes } from "@modules/general/components/roundedIcon/utils";
 import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
-import { EstadoProyecto } from "./proyecto.estado";
+import { EstadoProyecto } from "./proyecto.tipo";
 type Tecnologia = { nombre: string; imagen: keyof typeof Imagenes };
 export type ProyectoCard = {
   titulo: string;

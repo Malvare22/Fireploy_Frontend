@@ -1,4 +1,4 @@
-import ProjectCard from "@modules/proyectos/components/projectCard";
+import ProjectCard from "@modules/proyectos/components/projectForList";
 import { LabelProyecto } from "@modules/proyectos/enum/labelProyecto";
 import { proyectosPrueba } from "@modules/proyectos/test/datos/proyectos.prueba";
 import { Box, Button, Divider, Typography } from "@mui/material";
