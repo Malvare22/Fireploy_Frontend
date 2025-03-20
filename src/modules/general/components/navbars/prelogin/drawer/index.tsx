@@ -30,44 +30,44 @@ import { rutasMaterias } from "@modules/materias/router/router";
 type PairIcons = {
   icon: React.ReactNode;
   label: string;
-  url: string;
+  //url: string;
 };
 
 // Definición de las opciones del menú
 const misProyectos: PairIcons = {
   icon: <AccountTreeIcon />,
   label: "Mis Proyectos",
-  url: "misProyectos",
+  //url: "misProyectos",
 };
 
 const miPortafolio: PairIcons = {
   icon: <DocumentScannerIcon />,
   label: "Mi Portafolio",
-  url: "miPortafolio",
+  //url: "miPortafolio",
 };
 
 const usuarios: PairIcons = {
   icon: <SupervisedUserCircleIcon />,
   label: "Usuarios",
-  url: rutasUsuarios.listar,
+  //url: rutasUsuarios.listar,
 };
 
 const materias: PairIcons = {
   icon: <NoteAltIcon />,
   label: "Materias y Cursos",
-  url: rutasMaterias.listar,
+  //url: rutasMaterias.listar,
 };
 
 const proyectos: PairIcons = {
   icon: <CloudCircleIcon />,
   label: "Proyectos",
-  url: rutasProyectos.listar,
+  //url: rutasProyectos.listar,
 };
 
 const safari: PairIcons = {
   icon: <ExploreIcon />,
   label: "Explorar Portafolios",
-  url: rutasUsuarios.buscarPortafolio,
+  // url: rutasUsuarios.buscarPortafolio,
 };
 
 /**
@@ -109,13 +109,12 @@ export default function DrawerCustom() {
   const DrawerList = (
     <Box
       sx={{ width: { xs: 240, md: 280 } }}
-      role="presentation"
       onClick={toggleDrawer(false)}
     >
       <List>
         {admin.map((option, index) => (
           <ListItem key={index} disablePadding>
-            <ListItemButton onClick={() => navigate(option.url)}>
+            <ListItemButton>
               <ListItemIcon
                 sx={{
                   "& svg": {
@@ -126,7 +125,7 @@ export default function DrawerCustom() {
                 {option.icon}
               </ListItemIcon>
               <ListItemText
-                primary={<Typography variant="title2">{option.label}</Typography>}
+                primary={<Typography variant="body2">{option.label}</Typography>}
               />
             </ListItemButton>
           </ListItem>

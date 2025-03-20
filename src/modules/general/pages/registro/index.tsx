@@ -44,7 +44,7 @@ function Registrar() {
     navigate(rutasGeneral.login);
   };
 
-  const { RenderAlertDialog, init } = useQuery<UsuarioService>(
+  const {} = useQuery<UsuarioService>(
     () => registrarUsuarioService(getValues()),
     labelUsuario.registrarUsuario,
     false,

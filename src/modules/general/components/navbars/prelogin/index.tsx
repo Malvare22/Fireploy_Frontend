@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import GeneralButton from "../../buttons";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { Stack, useTheme } from "@mui/material";
@@ -22,6 +22,9 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { ModeContext } from "@modules/general/context/modeContext";
 import { obtenerImagen } from "../../RoundedIcon/utils";
+import DrawerCustom from "./drawer";
+import AccountMenu from "./accountMenu";
+import { AccountContext } from "@modules/general/context/accountContext";
 
 const pages = ["Inicio", "Iniciar Sesión", "Registrarse"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -34,8 +37,7 @@ function NavbarPrelogin() {
     null
   );
 
-  const [anchorElMoreVert, setAnchorElMoreVert] =
-    React.useState<null | HTMLElement>(null);
+  const [session, setSession] = useState<boolean | undefined>(undefined);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -52,40 +54,23 @@ function NavbarPrelogin() {
     setAnchorElUser(null);
   };
 
-  const handleOpenMoreVert = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElMoreVert(event.currentTarget);
-  };
+  const localUser = useContext(AccountContext)?.localUser
 
-  const handleCloseMoreVert = () => {
-    setAnchorElMoreVert(null);
-  };
+  useEffect(()=> {
+    if(localUser) setSession(true)
+      else setSession(false)
+  }, [localUser])
 
   const navigate = useNavigate();
 
-  const { mode, setMode } = useContext(ModeContext);
-
-  const moreVert = [
-    {
-      option: (
-        <Stack direction={'row'} spacing={1}>
-          <Typography>Cambiar Modo</Typography>
-          {mode == "light" ? <LightModeIcon /> : <DarkModeIcon />}
-        </Stack>
-      ),
-      action: () => {
-        const _mode = mode == "light" ? "dark" : "light";
-        setMode(_mode);
-        localStorage.setItem('MODE', _mode);
-      },
-    },
-  ];
-
   return (
     <AppBar position="static">
-      <Container maxWidth="xl">
+      <Container maxWidth="xl" sx={{paddingY: 1}}>
         <Toolbar disableGutters>
           {/* <Box component={'img'} src={obtenerImagen['logo_fireploy'].ruta} alt={obtenerImagen['logo_fireploy'].nombre} sx={{width: 48, height: 48}}/> */}
           {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
+          {session && <DrawerCustom/>}
+
           <Typography
             variant="h6"
             noWrap
@@ -104,7 +89,7 @@ function NavbarPrelogin() {
             FIREPLOY
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          {!session &&<Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -115,7 +100,7 @@ function NavbarPrelogin() {
             >
               <MenuIcon />
             </IconButton>
-            <Menu
+             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
@@ -137,8 +122,7 @@ function NavbarPrelogin() {
                 </MenuItem>
               ))}
             </Menu>
-          </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          </Box>}
           <Typography
             variant="h5"
             noWrap
@@ -155,9 +139,9 @@ function NavbarPrelogin() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            FIREPLOY
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+        {!session && <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page}
@@ -167,7 +151,7 @@ function NavbarPrelogin() {
                 {page}
               </Button>
             ))}
-          </Box>
+          </Box>}
           <Box
             sx={{
               flexGrow: 1,
@@ -176,55 +160,16 @@ function NavbarPrelogin() {
             }}
           >
              <Box>
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
-              sx={{
-                mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              <GeneralButton
+
+             {session ? <AccountMenu/> : <GeneralButton
                 mode={buttonTypes.login}
                 color={"secondary"}
                 onClick={() => navigate(rutasGeneral.login)}
-              />
-            </Typography>
+              />}
           </Box>
-            <IconButton color="inherit" onClick={handleOpenMoreVert}>
-              <MoreVertIcon />
-            </IconButton>
+           
           </Box>
-          <Menu
-            id="menu-appbar"
-            anchorEl={anchorElMoreVert}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "left",
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "left",
-            }}
-            open={Boolean(anchorElMoreVert)}
-            onClose={handleCloseMoreVert}
-            sx={{ display: 'block' }}
-          >
-            {moreVert.map((item, key) => (
-              <MenuItem key={key} onClick={item.action}>
-                <Typography sx={{ textAlign: "center" }}>
-                  {item.option}
-                </Typography>
-              </MenuItem>
-            ))}
-          </Menu>
+         
           {/* <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

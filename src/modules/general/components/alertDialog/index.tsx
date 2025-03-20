@@ -2,11 +2,8 @@ import * as React from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Box } from "@mui/material";
-import GeneralButton from "../buttons";
-import { buttonTypes } from "@modules/general/types/buttons";
+import { Box, Button, Typography } from "@mui/material";
 
 /**
  * @interface Props
@@ -21,8 +18,9 @@ import { buttonTypes } from "@modules/general/types/buttons";
  */
 interface Props {
   title: string;
-  body: React.ReactNode;
-  actions: React.ReactNode;
+  body?: React.ReactNode;
+  textBody?: string;
+  actions?: React.ReactNode;
   open: boolean;
   handleClose: () => void
 }
@@ -31,7 +29,8 @@ const AlertDialog: React.FC<Props> = ({
   title,
   actions,
   open,
-  body
+  body,
+  handleClose,textBody
 }) => {
 
   return (
@@ -41,16 +40,14 @@ const AlertDialog: React.FC<Props> = ({
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <Box sx={{
-          color: 'white'
-        }}>
+        <Box>
           <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
         </Box>
         <DialogContent>
-          {body}
+          {body || <Typography>{textBody}</Typography>}
         </DialogContent>
         <DialogActions>
-          {actions}
+          {!actions ? <Button onClick={handleClose}>Cerrar</Button> : actions}
         </DialogActions>
       </Dialog>
     </React.Fragment>

@@ -14,13 +14,22 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { labelLogin } from "@modules/general/enums/labelLogin";
 import { rutasGeneral } from "@modules/general/router/router";
 import { useForm } from "react-hook-form";
 import useQuery from "@modules/general/hooks/useQuery";
 import { postSignUp, SignUpResponse } from "@modules/general/services/signUp";
+import AlertDialog from "@modules/general/components/alertDialog";
+import { stringify } from "querystring";
+import { useNavigate } from "react-router-dom";
+import {
+  AccountContext,
+  AccountInformation,
+} from "@modules/general/context/accountContext";
+import { obtenerLetraTiposUsuario } from "@modules/usuarios/utils/usuario.map";
+import { TiposUsuario } from "@modules/usuarios/types/usuario.tipos";
 
 function Copyright() {
   return (
@@ -49,27 +58,43 @@ const SignIn: React.FC = () => {
     setSingUp({ ...singUp, [key]: value });
   };
 
-  const { RenderAlertDialog, init, responseData } = useQuery<SignUpResponse>(
-    () => postSignUp(singUp.email, singUp.password),
-    "Iniciar Sesión",
-    false,
-    false
-  );
+  const { handleAlertClose, initQuery, open, responseData } =
+    useQuery<SignUpResponse>(
+      () => postSignUp(singUp.email, singUp.password),
+      false
+    );
 
   const handleQuery = async () => {
-    await init();
+    await initQuery();
   };
 
-  useEffect(()=>{
-    if(responseData){
-      console.log(responseData)
-    }else{
-      
+  const navigate = useNavigate();
+
+  const setLocalUser = useContext(AccountContext)?.setLocalUser;
+
+  useEffect(() => {
+    if (responseData) {
+      localStorage.setItem("ACCOUNT", JSON.stringify(responseData));
+      if (setLocalUser)
+        setLocalUser({
+          foto: responseData.foto,
+          id: responseData.id,
+          nombre: responseData.nombre,
+          tipo: obtenerLetraTiposUsuario.get(responseData.tipo) as TiposUsuario,
+          token: responseData.access_token,
+        });
+      navigate("/app/dashboard");
     }
-  }, [responseData])
+  }, [responseData]);
 
   return (
     <Card sx={{ padding: 2, maxWidth: 600 }}>
+      <AlertDialog
+        handleClose={handleAlertClose}
+        textBody="Combinación de Usuario y Contraseña no encontrados en el sistema"
+        open={open && !responseData}
+        title="Iniciar Sesión"
+      />
       <CssBaseline />
       <div>
         <Box
