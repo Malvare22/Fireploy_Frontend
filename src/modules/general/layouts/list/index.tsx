@@ -14,8 +14,8 @@ const LayoutList: React.FC<LayoutListProps> = ({options, children}) => {
 
   const { mode } = useContext(ModeContext);
   return (
-    <Stack direction={'row'} spacing={6}>
-        <Box sx={{border: '1px solid black', width: 300, minHeight: 400}}>{options}</Box>
+    <Stack direction={{md: 'row', xs: 'column'}} spacing={6}>
+        <Box sx={{ width: 300, height: 400}}>{options}</Box>
         {children}
     </Stack>
   );

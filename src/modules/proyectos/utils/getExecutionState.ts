@@ -21,3 +21,8 @@ export const getColorExecutionState = (state: EstadoEjecucionProyecto) => {
       return theme.palette.warning.main;
   }
 };
+
+export const getExecutionStateArray = Object.entries(getExecutionState) as [
+  EstadoEjecucionProyecto,
+  string
+][];

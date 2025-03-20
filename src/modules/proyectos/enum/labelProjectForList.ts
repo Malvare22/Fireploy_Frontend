@@ -8,5 +8,5 @@ export enum labelProjectForList{
     frontend = 'Frontend',
     database = 'Base de Datos',
     puntuacion = 'Puntuación',
-    ultimaModificacion = 'Última modificación'    
+    fecha = 'Última modificación'    
 }

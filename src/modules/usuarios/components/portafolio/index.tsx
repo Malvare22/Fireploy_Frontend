@@ -103,7 +103,7 @@ const Portafolio = () => {
     }
   };
 
-  const { handleRequestSort, orderBy, removeSortProperty, stableSort } =
+  const { handleRequestSort, orderBy, stableSort } =
     useOrderSelect<ProyectoCard>();
 
   const logros = { titulo: "Repositorios en GitHub", valor: "50+" };

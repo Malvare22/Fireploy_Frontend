@@ -18,15 +18,13 @@ export type BaseDeDatosProyecto = {
 export type TecnologiaRepositorio = {
   id: number;
   nombre: string;
-  versiones: string[];
   logo: keyof typeof Imagenes;
-  tipo: 'F' | 'B' | 'I';
+
 };
 
 export type RepositorioProyecto = {
   id: number;
   url: string;
-  tipo: TipoRepositorio;
   versionDeTecnologia: string;
   variablesDeEntorno: string;
   tecnologia: TecnologiaRepositorio;
@@ -42,7 +40,9 @@ export type Proyecto = {
   estadoDeEjecucion: EstadoEjecucionProyecto;
   estadoDeProyecto: EstadoProyecto;
   baseDeDatos: BaseDeDatosProyecto;
-  repositorios: RepositorioProyecto[];
+  backend?: RepositorioProyecto,
+  frontend?: RepositorioProyecto,
+  integrado?: RepositorioProyecto,
   archivosLogs: ArchivoLog[];
   materiaInformacion: MateriaInformacion;
   fechaUltimaModificacion: string;
@@ -51,36 +51,42 @@ export type Proyecto = {
 export const proyectos: Proyecto[] = [
   {
     id: 1,
-    titulo: "Mi Proyecto 1",
-    descripcion: "Descripción del proyecto 1",
-    calificacion: 5,
-    imagen: "imagen1.jpg",
+    titulo: "Proyecto de Desarrollo Web",
+    descripcion: "Un proyecto para crear una plataforma de comercio electrónico.",
+    calificacion: 4.5,
+    imagen: "proyecto1.jpg",
     url: "https://example.com/proyecto1",
-    estadoDeEjecucion: "F",
+    estadoDeEjecucion: "N",
     estadoDeProyecto: "A",
     baseDeDatos: {
       id: 1,
       usuario: "admin",
       url: "https://db.example.com",
-      contrasenia: "password",
+      contrasenia: "password123",
       tipo: "S",
     },
-    repositorios: [
-      {
+    backend: {
+      id: 1,
+      url: "https://github.com/proyecto1/backend",
+      versionDeTecnologia: "1.0.0",
+      variablesDeEntorno: "API_KEY=123456",
+      tecnologia: {
         id: 1,
-        url: "https://github.com/mi-repositorio-1",
-        tipo: "B",
-        versionDeTecnologia: "1.0.0",
-        variablesDeEntorno: "API_KEY=123456",
-        tecnologia: {
-          id: 1,
-          nombre: "Node.js",
-          versiones: ["14.x", "16.x"],
-          logo: "nodejs",
-          tipo: "B",
-        },
+        nombre: "Node.js",
+        logo: "nodejs",
       },
-    ],
+    },
+    frontend: {
+      id: 2,
+      url: "https://github.com/proyecto1/frontend",
+      versionDeTecnologia: "2.0.0",
+      variablesDeEntorno: "API_KEY=654321",
+      tecnologia: {
+        id: 2,
+        nombre: "React",
+        logo: "react",
+      },
+    },
     archivosLogs: [
       {
         id: 1,
@@ -90,7 +96,7 @@ export const proyectos: Proyecto[] = [
     ],
     materiaInformacion: {
       id: 1,
-      nombre: "Informática",
+      nombre: "Desarrollo Web",
       seccionId: "S001",
       materiaId: "M001",
       cursoId: "C001",
@@ -99,36 +105,31 @@ export const proyectos: Proyecto[] = [
   },
   {
     id: 2,
-    titulo: "Mi Proyecto 2",
-    descripcion: "Descripción del proyecto 2",
-    calificacion: 4,
-    imagen: "imagen2.jpg",
+    titulo: "Proyecto de Análisis de Datos",
+    descripcion: "Un proyecto para analizar grandes volúmenes de datos.",
+    calificacion: 4.7,
+    imagen: "proyecto2.jpg",
     url: "https://example.com/proyecto2",
-    estadoDeEjecucion: "N",
+    estadoDeEjecucion: "F",
     estadoDeProyecto: "I",
     baseDeDatos: {
       id: 2,
       usuario: "admin",
       url: "https://db.example.com",
-      contrasenia: "password",
+      contrasenia: "password456",
       tipo: "N",
     },
-    repositorios: [
-      {
-        id: 2,
-        url: "https://github.com/mi-repositorio-2",
-        tipo: "F",
-        versionDeTecnologia: "2.0.0",
-        variablesDeEntorno: "API_KEY=654321",
-        tecnologia: {
-          id: 2,
-          nombre: "React",
-          versiones: ["17.x", "18.x"],
-          logo: "react",
-          tipo: "F",
-        },
+    backend: {
+      id: 3,
+      url: "https://github.com/proyecto2/backend",
+      versionDeTecnologia: "1.2.0",
+      variablesDeEntorno: "API_KEY=789012",
+      tecnologia: {
+        id: 3,
+        nombre: "Python",
+        logo: "nodejs",
       },
-    ],
+    },
     archivosLogs: [
       {
         id: 2,
@@ -138,11 +139,140 @@ export const proyectos: Proyecto[] = [
     ],
     materiaInformacion: {
       id: 2,
-      nombre: "Matemáticas",
+      nombre: "Análisis de Datos",
       seccionId: "S002",
       materiaId: "M002",
       cursoId: "C002",
     },
     fechaUltimaModificacion: "2023-10-02",
+  },
+  {
+    id: 3,
+    titulo: "Proyecto de Machine Learning",
+    descripcion: "Un proyecto para implementar modelos de aprendizaje automático.",
+    calificacion: 4.8,
+    imagen: "proyecto3.jpg",
+    url: "https://example.com/proyecto3",
+    estadoDeEjecucion: "E",
+    estadoDeProyecto: "A",
+    baseDeDatos: {
+      id: 3,
+      usuario: "admin",
+      url: "https://db.example.com",
+      contrasenia: "password789",
+      tipo: "S",
+    },
+    integrado: {
+      id: 4,
+      url: "https://github.com/proyecto3/integrado",
+      versionDeTecnologia: "1.5.0",
+      variablesDeEntorno: "API_KEY=345678",
+      tecnologia: {
+        id: 4,
+        nombre: "TensorFlow",
+        logo: "springboot",
+      },
+    },
+    archivosLogs: [
+      {
+        id: 3,
+        nombre: "debug.log",
+        url: "https://logs.example.com/debug.log",
+      },
+    ],
+    materiaInformacion: {
+      id: 3,
+      nombre: "Machine Learning",
+      seccionId: "S003",
+      materiaId: "M003",
+      cursoId: "C003",
+    },
+    fechaUltimaModificacion: "2023-10-03",
+  },
+  {
+    id: 4,
+    titulo: "Proyecto de Desarrollo Móvil",
+    descripcion: "Un proyecto para crear una aplicación móvil multiplataforma.",
+    calificacion: 4.6,
+    imagen: "proyecto4.jpg",
+    url: "https://example.com/proyecto4",
+    estadoDeEjecucion: "L",
+    estadoDeProyecto: "I",
+    baseDeDatos: {
+      id: 4,
+      usuario: "admin",
+      url: "https://db.example.com",
+      contrasenia: "password101",
+      tipo: "N",
+    },
+    frontend: {
+      id: 5,
+      url: "https://github.com/proyecto4/frontend",
+      versionDeTecnologia: "3.0.0",
+      variablesDeEntorno: "API_KEY=901234",
+      tecnologia: {
+        id: 5,
+        nombre: "Flutter",
+        logo: "angular",
+      },
+    },
+    archivosLogs: [
+      {
+        id: 4,
+        nombre: "info.log",
+        url: "https://logs.example.com/info.log",
+      },
+    ],
+    materiaInformacion: {
+      id: 4,
+      nombre: "Desarrollo Móvil",
+      seccionId: "S004",
+      materiaId: "M004",
+      cursoId: "C004",
+    },
+    fechaUltimaModificacion: "2023-10-04",
+  },
+  {
+    id: 5,
+    titulo: "Proyecto de DevOps",
+    descripcion: "Un proyecto para automatizar procesos de integración y despliegue.",
+    calificacion: 4.9,
+    imagen: "proyecto5.jpg",
+    url: "https://example.com/proyecto5",
+    estadoDeEjecucion: "N",
+    estadoDeProyecto: "A",
+    baseDeDatos: {
+      id: 5,
+      usuario: "admin",
+      url: "https://db.example.com",
+      contrasenia: "password112",
+      tipo: "S",
+    },
+    backend: {
+      id: 6,
+      url: "https://github.com/proyecto5/backend",
+      versionDeTecnologia: "2.5.0",
+      variablesDeEntorno: "API_KEY=567890",
+      tecnologia: {
+        id: 6,
+        nombre: "Docker",
+        logo: "nodejs",
+      },
+    },
+    archivosLogs: [
+      {
+        id: 5,
+        nombre: "deploy.log",
+        url: "https://logs.example.com/deploy.log",
+      },
+    ],
+    materiaInformacion: {
+      id: 5,
+      nombre: "DevOps",
+      seccionId: "S005",
+      materiaId: "M005",
+      cursoId: "C005",
+    },
+    fechaUltimaModificacion: "2023-10-05",
   },
 ];

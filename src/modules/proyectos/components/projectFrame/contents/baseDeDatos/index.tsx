@@ -1,7 +1,7 @@
 import CustomSelect from "@modules/general/components/customSelect";
 import { ProyectoContext } from "@modules/proyectos/context/proyectoContext";
 import { LabelDatabase } from "@modules/proyectos/enum/labelDatabase";
-import { obtenerTipoBaseDatos } from "@modules/proyectos/utils/baseDeDatos.map";
+import { obtenerTipoBaseDatos } from "@modules/proyectos/utils/getDatabaseTypes";
 import { Box, Button, Divider, MenuItem, Typography } from "@mui/material";
 import { useContext } from "react";
 

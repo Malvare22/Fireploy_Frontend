@@ -1,31 +1,35 @@
-import { ApiResponse } from "@core/services";
-import AlertDialog from "../components/alertDialog";
-import useAlertDialog from "./useAlertDialog";
-import { useState } from "react";
-import { Box } from "@mui/material";
+import { useState, useCallback, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import { rutasGeneral } from "../router/router";
 import { LabelDialog } from "../enums/labelDialog";
-import GeneralButton, { ButtonContainer } from "../components/buttons";
-import { buttonTypes } from "../types/buttons";
+import { ApiResponse } from "@core/services";
+import useAlertDialog from "./useAlertDialog";
+
+/**
+ * Estado inicial del hook
+ */
+const initialState = {
+  stage: 0,
+  responseData: undefined,
+};
+
+/**
+ * Reducer para manejar el estado del hook
+ */
+function reducer(state: any, action: any) {
+  switch (action.type) {
+    case "SET_STAGE":
+      return { ...state, stage: action.payload };
+    case "SET_RESPONSE":
+      return { ...state, responseData: action.payload };
+    default:
+      return state;
+  }
+}
 
 /**
  * Hook para manejar consultas asíncronas con opciones de confirmación y mensajes de éxito/error.
- * @template T - Tipo de datos esperados en la respuesta.
- * @param {() => Promise<ApiResponse<T>>} query - Función que ejecuta la consulta.
- * @param {string} title - Título del cuadro de diálogo de confirmación.
- * @param {boolean} withConfirmation - Indica si se debe mostrar un cuadro de confirmación antes de ejecutar la consulta.
- * @param {boolean} withSuccessMessage - Indica si se debe mostrar un mensaje de éxito tras una consulta exitosa.
- * @param {string} confirmationText - Texto opcional para el mensaje de confirmación.
- * @param {boolean} withReload - Indica si se debe recargar la página después de cerrar el cuadro de diálogo.
- * @param {() => void} successAction - Corresponde a la función a realizar luego de que se ejecute de manera correcta la consulta.
- * @returns {{
- *   responseData: T | undefined;
- *   RenderAlertDialog: () => JSX.Element;
- *   init: () => Promise<void>;
- * }} - Retorna los datos de la consulta, el componente de alerta y la función de inicialización.
  */
-
 export default function useQuery<T>(
   query: () => Promise<ApiResponse<T>>,
   title: string,
@@ -36,48 +40,37 @@ export default function useQuery<T>(
   successAction?: () => void,
   customContent?: React.ReactNode
 ) {
-  const {
-    message,
-    open,
-    setMessage,
-    title: _title,
-    setOpen,
-    setTitle,
-  } = useAlertDialog();
-
-  const [stage, setStage] = useState(0);
-
+  const { message, open, setMessage, title: _title, setOpen, setTitle } = useAlertDialog();
+  const [state, dispatch] = useReducer(reducer, initialState);
   const navigate = useNavigate();
-
-  const [responseData, setResposeData] = useState<T | undefined>(undefined);
 
   const [alertClose, setAlertClose] = useState<() => void>(() => {});
 
   /**
-   * Establecimiento de lo que va a suceder al aceptar luego de aplicada la consulta
-   * En caso de éxito (no se da un código de error), se aplica un refresh de ser deseado
-   * En caso de error, se mira el código de error para establecer posibles soluciones
-   * @param statusCode Código de la respuesta fallida de la consulta
+   * Manejo del cierre de la alerta
    */
-  const onCloseAlert = (statusCode: number | undefined) => {
-    setOpen(false);
-    if (statusCode == undefined) {
-      if (withReload) window.location.reload();
-      if (successAction) successAction();
-    }
-    if (statusCode == 401) {
-      navigate(rutasGeneral.login);
-    }
-  };
+  const onCloseAlert = useCallback(
+    (statusCode: number | undefined) => {
+      setOpen(false);
+      if (statusCode === undefined) {
+        if (withReload) window.location.reload();
+        if (successAction) successAction();
+      }
+      if (statusCode === 401) {
+        navigate(rutasGeneral.login);
+      }
+    },
+    [setOpen, navigate, withReload, successAction]
+  );
 
   /**
-   * Ejecución de la consulta
-   * @returns resultado de la consulta (data)
+   * Ejecución de la consulta asíncrona
    */
-  const queryResponse = async () => {
+  const queryResponse = useCallback(async () => {
     const response = await query();
-    setStage(1);
+    dispatch({ type: "SET_STAGE", payload: 1 });
     setAlertClose(() => () => onCloseAlert(response.error?.statusCode));
+
     if (response.error) {
       setMessage(response.error.message);
       setTitle(LabelDialog.seHaPresentadoUnError);
@@ -87,104 +80,22 @@ export default function useQuery<T>(
         setMessage(LabelDialog.guardadoExitoso);
         if (withSuccessMessage) setOpen(true);
         else setOpen(false);
-        return setResposeData(response.data);
+        dispatch({ type: "SET_RESPONSE", payload: response.data });
       }
     }
-    return setResposeData(undefined);
-  };
+  }, [query, setMessage, setTitle, setOpen, withSuccessMessage, onCloseAlert]);
 
   /**
-   * Iniciador de la ventana modal, en caso de no ser necesaria confirmación para ejecutar
-   * la consulta, se realiza de una vez
+   * Inicialización del proceso de consulta
    */
-  const init = async () => {
+  const init = useCallback(async () => {
     if (!withConfirmation) {
       await queryResponse();
     } else {
-      setStage(0);
+      dispatch({ type: "SET_STAGE", payload: 0 });
       setOpen(true);
     }
-  };
+  }, [withConfirmation, queryResponse, setOpen]);
 
-  /**
-   * Elemento visual para aceptar la ejecución de consultas
-   * @returns {Component} ventana modal de confirmación para aplicar la consulta
-   */
-  const ConfirmationModal = () => {
-    return (
-      <>
-        <AlertDialog
-          open={open}
-          setOpen={setOpen}
-          cuerpo={confirmationText}
-          titulo={title}
-          botones={
-            <ButtonContainer _justifyContent="flex-end">
-              <Box>
-                <GeneralButton
-                  mode={buttonTypes.accept}
-                  withIcon={false}
-                  onClick={() => queryResponse()}
-                />
-              </Box>
-              <Box>
-                <GeneralButton
-                  mode={buttonTypes.cancel}
-                  withIcon={false}
-                  onClick={() => setOpen(false)}
-                />
-              </Box>
-            </ButtonContainer>
-          }
-        >
-          {customContent}
-        </AlertDialog>
-      </>
-    );
-  };
-
-  /**
-   * Elemento visual para la protección del flujo correcto de información de consultas
-   * @returns {Components} ventana modal que muestra si fue correcto o no el resultado
-   * de la consulta
-   */
-  const PostExecutionModal = () => {
-    return (
-      <>
-        <AlertDialog
-          open={open}
-          setOpen={setOpen}
-          cuerpo={message}
-          titulo={_title}
-          botones={
-            <Box>
-              <Box>
-                <GeneralButton
-                  mode={buttonTypes.accept}
-                  withIcon={false}
-                  onClick={alertClose}
-                />
-              </Box>
-            </Box>
-          }
-        />
-      </>
-    );
-  };
-
-  /**
-   * Condicionador de la ventana de dialogo pertinente
-   * @returns {component} Ventana de dialogo a mostrar según la fase
-   */
-  const ValidationRender = () => (
-    <>{stage == 0 ? <ConfirmationModal /> : <PostExecutionModal />}</>
-  );
-
-  /**
-   * Condicionador de renderizado de las ventanas de dialogo
-   * @returns {component} Ventana de dialogo a mostrar según la fase
-   */
-  const RenderAlertDialog = () => <>{open && <ValidationRender />}</>;
-
-  return { responseData, RenderAlertDialog, init };
+  return { responseData: state.responseData, open, init, queryResponse, alertClose, title, confirmationText, customContent, message };
 }

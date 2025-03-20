@@ -1,13 +1,11 @@
-import { Box, Card, Stack, Tooltip, Typography, useTheme } from "@mui/material";
-import RoundedIcon from "@modules/general/components/roundedIcon";
-import { obtenerImagen } from "@modules/general/components/roundedIcon/utils";
+import { Box, Card, Stack, Tooltip, Typography } from "@mui/material";
 import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
 import CardTecnologia from "../cardTecnologia";
 import { labelProjectForList } from "@modules/proyectos/enum/labelProjectForList";
 import {
   getColorExecutionState,
   getExecutionState,
-} from "@modules/proyectos/utils/obtenerEstado";
+} from "@modules/proyectos/utils/getExecutionState";
 
 interface Props {
   proyecto: Proyecto;
