@@ -8,6 +8,7 @@ import Portafolio from "@modules/usuarios/components/portafolio";
 import LayoutAuthenticated from "../layouts/auth";
 import Dashboard from "../pages/dashboard";
 import MisProyectos from "@modules/proyectos/pages/misProyectos";
+import { routerMaterias } from "@modules/materias/router/router";
 
 export const rutaBase = "/";
 
@@ -61,6 +62,8 @@ export const authenticatedRoutes: RouteObject = {
       path: "test1",
       element: <MisProyectos />, // Dashboard del usuario
     },
+    ...(routerMaterias.children || []),
+    
   ],
 };
 

@@ -1,9 +1,15 @@
 import { adaptarUsuario } from "../utils/adaptar.usuario";
 import { UsuarioService } from "./services.usuario";
-import { EstadoUsuario } from "./usuario.estado";
-import { RedSocialUsuario } from "./usuario.redSocial";
-import { SexoUsuario } from "./usuario.sexo";
-import { TiposUsuario } from "./usuario.tipos";
+export type TiposUsuario = "A" | "D" | "E";
+export type SexoUsuario = "F" | "M" | "O";
+export type EstadoUsuario = "A" | "I";
+export type RedSocialUsuario = {
+  facebook?: "" | null | string;
+  instagram?: "" | null | string;
+  linkedin?: "" | null | string;
+  x?: "" | null | string;
+  github?: "" | null | string;
+};
 
 export type Usuario = {
   correo: string;

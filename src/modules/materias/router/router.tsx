@@ -2,9 +2,8 @@ import LayoutStandard from "@modules/general/layouts/auth";
 import { RouteObject } from "react-router-dom";
 // import ListarMaterias from "../pages/listar";
 import ListarMaterias from "../pages/listar";
-import VistaGestionMateria from "../pages/ver";
 
-export const rutaBase = "/materias";
+export const rutaBase = "/app/materias";
 
 export enum rutasMaterias {
   listar = rutaBase + "/listar",
@@ -20,9 +19,6 @@ export const routerMaterias: RouteObject = {
       path: rutasMaterias.listar,
       element: <ListarMaterias/>
     },
-    {
-      path: rutasMaterias.editar,
-      element: <VistaGestionMateria/>
-    },
+
   ],
 };

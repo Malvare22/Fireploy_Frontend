@@ -1,236 +1,102 @@
+import CardMateria from "@modules/materias/components/cardMateria";
+import { Materia, materiasEjemplo } from "@modules/materias/types/materia";
 import {
-  StyledTableCell,
-  StyledTableRow,
-} from "@modules/general/components/tabla";
-import {
-  Box,
-  Paper,
+  Grid2,
+  InputAdornment,
+  MenuItem,
+  Select,
   Stack,
-  Table,
-  TableBody,
-  TableContainer,
-  TableFooter,
-  TableHead,
-  TableSortLabel,
+  TextField,
+  Typography,
 } from "@mui/material";
-import useTabla from "@modules/general/hooks/useTabla";
-import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  labelAvisoCambioEstadoMateria,
-  labelTablaMaterias,
-} from "@modules/materias/enums/labelTablaMaterias";
-import { filtrosMaterias } from "@modules/materias/utils/filtros.materias";
-import {
-  MateriaTabla,
-  materiaTablaBase,
-} from "@modules/materias/types/materia.tabla";
-import useQuery from "@modules/general/hooks/useQuery";
-import { AccountContext } from "@modules/general/context/accountContext";
-import { MateriaService } from "@modules/materias/types/materia.service";
-import {
-  adaptarMateriaServiceAMateriaTabla,
-  adaptarMateriaTablaAMateriaService,
-} from "@modules/materias/utils/adapters/adaptar.materiaService.materia";
-import { obtenerMateriasService } from "@modules/materias/services/obtener.materias.services";
-import SourceIcon from "@mui/icons-material/Source";
-import { rutasMaterias } from "@modules/materias/router/router";
-import GeneralButton from "@modules/general/components/buttons";
-import ModalModificarMateria from "@modules/materias/components/modificarMateria";
-import { editarEstadoMateriaService } from "@modules/materias/services/editar.materia.services";
-import { buttonTypes } from "@modules/general/types/buttons";
-import ActionButton from "@modules/general/components/actionButton";
-import { actionButtonTypes } from "@modules/general/types/actionButtons";
-import { useModal } from "@modules/general/components/modal/hooks/useModal";
-
-export const LabelTablaMaterias = {
-  codigo: "Código",
-  nombreCompleto: "Nombre Completo",
-  tipoUsuario: "Tipo de Usuario",
-  estado: "Estado",
-  proyectos: "Proyectos",
-  porfolio: "Portafolio",
-  listaMaterias: "Lista Materias",
-};
+import SearchIcon from "@mui/icons-material/Search";
+import useOrderSelect, { Order } from "@modules/general/hooks/useOrderSelect";
+import { labelListarMateria } from "@modules/materias/enums/labelListarMateria";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import { useMemo, useState } from "react";
 
 function ListarMaterias() {
-  const {
-    handleRequestSort,
-    order,
-    orderBy,
-    setData,
-    renderData,
-    FillEmptyRows,
-    Pagination,
-    RenderSearchInput,
-    setFilterLabels,
-    RenderFilters,
-  } = useTabla<MateriaTabla>();
+  const materias = [...materiasEjemplo, ...materiasEjemplo, ...materiasEjemplo];
 
-  const token = useContext(AccountContext)?.localUser?.token ?? "";
+  const { handleRequestSort, stableSort } = useOrderSelect<Materia>();
 
-  const {
-    RenderAlertDialog: RenderAlertGetList,
-    init: initGetList,
-    responseData: responseGetList,
-  } = useQuery<MateriaService[]>(
-    () => obtenerMateriasService(token),
-    LabelTablaMaterias.listaMaterias,
-    false,
-    false
-  );
+  const [search, setSearch] = useState<string>("");
 
-  const [materias, setMaterias] = useState<MateriaTabla[]>([]);
-
-  useEffect(() => {
-    if (token == "") return;
-    const consulta = async () => {
-      await initGetList();
-    };
-    consulta();
-  }, [token]);
-
-  useEffect(() => {
-    if (responseGetList == undefined) return;
-    setMaterias(
-      responseGetList.map((materia) =>
-        adaptarMateriaServiceAMateriaTabla(materia)
-      )
-    );
-  }, [responseGetList]);
-
-  useEffect(() => {
-    setData(materias);
-    setFilterLabels(filtrosMaterias(materias));
-  }, [materias]);
-
-  const navigate = useNavigate();
-
-  const [selectMateria, setSelectMateria] =
-    useState<MateriaTabla>(materiaTablaBase);
-
-  const handleVer = (materiaId: number) => {
-    navigate(rutasMaterias.editar.replace(":id", materiaId.toString()));
-  };
-
-  const { handleClose, handleOpen, open } = useModal();
-
-  const { RenderAlertDialog, init } = useQuery<MateriaService>(
-    () =>
-      editarEstadoMateriaService(
-        token,
-        adaptarMateriaTablaAMateriaService(selectMateria)
-      ),
-      labelTablaMaterias.cambiarEstado,
-      true,
-      true,
-      labelAvisoCambioEstadoMateria(selectMateria.nombre, selectMateria.estado),
-      true
-  );
-
-  const handleEstadoMateria = (materia: MateriaTabla) => {
-    setSelectMateria(materia);
-    init();
-  };
+  const filterSearchData = useMemo(() => {
+    if (search != "")
+      return stableSort(materias).filter((materia) =>
+        materia.nombre.toLowerCase().includes(search.toLowerCase())
+      );
+    return stableSort(materias);
+  }, [search]);
 
   return (
-    <>
-      {/* {selectUsuario != undefined && (
-        <ModalEstadoUsuario
-          handleClose={estadoHandleClose}
-          open={estadoOpen}
-          usuario={selectUsuario}
+    <Stack spacing={5}>
+      <Stack
+        direction={"row"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        spacing={2}
+      >
+        <Typography variant="h3" textAlign={"center"}>
+          {labelListarMateria.titulo}
+        </Typography>
+        <MenuBookIcon sx={{ fontSize: 48 }} />
+      </Stack>
+      <Stack
+        direction={{ sm: "row", xs: "column" }}
+        justifyContent={"center"}
+        spacing={1}
+      >
+        <TextField
+          label="Buscar Materia"
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            },
+          }}
+          sx={{ width: { md: 600, xs: "100%" } }}
+          onChange={(e) => setSearch(e.currentTarget.value as string)}
+          value={search}
         />
-      )} */}
-      {/* <ModalUsuario
-        handleClose={handleClose}
-        open={open}
-        handleQuery={() => alert(":D")}
-        tipo="editar"
-        usuario={selectUsuario}
-      /> */}
-      <RenderAlertGetList />
-      <RenderAlertDialog />
-      <ModalModificarMateria
-        handleClose={handleClose}
-        open={open}
-        tipo="crear"
-      />
-      <Box>
-        <Box
-          sx={{ display: "flex", flexDirection: { xl: "row", xs: "column" } }}
+        <Select
+          onChange={(e) => {
+            const selectedValue = JSON.parse(e.target.value as string);
+            handleRequestSort(selectedValue.key, selectedValue.order);
+          }}
+          defaultValue={JSON.stringify({ key: undefined, order: undefined })}
         >
-          <RenderFilters />
-          <Box sx={{ marginY: 0, flex: 1 }}>{RenderSearchInput}</Box>
-        </Box>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <StyledTableRow>
-                <StyledTableCell>
-                  <TableSortLabel
-                    active={orderBy === "id"}
-                    direction={orderBy === "id" ? order : "asc"}
-                    onClick={() => {
-                      handleRequestSort("id");
-                    }}
-                  >
-                    {labelTablaMaterias.idMateria}
-                  </TableSortLabel>
-                </StyledTableCell>
-                <StyledTableCell>{labelTablaMaterias.nombre}</StyledTableCell>
-                <StyledTableCell>{labelTablaMaterias.semestre}</StyledTableCell>
-                <StyledTableCell align="center">
-                  {labelTablaMaterias.acciones}
-                </StyledTableCell>
-              </StyledTableRow>
-            </TableHead>
-            <TableBody>
-              {renderData.map((materia, key) => (
-                <StyledTableRow key={key}>
-                  <StyledTableCell>{materia.id}</StyledTableCell>
-                  <StyledTableCell>{materia.nombre}</StyledTableCell>
-                  <StyledTableCell>{materia.semestre}</StyledTableCell>
-                  <StyledTableCell align="center">
-                    {
-                      <Stack
-                        alignContent={"center"}
-                        direction={"row"}
-                        justifyContent={"center"}
-                      >
-                        <ActionButton
-                          mode={actionButtonTypes.ver}
-                          icon={<SourceIcon />}
-                          onClick={() => handleVer(materia.id)}
-                        />
-                        {materia.estado == "A" ? (
-                          <ActionButton
-                            mode={actionButtonTypes.deshabilitar}
-                            onClick={() => handleEstadoMateria(materia)}
-                          />
-                        ) : (
-                          <ActionButton
-                            mode={actionButtonTypes.habilitar}
-                            onClick={() => handleEstadoMateria(materia)}
-                          />
-                        )}
-                      </Stack>
-                    }
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
-              {FillEmptyRows}
-            </TableBody>
-            <TableFooter>
-              <Pagination />
-            </TableFooter>
-          </Table>
-        </TableContainer>
-      </Box>
-      <Box marginY={2}>
-        <GeneralButton mode={buttonTypes.add} onClick={handleOpen} />
-      </Box>
-    </>
+          <MenuItem
+            value={JSON.stringify({ key: undefined, order: undefined })}
+          >
+            {labelListarMateria.noAplicar}
+          </MenuItem>
+          <MenuItem value={JSON.stringify({ key: "nombre", order: "asc" })}>
+            {labelListarMateria.alfabeticamenteMayor}
+          </MenuItem>
+          <MenuItem value={JSON.stringify({ key: "nombre", order: "desc" })}>
+            {labelListarMateria.alfabeticamenteMenor}
+          </MenuItem>
+          <MenuItem value={JSON.stringify({ key: "semestre", order: "asc" })}>
+            {labelListarMateria.semestreMayor}
+          </MenuItem>
+          <MenuItem value={JSON.stringify({ key: "semestre", order: "desc" })}>
+            {labelListarMateria.semestreMenor}
+          </MenuItem>
+        </Select>
+      </Stack>
+      <Grid2 container spacing={5} paddingX={{md: 10}}>
+        {filterSearchData.map((materia, key) => (
+          <Grid2 size={{ xl: 4, sm: 6, xs: 12 }}>
+            <CardMateria materia={materia} key={key} />
+          </Grid2>
+        ))}
+      </Grid2>
+    </Stack>
   );
 }
 
