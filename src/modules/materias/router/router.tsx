@@ -3,13 +3,15 @@ import { RouteObject } from "react-router-dom";
 // import ListarMaterias from "../pages/listar";
 import ListarMaterias from "../pages/listar";
 import ListarCursos from "../pages/listar/id";
+import VerInformacionCurso from "../pages/listar/id/id";
 
 export const rutaBase = "/app/materias";
 
 export enum rutasMaterias {
   listar = rutaBase + "/listar",
   crear = rutaBase + '/crear',
-  verCursos = rutaBase + '/listar/:id'
+  verCursos = rutaBase + '/listar/:id',
+  verInformacionCursos = rutaBase + '/listar/:id/:id'
 };
 
 export const routerMaterias: RouteObject = {
@@ -23,6 +25,10 @@ export const routerMaterias: RouteObject = {
     {
       path: rutasMaterias.verCursos,
       element: <ListarCursos/>
+    },
+    {
+      path: rutasMaterias.verInformacionCursos,
+      element: <VerInformacionCurso/>
     },
 
   ],

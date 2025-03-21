@@ -29,6 +29,7 @@ const cursoEjemplo = [
     semestre: "2023-1",
     descripcion: "Curso de cálculo multivariable.",
     estado: "A",
+    materia: "POO 1",
     secciones: seccionesCurso,
     docente: {
       id: 1,
@@ -109,6 +110,7 @@ export const materiasEjemplo: Materia[] = [
         descripcion: "Curso de mecánica cuántica.",
         estado: "A",
         secciones: seccionesCurso,
+        materia: "POO 2",
         docente: {
           id: 3,
           nombres: "Carlos",

@@ -10,7 +10,8 @@ export type CursoMateria = {
   estado: EstadoCurso;
   docente: Usuario;
   estudiantes: Usuario[];
-  secciones: SeccionCurso[]
+  secciones: SeccionCurso[],
+  materia: string
 
 };
 
