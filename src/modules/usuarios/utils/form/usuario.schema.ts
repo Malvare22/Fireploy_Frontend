@@ -1,16 +1,12 @@
 import { z } from "zod";
-import {
-  obtenerEstado,
-  obtenerSexo,
-  obtenerTiposUsuario,
-} from "../usuario.map";
 import { fechaSchema } from "./fechaSchema";
+import { getGender, getUserStatus, getUserTypes } from "../usuario.map";
 
 /**
  * Atributo Zod para la validación de Estados de Usuario
  */
 export const estadoUsuarioSchema = z.enum(
-  Array.from(obtenerEstado.keys()) as ["A", "I"],
+  Array.from(getUserStatus.keys()) as ["A", "I"],
   { message: "Ingrese un estado válido" }
 );
 
@@ -18,7 +14,7 @@ export const estadoUsuarioSchema = z.enum(
  * Atributo Zod para la validación de Tipos de Usuario
  */
 export const tiposUsuarioSchema = z.enum(
-  Array.from(obtenerTiposUsuario.keys()) as ["A", "D", "E"],
+  Array.from(getUserTypes.keys()) as ["A", "D", "E"],
   { message: "Ingrese un tipo de usuario válido" }
 );
 
@@ -26,7 +22,7 @@ export const tiposUsuarioSchema = z.enum(
  * Atributo Zod para la validación del sexo de Usuario
  */
 export const sexoUsuarioSchema = z.enum(
-  Array.from(obtenerSexo.keys()) as ["M", "F", "O"],
+  Array.from(getGender.keys()) as ["M", "F", "O"],
   { message: "Ingrese un sexo válido" }
 );
 

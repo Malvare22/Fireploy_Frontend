@@ -9,6 +9,7 @@ import LayoutAuthenticated from "../layouts/auth";
 import Dashboard from "../pages/dashboard";
 import MisProyectos from "@modules/proyectos/pages/misProyectos";
 import { routerMaterias } from "@modules/materias/router/router";
+import { routerUsuarios } from "@modules/usuarios/router/router";
 
 export const rutaBase = "/";
 
@@ -35,14 +36,16 @@ export const routerGeneral: RouteObject = {
     //   path: "recuperar",
     //   element: <CambiarContrasenia />, // Página de login
     // },
-    ,{
-      path: "registrar",
-      element: <Registrar />, // Página de login
-    },
-    {
-      path: "test",
-      element: <TablaUsuarios />, // Página de login
-    },
+    // ,{
+    //   path: "registrar",
+    //   element: <Registrar />, // Página de login
+    // },,
+    ,
+    // {
+    //   path: "test",
+    //   element: <TablaUsuarios />, // Página de login
+    // },
+    ,
     {
       path: "test2",
       element: <Portafolio/> // Página de login
@@ -63,7 +66,7 @@ export const authenticatedRoutes: RouteObject = {
       element: <MisProyectos />, // Dashboard del usuario
     },
     ...(routerMaterias.children || []),
-    
+    ...(routerUsuarios.children || []),
   ],
 };
 

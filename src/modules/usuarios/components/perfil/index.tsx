@@ -1,244 +1,181 @@
-import EditIcon from "@mui/icons-material/Edit";
+import React from "react";
+import { TextField, Typography, Avatar, Stack, Grid2, Paper, useTheme } from "@mui/material";
 import { Usuario } from "@modules/usuarios/types/usuario";
-import { Box, Button, Card, SxProps, Typography } from "@mui/material";
-import ModalUsuario from "@modules/usuarios/components/modalUsuario";
-import { readBreakLine } from "@modules/general/utils/readBreakLine";
-import { breakLine } from "@modules/general/utils/breakLine";
-import { LabelGeneral } from "@modules/general/enums/labelGeneral";
-import Row from "@modules/general/components/row";
-import { LabelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
-import Label from "@modules/general/components/label";
-import { palette } from "@core/themes";
-import {
-  obtenerEstado,
-  obtenerTiposUsuario,
-} from "@modules/usuarios/utils/usuario.map";
-import { useModal } from "@modules/general/components/modal/hooks/useModal";
-import RoundedIcon from "@modules/general/components/RoundedIcon";
-import { obtenerImagen } from "@modules/general/components/RoundedIcon/utils";
+import { labelPerfil } from "@modules/usuarios/enum/labelPerfil";
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
-interface Props {
+interface PerfilProps {
   usuario: Usuario;
 }
 
-const VerPerfil: React.FC<Props> = ({ usuario }) => {
+const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
+
+  const theme = useTheme();
+
   return (
-    <Box
-      sx={{
-        marginY: 0,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        width: "100%",
-      }}
-    >
-      <Perfil usuario={usuario} />
-    </Box>
+    <Stack spacing={3} padding={3} component={Paper}>
+      {/* Información de la Cuenta */}
+     <Stack direction={'row'} alignItems={'center'} spacing={2} justifyContent={'center'}>
+     <Typography variant="h4">{labelPerfil.perfil}</Typography>
+     <AccountBoxIcon sx={{fontSize: 48}}/>
+     </Stack>
+      <Typography variant="h6">{labelPerfil.informacionCuenta}</Typography>
+      <Grid2 container spacing={2}>
+        <Grid2 size={{ md: 9, xs: 12 }}>
+          <Stack
+            spacing={2}
+            direction={{ xs: "column", md: "row" }}
+            sx={{padding: 2 }}
+          >
+            <Stack flex={1}>
+              <TextField
+                fullWidth
+                label={labelPerfil.nombres}
+                value={usuario.nombres}
+              />
+            </Stack>
+
+            <Stack flex={1}>
+              <TextField
+                fullWidth
+                label={labelPerfil.apellidos}
+                value={usuario.apellidos}
+              />
+            </Stack>
+          </Stack>
+
+          <Stack
+            spacing={2}
+            direction={{ xs: "column", md: "row" }}
+            sx={{padding: 2 }}
+          >
+            <Stack flex={1}>
+              <TextField fullWidth label="Correo" value={usuario.correo} />
+            </Stack>
+            <Stack flex={1} spacing={2}>
+              <TextField
+                fullWidth
+                label={labelPerfil.tipo}
+                value={usuario.tipo}
+              />
+              <Box><Button variant="contained" sx={{backgroundColor: theme.palette.terciary.main}}>{labelPerfil.solicitarRolDocente}</Button></Box>
+            </Stack>
+          </Stack>
+        </Grid2>
+        <Grid2 size={{ md: 3, xs: 12 }}>
+          <ProfilePhotoUploader />
+        </Grid2>
+      </Grid2>
+
+      {/* Información Personal */}
+      <Typography variant="h6">{labelPerfil.informacionPersonal}</Typography>
+      <Grid2 container spacing={2}>
+        <Grid2 size={{ md: 6, xs: 12 }}>
+          <TextField
+            fullWidth
+            label={labelPerfil.fechaNacimiento}
+            value={usuario.fechaDeNacimiento}
+          />
+        </Grid2>
+        <Grid2 size={{ md: 6, xs: 12 }}>
+          <TextField fullWidth label={labelPerfil.sexo} value={usuario.sexo} />
+        </Grid2>
+      </Grid2>
+
+      {/* Redes Sociales */}
+      <Typography variant="h6">{labelPerfil.redesSociales}</Typography>
+      <Grid2 container spacing={2}>
+        <Grid2 size={{ md: 6, xs: 12 }}>
+          <TextField
+            fullWidth
+            label={labelPerfil.facebook}
+            value={usuario.redSocial.facebook || ""}
+          />
+        </Grid2>
+        <Grid2 size={{ md: 6, xs: 12 }}>
+          <TextField
+            fullWidth
+            label={labelPerfil.instagram}
+            value={usuario.redSocial.instagram || ""}
+          />
+        </Grid2>
+        <Grid2 size={{ md: 6, xs: 12 }}>
+          <TextField
+            fullWidth
+            label={labelPerfil.linkedin}
+            value={usuario.redSocial.linkedin || ""}
+          />
+        </Grid2>
+        <Grid2 size={{ md: 6, xs: 12 }}>
+          <TextField
+            fullWidth
+            label={labelPerfil.x}
+            value={usuario.redSocial.x || ""}
+          />
+        </Grid2>
+        <Grid2 size={{ md: 6, xs: 12 }}>
+          <TextField
+            fullWidth
+            label={labelPerfil.gitHub}
+            value={usuario.redSocial.github || ""}
+          />
+        </Grid2>
+      </Grid2>
+
+      {/* Descripción */}
+      <Typography variant="h6">{labelPerfil.descripcion}</Typography>
+      <TextField fullWidth multiline rows={4} value={usuario.descripcion} />
+    </Stack>
   );
 };
 
-const Perfil: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
-  const { open, handleOpen, handleClose } = useModal();
+import { useState } from "react";
+import { Button, IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Box, styled } from "@mui/system";
 
-  const Cuerpo = () => {
-    const styleRowRedSocial = {
-      flexDirection: "row",
-      alignItems: "center",
-    } as SxProps;
+const HiddenInput = styled("input")({
+  display: "none",
+});
 
-    return (
-      <Card
-        sx={{
-          padding: 4,
-          backgroundColor: "white",
-          display: "flex",
-          flexDirection: "column",
-          gap: 4,
-          width: "80%",
-          marginTop: 2,
-        }}
-      >
-        <ModalUsuario
-          tipo="editar"
-          open={open}
-          handleClose={handleClose}
-          usuario={usuario}
-        />
+export const ProfilePhotoUploader: React.FC = () => {
+  const [photo, setPhoto] = useState<string | null>(
+    "https://via.placeholder.com/150"
+  );
 
-        {/* Correo */}
-        <Row>
-          <Label width={240}>{LabelUsuario.correo}</Label>
-          <Typography variant="title">{usuario.correo}</Typography>
-        </Row>
+  const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => setPhoto(e.target?.result as string);
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
 
-        {/* Código */}
-        <Row>
-          <Label width={240}>{LabelUsuario.codigo}</Label>
-          <Typography variant="title">{usuario.id}</Typography>
-        </Row>
-
-        {/* Nombres */}
-        <Row>
-          <Label width={240}>{LabelUsuario.nombres}</Label>
-          <Typography variant="title">{usuario.nombres}</Typography>
-        </Row>
-
-        {/* Apellidos */}
-        <Row>
-          <Label width={240}>{LabelUsuario.apellidos}</Label>
-          <Typography variant="title">{usuario.apellidos}</Typography>
-        </Row>
-
-        {/* Rol */}
-        <Row>
-          <Label width={240}>{LabelUsuario.rol}</Label>
-          <Typography variant="title">
-            {obtenerTiposUsuario.get(usuario.tipo)}
-          </Typography>
-        </Row>
-
-        {/* Estado */}
-        <Row>
-          <Label width={240}>{LabelUsuario.estado}</Label>
-          <Typography variant="title">
-            {obtenerEstado.get(usuario.estado)}
-          </Typography>
-        </Row>
-
-        {/* Fecha de nacimiento */}
-        <Row>
-          <Label width={240}>{LabelUsuario.fechaNacimiento}</Label>
-          <Typography variant="title">{usuario.fechaDeNacimiento}</Typography>
-        </Row>
-
-        {/* Fecha de Ingreso */}
-        <Row>
-          <Label width={240}>{LabelUsuario.fechaIngreso}</Label>
-          <Typography variant="title">{usuario.estFechaInicio}</Typography>
-        </Row>
-
-        {/* Redes sociales */}
-        <Row sx={{ alignItems: "start" }}>
-          <Label width={240}>{LabelUsuario.redesSociales}</Label>
-          <Box
-            sx={{
-              display: "flex",
-              gap: 3,
-            }}
-          >
-            {usuario.redSocial.facebook && (
-              <Row sx={styleRowRedSocial}>
-                <RoundedIcon
-                  imagen={obtenerImagen["facebook_logo"].ruta}
-                  nombre={obtenerImagen["facebook_logo"].nombre}
-                  url={usuario.redSocial.facebook}
-                />
-              </Row>
-            )}
-
-            {usuario.redSocial.x && (
-              <Row sx={styleRowRedSocial}>
-                <RoundedIcon
-                  imagen={obtenerImagen["x_logo"].ruta}
-                  nombre={obtenerImagen["x_logo"].nombre}
-                  url={usuario.redSocial.x}
-                />
-              </Row>
-            )}
-
-            {usuario.redSocial.instagram && (
-              <Row sx={styleRowRedSocial}>
-                <RoundedIcon
-                  imagen={obtenerImagen["instagram_logo"].ruta}
-                  nombre={obtenerImagen["instagram_logo"].nombre}
-                  url={usuario.redSocial.instagram}
-                />
-              </Row>
-            )}
-
-            {usuario.redSocial.linkedin && (
-              <Row sx={styleRowRedSocial}>
-                <RoundedIcon
-                  imagen={obtenerImagen["linkedin_logo"].ruta}
-                  nombre={obtenerImagen["linkedin_logo"].nombre}
-                  url={usuario.redSocial.linkedin}
-                />
-              </Row>
-            )}
-          </Box>
-        </Row>
-
-        {/* Descripción */}
-        <Row>
-          <Label width={240}>{LabelUsuario.descripcion}</Label>
-          <Typography variant="title">{usuario.descripcion}</Typography>
-        </Row>
-      </Card>
-    );
+  const handleRemovePhoto = () => {
+    setPhoto(null);
   };
 
   return (
-    <>
-      <Box sx={{ width: "84%" }}>
-        <CuadroPerfil usuario={usuario} handleOpen={handleOpen} tipo="editar" />
-      </Box>
-      <Cuerpo />
-    </>
+    <Stack alignItems="center" spacing={3}>
+      <Avatar src={photo || undefined} sx={{ width: 100, height: 100, border: '1px solid #ddd' }} />
+      <Stack direction="row" spacing={1} alignItems={'center'} justifyContent={'center'}>
+        <label htmlFor="upload-photo">
+          <HiddenInput
+            accept="image/*"
+            id="upload-photo"
+            type="file"
+            onChange={handlePhotoChange}
+          />
+          <Button variant="outlined" component="span">
+            Cambiar foto
+          </Button>
+        </label>
+        <IconButton onClick={handleRemovePhoto} disabled={!photo}>
+          <DeleteIcon sx={{fontSize: 32}}/>
+        </IconButton>
+      </Stack>
+    </Stack>
   );
 };
 
-export const CuadroPerfil: React.FC<{
-  usuario: Usuario;
-  handleOpen?: () => void;
-  tipo?: "editar" | "ver";
-}> = ({ usuario, handleOpen, tipo = "ver" }) => {
-  return (
-    <>
-      <Card sx={{ padding: 4, backgroundColor: palette.customGrey.main }}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: { xs: "column", sm: "row" },
-            alignItems: "center",
-            gap: 4,
-          }}
-        >
-          <Box sx={{ padding: 0.7, backgroundColor: "white" }}>
-            <Box
-              sx={{ height: 120, width: 120 }}
-              component={"img"}
-              src={usuario.fotoDePerfil}
-            ></Box>
-          </Box>
-          <Box sx={{ width: { md: 500 } }}>
-            <Typography variant="h4Bold" color="white">
-              {readBreakLine(
-                breakLine(`${usuario.nombres} ${usuario.apellidos}`, 2)
-              )}
-            </Typography>
-            {tipo == "editar" && (
-              <Box
-                sx={{
-                  marginTop: 1,
-                  display: "flex",
-                  justifyContent: { xs: "center", sm: "start" },
-                }}
-              >
-                <Button
-                  color="primary"
-                  variant="contained"
-                  onClick={handleOpen}
-                  endIcon={<EditIcon />}
-                >
-                  {LabelGeneral.editar}
-                </Button>
-              </Box>
-            )}
-          </Box>
-        </Box>
-      </Card>
-    </>
-  );
-};
-
-export default VerPerfil;
+export default Perfil;

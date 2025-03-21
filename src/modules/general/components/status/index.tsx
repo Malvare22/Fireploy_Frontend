@@ -1,5 +1,5 @@
-import { EstadoCurso } from "@modules/materias/types/estado.curso";
-import { obtenerEstado } from "@modules/usuarios/utils/usuario.map";
+import { EstadoCurso } from "@modules/materias/types/materia";
+import { getUserStatus } from "@modules/usuarios/utils/usuario.map";
 import { Box, Stack, useTheme } from "@mui/material";
 
 type StatusProps = {
@@ -27,7 +27,7 @@ const Status: React.FC<StatusProps> = ({ estado }) => {
           },
         }}
       />
-      <Box>{obtenerEstado.get(estado)}</Box>
+      <Box>{getUserStatus.get(estado)}</Box>
     </Stack>
   );
 };

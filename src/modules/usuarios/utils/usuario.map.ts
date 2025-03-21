@@ -1,45 +1,43 @@
-import { EstadoUsuario } from "../types/usuario.estado";
-import { SexoUsuario } from "../types/usuario.sexo";
-import { TiposUsuario } from "../types/usuario.tipos";
+import { EstadoUsuario, SexoUsuario, TiposUsuario } from "../types/usuario";
 
-const sexoMapData: Record<SexoUsuario, string> = {
+
+const genderMapData: Record<SexoUsuario, string> = {
   M: "Masculino",
   F: "Femenino",
   O: "Otro",
 } as const;
 
-export const obtenerSexo = new Map(
-  Object.entries(sexoMapData) as [SexoUsuario, string][]
+export const getGender = new Map(
+  Object.entries(genderMapData) as [SexoUsuario, string][]
 );
 
-const estadoUsuarioMapData: Record<EstadoUsuario, string> = {
+const userStatusMapData: Record<EstadoUsuario, string> = {
   A: "Activo",
   I: "Inactivo",
 } as const;
 
-export const obtenerEstado = new Map(
-  Object.entries(estadoUsuarioMapData) as [EstadoUsuario, string][]
+export const getUserStatus = new Map(
+  Object.entries(userStatusMapData) as [EstadoUsuario, string][]
 );
 
-export type TiposUsuarioStringCompleto = 'Administrador' | 'Docente' | 'Estudiante';
+export type UserTypeFullString = 'Administrator' | 'Teacher' | 'Student';
 
-const tiposUsuarioMapData: Record<TiposUsuario, TiposUsuarioStringCompleto> = {
-  E: "Estudiante",
-  A: "Administrador",
-  D: "Docente",
+const userTypeMapData: Record<TiposUsuario, UserTypeFullString> = {
+  E: "Student",
+  A: "Administrator",
+  D: "Teacher",
 } as const;
 
-const tiposLetraUsuarioMapData: Record<TiposUsuarioStringCompleto, TiposUsuario> = {
-  Administrador: 'A',
-  Docente: 'D',
-  Estudiante: 'E',
+const userLetterTypeMapData: Record<UserTypeFullString, TiposUsuario> = {
+  Administrator: 'A',
+  Teacher: 'D',
+  Student: 'E',
 } as const;
 
-
-export const obtenerTiposUsuario = new Map(
-  Object.entries(tiposUsuarioMapData) as [TiposUsuario, string][]
+export const getUserTypes = new Map(
+  Object.entries(userTypeMapData) as [TiposUsuario, string][]
 );
 
-export const obtenerLetraTiposUsuario = new Map(
-  Object.entries(tiposLetraUsuarioMapData) as [TiposUsuarioStringCompleto, TiposUsuario][]
+export const getUserLetterTypes = new Map(
+  Object.entries(userLetterTypeMapData) as [UserTypeFullString, TiposUsuario][]
 );

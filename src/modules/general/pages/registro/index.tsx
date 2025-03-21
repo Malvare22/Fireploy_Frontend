@@ -10,10 +10,6 @@ import { UsuarioRegistro } from "@modules/usuarios/types/usuario";
 import RegistroSchema from "@modules/usuarios/utils/form/registro.schema";
 import { UsuarioBaseRegistro } from "@modules/usuarios/utils/form/usuario.base";
 import {
-  obtenerSexo,
-  obtenerTiposUsuario,
-} from "@modules/usuarios/utils/usuario.map";
-import {
   Box,
   Button,
   Card,

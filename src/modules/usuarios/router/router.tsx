@@ -6,7 +6,10 @@
 // import LayoutStandard from "@modules/general/layouts/standard";
 // import BuscarPortafolio from "../pages/buscarPortafolio";
 
-const rutaBase = "/usuarios";
+import { RouteObject } from "react-router-dom";
+import VistaPerfil from "../pages/perfil";
+
+const rutaBase = "/app/usuarios";
 
 export enum rutasUsuarios{
   perfil = rutaBase + "/perfil",
@@ -16,31 +19,15 @@ export enum rutasUsuarios{
   buscarPortafolio = rutaBase + "/portafolios"
 };
 
-// export const routerUsuarios: RouteObject = 
-// {
-//   path: rutaBase,
-//   element: <LayoutStandard />, // Usar el Layout para rutas que necesitan el Navbar
-//   children: [
-//     {
-//       path: rutasUsuarios.perfil,
-//       element: <Perfil />, // Página principal
-//     },
-//     {
-//       path: rutasUsuarios.verPerfilPorId,
-//       element: <PerfilPorId />, // Ver perfil estudiante
-//     },
-//     {
-//       path: rutasUsuarios.listar,
-//       element: <ListarUsuarios />,
-//     },
-//     {
-//       path: rutasUsuarios.verPortafolio,
-//       element: <VerPortafolioPorId/>,
-//     },
-//     {
-//       path: rutasUsuarios.buscarPortafolio,
-//       element: <BuscarPortafolio/>,
-//     }
-//   ]
-// };
+export const routerUsuarios: RouteObject = 
+{
+  path: rutaBase,
+  children: [
+    {
+      path: rutasUsuarios.perfil,
+      element: <VistaPerfil />, // Página principal
+    },
+    
+  ]
+};
 

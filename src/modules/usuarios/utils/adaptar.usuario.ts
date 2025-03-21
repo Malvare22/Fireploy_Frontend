@@ -1,13 +1,9 @@
 import { adaptarFechaBackend } from "@modules/general/utils/fechas";
 import { UsuarioService } from "../types/services.usuario";
 import { EstadoUsuario, RedSocialUsuario, SexoUsuario, TiposUsuario, Usuario } from "../types/usuario";
-import {
-  obtenerLetraTiposUsuario,
-  obtenerTiposUsuario,
-  TiposUsuarioStringCompleto,
-} from "./usuario.map";
 import { UsuarioCampoBusqueda } from "@modules/general/components/searchUsers/hook";
 import { UsuarioPortafolioCard } from "../types/usuario.portafolio";
+import { getUserLetterTypes, getUserTypes, UserTypeFullString } from "./usuario.map";
 
 export const adaptarUsuario = (usuario: UsuarioService) => {
   const _usuario: Usuario = {
@@ -15,8 +11,8 @@ export const adaptarUsuario = (usuario: UsuarioService) => {
     id: usuario.id,
     fechaDeNacimiento: adaptarFechaBackend(usuario.fecha_nacimiento),
     estado: usuario.estado as EstadoUsuario,
-    tipo: obtenerLetraTiposUsuario.get(
-      usuario.tipo as TiposUsuarioStringCompleto
+    tipo: getUserLetterTypes.get(
+      usuario.tipo as UserTypeFullString
     ) as TiposUsuario,
     nombres: usuario.nombre,
     apellidos: usuario.apellido,
@@ -59,7 +55,7 @@ export const adaptarUsuarioSalida = (
     contrasenia: usuario.contrasenia,
     foto_perfil: usuario.fotoDePerfil,
     estado: usuario.estado,
-    tipo: obtenerTiposUsuario.get(usuario.tipo),
+    tipo: getUserTypes.get(usuario.tipo),
     est_fecha_inicio: usuario.estFechaInicio,
   };
   return _usuario;

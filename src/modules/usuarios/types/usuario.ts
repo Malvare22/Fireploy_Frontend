@@ -12,20 +12,107 @@ export type RedSocialUsuario = {
 };
 
 export type Usuario = {
-  correo: string;
   id: number;
-  fechaDeNacimiento: string;
-  estado: EstadoUsuario;
-  tipo: TiposUsuario;
+  correo: string;
   nombres: string;
   apellidos: string;
-  contrasenia?: string;
-  sexo: SexoUsuario;
   fotoDePerfil: string;
+  fechaDeNacimiento: string;
+  sexo: SexoUsuario;
+
+  tipo: TiposUsuario;
+  estFechaInicio: string;
+  estado: EstadoUsuario;
+  
   redSocial: RedSocialUsuario;
   descripcion: string;
-  estFechaInicio: string;
+  
+  contrasenia?: string;
 };
+
+export const usuarios: Usuario[] = [
+  {
+    id: 1,
+    correo: "juan.perez@example.com",
+    nombres: "Juan",
+    apellidos: "Pérez",
+    fotoDePerfil: "https://example.com/juan.jpg",
+    fechaDeNacimiento: "1990-05-15",
+    sexo: "M",
+    tipo: "A",
+    estFechaInicio: "2023-01-01",
+    estado: "A",
+    redSocial: {
+      facebook: "https://facebook.com/juanperez",
+      instagram: "https://instagram.com/juanperez",
+      linkedin: null,
+      x: "https://x.com/juanperez",
+      github: "https://github.com/juanperez",
+    },
+    descripcion: "Desarrollador Full Stack con 5 años de experiencia.",
+  },
+  {
+    id: 2,
+    correo: "maria.gomez@example.com",
+    nombres: "María",
+    apellidos: "Gómez",
+    fotoDePerfil: "https://example.com/maria.jpg",
+    fechaDeNacimiento: "1988-08-21",
+    sexo: "F",
+    tipo: "E",
+    estFechaInicio: "2022-06-15",
+    estado: "A",
+    redSocial: {
+      facebook: null,
+      instagram: "https://instagram.com/mariagomez",
+      linkedin: "https://linkedin.com/in/mariagomez",
+      x: null,
+      github: "",
+    },
+    descripcion: "Especialista en UX/UI y diseño de productos digitales.",
+  },
+  {
+    id: 3,
+    correo: "carlos.rodriguez@example.com",
+    nombres: "Carlos",
+    apellidos: "Rodríguez",
+    fotoDePerfil: "https://example.com/carlos.jpg",
+    fechaDeNacimiento: "1995-02-10",
+    sexo: "M",
+    tipo: "D",
+    estFechaInicio: "2021-09-10",
+    estado: "I",
+    redSocial: {
+      facebook: "",
+      instagram: null,
+      linkedin: "https://linkedin.com/in/carlosrodriguez",
+      x: "https://x.com/carlosrodriguez",
+      github: "https://github.com/carlosrodriguez",
+    },
+    descripcion: "Ingeniero de software con experiencia en backend y bases de datos.",
+  },
+  {
+    id: 4,
+    correo: "ana.lopez@example.com",
+    nombres: "Ana",
+    apellidos: "López",
+    fotoDePerfil: "https://example.com/ana.jpg",
+    fechaDeNacimiento: "1992-12-03",
+    sexo: "F",
+    tipo: "A",
+    estFechaInicio: "2020-04-20",
+    estado: "A",
+    redSocial: {
+      facebook: "https://facebook.com/analopez",
+      instagram: "",
+      linkedin: "https://linkedin.com/in/analopez",
+      x: null,
+      github: null,
+    },
+    descripcion: "Project Manager con experiencia en metodologías ágiles.",
+  },
+];
+
 
 const usuarioServiceEjemplo: UsuarioService = {
   estado: "A",

@@ -28,8 +28,9 @@ import {
   AccountContext,
   AccountInformation,
 } from "@modules/general/context/accountContext";
-import { obtenerLetraTiposUsuario } from "@modules/usuarios/utils/usuario.map";
-import { TiposUsuario } from "@modules/usuarios/types/usuario.tipos";
+import { getUserLetterTypes } from "@modules/usuarios/utils/usuario.map";
+import { TiposUsuario } from "@modules/usuarios/types/usuario";
+
 
 function Copyright() {
   return (
@@ -80,7 +81,7 @@ const SignIn: React.FC = () => {
           foto: responseData.foto,
           id: responseData.id,
           nombre: responseData.nombre,
-          tipo: obtenerLetraTiposUsuario.get(responseData.tipo) as TiposUsuario,
+          tipo: getUserLetterTypes.get(responseData.tipo) as TiposUsuario,
           token: responseData.access_token,
         });
       navigate("/app/dashboard");
