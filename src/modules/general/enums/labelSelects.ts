@@ -6,5 +6,7 @@ export enum labelSelects{
     puntuacionMayor = "Puntuación Mayor",
     puntuacionMenor = "Puntuación Menor",
     noAplicar = "No Aplicar",
-    ordenarPor = 'Ordenar Por'
+    ordenarPor = 'Ordenar Por',
+    mayor = 'Mayor',
+    menor = 'Menor'
 }

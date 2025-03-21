@@ -10,6 +10,7 @@ import {
   Button,
   Card,
   Divider,
+  FormControl,
   Grid2,
   InputLabel,
   MenuItem,
@@ -34,6 +35,7 @@ import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyecto
 import { useFilters } from "@modules/general/hooks/useFilters";
 import useOrderSelect, { Order } from "@modules/general/hooks/useOrderSelect";
 import { ShowGoal } from "@modules/general/components/portafolioCard";
+import { labelSelects } from "@modules/general/enums/labelSelects";
 
 // interface Props {
 //   usuario: Usuario;
@@ -42,10 +44,6 @@ import { ShowGoal } from "@modules/general/components/portafolioCard";
 
 const Portafolio = () => {
   const usuario = usuarioEjemplo;
-
-  const { mode } = useContext(ModeContext);
-
-  const [fase, setFase] = useState(0);
 
   const proyectos: ProyectoCard[] = [
     proyecto1,
@@ -57,8 +55,6 @@ const Portafolio = () => {
   const [selectProyecto, setSelectProyecto] = useState<
     ProyectoCard | undefined
   >(undefined);
-
-  const theme = getTheme(mode as PaletteMode);
 
   const { handleClose, handleOpen, open } = useSpringModal();
 
@@ -124,74 +120,86 @@ const Portafolio = () => {
           padding: 6,
         }}
       >
-        <Stack spacing={3} alignItems={"center"}>
-          <Box
-            component={"img"}
-            sx={{ width: 96, heigth: 96 }}
-            src={usuario.fotoDePerfil}
-          />
-          <Stack spacing={4} direction={"row"}>
-            <Button variant="text" onClick={() => setFase(0)}>
-              <Typography variant="h5">{labelPortafolio.proyectos}</Typography>
-            </Button>
-            <Button variant="text" onClick={() => setFase(1)}>
-              <Typography variant="h5">{labelPortafolio.acercaDe}</Typography>
-            </Button>
+        <Stack spacing={3}>
+          <Stack spacing={3} alignItems={"center"}>
+            <Box
+              component={"img"}
+              sx={{ width: 96, heigth: 96 }}
+              src={usuario.fotoDePerfil}
+            />
+            <Stack alignItems={"center"} marginTop={3} spacing={4}>
+              <Stack spacing={2}>
+                <Typography variant="h4" textAlign={"center"}>
+                  {labelPortafolio.acercaDe}
+                </Typography>
+                <Typography variant="body1" textAlign={"center"} maxWidth={850}>
+                  {usuario.descripcion}
+                </Typography>
+              </Stack>
+            </Stack>
           </Stack>
-          <Stack direction="row" spacing={2}>
-            {showSocialNetworks(usuario.redSocial)}
+          <Stack alignItems={"center"} spacing={3}>
+            <Stack direction="row" spacing={2}>
+              {showSocialNetworks(usuario.redSocial)}
+            </Stack>
+            <Stack direction={"row"} spacing={4}>
+              <ShowGoal logro={logros} />
+              <ShowGoal logro={logros} />
+              <ShowGoal logro={logros} />
+            </Stack>
           </Stack>
         </Stack>
       </Card>
-      <Stack
-        direction={{ md: "row", xs: "column" }}
-        spacing={4}
-        marginTop={3}
-        display={fase == 0 ? "flex" : "none"}
+      <Stack direction={{ md: "row", xs: "column" }} spacing={4} marginTop={3}>
+      <Card sx={{ width: { md: 360, xs: "100%" }, height: "100%" }}>
+  <Stack spacing={2} sx={{ margin: 2, marginBottom: 4 }}>
+    <Typography variant="h6" fontWeight="bold">
+      {labelPortafolio.ordenarPor}
+    </Typography>
+
+    <FormControl variant="standard" sx={{ width: "100%" }}>
+      <InputLabel id="puntuacion-label">
+        {labelPortafolio.puntuacion}
+      </InputLabel>
+      <Select
+        labelId="puntuacion-label"
+        value={orderBy.puntuacion}
+        onChange={(e) =>
+          handleRequestSort("puntuacion", (e.target.value as Order) || undefined)
+        }
+        displayEmpty
       >
-        <Card sx={{ width: { md: 360, xs: "100%" }, height: "100%" }}>
-          <Stack spacing={2} sx={{ margin: 2, marginBottom: 4 }}>
-            <InputLabel>
-              <Typography variant="h6" fontWeight={"bold"}>
-                {labelPortafolio.ordenarPor}
-              </Typography>
-            </InputLabel>
-            <Stack>
-              <Typography variant="body1" fontWeight={"bold"}>
-                {labelPortafolio.puntuacion}
-              </Typography>
-              <Select
-                onChange={(e) =>
-                  handleRequestSort(
-                    "puntuacion",
-                    (e.target.value as Order) ?? "asc"
-                  )
-                }
-                value={orderBy.puntuacion}
-              >
-                <MenuItem value="asc">{labelPortafolio.mayor}</MenuItem>
-                <MenuItem value="desc">{labelPortafolio.menor}</MenuItem>
-              </Select>
-            </Stack>
-            <Stack>
-              <Typography variant="body1" fontWeight={"bold"}>
-                {labelPortafolio.semestre}
-              </Typography>
-              <Select
-                onChange={(e) =>
-                  handleRequestSort(
-                    "semestre",
-                    (e.target.value as Order) ?? "asc"
-                  )
-                }
-                value={orderBy.semestre}
-              >
-                <MenuItem value="asc">{labelPortafolio.mayor}</MenuItem>
-                <MenuItem value="desc">{labelPortafolio.menor}</MenuItem>
-              </Select>
-            </Stack>
-          </Stack>
-        </Card>
+        <MenuItem value="">
+          <em>No aplicar</em>
+        </MenuItem>
+        <MenuItem value="asc">{labelSelects.mayor}</MenuItem>
+        <MenuItem value="desc">{labelSelects.menor}</MenuItem>
+      </Select>
+    </FormControl>
+
+    <FormControl variant="standard" sx={{ width: "100%" }}>
+      <InputLabel id="semestre-label">
+        {labelPortafolio.semestre}
+      </InputLabel>
+      <Select
+        labelId="semestre-label"
+        value={orderBy.semestre}
+        onChange={(e) =>
+          handleRequestSort("semestre", (e.target.value as Order) || undefined)
+        }
+        displayEmpty
+      >
+        <MenuItem value="">
+          <em>No aplicar</em>
+        </MenuItem>
+        <MenuItem value="asc">{labelSelects.mayor}</MenuItem>
+        <MenuItem value="desc">{labelSelects.menor}</MenuItem>
+      </Select>
+    </FormControl>
+  </Stack>
+</Card>
+
+
         <Box sx={{ flexGrow: 1 }}>
           <Grid2
             container
@@ -214,26 +222,6 @@ const Portafolio = () => {
             ))}
           </Grid2>
         </Box>
-      </Stack>
-      <Stack
-        alignItems={"center"}
-        marginTop={3}
-        spacing={4}
-        display={fase == 1 ? "flex" : "none"}
-      >
-        <Stack spacing={2}>
-          <Typography variant="h4" textAlign={"center"}>
-            {labelPortafolio.acercaDe}
-          </Typography>
-          <Typography variant="body1" textAlign={"center"} width={500}>
-            {usuario.descripcion}
-          </Typography>
-        </Stack>
-        <Stack direction={"row"} spacing={4}>
-          <ShowGoal logro={logros} />
-          <ShowGoal logro={logros} />
-          <ShowGoal logro={logros} />
-        </Stack>
       </Stack>
     </Box>
   );

@@ -77,7 +77,6 @@ const SpringModal: React.FC<Props> = ({
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
       <Modal
         aria-labelledby="spring-modal-title"
         aria-describedby="spring-modal-description"
