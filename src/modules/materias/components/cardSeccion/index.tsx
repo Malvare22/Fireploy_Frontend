@@ -1,9 +1,23 @@
-import { Box, Grid2, Stack, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Grid2,
+  MenuItem,
+  Select,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React from "react";
 import { SeccionCurso } from "@modules/materias/types/curso.seccion";
 import AccordionUsage from "@modules/general/components/accordionUsage";
 import { ProjectCardPortafolio } from "@modules/general/components/projectCard";
-import { proyecto1 } from "@modules/proyectos/types/proyecto.card";
+import {
+  proyecto1,
+  ProyectoCard,
+} from "@modules/proyectos/types/proyecto.card";
+import { labelSelects } from "@modules/general/enums/labelSelects";
+import useOrderSelect from "@modules/general/hooks/useOrderSelect";
+import { labelCardSeccion } from "@modules/materias/enums/labelCardSeccion";
 
 type CardSeccionProps = {
   seccion: SeccionCurso;
@@ -14,12 +28,24 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion }) => {
 
   const theme = useTheme();
 
+  const { handleRequestSort, orderBy, stableSort } =
+    useOrderSelect<ProyectoCard>();
+
   const Title = () => {
     return (
       <Stack spacing={1}>
         <Typography variant="h6">{seccion.titulo}</Typography>
         <Box>
-          <Typography display={'inline-block'} sx={{backgroundColor: theme.palette.terciary.main, color: 'white', fontWeight: '500', padding: 0.5}} variant="body2">{`${seccion.fechaDeInicio} - ${seccion.fechaDeCierre}`}</Typography>
+          <Typography
+            display={"inline-block"}
+            sx={{
+              backgroundColor: theme.palette.terciary.main,
+              color: "white",
+              fontWeight: "500",
+              padding: 0.5,
+            }}
+            variant="body2"
+          >{`${seccion.fechaDeInicio} - ${seccion.fechaDeCierre}`}</Typography>
         </Box>
       </Stack>
     );
@@ -27,19 +53,60 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion }) => {
 
   return (
     <AccordionUsage title={<Title />}>
-      <Stack>
+      <Stack spacing={3}>
         <Typography>{seccion.descripcion}</Typography>
-        <Stack sx={{ padding: 3 }} spacing={3}>
-        <Grid2 container sx={{border: '1px solid black'}}>
-        {proyectos.map((proyecto, key) => (
-            <Grid2 size={4}><ProjectCardPortafolio
-            handleOpen={() => {}}
-            proyecto={proyecto}
-            key={key}
-          /></Grid2>
+        <Typography variant="h5">{labelCardSeccion.proyectos}</Typography>
+        <Stack
+          direction={"row"}
+          justifyContent={"end"}
+          alignItems={"center"}
+          spacing={1}
+        >
+          <Typography variant="h6" fontWeight={"bold"}>
+            {labelSelects.ordenarPor}
+          </Typography>
+          <Select
+            onChange={(e) => {
+              const selectedValue = JSON.parse(e.target.value as string);
+              handleRequestSort(selectedValue.key, selectedValue.order);
+            }}
+            defaultValue={JSON.stringify({ key: undefined, order: undefined })}
+            sx={{ width: 300 }}
+          >
+            <MenuItem
+              value={JSON.stringify({ key: undefined, order: undefined })}
+            >
+              {labelSelects.noAplicar}
+            </MenuItem>
+            <MenuItem value={JSON.stringify({ key: "titulo", order: "asc" })}>
+              {labelSelects.alfabeticamenteMayor}
+            </MenuItem>
+            <MenuItem value={JSON.stringify({ key: "titulo", order: "desc" })}>
+              {labelSelects.alfabeticamenteMenor}
+            </MenuItem>
+            <MenuItem
+              value={JSON.stringify({ key: "puntuacion", order: "asc" })}
+            >
+              {labelSelects.puntuacionMayor}
+            </MenuItem>
+            <MenuItem
+              value={JSON.stringify({ key: "puntuacion", order: "desc" })}
+            >
+              {labelSelects.puntuacionMenor}
+            </MenuItem>
+          </Select>
+        </Stack>
+        <Grid2 container sx={{ padding: 2 }}>
+          {stableSort(proyectos).map((proyecto, key) => (
+            <Grid2 size={{lg: 4, sm: 6, xs: 12}} display={'flex'} justifyContent={'center'}>
+              <ProjectCardPortafolio
+                handleOpen={() => {}}
+                proyecto={proyecto}
+                key={key}
+              />
+            </Grid2>
           ))}
         </Grid2>
-        </Stack>
       </Stack>
     </AccordionUsage>
   );

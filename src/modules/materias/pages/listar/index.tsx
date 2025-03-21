@@ -10,10 +10,11 @@ import {
   Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import useOrderSelect, { Order } from "@modules/general/hooks/useOrderSelect";
+import useOrderSelect from "@modules/general/hooks/useOrderSelect";
 import { labelListarMateria } from "@modules/materias/enums/labelListarMateria";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import { useMemo, useState } from "react";
+import { labelSelects } from "@modules/general/enums/labelSelects";
 
 function ListarMaterias() {
   const materias = [...materiasEjemplo, ...materiasEjemplo, ...materiasEjemplo];
@@ -73,19 +74,19 @@ function ListarMaterias() {
           <MenuItem
             value={JSON.stringify({ key: undefined, order: undefined })}
           >
-            {labelListarMateria.noAplicar}
+            {labelSelects.noAplicar}
           </MenuItem>
           <MenuItem value={JSON.stringify({ key: "nombre", order: "asc" })}>
-            {labelListarMateria.alfabeticamenteMayor}
+            {labelSelects.alfabeticamenteMayor}
           </MenuItem>
           <MenuItem value={JSON.stringify({ key: "nombre", order: "desc" })}>
-            {labelListarMateria.alfabeticamenteMenor}
+            {labelSelects.alfabeticamenteMenor}
           </MenuItem>
           <MenuItem value={JSON.stringify({ key: "semestre", order: "asc" })}>
-            {labelListarMateria.semestreMayor}
+            {labelSelects.semestreMayor}
           </MenuItem>
           <MenuItem value={JSON.stringify({ key: "semestre", order: "desc" })}>
-            {labelListarMateria.semestreMenor}
+            {labelSelects.semestreMenor}
           </MenuItem>
         </Select>
       </Stack>
