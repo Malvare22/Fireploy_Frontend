@@ -1,4 +1,4 @@
-import { LabelLogs } from "@modules/proyectos/enum/labelLogs";
+import { labelLogs } from "@modules/proyectos/enum/labelLogs";
 import {
   Box,
   Divider,
@@ -12,19 +12,19 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
 import { generateLog } from "@modules/proyectos/utils/generateLog";
 import { capitalizeFirstLetter } from "@modules/general/utils/capitalCase";
-import { archivosLogsPrueba } from "@modules/proyectos/test/datos/archivosLog.prueba";
 import { ArchivoLog } from "@modules/proyectos/types/archivoLog.tipo";
+import { archivosLogsPrueba } from "@modules/proyectos/test/datos/archivosLog.prueba";
 
-function ArchivosLogs() {
+function LogsFiles() {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
       <Box>
-        <Typography variant="h3Bold">{LabelLogs.titulo}</Typography>
+        <Typography variant="h6">{labelLogs.titulo}</Typography>
         <Divider />
       </Box>
       <Box>
-        <Typography variant="body">{LabelLogs.parrafo}</Typography>
+        <Typography variant="body1">{labelLogs.parrafo}</Typography>
       </Box>
       <Container />
     </Box>
@@ -34,17 +34,17 @@ function ArchivosLogs() {
 const Container = () => {
   const [page, setPage] = useState(1);
 
-  const archivosLogs = archivosLogsPrueba;
+  const logsFiles = archivosLogsPrueba;
 
   const totalPages = useMemo(() => {
-    return Math.ceil(archivosLogs.length / 3.0);
+    return Math.ceil(logsFiles.length / 3.0);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getCurrentLogs = useMemo(() => {
     const left = (page - 1) * 3;
 
-    return archivosLogs.slice(left, left + 3);
+    return logsFiles.slice(left, left + 3);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
@@ -99,23 +99,23 @@ const CardLog: React.FC<{
         >
           <Box sx={{ marginBottom: 2 }}>
           <Box sx={{ display: "flex", marginBottom: 1 }}>
-              <Typography variant="titleBold">{LabelLogs.instancia}</Typography>
-              <Typography variant="title" marginLeft={1}>
+              <Typography variant="body1">{labelLogs.instancia}</Typography>
+              <Typography variant="body1" marginLeft={1}>
                 {capitalizeFirstLetter(currentLog.instancia)}
               </Typography>
             </Box>
             <Box sx={{ display: "flex", marginBottom: 1 }}>
-              <Typography variant="titleBold">{LabelLogs.fecha}</Typography>
-              <Typography variant="title" marginLeft={1}>
+              <Typography variant="body1">{labelLogs.fecha}</Typography>
+              <Typography variant="body1" marginLeft={1}>
                 {currentLog.fecha}
               </Typography>
             </Box>
             <Box>
-              <Typography variant="body">{currentLog.mensaje}</Typography>
+              <Typography variant="body1">{currentLog.mensaje}</Typography>
             </Box>
           </Box>
           <Box sx={{ display: "flex", alignItems: 'center' }}>
-            <Tooltip title={LabelLogs.verDetalles} placement="top">
+            <Tooltip title={labelLogs.verDetalles} placement="top">
               <IconButton onClick={() => setOpen(!open)}>
                 <ExpandCircleDownIcon
                   sx={{
@@ -126,7 +126,7 @@ const CardLog: React.FC<{
                 />
               </IconButton>
             </Tooltip>
-            <Tooltip placement="top" title={LabelLogs.descargar}>
+            <Tooltip placement="top" title={labelLogs.descargar}>
               <IconButton onClick={() => generateLog(currentLog)}>
                 <FileDownloadIcon sx={{ fontSize: 32 }} />
               </IconButton>
@@ -158,7 +158,7 @@ const CardLog: React.FC<{
               transition: "padding 0.4s ease", // Transición suave para el padding
             }}
           >
-            <Typography variant="body">{currentLog.detalles}</Typography>
+            <Typography variant="body1">{currentLog.detalles}</Typography>
           </Box>
         </Box>
       </Box>
@@ -167,4 +167,4 @@ const CardLog: React.FC<{
   );
 };
 
-export default ArchivosLogs;
+export default LogsFiles;

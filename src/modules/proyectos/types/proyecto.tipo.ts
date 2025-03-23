@@ -1,4 +1,5 @@
 import { Imagenes } from "@modules/general/components/roundedIcon/utils";
+import { Usuario } from "@modules/usuarios/types/usuario";
 
 export type EstadoEjecucionProyecto = "F" | "N" | "E" | "L";
 export type EstadoProyecto = "A" | "I"; // Ejemplo, ajusta según tus necesidades
@@ -8,7 +9,7 @@ export type MateriaInformacion = { id: number; nombre: string, seccionId: string
 export type TipoRepositorio = 'B' | 'F' | 'I'
 
 export type BaseDeDatosProyecto = {
-    id: number;
+    id?: number;
     usuario: string;
     url: string;
     contrasenia: string;
@@ -23,11 +24,11 @@ export type TecnologiaRepositorio = {
 };
 
 export type RepositorioProyecto = {
-  id: number;
+  id?: number;
   url: string;
   versionDeTecnologia: string;
   variablesDeEntorno: string;
-  tecnologia: TecnologiaRepositorio;
+  tecnologia?: TecnologiaRepositorio;
 };
 
 export type Proyecto = {
@@ -43,9 +44,10 @@ export type Proyecto = {
   backend?: RepositorioProyecto,
   frontend?: RepositorioProyecto,
   integrado?: RepositorioProyecto,
-  archivosLogs: ArchivoLog[];
+  archivosLogs?: ArchivoLog[];
   materiaInformacion: MateriaInformacion;
-  fechaUltimaModificacion: string;
+  fechaUltimaModificacion?: string;
+  colaboradores?: Usuario[]
 };
 
 export const proyectos: Proyecto[] = [

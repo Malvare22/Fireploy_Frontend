@@ -1,4 +1,4 @@
-export enum LabelLogs{
+export enum labelLogs{
     titulo = 'Logs & Mensajes',
     parrafo = 'Los Logs corresponden a mensajes sobre eventos ocurridos en tús instancias. Brindan una visión sobre las actividades de los sistemas de tu aplicativo.',
     fecha = 'Fecha:',

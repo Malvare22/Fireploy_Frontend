@@ -10,6 +10,7 @@ import Dashboard from "../pages/dashboard";
 import MisProyectos from "@modules/proyectos/pages/misProyectos";
 import { routerMaterias } from "@modules/materias/router/router";
 import { routerUsuarios } from "@modules/usuarios/router/router";
+import { routerProyectos } from "@modules/proyectos/router";
 
 export const rutaBase = "/";
 
@@ -67,6 +68,7 @@ export const authenticatedRoutes: RouteObject = {
     },
     ...(routerMaterias.children || []),
     ...(routerUsuarios.children || []),
+    ...(routerProyectos.children || []),
   ],
 };
 
