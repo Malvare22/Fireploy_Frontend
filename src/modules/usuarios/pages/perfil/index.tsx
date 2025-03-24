@@ -34,7 +34,7 @@ function VistaPerfil() {
 
   return (
     <Box paddingX={0}>
-      {error && <AlertDialog handleAction={handleAlertClose} open={open} setOpen={setOpen} title="Información Perfil" textBody={message}/>}
+      {error && <AlertDialog title="Información Perfil" textBody={message} handleAccept={handleAlertClose} open={open}/>}
       {usuario && <VerPerfil usuario={usuario} />}
     </Box>
   );

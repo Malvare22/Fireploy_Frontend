@@ -1,7 +1,7 @@
 import AnimatedCard from "@modules/general/components/animatedCard";
 import {
   Imagenes,
-  obtenerImagen,
+  getImage,
 } from "@modules/general/components/roundedIcon/utils";
 import { Box, Card, Stack, Typography, useTheme } from "@mui/material";
 
@@ -43,7 +43,7 @@ const CardTecnologia: React.FC<CardTecnologiaProps> = ({ tecnologia }) => {
           fontWeight={"bold"}
           display={"inline-block"}
         >
-          {obtenerImagen[tecnologia].nombre}
+          {getImage[tecnologia].nombre}
         </Typography>
         <Card
           sx={{
@@ -57,7 +57,7 @@ const CardTecnologia: React.FC<CardTecnologiaProps> = ({ tecnologia }) => {
           <Box
             component={"img"}
             sx={{ height: 32 }}
-            src={obtenerImagen[tecnologia].ruta}
+            src={getImage[tecnologia].ruta}
           />
         </Card>
       </Stack>

@@ -15,6 +15,7 @@ import angular from "@modules/general/assets/tecnologias/angular.png";
 import ingSistemasLogo from "@modules/general/assets/ufps/ingSistemasLogo.png";
 import ufpsLogo from "@modules/general/assets/ufps/UFPSLogo.png";
 import ufpsLogoCompleto from "@modules/general/assets/ufps/UFPSLogoCompleto.png";
+import defaultProfileImage from "@modules/general/assets/profile/defaultProfileImage.png";
 
 export const Imagenes = {
   // Fireploy
@@ -38,11 +39,13 @@ export const Imagenes = {
   ing_sistemas_logo: ingSistemasLogo,
   ufps_logo: ufpsLogo,
   ufps_logo_completo: ufpsLogoCompleto,
+
+  defaultProfileImage: defaultProfileImage
 } as const; // "as const" asegura que los valores sean de solo lectura
 
 
 // Mapa para obtener las imágenes con sus rutas y nombres
-export const obtenerImagen: Record<keyof typeof Imagenes, { nombre: string; ruta: string }> =
+export const getImage: Record<keyof typeof Imagenes, { nombre: string; ruta: string }> =
   Object.keys(Imagenes).reduce((mapa, clave) => {
     return {
       ...mapa,

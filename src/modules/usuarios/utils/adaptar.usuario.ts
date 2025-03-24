@@ -4,6 +4,7 @@ import { EstadoUsuario, RedSocialUsuario, SexoUsuario, TiposUsuario, Usuario } f
 import { UsuarioCampoBusqueda } from "@modules/general/components/searchUsers/hook";
 import { UsuarioPortafolioCard } from "../types/usuario.portafolio";
 import { getUserLetterTypes, getUserTypes, UserTypeFullString } from "./usuario.map";
+import { getImage } from "@modules/general/components/roundedIcon/utils";
 
 export const adapterUsuario = (usuario: UsuarioService) => {
   const _usuario: Usuario = {
@@ -17,7 +18,7 @@ export const adapterUsuario = (usuario: UsuarioService) => {
     nombres: usuario.nombre,
     apellidos: usuario.apellido,
     sexo: usuario.sexo as SexoUsuario,
-    fotoDePerfil: `${usuario.foto_perfil.replace(/\?t=.*/, "")}?t=${Date.now()}}`,
+    fotoDePerfil: usuario.foto_perfil != '' ? ( `${usuario.foto_perfil.replace(/\?t=.*/, "")}?t=${Date.now()}}`): getImage['defaultProfileImage'].ruta,
     redSocial: adaptarRedSocial(usuario.red_social),
     descripcion: usuario.descripcion ?? '',
     estFechaInicio: usuario.est_fecha_inicio ? adaptarFechaBackend(usuario.est_fecha_inicio) : ''

@@ -1,6 +1,6 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { LabelFooter } from "@modules/general/enums/labelFooter";
-import { obtenerImagen } from "../roundedIcon/utils";
+import { getImage } from "../roundedIcon/utils";
 
 /**
  * Componente Footer que muestra información sobre Fireploy,
@@ -37,8 +37,8 @@ function Footer(): JSX.Element {
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <img
-              src={obtenerImagen["logo_fireploy"].ruta}
-              alt={obtenerImagen["logo_fireploy"].nombre}
+              src={getImage["logo_fireploy"].ruta}
+              alt={getImage["logo_fireploy"].nombre}
               width={60}
             />
           </Box>
@@ -120,8 +120,8 @@ function Footer(): JSX.Element {
           sx={{
             width: { sm: 90, xs: 100 },
           }}
-          src={obtenerImagen["ufps_logo"].ruta}
-          alt={obtenerImagen["ufps_logo"].nombre}
+          src={getImage["ufps_logo"].ruta}
+          alt={getImage["ufps_logo"].nombre}
           width={"50%"}
         />
       </Box>
@@ -143,8 +143,8 @@ function Footer(): JSX.Element {
           sx={{
             width: { sm: 90, xs: 100 },
           }}
-          src={obtenerImagen["ing_sistemas_logo"].ruta}
-          alt={obtenerImagen["ing_sistemas_logo"].nombre}
+          src={getImage["ing_sistemas_logo"].ruta}
+          alt={getImage["ing_sistemas_logo"].nombre}
           width={"50%"}
         />
       </Box>

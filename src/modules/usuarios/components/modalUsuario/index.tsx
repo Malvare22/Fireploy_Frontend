@@ -21,9 +21,9 @@ import CustomTextArea from "@modules/general/components/customTextArea";
 import { crearUsuarioService } from "@modules/usuarios/services/crearUsuario";
 import useQuery from "@modules/general/hooks/useQuery";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
-import { subirImagenUsuario } from "@modules/usuarios/services/imagen.subir";
+import { subirImagenUsuario } from "@modules/usuarios/services/patch.foto";
 import RoundedIcon from "@modules/general/components/RoundedIcon";
-import { obtenerImagen } from "@modules/general/components/RoundedIcon/utils";
+import { getImage } from "@modules/general/components/RoundedIcon/utils";
 import PreviewImage from "@modules/general/components/previewImage";
 import { usePreviewImage } from "@modules/general/components/previewImage/hooks";
 import GeneralButton, {
@@ -345,8 +345,8 @@ const Cuerpo: React.FC<{
             >
               <Row sx={styleRowRedSocial}>
                 <RoundedIcon
-                  imagen={obtenerImagen["linkedin_logo"].ruta}
-                  nombre={obtenerImagen["linkedin_logo"].nombre}
+                  imagen={getImage["linkedin_logo"].ruta}
+                  nombre={getImage["linkedin_logo"].nombre}
                 />
                 <CustomInput
                   variant="secondary"
@@ -356,8 +356,8 @@ const Cuerpo: React.FC<{
               </Row>
               <Row sx={styleRowRedSocial}>
                 <RoundedIcon
-                  imagen={obtenerImagen["facebook_logo"].ruta}
-                  nombre={obtenerImagen["facebook_logo"].nombre}
+                  imagen={getImage["facebook_logo"].ruta}
+                  nombre={getImage["facebook_logo"].nombre}
                 />
                 <CustomInput
                   variant="secondary"
@@ -367,8 +367,8 @@ const Cuerpo: React.FC<{
               </Row>
               <Row sx={styleRowRedSocial}>
                 <RoundedIcon
-                  imagen={obtenerImagen["instagram_logo"].ruta}
-                  nombre={obtenerImagen["instagram_logo"].nombre}
+                  imagen={getImage["instagram_logo"].ruta}
+                  nombre={getImage["instagram_logo"].nombre}
                 />
                 <CustomInput
                   variant="secondary"
@@ -378,8 +378,8 @@ const Cuerpo: React.FC<{
               </Row>
               <Row sx={styleRowRedSocial}>
                 <RoundedIcon
-                  imagen={obtenerImagen["x_logo"].ruta}
-                  nombre={obtenerImagen["x_logo"].nombre}
+                  imagen={getImage["x_logo"].ruta}
+                  nombre={getImage["x_logo"].nombre}
                 />
                 <CustomInput
                   variant="secondary"

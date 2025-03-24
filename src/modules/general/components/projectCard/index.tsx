@@ -8,7 +8,7 @@ import {
 } from "@modules/proyectos/types/proyecto.card";
 import React from "react";
 import RoundedIcon from "../roundedIcon";
-import { obtenerImagen } from "../roundedIcon/utils";
+import { getImage } from "../roundedIcon/utils";
 import { ProjectCardMembers } from "../avatar";
 import Status from "../status";
 
@@ -98,16 +98,16 @@ export const ProjectCardHome: React.FC<ProjectCardHomeProps> = ({
             <Typography variant="h6">{LabelProjectCard.tecnologias}</Typography>
             <Box>
               <RoundedIcon
-                imagen={obtenerImagen[proyecto.frontend.imagen].ruta}
-                nombre={obtenerImagen[proyecto.frontend.imagen].nombre}
+                imagen={getImage[proyecto.frontend.imagen].ruta}
+                nombre={getImage[proyecto.frontend.imagen].nombre}
               />
               <RoundedIcon
-                imagen={obtenerImagen[proyecto.backend.imagen].ruta}
-                nombre={obtenerImagen[proyecto.backend.imagen].nombre}
+                imagen={getImage[proyecto.backend.imagen].ruta}
+                nombre={getImage[proyecto.backend.imagen].nombre}
               />
               <RoundedIcon
-                imagen={obtenerImagen[proyecto.dataBase.imagen].ruta}
-                nombre={obtenerImagen[proyecto.dataBase.imagen].nombre}
+                imagen={getImage[proyecto.dataBase.imagen].ruta}
+                nombre={getImage[proyecto.dataBase.imagen].nombre}
               />
             </Box>
           </Box>
@@ -184,16 +184,16 @@ export const ProjectCardPortafolio: React.FC<ProjectCardPortafolioProps> = ({
                 </Typography>
                 <Box>
                   <RoundedIcon
-                    imagen={obtenerImagen[proyecto.frontend.imagen].ruta}
-                    nombre={obtenerImagen[proyecto.frontend.imagen].nombre}
+                    imagen={getImage[proyecto.frontend.imagen].ruta}
+                    nombre={getImage[proyecto.frontend.imagen].nombre}
                   />
                   <RoundedIcon
-                    imagen={obtenerImagen[proyecto.backend.imagen].ruta}
-                    nombre={obtenerImagen[proyecto.backend.imagen].nombre}
+                    imagen={getImage[proyecto.backend.imagen].ruta}
+                    nombre={getImage[proyecto.backend.imagen].nombre}
                   />
                   <RoundedIcon
-                    imagen={obtenerImagen[proyecto.dataBase.imagen].ruta}
-                    nombre={obtenerImagen[proyecto.dataBase.imagen].nombre}
+                    imagen={getImage[proyecto.dataBase.imagen].ruta}
+                    nombre={getImage[proyecto.dataBase.imagen].nombre}
                   />
                 </Box>
               </Box>

@@ -4,7 +4,7 @@ import React, { ReactNode } from "react";
 import RoundedIcon from "@modules/general/components/RoundedIcon";
 import {
   Imagenes,
-  obtenerImagen,
+  getImage,
 } from "@modules/general/components/RoundedIcon/utils";
 
 const RedesSociales: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
@@ -34,7 +34,7 @@ const RedesSociales: React.FC<{ usuario: Usuario }> = ({ usuario }) => {
       let elemento: any;
       if (urlRed != null && urlRed != "" && urlRed != undefined) {
         elemento = (
-          <RoundedIcon nombre={obtenerImagen[x].nombre} imagen={obtenerImagen[x].ruta} url={urlRed} />
+          <RoundedIcon nombre={getImage[x].nombre} imagen={getImage[x].ruta} url={urlRed} />
         );
       }
       redesSociales.push(elemento);
