@@ -1,4 +1,4 @@
-import { TiposUsuario } from "@modules/usuarios/types/usuario.tipos";
+import { TiposUsuario } from "@modules/usuarios/types/usuario";
 import { createContext } from "react";
 
 export type AccountInformation = {
@@ -12,10 +12,7 @@ export type AccountInformation = {
 /**
  * Creación de contexto para la obtención de información básica de usuario
  */
-export const AccountContext = createContext<
-  | {
-      localUser: AccountInformation | null;
-      setLocalUser: React.Dispatch<AccountInformation | null>;
-    }
-  | undefined
->(undefined);
+export const AccountContext = createContext<{
+  localUser: AccountInformation | null;
+  setLocalUser: React.Dispatch<AccountInformation | null> | null;
+}>({ localUser: null, setLocalUser: null });

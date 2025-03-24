@@ -9,7 +9,7 @@ import {
   obtenerDeshabilitarUsuario,
   obtenerHabilitarUsuario,
 } from "@modules/usuarios/enum/labelGestionUsuarios";
-import { modificarEstadoUsuario } from "@modules/usuarios/services/modificarUsuario";
+import { modificarEstadoUsuario } from "@modules/usuarios/services/post.modificar.usuario";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { useContext } from "react";
 

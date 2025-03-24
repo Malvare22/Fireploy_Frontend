@@ -1,5 +1,5 @@
 import SocialNetworkIcon from "../components/socialNetwork";
-import { RedSocialUsuario } from "../types/usuario.redSocial";
+import { RedSocialUsuario } from "../types/usuario";
 
 export function showSocialNetworks(redSocial: RedSocialUsuario) {
   const iconos = [];

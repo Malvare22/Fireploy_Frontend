@@ -20,7 +20,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import TextFieldPassword from "@modules/general/components/textFieldPassword";
-import { Usuario, usuarioTemplate } from "@modules/usuarios/types/usuario";
+import { usuarioTemplate } from "@modules/usuarios/types/usuario";
 import { getGender } from "@modules/usuarios/utils/usuario.map";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { useEffect } from "react";

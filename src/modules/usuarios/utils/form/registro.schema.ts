@@ -7,7 +7,7 @@ import {
   nombresSchema,
   sexoUsuarioSchema,
   tiposUsuarioSchema,
-} from "./usuario.schema";
+} from "./editar.schema";
 import { Usuario } from "@modules/usuarios/types/usuario";
 
 export type UsuarioRegistro = Usuario & { confirmarContrasenia: string };

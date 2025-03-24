@@ -5,7 +5,7 @@ import { UsuarioCampoBusqueda } from "@modules/general/components/searchUsers/ho
 import { UsuarioPortafolioCard } from "../types/usuario.portafolio";
 import { getUserLetterTypes, getUserTypes, UserTypeFullString } from "./usuario.map";
 
-export const adaptarUsuario = (usuario: UsuarioService) => {
+export const adapterUsuario = (usuario: UsuarioService) => {
   const _usuario: Usuario = {
     correo: usuario.correo,
     id: usuario.id,
@@ -20,7 +20,7 @@ export const adaptarUsuario = (usuario: UsuarioService) => {
     fotoDePerfil: `${usuario.foto_perfil.replace(/\?t=.*/, "")}?t=${Date.now()}}`,
     redSocial: adaptarRedSocial(usuario.red_social),
     descripcion: usuario.descripcion ?? '',
-    estFechaInicio: usuario.est_fecha_inicio ?? ''
+    estFechaInicio: usuario.est_fecha_inicio ? adaptarFechaBackend(usuario.est_fecha_inicio) : ''
   };
 
   return _usuario;

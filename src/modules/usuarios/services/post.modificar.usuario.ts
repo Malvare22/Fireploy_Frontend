@@ -1,10 +1,9 @@
 import { patchData } from "@core/services";
 import { UsuarioService } from "../types/services.usuario";
 import { adaptarUsuarioSalida } from "../utils/adaptar.usuario";
-import { Usuario } from "../types/usuario";
-import { EstadoUsuario } from "../types/usuario.estado";
+import { EstadoUsuario, Usuario } from "../types/usuario";
 
-export const modificarUsuarioService = async (
+export const postModificarUsuarioService = async (
   id: number,
   token: string,
   data: Usuario
@@ -20,7 +19,7 @@ export const modificarUsuarioService = async (
   return response;
 };
 
-export const modificarEstadoUsuario = async (
+export const postModificarEstadoUsuario = async (
   id: number,
   token: string,
   estado: EstadoUsuario

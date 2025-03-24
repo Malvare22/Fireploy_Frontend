@@ -23,6 +23,7 @@ function LayoutAuthenticated() {
           display: "flex",
           justifyContent: "center",
           "> div": { width: "100%" },
+          minHeight: '100vh'
         }}
       >
         <Stack spacing={3}>

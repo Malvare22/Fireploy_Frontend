@@ -6,28 +6,18 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import React, { useContext, useEffect, useState } from "react";
 import GeneralButton from "../../buttons";
 import { buttonTypes } from "@modules/general/types/buttons";
-import { Stack, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { rutasGeneral } from "@modules/general/router/router";
-import LightModeIcon from "@mui/icons-material/LightMode";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { ModeContext } from "@modules/general/context/modeContext";
-import { obtenerImagen } from "../../RoundedIcon/utils";
 import DrawerCustom from "./drawer";
 import AccountMenu from "./accountMenu";
 import { AccountContext } from "@modules/general/context/accountContext";
 
 const pages = ["Inicio", "Iniciar Sesión", "Registrarse"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function NavbarPrelogin() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(

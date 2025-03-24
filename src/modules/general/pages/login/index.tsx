@@ -3,12 +3,8 @@ import {
   Box,
   Button,
   Card,
-  Container,
   CssBaseline,
-  FormControlLabel,
-  Grid2 as Grid,
   Link,
-  makeStyles,
   Stack,
   TextField,
   Typography,
@@ -18,11 +14,9 @@ import React, { useContext, useEffect, useState } from "react";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { labelLogin } from "@modules/general/enums/labelLogin";
 import { rutasGeneral } from "@modules/general/router/router";
-import { useForm } from "react-hook-form";
 import useQuery from "@modules/general/hooks/useQuery";
 import { postSignUp, SignUpResponse } from "@modules/general/services/signUp";
 import AlertDialog from "@modules/general/components/alertDialog";
-import { stringify } from "querystring";
 import { useNavigate } from "react-router-dom";
 import {
   AccountContext,
@@ -30,7 +24,6 @@ import {
 } from "@modules/general/context/accountContext";
 import { getUserLetterTypes } from "@modules/usuarios/utils/usuario.map";
 import { TiposUsuario } from "@modules/usuarios/types/usuario";
-
 
 function Copyright() {
   return (
@@ -59,7 +52,7 @@ const SignIn: React.FC = () => {
     setSingUp({ ...singUp, [key]: value });
   };
 
-  const { handleAlertClose, initQuery, open, responseData } =
+  const { setOpen, initQuery, open, responseData } =
     useQuery<SignUpResponse>(
       () => postSignUp(singUp.email, singUp.password),
       false
@@ -75,15 +68,15 @@ const SignIn: React.FC = () => {
 
   useEffect(() => {
     if (responseData) {
-      localStorage.setItem("ACCOUNT", JSON.stringify(responseData));
-      if (setLocalUser)
-        setLocalUser({
-          foto: responseData.foto,
-          id: responseData.id,
-          nombre: responseData.nombre,
-          tipo: getUserLetterTypes.get(responseData.tipo) as TiposUsuario,
-          token: responseData.access_token,
-        });
+      const _localUser: AccountInformation = {
+        foto: responseData.foto,
+        id: responseData.id,
+        nombre: responseData.nombre,
+        tipo: getUserLetterTypes.get(responseData.tipo) as TiposUsuario,
+        token: responseData.access_token,
+      };
+      localStorage.setItem("ACCOUNT", JSON.stringify(_localUser));
+      if (setLocalUser) setLocalUser(_localUser);
       navigate("/app/dashboard");
     }
   }, [responseData]);
@@ -91,7 +84,7 @@ const SignIn: React.FC = () => {
   return (
     <Card sx={{ padding: 2, maxWidth: 600 }}>
       <AlertDialog
-        handleClose={handleAlertClose}
+        setOpen={setOpen}
         textBody="Combinación de Usuario y Contraseña no encontrados en el sistema"
         open={open && !responseData}
         title="Iniciar Sesión"

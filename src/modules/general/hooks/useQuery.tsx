@@ -20,6 +20,8 @@ export default function useQuery<T>(
 
   const [responseData, setResponseData] = useState<T | undefined>(undefined);
 
+  const [error, setError] = useState(false);
+
   const [message, setMessage] = useState<string>("");
 
   const [open, setOpen] = useState(false);
@@ -47,14 +49,17 @@ export default function useQuery<T>(
   const queryResponse = useCallback(async () => {
     const response = await query();
     setHandleAlertClose(() => () => onCloseAlert(response.error?.statusCode));
-    if (response.data) setMessage(successMessage ?? "");
-    else
-    setMessage(
-      Array.isArray(response.error?.message)
-        ? response.error?.message.join("\n")
-        : response.error?.message || ""
-    );
-
+    if (response.data) {
+      setMessage(successMessage ?? "");
+      setError(false);
+    } else {
+      setMessage(
+        Array.isArray(response.error?.message)
+          ? response.error?.message.join("\n")
+          : response.error?.message || ""
+      );
+      setError(true);
+    }
     setResponseData(response.data);
     setOpen(true);
   }, [query, onCloseAlert]);
@@ -71,5 +76,6 @@ export default function useQuery<T>(
     setOpen,
     handleClose,
     message,
+    error
   };
 }

@@ -2,7 +2,7 @@ import { AccountContext } from "@modules/general/context/accountContext";
 import useQuery from "@modules/general/hooks/useQuery";
 import { proyectosPrueba } from "@modules/proyectos/test/datos/proyectos.prueba";
 import Portafolio from "@modules/usuarios/components/portafolio";
-import { obtenerUsuarioPorIdService } from "@modules/usuarios/services/obtenerUsuarioPorId";
+import { obtenerUsuarioPorIdService } from "@modules/usuarios/services/get.usuario";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { adaptarUsuario } from "@modules/usuarios/utils/adaptar.usuario";

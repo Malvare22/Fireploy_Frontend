@@ -3,7 +3,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 
 /**
  * @interface Props
@@ -20,21 +20,24 @@ interface Props {
   title: string;
   body?: React.ReactNode;
   textBody?: string;
-  actions?: React.ReactNode;
-  open: boolean;
-  handleClose: () => void;
+  handleAccept: () => void;
+  handleCancel?: () => void;
+  open: boolean
+  
 }
 
 const AlertDialog: React.FC<Props> = ({
   title,
-  actions,
+  handleAccept,
   open,
   body,
-  handleClose,
-  textBody,
+  handleCancel,
+  textBody
 }) => {
+
+
   return (
-    <React.Fragment>
+    <React.Fragment >
       <Dialog
         open={open}
         aria-labelledby="alert-dialog-title"
@@ -44,10 +47,21 @@ const AlertDialog: React.FC<Props> = ({
           <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
         </Box>
         <DialogContent>
-          {body || <Typography sx={{ whiteSpace: "pre-wrap"}}>{textBody}</Typography>}
+          {body || (
+            <Typography sx={{ whiteSpace: "pre-wrap" }}>{textBody}</Typography>
+          )}
         </DialogContent>
         <DialogActions>
-          {!actions ? <Button onClick={handleClose}>Aceptar</Button> : actions}
+          
+           { <Stack direction={"row"} spacing={2}>
+              {handleAccept && <Box>
+                <Button variant="contained" onClick={handleAccept}>Aceptar</Button>
+              </Box>}
+              {handleCancel && <Box>
+                <Button variant="contained" color="inherit" onClick={handleCancel}>Cancelar</Button>
+              </Box>}
+            </Stack>
+              }
         </DialogActions>
       </Dialog>
     </React.Fragment>

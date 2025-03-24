@@ -1,4 +1,4 @@
-import { adaptarUsuario } from "../utils/adaptar.usuario";
+import { adapterUsuario } from "../utils/adaptar.usuario";
 import { UsuarioService } from "./services.usuario";
 export type TiposUsuario = "A" | "D" | "E";
 export type SexoUsuario = "F" | "M" | "O";
@@ -131,7 +131,7 @@ const usuarioServiceEjemplo: UsuarioService = {
     "https://storage.googleapis.com/fireploy-57702.firebasestorage.app/uploads/User_Image_6.png",
   tipo: "Docente",
 };
-export const usuarioEjemplo: Usuario = adaptarUsuario(usuarioServiceEjemplo);
+export const usuarioEjemplo: Usuario = adapterUsuario(usuarioServiceEjemplo);
 
 export const usuarioTemplate: Usuario =  {
   id: 1,

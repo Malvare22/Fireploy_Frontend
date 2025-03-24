@@ -1,147 +1,420 @@
-import React from "react";
-import { TextField, Typography, Avatar, Stack, Grid2, Paper, useTheme } from "@mui/material";
+import React, { useContext, useEffect, useRef } from "react";
+import {
+  TextField,
+  Typography,
+  Avatar,
+  Stack,
+  Grid2,
+  Paper,
+  useTheme,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { labelPerfil } from "@modules/usuarios/enum/labelPerfil";
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import { useState } from "react";
+import { Button } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Box, Container, getValue, styled } from "@mui/system";
+import { AccountContext } from "@modules/general/context/accountContext";
+import {
+  getGenderArray,
+  getUserTypesArray,
+} from "@modules/usuarios/utils/usuario.map";
+import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import AlertDialog from "@modules/general/components/alertDialog";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { EditarUsuarioSchema } from "@modules/usuarios/utils/form/editar.schema";
+import { Controller, useForm } from "react-hook-form";
+import { InputAdornment } from "@mui/material";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import GeneralButton from "@modules/general/components/buttons";
+import { buttonTypes } from "@modules/general/types/buttons";
+import useQuery from "@modules/general/hooks/useQuery";
+import { postModificarUsuarioService } from "@modules/usuarios/services/post.modificar.usuario";
+import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 
 interface PerfilProps {
   usuario: Usuario;
 }
 
 const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
-
   const theme = useTheme();
 
+  const { localUser } = useContext(AccountContext);
+
+  const { open, setOpen } = useAlertDialog();
+
+  const { register, handleSubmit, formState, getValues, control, reset } =
+    useForm({
+      resolver: zodResolver(EditarUsuarioSchema),
+      defaultValues: usuario,
+    });
+
+  const { errors } = formState;
+
+  const [showButton, setShowButton] = useState(false);
+
+  const { open: openConfirmation, setOpen: setOpenConfirmation } =
+    useAlertDialog();
+
+  const onSubmit = () => {
+    setOpenConfirmation(true);
+  };
+
+  useEffect(() => {
+    setShowButton(formState.isDirty);
+  }, [formState.isDirty]);
+
+  // const {error: error_upperUser, handleAlertClose: handleAlertClose_upperUser, initQuery: initQuery_upperUser, responseData : responseData_upperUser, open: open_upperUser, message: message_upperUser}  = useQuery();
+
+  const {
+    handleAlertClose: handleAlertCloseUpdateUser,
+    initQuery: initQueryUpdateUser,
+    responseData: responseDataUpdateUser,
+    open: openUpdateUser,
+    message: messageUpdateUser,
+  } = useQuery<UsuarioService>(
+    () =>
+      postModificarUsuarioService(
+        localUser?.id ?? 0,
+        localUser?.token ?? "",
+        getValues()
+      ),
+    true,
+    "Usuario Actualizado con éxito!"
+  );
+
+  const handleUpdateUser = async () => {
+    await initQueryUpdateUser();
+  };
+
+  useEffect(() => {
+    if (!responseDataUpdateUser) return;
+  }, [responseDataUpdateUser]);
+
   return (
-    <Stack spacing={3} padding={3} component={Paper}>
-      {/* Información de la Cuenta */}
-     <Stack direction={'row'} alignItems={'center'} spacing={2} justifyContent={'center'}>
-     <Typography variant="h4">{labelPerfil.perfil}</Typography>
-     <AccountBoxIcon sx={{fontSize: 48}}/>
-     </Stack>
-      <Typography variant="h6">{labelPerfil.informacionCuenta}</Typography>
-      <Grid2 container spacing={2}>
-        <Grid2 size={{ md: 9, xs: 12 }}>
-          <Stack
-            spacing={2}
-            direction={{ xs: "column", md: "row" }}
-            sx={{padding: 2 }}
-          >
-            <Stack flex={1}>
-              <TextField
-                fullWidth
-                label={labelPerfil.nombres}
-                value={usuario.nombres}
-              />
+    <Container component={"form"} onSubmit={handleSubmit(onSubmit)}>
+      <Stack spacing={3} padding={3} component={Paper}>
+        {/* Información de la Cuenta */}
+        {/* <AlertDialog
+          title="Solicitar promoción a Rol Docente"
+          textBody="¿Está seguro de que desea solicitar la promoción al rol de docente?"
+          handleAccept={() => console.log("Enviado")}
+          open={open}
+        /> */}
+        <AlertDialog
+          title="Modificación de usuarios"
+          textBody="¿Está seguro de que desea aplicar estas modificaciones?"
+          handleAccept={() => {
+            setOpenConfirmation(false);
+            handleUpdateUser();
+          }}
+          open={openConfirmation}
+          handleCancel={() => setOpenConfirmation(false)}
+        />
+        {
+          <AlertDialog
+            title="Modificación de usuarios"
+            textBody={messageUpdateUser}
+            open={openUpdateUser}
+            handleAccept={handleAlertCloseUpdateUser}
+          />
+        }
+        <Stack
+          direction={"row"}
+          alignItems={"center"}
+          spacing={2}
+          justifyContent={"center"}
+        >
+          <Typography variant="h4">{labelPerfil.perfil}</Typography>
+          <AccountBoxIcon sx={{ fontSize: 48 }} />
+        </Stack>
+        <Typography variant="h6">{labelPerfil.informacionCuenta}</Typography>
+        <Grid2 container spacing={2}>
+          <Grid2 size={{ md: 9, xs: 12 }}>
+            <Stack
+              spacing={2}
+              direction={{ xs: "column", md: "row" }}
+              sx={{ padding: 2 }}
+            >
+              <Stack flex={1}>
+                <TextField
+                  fullWidth
+                  label={labelPerfil.nombres}
+                  {...register("nombres")}
+                  error={!!errors.nombres}
+                  helperText={errors.nombres?.message}
+                />
+              </Stack>
+
+              <Stack flex={1}>
+                <TextField
+                  fullWidth
+                  label={labelPerfil.apellidos}
+                  {...register("apellidos")}
+                  error={!!errors.apellidos}
+                  helperText={errors.apellidos?.message}
+                />
+              </Stack>
             </Stack>
 
-            <Stack flex={1}>
-              <TextField
-                fullWidth
-                label={labelPerfil.apellidos}
-                value={usuario.apellidos}
-              />
+            <Stack
+              spacing={2}
+              direction={{ xs: "column", md: "row" }}
+              sx={{ padding: 2 }}
+            >
+              <Stack flex={1}>
+                <TextField
+                  fullWidth
+                  label="Correo"
+                  {...register("correo")}
+                  error={!!errors.correo}
+                  helperText={errors.correo?.message}
+                  disabled
+                />
+              </Stack>
+              <Stack flex={1}>
+                <TextField
+                  fullWidth
+                  label="Fecha de Ingreso a la Universidad"
+                  {...register("estFechaInicio")}
+                  error={!!errors.estFechaInicio}
+                  helperText={errors.estFechaInicio?.message}
+                  disabled
+                />
+              </Stack>
             </Stack>
+            <Stack
+              spacing={2}
+              direction={{ xs: "column", md: "row" }}
+              sx={{ padding: 2 }}
+            >
+              <Stack flex={1} spacing={2} width={{ md: "50%", xs: "100%" }}>
+                <Controller
+                  name="tipo"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      label="Tipo de usuario"
+                      select
+                      disabled={localUser?.tipo == "E"}
+                      error={!!errors.tipo}
+                      helperText={errors.tipo?.message}
+                    >
+                      {getUserTypesArray.map(([valor, clave]) => (
+                        <MenuItem value={valor} key={valor}>
+                          {clave}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  )}
+                />
+              </Stack>
+              <Stack flex={1}>
+                {localUser?.tipo == "E" && (
+                  <Box
+                    display={"flex"}
+                    alignItems={"center"}
+                    alignContent={"center"}
+                    height={"100%"}
+                  >
+                    <Button
+                      variant="contained"
+                      onClick={() => setOpen(true)}
+                      sx={{ backgroundColor: theme.palette.terciary.main }}
+                    >
+                      {labelPerfil.solicitarRolDocente}
+                    </Button>
+                  </Box>
+                )}
+              </Stack>
+            </Stack>
+          </Grid2>
+          <Grid2 size={{ md: 3, xs: 12 }}>
+            {/* <ProfilePhotoUploader
+              actualImg={getValues("fotoDePerfil")}
+              userId={getValues("id")}
+            /> */}
+          </Grid2>
+        </Grid2>
+
+        {/* Información Personal */}
+        <Typography variant="h6">{labelPerfil.informacionPersonal}</Typography>
+        <Grid2 container spacing={2}>
+          <Grid2 size={{ md: 6, xs: 12 }}>
+            <TextField
+              fullWidth
+              label={labelPerfil.fechaNacimiento}
+              type="date"
+              {...register("fechaDeNacimiento")}
+              error={!!errors.fechaDeNacimiento}
+              helperText={errors.fechaDeNacimiento?.message}
+            />
+          </Grid2>
+          <Grid2 size={{ md: 6, xs: 12 }}>
+            <Controller
+              name="sexo"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  fullWidth
+                  label="Género"
+                  select
+                  error={!!errors.sexo}
+                  helperText={errors.sexo?.message}
+                >
+                  {getGenderArray.map(([valor, clave]) => (
+                    <MenuItem value={valor} key={valor}>
+                      {clave}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
+          </Grid2>
+        </Grid2>
+
+        {/* Redes Sociales */}
+        <Typography variant="h6">{labelPerfil.redesSociales}</Typography>
+        <Grid2 container spacing={2}>
+          <Grid2 size={{ md: 6, xs: 12 }}>
+            <TextField
+              fullWidth
+              label={labelPerfil.facebook}
+              {...register("redSocial.facebook")}
+              error={!!errors.redSocial?.facebook}
+              helperText={errors.redSocial?.facebook?.message}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton>
+                      <FacebookIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid2>
+          <Grid2 size={{ md: 6, xs: 12 }}>
+            <TextField
+              fullWidth
+              label={labelPerfil.instagram}
+              {...register("redSocial.instagram")}
+              error={!!errors.redSocial?.instagram}
+              helperText={errors.redSocial?.instagram?.message}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton>
+                      <InstagramIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid2>
+          <Grid2 size={{ md: 6, xs: 12 }}>
+            <TextField
+              fullWidth
+              label={labelPerfil.linkedin}
+              {...register("redSocial.linkedin")}
+              error={!!errors.redSocial?.linkedin}
+              helperText={errors.redSocial?.linkedin?.message}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton>
+                      <LinkedInIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid2>
+          <Grid2 size={{ md: 6, xs: 12 }}>
+            <TextField
+              fullWidth
+              label={labelPerfil.x}
+              {...register("redSocial.x")}
+              error={!!errors.redSocial?.x}
+              helperText={errors.redSocial?.x?.message}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton>
+                      <TwitterIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid2>
+          <Grid2 size={{ md: 6, xs: 12 }}>
+            <TextField
+              fullWidth
+              label={labelPerfil.gitHub}
+              {...register("redSocial.github")}
+              error={!!errors.redSocial?.github}
+              helperText={errors.redSocial?.github?.message}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton>
+                      <GitHubIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid2>
+        </Grid2>
+
+        {/* Descripción */}
+        <Typography variant="h6">{labelPerfil.descripcion}</Typography>
+        <TextField
+          fullWidth
+          multiline
+          rows={4}
+          {...register("descripcion")}
+          error={!!errors.descripcion}
+          helperText={errors.descripcion?.message}
+        />
+        {showButton && (
+          <Stack direction={"row"} spacing={1} justifyContent={"end"}>
+            <GeneralButton mode={buttonTypes.save} type="submit" />
+            <GeneralButton mode={buttonTypes.cancel} onClick={() => reset()} />
           </Stack>
-
-          <Stack
-            spacing={2}
-            direction={{ xs: "column", md: "row" }}
-            sx={{padding: 2 }}
-          >
-            <Stack flex={1}>
-              <TextField fullWidth label="Correo" value={usuario.correo} />
-            </Stack>
-            <Stack flex={1} spacing={2}>
-              <TextField
-                fullWidth
-                label={labelPerfil.tipo}
-                value={usuario.tipo}
-              />
-              <Box><Button variant="contained" sx={{backgroundColor: theme.palette.terciary.main}}>{labelPerfil.solicitarRolDocente}</Button></Box>
-            </Stack>
-          </Stack>
-        </Grid2>
-        <Grid2 size={{ md: 3, xs: 12 }}>
-          <ProfilePhotoUploader />
-        </Grid2>
-      </Grid2>
-
-      {/* Información Personal */}
-      <Typography variant="h6">{labelPerfil.informacionPersonal}</Typography>
-      <Grid2 container spacing={2}>
-        <Grid2 size={{ md: 6, xs: 12 }}>
-          <TextField
-            fullWidth
-            label={labelPerfil.fechaNacimiento}
-            value={usuario.fechaDeNacimiento}
-          />
-        </Grid2>
-        <Grid2 size={{ md: 6, xs: 12 }}>
-          <TextField fullWidth label={labelPerfil.sexo} value={usuario.sexo} />
-        </Grid2>
-      </Grid2>
-
-      {/* Redes Sociales */}
-      <Typography variant="h6">{labelPerfil.redesSociales}</Typography>
-      <Grid2 container spacing={2}>
-        <Grid2 size={{ md: 6, xs: 12 }}>
-          <TextField
-            fullWidth
-            label={labelPerfil.facebook}
-            value={usuario.redSocial.facebook || ""}
-          />
-        </Grid2>
-        <Grid2 size={{ md: 6, xs: 12 }}>
-          <TextField
-            fullWidth
-            label={labelPerfil.instagram}
-            value={usuario.redSocial.instagram || ""}
-          />
-        </Grid2>
-        <Grid2 size={{ md: 6, xs: 12 }}>
-          <TextField
-            fullWidth
-            label={labelPerfil.linkedin}
-            value={usuario.redSocial.linkedin || ""}
-          />
-        </Grid2>
-        <Grid2 size={{ md: 6, xs: 12 }}>
-          <TextField
-            fullWidth
-            label={labelPerfil.x}
-            value={usuario.redSocial.x || ""}
-          />
-        </Grid2>
-        <Grid2 size={{ md: 6, xs: 12 }}>
-          <TextField
-            fullWidth
-            label={labelPerfil.gitHub}
-            value={usuario.redSocial.github || ""}
-          />
-        </Grid2>
-      </Grid2>
-
-      {/* Descripción */}
-      <Typography variant="h6">{labelPerfil.descripcion}</Typography>
-      <TextField fullWidth multiline rows={4} value={usuario.descripcion} />
-    </Stack>
+        )}
+      </Stack>
+    </Container>
   );
 };
-
-import { useState } from "react";
-import { Button, IconButton } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { Box, styled } from "@mui/system";
 
 const HiddenInput = styled("input")({
   display: "none",
 });
 
-export const ProfilePhotoUploader: React.FC = () => {
-  const [photo, setPhoto] = useState<string | null>(
-    "https://via.placeholder.com/150"
-  );
+type ProfilePhotoUploaderProps = {
+  userId: number;
+  actualImg: string;
+  initQuery: boolean;
+};
+
+export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
+  userId,
+  actualImg,
+  initQuery,
+}) => {
+  const [photo, setPhoto] = useState<string | null>(actualImg);
 
   const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -151,27 +424,41 @@ export const ProfilePhotoUploader: React.FC = () => {
     }
   };
 
+  const ref = useRef<HTMLInputElement>(null);
+
   const handleRemovePhoto = () => {
     setPhoto(null);
+    if (ref.current) {
+      ref.current.value = "";
+    }
   };
 
   return (
     <Stack alignItems="center" spacing={3}>
-      <Avatar src={photo || undefined} sx={{ width: 100, height: 100, border: '1px solid #ddd' }} />
-      <Stack direction="row" spacing={1} alignItems={'center'} justifyContent={'center'}>
+      <Avatar
+        src={photo || undefined}
+        sx={{ width: 100, height: 100, border: "1px solid #ddd" }}
+      />
+      <Stack
+        direction="row"
+        spacing={1}
+        alignItems={"center"}
+        justifyContent={"center"}
+      >
         <label htmlFor="upload-photo">
           <HiddenInput
             accept="image/*"
             id="upload-photo"
             type="file"
             onChange={handlePhotoChange}
+            ref={ref}
           />
           <Button variant="outlined" component="span">
             Cambiar foto
           </Button>
         </label>
         <IconButton onClick={handleRemovePhoto} disabled={!photo}>
-          <DeleteIcon sx={{fontSize: 32}}/>
+          <DeleteIcon sx={{ fontSize: 32 }} />
         </IconButton>
       </Stack>
     </Stack>
