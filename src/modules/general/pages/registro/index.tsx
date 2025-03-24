@@ -6,9 +6,7 @@ import { registrarUsuarioService } from "@modules/general/services/registrar.usu
 import { obtenerFechaActual } from "@modules/general/utils/fechas";
 import { labelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
-import { UsuarioRegistro } from "@modules/usuarios/types/usuario";
-import RegistroSchema from "@modules/usuarios/utils/form/registro.schema";
-import { UsuarioBaseRegistro } from "@modules/usuarios/utils/form/usuario.base";
+import RegistroSchema, { UsuarioRegistro } from "@modules/usuarios/utils/form/registro.schema";
 import {
   Box,
   Button,
@@ -22,6 +20,10 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import TextFieldPassword from "@modules/general/components/textFieldPassword";
+import { Usuario, usuarioTemplate } from "@modules/usuarios/types/usuario";
+import { getGender } from "@modules/usuarios/utils/usuario.map";
+import AlertDialog from "@modules/general/components/alertDialog";
+import { useEffect } from "react";
 
 function Registrar() {
   const {
@@ -31,7 +33,7 @@ function Registrar() {
     getValues,
   } = useForm<UsuarioRegistro>({
     resolver: zodResolver(RegistroSchema),
-    defaultValues: UsuarioBaseRegistro,
+    defaultValues: usuarioTemplate,
   });
 
   const navigate = useNavigate();
@@ -40,23 +42,26 @@ function Registrar() {
     navigate(rutasGeneral.login);
   };
 
-  const {} = useQuery<UsuarioService>(
-    () => registrarUsuarioService(getValues()),
-    labelUsuario.registrarUsuario,
-    false,
-    true,
-    labelUsuario.registroExitoso,
-    false,
-    successAction
-  );
+  const {handleAlertClose, initQuery, message, open, responseData, setOpen} = useQuery<UsuarioService>(() => registrarUsuarioService(getValues()), false, labelUsuario.registroExitoso, successAction );
+
+  const RegisterAlertDialog = () => (
+    <AlertDialog handleClose={handleAlertClose} open={open} title={labelUsuario.registrarUsuario} textBody={message}></AlertDialog>
+  )
 
   const onSubmit = async () => {
-    await init();
+    await initQuery();
   };
+
+  useEffect(
+    () => {
+      if(! responseData) return;
+      setOpen(true);
+    }, [responseData]
+  );
 
   return (
     <Card sx={{ maxWidth: 600, padding: 4 }}>
-      <RenderAlertDialog />
+      <RegisterAlertDialog/>
       <Stack spacing={3}>
         <Stack spacing={1} direction={"row"} alignItems={"center"}>
           <Typography variant="h4" textAlign={"center"}>
@@ -100,25 +105,7 @@ function Registrar() {
                 {...register("correo")}
                 fullWidth
               />
-              <TextField
-                label="Tipo de Usuario"
-                select
-                error={!!errors.sexo}
-                helperText={errors.sexo?.message}
-                {...register("sexo")}
-                fullWidth
-              >
-                {Array.from(obtenerTiposUsuario.entries()).map(
-                  ([valor, texto]) => {
-                    if (valor != "A")
-                      return (
-                        <MenuItem key={valor} value={valor}>
-                          {texto}
-                        </MenuItem>
-                      );
-                  }
-                )}
-              </TextField>
+
               <TextField
                 label="Sexo"
                 select
@@ -127,7 +114,7 @@ function Registrar() {
                 {...register("sexo")}
                 fullWidth
               >
-                {Array.from(obtenerSexo.entries()).map(([valor, texto]) => (
+                {Array.from(getGender.entries()).map(([valor, texto]) => (
                   <MenuItem key={valor} value={valor}>
                     {texto}
                   </MenuItem>
@@ -187,7 +174,7 @@ function Registrar() {
                 </Button>
               </Box>
               <Box>
-                <Button type="submit" variant="contained">
+                <Button onClick={onSubmit} variant="contained">
                   {LabelGeneral.registrar}
                 </Button>
               </Box>

@@ -8,26 +8,20 @@ const rutaBase = "/app/proyectos";
 export const rutasProyectos = {
   listar: rutaBase + "/listar",
   ver: rutaBase + "/listar/ver/:id",
-  crear: rutaBase + '/crear'
+  crear: rutaBase + "/crear",
 };
 
-
-export const routerProyectos: RouteObject = {
-  path: rutaBase,
-  element: <LayoutStandard />, // Usar el Layout para rutas que necesitan el Navbar
-  children: [
-    // {
-    //   path: rutasProyectos.listar,
-    //   element: <VerProyectos/>,
-    // },
-    {
-      path: rutasProyectos.ver,
-      element: <VerProyecto/>
-    },
-    {
-      path: rutasProyectos.crear,
-      element: <CrearProyecto/>
-    }
-   
-  ],
-};
+export const routerProyectos: RouteObject[] = [
+  // {
+  //   path: rutasProyectos.listar,
+  //   element: <VerProyectos/>,
+  // },
+  {
+    path: rutasProyectos.ver,
+    element: <VerProyecto />,
+  },
+  {
+    path: rutasProyectos.crear,
+    element: <CrearProyecto />,
+  },
+];

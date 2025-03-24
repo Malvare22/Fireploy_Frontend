@@ -21,12 +21,12 @@ export type Usuario = {
   sexo: SexoUsuario;
 
   tipo: TiposUsuario;
-  estFechaInicio: string;
+  estFechaInicio?: string;
   estado: EstadoUsuario;
-  
+
   redSocial: RedSocialUsuario;
   descripcion: string;
-  
+
   contrasenia?: string;
 };
 
@@ -89,7 +89,8 @@ export const usuarios: Usuario[] = [
       x: "https://x.com/carlosrodriguez",
       github: "https://github.com/carlosrodriguez",
     },
-    descripcion: "Ingeniero de software con experiencia en backend y bases de datos.",
+    descripcion:
+      "Ingeniero de software con experiencia en backend y bases de datos.",
   },
   {
     id: 4,
@@ -113,7 +114,6 @@ export const usuarios: Usuario[] = [
   },
 ];
 
-
 const usuarioServiceEjemplo: UsuarioService = {
   estado: "A",
   id: 6,
@@ -133,4 +133,23 @@ const usuarioServiceEjemplo: UsuarioService = {
 };
 export const usuarioEjemplo: Usuario = adaptarUsuario(usuarioServiceEjemplo);
 
-export type UsuarioRegistro = Usuario & { confirmarContrasenia: string };
+export const usuarioTemplate: Usuario =  {
+  id: 1,
+  correo: "",
+  nombres: "",
+  apellidos: "",
+  fotoDePerfil: "",
+  fechaDeNacimiento: "",
+  sexo: "" as SexoUsuario,
+  tipo: "E",
+  estFechaInicio: "",
+  estado: "A",
+  redSocial: {
+    facebook: "",
+    instagram: "",
+    linkedin: "",
+    x: "",
+    github: ""
+  },
+  descripcion: "",
+};

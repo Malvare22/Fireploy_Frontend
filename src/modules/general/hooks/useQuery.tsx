@@ -10,6 +10,7 @@ export default function useQuery<T>(
   query: () => Promise<ApiResponse<T>>,
   withReload?: boolean,
   successMessage?: string,
+  onSuccesActions?: () => void
 ) {
   const navigate = useNavigate();
 
@@ -19,10 +20,10 @@ export default function useQuery<T>(
 
   const [responseData, setResponseData] = useState<T | undefined>(undefined);
 
-  const [message, setMessage] = useState<string>('');
+  const [message, setMessage] = useState<string>("");
 
   const [open, setOpen] = useState(false);
-  
+
   const handleClose = () => setOpen(false);
   /**
    * Manejo del cierre de la alerta
@@ -32,8 +33,8 @@ export default function useQuery<T>(
       setOpen(false);
       if (statusCode === undefined) {
         if (withReload) window.location.reload();
-      }
-      if (statusCode === 401) {
+        else if (onSuccesActions) onSuccesActions();
+      } else if (statusCode === 401) {
         navigate(rutasGeneral.login);
       }
     },
@@ -46,19 +47,29 @@ export default function useQuery<T>(
   const queryResponse = useCallback(async () => {
     const response = await query();
     setHandleAlertClose(() => () => onCloseAlert(response.error?.statusCode));
-    if(response.data) setMessage(successMessage ?? '');
-    else setMessage(response.error?.message ?? '');
+    if (response.data) setMessage(successMessage ?? "");
+    else
+    setMessage(
+      Array.isArray(response.error?.message)
+        ? response.error?.message.join("\n")
+        : response.error?.message || ""
+    );
 
     setResponseData(response.data);
     setOpen(true);
   }, [query, onCloseAlert]);
 
-  /**
-   * Inicialización del proceso de consulta
-   */
   const initQuery = async () => {
     await queryResponse();
   };
 
-  return { responseData, open, initQuery, handleAlertClose, setOpen, handleClose, message };
+  return {
+    responseData,
+    open,
+    initQuery,
+    handleAlertClose,
+    setOpen,
+    handleClose,
+    message,
+  };
 }

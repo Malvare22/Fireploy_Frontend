@@ -20,18 +20,18 @@ export const getUserStatus = new Map(
   Object.entries(userStatusMapData) as [EstadoUsuario, string][]
 );
 
-export type UserTypeFullString = 'Administrator' | 'Teacher' | 'Student';
+export type UserTypeFullString = 'Administrador' | 'Docente' | 'Estudiante';
 
 const userTypeMapData: Record<TiposUsuario, UserTypeFullString> = {
-  E: "Student",
-  A: "Administrator",
-  D: "Teacher",
+  E: "Estudiante",
+  A: "Administrador",
+  D: "Docente",
 } as const;
 
 const userLetterTypeMapData: Record<UserTypeFullString, TiposUsuario> = {
-  Administrator: 'A',
-  Teacher: 'D',
-  Student: 'E',
+  Administrador: 'A',
+  Docente: 'D',
+  Estudiante: 'E',
 } as const;
 
 export const getUserTypes = new Map(

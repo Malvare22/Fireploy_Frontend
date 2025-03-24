@@ -9,27 +9,22 @@ export const rutaBase = "/app/materias";
 
 export enum rutasMaterias {
   listar = rutaBase + "/listar",
-  crear = rutaBase + '/crear',
-  verCursos = rutaBase + '/listar/:id',
-  verInformacionCursos = rutaBase + '/listar/:id/:id'
-};
+  crear = rutaBase + "/crear",
+  verCursos = rutaBase + "/listar/:id",
+  verInformacionCursos = rutaBase + "/listar/:id/:id",
+}
 
-export const routerMaterias: RouteObject = {
-  path: rutaBase,
-  element: <LayoutStandard />, // Usar el Layout para rutas que necesitan el Navbar
-  children: [
-    {
-      path: rutasMaterias.listar,
-      element: <ListarMaterias/>
-    },
-    {
-      path: rutasMaterias.verCursos,
-      element: <ListarCursos/>
-    },
-    {
-      path: rutasMaterias.verInformacionCursos,
-      element: <VerInformacionCurso/>
-    },
-
-  ],
-};
+export const routerMaterias: RouteObject[] = [
+  {
+    path: rutasMaterias.listar,
+    element: <ListarMaterias />,
+  },
+  {
+    path: rutasMaterias.verCursos,
+    element: <ListarCursos />,
+  },
+  {
+    path: rutasMaterias.verInformacionCursos,
+    element: <VerInformacionCurso />,
+  },
+];

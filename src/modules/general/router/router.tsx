@@ -27,29 +27,15 @@ export const routerGeneral: RouteObject = {
   children: [
     {
       path: "/",
-      element: <Home />, // Página principal
+      element: <Home />,
     },
     {
-      path: "login",
-      element: <Login />} // Página de login
-    // },
-    // {
-    //   path: "recuperar",
-    //   element: <CambiarContrasenia />, // Página de login
-    // },
-    // ,{
-    //   path: "registrar",
-    //   element: <Registrar />, // Página de login
-    // },,
-    ,
-    // {
-    //   path: "test",
-    //   element: <TablaUsuarios />, // Página de login
-    // },
-    ,
+      path: rutasGeneral.login,
+      element: <Login />,
+    },
     {
-      path: "test2",
-      element: <Portafolio/> // Página de login
+      path: rutasGeneral.registrar,
+      element: <Registrar />,
     },
   ],
 };
@@ -66,9 +52,8 @@ export const authenticatedRoutes: RouteObject = {
       path: "test1",
       element: <MisProyectos />, // Dashboard del usuario
     },
-    ...(routerMaterias.children || []),
-    ...(routerUsuarios.children || []),
-    ...(routerProyectos.children || []),
+    ...(routerMaterias || []),
+    ...(routerUsuarios || []),
+    ...(routerProyectos || []),
   ],
 };
-

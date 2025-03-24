@@ -22,7 +22,7 @@ interface Props {
   textBody?: string;
   actions?: React.ReactNode;
   open: boolean;
-  handleClose: () => void
+  handleClose: () => void;
 }
 
 const AlertDialog: React.FC<Props> = ({
@@ -30,9 +30,9 @@ const AlertDialog: React.FC<Props> = ({
   actions,
   open,
   body,
-  handleClose,textBody
+  handleClose,
+  textBody,
 }) => {
-
   return (
     <React.Fragment>
       <Dialog
@@ -44,10 +44,10 @@ const AlertDialog: React.FC<Props> = ({
           <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
         </Box>
         <DialogContent>
-          {body || <Typography>{textBody}</Typography>}
+          {body || <Typography sx={{ whiteSpace: "pre-wrap"}}>{textBody}</Typography>}
         </DialogContent>
         <DialogActions>
-          {!actions ? <Button onClick={handleClose}>Cerrar</Button> : actions}
+          {!actions ? <Button onClick={handleClose}>Aceptar</Button> : actions}
         </DialogActions>
       </Dialog>
     </React.Fragment>

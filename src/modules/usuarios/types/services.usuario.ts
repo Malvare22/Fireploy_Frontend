@@ -7,7 +7,7 @@ export interface UsuarioService {
     sexo: string;
     descripcion: string | null;
     correo: string;
-    contrasenia: string;
+    contrasenia?: string | null | undefined;
     red_social: string;
     foto_perfil: string;
     tipo: string;

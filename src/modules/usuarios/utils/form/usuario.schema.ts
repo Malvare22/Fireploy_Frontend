@@ -86,5 +86,3 @@ export const UsuarioSchema = z.object({
   descripcion: descripcionSchema,
   estFechaInicio: fechaSchema,
 });
-
-export type Usuario = z.infer<typeof UsuarioSchema>;

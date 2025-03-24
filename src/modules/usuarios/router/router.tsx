@@ -11,23 +11,17 @@ import VistaPerfil from "../pages/perfil";
 
 const rutaBase = "/app/usuarios";
 
-export enum rutasUsuarios{
+export enum rutasUsuarios {
   perfil = rutaBase + "/perfil",
   verPerfilPorId = rutaBase + "/perfil/:id",
   listar = rutaBase + "/listar",
   verPortafolio = rutaBase + "/portafolios/:id",
-  buscarPortafolio = rutaBase + "/portafolios"
-};
+  buscarPortafolio = rutaBase + "/portafolios",
+}
 
-export const routerUsuarios: RouteObject = 
-{
-  path: rutaBase,
-  children: [
-    {
-      path: rutasUsuarios.perfil,
-      element: <VistaPerfil />, // Página principal
-    },
-    
-  ]
-};
-
+export const routerUsuarios: RouteObject[] = [
+  {
+    path: rutasUsuarios.perfil,
+    element: <VistaPerfil />, // Página principal
+  },
+];

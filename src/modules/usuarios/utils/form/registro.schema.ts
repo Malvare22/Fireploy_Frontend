@@ -8,7 +8,9 @@ import {
   sexoUsuarioSchema,
   tiposUsuarioSchema,
 } from "./usuario.schema";
-import { UsuarioRegistro } from "@modules/usuarios/types/usuario";
+import { Usuario } from "@modules/usuarios/types/usuario";
+
+export type UsuarioRegistro = Usuario & { confirmarContrasenia: string };
 
 type RegistroKeys = Pick<
   UsuarioRegistro,
@@ -45,6 +47,6 @@ const RegistroSchema: z.ZodType<RegistroKeys> = z
     path: ["confirmarContrasenia"],
   });
 
-export type RegistroSchemaType = z.infer<typeof RegistroSchema>;
+export type RegistroSchema= z.infer<typeof RegistroSchema>;
 
 export default RegistroSchema;
