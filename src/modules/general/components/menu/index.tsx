@@ -16,7 +16,6 @@ import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import StorageIcon from "@mui/icons-material/Storage";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
-import ExploreIcon from "@mui/icons-material/Explore";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import CustomizedSteppers from "../customStepper";
@@ -27,6 +26,8 @@ import { getProyectosService } from "@modules/proyectos/services/getProyectosSer
 import { AccountContext } from "@modules/general/context/accountContext";
 import { EstadoProyecto } from "@modules/proyectos/types/proyecto.tipo";
 import AlertDialog from "../alertDialog";
+import { rutasProyectos } from "@modules/proyectos/router";
+import { useNavigate } from "react-router-dom";
 
 type MenuCardProps = {
   color: string;
@@ -67,8 +68,9 @@ const Menu: React.FC<MenuProps> = ({ type = "A" }) => {
   const menuOptions: MenuCardProps[] = [
     {
       color: theme.palette.success.main,
-      label: "Mis Proyectos",
+      label: "Proyectos",
       icon: <AccountTreeIcon />,
+      url: rutasProyectos.listar
     },
     {
       color: theme.palette.info.main,
@@ -90,11 +92,6 @@ const Menu: React.FC<MenuProps> = ({ type = "A" }) => {
       label: "Portafolios",
       icon: <TravelExploreIcon />,
     },
-    {
-      color: theme.palette.secondary.main,
-      label: "Proyectos",
-      icon: <ExploreIcon />,
-    },
     //Propiedades de Administrador
     {
       color: theme.palette.error.main,
@@ -107,7 +104,7 @@ const Menu: React.FC<MenuProps> = ({ type = "A" }) => {
     if (type == "A") {
       return menuOptions;
     } else {
-      return menuOptions.slice(0, 6);
+      return menuOptions.slice(0, 5);
     }
   };
 
@@ -131,6 +128,7 @@ const Menu: React.FC<MenuProps> = ({ type = "A" }) => {
             color={option.color}
             icon={option.icon}
             label={option.label}
+            url={option.url ?? ''}
           />
         </Grid2>
       ))}
@@ -144,14 +142,17 @@ const Menu: React.FC<MenuProps> = ({ type = "A" }) => {
     >
       {proyectos.length != 0 && <TopProjects proyectos={proyectos} />}
       <Box paddingY={1}>{MenuBox}</Box>
-      {error && <AlertDialog handleClose={handleAlertClose} open={open} title="Cargar información" textBody={message}/>}
+      {error && <AlertDialog handleAccept={handleAlertClose} open={open} title="Cargar información" textBody={message}/>}
     </Stack>
   );
 };
 
-const MenuCard: React.FC<MenuCardProps> = ({ color, icon, label }) => {
+const MenuCard: React.FC<MenuCardProps> = ({ color, icon, label, url }) => {
+
+  const navigate = useNavigate();
+
   return (
-    <AnimatedCard
+    <AnimatedCard onClick={() => navigate(url)}
       sx={{
         backgroundColor: color,
         color: "white",

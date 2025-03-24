@@ -3,11 +3,8 @@ import Home from "../pages/home";
 import LayoutPrelogin from "../layouts/prelogin";
 import Login from "../pages/login";
 import Registrar from "../pages/registro";
-import TablaUsuarios from "@modules/usuarios/components/tablaUsuarios";
-import Portafolio from "@modules/usuarios/components/portafolio";
 import LayoutAuthenticated from "../layouts/auth";
 import Dashboard from "../pages/dashboard";
-import MisProyectos from "@modules/proyectos/pages/misProyectos";
 import { routerMaterias } from "@modules/materias/router/router";
 import { routerUsuarios } from "@modules/usuarios/router/router";
 import { routerProyectos } from "@modules/proyectos/router";
@@ -47,10 +44,6 @@ export const authenticatedRoutes: RouteObject = {
     {
       path: "dashboard",
       element: <Dashboard />, // Dashboard del usuario
-    },
-    {
-      path: "test1",
-      element: <MisProyectos />, // Dashboard del usuario
     },
     ...(routerMaterias || []),
     ...(routerUsuarios || []),

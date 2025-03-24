@@ -1,6 +1,6 @@
 import { Imagenes } from "@modules/general/components/roundedIcon/utils";
 import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
-import { EstadoProyecto } from "./proyecto.tipo";
+import { EstadoEjecucionProyecto } from "./proyecto.tipo";
 type Tecnologia = { nombre: string; imagen: keyof typeof Imagenes };
 export type ProyectoCard = {
   titulo: string;
@@ -16,7 +16,7 @@ export type ProyectoCard = {
   grupo: string;
   seccion: string;
   semestre: string;
-  estado: EstadoProyecto;
+  estado: EstadoEjecucionProyecto;
 };
 
 export const proyecto1: ProyectoCard = {
@@ -30,21 +30,21 @@ export const proyecto1: ProyectoCard = {
       id: "1",
       foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnLAwnCxV26w3jNd5ARMQl_WXk9yn7IRAi5Q&s",
       rol: "Desarrollador Full Stack",
-      logros: { titulo: "Repositorios en GitHub", valor: "50+" },
+      logros: [{ titulo: "Repositorios en GitHub", valor: "50+" }],
     },
     {
       nombres: "Ana Gómez",
       id: "1",
       foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnLAwnCxV26w3jNd5ARMQl_WXk9yn7IRAi5Q&s",
       rol: "Diseñadora UI/UX",
-      logros: { titulo: "Proyectos completados", valor: "30+" },
+      logros: [{ titulo: "Proyectos completados", valor: "30+" }],
     },
     {
       nombres: "Ana Gómez",
       id: "1",
       foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnLAwnCxV26w3jNd5ARMQl_WXk9yn7IRAi5Q&s",
       rol: "Diseñadora UI/UX",
-      logros: { titulo: "Proyectos completados", valor: "30+" },
+      logros: [{ titulo: "Proyectos completados", valor: "30+" }],
     },
   ],
   frontend: { nombre: "React", imagen: "react" },
@@ -56,13 +56,13 @@ export const proyecto1: ProyectoCard = {
     nombres: "Laura Martínez",
     foto: "s",
     rol: "Gerente de Producto",
-    logros: { titulo: "Años de experiencia", valor: "10+" },
+    logros: [{ titulo: "Años de experiencia", valor: "10+" }],
   },
   materia: "Análisis de Algoritmos",
   grupo: "A",
   seccion: "Teoría de grafos",
   semestre: "2025-2",
-  estado: "I",
+  estado: "F",
 };
 
 export const proyecto2: ProyectoCard = {
@@ -76,21 +76,21 @@ export const proyecto2: ProyectoCard = {
       id: "1",
       foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnLAwnCxV26w3jNd5ARMQl_WXk9yn7IRAi5Q&s",
       rol: "Desarrollador Full Stack",
-      logros: { titulo: "Repositorios en GitHub", valor: "50+" },
+      logros: [{ titulo: "Años de experiencia", valor: "10+" }],
     },
     {
       nombres: "José Julian",
       id: "1",
       foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnLAwnCxV26w3jNd5ARMQl_WXk9yn7IRAi5Q&s",
       rol: "Diseñadora UI/UX",
-      logros: { titulo: "Proyectos completados", valor: "30+" },
+      logros: [{ titulo: "Años de experiencia", valor: "10+" }],
     },
     {
       nombres: "Julian Quiroz",
       id: "1",
       foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnLAwnCxV26w3jNd5ARMQl_WXk9yn7IRAi5Q&s",
       rol: "Diseñadora UI/UX",
-      logros: { titulo: "Proyectos completados", valor: "30+" },
+      logros: [{ titulo: "Años de experiencia", valor: "10+" }],
     },
   ],
   frontend: { nombre: "Angular", imagen: "angular" },
@@ -102,11 +102,11 @@ export const proyecto2: ProyectoCard = {
     nombres: "Laura Martínez",
     foto: "s",
     rol: "Gerente de Producto",
-    logros: { titulo: "Años de experiencia", valor: "10+" },
+    logros: [{ titulo: "Años de experiencia", valor: "10+" }],
   },
   materia: "Análisis de Algoritmos",
   grupo: "A",
   seccion: "Teoría de grafos",
   semestre: "2025-1",
-  estado: "I",
+  estado: "L",
 };

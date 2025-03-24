@@ -24,9 +24,6 @@ import {
 } from "@mui/material";
 
 import React, { useContext, useState } from "react";
-import SocialNetworkIcon from "../socialNetwork";
-import { ModeContext } from "@modules/general/context/modeContext";
-import { getTheme } from "@core/themes";
 import ProjectCard from "@modules/general/components/projectCard";
 import { labelPortafolio } from "@modules/usuarios/enum/labelPortafolio";
 import useSpringModal from "@modules/general/hooks/useSpringModal";
@@ -77,26 +74,6 @@ const Portafolio = () => {
   const handleCard = (proyecto: ProyectoCard) => {
     setSelectProyecto(proyecto);
     handleOpen();
-  };
-
-  const handleFiltro = (key: keyof Filtros, value: unknown) => {
-    setFiltros({ ...filtros, [key]: value });
-    if (key == "semestre") {
-      toggleFilter(key, value);
-      return;
-    }
-
-    switch (key) {
-      case "backend":
-        toggleFilter("backend.nombre", value);
-        return;
-      case "frontend":
-        toggleFilter("frontend.nombre", value);
-        return;
-      case "dataBase":
-        toggleFilter("dataBase.nombre", value);
-        return;
-    }
   };
 
   const { handleRequestSort, orderBy, stableSort } =

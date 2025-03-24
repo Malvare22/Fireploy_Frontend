@@ -16,6 +16,8 @@ import ingSistemasLogo from "@modules/general/assets/ufps/ingSistemasLogo.png";
 import ufpsLogo from "@modules/general/assets/ufps/UFPSLogo.png";
 import ufpsLogoCompleto from "@modules/general/assets/ufps/UFPSLogoCompleto.png";
 import defaultProfileImage from "@modules/general/assets/profile/defaultProfileImage.png";
+import defaultProjectImage from "@modules/general/assets/project/defaultImage.jpg"
+
 
 export const Imagenes = {
   // Fireploy
@@ -40,7 +42,9 @@ export const Imagenes = {
   ufps_logo: ufpsLogo,
   ufps_logo_completo: ufpsLogoCompleto,
 
-  defaultProfileImage: defaultProfileImage
+  defaultProfileImage: defaultProfileImage,
+
+  defaultProjectImage: defaultProjectImage
 } as const; // "as const" asegura que los valores sean de solo lectura
 
 
