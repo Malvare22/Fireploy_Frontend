@@ -24,6 +24,7 @@ import {
 } from "@modules/general/context/accountContext";
 import { getUserLetterTypes } from "@modules/usuarios/utils/usuario.map";
 import { TiposUsuario } from "@modules/usuarios/types/usuario";
+import { rutasProyectos } from "@modules/proyectos/router";
 
 function Copyright() {
   return (
@@ -52,7 +53,7 @@ const SignIn: React.FC = () => {
     setSingUp({ ...singUp, [key]: value });
   };
 
-  const { setOpen, initQuery, open, responseData } =
+  const { setOpen, initQuery, open, responseData, error } =
     useQuery<SignUpResponse>(
       () => postSignUp(singUp.email, singUp.password),
       false
@@ -77,18 +78,18 @@ const SignIn: React.FC = () => {
       };
       localStorage.setItem("ACCOUNT", JSON.stringify(_localUser));
       if (setLocalUser) setLocalUser(_localUser);
-      navigate("/app/dashboard");
+      navigate(rutasProyectos.listar);
     }
   }, [responseData]);
 
   return (
     <Card sx={{ padding: 2, maxWidth: 600 }}>
-      <AlertDialog
-        setOpen={setOpen}
+      {error && <AlertDialog
         textBody="Combinación de Usuario y Contraseña no encontrados en el sistema"
-        open={open && !responseData}
+        open={open}
         title="Iniciar Sesión"
-      />
+        handleAccept={()=> setOpen(false)}
+      />}
       <CssBaseline />
       <div>
         <Box

@@ -33,7 +33,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import GeneralButton from "@modules/general/components/buttons";
+import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import useQuery from "@modules/general/hooks/useQuery";
 import { postModificarUsuarioService } from "@modules/usuarios/services/post.modificar.usuario";

@@ -1,3 +1,4 @@
 export enum labelListarCursos{
-    grupos = 'Grupos'
+    grupos = 'Grupos',
+    noHayGrupos = 'Actualmente no se encuentran grupos registrados para esta materia'
 }

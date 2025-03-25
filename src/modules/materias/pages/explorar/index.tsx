@@ -22,7 +22,7 @@ import { AccountContext } from "@modules/general/context/accountContext";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { adaptarMateriaService } from "@modules/materias/utils/adapters/adaptar.materiaService.materia";
 
-function ListarMaterias() {
+function ExplorarMaterias() {
   const [materias, setMaterias] = useState<Materia[]>([]);
 
   const token = useContext(AccountContext).localUser?.token;
@@ -145,4 +145,4 @@ function ListarMaterias() {
   );
 }
 
-export default ListarMaterias;
+export default ExplorarMaterias;

@@ -1,26 +1,24 @@
 import { RouteObject } from "react-router-dom";
-// import ListarMaterias from "../pages/listar";
-import ListarMaterias from "../pages/listar";
-import ListarCursos from "../pages/listar/id";
-import VerInformacionCurso from "../pages/listar/id/id";
+import VerInformacionCurso from "../pages/explorar/id/id";
+import ExplorarMaterias from "../pages/explorar";
+import VerCursosMateria from "../pages/explorar/id";
 
 export const rutaBase = "/app/materias";
 
 export enum rutasMaterias {
-  listar = rutaBase + "/listar",
-  crear = rutaBase + "/crear",
-  verCursos = rutaBase + "/:id/cursos",
-  verInformacionCursos = rutaBase + "/curso/:id",
+  explorar = rutaBase + "/explorar",
+  verCursos = explorar + "/:id",
+  verInformacionCursos = verCursos + "/:id",
 }
 
 export const routerMaterias: RouteObject[] = [
   {
-    path: rutasMaterias.listar,
-    element: <ListarMaterias />,
+    path: rutasMaterias.explorar,
+    element: <ExplorarMaterias />,
   },
   {
     path: rutasMaterias.verCursos,
-    element: <ListarCursos />,
+    element: <VerCursosMateria />,
   },
   {
     path: rutasMaterias.verInformacionCursos,

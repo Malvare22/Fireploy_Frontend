@@ -55,7 +55,7 @@ const miPortafolio: PairIcons = {
 const materias: PairIcons = {
   icon: <NoteAltIcon />,
   label: "Materias y Cursos",
-  url: rutasMaterias.listar,
+  url: rutasMaterias.explorar,
 };
 
 // const safari: PairIcons = {

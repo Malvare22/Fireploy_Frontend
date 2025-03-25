@@ -8,20 +8,33 @@
 
 import { RouteObject } from "react-router-dom";
 import VistaPerfil from "../pages/perfil";
+import ListarPortafolios from "../pages/explorarPortafolios";
+import Portafolio from "../components/portafolio";
+import ExplorarPortafolios from "../pages/explorarPortafolios";
 
 const rutaBase = "/app/usuarios";
 
 export enum rutasUsuarios {
   perfil = rutaBase + "/perfil",
-  verPerfilPorId = rutaBase + "/perfil/:id",
-  listar = rutaBase + "/listar",
-  verPortafolio = rutaBase + "/portafolios/:id",
-  buscarPortafolio = rutaBase + "/portafolios",
+  explorarPortafolios = rutaBase + "/explorar",
+  portafolio = rutaBase + "/portafolio/:id"
 }
 
 export const routerUsuarios: RouteObject[] = [
   {
     path: rutasUsuarios.perfil,
-    element: <VistaPerfil />, // Página principal
+    element: <VistaPerfil />,
   },
+  {
+    path: rutasUsuarios.explorarPortafolios,
+    element: <ListarPortafolios />,
+  },
+  {
+    path: rutasUsuarios.portafolio,
+    element: <Portafolio/>
+  },
+  {
+    path: rutasUsuarios.explorarPortafolios,
+    element: <ExplorarPortafolios/>
+  }
 ];

@@ -9,7 +9,7 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import React, { useContext, useEffect, useState } from "react";
-import GeneralButton from "../../buttons";
+import GeneralButton from "../../button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { useNavigate } from "react-router-dom";
 import { rutasGeneral } from "@modules/general/router/router";
