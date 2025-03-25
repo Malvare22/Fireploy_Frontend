@@ -8,10 +8,15 @@ export type CursoMateria = {
   semestre: string;
   descripcion: string;
   estado: EstadoCurso;
-  docente: Usuario;
-  estudiantes: Usuario[];
-  secciones: SeccionCurso[],
-  materia: string
+  docente?: Usuario | undefined;
+  estudiantes?: Usuario[];
+  secciones?: SeccionCurso[],
+  materia?: {
+    id?: number,
+    nombre: string,
+    semestre: string,
+    estado: string
+  }
 
 };
 

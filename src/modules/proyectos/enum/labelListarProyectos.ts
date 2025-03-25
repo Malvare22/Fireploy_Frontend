@@ -5,5 +5,6 @@ export enum labelListarProyecto {
   explorarProyectos = "Explorar Proyectos",
   explorarProyectosParrafo = "Navega entre los proyectos de diferentes usuarios, y descubre",
   proyectos = 'Proyectos',
-  notificacion = 'Para crear un proyecto debes encontrarte registrado en un curso que contenga una sección activa'
+  notificacion = 'Para crear un proyecto debes encontrarte registrado en un curso que contenga una sección activa',
+  verMisProyectos = 'Ver mis Proyectos'
 }

@@ -3,5 +3,6 @@ export enum labelCardCurso{
     estudiantes = 'Estudiantes',
     docente = 'Docente',
     grupo = 'Grupo',
-    inscribirme = 'Inscribirme'
+    inscribirme = 'Inscribirme',
+    docenteSinAsignar = 'Docente sin asignar'
 };

@@ -1,4 +1,3 @@
-import LayoutStandard from "@modules/general/layouts/auth";
 import { RouteObject } from "react-router-dom";
 // import ListarMaterias from "../pages/listar";
 import ListarMaterias from "../pages/listar";
@@ -10,8 +9,8 @@ export const rutaBase = "/app/materias";
 export enum rutasMaterias {
   listar = rutaBase + "/listar",
   crear = rutaBase + "/crear",
-  verCursos = rutaBase + "/listar/:id",
-  verInformacionCursos = rutaBase + "/listar/:id/:id",
+  verCursos = rutaBase + "/:id/cursos",
+  verInformacionCursos = rutaBase + "/curso/:id",
 }
 
 export const routerMaterias: RouteObject[] = [

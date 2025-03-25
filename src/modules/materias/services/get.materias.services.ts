@@ -1,7 +1,7 @@
 import { getData } from "@core/services";
 import { MateriaService } from "../types/materia.service";
 
-export const obtenerMateriasService = async (token: string) => {
+export const getMateriasService = async (token: string) => {
   const response = await getData<MateriaService[]>(
     `/materia`,
     {},

@@ -1,25 +1,17 @@
 import { seccionesCurso } from "./curso.seccion";
 import { CursoMateria } from "./materia.curso";
+
 export type EstadoMateria = "A" | "I";
+
 export type EstadoCurso = "A" | "I";
-export type SemestreMateria =
-  | "I"
-  | "II"
-  | "III"
-  | "IV"
-  | "V"
-  | "VI"
-  | "VII"
-  | "VIII"
-  | "IX"
-  | "X";
+
 export type Materia = {
-  estado: EstadoMateria;
+  estado?: EstadoMateria;
   nombre: string;
   semestre: string;
   id: number;
-  descripcion: string;
-  cursos: CursoMateria[];
+  descripcion?: string | undefined;
+  cursos?: CursoMateria[] | undefined;
 };
 
 const cursoEjemplo = [

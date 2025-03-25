@@ -56,7 +56,6 @@ function useOrderSelect<T extends object>() {
    * @param {Order | undefined} order - El orden a aplicar ("asc", "desc" o `undefined` para eliminar).
    */
   const handleRequestSort = (property: string, order: Order | undefined) => {
-    console.log(property, order)
     setOrderBy((prevOrderBy) => ({
       ...prevOrderBy,
       [property]: order,
@@ -83,6 +82,7 @@ function useOrderSelect<T extends object>() {
     orderBy,
     handleRequestSort,
     stableSort,
+    setOrderBy
   };
 }
 

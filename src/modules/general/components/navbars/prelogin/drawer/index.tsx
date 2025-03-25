@@ -30,56 +30,47 @@ import { rutasMaterias } from "@modules/materias/router/router";
 type PairIcons = {
   icon: React.ReactNode;
   label: string;
-  //url: string;
+  url: string;
 };
 
 // Definición de las opciones del menú
-const misProyectos: PairIcons = {
+const proyectos: PairIcons = {
   icon: <AccountTreeIcon />,
-  label: "Mis Proyectos",
-  //url: "misProyectos",
+  label: "Proyectos",
+  url: rutasProyectos.listar
 };
 
 const miPortafolio: PairIcons = {
   icon: <DocumentScannerIcon />,
   label: "Mi Portafolio",
-  //url: "miPortafolio",
+  url: rutasUsuarios.verPortafolio,
 };
 
-const usuarios: PairIcons = {
-  icon: <SupervisedUserCircleIcon />,
-  label: "Usuarios",
-  //url: rutasUsuarios.listar,
-};
+// const usuarios: PairIcons = {
+//   icon: <SupervisedUserCircleIcon />,
+//   label: "Usuarios",
+//   //url: rutasUsuarios.listar,
+// };
 
 const materias: PairIcons = {
   icon: <NoteAltIcon />,
   label: "Materias y Cursos",
-  //url: rutasMaterias.listar,
+  url: rutasMaterias.listar,
 };
 
-const proyectos: PairIcons = {
-  icon: <CloudCircleIcon />,
-  label: "Proyectos",
-  //url: rutasProyectos.listar,
-};
-
-const safari: PairIcons = {
-  icon: <ExploreIcon />,
-  label: "Explorar Portafolios",
-  // url: rutasUsuarios.buscarPortafolio,
-};
+// const safari: PairIcons = {
+//   icon: <ExploreIcon />,
+//   label: "Explorar Portafolios",
+//   // url: rutasUsuarios.buscarPortafolio,
+// };
 
 /**
  * Lista de elementos del menú para administradores.
  */
 const admin: PairIcons[] = [
-  misProyectos,
-  miPortafolio,
-  usuarios,
-  materias,
   proyectos,
-  safari,
+  miPortafolio,
+  materias,
 ];
 
 /**
@@ -114,7 +105,7 @@ export default function DrawerCustom() {
       <List>
         {admin.map((option, index) => (
           <ListItem key={index} disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={() => navigate(option.url)}>
               <ListItemIcon
                 sx={{
                   "& svg": {

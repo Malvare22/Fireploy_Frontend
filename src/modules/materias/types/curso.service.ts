@@ -9,6 +9,6 @@ export type CursoService = {
   descripcion: string;
   estado: EstadoMateria;
   materia: MateriaService;
-  docente: UsuarioService;
-  estudiantes?: UsuarioService[];
+  docente: UsuarioService | null;
+  estudiantes: UsuarioService[];
 };

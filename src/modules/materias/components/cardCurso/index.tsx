@@ -18,6 +18,8 @@ import {
   adaptarUsuarioAUsuarioCardPortafolio,
 } from "@modules/usuarios/utils/adaptar.usuario";
 import InputIcon from '@mui/icons-material/Input';
+import { Usuario } from "@modules/usuarios/types/usuario";
+import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 
 type CardCursoProps = {
   curso: CursoMateria;
@@ -26,7 +28,11 @@ type CardCursoProps = {
 const CardCurso: React.FC<CardCursoProps> = ({ curso }) => {
   const theme = useTheme();
 
-  const adaptedDocente = adaptarUsuarioAUsuarioCardPortafolio(curso.docente);
+  let docente: undefined | UsuarioPortafolioCard = undefined;
+
+  if(curso.docente){
+    docente =  adaptarUsuarioAUsuarioCardPortafolio(curso.docente);
+  }
 
   return (
     <AnimatedCard>
@@ -35,7 +41,7 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso }) => {
           {`${labelCardCurso.grupo}: ${curso.grupo}`}
         </Typography>
         <Stack direction={"row"} alignItems={"center"} spacing={2}>
-          <Typography>{labelCardCurso.docente}</Typography>
+          <Typography>{docente ? labelCardCurso.docente : labelCardCurso.docenteSinAsignar}</Typography>
           <Card
             sx={{
               paddingX: 1,
@@ -44,16 +50,16 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso }) => {
               fontWeight: 500,
             }}
           >
-            <Stack direction={"row"} alignItems={"center"} spacing={1}>
+            {docente && <Stack direction={"row"} alignItems={"center"} spacing={1}>
               <ProjectCardAvatar
-                usuario={adaptedDocente}
+                usuario={docente}
                 sx={{ width: 32, height: 32 }}
               />
-              <Typography variant="body2">{adaptedDocente.nombres}</Typography>
-            </Stack>
+              <Typography variant="body2">{docente.nombres}</Typography>
+            </Stack>}
           </Card>
         </Stack>
-        <Card sx={{ padding: 2 }}>
+        {/* <Card sx={{ padding: 2 }}>
           <Stack direction={"row"} alignItems={"center"} spacing={2}>
             <Typography>{`${labelCardCurso.secciones}: ${curso.secciones.length}`}</Typography>
             <Divider
@@ -62,7 +68,7 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso }) => {
             />
             <Typography>{`${labelCardCurso.estudiantes}: ${curso.estudiantes.length}`}</Typography>
           </Stack>
-        </Card>
+        </Card> */}
         <Stack alignItems={"end"}>
           <Button variant="contained" endIcon={<InputIcon />}>{labelCardCurso.inscribirme}</Button>
         </Stack>

@@ -19,10 +19,10 @@ const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
   return (
     <Card sx={{ padding: 4 }}>
       <Stack spacing={2}>
-        <Typography variant="h5" color="info">
+        <Typography variant="h5" textAlign={{xs: 'center', sm: 'start'}} color="info">
           {proyecto.titulo}
         </Typography>
-        <Stack direction={"row"} spacing={3}>
+        <Stack direction={{lg: "row", xs: 'column'}} alignItems={'center'} spacing={3}>
           <Box
             component={"img"}
             src={proyecto.imagen}
@@ -65,8 +65,10 @@ const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
                   </Typography>
                 </Box>
               </Box>
-              <Stack direction={"row"} spacing={3}>
-                <CardTecnologia tecnologia="angular" />
+              <Stack direction={{sm: "row", xs: 'column'}} sx={{'> div': {
+                width: {xs: '70%'}
+              }}} alignItems={'center'} spacing={3}>
+               <CardTecnologia tecnologia="angular" />
                 <CardTecnologia tecnologia="springboot" />
                 <CardTecnologia tecnologia="mongodb" />
               </Stack>
