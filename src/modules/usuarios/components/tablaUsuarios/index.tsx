@@ -1,10 +1,16 @@
 import { labelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
-import { usuariosEjemplo } from "./usuariosEjemplo";
-import { Usuario } from "@modules/usuarios/types/usuario";
+import { EstadoUsuario, Usuario } from "@modules/usuarios/types/usuario";
 import DataTable, { ConditionalStyles } from "react-data-table-component";
 import { TableColumn, TableStyles } from "react-data-table-component";
-import { Box, Chip, Stack, Tooltip, useMediaQuery, useTheme } from "@mui/material";
-import { useMemo } from "react";
+import {
+  Chip,
+  Stack,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import React, { useContext, useMemo, useState } from "react";
 import { getUserTypes } from "@modules/usuarios/utils/usuario.map";
 import SchoolIcon from "@mui/icons-material/School";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
@@ -14,12 +20,67 @@ import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import { showSocialNetworks } from "@modules/usuarios/utils/showSocialNetworks";
 import Status from "@modules/general/components/status";
-import { adapterUsuario } from "@modules/usuarios/utils/adaptar.usuario";
+import { useNavigate } from "react-router";
+import { rutasUsuarios } from "@modules/usuarios/router/router";
+import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import AlertDialog from "@modules/general/components/alertDialog";
+import useQuery from "@modules/general/hooks/useQuery";
+import { UsuarioService } from "@modules/usuarios/types/services.usuario";
+import { postModificarEstadoUsuarioService } from "@modules/usuarios/services/post.modificar.usuario";
+import { AccountContext } from "@modules/general/context/accountContext";
 
-function TablaUsuarios() {
+type TablaUsuariosProps = {
+  usuarios: Usuario[];
+};
+const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
   const theme = useTheme();
 
-  const matches = useMediaQuery(theme.breakpoints.up('md'));
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
+
+  const [selectUsuario, setSelectUsuario] = useState<Usuario | undefined>(
+    undefined
+  );
+
+  const token = useContext(AccountContext).localUser?.token;
+
+  const {
+    handleAlertClose: handleAlertCloseChangeStatus,
+    initQuery: initQueryChangeStatus,
+    message: messageChangeStatus,
+    open: openChangeStatus,
+  } = useQuery<UsuarioService>(
+    () =>
+      postModificarEstadoUsuarioService(
+        selectUsuario?.id!!,
+        token!!,
+        selectUsuario?.estado == "A" ? "I" : "A"
+      ),
+    true,
+    "Estado cambiado correctamente"
+  );
+
+  const handleSelect = (usuario: Usuario) => {
+    setSelectUsuario(usuario);
+    setOpenHandleStatus(true);
+  };
+
+  const navigate = useNavigate();
+
+  const { open: openHandleStatus, setOpen: setOpenHandleStatus } =
+    useAlertDialog();
+
+  function ModalChangeStatus(status: EstadoUsuario) {
+    const label = status == "I" ? "habilitar" : "deshabilitar";
+
+    return (
+      <Stack>
+        <Typography>
+          `¿Está seguro de que desea ${label} al usuario $
+          {selectUsuario?.nombres} ${selectUsuario?.apellidos}?`
+        </Typography>
+      </Stack>
+    );
+  }
 
   const columns: TableColumn<Usuario & { rowIndex: number }>[] = [
     {
@@ -126,7 +187,7 @@ function TablaUsuarios() {
             );
         }
       },
-      width: matches ? 'auto' : '70px'
+      width: matches ? "auto" : "70px",
     },
 
     {
@@ -157,9 +218,28 @@ function TablaUsuarios() {
       name: "Acciones", // Nueva columna con un botón
       cell: (row) => (
         <Stack direction={"row"}>
-          <ActionButton mode={actionButtonTypes.ver} />
+          <ActionButton
+            mode={actionButtonTypes.ver}
+            onClick={() =>
+              navigate(
+                rutasUsuarios.modificarPerfil.replace(":id", row.id.toString())
+              )
+            }
+          />
           <ActionButton mode={actionButtonTypes.editar} />
-          <ActionButton mode={actionButtonTypes.habilitar} />
+          {row.estado == "A" ? (
+            <ActionButton
+              mode={actionButtonTypes.deshabilitarUsuario}
+              onClick={() => handleSelect(row)}
+              sx={{ color: theme.palette.error.main }}
+            />
+          ) : (
+            <ActionButton
+              mode={actionButtonTypes.habilitarUsuario}
+              onClick={() => handleSelect(row)}
+              sx={{ color: theme.palette.success.main }}
+            />
+          )}
         </Stack>
       ),
       ignoreRowClick: true, // Evita que la fila se seleccione al hacer clic en el botón
@@ -211,21 +291,39 @@ function TablaUsuarios() {
 
   const dataConIndice = useMemo(
     () =>
-      usuariosEjemplo.map((usuario, index) => ({
-        ...adapterUsuario(usuario),
+      usuarios.map((usuario, index) => ({
+        ...usuario,
         rowIndex: index,
       })),
-    [usuariosEjemplo]
+    [usuarios]
   );
 
   return (
-    <DataTable
-      columns={columns}
-      data={dataConIndice}
-      customStyles={customStyles}
-      conditionalRowStyles={conditionalRowStyles}
-    ></DataTable>
+    <>
+      <AlertDialog
+        open={openHandleStatus}
+        handleAccept={() => {
+          initQueryChangeStatus();
+          setOpenHandleStatus(false);
+        }}
+        title="Cambiar Estado del Usuario"
+        body={ModalChangeStatus(selectUsuario?.estado!!)}
+        handleCancel={() => setOpenHandleStatus(false)}
+      />
+      <AlertDialog
+        open={openChangeStatus}
+        handleAccept={handleAlertCloseChangeStatus}
+        title="Cambiar Estado del Usuario"
+        textBody={messageChangeStatus}
+      />
+      <DataTable
+        columns={columns}
+        data={dataConIndice}
+        customStyles={customStyles}
+        conditionalRowStyles={conditionalRowStyles}
+      ></DataTable>
+    </>
   );
-}
+};
 
 export default TablaUsuarios;

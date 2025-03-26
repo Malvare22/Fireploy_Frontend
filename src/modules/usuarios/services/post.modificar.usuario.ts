@@ -19,7 +19,7 @@ export const postModificarUsuarioService = async (
   return response;
 };
 
-export const postModificarEstadoUsuario = async (
+export const postModificarEstadoUsuarioService = async (
   id: number,
   token: string,
   estado: EstadoUsuario

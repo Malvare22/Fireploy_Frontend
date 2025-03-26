@@ -10,7 +10,7 @@ import {
   MenuItem,
   IconButton,
 } from "@mui/material";
-import { Usuario } from "@modules/usuarios/types/usuario";
+import { TiposUsuario, Usuario } from "@modules/usuarios/types/usuario";
 import { labelPerfil } from "@modules/usuarios/enum/labelPerfil";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import { useState } from "react";
@@ -58,11 +58,10 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
 
   const { open, setOpen } = useAlertDialog();
 
-  const { register, handleSubmit, formState, getValues, control, reset } =
-    useForm({
-      resolver: zodResolver(EditarUsuarioSchema),
-      defaultValues: usuario,
-    });
+  const { register, handleSubmit, formState, getValues, control } = useForm({
+    resolver: zodResolver(EditarUsuarioSchema),
+    defaultValues: usuario,
+  });
 
   const { errors } = formState;
 
@@ -95,12 +94,12 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
     open: openUpdateUser,
     message: messageUpdateUser,
     error: errorUpdateUser,
-    handleAlertClose: handleAlertCloseUpdateUser
+    handleAlertClose: handleAlertCloseUpdateUser,
   } = useQuery<UsuarioService>(
     () =>
       postModificarUsuarioService(
-        localUser?.id ?? 0,
-        localUser?.token ?? "",
+        getValues().id!!,
+        localUser?.token!!,
         getValues()
       ),
     false,
@@ -110,6 +109,8 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
   const handleUpdateUser = async () => {
     await initQueryUpdateUser();
   };
+
+  const CURRENT_USER_TYPE = (useContext(AccountContext).localUser?.tipo ?? 'E') as TiposUsuario;
 
   useEffect(() => {
     if (!responseDataUpdateUser) return;
@@ -137,14 +138,14 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
           open={openConfirmation}
           handleCancel={() => setOpenConfirmation(false)}
         />
-        { errorUpdateUser && 
+        {errorUpdateUser && (
           <AlertDialog
             title="Modificación de usuarios"
             textBody={messageUpdateUser}
             open={openUpdateUser}
             handleAccept={handleAlertCloseUpdateUser}
           />
-        }
+        )}
         <Stack
           direction={"row"}
           alignItems={"center"}
@@ -205,7 +206,10 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
                   {...register("estFechaInicio")}
                   error={!!errors.estFechaInicio}
                   helperText={errors.estFechaInicio?.message}
-                  disabled
+                  disabled={CURRENT_USER_TYPE == 'E'}
+                  type="date"
+                  InputLabelProps={{ shrink: true }}
+
                 />
               </Stack>
             </Stack>
@@ -258,12 +262,14 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
             </Stack>
           </Grid2>
           <Grid2 size={{ md: 3, xs: 12 }}>
-            <ProfilePhotoUploader
-              actualImg={getValues("fotoDePerfil")}
-              userId={id}
-              initQueryCondition={updateImageCondition}
-              setDetectChangeImage={setDetectChangeImage}
-            />
+            {
+              <ProfilePhotoUploader
+                actualImg={getValues("fotoDePerfil")}
+                userId={id}
+                initQueryCondition={updateImageCondition}
+                setDetectChangeImage={setDetectChangeImage}
+              />
+            }
           </Grid2>
         </Grid2>
 
@@ -278,6 +284,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
               {...register("fechaDeNacimiento")}
               error={!!errors.fechaDeNacimiento}
               helperText={errors.fechaDeNacimiento?.message}
+              InputLabelProps={{ shrink: true }}
             />
           </Grid2>
           <Grid2 size={{ md: 6, xs: 12 }}>
@@ -426,51 +433,54 @@ const HiddenInput = styled("input")({
 
 type ProfilePhotoUploaderProps = {
   userId: number | undefined;
-  actualImg: string;
+  actualImg: string | null;
   initQueryCondition: boolean;
-  setDetectChangeImage: React.Dispatch<boolean>
+  setDetectChangeImage: React.Dispatch<boolean>;
 };
 
 export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
   userId,
   actualImg,
   initQueryCondition,
-  setDetectChangeImage
+  setDetectChangeImage,
 }) => {
   const [photo, setPhoto] = useState<string | null>(actualImg);
 
-  const [fileValue, setFileValue] = useState<Blob | undefined>(undefined); 
+  const [fileValue, setFileValue] = useState<Blob | undefined>(undefined);
 
-  const token = useContext(AccountContext).localUser?.token ?? '';
+  const token = useContext(AccountContext).localUser?.token ?? "";
 
-  useEffect(
-    () => {
-      const f = async () => {
-        if(photo){
-          setFileValue(await urlToBlob(photo));
-        }
-        else{
-          const response = await fetch(getImage['defaultProfileImage'].ruta);
-          setFileValue(await response.blob())
-        }
-
-        if(photo != actualImg){
-          setDetectChangeImage(true);
-        }
-      };
-      f();
-    }, [photo]
-  );
-
-  const {handleAlertClose, initQuery, message, open} = useQuery<unknown>(() => patchSubirFotoPerfil(userId!!, token, fileValue!!), true, 'Perfil Actualizado Correctamente');
-  
-  useEffect(
-    () => {
-      if(initQueryCondition){
-          initQuery();
+  useEffect(() => {
+    const f = async () => {
+      if (photo && photo != actualImg) {
+        setFileValue(await urlToBlob(photo));
+      } else if (!photo) {
+        const response = await fetch(getImage["defaultProfileImage"].ruta);
+        setFileValue(await response.blob());
       }
-    }, [initQueryCondition]
-  );
+
+      if (photo != actualImg) {
+        setDetectChangeImage(true);
+      }
+    };
+    f();
+  }, [photo]);
+
+  const { handleAlertClose, initQuery, message, open, error, setOpen } =
+    useQuery<unknown>(
+      () => patchSubirFotoPerfil(userId!!, token, fileValue!!),
+      true,
+      "Perfil Actualizado Correctamente"
+    );
+
+  useEffect(() => {
+    if(!initQueryCondition) return;
+    if (photo != actualImg) {
+      initQuery();
+    } else {
+      setOpen(true);
+    }
+  }, [initQueryCondition]);
 
   const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -489,9 +499,30 @@ export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
     }
   };
 
+  const navigate = useNavigate();
+
+  function handleRefresh(){
+    navigate(0);
+  };
+
   return (
     <Stack alignItems="center" spacing={3}>
-      <AlertDialog handleAccept={handleAlertClose} open={open} title="Gestión de Usuarios" textBody={message}/>
+      {error && (
+        <AlertDialog
+          handleAccept={handleAlertClose}
+          open={open}
+          title="Gestión de Usuarios"
+          textBody={message}
+        />
+      )}
+      {
+        <AlertDialog
+          handleAccept={handleRefresh}
+          open={open}
+          title="Gestión de Usuarios"
+          textBody={'Se ha actualizado la información correctamente'}
+        />
+      }
       <Avatar
         src={photo || undefined}
         sx={{ width: 100, height: 100, border: "1px solid #ddd" }}

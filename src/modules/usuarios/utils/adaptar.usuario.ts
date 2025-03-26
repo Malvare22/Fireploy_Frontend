@@ -3,7 +3,7 @@ import { UsuarioService } from "../types/services.usuario";
 import { EstadoUsuario, RedSocialUsuario, SexoUsuario, TiposUsuario, Usuario } from "../types/usuario";
 import { UsuarioCampoBusqueda } from "@modules/general/components/searchUsers/hook";
 import { UsuarioPortafolioCard } from "../types/usuario.portafolio";
-import { getUserLetterTypes, getUserTypes, UserTypeFullString } from "./usuario.map";
+import { getUserLetterTypes, getUserTypes, getUserTypesArray, UserTypeFullString } from "./usuario.map";
 import { getImage } from "@modules/general/components/roundedIcon/utils";
 
 export const adapterUsuario = (usuario: UsuarioService) => {
@@ -41,6 +41,8 @@ export const adaptarUsuarioSalida = (
       foto_perfil: usuario.fotoDePerfil,
       red_social: JSON.stringify(usuario.redSocial),
       descripcion: usuario.descripcion,
+      tipo: getUserTypes.get(usuario.tipo),
+      est_fecha_inicio: usuario.estFechaInicio
     };
     return _usuario;
   }

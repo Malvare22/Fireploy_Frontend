@@ -95,7 +95,7 @@ export const redSocialUsuarioSchema = z
  */
 export const nombresSchema = z
   .string()
-  .min(1, { message: "El nombre no puede estar vacío" });
+  .min(0, { message: "El nombre no puede estar vacío" });
 export const apellidosSchema = z
   .string()
   .min(1, { message: "El apellido no puede estar vacío" });
