@@ -3,12 +3,9 @@ import { usuariosEjemplo } from "./usuariosEjemplo";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import DataTable, { ConditionalStyles } from "react-data-table-component";
 import { TableColumn, TableStyles } from "react-data-table-component";
-import { adaptarUsuario } from "@modules/usuarios/utils/adaptar.usuario";
-import { Box, Chip, Stack, useTheme } from "@mui/material";
+import { Box, Chip, Stack, Tooltip, useMediaQuery, useTheme } from "@mui/material";
 import { useMemo } from "react";
-import {
-  obtenerTiposUsuario,
-} from "@modules/usuarios/utils/usuario.map";
+import { getUserTypes } from "@modules/usuarios/utils/usuario.map";
 import SchoolIcon from "@mui/icons-material/School";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
@@ -17,98 +14,158 @@ import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import { showSocialNetworks } from "@modules/usuarios/utils/showSocialNetworks";
 import Status from "@modules/general/components/status";
-
-const columns: TableColumn<Usuario & { rowIndex: number }>[] = [
-  {
-    name: labelUsuario.id,
-    selector: (row) => row.id,
-    width: "70px",
-    sortable: true,
-  },
-  {
-    name: labelUsuario.nombres,
-    selector: (row) => row.nombres + " " + row.apellidos,
-    sortable: true,
-  },
-  {
-    name: labelUsuario.rol,
-    cell: (row) => {
-      const label = obtenerTiposUsuario.get(row.tipo);
-      switch (row.tipo) {
-        case "A":
-          return (
-            <Chip
-              label={label}
-              color="primary"
-              icon={<ManageAccountsIcon />}
-              sx={{ padding: 1, color: "white" }}
-            />
-          );
-
-        case "D":
-          return (
-            <Chip
-              label={label}
-              color="error"
-              icon={<RecordVoiceOverIcon />}
-              sx={{ padding: 1, color: "white" }}
-            />
-          );
-
-        case "E":
-          return (
-            <Chip
-              label={label}
-              color="warning"
-              icon={<SchoolIcon />}
-              sx={{ padding: 1, color: "white" }}
-            />
-          );
-      }
-    },
-  },
-
-  {
-    name: labelUsuario.estado,
-    cell: (row) => <Status estado={row.estado} />,
-    sortable: true,
-    sortFunction: (rowA, rowB) => {
-      return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
-    },
-  },
-  {
-    name: "Redes Sociales", // Nueva columna con un botón
-    cell: (row) => {
-      const redesSociales = showSocialNetworks(row.redSocial);
-      if (redesSociales.length == 0)
-        return (
-          <Chip
-            label="No dispone"
-            icon={<ErrorOutlineIcon />}
-            color="info"
-            sx={{ padding: 1, color: "white" }}
-          />
-        );
-      return redesSociales;
-    },
-  },
-  {
-    name: "Acciones", // Nueva columna con un botón
-    cell: (row) => (
-      <Stack direction={"row"}>
-        <ActionButton mode={actionButtonTypes.ver} />
-        <ActionButton mode={actionButtonTypes.editar} />
-        <ActionButton mode={actionButtonTypes.habilitar} />
-      </Stack>
-    ),
-    ignoreRowClick: true, // Evita que la fila se seleccione al hacer clic en el botón
-    width: "200px",
-    style: { display: "flex", justifyContent: "center" },
-  },
-];
+import { adapterUsuario } from "@modules/usuarios/utils/adaptar.usuario";
 
 function TablaUsuarios() {
   const theme = useTheme();
+
+  const matches = useMediaQuery(theme.breakpoints.up('md'));
+
+  const columns: TableColumn<Usuario & { rowIndex: number }>[] = [
+    {
+      name: labelUsuario.id,
+      selector: (row) => row.id,
+      width: "70px",
+      sortable: true,
+    },
+    {
+      name: labelUsuario.nombres,
+      selector: (row) => row.nombres + " " + row.apellidos,
+      sortable: true,
+    },
+    {
+      name: labelUsuario.rol,
+      cell: (row) => {
+        const label = getUserTypes.get(row.tipo);
+        switch (row.tipo) {
+          case "A":
+            return (
+              <>
+                <Chip
+                  label={label}
+                  color="primary"
+                  icon={<ManageAccountsIcon />}
+                  sx={{
+                    padding: 1,
+                    color: "white",
+                    display: { xs: "none", md: "flex" },
+                  }}
+                />
+                <Stack
+                  sx={{
+                    backgroundColor: theme.palette.primary.main,
+                    color: "white",
+                    borderRadius: "100%",
+                    padding: 0.5,
+                    display: { md: "none", xs: "flex" },
+                  }}
+                >
+                  <Tooltip title={label}>
+                    <ManageAccountsIcon />
+                  </Tooltip>
+                </Stack>
+              </>
+            );
+
+          case "D":
+            return (
+              <>
+                <Chip
+                  label={label}
+                  color="error"
+                  icon={<RecordVoiceOverIcon />}
+                  sx={{
+                    padding: 1,
+                    color: "white",
+                    display: { xs: "none", md: "flex" },
+                  }}
+                />
+                <Stack
+                  sx={{
+                    backgroundColor: theme.palette.error.main,
+                    color: "white",
+                    borderRadius: "100%",
+                    padding: 0.5,
+                    display: { md: "none", xs: "flex" },
+                  }}
+                >
+                  <Tooltip title={label}>
+                    <RecordVoiceOverIcon />
+                  </Tooltip>
+                </Stack>
+              </>
+            );
+
+          case "E":
+            return (
+              <>
+                <Chip
+                  label={label}
+                  color="warning"
+                  icon={<SchoolIcon />}
+                  sx={{
+                    padding: 1,
+                    color: "white",
+                    display: { xs: "none", md: "flex" },
+                  }}
+                />
+                <Stack
+                  sx={{
+                    backgroundColor: theme.palette.warning.main,
+                    color: "white",
+                    borderRadius: "100%",
+                    padding: 0.5,
+                    display: { md: "none", xs: "flex" },
+                  }}
+                >
+                  <Tooltip title={label}>
+                    <SchoolIcon />
+                  </Tooltip>
+                </Stack>
+              </>
+            );
+        }
+      },
+      width: matches ? 'auto' : '70px'
+    },
+
+    {
+      name: labelUsuario.estado,
+      cell: (row) => <Status estado={row.estado} />,
+      sortable: true,
+      sortFunction: (rowA, rowB) => {
+        return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
+      },
+    },
+    {
+      name: "Redes Sociales", // Nueva columna con un botón
+      cell: (row) => {
+        const redesSociales = showSocialNetworks(row.redSocial);
+        if (redesSociales.length == 0)
+          return (
+            <Chip
+              label="No dispone"
+              icon={<ErrorOutlineIcon />}
+              color="info"
+              sx={{ padding: 1, color: "white" }}
+            />
+          );
+        return redesSociales;
+      },
+    },
+    {
+      name: "Acciones", // Nueva columna con un botón
+      cell: (row) => (
+        <Stack direction={"row"}>
+          <ActionButton mode={actionButtonTypes.ver} />
+          <ActionButton mode={actionButtonTypes.editar} />
+          <ActionButton mode={actionButtonTypes.habilitar} />
+        </Stack>
+      ),
+      ignoreRowClick: true, // Evita que la fila se seleccione al hacer clic en el botón
+      style: { display: "flex", justifyContent: "center" },
+    },
+  ];
 
   const customStyles: TableStyles = {
     headCells: {
@@ -155,22 +212,19 @@ function TablaUsuarios() {
   const dataConIndice = useMemo(
     () =>
       usuariosEjemplo.map((usuario, index) => ({
-        ...adaptarUsuario(usuario),
+        ...adapterUsuario(usuario),
         rowIndex: index,
       })),
     [usuariosEjemplo]
   );
 
   return (
-    <Stack spacing={2} direction={"row"}>
-      <Box sx={{ border: "1px solid black", width: 400 }}></Box>
-      <DataTable
-        columns={columns}
-        data={dataConIndice}
-        customStyles={customStyles}
-        conditionalRowStyles={conditionalRowStyles}
-      ></DataTable>
-    </Stack>
+    <DataTable
+      columns={columns}
+      data={dataConIndice}
+      customStyles={customStyles}
+      conditionalRowStyles={conditionalRowStyles}
+    ></DataTable>
   );
 }
 

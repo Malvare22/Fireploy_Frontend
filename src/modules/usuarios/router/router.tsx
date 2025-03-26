@@ -10,14 +10,15 @@ import { RouteObject } from "react-router-dom";
 import VistaPerfil from "../pages/perfil";
 import ListarPortafolios from "../pages/explorarPortafolios";
 import Portafolio from "../components/portafolio";
-import ExplorarPortafolios from "../pages/explorarPortafolios";
+import ListarUsuarios from "../pages/listar";
 
 const rutaBase = "/app/usuarios";
 
 export enum rutasUsuarios {
   perfil = rutaBase + "/perfil",
   explorarPortafolios = rutaBase + "/explorar",
-  portafolio = rutaBase + "/portafolio/:id"
+  portafolio = rutaBase + "/portafolio/:id",
+  listarUsuarios = rutaBase + "/listar"
 }
 
 export const routerUsuarios: RouteObject[] = [
@@ -34,7 +35,7 @@ export const routerUsuarios: RouteObject[] = [
     element: <Portafolio/>
   },
   {
-    path: rutasUsuarios.explorarPortafolios,
-    element: <ExplorarPortafolios/>
+    path: rutasUsuarios.listarUsuarios,
+    element: <ListarUsuarios/>
   }
 ];

@@ -1,16 +1,15 @@
 import Footer from "@modules/general/components/footer";
-import NavbarPrelogin from "@modules/general/components/navbars/prelogin";
-import { Box, Stack, useTheme } from "@mui/material";
+import DashboardLayoutBasic from "@modules/general/components/toolMenu";
+import { Box, Stack } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
 function LayoutAuthenticated() {
 
   return (
     <Box>
-      <NavbarPrelogin />
+      <DashboardLayoutBasic>
       <Box
         sx={{
-          paddingX: { md: 2, xs: 4 },
           backgroundColor: "#fafafa",
           paddingY: 2,
           marginTop: 10,
@@ -18,6 +17,7 @@ function LayoutAuthenticated() {
           justifyContent: "center",
           "> div": { width: "100%" },
           minHeight: "100vh",
+          paddingX: 2
         }}
       >
         <Stack spacing={3}>
@@ -25,6 +25,7 @@ function LayoutAuthenticated() {
           <Outlet />
         </Stack>
       </Box>
+      </DashboardLayoutBasic>
       <Footer />
     </Box>
   );
