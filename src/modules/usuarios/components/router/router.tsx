@@ -1,10 +1,10 @@
 import { RouteObject } from "react-router-dom";
-import Home from "../pages/home";
-import LayoutPrelogin from "../layouts/prelogin";
-import Login from "../pages/login";
-import Registrar from "../pages/registro";
-import LayoutAuthenticated from "../layouts/auth";
-import Dashboard from "../pages/dashboard";
+import Home from "../../../general/pages/home";
+import LayoutPrelogin from "../../../general/layouts/prelogin";
+import Login from "../../../general/pages/login";
+import Registrar from "../../../general/pages/registro";
+import LayoutAuthenticated from "../../../general/layouts/auth";
+import Dashboard from "../../../general/pages/dashboard";
 import { routerMaterias } from "@modules/materias/router/router";
 import { routerUsuarios } from "@modules/usuarios/router/router";
 import { routerProyectos } from "@modules/proyectos/router";
@@ -33,7 +33,7 @@ export const routerGeneral: RouteObject = {
     {
       path: rutasGeneral.registrar,
       element: <Registrar />,
-    },
+    }
   ],
 };
 

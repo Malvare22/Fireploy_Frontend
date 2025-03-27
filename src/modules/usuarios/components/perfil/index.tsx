@@ -16,7 +16,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import { useState } from "react";
 import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Box, Container, getValue, styled } from "@mui/system";
+import { Box, Container, styled } from "@mui/system";
 import { AccountContext } from "@modules/general/context/accountContext";
 import {
   getGenderArray,
@@ -25,7 +25,12 @@ import {
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CrearUsuarioSchema, EditarUsuarioSchema } from "@modules/usuarios/utils/form/editar.schema";
+import {
+  adapterUsuarioFormToUsuario,
+  adapterUsuarioToUsuarioForm,
+  UsuarioForm,
+  usuarioFormTemplate,
+} from "@modules/usuarios/utils/form/editar.schema";
 import { Controller, useForm } from "react-hook-form";
 import { InputAdornment } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -50,7 +55,7 @@ interface PerfilProps {
   type?: "crear" | "editar";
 }
 
-const Perfil: React.FC<PerfilProps> = ({ usuario, type = "crear" }) => {
+const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
   const theme = useTheme();
 
   const { localUser } = useContext(AccountContext);
@@ -61,19 +66,26 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "crear" }) => {
 
   const { open, setOpen } = useAlertDialog();
 
-  const { register, handleSubmit, formState, getValues, control } = useForm<Usuario>({
-    resolver: zodResolver(CrearUsuarioSchema),
-    defaultValues: usuario,
-  });
+  const { register, handleSubmit, formState, getValues, control, watch } =
+    useForm<UsuarioForm>({
+      resolver: zodResolver(UsuarioForm),
+      defaultValues:
+        type == "crear"
+          ? usuarioFormTemplate
+          : adapterUsuarioToUsuarioForm(usuario),
+    });
 
   async function handleGetQuery() {
     if (type == "crear") {
-      return postCrearUsuarioService(localUser?.token!!, getValues());
+      return postCrearUsuarioService(
+        localUser?.token!!,
+        adapterUsuarioFormToUsuario(getValues())
+      );
     } else {
       return postModificarUsuarioService(
         getValues().id!!,
         localUser?.token!!,
-        getValues()
+        adapterUsuarioFormToUsuario(getValues())
       );
     }
   }
@@ -208,7 +220,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "crear" }) => {
                       fullWidth
                       label="Tipo de usuario"
                       select
-                      disabled={CURRENT_USER_TYPE == "E"}
+                      disabled={CURRENT_USER_TYPE == "E" || type != "crear"}
                       error={!!errors.tipo}
                       helperText={errors.tipo?.message}
                     >
@@ -243,7 +255,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "crear" }) => {
                   </Grid2>
                 </>
               )}
-              {getValues("tipo") == "E" && (
+              {watch("tipo") == "E" && (
                 <Grid2 size={{ md: 6, xs: 12 }}>
                   <TextField
                     fullWidth

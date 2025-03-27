@@ -10,6 +10,13 @@ import ContactMailIcon from "@mui/icons-material/ContactMail";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import PeopleIcon from '@mui/icons-material/People';
+import { useNavigate, useLocation } from "react-router-dom";
+import { rutasMaterias } from "@modules/materias/router/router";
+import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { rutasProyectos } from "@modules/proyectos/router";
+import { AccountContext } from "@modules/general/context/accountContext";
 
 const navigationStudent: Navigation = [
   {
@@ -22,7 +29,7 @@ const navigationStudent: Navigation = [
         icon: <ManageAccountsIcon />,
       },
       {
-        segment: "traffic",
+        segment: rutasUsuarios.logout as string,
         title: "Cerrar Sesión",
         icon: <PowerSettingsNewIcon />,
       },
@@ -59,7 +66,7 @@ const navigationAdmin: Navigation = [
         icon: <ManageAccountsIcon />,
       },
       {
-        segment: "traffic",
+        segment: rutasUsuarios.logout as string,
         title: "Cerrar Sesión",
         icon: <PowerSettingsNewIcon />,
       },
@@ -87,17 +94,22 @@ const navigationAdmin: Navigation = [
     kind: "divider",
   },
   {
-    segment: rutasUsuarios.listarUsuarios as string,
     title: "Usuarios",
     icon: <SupervisedUserCircleIcon />,
+    children: [
+      {
+        segment: rutasUsuarios.listarUsuarios as string,
+        title: 'Listar Usuarios',
+        icon: <PeopleIcon/>
+      },
+      {
+        segment: rutasUsuarios.agregarUsuario as string,
+        title: 'Agregar Usuario',
+        icon: <GroupAddIcon/>
+      }
+    ]
   },
 ];
-
-import { useNavigate, useLocation } from "react-router-dom";
-import { rutasMaterias } from "@modules/materias/router/router";
-import { rutasUsuarios } from "@modules/usuarios/router/router";
-import { rutasProyectos } from "@modules/proyectos/router";
-import { AccountContext } from "@modules/general/context/accountContext";
 
 function useDemoRouter(): Router {
   const navigate = useNavigate();

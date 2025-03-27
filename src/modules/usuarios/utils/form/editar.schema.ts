@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { fechaSchema } from "./fechaSchema";
 import { getGender, getUserStatus, getUserTypes } from "../usuario.map";
-import { Usuario } from "@modules/usuarios/types/usuario";
+import { SexoUsuario, Usuario } from "@modules/usuarios/types/usuario";
 
 /**
  * Atributo Zod para la validación de Estados de Usuario
@@ -107,57 +107,78 @@ export const correoSchema = z
   .string()
   .email({ message: "Debe ser un correo válido" });
 
-type EditarKeys = Pick<
-  Usuario,
-  | "nombres"
-  | "apellidos"
-  | "correo"
-  | "fechaDeNacimiento"
-  | "estFechaInicio"
-  | "estado"
-  | "sexo"
-  | "tipo"
-  | "contrasenia"
-  | "redSocial"
-  | "descripcion"
->;
-
-type RegistroKeys = EditarKeys& { contrasenia: string; confirmarContrasenia: string };
-
-/**
- * Objeto Zod para la validación de edición de perfil por parte de un administrador
- */
-export const EditarUsuarioSchema: z.ZodType<EditarKeys> = z.object({
-  nombres: nombresSchema,
-  apellidos: apellidosSchema,
-  correo: correoSchema,
-  fechaDeNacimiento: fechaSchema,
-  estFechaInicio: fechaSchema,
-  estado: estadoUsuarioSchema,
-  sexo: sexoUsuarioSchema,
-  tipo: tiposUsuarioSchema,
-  redSocial: redSocialUsuarioSchema,
-  descripcion: descripcionSchema,
-});
-
-export const CrearUsuarioSchema: z.ZodType<RegistroKeys> = z
+export const UsuarioForm = z
   .object({
+    id: z.number().optional(),
     nombres: nombresSchema,
     apellidos: apellidosSchema,
     correo: correoSchema,
     fechaDeNacimiento: fechaSchema,
-    estFechaInicio: fechaSchema,
+    estFechaInicio: fechaSchema.optional(),
     estado: estadoUsuarioSchema,
     sexo: sexoUsuarioSchema,
     tipo: tiposUsuarioSchema,
     redSocial: redSocialUsuarioSchema,
     descripcion: descripcionSchema,
-    contrasenia: contraseniaSchema,
-    confirmarContrasenia: z
-      .string()
-      .min(1, { message: "Debe confirmar la contraseña." }),
+    fotoDePerfil: z.string().optional().nullable(),
+    contrasenia: contraseniaSchema.optional(),
+    confirmarContrasenia: z.string().optional(),
   })
-  .refine((data) => data.contrasenia === data.confirmarContrasenia, {
-    message: "Las contraseñas no coinciden.",
-    path: ["confirmarContrasenia"],
-  });
+  .refine(
+    (data) => {
+      // Solo validar coincidencia de contraseñas si se está creando o modificando la contraseña
+      if (data.contrasenia || data.confirmarContrasenia) {
+        return data.contrasenia === data.confirmarContrasenia;
+      }
+      return true;
+    },
+    {
+      message: "Las contraseñas no coinciden",
+      path: ["confirmarContrasenia"],
+    }
+  );
+
+export type UsuarioForm = Usuario & { confirmarContrasenia: string };
+
+export const usuarioFormTemplate: UsuarioForm = {
+  id: 1,
+  nombres: "",
+  apellidos: "",
+  correo: "",
+  fechaDeNacimiento: "",
+  estFechaInicio: "",
+  estado: "A",
+  sexo: "" as SexoUsuario,
+  tipo: "E",
+  redSocial: {
+    facebook: "",
+    instagram: "",
+    linkedin: "",
+    x: "",
+    github: "",
+  },
+  descripcion: "",
+  fotoDePerfil: "",
+  contrasenia: "",
+  confirmarContrasenia: "",
+};
+
+// Adaptador de UsuarioForm (formulario) a Usuario (backend)
+// Adaptador de Usuario a formulario (incluye confirmarContrasenia)
+export function adapterUsuarioToUsuarioForm(usuario: Usuario): UsuarioForm {
+  return {
+    ...usuario,
+    confirmarContrasenia: usuario.contrasenia || "",
+    estFechaInicio: usuario.tipo == "E" ? usuario.estFechaInicio : "2002-04-22",
+  };
+}
+
+// Adaptador de formulario a Usuario (elimina confirmarContrasenia)
+export function adapterUsuarioFormToUsuario(formData: UsuarioForm): Usuario {
+
+  const _usuario = formData as Usuario;
+
+  if (formData.tipo != "E") delete _usuario.estFechaInicio;
+
+  return _usuario;
+}

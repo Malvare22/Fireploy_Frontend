@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { rutasGeneral } from "../router/router";
+import { rutasGeneral } from "../../usuarios/components/router/router";
 import { ApiResponse } from "@core/services";
 
 /**

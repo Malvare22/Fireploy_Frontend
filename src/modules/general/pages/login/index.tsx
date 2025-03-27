@@ -13,7 +13,7 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { labelLogin } from "@modules/general/enums/labelLogin";
-import { rutasGeneral } from "@modules/general/router/router";
+import { rutasGeneral } from "@modules/usuarios/components/router/router";
 import useQuery from "@modules/general/hooks/useQuery";
 import { postSignUp, SignUpResponse } from "@modules/general/services/signUp";
 import AlertDialog from "@modules/general/components/alertDialog";
