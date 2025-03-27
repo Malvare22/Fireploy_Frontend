@@ -12,6 +12,7 @@ import ListarPortafolios from "../pages/explorarPortafolios";
 import Portafolio from "../components/portafolio";
 import ListarUsuarios from "../pages/listar";
 import GestionarPerfil from "../pages/admin/modificarPerfil";
+import CrearUsuario from "../pages/admin/crearUsuario";
 
 const rutaBase = "/app/usuarios";
 
@@ -20,7 +21,8 @@ export enum rutasUsuarios {
   explorarPortafolios = rutaBase + "/explorar",
   portafolio = rutaBase + "/portafolio/:id",
   listarUsuarios = rutaBase + "/listar",
-  modificarPerfil = rutaBase + "/perfil/:id"
+  modificarPerfil = rutaBase + "/perfil/:id",
+  agregarUsuario = rutaBase + '/agregar'
 }
 
 export const routerUsuarios: RouteObject[] = [
@@ -43,5 +45,9 @@ export const routerUsuarios: RouteObject[] = [
   {
     path: rutasUsuarios.modificarPerfil,
     element: <GestionarPerfil/>
+  },
+  {
+    path: rutasUsuarios.agregarUsuario,
+    element: <CrearUsuario/>
   }
 ];

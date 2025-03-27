@@ -25,7 +25,7 @@ import {
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EditarUsuarioSchema } from "@modules/usuarios/utils/form/editar.schema";
+import { CrearUsuarioSchema, EditarUsuarioSchema } from "@modules/usuarios/utils/form/editar.schema";
 import { Controller, useForm } from "react-hook-form";
 import { InputAdornment } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -42,12 +42,15 @@ import { urlToBlob } from "@modules/general/utils/urlToBlod";
 import { getImage } from "@modules/general/components/roundedIcon/utils";
 import { patchSubirFotoPerfil } from "@modules/usuarios/services/patch.foto";
 import { useNavigate } from "react-router-dom";
+import { postCrearUsuarioService } from "@modules/usuarios/services/post.crear.usuario";
+import TextFieldPassword from "@modules/general/components/textFieldPassword";
 
 interface PerfilProps {
   usuario: Usuario;
+  type?: "crear" | "editar";
 }
 
-const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
+const Perfil: React.FC<PerfilProps> = ({ usuario, type = "crear" }) => {
   const theme = useTheme();
 
   const { localUser } = useContext(AccountContext);
@@ -58,10 +61,22 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
 
   const { open, setOpen } = useAlertDialog();
 
-  const { register, handleSubmit, formState, getValues, control } = useForm({
-    resolver: zodResolver(EditarUsuarioSchema),
+  const { register, handleSubmit, formState, getValues, control } = useForm<Usuario>({
+    resolver: zodResolver(CrearUsuarioSchema),
     defaultValues: usuario,
   });
+
+  async function handleGetQuery() {
+    if (type == "crear") {
+      return postCrearUsuarioService(localUser?.token!!, getValues());
+    } else {
+      return postModificarUsuarioService(
+        getValues().id!!,
+        localUser?.token!!,
+        getValues()
+      );
+    }
+  }
 
   const { errors } = formState;
 
@@ -96,12 +111,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
     error: errorUpdateUser,
     handleAlertClose: handleAlertCloseUpdateUser,
   } = useQuery<UsuarioService>(
-    () =>
-      postModificarUsuarioService(
-        getValues().id!!,
-        localUser?.token!!,
-        getValues()
-      ),
+    () => handleGetQuery(),
     false,
     "Usuario Actualizado con éxito!"
   );
@@ -110,7 +120,8 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
     await initQueryUpdateUser();
   };
 
-  const CURRENT_USER_TYPE = (useContext(AccountContext).localUser?.tipo ?? 'E') as TiposUsuario;
+  const CURRENT_USER_TYPE = (useContext(AccountContext).localUser?.tipo ??
+    "E") as TiposUsuario;
 
   useEffect(() => {
     if (!responseDataUpdateUser) return;
@@ -158,12 +169,8 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
         <Typography variant="h6">{labelPerfil.informacionCuenta}</Typography>
         <Grid2 container spacing={2}>
           <Grid2 size={{ md: 9, xs: 12 }}>
-            <Stack
-              spacing={2}
-              direction={{ xs: "column", md: "row" }}
-              sx={{ padding: 2 }}
-            >
-              <Stack flex={1}>
+            <Grid2 container sx={{ padding: 2 }} spacing={2}>
+              <Grid2 size={{ md: 6, xs: 12 }}>
                 <TextField
                   fullWidth
                   label={labelPerfil.nombres}
@@ -171,9 +178,8 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
                   error={!!errors.nombres}
                   helperText={errors.nombres?.message}
                 />
-              </Stack>
-
-              <Stack flex={1}>
+              </Grid2>
+              <Grid2 size={{ md: 6, xs: 12 }}>
                 <TextField
                   fullWidth
                   label={labelPerfil.apellidos}
@@ -181,44 +187,18 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
                   error={!!errors.apellidos}
                   helperText={errors.apellidos?.message}
                 />
-              </Stack>
-            </Stack>
-
-            <Stack
-              spacing={2}
-              direction={{ xs: "column", md: "row" }}
-              sx={{ padding: 2 }}
-            >
-              <Stack flex={1}>
+              </Grid2>
+              <Grid2 size={{ md: 6, xs: 12 }}>
                 <TextField
                   fullWidth
                   label="Correo"
                   {...register("correo")}
                   error={!!errors.correo}
                   helperText={errors.correo?.message}
-                  disabled
+                  disabled={type != "crear"}
                 />
-              </Stack>
-              <Stack flex={1}>
-                <TextField
-                  fullWidth
-                  label="Fecha de Ingreso a la Universidad"
-                  {...register("estFechaInicio")}
-                  error={!!errors.estFechaInicio}
-                  helperText={errors.estFechaInicio?.message}
-                  disabled={CURRENT_USER_TYPE == 'E'}
-                  type="date"
-                  InputLabelProps={{ shrink: true }}
-
-                />
-              </Stack>
-            </Stack>
-            <Stack
-              spacing={2}
-              direction={{ xs: "column", md: "row" }}
-              sx={{ padding: 2 }}
-            >
-              <Stack flex={1} spacing={2} width={{ md: "50%", xs: "100%" }}>
+              </Grid2>
+              <Grid2 size={{ md: 6, xs: 12 }}>
                 <Controller
                   name="tipo"
                   control={control}
@@ -228,7 +208,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
                       fullWidth
                       label="Tipo de usuario"
                       select
-                      disabled={localUser?.tipo == "E"}
+                      disabled={CURRENT_USER_TYPE == "E"}
                       error={!!errors.tipo}
                       helperText={errors.tipo?.message}
                     >
@@ -240,9 +220,45 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
                     </TextField>
                   )}
                 />
-              </Stack>
-              <Stack flex={1}>
-                {localUser?.tipo == "E" && (
+              </Grid2>
+              {type == "crear" && (
+                <>
+                  <Grid2 size={{ md: 6, xs: 12 }}>
+                    <TextFieldPassword
+                      fullWidth
+                      label={labelPerfil.contrasenia}
+                      {...register("contrasenia")}
+                      error={!!errors.contrasenia}
+                      helperText={errors.contrasenia?.message}
+                    />
+                  </Grid2>
+                  <Grid2 size={{ md: 6, xs: 12 }}>
+                    <TextFieldPassword
+                      fullWidth
+                      label={labelPerfil.confirmarContrasenia}
+                      {...register("confirmarContrasenia")}
+                      error={!!errors.confirmarContrasenia}
+                      helperText={errors.confirmarContrasenia?.message}
+                    />
+                  </Grid2>
+                </>
+              )}
+              {getValues("tipo") == "E" && (
+                <Grid2 size={{ md: 6, xs: 12 }}>
+                  <TextField
+                    fullWidth
+                    label="Fecha de Ingreso a la Universidad"
+                    {...register("estFechaInicio")}
+                    error={!!errors.estFechaInicio}
+                    helperText={errors.estFechaInicio?.message}
+                    disabled={CURRENT_USER_TYPE == "E"}
+                    type="date"
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </Grid2>
+              )}
+              <Grid2 size={{ md: 6, xs: 12 }}>
+                {CURRENT_USER_TYPE == "E" && (
                   <Box
                     display={"flex"}
                     alignItems={"center"}
@@ -258,8 +274,8 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
                     </Button>
                   </Box>
                 )}
-              </Stack>
-            </Stack>
+              </Grid2>
+            </Grid2>
           </Grid2>
           <Grid2 size={{ md: 3, xs: 12 }}>
             {
@@ -474,7 +490,7 @@ export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
     );
 
   useEffect(() => {
-    if(!initQueryCondition) return;
+    if (!initQueryCondition) return;
     if (photo != actualImg) {
       initQuery();
     } else {
@@ -501,9 +517,9 @@ export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
 
   const navigate = useNavigate();
 
-  function handleRefresh(){
+  function handleRefresh() {
     navigate(0);
-  };
+  }
 
   return (
     <Stack alignItems="center" spacing={3}>
@@ -520,7 +536,7 @@ export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
           handleAccept={handleRefresh}
           open={open}
           title="Gestión de Usuarios"
-          textBody={'Se ha actualizado la información correctamente'}
+          textBody={"Se ha actualizado la información correctamente"}
         />
       }
       <Avatar

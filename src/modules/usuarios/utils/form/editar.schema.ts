@@ -80,7 +80,7 @@ export const redSocialUsuarioSchema = z
       .refine((s) => s?.includes("x.com") || s?.length == 0, {
         message: msgRedSocial,
       }),
-      github: z
+    github: z
       .string()
       .optional()
       .optional()
@@ -107,7 +107,7 @@ export const correoSchema = z
   .string()
   .email({ message: "Debe ser un correo válido" });
 
-type RegistroKeys = Pick<
+type EditarKeys = Pick<
   Usuario,
   | "nombres"
   | "apellidos"
@@ -122,10 +122,12 @@ type RegistroKeys = Pick<
   | "descripcion"
 >;
 
+type RegistroKeys = EditarKeys& { contrasenia: string; confirmarContrasenia: string };
+
 /**
  * Objeto Zod para la validación de edición de perfil por parte de un administrador
  */
-export const EditarUsuarioSchema: z.ZodType<RegistroKeys> = z.object({
+export const EditarUsuarioSchema: z.ZodType<EditarKeys> = z.object({
   nombres: nombresSchema,
   apellidos: apellidosSchema,
   correo: correoSchema,
@@ -137,3 +139,25 @@ export const EditarUsuarioSchema: z.ZodType<RegistroKeys> = z.object({
   redSocial: redSocialUsuarioSchema,
   descripcion: descripcionSchema,
 });
+
+export const CrearUsuarioSchema: z.ZodType<RegistroKeys> = z
+  .object({
+    nombres: nombresSchema,
+    apellidos: apellidosSchema,
+    correo: correoSchema,
+    fechaDeNacimiento: fechaSchema,
+    estFechaInicio: fechaSchema,
+    estado: estadoUsuarioSchema,
+    sexo: sexoUsuarioSchema,
+    tipo: tiposUsuarioSchema,
+    redSocial: redSocialUsuarioSchema,
+    descripcion: descripcionSchema,
+    contrasenia: contraseniaSchema,
+    confirmarContrasenia: z
+      .string()
+      .min(1, { message: "Debe confirmar la contraseña." }),
+  })
+  .refine((data) => data.contrasenia === data.confirmarContrasenia, {
+    message: "Las contraseñas no coinciden.",
+    path: ["confirmarContrasenia"],
+  });

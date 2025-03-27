@@ -134,7 +134,7 @@ const usuarioServiceEjemplo: UsuarioService = {
 export const usuarioEjemplo: Usuario = adapterUsuario(usuarioServiceEjemplo);
 
 export const usuarioTemplate: Usuario =  {
-  id: 1,
+  id: 0,
   correo: "",
   nombres: "",
   apellidos: "",

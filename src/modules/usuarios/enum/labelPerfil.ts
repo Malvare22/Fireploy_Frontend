@@ -8,6 +8,8 @@ export enum labelPerfil{
     
     tipo = 'Tipo de Usuario',
     estFechaInicio = 'Fecha de Inicio en la Institución',
+    contrasenia = 'Contraseña',
+    confirmarContrasenia = 'Confirmar Contraseña',
     
     redSocial = 'Redes Sociales',
     
