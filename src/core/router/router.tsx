@@ -1,4 +1,4 @@
-import { authenticatedRoutes, routerGeneral } from "@modules/usuarios/components/router/router";
+import { authenticatedRoutes, routerGeneral } from "@modules/general/router/router";
 // import { routerMaterias } from "@modules/materias/router/router";
 // import { routerProyectos } from "@modules/proyectos/router";
 // import { routerUsuarios } from "@modules/usuarios/router/router";

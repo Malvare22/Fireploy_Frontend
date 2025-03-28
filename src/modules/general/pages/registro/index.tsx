@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LabelGeneral } from "@modules/general/enums/labelGeneral";
 import useQuery from "@modules/general/hooks/useQuery";
-import { rutasGeneral } from "@modules/usuarios/components/router/router";
+import { rutasGeneral } from "@modules/general/router/router";
 import { registrarUsuarioService } from "@modules/general/services/registrar.usuario";
 import { obtenerFechaActual } from "@modules/general/utils/fechas";
 import { labelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";

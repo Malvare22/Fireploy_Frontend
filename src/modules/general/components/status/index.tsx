@@ -1,12 +1,10 @@
-import { EstadoCurso } from "@modules/materias/types/materia";
-import { getUserStatus } from "@modules/usuarios/utils/usuario.map";
 import { Box, Stack, useTheme } from "@mui/material";
 
-type StatusProps = {
-  estado: EstadoCurso;
+export type StatusProps = {
+  status: 'A' | 'I';
 };
 
-const Status: React.FC<StatusProps> = ({ estado }) => {
+const Status: React.FC<StatusProps> = ({ status }) => {
   const theme = useTheme();
   return (
     <Stack direction={"row"} alignItems={"center"} spacing={1}>
@@ -15,7 +13,7 @@ const Status: React.FC<StatusProps> = ({ estado }) => {
           width: 16,
           height: 16,
           backgroundColor:
-            estado == "A"
+            status == "A"
               ? theme.palette.success.main
               : theme.palette.error.main,
           borderRadius: "100%",
@@ -27,9 +25,13 @@ const Status: React.FC<StatusProps> = ({ estado }) => {
           },
         }}
       />
-      <Box>{getUserStatus.get(estado)}</Box>
+      <Box>{getStatus(status)}</Box>
     </Stack>
   );
 };
+
+function getStatus(status: StatusProps['status']){
+  return status == 'A' ? 'Activo' : 'Inactivo';
+}
 
 export default Status;

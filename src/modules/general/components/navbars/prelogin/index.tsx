@@ -12,7 +12,7 @@ import React, { useContext, useEffect, useState } from "react";
 import GeneralButton from "../../button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { useNavigate } from "react-router-dom";
-import { rutasGeneral } from "@modules/usuarios/components/router/router";
+import { rutasGeneral } from "@modules/general/router/router";
 import DrawerCustom from "./drawer";
 import AccountMenu from "./accountMenu";
 import { AccountContext } from "@modules/general/context/accountContext";

@@ -1,18 +1,14 @@
-import { Materia } from "@modules/materias/types/materia";
+import { EstadoMateria } from "@modules/materias/types/materia";
 import { MateriaService } from "@modules/materias/types/materia.service";
+import { MateriaTabla } from "@modules/materias/types/materia.tabla";
 
 
-export function adaptarMateriaService(materia: MateriaService): Materia{
+export function adaptMateriaService(materia: MateriaService): MateriaTabla{
   return {
+    cantidadGruposActivos: materia.cursos?.length || 0,
+    codigo: materia.id,
+    estado: materia.estado as EstadoMateria,
     nombre: materia.nombre,
     semestre: materia.semestre,
-    id: materia.id as number,
-    cursos: materia.cursos ?  materia.cursos.map(curso => ({
-      id: curso.id,
-      grupo: curso.grupo,
-      semestre: curso.semestre,
-      descripcion: curso.descripcion,
-      estado: curso.estado
-    })) : undefined
   }
-};
+}

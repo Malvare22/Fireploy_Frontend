@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import useOrderSelect from "@modules/general/hooks/useOrderSelect";
-import { labelListarMateria } from "@modules/materias/enums/labelListarMateria";
+import { labelListarMateria } from "@modules/materias/enums/labelListarMaterias";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { labelSelects } from "@modules/general/enums/labelSelects";

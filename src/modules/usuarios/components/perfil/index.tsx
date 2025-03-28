@@ -49,6 +49,8 @@ import { patchSubirFotoPerfil } from "@modules/usuarios/services/patch.foto";
 import { useNavigate } from "react-router-dom";
 import { postCrearUsuarioService } from "@modules/usuarios/services/post.crear.usuario";
 import TextFieldPassword from "@modules/general/components/textFieldPassword";
+import { getSolicitudService } from "@modules/usuarios/services/get.solicitud";
+import { postCrearSolicitud } from "@modules/usuarios/services/post.solicitud.crear";
 
 interface PerfilProps {
   usuario: Usuario;
@@ -63,8 +65,6 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
   const [id, setId] = useState<number | undefined>(undefined);
 
   const [updateImageCondition, setUpdateImageCondition] = useState(false);
-
-  const { open, setOpen } = useAlertDialog();
 
   const { register, handleSubmit, formState, getValues, control, watch } =
     useForm<UsuarioForm>({
@@ -113,8 +113,6 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
     navigate(0);
   };
 
-  // const {error: error_upperUser, handleAlertClose: handleAlertClose_upperUser, initQuery: initQuery_upperUser, responseData : responseData_upperUser, open: open_upperUser, message: message_upperUser}  = useQuery();
-
   const {
     initQuery: initQueryUpdateUser,
     responseData: responseDataUpdateUser,
@@ -145,12 +143,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
     <Container component={"form"} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3} padding={3} component={Paper}>
         {/* Información de la Cuenta */}
-        {/* <AlertDialog
-          title="Solicitar promoción a Rol Docente"
-          textBody="¿Está seguro de que desea solicitar la promoción al rol de docente?"
-          handleAccept={() => console.log("Enviado")}
-          open={open}
-        /> */}
+
         <AlertDialog
           title="Modificación de usuarios"
           textBody="¿Está seguro de que desea aplicar estas modificaciones?"
@@ -277,13 +270,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
                     alignContent={"center"}
                     height={"100%"}
                   >
-                    <Button
-                      variant="contained"
-                      onClick={() => setOpen(true)}
-                      sx={{ backgroundColor: theme.palette.terciary.main }}
-                    >
-                      {labelPerfil.solicitarRolDocente}
-                    </Button>
+                    <ButtonUpdaterRol/>
                   </Box>
                 )}
               </Grid2>
@@ -578,6 +565,77 @@ export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
         </IconButton>
       </Stack>
     </Stack>
+  );
+};
+
+
+const ButtonUpdaterRol = () => {
+  const token = useContext(AccountContext).localUser?.token;
+
+  const id = useContext(AccountContext).localUser?.id;
+
+  const theme = useTheme();
+
+  const { open, setOpen } = useAlertDialog();
+
+  const { error, initQuery } = useQuery<unknown>(
+    () => getSolicitudService(id!!, token!!),
+    false
+  );
+
+  useEffect(() => {
+    if (token && id) initQuery();
+  }, [token, id]);
+
+  const [valid, setValid] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (error == true) {
+      setValid(true);
+    }
+  }, [error]);
+
+  const {
+    handleAlertClose: handleAlertCloseUpperUser,
+    initQuery: initQueryUpperUser,
+    open: openUpperUser,
+    message: messageUpperUser,
+    responseData
+  } = useQuery<unknown>(
+    () => postCrearSolicitud(id!!, token!!),
+    false,
+    "Solicitud enviada de manera correcta"
+  );
+
+  console.log('-> ', responseData);
+
+  const fetch = async () => await initQueryUpperUser();
+
+  return (
+    <>
+      <AlertDialog
+        title="Solicitar promoción a Rol Docente"
+        textBody="¿Está seguro de que desea solicitar la promoción al rol de docente?"
+        handleAccept={fetch}
+        open={open}
+        handleCancel={() => setOpen(false)}
+      />
+      <AlertDialog
+        title="Solicitar promoción a Rol Docente"
+        textBody={messageUpperUser}
+        handleAccept={handleAlertCloseUpperUser}
+        open={openUpperUser}
+      />
+
+      <Button
+        variant="contained"
+        onClick={() => setOpen(true)}
+        sx={{ backgroundColor: theme.palette.terciary.main }}
+        disabled={!valid}
+      >
+        {valid ? labelPerfil.solicitarRolDocente : labelPerfil.solicitudEnviada}
+      </Button>
+    </>
   );
 };
 

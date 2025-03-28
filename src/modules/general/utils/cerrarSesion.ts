@@ -1,6 +1,6 @@
 import { NavigateFunction } from "react-router-dom";
 import { AccountInformation } from "../context/accountContext";
-import { rutasGeneral } from "../../usuarios/components/router/router";
+import { rutasGeneral } from "../router/router";
 
 /**
  *

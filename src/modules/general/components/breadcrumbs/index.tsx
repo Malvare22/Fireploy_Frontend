@@ -9,7 +9,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { Link as RouterLink, Route, Routes, MemoryRouter, useLocation } from 'react-router-dom';
-import { rutasGeneral } from '@modules/usuarios/components/router/router';
+import { rutasGeneral } from '@modules/general/router/router';
 
 
 interface ListItemLinkProps extends ListItemProps {

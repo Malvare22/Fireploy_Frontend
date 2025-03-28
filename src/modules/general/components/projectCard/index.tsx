@@ -146,7 +146,7 @@ export const ProjectCardPortafolio: React.FC<ProjectCardPortafolioProps> = ({
               right: 5,
             }}
           >
-            <Status estado="A" />
+            <Status status="A" />
           </Card>
         </Box>
         <Stack spacing={2}>

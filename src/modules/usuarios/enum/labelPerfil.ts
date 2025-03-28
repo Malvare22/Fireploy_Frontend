@@ -27,6 +27,7 @@ export enum labelPerfil{
 
     perfil = 'Perfil',
 
-    solicitarRolDocente = 'Solicitar Rol de Docente'
+    solicitarRolDocente = 'Solicitar Rol de Docente',
+    solicitudEnviada = 'Solicitud de Rol de Docente enviada'
 
 }

@@ -1,5 +1,5 @@
 import { AccountContext } from "@modules/general/context/accountContext";
-import { rutasGeneral } from "@modules/usuarios/components/router/router";
+import { rutasGeneral } from "@modules/general/router/router";
 import { Typography } from "@mui/material";
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";

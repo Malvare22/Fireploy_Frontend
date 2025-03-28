@@ -2,7 +2,7 @@ import { patchData } from "@core/services";
 import { MateriaModal } from "../utils/forms/schema.materias";
 import { MateriaService } from "../types/materia.service";
 
-export const editarMateriaService = async (token: string, data: MateriaModal) => {
+export const postMateriaService = async (token: string, data: MateriaModal) => {
   const _data: Partial<Record<keyof MateriaModal, string>> = {
     estado: data.estado,
     nombre: data.nombre,
@@ -20,18 +20,18 @@ export const editarMateriaService = async (token: string, data: MateriaModal) =>
   return response;
 };
 
-export const editarEstadoMateriaService = async (
+export const postEstadoMateriaService = async (
   token: string,
-  data: MateriaModal
+  data: {
+    nombre: string,
+    semestre: string,
+    estado: string
+  },
+  id: number
 ) => {
-  const _data: Partial<Record<keyof MateriaModal, string>> = {
-    estado: data.estado == "A" ? "I" : "A",
-    nombre: data.nombre,
-    semestre: data.semestre,
-  };
   const response = await patchData<MateriaService>(
-    `/materia/${data.id}`,
-    _data,
+    `/materia/${id}`,
+    data,
     {
       sessiontoken: token,
     }
