@@ -7,12 +7,17 @@ import { getMateriasService } from "@modules/materias/services/get.materias.serv
 import { MateriaService } from "@modules/materias/types/materia.service";
 import { MateriaTabla } from "@modules/materias/types/materia.tabla";
 import { adaptMateriaService } from "@modules/materias/utils/adapters/adaptar.materiaService.materia";
-import { MenuItem, Stack, TextField, Typography } from "@mui/material";
+import { Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import useSearch from "@modules/general/hooks/useSearch";
-import { useFilters } from "@modules/general/hooks/useFilters";
 import { labelSelects } from "@modules/general/enums/labelSelects";
+import { useFiltersByConditions } from "@modules/general/hooks/useFiltersByCondition";
+
+export const getSemestresLabels = () => {
+  const labels = ["l", "ll", "lll", "lV", "V", "Vl", "Vll", "Vlll", "lX", "X"];
+  return labels.map((label, index) => [index + 1, label] as [number, string]);
+};
 
 function ListarMaterias() {
   const [materias, setMaterias] = useState<MateriaTabla[] | undefined>(
@@ -37,12 +42,7 @@ function ListarMaterias() {
     }
   }, [responseData]);
 
-  const {
-    filteredData,
-    handleKeyDown,
-    searchValue,
-    setBuffer,
-  } = useSearch();
+  const { filteredData, handleKeyDown, searchValue, setBuffer } = useSearch();
 
   const sorter = (materia: MateriaTabla[]) => {
     return materia.filter((mat) =>
@@ -52,10 +52,12 @@ function ListarMaterias() {
     );
   };
 
-  const {filterData, filters, toggleFilter} = useFilters<MateriaTabla>();
+  const { filterData, toggleFilter } =
+    useFiltersByConditions<MateriaTabla>();
 
   const materiasToRender = () => {
-    return filteredData(materias, sorter);
+    if (materias) return filteredData(filterData(materias), sorter);
+    return [];
   };
 
   return (
@@ -77,27 +79,82 @@ function ListarMaterias() {
           onChange={(e) => setBuffer(e.currentTarget.value as string)}
           onKeyDown={handleKeyDown}
           sx={{
-            maxWidth: 500
+            maxWidth: 500,
           }}
         />
-        <Stack>
-          <TextField select label={labelSelects.filtrarCursosActivos}
-          onChange={(e) => toggleFilter(0)}>
-            <MenuItem value={0}>{labelSelects.sinCursos}</MenuItem>
-            <MenuItem value={0}>{labelSelects.conCursos}</MenuItem>
-          </TextField>
-           {/* <Select
-                      onChange={(e) => {
-                        const selectedValue = JSON.parse(e.target.value as string);
-                        handleRequestSort(selectedValue.key, selectedValue.order);
-                      }}
-                      defaultValue={JSON.stringify({ key: undefined, order: undefined })}
-                      sx={{ width: 300 }}
-                    >
-                      <MenuItem
-                        value={JSON.stringify({ key: undefined, order: undefined })}
-                      ></MenuItem> */}
-        </Stack>
+        <Grid2 container spacing={2}>
+          <Grid2 size={{ md: 4, xs: 12 }}>
+            <TextField
+              select
+              label={labelSelects.filtrarCursosActivos}
+              onChange={(e) => {
+                if (e.target.value == "0")
+                  toggleFilter(
+                    "cantidadGruposActivos",
+                    (value: any) => value == 0
+                  );
+                if (e.target.value == "1")
+                  toggleFilter(
+                    "cantidadGruposActivos",
+                    (value: any) => value != 0
+                  );
+                if (e.target.value == "-1")
+                  toggleFilter("cantidadGruposActivos", (_value: any) => true);
+              }}
+              defaultValue={-1}
+              fullWidth
+            >
+              <MenuItem value={0}>{labelSelects.sinCursos}</MenuItem>
+              <MenuItem value={1}>{labelSelects.conCursos}</MenuItem>
+              <MenuItem value={-1}>{labelSelects.noAplicar}</MenuItem>
+            </TextField>
+          </Grid2>
+          <Grid2 size={{ md: 4, xs: 12 }}>
+            <TextField
+              select
+              label={labelSelects.filtrarCursosActivos}
+              onChange={(e) => {
+                if (e.target.value == "0")
+                  toggleFilter("estado", (value: any) => value == "A");
+                if (e.target.value == "1")
+                  toggleFilter("estado", (value: any) => value == "I");
+                if (e.target.value == "-1")
+                  toggleFilter("estado", (_value: any) => true);
+              }}
+              defaultValue={-1}
+              fullWidth
+            >
+              <MenuItem value={0}>{labelSelects.activado}</MenuItem>
+              <MenuItem value={1}>{labelSelects.desactivado}</MenuItem>
+              <MenuItem value={-1}>{labelSelects.noAplicar}</MenuItem>
+            </TextField>
+          </Grid2>
+          <Grid2 size={{ md: 4, xs: 12 }}>
+            <TextField
+              select
+              label={labelSelects.filtrarCursosActivos}
+              onChange={(e) => {
+                if (e.target.value == "-1")
+                  toggleFilter("semestre", (_value: any) => true);
+                else {
+                  toggleFilter(
+                    "semestre",
+                    (value: any) => value == e.target.value
+                  );
+                }
+              }}
+              defaultValue={-1}
+              fullWidth
+            >
+              {getSemestresLabels().map(([value, text], key) => (
+                <MenuItem value={value} key={key}>
+                  {text}
+                </MenuItem>
+              ))}
+              <MenuItem value={-1}>{labelSelects.noAplicar}</MenuItem>
+            </TextField>
+          </Grid2>
+        </Grid2>
         {materias && <TablaMaterias materias={materiasToRender()} />}
       </Stack>
     </>
