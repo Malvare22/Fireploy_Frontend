@@ -17,6 +17,12 @@ declare module "@mui/material/styles" {
 export const getTheme = (mode: PaletteMode) =>
   responsiveFontSizes(
     createTheme({
+      components: {
+        MuiSelect: {
+          variant: "outlined",
+          size: "small",
+        },
+      },
       palette: {
         mode: mode,
         primary:
@@ -30,10 +36,10 @@ export const getTheme = (mode: PaletteMode) =>
                 contrastText: "rgba(255,255,255,0.87)",
               },
         secondary: {
-          main: '#8e3110',
+          main: "#8e3110",
         },
         terciary: {
-          main: '#757780'
+          main: "#757780",
         },
         info: {
           main: "#5a727f",
@@ -48,13 +54,15 @@ export const getTheme = (mode: PaletteMode) =>
           main: "#d05353",
         },
         background:
-        mode=='light'? {
-          default: '#fffbfb',
-          paper: '#fff'
-        }: {
-          default: '#252323',
-          paper: '#121212'
-        }
+          mode == "light"
+            ? {
+                default: "#fffbfb",
+                paper: "#fff",
+              }
+            : {
+                default: "#252323",
+                paper: "#121212",
+              },
       },
       typography: {
         fontFamily: "Open Sans",

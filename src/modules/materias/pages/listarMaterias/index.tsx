@@ -103,6 +103,7 @@ function ListarMaterias() {
               }}
               defaultValue={-1}
               fullWidth
+              variant="standard"
             >
               <MenuItem value={0}>{labelSelects.sinCursos}</MenuItem>
               <MenuItem value={1}>{labelSelects.conCursos}</MenuItem>
@@ -123,6 +124,7 @@ function ListarMaterias() {
               }}
               defaultValue={-1}
               fullWidth
+              variant="standard"
             >
               <MenuItem value={0}>{labelSelects.activado}</MenuItem>
               <MenuItem value={1}>{labelSelects.desactivado}</MenuItem>
@@ -145,6 +147,7 @@ function ListarMaterias() {
               }}
               defaultValue={-1}
               fullWidth
+              variant="standard"
             >
               {getSemestresLabels().map(([value, text], key) => (
                 <MenuItem value={value} key={key}>
