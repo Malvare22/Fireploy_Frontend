@@ -17,6 +17,7 @@
     "@mui/material": "^6.1.2",
     "@react-spring/web": "^9.7.5",
     "@toolpad/core": "^0.13.0",
+    "@types/react-router-dom": "^5.3.3",
     "axios": "^1.8.1",
     "dotenv": "^16.4.7",
     "gapi-script": "^1.2.0",

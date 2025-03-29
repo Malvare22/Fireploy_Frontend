@@ -8,6 +8,7 @@ import Dashboard from "../pages/dashboard";
 import { routerMaterias } from "@modules/materias/router/router";
 import { routerUsuarios } from "@modules/usuarios/router/router";
 import { routerProyectos } from "@modules/proyectos/router";
+import ErrorPage from "../pages/404";
 
 export const rutaBase = "/";
 
@@ -33,7 +34,11 @@ export const routerGeneral: RouteObject = {
     {
       path: rutasGeneral.registrar,
       element: <Registrar />,
-    }
+    },
+    {
+      path: "*",
+      element: <ErrorPage />,
+    },
   ],
 };
 
@@ -48,5 +53,6 @@ export const authenticatedRoutes: RouteObject = {
     ...(routerMaterias || []),
     ...(routerUsuarios || []),
     ...(routerProyectos || []),
+
   ],
 };
