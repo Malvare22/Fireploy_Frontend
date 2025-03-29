@@ -6,7 +6,8 @@ import { Outlet } from "react-router-dom";
 function LayoutAuthenticated() {
 
   return (
-    <Box>
+    <Box sx={{          overflowX: 'hidden'
+    }}>
       <DashboardLayoutBasic>
       <Box
         sx={{
@@ -16,8 +17,8 @@ function LayoutAuthenticated() {
           display: "flex",
           justifyContent: "center",
           "> div": { width: "100%" },
-          minHeight: "100vh",
-          paddingX: 2
+          minHeight: "110vh",
+          paddingX: 2,
         }}
       >
         <Stack spacing={3}>

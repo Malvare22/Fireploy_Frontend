@@ -19,7 +19,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { ReactNode } from "react";
+import { ReactNode, useCallback, useRef } from "react";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import { useNavigate } from "react-router-dom";
@@ -30,20 +30,24 @@ function ListarProyectos() {
   const { handleRequestSort, orderBy, stableSort } = useOrderSelect<Proyecto>();
   const selectFilters = getDataForSelects(proyectos);
 
+  const proyectosSectionRef = useRef<HTMLDivElement>(null);
+
+
   const navigate = useNavigate();
 
   // const {error, handleAlertClose, initQuery, message, open, responseData} = useQuery<unknown>();
 
-  const scrollToSection = () => {
-    const section = document.getElementById("misProyectos");
-    const headerHeight = 100; // Ajusta según la altura de tu header
-
-    if (section) {
-      const yOffset =
-        section.getBoundingClientRect().top + window.scrollY - headerHeight;
-      window.scrollTo({ top: yOffset, behavior: "smooth" });
+  const scrollToSection = useCallback(() => {
+    if (proyectosSectionRef.current) {
+      proyectosSectionRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      window.scrollTo({
+        top: 0
+      });
     }
-  };
+  }, []);
 
   const Filters = () => {
     return (
@@ -187,7 +191,7 @@ function ListarProyectos() {
           </Box>
         </Stack>
       </Stack>
-      <Box id="misProyectos">
+      <Box id="misProyectos" ref={proyectosSectionRef}>
         <Stack spacing={2} paddingX={2}>
           <Typography variant="h4" textTransform={"uppercase"}>
             {labelProjectForList.titulo}

@@ -6,6 +6,7 @@ import { router } from "./router/router";
 import {
   AccountContext,
   AccountInformation,
+  accountInformationTemplate,
 } from "@modules/general/context/accountContext";
 import { ModeContext } from "@modules/general/context/modeContext";
 
@@ -24,7 +25,7 @@ function App(): JSX.Element {
    * @state {React.Dispatch<React.SetStateAction<AccountInformation | null>>} setLocalUser -
    * Función para actualizar la información del usuario.
    */
-  const [localUser, setLocalUser] = useState<AccountInformation | null>(null);
+  const [localUser, setLocalUser] = useState<AccountInformation>(accountInformationTemplate);
 
   const [mode, setMode] = useState<PaletteMode | undefined>(undefined);
 

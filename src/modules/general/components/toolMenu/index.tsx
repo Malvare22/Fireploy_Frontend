@@ -141,7 +141,7 @@ export default function DashboardLayoutBasic(props: any) {
 
   const theme = useTheme();
 
-  const { localUser } = React.useContext(AccountContext);
+  const { localUser } = React.useContext(AccountContext)!!;
 
   return (
     <>
@@ -170,7 +170,7 @@ export default function DashboardLayoutBasic(props: any) {
               },
             }}
           >
-            <Box marginTop={-10}>{props.children}</Box>
+            <Box marginTop={-10} sx={{}}>{props.children}</Box>
           </DashboardLayout>
         </AppProvider>
       }
