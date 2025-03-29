@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Container,
   Tabs,
@@ -18,6 +18,8 @@ import {
   useTheme,
   IconButton,
   Tooltip,
+  Autocomplete,
+  debounce,
 } from "@mui/material";
 import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
 import {
@@ -30,21 +32,29 @@ import LogsFiles from "../logsFiles";
 import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import { EstadoEjecucionProyecto } from "@modules/proyectos/types/proyecto.tipo";
-import StopIcon from '@mui/icons-material/Stop';
-import PlayCircleIcon from '@mui/icons-material/PlayCircle';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import StopIcon from "@mui/icons-material/Stop";
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import {
   getColorExecutionState,
   getExecutionState,
 } from "@modules/proyectos/utils/getExecutionState";
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import { getDockerRepositories, getDockerTags } from "@modules/proyectos/services/get.docker.information";
 
 export default function ProjectSettings() {
   const [tabIndex, setTabIndex] = useState(0);
 
   return (
     <Grid2 container>
-      <Grid2 size={12} marginBottom={2}><Stack direction={'row'} spacing={1}><Typography variant="h4">TITULO DE PRUEBA</Typography><IconButton><OpenInNewIcon/></IconButton></Stack></Grid2>
+      <Grid2 size={12} marginBottom={2}>
+        <Stack direction={"row"} spacing={1}>
+          <Typography variant="h4">TITULO DE PRUEBA</Typography>
+          <IconButton>
+            <OpenInNewIcon />
+          </IconButton>
+        </Stack>
+      </Grid2>
       <Grid2 size={10}>
         <Container component={Paper} sx={{ p: 4 }}>
           <Typography variant="h4" sx={{ mb: 2 }}>
@@ -68,15 +78,9 @@ export default function ProjectSettings() {
           </Tabs>
 
           <Stack spacing={3} padding={2}>
-            {tabIndex == 0 && (
-              <Information/>
-            )}
-            {tabIndex == 1 && (
-              <Repositories/>
-            )}
-            {tabIndex == 2 && (
-              <DataBase/>
-            )}
+            {tabIndex == 0 && <Information />}
+            {tabIndex == 1 && <Repositories />}
+            {tabIndex == 2 && <DataBase />}
             {tabIndex == 3 && (
               <>
                 <Members />
@@ -103,131 +107,195 @@ export default function ProjectSettings() {
 }
 
 export const Information = () => {
-  return <Stack spacing={3}>
-  <Stack>
-    <Typography variant="h5">
-      {labelConfiguracion.informacion}
-    </Typography>
-    <Divider />
-  </Stack>
-  <Typography variant="body1">
-    {labelConfiguracion.informacionParrafo}
-  </Typography>
-  <Grid2 container spacing={2}>
-    <Grid2 size={6}>
-      <TextField
-        fullWidth
-        label={labelConfiguracion.nombre}
-        value={""}
-      />
-    </Grid2>
-    <TextField
-      fullWidth
-      label={labelConfiguracion.descripcion}
-      value={""}
-      multiline
-      rows={6}
-    />
-  </Grid2>
-  <Grid2 container spacing={2}>
-    <Grid2 size={4}>
-      <Select
-        fullWidth
-        label={labelConfiguracion.materia}
-        value={""}
-      />
-    </Grid2>
-    <Grid2 size={4}>
-      <Select
-        fullWidth
-        label={labelConfiguracion.grupo}
-        value={""}
-      />
-    </Grid2>
-    <Grid2 size={4}>
-      <Select
-        fullWidth
-        label={labelConfiguracion.seccion}
-        value={""}
-      />
-    </Grid2>
-  </Grid2>
-</Stack>
-}
+  return (
+    <Stack spacing={3}>
+      <Stack>
+        <Typography variant="h5">{labelConfiguracion.informacion}</Typography>
+        <Divider />
+      </Stack>
+      <Typography variant="body1">
+        {labelConfiguracion.informacionParrafo}
+      </Typography>
+      <Grid2 container spacing={2}>
+        <Grid2 size={6}>
+          <TextField fullWidth label={labelConfiguracion.nombre} value={""} />
+        </Grid2>
+        <TextField
+          fullWidth
+          label={labelConfiguracion.descripcion}
+          value={""}
+          multiline
+          rows={6}
+        />
+      </Grid2>
+      <Grid2 container spacing={2}>
+        <Grid2 size={4}>
+          <Select fullWidth label={labelConfiguracion.materia} value={""} />
+        </Grid2>
+        <Grid2 size={4}>
+          <Select fullWidth label={labelConfiguracion.grupo} value={""} />
+        </Grid2>
+        <Grid2 size={4}>
+          <Select fullWidth label={labelConfiguracion.seccion} value={""} />
+        </Grid2>
+      </Grid2>
+    </Stack>
+  );
+};
 
 export const Repositories = () => {
-  return <Stack spacing={3}>
-                <Stack>
-                  <Typography variant="h5">
-                    {labelConfiguracion.repositorios}
-                  </Typography>
-                  <Divider />
-                </Stack>
-                <Typography variant="body2">
-                  {labelConfiguracion.repositoriosParrafo}
-                </Typography>
-                <Grid2 container spacing={2}>
-                  <Typography variant="h6">
-                    {labelConfiguracion.frontend}
-                  </Typography>
-                </Grid2>
-                <TextField
-                  fullWidth
-                  label={labelConfiguracion.urlFrontend}
-                  value={""}
-                  sx={{ width: "50%" }}
-                />
-                <Select
-                  fullWidth
-                  label={labelConfiguracion.tecnologiaFrontend}
-                  value={""}
-                  sx={{ width: "50%" }}
-                />
-                <Divider />
-                <Typography variant="h6">
-                  {labelConfiguracion.backend}
-                </Typography>
-                <TextField
-                  fullWidth
-                  label={labelConfiguracion.urlBackend}
-                  value={""}
-                  sx={{ width: "50%" }}
-                />
-                <Select
-                  fullWidth
-                  label={labelConfiguracion.tecnologiaBackend}
-                  value={""}
-                  sx={{ width: "50%" }}
-                />
-              </Stack>
-}
+  const [repository, setRepository] = useState<string | null>(null);
+  const [repositoryResults, setRepositoryResults] = useState<string[]>([]);
+  const [buffer, setBuffer] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [showTagsInput, setShowTagsInput] = useState<boolean>(false);
+  const [tagsResults, setTagsResults] = useState<string[]>([]);
+  const [selectTag, setSelectTag] = useState<string | null>(null);
+
+  console.log(repository)
+
+  useEffect(() => {
+    const fetchRepositories = async (query: string) => {
+      if (query.trim() === "") {
+        setRepositoryResults([]);
+        return;
+      }
+
+      setIsLoading(true);
+      const results = await getDockerRepositories(query);
+      setRepositoryResults(results);
+      setIsLoading(false);
+    };
+
+    const timer = setTimeout(() => {
+      fetchRepositories(buffer);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [buffer]);
+
+  useEffect(() => {
+    if(!repository) return;
+    const fetchTags = async () => {
+
+      const results = await getDockerTags(repository);
+      setTagsResults(results);
+    };
+
+    const timer = setTimeout(() => {
+      fetchTags();
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [repository]);
+
+  useEffect(() => {
+    setShowTagsInput(repository != null);
+  }, [repository]);
+
+  return (
+    <Stack spacing={3}>
+      <Autocomplete
+        freeSolo
+        disablePortal
+        loading={isLoading}
+        options={repositoryResults}
+        sx={{ width: 300 }}
+        onInputChange={(_e, value) => setBuffer(value ?? "")}
+        inputValue={buffer}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Repositorio"
+            placeholder="Escribe para buscar..."
+          />
+        )}
+        onChange={(_e, value) => setRepository(value)}
+        value={repository}
+      />
+      {showTagsInput && (
+        <Autocomplete
+          freeSolo
+          disablePortal
+          options={tagsResults}
+          sx={{ width: 300 }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Tags"
+              placeholder="Escribe para buscar..."
+            />
+          )}
+          onChange={(_e, value) => setSelectTag(value)}
+          value={selectTag}
+        />
+      )}
+      <Stack>
+        <Typography variant="h5">{labelConfiguracion.repositorios}</Typography>
+        <Divider />
+      </Stack>
+      <Typography variant="body2">
+        {labelConfiguracion.repositoriosParrafo}
+      </Typography>
+      <Grid2 container spacing={2}>
+        <Typography variant="h6">{labelConfiguracion.frontend}</Typography>
+      </Grid2>
+      <TextField
+        fullWidth
+        label={labelConfiguracion.urlFrontend}
+        value={""}
+        sx={{ width: "50%" }}
+      />
+      <Select
+        fullWidth
+        label={labelConfiguracion.tecnologiaFrontend}
+        value={""}
+        sx={{ width: "50%" }}
+      />
+      <Divider />
+      <Typography variant="h6">{labelConfiguracion.backend}</Typography>
+      <TextField
+        fullWidth
+        label={labelConfiguracion.urlBackend}
+        value={""}
+        sx={{ width: "50%" }}
+      />
+      <Select
+        fullWidth
+        label={labelConfiguracion.tecnologiaBackend}
+        value={""}
+        sx={{ width: "50%" }}
+      />
+    </Stack>
+  );
+};
 
 export const DataBase = () => {
-  return <Stack spacing={3}>
-                <Stack>
-                  <Typography variant="h5">
-                    {labelConfiguracion.baseDeDatos}
-                  </Typography>
-                  <Divider />
-                </Stack>
-                <Stack>
-                  <Typography variant="body1">
-                    {labelConfiguracion.baseDeDatosParrafo}
-                  </Typography>
-                </Stack>
-                <TextField
-                  fullWidth
-                  label={labelConfiguracion.tipoBaseDatos}
-                  value={""}
-                  sx={{ width: "50%" }}
-                />
-                <Box>
-                  <Button variant="contained">
-                    {labelConfiguracion.gestionarBaseDatos}
-                  </Button>
-                </Box>
-              </Stack>
-}
+  return (
+    <Stack spacing={3}>
+      <Stack>
+        <Typography variant="h5">{labelConfiguracion.baseDeDatos}</Typography>
+        <Divider />
+      </Stack>
+      <Stack>
+        <Typography variant="body1">
+          {labelConfiguracion.baseDeDatosParrafo}
+        </Typography>
+      </Stack>
+      <TextField
+        fullWidth
+        label={labelConfiguracion.tipoBaseDatos}
+        value={""}
+        sx={{ width: "50%" }}
+      />
+      <Box>
+        <Button variant="contained">
+          {labelConfiguracion.gestionarBaseDatos}
+        </Button>
+      </Box>
+    </Stack>
+  );
+};
 
 export const Members = () => {
   const theme = useTheme();
@@ -390,31 +458,62 @@ const Status: React.FC<StatusProps> = ({ status }) => {
   const theme = useTheme();
 
   return (
-    <Stack spacing={2} component={Paper} sx={{padding: 2}}>
-      <Typography variant="h6" textAlign={'center'}>{labelConfiguracion.estadoActual}</Typography>
-      <Box display={'inline-flex'} justifyContent={'center'}>
-      <Stack
-        sx={{ backgroundColor: theme.palette.terciary.main, borderRadius: 1,             color: 'white'
-        }}
-        direction={"row"}
-        spacing={1}
-        padding={1}
-      >
-        <Stack direction={'row'} spacing={1} justifyContent={'center'}><Typography variant="body1">{label}</Typography>
-        <Box
+    <Stack spacing={2} component={Paper} sx={{ padding: 2 }}>
+      <Typography variant="h6" textAlign={"center"}>
+        {labelConfiguracion.estadoActual}
+      </Typography>
+      <Box display={"inline-flex"} justifyContent={"center"}>
+        <Stack
           sx={{
-            width: 24,
-            height: 24,
-            backgroundColor: colorState,
-            borderRadius: '100%',
+            backgroundColor: theme.palette.terciary.main,
+            borderRadius: 1,
+            color: "white",
           }}
-        ></Box></Stack>
-      </Stack>
+          direction={"row"}
+          spacing={1}
+          padding={1}
+        >
+          <Stack direction={"row"} spacing={1} justifyContent={"center"}>
+            <Typography variant="body1">{label}</Typography>
+            <Box
+              sx={{
+                width: 24,
+                height: 24,
+                backgroundColor: colorState,
+                borderRadius: "100%",
+              }}
+            ></Box>
+          </Stack>
+        </Stack>
       </Box>
       <Grid2 container rowSpacing={1}>
-        <Grid2 size={12} sx={{display: 'flex', justifyContent: 'center'}}><Button size="small"  variant="contained" endIcon={<StopIcon sx={{fontSize: 32}}/>}>{labelConfiguracion.detener}</Button></Grid2>
-        <Grid2 size={12} sx={{display: 'flex', justifyContent: 'center'}}><Button size="small"  variant="contained" endIcon={<PlayCircleIcon sx={{fontSize: 32}}/>}>{labelConfiguracion.reanudar}</Button></Grid2>
-        <Grid2 size={12} sx={{display: 'flex', justifyContent: 'center'}}><Button size="small"  variant="contained" endIcon={<RocketLaunchIcon sx={{fontSize: 32}}/>}>{labelConfiguracion.desplegar}</Button></Grid2>
+        <Grid2 size={12} sx={{ display: "flex", justifyContent: "center" }}>
+          <Button
+            size="small"
+            variant="contained"
+            endIcon={<StopIcon sx={{ fontSize: 32 }} />}
+          >
+            {labelConfiguracion.detener}
+          </Button>
+        </Grid2>
+        <Grid2 size={12} sx={{ display: "flex", justifyContent: "center" }}>
+          <Button
+            size="small"
+            variant="contained"
+            endIcon={<PlayCircleIcon sx={{ fontSize: 32 }} />}
+          >
+            {labelConfiguracion.reanudar}
+          </Button>
+        </Grid2>
+        <Grid2 size={12} sx={{ display: "flex", justifyContent: "center" }}>
+          <Button
+            size="small"
+            variant="contained"
+            endIcon={<RocketLaunchIcon sx={{ fontSize: 32 }} />}
+          >
+            {labelConfiguracion.desplegar}
+          </Button>
+        </Grid2>
       </Grid2>
     </Stack>
   );

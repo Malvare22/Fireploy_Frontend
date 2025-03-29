@@ -9,8 +9,14 @@ export default defineConfig({
       "@modules" : "/src/modules",
     },
   },
-  // server:{
-  //   cors: config
-  // }
+  server: {
+    proxy: {
+      "/api/docker": {
+        target: "https://hub.docker.com/v2/",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/docker/, ""),
+      },
+    },
+  },
   
 });
