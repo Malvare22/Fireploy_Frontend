@@ -8,6 +8,10 @@ export const postModificarUsuarioService = async (
   token: string,
   data: Usuario
 ) => {
+  console.log(data)
+
+  console.log(adaptarUsuarioSalida("editar", data))
+
   const response = await patchData<UsuarioService>(
     `/usuario/${id}`,
     adaptarUsuarioSalida("editar", data),

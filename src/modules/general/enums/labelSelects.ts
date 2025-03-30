@@ -17,4 +17,8 @@ export enum labelSelects {
   filtrarCursosActivos = "Filtrar Cursos Activos",
   sinCursos = "Sin Cursos Activos",
   conCursos = "Con Cursos Activos",
+
+  pendiente = 'Pendiente',
+  aprobada = 'Aprobada',
+  rechazada = 'Rechazada',
 }

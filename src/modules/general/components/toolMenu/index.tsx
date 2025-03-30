@@ -17,6 +17,7 @@ import { rutasMaterias } from "@modules/materias/router/router";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { rutasProyectos } from "@modules/proyectos/router";
 import { AccountContext } from "@modules/general/context/accountContext";
+import CastForEducationIcon from '@mui/icons-material/CastForEducation';
 
 const navigationStudent: Navigation = [
   {
@@ -106,6 +107,11 @@ const navigationAdmin: Navigation = [
         segment: rutasUsuarios.agregarUsuario as string,
         title: 'Agregar Usuario',
         icon: <GroupAddIcon/>
+      },
+      {
+        segment: rutasUsuarios.solicitudes as string,
+        title: 'Solicitudes de Rol Docente',
+        icon: <CastForEducationIcon/>
       }
     ]
   },

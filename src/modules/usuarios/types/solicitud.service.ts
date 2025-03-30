@@ -10,5 +10,9 @@ export type SolicitudService = {
     id: number;
     nombre: string;
   };
-  aprobado_by: null | number;
+  aprobado_by: null | {
+    estado: string;
+    id: number;
+    nombre: string;
+  };
 };

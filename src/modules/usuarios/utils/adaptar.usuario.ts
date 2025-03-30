@@ -28,7 +28,7 @@ export const adapterUsuario = (usuario: UsuarioService) => {
 };
 
 export const adaptarUsuarioSalida = (
-  tipo: "crear" | "editar" | "editarEspecial",
+  tipo: "crear" | "editar",
   usuario: Usuario
 ) => {
   let _usuario: Partial<Record<keyof UsuarioService, string>>;

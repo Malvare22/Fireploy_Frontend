@@ -18,10 +18,7 @@ export const getTheme = (mode: PaletteMode) =>
   responsiveFontSizes(
     createTheme({
       components: {
-        MuiSelect: {
-          variant: "outlined",
-          size: "small",
-        },
+
       },
       palette: {
         mode: mode,

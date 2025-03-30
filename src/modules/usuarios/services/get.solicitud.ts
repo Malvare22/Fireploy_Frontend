@@ -12,3 +12,15 @@ export const getSolicitudService = async (id: number, token: string) => {
 
   return response;
 };
+
+export const getSolicitudesServices = async (token: string) => {
+  const response = await getData<SolicitudService[]>(
+    `/solicitud`,
+    {},
+    {
+      sessiontoken: token,
+    }
+  );
+
+  return response;
+};

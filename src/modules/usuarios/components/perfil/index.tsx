@@ -58,7 +58,6 @@ interface PerfilProps {
 }
 
 const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
-
   const { localUser } = useContext(AccountContext)!!;
 
   const [id, setId] = useState<number | undefined>(undefined);
@@ -269,7 +268,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
                     alignContent={"center"}
                     height={"100%"}
                   >
-                    <ButtonUpdaterRol/>
+                    <ButtonUpdaterRol />
                   </Box>
                 )}
               </Grid2>
@@ -567,7 +566,6 @@ export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
   );
 };
 
-
 const ButtonUpdaterRol = () => {
   const token = useContext(AccountContext)!!.localUser?.token;
 
@@ -595,18 +593,15 @@ const ButtonUpdaterRol = () => {
   }, [error]);
 
   const {
-    handleAlertClose: handleAlertCloseUpperUser,
     initQuery: initQueryUpperUser,
     open: openUpperUser,
     message: messageUpperUser,
-    responseData
+    setOpen: setOpenUpperUser,
   } = useQuery<unknown>(
     () => postCrearSolicitud(id!!, token!!),
     false,
     "Solicitud enviada de manera correcta"
   );
-
-  console.log('-> ', responseData);
 
   const fetch = async () => await initQueryUpperUser();
 
@@ -622,7 +617,10 @@ const ButtonUpdaterRol = () => {
       <AlertDialog
         title="Solicitar promoción a Rol Docente"
         textBody={messageUpperUser}
-        handleAccept={handleAlertCloseUpperUser}
+        handleAccept={() => {
+          setOpen(false);
+          setOpenUpperUser(false);
+        }}
         open={openUpperUser}
       />
 
