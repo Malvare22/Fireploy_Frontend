@@ -10,7 +10,6 @@ export type Materia = {
   nombre: string;
   semestre: string;
   id: number;
-  descripcion?: string | undefined;
   cursos?: CursoMateria[] | undefined;
 };
 
@@ -63,88 +62,6 @@ const cursoEjemplo = [
         },
         descripcion: "Estudiante de ingeniería.",
         estFechaInicio: "2022-08-01",
-      },
-    ],
-  },
-];
-
-export const materiasEjemplo: Materia[] = [
-  {
-    id: 1,
-    nombre: "Matemáticas Avanzadas",
-    semestre: "2023-1",
-    descripcion:
-      "Curso de matemáticas avanzadas que cubre temas como cálculo multivariable y álgebra lineal. asdjhsdkgjhdfkjghdkf gidj hrijhijdf h gkjdfhngkjdfkjgdhkjhgdkjhgdkjhfgkjdhfgkjdhfgkjhdfkghdfkjhgkdjhgkdjhfgk",
-    estado: "A",
-    cursos: [
-      ...cursoEjemplo,
-      ...cursoEjemplo,
-      ...cursoEjemplo,
-      ...cursoEjemplo,
-      ...cursoEjemplo,
-      ...cursoEjemplo,
-      ...cursoEjemplo,
-      ...cursoEjemplo,
-    ],
-  },
-  {
-    id: 2,
-    nombre: "Física Cuántica",
-    semestre: "2023-1",
-    descripcion:
-      "Introducción a los principios de la física cuántica y sus aplicaciones.",
-    estado: "A",
-    cursos: [
-      {
-        id: "201",
-        grupo: "G1",
-        semestre: "2023-1",
-        descripcion: "Curso de mecánica cuántica.",
-        estado: "A",
-        secciones: seccionesCurso,
-        materia: "POO 2",
-        docente: {
-          id: 3,
-          nombres: "Carlos",
-          apellidos: "Ruiz",
-          correo: "carlos.ruiz@example.com",
-          fechaDeNacimiento: "1975-12-10",
-          estado: "A",
-          tipo: "D",
-          sexo: "M",
-          fotoDePerfil: "url_foto_carlos",
-          redSocial: {
-            facebook: null,
-            instagram: null,
-            linkedin: "carlos-ruiz",
-            x: "carlos_ruiz",
-            github: null,
-          },
-          descripcion: "Profesor de física con especialización en cuántica.",
-          estFechaInicio: "2005-06-01",
-        },
-        estudiantes: [
-          {
-            id: 4,
-            nombres: "Luis",
-            apellidos: "Martínez",
-            correo: "luis.martinez@example.com",
-            fechaDeNacimiento: "1999-07-25",
-            estado: "A",
-            tipo: "E",
-            sexo: "M",
-            fotoDePerfil: "url_foto_luis",
-            redSocial: {
-              facebook: "luis.martinez",
-              instagram: null,
-              linkedin: null,
-              x: null,
-              github: "luis-martinez",
-            },
-            descripcion: "Estudiante de física.",
-            estFechaInicio: "2021-08-01",
-          },
-        ],
       },
     ],
   },

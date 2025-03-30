@@ -41,7 +41,7 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
     undefined
   );
 
-  const token = useContext(AccountContext).localUser?.token;
+  const token = useContext(AccountContext)!!.localUser?.token;
 
   const {
     handleAlertClose: handleAlertCloseChangeStatus,
@@ -192,7 +192,7 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
 
     {
       name: labelUsuario.estado,
-      cell: (row) => <Status estado={row.estado} />,
+      cell: (row) => <Status status={row.estado} />,
       sortable: true,
       sortFunction: (rowA, rowB) => {
         return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente

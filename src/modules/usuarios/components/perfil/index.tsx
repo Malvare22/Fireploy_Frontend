@@ -58,9 +58,8 @@ interface PerfilProps {
 }
 
 const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
-  const theme = useTheme();
 
-  const { localUser } = useContext(AccountContext);
+  const { localUser } = useContext(AccountContext)!!;
 
   const [id, setId] = useState<number | undefined>(undefined);
 
@@ -130,7 +129,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
     await initQueryUpdateUser();
   };
 
-  const CURRENT_USER_TYPE = (useContext(AccountContext).localUser?.tipo ??
+  const CURRENT_USER_TYPE = (useContext(AccountContext)!!.localUser?.tipo ??
     "E") as TiposUsuario;
 
   useEffect(() => {
@@ -463,7 +462,7 @@ export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
 
   const [fileValue, setFileValue] = useState<Blob | undefined>(undefined);
 
-  const token = useContext(AccountContext).localUser?.token ?? "";
+  const token = useContext(AccountContext)!!.localUser?.token ?? "";
 
   useEffect(() => {
     const f = async () => {
@@ -570,9 +569,9 @@ export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
 
 
 const ButtonUpdaterRol = () => {
-  const token = useContext(AccountContext).localUser?.token;
+  const token = useContext(AccountContext)!!.localUser?.token;
 
-  const id = useContext(AccountContext).localUser?.id;
+  const id = useContext(AccountContext)!!.localUser?.id;
 
   const theme = useTheme();
 

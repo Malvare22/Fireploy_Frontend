@@ -1,249 +1,98 @@
-import { labelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
-import { EstadoUsuario, Usuario } from "@modules/usuarios/types/usuario";
 import DataTable, { ConditionalStyles } from "react-data-table-component";
 import { TableColumn, TableStyles } from "react-data-table-component";
-import {
-  Chip,
-  Stack,
-  Tooltip,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Button, Chip, Stack, Typography, useTheme } from "@mui/material";
 import React, { useContext, useMemo, useState } from "react";
-import { getUserTypes } from "@modules/usuarios/utils/usuario.map";
-import SchoolIcon from "@mui/icons-material/School";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import ActionButton from "@modules/general/components/actionButton";
-import { actionButtonTypes } from "@modules/general/types/actionButtons";
-import { showSocialNetworks } from "@modules/usuarios/utils/showSocialNetworks";
-import Status from "@modules/general/components/status";
 import { useNavigate } from "react-router";
-import { rutasUsuarios } from "@modules/usuarios/router/router";
-import useAlertDialog from "@modules/general/hooks/useAlertDialog";
-import AlertDialog from "@modules/general/components/alertDialog";
-import useQuery from "@modules/general/hooks/useQuery";
-import { UsuarioService } from "@modules/usuarios/types/services.usuario";
-import { postModificarEstadoUsuarioService } from "@modules/usuarios/services/post.modificar.usuario";
 import { AccountContext } from "@modules/general/context/accountContext";
+import { SolicitudPromover } from "@modules/usuarios/types/solicitud.promover";
+import { labelSolicitudes } from "@modules/usuarios/enum/labelSolicitudes";
 
-type TablaUsuariosProps = {
-  usuarios: Usuario[];
+type Props = {
+  solicitudes: SolicitudPromover[];
 };
-const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
+const TablaSolicitudes: React.FC<Props> = ({ solicitudes }) => {
   const theme = useTheme();
 
-  const matches = useMediaQuery(theme.breakpoints.up("md"));
+  const [selectSolicitud, setSelectSolicitud] = useState<
+    SolicitudPromover | undefined
+  >(undefined);
 
-  const [selectUsuario, setSelectUsuario] = useState<Usuario | undefined>(
-    undefined
-  );
-
-  const token = useContext(AccountContext).localUser?.token;
-
-  const {
-    handleAlertClose: handleAlertCloseChangeStatus,
-    initQuery: initQueryChangeStatus,
-    message: messageChangeStatus,
-    open: openChangeStatus,
-  } = useQuery<UsuarioService>(
-    () =>
-      postModificarEstadoUsuarioService(
-        selectUsuario?.id!!,
-        token!!,
-        selectUsuario?.estado == "A" ? "I" : "A"
-      ),
-    true,
-    "Estado cambiado correctamente"
-  );
-
-  const handleSelect = (usuario: Usuario) => {
-    setSelectUsuario(usuario);
-    setOpenHandleStatus(true);
-  };
+  const token = useContext(AccountContext)!!.localUser?.token;
 
   const navigate = useNavigate();
 
-  const { open: openHandleStatus, setOpen: setOpenHandleStatus } =
-    useAlertDialog();
+  // function ModalChangeStatus() {
+  //   if(!selectSolicitud) return <></>;
+  //   return (
+  //     <Stack>
+  //       <Typography>
+  //         `¿Está seguro de que desea ${label} al usuario $
+  //         {selectUsuario?.nombres} ${selectUsuario?.apellidos}?`
+  //       </Typography>
+  //     </Stack>
+  //   );
+  // }
 
-  function ModalChangeStatus(status: EstadoUsuario) {
-    const label = status == "I" ? "habilitar" : "deshabilitar";
-
-    return (
-      <Stack>
-        <Typography>
-          `¿Está seguro de que desea ${label} al usuario $
-          {selectUsuario?.nombres} ${selectUsuario?.apellidos}?`
-        </Typography>
-      </Stack>
-    );
-  }
-
-  const columns: TableColumn<Usuario & { rowIndex: number }>[] = [
+  const columns: TableColumn<SolicitudPromover & { rowIndex: number }>[] = [
     {
-      name: labelUsuario.id,
+      name: labelSolicitudes.idSolicitud,
       selector: (row) => row.id,
-      width: "70px",
+      width: "170px",
       sortable: true,
     },
     {
-      name: labelUsuario.nombres,
-      selector: (row) => row.nombres + " " + row.apellidos,
+      name: labelSolicitudes.nombres,
+      selector: (row) => row.usuario.nombres,
       sortable: true,
     },
     {
-      name: labelUsuario.rol,
+      name: labelSolicitudes.idUsuario,
+      selector: (row) => row.usuario.id,
+      sortable: true,
+      width: "170px",
+    },
+    {
+      name: labelSolicitudes.fechaSolicitud,
+      selector: (row) => row.usuario.fechaRecepcion,
+      sortable: true,
+    },
+    {
+      name: labelSolicitudes.aprobar,
+      center: true,
       cell: (row) => {
-        const label = getUserTypes.get(row.tipo);
-        switch (row.tipo) {
-          case "A":
-            return (
-              <>
-                <Chip
-                  label={label}
-                  color="primary"
-                  icon={<ManageAccountsIcon />}
-                  sx={{
-                    padding: 1,
-                    color: "white",
-                    display: { xs: "none", md: "flex" },
-                  }}
-                />
-                <Stack
-                  sx={{
-                    backgroundColor: theme.palette.primary.main,
-                    color: "white",
-                    borderRadius: "100%",
-                    padding: 0.5,
-                    display: { md: "none", xs: "flex" },
-                  }}
-                >
-                  <Tooltip title={label}>
-                    <ManageAccountsIcon />
-                  </Tooltip>
-                </Stack>
-              </>
-            );
-
-          case "D":
-            return (
-              <>
-                <Chip
-                  label={label}
-                  color="error"
-                  icon={<RecordVoiceOverIcon />}
-                  sx={{
-                    padding: 1,
-                    color: "white",
-                    display: { xs: "none", md: "flex" },
-                  }}
-                />
-                <Stack
-                  sx={{
-                    backgroundColor: theme.palette.error.main,
-                    color: "white",
-                    borderRadius: "100%",
-                    padding: 0.5,
-                    display: { md: "none", xs: "flex" },
-                  }}
-                >
-                  <Tooltip title={label}>
-                    <RecordVoiceOverIcon />
-                  </Tooltip>
-                </Stack>
-              </>
-            );
-
-          case "E":
-            return (
-              <>
-                <Chip
-                  label={label}
-                  color="warning"
-                  icon={<SchoolIcon />}
-                  sx={{
-                    padding: 1,
-                    color: "white",
-                    display: { xs: "none", md: "flex" },
-                  }}
-                />
-                <Stack
-                  sx={{
-                    backgroundColor: theme.palette.warning.main,
-                    color: "white",
-                    borderRadius: "100%",
-                    padding: 0.5,
-                    display: { md: "none", xs: "flex" },
-                  }}
-                >
-                  <Tooltip title={label}>
-                    <SchoolIcon />
-                  </Tooltip>
-                </Stack>
-              </>
-            );
+        if (row.estado == "P") {
+          return (
+            <Button size="small" variant="contained">
+              {labelSolicitudes.aprobar}
+            </Button>
+          );
+        } else {
+          return (
+            <Stack
+              sx={{
+                height: "auto",
+                width: 150,
+                backgroundColor: theme.palette.info.main as string,
+                color : 'white',
+                padding: 0.4,
+                borderRadius: 1,
+                textAlign: 'center',
+                marginY: 1
+              }}
+              alignContent={'center'}
+            >
+              <Typography variant="caption" sx={{fontWeight: 600}}>{labelSolicitudes.aprobadoPor}</Typography>
+              <Typography variant="caption">{`${row.aprobadoPor || ''}`}</Typography>
+            </Stack>
+          );
         }
       },
-      width: matches ? "auto" : "70px",
-    },
-
-    {
-      name: labelUsuario.estado,
-      cell: (row) => <Status status={row.estado} />,
       sortable: true,
-      sortFunction: (rowA, rowB) => {
-        return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
+      sortFunction: (rowA: SolicitudPromover, rowB: SolicitudPromover) => {
+        const getDif = (x: SolicitudPromover["estado"]) => (x == "A" ? 1 : -1);
+
+        return getDif(rowA.estado) - getDif(rowB.estado);
       },
-    },
-    {
-      name: "Redes Sociales", // Nueva columna con un botón
-      cell: (row) => {
-        const redesSociales = showSocialNetworks(row.redSocial);
-        if (redesSociales.length == 0)
-          return (
-            <Chip
-              label="No dispone"
-              icon={<ErrorOutlineIcon />}
-              color="info"
-              sx={{ padding: 1, color: "white" }}
-            />
-          );
-        return redesSociales;
-      },
-    },
-    {
-      name: "Acciones", // Nueva columna con un botón
-      cell: (row) => (
-        <Stack direction={"row"}>
-          <ActionButton
-            mode={actionButtonTypes.ver}
-            onClick={() =>
-              navigate(
-                rutasUsuarios.modificarPerfil.replace(":id", row.id.toString())
-              )
-            }
-          />
-          <ActionButton mode={actionButtonTypes.editar} />
-          {row.estado == "A" ? (
-            <ActionButton
-              mode={actionButtonTypes.deshabilitarUsuario}
-              onClick={() => handleSelect(row)}
-              sx={{ color: theme.palette.error.main }}
-            />
-          ) : (
-            <ActionButton
-              mode={actionButtonTypes.habilitarUsuario}
-              onClick={() => handleSelect(row)}
-              sx={{ color: theme.palette.success.main }}
-            />
-          )}
-        </Stack>
-      ),
-      ignoreRowClick: true, // Evita que la fila se seleccione al hacer clic en el botón
-      style: { display: "flex", justifyContent: "center" },
     },
   ];
 
@@ -257,12 +106,6 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
         fontFamily: theme.typography.body1.fontFamily,
       },
     },
-    // table: {
-    //   style: {
-    //     border: "1px solid red",
-    //      borderRadius: '20px'
-    //   },
-    // },
     rows: {
       style: {
         color: theme.palette.text.primary,
@@ -275,7 +118,7 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
   };
 
   const conditionalRowStyles: ConditionalStyles<
-    Usuario & { rowIndex: number }
+    SolicitudPromover & { rowIndex: number }
   >[] = [
     {
       when: (row) => row.rowIndex % 2 !== 0, // Filas impares
@@ -291,31 +134,15 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
 
   const dataConIndice = useMemo(
     () =>
-      usuarios.map((usuario, index) => ({
-        ...usuario,
+      solicitudes.map((solicitud, index) => ({
+        ...solicitud,
         rowIndex: index,
       })),
-    [usuarios]
+    [solicitudes]
   );
 
   return (
     <>
-      <AlertDialog
-        open={openHandleStatus}
-        handleAccept={() => {
-          initQueryChangeStatus();
-          setOpenHandleStatus(false);
-        }}
-        title="Cambiar Estado del Usuario"
-        body={ModalChangeStatus(selectUsuario?.estado!!)}
-        handleCancel={() => setOpenHandleStatus(false)}
-      />
-      <AlertDialog
-        open={openChangeStatus}
-        handleAccept={handleAlertCloseChangeStatus}
-        title="Cambiar Estado del Usuario"
-        textBody={messageChangeStatus}
-      />
       <DataTable
         columns={columns}
         data={dataConIndice}
@@ -326,4 +153,4 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
   );
 };
 
-export default TablaUsuarios;
+export default TablaSolicitudes;

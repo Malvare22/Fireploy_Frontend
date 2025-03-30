@@ -177,8 +177,5 @@ export function adapterUsuarioToUsuarioForm(usuario: Usuario): UsuarioForm {
 export function adapterUsuarioFormToUsuario(formData: UsuarioForm): Usuario {
 
   const _usuario = formData as Usuario;
-
-  if (formData.tipo != "E") delete _usuario.estFechaInicio;
-
   return _usuario;
 }

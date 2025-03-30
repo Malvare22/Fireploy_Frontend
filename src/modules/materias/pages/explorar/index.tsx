@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import useOrderSelect from "@modules/general/hooks/useOrderSelect";
-import { labelListarMateria } from "@modules/materias/enums/labelListarMaterias";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { labelSelects } from "@modules/general/enums/labelSelects";
@@ -20,12 +19,13 @@ import { MateriaService } from "@modules/materias/types/materia.service";
 import { getMateriasService } from "@modules/materias/services/get.materias.services";
 import { AccountContext } from "@modules/general/context/accountContext";
 import AlertDialog from "@modules/general/components/alertDialog";
-import { adaptarMateriaService } from "@modules/materias/utils/adapters/adaptar.materiaService.materia";
+import { adaptMateriaServiceToMateria } from "@modules/materias/utils/adapters/adaptar.materiaService.materia";
+import { labelListarMaterias } from "@modules/materias/enums/labelListarMaterias";
 
 function ExplorarMaterias() {
   const [materias, setMaterias] = useState<Materia[]>([]);
 
-  const token = useContext(AccountContext).localUser?.token;
+  const token = useContext(AccountContext)!!.localUser?.token;
 
   const { error, handleAlertClose, initQuery, message, open, responseData } =
     useQuery<MateriaService[]>(() => getMateriasService(token!!), false);
@@ -40,7 +40,7 @@ function ExplorarMaterias() {
   useEffect(() => {
     if (responseData)
       setMaterias(
-        responseData.map((materia) => adaptarMateriaService(materia))
+        responseData.map((materia) => adaptMateriaServiceToMateria(materia))
       );
   }, [responseData]);
 
@@ -76,7 +76,7 @@ function ExplorarMaterias() {
             textAlign={"center"}
             textTransform={"uppercase"}
           >
-            {labelListarMateria.titulo}
+            {labelListarMaterias.titulo}
           </Typography>
           <MenuBookIcon sx={{ fontSize: 48 }} />
         </Stack>

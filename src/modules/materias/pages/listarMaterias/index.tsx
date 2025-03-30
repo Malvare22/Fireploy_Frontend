@@ -24,7 +24,7 @@ function ListarMaterias() {
     undefined
   );
 
-  const token = useContext(AccountContext).localUser?.token;
+  const token = useContext(AccountContext)!!.localUser?.token;
 
   /**
    * Variables de Consulta de Materias

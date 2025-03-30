@@ -14,6 +14,7 @@ import ListarUsuarios from "../pages/listar";
 import GestionarPerfil from "../pages/admin/modificarPerfil";
 import CrearUsuario from "../pages/admin/crearUsuario";
 import Logout from "@modules/general/pages/logout";
+import VistaSolicitudes from "../pages/solicitudes";
 
 const rutaBase = "/app/usuarios";
 
@@ -24,7 +25,8 @@ export enum rutasUsuarios {
   listarUsuarios = rutaBase + "/listar",
   modificarPerfil = rutaBase + "/perfil/:id",
   agregarUsuario = rutaBase + '/agregar',
-  logout = rutaBase + '/logout'
+  logout = rutaBase + '/logout',
+  solicitudes = rutaBase + '/solicitudes'
 }
 
 export const routerUsuarios: RouteObject[] = [
@@ -55,5 +57,9 @@ export const routerUsuarios: RouteObject[] = [
   {
     path: rutasUsuarios.logout,
     element: <Logout />,
+  },
+  {
+    path: rutasUsuarios.solicitudes,
+    element: <VistaSolicitudes />,
   },
 ];

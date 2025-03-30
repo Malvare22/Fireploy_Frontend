@@ -14,10 +14,10 @@ export enum rutasMaterias {
 }
 
 export const routerMaterias: RouteObject[] = [
-  // {
-  //   path: rutasMaterias.explorar,
-  //   element: <ExplorarMaterias />,
-  // },
+  {
+    path: rutasMaterias.explorar,
+    element: <ExplorarMaterias />,
+  },
   {
     path: rutasMaterias.listarMaterias,
     element: <ListarMaterias/>
