@@ -2,14 +2,13 @@ import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import { useFiltersByConditions } from "@modules/general/hooks/useFiltersByCondition";
 import useSearch from "@modules/general/hooks/useSearch";
-import RepositoryCard from "@modules/proyectos/components/CardRepository";
+import TablaBasesDeDatos from "@modules/proyectos/components/tablaBasesDeDatos";
+import { labelBaseDeDatos } from "@modules/proyectos/enum/labelBaseDeDatos";
 import { labelRepositorios } from "@modules/proyectos/enum/labelRepositorios";
-import {
-  exampleRepositorios,
-  Repositorio,
-} from "@modules/proyectos/types/repositorio";
-import { getNoRepeatValuesRepositorios } from "@modules/proyectos/utils/getNoRepeatValues.repositorios";
-import { getRepositoryTypesArray } from "@modules/proyectos/utils/repository";
+import { BaseDeDatos, exampleBasesDeDatos } from "@modules/proyectos/types/baseDeDatos";
+import { getDataBaseTypesArray } from "@modules/proyectos/utils/database";
+import { getNoRepeatValuesBasesDeDatos } from "@modules/proyectos/utils/getNoRepeatValues.basesDeDatos";
+
 import {
   Divider,
   Grid2,
@@ -20,9 +19,9 @@ import {
 } from "@mui/material";
 import { useMemo, useState } from "react";
 
-function VistaRepositorios() {
-  const [repositorios, useStateRepositorios] =
-    useState<Repositorio[]>(exampleRepositorios);
+function VistaBasesDeDatos() {
+  const [basesDeDatos, setBasesDeDatos] =
+    useState<BaseDeDatos[]>(exampleBasesDeDatos);
 
   const {
     searchValue,
@@ -50,7 +49,7 @@ function VistaRepositorios() {
         >
           <MenuItem value="">{labelSelects.noAplicar}</MenuItem>
           {Array.from(
-            getNoRepeatValuesRepositorios(repositorios, "proyecto")
+            getNoRepeatValuesBasesDeDatos(basesDeDatos, "proyecto")
           ).map((element) => (
             <MenuItem value={element} key={element}>
               {element}
@@ -77,7 +76,7 @@ function VistaRepositorios() {
         defaultValue={""}
       >
         <MenuItem value="">{labelSelects.noAplicar}</MenuItem>
-        {getRepositoryTypesArray.map(([value, key]) => (
+        {getDataBaseTypesArray.map(([value, key]) => (
           <MenuItem value={value} key={key}>
             {key}
           </MenuItem>
@@ -86,47 +85,20 @@ function VistaRepositorios() {
     );
   }, []);
 
-  const filterDocker = useMemo(() => {
-    return (
-      <TextField
-        select
-        size="small"
-        label={labelRepositorios.filtrarPorImagenDocker}
-        variant="standard"
-        fullWidth
-        onChange={(e) => {
-          const value = e.target.value || "";
-          if (value != "") toggleFilter("dockerText", (x: any) => x == value);
-          else toggleFilter("dockerText", (_x: any) => true);
-        }}
-        defaultValue={""}
-      >
-        <MenuItem value="">{labelSelects.noAplicar}</MenuItem>
-        {Array.from(
-          getNoRepeatValuesRepositorios(repositorios, "dockerText")
-        ).map((element) => (
-          <MenuItem value={element} key={element}>
-            {element}
-          </MenuItem>
-        ))}
-      </TextField>
-    );
-  }, []);
-
   const dataToRender = useMemo(() => {
-    const filterText = (x: Repositorio[]) => {
+    const filterText = (x: BaseDeDatos[]) => {
       const textValue = searchValue.toLowerCase();
       if (searchValue == "") return x;
       return x.filter((y) => y.proyecto.toLowerCase().includes(textValue));
     };
 
-    return filterData(filterByText(repositorios, filterText)) as Repositorio[];
+    return filterData(filterByText(basesDeDatos, filterText)) as BaseDeDatos[];
   }, [filters, searchValue]);
 
   return (
     <Stack spacing={3}>
       <Stack>
-        <Typography variant="h4">{labelRepositorios.titulo}</Typography>
+        <Typography variant="h4">{labelBaseDeDatos.basesDeDatos}</Typography>
         <Divider />
       </Stack>
       <Stack spacing={1}>
@@ -137,18 +109,11 @@ function VistaRepositorios() {
         <Grid2 container columnSpacing={4}>
           <Grid2 size={{ xs: 12, md: 4 }}>{filterProject}</Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>{filterType}</Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>{filterDocker}</Grid2>
         </Grid2>
       </Stack>
-      <Grid2 container justifyContent={"center"} rowSpacing={3}>
-        {dataToRender.map((repo) => (
-          <Grid2 size={{ md: 8, xs: 12 }}>
-            <RepositoryCard repositorio={repo} key={repo.id}/>
-          </Grid2>
-        ))}
-      </Grid2>
+      <TablaBasesDeDatos basesDeDatos={dataToRender}/>
     </Stack>
   );
 }
 
-export default VistaRepositorios;
+export default VistaBasesDeDatos;

@@ -48,7 +48,7 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
 
   const navigate = useNavigate();
 
-  const token = useContext(AccountContext).localUser?.token;
+  const token = useContext(AccountContext)!!.localUser?.token;
 
   const columns: TableColumn<MateriaTabla & { rowIndex: number }>[] = [
     {
@@ -191,7 +191,7 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
 
   return (
     <>
-      <AlertDialog
+      {/* <AlertDialog
         open={openHandleStatus}
         handleAccept={() => {
           initQuery();
@@ -208,7 +208,7 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
           title="Cambiar Estado de Materia"
           textBody={message}
         />
-      }
+      } */}
       <DataTable
         columns={columns}
         data={dataConIndice}

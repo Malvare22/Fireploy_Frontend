@@ -1,6 +1,6 @@
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { EstadoCurso } from "./materia";
-import { SeccionCurso } from "./curso.seccion";
+import { SeccionCurso } from "./seccion";
 
 export type CursoMateria = {
   id: string;

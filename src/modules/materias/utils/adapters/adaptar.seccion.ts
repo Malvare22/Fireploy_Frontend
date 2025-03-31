@@ -1,5 +1,5 @@
 import { adaptarFechaBackend } from "@modules/general/utils/fechas";
-import { SeccionCurso } from "@modules/materias/types/curso.seccion";
+import { SeccionCurso } from "@modules/materias/types/seccion";
 import { EstadoMateria } from "@modules/materias/types/materia.estado";
 import { SeccionService } from "@modules/materias/types/seccion.services";
 

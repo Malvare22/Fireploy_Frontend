@@ -1,4 +1,4 @@
-import { seccionesCurso } from "./curso.seccion";
+import { seccionesCurso } from "./seccion";
 import { CursoMateria } from "./materia.curso";
 
 export type EstadoMateria = "A" | "I";

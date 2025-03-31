@@ -5,6 +5,7 @@ import CrearProyecto from "./pages/crear";
 import ListarProyectos from "./pages/listar";
 import ExplorarProyectos from "./pages/explorar";
 import VistaRepositorios from "./pages/repositorios";
+import VistaBasesDeDatos from "./pages/basesDeDatos";
 
 const rutaBase = "/app/proyectos";
 
@@ -13,7 +14,8 @@ export const rutasProyectos = {
   ver: rutaBase + "/listar/ver/:id",
   crear: rutaBase + "/crear",
   explorar: rutaBase + "/explorar",
-  repositorios: rutaBase + '/repositorios'
+  repositorios: rutaBase + "/repositorios",
+  basesDeDatos: rutaBase + "/basesDeDatos",
 };
 
 export const routerProyectos: RouteObject[] = [
@@ -40,5 +42,9 @@ export const routerProyectos: RouteObject[] = [
   {
     path: rutasProyectos.repositorios,
     element: <VistaRepositorios />,
+  },
+  {
+    path: rutasProyectos.basesDeDatos,
+    element: <VistaBasesDeDatos />,
   },
 ];

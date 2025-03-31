@@ -19,6 +19,7 @@ import { rutasProyectos } from "@modules/proyectos/router";
 import { AccountContext } from "@modules/general/context/accountContext";
 import CastForEducationIcon from '@mui/icons-material/CastForEducation';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import StorageIcon from '@mui/icons-material/Storage';
 
 const navigationStudent: Navigation = [
   {
@@ -125,6 +126,11 @@ const navigationAdmin: Navigation = [
         segment: rutasProyectos.repositorios as string,
         title: "Repositorios",
         icon: <GitHubIcon />,
+      },
+      {
+        segment: rutasProyectos.basesDeDatos as string,
+        title: "Bases de Datos",
+        icon: <StorageIcon />,
       },
     ]
   },

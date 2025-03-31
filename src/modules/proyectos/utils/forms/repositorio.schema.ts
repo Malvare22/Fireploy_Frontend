@@ -22,9 +22,10 @@ export const repositorioSchema: z.ZodType<Repositorio> = z.object({
   ),
   docker: z
     .object({
-      tecnonologia: z
+      tecnologia: z
         .string()
         .min(1, { message: "La tecnología es obligatoria." }),
       tag: z.string().min(1, { message: "El tag es obligatorio." }),
-    })
+    }),
+  dockerText: z.string()
 });

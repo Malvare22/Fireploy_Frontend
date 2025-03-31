@@ -127,7 +127,7 @@ const RepositoryCard: React.FC<Props> = ({ repositorio }) => {
                       label={
                         <Typography variant="body2">
                           {repositorio.docker
-                            ? `${repositorio.docker?.tecnonologia} : ${repositorio.docker?.tag}`
+                            ? `${repositorio.docker?.tecnologia} : ${repositorio.docker?.tag}`
                             : "No seleccionada"}
                         </Typography>
                       }
@@ -144,13 +144,13 @@ const RepositoryCard: React.FC<Props> = ({ repositorio }) => {
                         repositoryInitial=""
                         tagInitial=""
                         onChange={(repo, tag) => {
-                          setValue("docker.tecnonologia", repo || "");
+                          setValue("docker.tecnologia", repo || "");
                           setValue("docker.tag", tag || "");
                         }}
                       />
-                      {errors.docker?.tecnonologia && (
+                      {errors.docker?.tecnologia && (
                         <Typography color="error" variant="caption">
-                          {errors.docker.tecnonologia.message}
+                          {errors.docker.tecnologia.message}
                         </Typography>
                       )}
                       {errors.docker?.tag && (

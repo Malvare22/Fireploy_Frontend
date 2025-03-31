@@ -8,7 +8,7 @@ import {
   useTheme,
 } from "@mui/material";
 import React from "react";
-import { SeccionCurso } from "@modules/materias/types/curso.seccion";
+import { SeccionCurso } from "@modules/materias/types/seccion";
 import AccordionUsage from "@modules/general/components/accordionUsage";
 import { ProjectCardPortafolio } from "@modules/general/components/projectCard";
 import {
