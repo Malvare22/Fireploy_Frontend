@@ -1,0 +1,56 @@
+export type Repositorio = {
+  id: number;
+  proyecto: string;
+  url: string;
+  tipo: "B" | "F" | "I";
+  variables: { nombre: string; valor: string }[];
+  docker?: { tecnonologia: string; tag: string };
+  dockerText: string;
+};
+
+export const exampleRepositorios: Repositorio[] = [
+  {
+    id: 1,
+    proyecto: "Frontend Web",
+    url: "https://github.com/org/frontend-web",
+    tipo: "F",
+    variables: [
+      { nombre: "API_URL", valor: "https://api.example.com" },
+      { nombre: "NODE_ENV", valor: "production" },
+    ],
+    docker: {
+      tecnonologia: "NodeJS",
+      tag: "1.0",
+    },
+  },
+  {
+    id: 2,
+    proyecto: "Backend API",
+    url: "https://github.com/org/backend-api",
+    tipo: "B",
+    variables: [
+      { nombre: "DB_HOST", valor: "db.example.com" },
+      { nombre: "DB_USER", valor: "admin" },
+    ],
+  },
+  {
+    id: 3,
+    proyecto: "Infraestructura",
+    url: "https://github.com/org/infra",
+    tipo: "I",
+    variables: [
+      { nombre: "CLOUD_PROVIDER", valor: "AWS" },
+      { nombre: "REGION", valor: "us-east-1" },
+    ],
+  },
+  {
+    id: 4,
+    proyecto: "Mobile App",
+    url: "https://github.com/org/mobile-app",
+    tipo: "F",
+    variables: [
+      { nombre: "API_URL", valor: "https://api.example.com" },
+      { nombre: "APP_ENV", valor: "staging" },
+    ],
+  },
+];

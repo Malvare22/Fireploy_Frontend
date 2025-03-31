@@ -16,8 +16,7 @@ import ingSistemasLogo from "@modules/general/assets/ufps/ingSistemasLogo.png";
 import ufpsLogo from "@modules/general/assets/ufps/UFPSLogo.png";
 import ufpsLogoCompleto from "@modules/general/assets/ufps/UFPSLogoCompleto.png";
 import defaultProfileImage from "@modules/general/assets/profile/defaultProfileImage.png";
-import defaultProjectImage from "@modules/general/assets/project/defaultImage.jpg"
-
+import defaultProjectImage from "@modules/general/assets/project/defaultImage.jpg";
 
 export const Imagenes = {
   // Fireploy
@@ -44,15 +43,23 @@ export const Imagenes = {
 
   defaultProfileImage: defaultProfileImage,
 
-  defaultProjectImage: defaultProjectImage
+  defaultProjectImage: defaultProjectImage,
+
 } as const; // "as const" asegura que los valores sean de solo lectura
 
-
 // Mapa para obtener las imágenes con sus rutas y nombres
-export const getImage: Record<keyof typeof Imagenes, { nombre: string; ruta: string }> =
-  Object.keys(Imagenes).reduce((mapa, clave) => {
+export const getImage: Record<
+  keyof typeof Imagenes,
+  { nombre: string; ruta: string }
+> = Object.keys(Imagenes).reduce(
+  (mapa, clave) => {
     return {
       ...mapa,
-      [clave]: { nombre: capitalizeFirstLetter(clave), ruta: Imagenes[clave as keyof typeof Imagenes] },
+      [clave]: {
+        nombre: capitalizeFirstLetter(clave),
+        ruta: Imagenes[clave as keyof typeof Imagenes],
+      },
     };
-  }, {} as Record<keyof typeof Imagenes, { nombre: string; ruta: string }>);
+  },
+  {} as Record<keyof typeof Imagenes, { nombre: string; ruta: string }>
+);

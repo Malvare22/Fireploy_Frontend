@@ -4,6 +4,7 @@ import VerProyecto from "./pages/ver";
 import CrearProyecto from "./pages/crear";
 import ListarProyectos from "./pages/listar";
 import ExplorarProyectos from "./pages/explorar";
+import VistaRepositorios from "./pages/repositorios";
 
 const rutaBase = "/app/proyectos";
 
@@ -12,6 +13,7 @@ export const rutasProyectos = {
   ver: rutaBase + "/listar/ver/:id",
   crear: rutaBase + "/crear",
   explorar: rutaBase + "/explorar",
+  repositorios: rutaBase + '/repositorios'
 };
 
 export const routerProyectos: RouteObject[] = [
@@ -34,5 +36,9 @@ export const routerProyectos: RouteObject[] = [
   {
     path: rutasProyectos.explorar,
     element: <ExplorarProyectos />,
+  },
+  {
+    path: rutasProyectos.repositorios,
+    element: <VistaRepositorios />,
   },
 ];

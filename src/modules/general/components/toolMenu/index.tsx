@@ -18,6 +18,7 @@ import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { rutasProyectos } from "@modules/proyectos/router";
 import { AccountContext } from "@modules/general/context/accountContext";
 import CastForEducationIcon from '@mui/icons-material/CastForEducation';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 const navigationStudent: Navigation = [
   {
@@ -82,11 +83,6 @@ const navigationAdmin: Navigation = [
     icon: <MenuBookIcon />,
   },
   {
-    segment: rutasProyectos.listar as string,
-    title: "Proyectos",
-    icon: <AccountTreeIcon />,
-  },
-  {
     segment: rutasUsuarios.explorarPortafolios as string,
     title: "Portafolios",
     icon: <ContactMailIcon />,
@@ -113,6 +109,23 @@ const navigationAdmin: Navigation = [
         title: 'Solicitudes de Rol Docente',
         icon: <CastForEducationIcon/>
       }
+    ]
+  },
+  {
+    
+    title: "Proyectos",
+    icon: <AccountTreeIcon />,
+    children: [
+      {
+        segment: rutasProyectos.listar as string,
+        title: "Explorar proyectos",
+        icon: <AccountTreeIcon />,
+      },
+      {
+        segment: rutasProyectos.repositorios as string,
+        title: "Repositorios",
+        icon: <GitHubIcon />,
+      },
     ]
   },
 ];
