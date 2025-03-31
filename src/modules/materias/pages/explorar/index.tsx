@@ -19,7 +19,7 @@ import { MateriaService } from "@modules/materias/types/materia.service";
 import { getMateriasService } from "@modules/materias/services/get.materias.services";
 import { AccountContext } from "@modules/general/context/accountContext";
 import AlertDialog from "@modules/general/components/alertDialog";
-import { adaptMateriaServiceToMateria } from "@modules/materias/utils/adapters/adaptar.materiaService.materia";
+import { adaptMateriaServiceToMateria } from "@modules/materias/utils/adapters/materia.service";
 import { labelListarMaterias } from "@modules/materias/enums/labelListarMaterias";
 
 function ExplorarMaterias() {

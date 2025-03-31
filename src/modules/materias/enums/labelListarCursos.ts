@@ -1,4 +1,17 @@
-export enum labelListarCursos{
-    grupos = 'Grupos',
-    noHayGrupos = 'Actualmente no se encuentran grupos registrados para esta materia'
+export enum labelListarCursos {
+  titulo = 'Grupos',
+  grupos = "Grupos",
+  noHayGrupos = "Actualmente no se encuentran grupos registrados para esta materia",
+
+  id = "Id",
+  semestre = "Semestre",
+  grupo = "Grupo",
+  docente = "Docente",
+  cantidad = "Cantidad Estudiantes",
+  acciones = "Acciones",
+  estado = 'Estado',
+
+  placeHolder = 'Buscar Grupo',
+  filtrarPorEstado = 'Filtrar Por Estado',
+  filtrarPorDocente = 'Filtrar Por Docente'
 }

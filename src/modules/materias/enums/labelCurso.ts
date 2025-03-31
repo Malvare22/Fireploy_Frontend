@@ -11,4 +11,5 @@ export enum LabelCurso {
   estado = 'Estado',
   semestre = 'Semestre',
   descripcion = 'Descripción'
+  
 }

@@ -6,38 +6,36 @@ import { useNavigate } from "react-router";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import useQuery from "@modules/general/hooks/useQuery";
 import { AccountContext } from "@modules/general/context/accountContext";
-import { MateriaTabla } from "@modules/materias/types/materia.tabla";
-import { EstadoMateria } from "@modules/materias/types/materia";
-import { labelTablaMaterias } from "@modules/materias/enums/labelTablaMaterias";
 import AlertDialog from "@modules/general/components/alertDialog";
-import { postEstadoMateriaService } from "@modules/materias/services/post.materia.services";
 import Status from "@modules/general/components/status";
 import InfoIcon from "@mui/icons-material/Info";
 import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
+import { CursoTabla } from "@modules/materias/types/curso.tabla";
+import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
 
-type TablaMateriasProps = {
-  materias: MateriaTabla[];
+type TablaCursosProps = {
+  cursos: CursoTabla[];
 };
-const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
+const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
   const theme = useTheme();
 
-  const [selectMateria, setSelectMateria] = useState<MateriaTabla | undefined>(
+  const [selectCurso, setSelectCurso] = useState<CursoTabla | undefined>(
     undefined
   );
 
-  const handleSelect = (materia: MateriaTabla) => {
-    setSelectMateria(materia);
+  const handleSelect = (materia: CursoTabla) => {
+    setSelectCurso(materia);
     setOpenHandleStatus(true);
   };
 
-  function ModalChangeStatus(status: EstadoMateria) {
+  function ModalChangeStatus(status: CursoTabla['estado']) {
     const label = status == "I" ? "habilitar" : "deshabilitar";
 
     return (
       <Stack>
         <Typography>
-          {`¿Está seguro de que desea ${label} la materia: ${selectMateria?.nombre}?`}
+          {`¿Está seguro de que desea ${label} el curso: ${selectCurso?.grupo}?`}
         </Typography>
       </Stack>
     );
@@ -50,24 +48,24 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
 
   const token = useContext(AccountContext)!!.localUser?.token;
 
-  const columns: TableColumn<MateriaTabla & { rowIndex: number }>[] = [
+  const columns: TableColumn<CursoTabla & { rowIndex: number }>[] = [
     {
-      name: labelTablaMaterias.idMateria,
-      selector: (row) => row.codigo,
+      name: labelListarCursos.id,
+      selector: (row) => row.id,
       sortable: true,
     },
     {
-      name: labelTablaMaterias.nombre,
-      selector: (row) => row.nombre,
+      name: labelListarCursos.grupo,
+      selector: (row) => row.grupo,
       sortable: true,
     },
     {
-      name: labelTablaMaterias.semestre,
+      name: labelListarCursos.semestre,
       selector: (row) => row.semestre,
       sortable: true,
     },
     {
-      name: labelTablaMaterias.estado,
+      name: labelListarCursos.estado,
       cell: (row) => {
         return <Status status={row.estado} />;
       },
@@ -77,30 +75,12 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
       sortable: true,
     },
     {
-      name: labelTablaMaterias.cantidadCursos,
-      cell: (row) => {
-        if (!row.cantidadGruposActivos)
-          return (
-            <Chip
-              color="primary"
-              label={labelTablaMaterias.noDispone}
-              icon={<InfoIcon />}
-            />
-          );
-        else
-          return (
-            <Typography textAlign={"center"}>
-              {row.cantidadGruposActivos}
-            </Typography>
-          );
-      },
+      name: labelListarCursos.cantidad,
+      selector : row => row.cantidadEstudiantes,
       sortable: true,
-      sortFunction: (rowA, rowB) => {
-        return rowA.cantidadGruposActivos - rowB.cantidadGruposActivos;
-      },
     },
     {
-      name: labelTablaMaterias.acciones,
+      name: labelListarCursos.acciones,
       cell: (row) => {
         return (
           <Stack direction={"row"} justifyContent={"center"}>
@@ -152,7 +132,7 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
   };
 
   const conditionalRowStyles: ConditionalStyles<
-    MateriaTabla & { rowIndex: number }
+    CursoTabla & { rowIndex: number }
   >[] = [
     {
       when: (row) => row.rowIndex % 2 !== 0, // Filas impares
@@ -167,48 +147,47 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
   ];
 
   const dataConIndice = useMemo(() => {
-    return materias
-      ? materias.map((materia, index) => ({
-          ...materia,
+    return cursos
+      ? cursos.map((curso, index) => ({
+          ...curso,
           rowIndex: index,
         }))
       : [];
-  }, [materias]);
+  }, [cursos]);
 
-  const bodyQuery = useMemo(() => {
-    return {
-      nombre: selectMateria?.nombre as string,
-      estado: selectMateria?.estado == "A" ? "I" : ("A" as string),
-      semestre: selectMateria?.semestre as string,
-    };
-  }, [selectMateria]);
+  // const bodyQuery = useMemo(() => {
+  //   return {
+  //     nombre: selectCurso?.nombre as string,
+  //     estado: selectCurso?.estado == "A" ? "I" : ("A" as string),
+  //     semestre: selectCurso?.semestre as string,
+  //   };
+  // }, [selectCurso]);
 
-  const { error, handleAlertClose, initQuery, message, open } = useQuery(
-    () => postEstadoMateriaService(token!!, bodyQuery, selectMateria?.codigo!!),
-    true,
-    "Materia Modificada Exitosamente"
-  );
+  // const { error, handleAlertClose, initQuery, message, open } = useQuery(
+  //   () => postEstadocursoservice(token!!, bodyQuery, selectCurso?.codigo!!),
+  //   true,
+  //   "Materia Modificada Exitosamente"
+  // );
 
   return (
     <>
       <AlertDialog
         open={openHandleStatus}
         handleAccept={() => {
-          initQuery();
           setOpenHandleStatus(false);
         }}
         title="Cambiar Estado de Materia"
-        body={ModalChangeStatus(selectMateria?.estado!!)}
+        body={ModalChangeStatus(selectCurso?.estado!!)}
         handleCancel={() => setOpenHandleStatus(false)}
       />
-      {
+      {/* {
         <AlertDialog
           open={open}
           handleAccept={handleAlertClose}
           title="Cambiar Estado de Materia"
           textBody={message}
         />
-      }
+      } */}
       <DataTable
         columns={columns}
         data={dataConIndice}
@@ -219,4 +198,4 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
   );
 };
 
-export default TablaMaterias;
+export default TablaCursos;

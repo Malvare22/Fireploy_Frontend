@@ -12,7 +12,7 @@ export function adaptMateriaService(materia: MateriaService): MateriaTabla {
     codigo: materia.id,
     estado: materia.estado as EstadoMateria,
     nombre: materia.nombre,
-    semestre: materia.semestre,
+    semestre: parseInt(materia.semestre) || 0,
   };
 }
 

@@ -1,7 +1,7 @@
 import { patchData } from "@core/services";
 import { SeccionService } from "../types/seccion.services";
 import { SeccionCurso } from "../types/seccion";
-import { adaptarSeccionASeccionService } from "../utils/adapters/adaptar.seccion";
+import { adaptarSeccionASeccionService } from "../utils/adapters/seccion.service";
 
 export const editarSeccionService = async (
   token: string,

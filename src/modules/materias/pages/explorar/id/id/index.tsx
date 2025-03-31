@@ -2,21 +2,22 @@ import { ProjectCardAvatar } from "@modules/general/components/avatar";
 import CardSeccion from "@modules/materias/components/cardSeccion";
 import { labelCardCurso } from "@modules/materias/enums/labelCardCurso";
 import { LabelCurso } from "@modules/materias/enums/labelCurso";
-import { materiasEjemplo } from "@modules/materias/types/materia";
+import { exampleCursos } from "@modules/materias/types/curso";
+import { exampleSecciones } from "@modules/materias/types/seccion";
 import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import { adaptarUsuarioAUsuarioCardPortafolio } from "@modules/usuarios/utils/adaptar.usuario";
 import { StackedBarChart } from "@mui/icons-material";
 import { Box, Card, Grid2, Stack, Typography, useTheme } from "@mui/material";
 
 function VerInformacionCurso() {
-  const curso = materiasEjemplo[0].cursos[0];
+  const curso = exampleCursos[0];
 
-  const docenteAdapt = adaptarUsuarioAUsuarioCardPortafolio(curso.docente);
+  // const docenteAdapt = adaptarUsuarioAUsuarioCardPortafolio(curso.docente);
 
   return (
     <Stack spacing={3} paddingX={{lg: 5}}>
       <Stack direction={"row"} spacing={2}>
-        <Typography variant="h3">{curso.materia}</Typography>
+        <Typography variant="h3">{curso.materia?.nombre}</Typography>
         <Card>
           <Typography variant="h3" paddingX={2}>
             {curso.grupo}
@@ -27,11 +28,13 @@ function VerInformacionCurso() {
       <Typography variant="h4">{LabelCurso.secciones}</Typography>
       <Grid2 container spacing={3} direction={{xs:'column-reverse', xl: 'row'}}>
         <Grid2 size={{xl: 10, xs: 12}}><Stack spacing={2}>
-          {curso.secciones.map((seccion, key) => (
+          {exampleSecciones.map((seccion, key) => (
             <CardSeccion seccion={seccion} key={key} />
           ))}
         </Stack></Grid2>
-        <Grid2 size={{xl: 2, xs: 10, sm: 4}}><FrameDocente docente={docenteAdapt}/></Grid2>
+        <Grid2 size={{xl: 2, xs: 10, sm: 4}}>
+          {/* <FrameDocente docente={docenteAdapt}/> */}
+          </Grid2>
       </Grid2>
     </Stack>
   );

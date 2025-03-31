@@ -1,6 +1,6 @@
 import { adaptarFechaBackend } from "@modules/general/utils/fechas";
+import { EstadoMateria } from "@modules/materias/types/materia";
 import { SeccionCurso } from "@modules/materias/types/seccion";
-import { EstadoMateria } from "@modules/materias/types/materia.estado";
 import { SeccionService } from "@modules/materias/types/seccion.services";
 
 export function adaptarSeccionServiceASeccion(

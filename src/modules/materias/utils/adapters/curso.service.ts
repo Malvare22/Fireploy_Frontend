@@ -1,8 +1,8 @@
+import { Curso } from "@modules/materias/types/curso";
 import { CursoService } from "@modules/materias/types/curso.service";
-import { CursoMateria } from "@modules/materias/types/materia.curso";
 import { adapterUsuario } from "@modules/usuarios/utils/adaptar.usuario";
 
-export function adaptCursoService(curso: CursoService): CursoMateria {
+export function adaptCursoService(curso: CursoService): Curso {
   return {
     descripcion: curso.descripcion,
     docente: curso.docente ? adapterUsuario(curso.docente) : null,

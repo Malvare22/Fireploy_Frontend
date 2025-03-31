@@ -6,7 +6,7 @@ import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
 import { getCursosMateria } from "@modules/materias/services/get.curso.materia";
 import { Materia } from "@modules/materias/types/materia";
 import { MateriaService } from "@modules/materias/types/materia.service";
-import { adaptarMateriaService } from "@modules/materias/utils/adapters/adaptar.materiaService.materia";
+import { adaptarMateriaService } from "@modules/materias/utils/adapters/materia.service";
 import { Alert, Card, Grid2, Stack, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";

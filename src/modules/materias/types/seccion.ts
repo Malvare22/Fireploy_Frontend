@@ -1,6 +1,6 @@
 import { EstadoMateria } from "./materia";
 
-export type SeccionCurso = {
+export type Seccion = {
     id: string,
     titulo: string,
     descripcion: string,
@@ -10,7 +10,7 @@ export type SeccionCurso = {
     cursoId: string;
 };
 
-export const seccionesCurso: SeccionCurso[] = [
+export const exampleSecciones: Seccion[] = [
     {
       id: "SEC-001",
       titulo: "Introducción a la Programación",

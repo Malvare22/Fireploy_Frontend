@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import StyleIcon from "@mui/icons-material/Style";
-import { CursoMateria } from "@modules/materias/types/materia.curso";
+import { CursoMateria } from "@modules/materias/types/curso";
 import { labelCardCurso } from "@modules/materias/enums/labelCardCurso";
 import { ProjectCardAvatar } from "@modules/general/components/avatar";
 import {

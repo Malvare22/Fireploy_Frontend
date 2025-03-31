@@ -1,7 +1,7 @@
 import { postData } from "@core/services";
 import { SeccionCurso } from "../types/seccion";
 import { SeccionService } from "../types/seccion.services";
-import { adaptarSeccionASeccionService } from "../utils/adapters/adaptar.seccion";
+import { adaptarSeccionASeccionService } from "../utils/adapters/seccion.service";
 
 export const crearSeccionService = async (
   token: string,

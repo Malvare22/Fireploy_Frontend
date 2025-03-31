@@ -5,8 +5,8 @@ import TablaMaterias from "@modules/materias/components/tablaMaterias";
 import { labelListarMaterias } from "@modules/materias/enums/labelListarMaterias";
 import { getMateriasService } from "@modules/materias/services/get.materias.services";
 import { MateriaService } from "@modules/materias/types/materia.service";
-import { MateriaTabla } from "@modules/materias/types/materia.tabla";
-import { adaptMateriaService } from "@modules/materias/utils/adapters/adaptar.materiaService.materia";
+import { exampleMaterias, MateriaTabla } from "@modules/materias/types/materia.tabla";
+import { adaptMateriaService } from "@modules/materias/utils/adapters/materia.service";
 import { Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
@@ -21,7 +21,7 @@ export const getSemestresLabels = () => {
 
 function ListarMaterias() {
   const [materias, setMaterias] = useState<MateriaTabla[] | undefined>(
-    undefined
+    exampleMaterias
   );
 
   const token = useContext(AccountContext)!!.localUser?.token;
@@ -33,7 +33,7 @@ function ListarMaterias() {
     useQuery<MateriaService[]>(() => getMateriasService(token!!), false);
 
   useEffect(() => {
-    initQuery();
+    // initQuery();
   }, []);
 
   useEffect(() => {
@@ -113,7 +113,7 @@ function ListarMaterias() {
           <Grid2 size={{ md: 4, xs: 12 }}>
             <TextField
               select
-              label={labelSelects.filtrarCursosActivos}
+              label={labelSelects.filtrarEstado}
               onChange={(e) => {
                 if (e.target.value == "0")
                   toggleFilter("estado", (value: any) => value == "A");
@@ -134,7 +134,7 @@ function ListarMaterias() {
           <Grid2 size={{ md: 4, xs: 12 }}>
             <TextField
               select
-              label={labelSelects.filtrarCursosActivos}
+              label={labelSelects.filtrarSemestre}
               onChange={(e) => {
                 if (e.target.value == "-1")
                   toggleFilter("semestre", (_value: any) => true);
