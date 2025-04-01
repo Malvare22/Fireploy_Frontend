@@ -7,7 +7,7 @@ export type UsuarioCurso = {
 };
 
 export type Curso = {
-  id: string;
+  id?: string;
   grupo: string;
   semestre: string;
   descripcion: string;
@@ -26,8 +26,8 @@ export type Curso = {
 export const cursoTemplate: Curso = {
   id: "",
   grupo: "",
-  semestre: "",
-  descripcion: "",
+  semestre: "2025-1",
+  descripcion: " ",
   estado: "A",
 };
 

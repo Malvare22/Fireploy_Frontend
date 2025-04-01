@@ -5,15 +5,29 @@ import TablaMaterias from "@modules/materias/components/tablaMaterias";
 import { labelListarMaterias } from "@modules/materias/enums/labelListarMaterias";
 import { getMateriasService } from "@modules/materias/services/get.materias.services";
 import { MateriaService } from "@modules/materias/types/materia.service";
-import { exampleMaterias, MateriaTabla } from "@modules/materias/types/materia.tabla";
+import {
+  exampleMaterias,
+  MateriaTabla,
+} from "@modules/materias/types/materia.tabla";
 import { adaptMateriaService } from "@modules/materias/utils/adapters/materia.service";
-import { Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Grid2,
+  MenuItem,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import useSearch from "@modules/general/hooks/useSearch";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import { useFiltersByConditions } from "@modules/general/hooks/useFiltersByCondition";
 import { getMateriasSemestresLabels } from "@modules/materias/utils/materias";
+import GeneralButton from "@modules/general/components/button";
+import { buttonTypes } from "@modules/general/types/buttons";
+import { useNavigate } from "react-router";
+import { rutasMaterias } from "@modules/materias/router/router";
 
 function ListarMaterias() {
   const [materias, setMaterias] = useState<MateriaTabla[] | undefined>(
@@ -48,13 +62,14 @@ function ListarMaterias() {
     );
   };
 
-  const { filterData, toggleFilter } =
-    useFiltersByConditions<MateriaTabla>();
+  const { filterData, toggleFilter } = useFiltersByConditions<MateriaTabla>();
 
   const materiasToRender = () => {
     if (materias) return filteredData(filterData(materias), sorter);
     return [];
   };
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -155,6 +170,14 @@ function ListarMaterias() {
           </Grid2>
         </Grid2>
         {materias && <TablaMaterias materias={materiasToRender()} />}
+        <Stack direction={"row"} justifyContent={"end"}>
+          <Box>
+            <GeneralButton
+              onClick={() => navigate(rutasMaterias.crearMateria)}
+              mode={buttonTypes.add}
+            />
+          </Box>
+        </Stack>
       </Stack>
     </>
   );

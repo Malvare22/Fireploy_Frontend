@@ -1,6 +1,7 @@
 import DataTable, { ConditionalStyles } from "react-data-table-component";
 import { TableColumn, TableStyles } from "react-data-table-component";
 import {
+  Alert,
   Box,
   Chip,
   MenuItem,
@@ -22,7 +23,13 @@ import SearchUsers, {
 import { useSearchUsers } from "@modules/general/components/searchUsers/hook";
 import { getMateriaStatesArray } from "@modules/materias/utils/materias";
 import SchoolIcon from "@mui/icons-material/School";
-import { Controller, get, useForm, useFormContext } from "react-hook-form";
+import {
+  Controller,
+  FieldError,
+  get,
+  useForm,
+  useFormContext,
+} from "react-hook-form";
 import { Curso, cursoTemplate } from "@modules/materias/types/curso";
 import { Materia } from "@modules/materias/types/materia";
 import { adaptCursoToCursoTabla } from "@modules/materias/utils/adapters/curso";
@@ -53,12 +60,13 @@ const TablaGestionarCursos = () => {
     control: controlCurso,
   } = useForm<Curso>();
 
-  console.log(getValues(`cursos.${0}`));
-
   function handleAdd() {
     setValue("cursos", [
       ...(getValues("cursos") ?? []),
-      { ...cursoTemplate, grupo: (getValues("cursos")?.length ?? 0).toString() },
+      {
+        ...cursoTemplate,
+        grupo: (getValues("cursos")?.length ?? 0).toString(),
+      },
     ]);
   }
 
@@ -86,7 +94,7 @@ const TablaGestionarCursos = () => {
 
   useEffect(() => {
     if (!getValues("cursos")) handleAdd();
-  }, [watch('cursos')]);
+  }, [watch("cursos")]);
 
   const [currentEdit, setCurrentEdit] = useState<number>(-1);
 
@@ -318,6 +326,17 @@ const TablaGestionarCursos = () => {
             />
           </Box>
         </Stack>
+        {errors?.cursos &&
+          Array.isArray(errors.cursos) &&
+          errors.cursos.map((cursoError, index) => (
+            <div key={index}>
+              {Object.entries(cursoError).map(([field, error]) => (
+                <Alert severity="error" key={`${index}-${field}`}>
+                  {`${field}: ${(error as FieldError)?.message || "Error desconocido"}`}
+                </Alert>
+              ))}
+            </div>
+          ))}
       </form>
     </>
   );

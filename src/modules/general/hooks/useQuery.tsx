@@ -68,6 +68,12 @@ export default function useQuery<T>(
     await queryResponse();
   };
 
+  const onDetectErrorAction = useCallback((statusCode: number) => {
+    if (statusCode === 401) {
+      navigate(rutasGeneral.login);
+    }
+  }, []);
+
   return {
     responseData,
     open,
@@ -76,6 +82,7 @@ export default function useQuery<T>(
     setOpen,
     handleClose,
     message,
-    error
+    error,
+    onDetectErrorAction,
   };
 }

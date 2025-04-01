@@ -29,7 +29,7 @@ export const MateriaSchema: z.ZodType<Materia> = z.object({
 
 export const CursoSchema: z.ZodType<Curso> = z
   .object({
-    id: z.string().min(1, "El ID es requerido"),
+    id: z.string().optional(),
     grupo: z.string().min(1, "El grupo es requerido"),
     semestre: z.string().min(1, "El semestre es requerido"),
     descripcion: z.string().min(1, "La descripción es requerida"),

@@ -22,14 +22,14 @@ export const routerMaterias: RouteObject[] = [
     path: rutasMaterias.explorar,
     element: <ExplorarMaterias />,
   },
-  {
-    path: rutasMaterias.listarMaterias,
-    element: <ListarMaterias/>
-  },
-  {
-    path: rutasMaterias.listarCursos,
-    element: <ListarCursos/>
-  },
+  // {
+  //   path: rutasMaterias.listarMaterias,
+  //   element: <ListarMaterias/>
+  // },
+  // {
+  //   path: rutasMaterias.listarCursos,
+  //   element: <ListarCursos/>
+  // },
   // {
   //   path: rutasMaterias.verCursos,
   //   element: <VerCursosMateria />,
