@@ -13,7 +13,7 @@ export enum rutasMaterias {
   // verCursos = rutaBase + "/:id",
   verInformacionCursos = rutaBase + "/:id",
   listarMaterias = rutaBase + "/listar",
-  listarCursos = rutaBase + '/cursos/listar',
+  listarCursos = rutaBase + '/:idMateria/cursos/listar',
   crearMateria = rutaBase + '/crear'
 }
 
@@ -22,14 +22,14 @@ export const routerMaterias: RouteObject[] = [
     path: rutasMaterias.explorar,
     element: <ExplorarMaterias />,
   },
-  // {
-  //   path: rutasMaterias.listarMaterias,
-  //   element: <ListarMaterias/>
-  // },
-  // {
-  //   path: rutasMaterias.listarCursos,
-  //   element: <ListarCursos/>
-  // },
+  {
+    path: rutasMaterias.listarMaterias,
+    element: <ListarMaterias/>
+  },
+  {
+    path: rutasMaterias.listarCursos,
+    element: <ListarCursos/>
+  },
   // {
   //   path: rutasMaterias.verCursos,
   //   element: <VerCursosMateria />,

@@ -7,14 +7,14 @@ import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import useQuery from "@modules/general/hooks/useQuery";
 import { AccountContext } from "@modules/general/context/accountContext";
 import { MateriaTabla } from "@modules/materias/types/materia.tabla";
-import { EstadoMateria } from "@modules/materias/types/materia";
 import { labelTablaMaterias } from "@modules/materias/enums/labelTablaMaterias";
 import AlertDialog from "@modules/general/components/alertDialog";
-import { postEstadoMateriaService } from "@modules/materias/services/post.materia.services";
 import Status from "@modules/general/components/status";
 import InfoIcon from "@mui/icons-material/Info";
 import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
+import { patchChangeStatusMateria } from "@modules/materias/services/patch.change.materia";
+import { rutasMaterias } from "@modules/materias/router/router";
 
 type TablaMateriasProps = {
   materias: MateriaTabla[];
@@ -31,7 +31,7 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
     setOpenHandleStatus(true);
   };
 
-  function ModalChangeStatus(status: EstadoMateria) {
+  function ModalChangeStatus(status: MateriaTabla["estado"]) {
     const label = status == "I" ? "habilitar" : "deshabilitar";
 
     return (
@@ -104,7 +104,14 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
       cell: (row) => {
         return (
           <Stack direction={"row"} justifyContent={"center"}>
-            <ActionButton mode={actionButtonTypes.ver} />
+            <ActionButton
+              mode={actionButtonTypes.ver}
+              onClick={() =>
+                navigate(
+                  rutasMaterias.listarCursos.replace(":idMateria", (row.codigo).toString())
+                )
+              }
+            />
             {row.estado == "A" ? (
               <ActionButton
                 sx={{ color: theme.palette.error.main }}
@@ -179,12 +186,12 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
     return {
       nombre: selectMateria?.nombre as string,
       estado: selectMateria?.estado == "A" ? "I" : ("A" as string),
-      semestre: selectMateria?.semestre as string,
+      semestre: selectMateria?.semestre?.toString(),
     };
   }, [selectMateria]);
 
-  const { error, handleAlertClose, initQuery, message, open } = useQuery(
-    () => postEstadoMateriaService(token!!, bodyQuery, selectMateria?.codigo!!),
+  const { handleAlertClose, initQuery, message, open } = useQuery(
+    () => patchChangeStatusMateria(token!!, bodyQuery, selectMateria?.codigo!!),
     true,
     "Materia Modificada Exitosamente"
   );

@@ -9,7 +9,7 @@ export function adaptCursoToCursoTabla(x: Curso): CursoTabla {
       : null,
     estado: x.estado,
     grupo: x.grupo,
-    id: x.id,
+    id: x.id || '',
     semestre: x.semestre,
   };
 };

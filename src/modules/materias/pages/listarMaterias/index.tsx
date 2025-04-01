@@ -6,7 +6,6 @@ import { labelListarMaterias } from "@modules/materias/enums/labelListarMaterias
 import { getMateriasService } from "@modules/materias/services/get.materias.services";
 import { MateriaService } from "@modules/materias/types/materia.service";
 import {
-  exampleMaterias,
   MateriaTabla,
 } from "@modules/materias/types/materia.tabla";
 import { adaptMateriaService } from "@modules/materias/utils/adapters/materia.service";
@@ -30,9 +29,7 @@ import { useNavigate } from "react-router";
 import { rutasMaterias } from "@modules/materias/router/router";
 
 function ListarMaterias() {
-  const [materias, setMaterias] = useState<MateriaTabla[] | undefined>(
-    exampleMaterias
-  );
+  const [materias, setMaterias] = useState<MateriaTabla[]>([]);
 
   const token = useContext(AccountContext)!!.localUser?.token;
 
@@ -43,7 +40,7 @@ function ListarMaterias() {
     useQuery<MateriaService[]>(() => getMateriasService(token!!), false);
 
   useEffect(() => {
-    // initQuery();
+    initQuery();
   }, []);
 
   useEffect(() => {

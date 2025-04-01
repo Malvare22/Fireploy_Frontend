@@ -1,11 +1,17 @@
 import { Curso } from "@modules/materias/types/curso";
 import { CursoService } from "@modules/materias/types/curso.service";
-import { adapterUsuario } from "@modules/usuarios/utils/adaptar.usuario";
 
 export function adaptCursoService(curso: CursoService): Curso {
   return {
     descripcion: curso.descripcion,
-    docente: curso.docente ? adapterUsuario(curso.docente) : null,
+    docente:
+      curso.docente != null && curso.docente != undefined
+        ? {
+            id: curso.docente.id.toString(),
+            nombre: curso.docente.nombre,
+            correo: curso.docente.correo,
+          }
+        : null,
     estado: curso.estado,
     estudiantes: [],
     id: curso.id,

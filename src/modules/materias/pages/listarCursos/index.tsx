@@ -5,32 +5,45 @@ import SearchIcon from "@mui/icons-material/Search";
 import useSearch from "@modules/general/hooks/useSearch";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import { useFiltersByConditions } from "@modules/general/hooks/useFiltersByCondition";
-import { CursoTabla, exampleCursosTabla } from "@modules/materias/types/curso.tabla";
+import {
+  CursoTabla,
+} from "@modules/materias/types/curso.tabla";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
 import TablaCursos from "@modules/materias/components/tablaCursos";
+import { useParams } from "react-router";
+import { CursoService } from "@modules/materias/types/curso.service";
+import { getCursoByMateriaId } from "@modules/materias/services/get.curso";
+import useQuery from "@modules/general/hooks/useQuery";
+import { adaptCursoToCursoTabla } from "@modules/materias/utils/adapters/curso";
+import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
+import AlertDialog from "@modules/general/components/alertDialog";
 
 function ListarCursos() {
-  const [cursos, setCursos] = useState<CursoTabla[] | undefined>(
-    exampleCursosTabla
-  );
+  const { idMateria } = useParams();
+
+  const [cursos, setCursos] = useState<CursoTabla[]>([]);
 
   const token = useContext(AccountContext)!!.localUser?.token;
 
   /**
    * Variables de Consulta de Materias
    */
-  // const { error, handleAlertClose, initQuery, responseData, message, open } =
-  //   useQuery<MateriaService[]>(() => getMateriasService(token!!), false);
+  const { error, handleAlertClose, initQuery, responseData, message, open } =
+    useQuery<CursoService[]>(() => getCursoByMateriaId(token!!, idMateria!!), false);
 
   useEffect(() => {
-    // initQuery();
+    initQuery();
   }, []);
 
-  // useEffect(() => {
-  //   if (responseData) {
-  //     setMaterias(responseData.map((materia) => adaptMateriaService(materia)));
-  //   }
-  // }, [responseData]);
+  useEffect(() => {
+    if (responseData) {
+      setCursos(
+        responseData.map((curso) =>
+          adaptCursoToCursoTabla(adaptCursoService(curso))
+        )
+      );
+    }
+  }, [responseData]);
 
   const { filteredData, handleKeyDown, searchValue, setBuffer } = useSearch();
 
@@ -49,14 +62,14 @@ function ListarCursos() {
 
   return (
     <>
-      {/* {error && (
+      {error && (
         <AlertDialog
           open={open}
           handleAccept={handleAlertClose}
           title="Consultar Materias"
           textBody={message}
         />
-      )} */}
+      )}
       <Stack spacing={3}>
         <Typography variant="h4">{labelListarCursos.titulo}</Typography>
         <TextField

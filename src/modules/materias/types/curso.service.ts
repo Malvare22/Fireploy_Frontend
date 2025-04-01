@@ -1,13 +1,13 @@
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 import { MateriaService } from "./materia.service";
-import { EstadoMateria } from "./materia";
+import { Curso } from "./curso";
 
 export type CursoService = {
-  id: string; //"6I2025-1 id materia - grupo - código",
+  id: string;
   grupo: string;
   semestre: string;
   descripcion: string;
-  estado: EstadoMateria;
+  estado: Curso['estado'];
   materia: MateriaService;
   docente: UsuarioService | null;
   estudiantes: UsuarioService[];

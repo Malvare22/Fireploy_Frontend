@@ -3,7 +3,7 @@ import { AccountContext } from "@modules/general/context/accountContext";
 import useQuery from "@modules/general/hooks/useQuery";
 import CardCurso from "@modules/materias/components/cardCurso";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
-import { getCursosMateria } from "@modules/materias/services/get.curso.materia";
+import { getCursosMateria } from "@modules/materias/services/get.curso";
 import { Materia } from "@modules/materias/types/materia";
 import { MateriaService } from "@modules/materias/types/materia.service";
 import { adaptarMateriaService } from "@modules/materias/utils/adapters/materia.service";

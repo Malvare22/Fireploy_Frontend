@@ -1,7 +1,7 @@
 import AlertDialog from "@modules/general/components/alertDialog";
 import { AccountContext } from "@modules/general/context/accountContext";
 import useQuery from "@modules/general/hooks/useQuery";
-import { getCursosMateria } from "@modules/materias/services/get.curso.materia";
+import { getCursosMateria } from "@modules/materias/services/get.curso";
 import { MateriaService } from "@modules/materias/types/materia.service";
 import { labelListarPortafolios } from "@modules/usuarios/enum/labelListarPortafolios";
 import { UsuarioPortafolioCard, usuarioPrueba } from "@modules/usuarios/types/usuario.portafolio";
