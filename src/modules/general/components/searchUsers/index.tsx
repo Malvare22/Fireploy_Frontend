@@ -5,6 +5,34 @@ import { FC } from "react";
 import { Box, Typography } from "@mui/material";
 import { UsuarioCampoBusqueda } from "../searchUsers/hook";
 
+export const exampleUsuarioCampoBusqueda: UsuarioCampoBusqueda[] = [
+  {
+    foto: "https://randomuser.me/api/portraits/men/1.jpg",
+    nombreCompleto: "Juan Pérez",
+    id: 1
+  },
+  {
+    foto: "https://randomuser.me/api/portraits/women/2.jpg",
+    nombreCompleto: "María González",
+    id: 2
+  },
+  {
+    foto: "https://randomuser.me/api/portraits/men/3.jpg",
+    nombreCompleto: "Carlos Rodríguez",
+    id: 3
+  },
+  {
+    foto: "https://randomuser.me/api/portraits/women/4.jpg",
+    nombreCompleto: "Ana Martínez",
+    id: 4
+  },
+  {
+    foto: "https://randomuser.me/api/portraits/men/5.jpg",
+    nombreCompleto: "Luis Fernández",
+    id: 5
+  }
+];
+
 interface Props {
   users: UsuarioCampoBusqueda[]; 
   setSelectUser: React.Dispatch<UsuarioCampoBusqueda | null>; 
@@ -23,6 +51,7 @@ const SearchUsers: FC<Props> = ({ users, setSelectUser, selectUser }) => {
   return (
     <Stack spacing={2} sx={{ width: "100%" }}>
       <Autocomplete
+      size="small"
         freeSolo
         options={users}
         renderOption={(props, option) => (
@@ -33,7 +62,7 @@ const SearchUsers: FC<Props> = ({ users, setSelectUser, selectUser }) => {
         getOptionLabel={(option) =>
           typeof option === "string" ? option : option.nombreCompleto
         }
-        renderInput={(params) => <TextField {...params} />}
+        renderInput={(params) => <TextField size="small" {...params} />}
         onChange={(_e, value) => {
           setSelectUser(value as UsuarioCampoBusqueda);
         }}

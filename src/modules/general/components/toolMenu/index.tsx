@@ -9,17 +9,20 @@ import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
-import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import PeopleIcon from '@mui/icons-material/People';
+import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import PeopleIcon from "@mui/icons-material/People";
 import { useNavigate, useLocation } from "react-router-dom";
 import { rutasMaterias } from "@modules/materias/router/router";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { rutasProyectos } from "@modules/proyectos/router";
 import { AccountContext } from "@modules/general/context/accountContext";
-import CastForEducationIcon from '@mui/icons-material/CastForEducation';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import StorageIcon from '@mui/icons-material/Storage';
+import CastForEducationIcon from "@mui/icons-material/CastForEducation";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import StorageIcon from "@mui/icons-material/Storage";
+import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
+import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 
 const navigationStudent: Navigation = [
   {
@@ -79,11 +82,6 @@ const navigationAdmin: Navigation = [
     kind: "divider",
   },
   {
-    segment: rutasMaterias.explorar as string,
-    title: "Materias",
-    icon: <MenuBookIcon />,
-  },
-  {
     segment: rutasUsuarios.explorarPortafolios as string,
     title: "Portafolios",
     icon: <ContactMailIcon />,
@@ -97,23 +95,22 @@ const navigationAdmin: Navigation = [
     children: [
       {
         segment: rutasUsuarios.listarUsuarios as string,
-        title: 'Listar Usuarios',
-        icon: <PeopleIcon/>
+        title: "Listar Usuarios",
+        icon: <PeopleIcon />,
       },
       {
         segment: rutasUsuarios.agregarUsuario as string,
-        title: 'Agregar Usuario',
-        icon: <GroupAddIcon/>
+        title: "Agregar Usuario",
+        icon: <GroupAddIcon />,
       },
       {
         segment: rutasUsuarios.solicitudes as string,
-        title: 'Solicitudes de Rol Docente',
-        icon: <CastForEducationIcon/>
-      }
-    ]
+        title: "Solicitudes de Rol Docente",
+        icon: <CastForEducationIcon />,
+      },
+    ],
   },
   {
-    
     title: "Proyectos",
     icon: <AccountTreeIcon />,
     children: [
@@ -132,7 +129,28 @@ const navigationAdmin: Navigation = [
         title: "Bases de Datos",
         icon: <StorageIcon />,
       },
-    ]
+    ],
+  },
+  {
+    title: "Materias",
+    icon: <MenuBookIcon />,
+    children: [
+      {
+        segment: rutasMaterias.explorar as string,
+        title: "Explorar",
+        icon: <AutoStoriesIcon />,
+      },
+      {
+        segment: rutasMaterias.listarMaterias as string,
+        title: "Listar",
+        icon: <CollectionsBookmarkIcon />,
+      },
+      {
+        segment: rutasMaterias.crearMateria as string,
+        title: "Crear",
+        icon: <BookmarkAddIcon />,
+      },
+    ],
   },
 ];
 
@@ -170,10 +188,11 @@ export default function DashboardLayoutBasic(props: any) {
 
   return (
     <>
-      { 
-        localUser?.tipo && 
+      {localUser?.tipo && (
         <AppProvider
-          navigation={localUser.tipo == 'A' ? navigationAdmin : navigationStudent}
+          navigation={
+            localUser.tipo == "A" ? navigationAdmin : navigationStudent
+          }
           router={router}
           theme={theme}
           branding={{
@@ -195,10 +214,12 @@ export default function DashboardLayoutBasic(props: any) {
               },
             }}
           >
-            <Box marginTop={-10} sx={{}}>{props.children}</Box>
+            <Box marginTop={-10} sx={{}}>
+              {props.children}
+            </Box>
           </DashboardLayout>
         </AppProvider>
-      }
+      )}
     </>
   );
 }

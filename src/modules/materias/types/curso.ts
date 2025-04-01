@@ -1,27 +1,34 @@
 import { Seccion } from "./seccion";
 
-type UsuarioCurso = {
-  id:string,
-  nombre: string,
-  correo: string
-}
+export type UsuarioCurso = {
+  id: string;
+  nombre: string;
+  correo?: string | undefined;
+};
 
 export type Curso = {
   id: string;
   grupo: string;
   semestre: string;
   descripcion: string;
-  estado: 'A' | 'I';
-  docente: UsuarioCurso | null;
+  estado: "A" | "I";
+  docente?: UsuarioCurso | null;
   estudiantes?: UsuarioCurso[];
-  secciones: Seccion[] | null,
+  secciones?: Seccion[] | null;
   materia?: {
-    id: number | null,
-    nombre: string,
-    semestre: string,
-    estado: string
-  }
+    id: number | null;
+    nombre: string;
+    semestre: string;
+    estado: string;
+  };
+};
 
+export const cursoTemplate: Curso = {
+  id: "",
+  grupo: "",
+  semestre: "",
+  descripcion: "",
+  estado: "A",
 };
 
 export const exampleCursos: Curso[] = [
@@ -34,19 +41,19 @@ export const exampleCursos: Curso[] = [
     docente: {
       id: "101",
       nombre: "Juan Pérez",
-      correo: "juan.perez@example.com"
+      correo: "juan.perez@example.com",
     },
     estudiantes: [
       { id: "201", nombre: "María Gómez", correo: "maria.gomez@example.com" },
-      { id: "202", nombre: "Carlos Ruiz", correo: "carlos.ruiz@example.com" }
+      { id: "202", nombre: "Carlos Ruiz", correo: "carlos.ruiz@example.com" },
     ],
     secciones: [],
     materia: {
       id: 1,
       nombre: "Matemáticas",
       semestre: "2024-1",
-      estado: "Activo"
-    }
+      estado: "Activo",
+    },
   },
   {
     id: "2",
@@ -57,7 +64,7 @@ export const exampleCursos: Curso[] = [
     docente: {
       id: "102",
       nombre: "Ana López",
-      correo: "ana.lopez@example.com"
+      correo: "ana.lopez@example.com",
     },
     estudiantes: [],
     secciones: [],
@@ -65,9 +72,7 @@ export const exampleCursos: Curso[] = [
       id: 2,
       nombre: "Física",
       semestre: "2024-1",
-      estado: "Inactivo"
-    }
-  }
+      estado: "Inactivo",
+    },
+  },
 ];
-
-

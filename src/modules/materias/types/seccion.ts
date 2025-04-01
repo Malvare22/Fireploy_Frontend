@@ -1,12 +1,10 @@
-import { EstadoMateria } from "./materia";
-
 export type Seccion = {
     id: string,
     titulo: string,
     descripcion: string,
     fechaDeCierre: string,
     fechaDeInicio: string,
-    estado: EstadoMateria,
+    estado: 'A' | 'I',
     cursoId: string;
 };
 

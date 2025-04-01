@@ -9,6 +9,7 @@ import DoDisturbOnIcon from "@mui/icons-material/DoDisturbOn";
 import DoNotDisturbOffIcon from "@mui/icons-material/DoNotDisturbOff";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import CancelIcon from '@mui/icons-material/Cancel';
+import SaveIcon from '@mui/icons-material/Save';
 
 /**
  * Mapa de iconos asociados a cada tipo de acción.
@@ -22,6 +23,7 @@ const iconMap = {
   [actionButtonTypes.habilitar]: <DoNotDisturbOffIcon />,
   [actionButtonTypes.deshabilitar]: <DoDisturbOnIcon />,
   [actionButtonTypes.cancelar]: <CancelIcon />,
+  [actionButtonTypes.guardar]: <SaveIcon />,
 };
 
 /**
@@ -36,6 +38,7 @@ const labelMap = {
   [actionButtonTypes.habilitar]: "habilitar",
   [actionButtonTypes.deshabilitar]: "deshabilitar",
   [actionButtonTypes.cancelar]: "cancelar",
+  [actionButtonTypes.guardar]: "guardar",
 };
 
 /**

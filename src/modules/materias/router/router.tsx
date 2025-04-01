@@ -4,6 +4,7 @@ import ExplorarMaterias from "../pages/explorar";
 import VerCursosMateria from "../pages/explorar/id";
 import ListarMaterias from "../pages/listarMaterias";
 import ListarCursos from "../pages/listarCursos";
+import VistaCrearMateria from "../pages/crearMateria";
 
 export const rutaBase = "/app/materias";
 
@@ -12,7 +13,8 @@ export enum rutasMaterias {
   // verCursos = rutaBase + "/:id",
   verInformacionCursos = rutaBase + "/:id",
   listarMaterias = rutaBase + "/listar",
-  listarCursos = rutaBase + '/cursos/listar'
+  listarCursos = rutaBase + '/cursos/listar',
+  crearMateria = rutaBase + '/crear'
 }
 
 export const routerMaterias: RouteObject[] = [
@@ -35,5 +37,9 @@ export const routerMaterias: RouteObject[] = [
   {
     path: rutasMaterias.verInformacionCursos,
     element: <VerInformacionCurso />,
+  },
+  {
+    path: rutasMaterias.crearMateria,
+    element: <VistaCrearMateria />,
   },
 ];

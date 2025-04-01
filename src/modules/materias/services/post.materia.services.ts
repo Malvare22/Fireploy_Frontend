@@ -1,5 +1,5 @@
 import { patchData } from "@core/services";
-import { MateriaModal } from "../utils/forms/schema.materias";
+import { MateriaModal } from "../types/materia";
 import { MateriaService } from "../types/materia.service";
 
 export const postMateriaService = async (token: string, data: MateriaModal) => {

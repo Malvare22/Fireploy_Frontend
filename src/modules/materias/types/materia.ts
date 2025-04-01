@@ -1,9 +1,9 @@
 import { Curso } from "./curso";
 
 export type Materia = {
-  estado?: 'A' |'I';
+  estado: "A" | "I";
   nombre: string;
-  semestre: string;
-  id: number;
-  cursos: Curso[] | null;
+  semestre: number;
+  id?: number | undefined;
+  cursos?: Curso[] | null;
 };

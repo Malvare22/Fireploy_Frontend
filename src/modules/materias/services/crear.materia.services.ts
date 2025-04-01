@@ -1,6 +1,6 @@
 import { postData } from "@core/services";
 import { MateriaService } from "../types/materia.service";
-import { MateriaModal } from "../utils/forms/schema.materias";
+import { MateriaModal } from "../types/materia";
 
 // import { postData } from "@core/services";
 export const crearMateriaService = async (

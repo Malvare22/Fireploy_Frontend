@@ -6,5 +6,6 @@ export enum actionButtonTypes {
   deshabilitarUsuario = "deshabilitar usuario",
   habilitar = "habilitar",
   deshabilitar = "deshabilitar",
-  cancelar = 'Cancelar'
+  cancelar = 'cancelar',
+  guardar = 'guardar'
 }

@@ -13,11 +13,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import useSearch from "@modules/general/hooks/useSearch";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import { useFiltersByConditions } from "@modules/general/hooks/useFiltersByCondition";
-
-export const getSemestresLabels = () => {
-  const labels = ["l", "ll", "lll", "lV", "V", "Vl", "Vll", "Vlll", "lX", "X"];
-  return labels.map((label, index) => [index + 1, label] as [number, string]);
-};
+import { getMateriasSemestresLabels } from "@modules/materias/utils/materias";
 
 function ListarMaterias() {
   const [materias, setMaterias] = useState<MateriaTabla[] | undefined>(
@@ -149,7 +145,7 @@ function ListarMaterias() {
               fullWidth
               variant="standard"
             >
-              {getSemestresLabels().map(([value, text], key) => (
+              {getMateriasSemestresLabels().map(([value, text], key) => (
                 <MenuItem value={value} key={key}>
                   {text}
                 </MenuItem>

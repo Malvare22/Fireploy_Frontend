@@ -5,13 +5,13 @@ import SearchIcon from "@mui/icons-material/Search";
 import useSearch from "@modules/general/hooks/useSearch";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import { useFiltersByConditions } from "@modules/general/hooks/useFiltersByCondition";
-import { CursoTabla, exampleCursos } from "@modules/materias/types/curso.tabla";
+import { CursoTabla, exampleCursosTabla } from "@modules/materias/types/curso.tabla";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
 import TablaCursos from "@modules/materias/components/tablaCursos";
 
 function ListarCursos() {
   const [cursos, setCursos] = useState<CursoTabla[] | undefined>(
-    exampleCursos
+    exampleCursosTabla
   );
 
   const token = useContext(AccountContext)!!.localUser?.token;

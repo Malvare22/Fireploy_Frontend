@@ -1,5 +1,3 @@
-import { CursoService } from "./curso.service";
-
 export type MateriaService = {
   estado: string;
   nombre: string;
