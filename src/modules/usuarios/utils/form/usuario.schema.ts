@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { fechaSchema } from "./fechaSchema";
 import { getGender, getUserStatus, getUserTypes } from "../usuario.map";
 import { SexoUsuario, Usuario } from "@modules/usuarios/types/usuario";
+import { fechaSchema } from "./fechaSchema";
 
 /**
  * Atributo Zod para la validación de Estados de Usuario
@@ -107,28 +107,25 @@ export const correoSchema = z
   .string()
   .email({ message: "Debe ser un correo válido" });
 
-  export type UsuarioForm = Usuario & { confirmarContrasenia: string };
-
-export const UsuarioForm = z
+export const UsuarioSchema: z.ZodType<Usuario> = z
   .object({
     id: z.number().optional(),
-    nombres: nombresSchema,
-    apellidos: apellidosSchema,
-    correo: correoSchema,
+    correo: z.string().email(),
+    nombres: z.string(),
+    apellidos: z.string(),
     fechaDeNacimiento: fechaSchema,
-    estFechaInicio: fechaSchema.optional(),
-    estado: estadoUsuarioSchema,
-    sexo: sexoUsuarioSchema,
-    tipo: tiposUsuarioSchema,
+    estFechaInicio: z.string().optional(),
+    estado: z.enum(["A", "I"]),
+    sexo: z.enum(["F", "M", "O"]),
+    tipo: z.enum(["A", "D", "E"]).optional(),
     redSocial: redSocialUsuarioSchema,
-    descripcion: descripcionSchema,
-    fotoDePerfil: z.string().optional().nullable(),
-    contrasenia: contraseniaSchema.optional(),
+    descripcion: z.string(),
+    fotoDePerfil: z.string(),
+    contrasenia: z.string().optional(),
     confirmarContrasenia: z.string().optional(),
   })
   .refine(
     (data) => {
-      // Solo validar coincidencia de contraseñas si se está creando o modificando la contraseña
       if (data.contrasenia || data.confirmarContrasenia) {
         return data.contrasenia === data.confirmarContrasenia;
       }
@@ -138,10 +135,15 @@ export const UsuarioForm = z
       message: "Las contraseñas no coinciden",
       path: ["confirmarContrasenia"],
     }
-  );
+  )
+  .refine((data) => {
+    if (data.tipo == "E") {
+      return fechaSchema.safeParse(data.estFechaInicio).success;
+    }
+    return true;
+  });
 
-
-export const usuarioFormTemplate: UsuarioForm = {
+export const usuarioTemplate: Usuario = {
   id: 1,
   nombres: "",
   apellidos: "",
@@ -163,20 +165,3 @@ export const usuarioFormTemplate: UsuarioForm = {
   contrasenia: "",
   confirmarContrasenia: "",
 };
-
-// Adaptador de UsuarioForm (formulario) a Usuario (backend)
-// Adaptador de Usuario a formulario (incluye confirmarContrasenia)
-export function adapterUsuarioToUsuarioForm(usuario: Usuario): UsuarioForm {
-  return {
-    ...usuario,
-    confirmarContrasenia: usuario.contrasenia || "",
-    estFechaInicio: usuario.tipo == "E" ? usuario.estFechaInicio : "2002-04-22",
-  };
-}
-
-// Adaptador de formulario a Usuario (elimina confirmarContrasenia)
-export function adapterUsuarioFormToUsuario(formData: UsuarioForm): Usuario {
-
-  const _usuario = formData as Usuario;
-  return _usuario;
-}

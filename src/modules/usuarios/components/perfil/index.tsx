@@ -10,7 +10,11 @@ import {
   MenuItem,
   IconButton,
 } from "@mui/material";
-import { TiposUsuario, Usuario } from "@modules/usuarios/types/usuario";
+import {
+  TiposUsuario,
+  Usuario,
+  usuarioTemplate,
+} from "@modules/usuarios/types/usuario";
 import { labelPerfil } from "@modules/usuarios/enum/labelPerfil";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import { useState } from "react";
@@ -25,12 +29,6 @@ import {
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  adapterUsuarioFormToUsuario,
-  adapterUsuarioToUsuarioForm,
-  UsuarioForm,
-  usuarioFormTemplate,
-} from "@modules/usuarios/utils/form/editar.schema";
 import { Controller, useForm } from "react-hook-form";
 import { InputAdornment } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -51,6 +49,7 @@ import { postCrearUsuarioService } from "@modules/usuarios/services/post.crear.u
 import TextFieldPassword from "@modules/general/components/textFieldPassword";
 import { getSolicitudService } from "@modules/usuarios/services/get.solicitud";
 import { postCrearSolicitud } from "@modules/usuarios/services/post.solicitud.crear";
+import { UsuarioSchema } from "@modules/usuarios/utils/form/usuario.schema";
 
 interface PerfilProps {
   usuario: Usuario;
@@ -65,32 +64,28 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
   const [updateImageCondition, setUpdateImageCondition] = useState(false);
 
   const { register, handleSubmit, formState, getValues, control, watch } =
-    useForm<UsuarioForm>({
-      resolver: zodResolver(type == 'crear' ? UsuarioForm : UsuarioForm.omi),
-      defaultValues:
-        type == "crear"
-          ? usuarioFormTemplate
-          : adapterUsuarioToUsuarioForm(usuario),
+    useForm<Usuario>({
+      resolver: zodResolver(UsuarioSchema),
+      defaultValues: type == "crear" ? usuarioTemplate : usuario,
     });
 
   async function handleGetQuery() {
     if (type == "crear") {
-      return postCrearUsuarioService(
-        localUser?.token!!,
-        adapterUsuarioFormToUsuario(getValues())
-      );
+      return postCrearUsuarioService(localUser?.token!!, getValues());
     } else {
       return postModificarUsuarioService(
         getValues().id!!,
         localUser?.token!!,
-        adapterUsuarioFormToUsuario(getValues())
+        getValues()
       );
     }
   }
 
   const { errors } = formState;
 
-  console.log(errors)
+  console.log(getValues())
+
+  console.log(errors);
 
   const [showButton, setShowButton] = useState(false);
 
@@ -203,7 +198,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
                   disabled={type != "crear"}
                 />
               </Grid2>
-              <Grid2 size={{ md: 6, xs: 12 }}>
+              {getValues('tipo') && <Grid2 size={{ md: 6, xs: 12 }}>
                 <Controller
                   name="tipo"
                   control={control}
@@ -225,7 +220,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
                     </TextField>
                   )}
                 />
-              </Grid2>
+              </Grid2>}
               {type == "crear" && (
                 <>
                   <Grid2 size={{ md: 6, xs: 12 }}>
@@ -279,7 +274,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
           <Grid2 size={{ md: 3, xs: 12 }}>
             {
               <ProfilePhotoUploader
-                actualImg={getValues("fotoDePerfil")}
+                actualImg={getValues("fotoDePerfil") || ""}
                 userId={id}
                 initQueryCondition={updateImageCondition}
                 setDetectChangeImage={setDetectChangeImage}

@@ -12,7 +12,7 @@ export type RedSocialUsuario = {
 };
 
 export type Usuario = {
-  id: number;
+  id?: number | undefined;
   correo: string;
   nombres: string;
   apellidos: string;
@@ -20,14 +20,15 @@ export type Usuario = {
   fechaDeNacimiento: string;
   sexo: SexoUsuario;
 
-  tipo: TiposUsuario;
-  estFechaInicio?: string;
+  tipo?: TiposUsuario | undefined;
+  estFechaInicio?: string | undefined;
   estado: EstadoUsuario;
 
   redSocial: RedSocialUsuario;
   descripcion: string;
 
-  contrasenia?: string;
+  contrasenia?: string | undefined;
+  confirmarContrasenia?: string | undefined;
 };
 
 export const usuarios: Usuario[] = [

@@ -9,7 +9,7 @@ export interface UsuarioService {
     correo: string;
     contrasenia?: string | null | undefined;
     red_social: string;
-    foto_perfil: string;
-    tipo: string;
+    foto_perfil?: string | null;
+    tipo?: string | undefined | null;
     est_fecha_inicio?: string | null | undefined;
   }

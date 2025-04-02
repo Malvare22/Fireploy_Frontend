@@ -1,12 +1,18 @@
 import { adaptarFechaBackend } from "@modules/general/utils/fechas";
 import { UsuarioService } from "../types/services.usuario";
-import { EstadoUsuario, RedSocialUsuario, SexoUsuario, TiposUsuario, Usuario } from "../types/usuario";
+import {
+  EstadoUsuario,
+  RedSocialUsuario,
+  SexoUsuario,
+  TiposUsuario,
+  Usuario,
+} from "../types/usuario";
 import { UsuarioCampoBusqueda } from "@modules/general/components/searchUsers/hook";
 import { UsuarioPortafolioCard } from "../types/usuario.portafolio";
-import { getUserLetterTypes, getUserTypes, getUserTypesArray, UserTypeFullString } from "./usuario.map";
-import { getImage } from "@modules/general/components/roundedIcon/utils";
+import { getUserLetterTypes, UserTypeFullString } from "./usuario.map";
 
 export const adapterUsuario = (usuario: UsuarioService) => {
+  console.log(usuario);
   const _usuario: Usuario = {
     correo: usuario.correo,
     id: usuario.id,
@@ -18,77 +24,47 @@ export const adapterUsuario = (usuario: UsuarioService) => {
     nombres: usuario.nombre,
     apellidos: usuario.apellido,
     sexo: usuario.sexo as SexoUsuario,
-    fotoDePerfil: usuario.foto_perfil != '' ? ( `${usuario.foto_perfil.replace(/\?t=.*/, "")}?t=${Date.now()}}`): getImage['defaultProfileImage'].ruta,
+    fotoDePerfil:
+      usuario.foto_perfil == "" || !usuario.foto_perfil
+        ? ""
+        : `${usuario.foto_perfil.replace(/\?t=.*/, "")}?t=${Date.now()}}`,
     redSocial: adaptarRedSocial(usuario.red_social),
-    descripcion: usuario.descripcion ?? '',
-    estFechaInicio: usuario.est_fecha_inicio ? adaptarFechaBackend(usuario.est_fecha_inicio) : ''
+    descripcion: usuario.descripcion ?? "",
   };
 
-  return _usuario;
-};
-
-export const adaptarUsuarioSalida = (
-  tipo: "crear" | "editar",
-  usuario: Usuario
-) => {
-  let _usuario: Partial<Record<keyof UsuarioService, string>>;
-  if (tipo == "editar") {
-    _usuario = {
-      fecha_nacimiento: usuario.fechaDeNacimiento,
-      nombre: usuario.nombres,
-      apellido: usuario.apellidos,
-      sexo: usuario.sexo,
-      foto_perfil: usuario.fotoDePerfil,
-      red_social: JSON.stringify(usuario.redSocial),
-      descripcion: usuario.descripcion,
-      tipo: getUserTypes.get(usuario.tipo),
-      est_fecha_inicio: usuario.estFechaInicio
-    };
-    return _usuario;
+  if (usuario.est_fecha_inicio) {
+    _usuario.estFechaInicio = adaptarFechaBackend(usuario.est_fecha_inicio);
   }
-
-  _usuario = {
-    nombre: usuario.nombres,
-    apellido: usuario.apellidos,
-    fecha_nacimiento: usuario.fechaDeNacimiento,
-    sexo: usuario.sexo,
-    descripcion: usuario.descripcion,
-    correo: usuario.correo,
-    red_social: JSON.stringify(usuario.redSocial),
-    contrasenia: usuario.contrasenia,
-    foto_perfil: usuario.fotoDePerfil,
-    estado: usuario.estado,
-    tipo: getUserTypes.get(usuario.tipo),
-    est_fecha_inicio: usuario.estFechaInicio,
-  };
   return _usuario;
 };
 
 const adaptarRedSocial = (redSocialPlana: string) => {
-  try{
+  try {
     const conversion = JSON.parse(redSocialPlana) as RedSocialUsuario;
     return conversion;
-  }
-  catch{
+  } catch {
     return {};
   }
 };
 
-
-export function adaptarUsuarioServiceAUsuarioCampoDeBusqueda(usuario: UsuarioService): UsuarioCampoBusqueda{
+export function adaptarUsuarioServiceAUsuarioCampoDeBusqueda(
+  usuario: UsuarioService
+): UsuarioCampoBusqueda {
   return {
     id: usuario.id,
-    foto: usuario.foto_perfil,
-    nombreCompleto: `${usuario.nombre} ${usuario.apellido}`
+    foto: usuario.foto_perfil || "",
+    nombreCompleto: `${usuario.nombre} ${usuario.apellido}`,
   };
-};
+}
 
-export function adaptarUsuarioAUsuarioCardPortafolio(usuario: Usuario): UsuarioPortafolioCard{
+export function adaptarUsuarioAUsuarioCardPortafolio(
+  usuario: Usuario
+): UsuarioPortafolioCard {
   return {
-    foto: usuario.fotoDePerfil,
+    foto: usuario.fotoDePerfil || "",
     nombres: `${usuario.nombres} ${usuario.apellidos}`,
-    id: usuario.id.toString(),
-    rol: usuario.tipo,
-    logros: [{titulo: 'Ejemplo', valor: 'X'}]
+    id: usuario.id ? usuario.id.toString() : "",
+    rol: usuario.tipo || "E",
+    logros: [{ titulo: "Ejemplo", valor: "X" }],
   };
-};
+}
