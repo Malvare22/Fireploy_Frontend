@@ -42,7 +42,6 @@ import useQuery from "@modules/general/hooks/useQuery";
 import { postModificarUsuarioService } from "@modules/usuarios/services/post.modificar.usuario";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 import { urlToBlob } from "@modules/general/utils/urlToBlod";
-import { getImage } from "@modules/general/components/roundedIcon/utils";
 import { patchSubirFotoPerfil } from "@modules/usuarios/services/patch.foto";
 import { useNavigate } from "react-router-dom";
 import { postCrearUsuarioService } from "@modules/usuarios/services/post.crear.usuario";
@@ -57,11 +56,9 @@ interface PerfilProps {
 }
 
 const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
-  const { localUser } = useContext(AccountContext)!!;
+  const token = useContext(AccountContext)?.localUser.token ?? "";
 
   const [id, setId] = useState<number | undefined>(undefined);
-
-  const [updateImageCondition, setUpdateImageCondition] = useState(false);
 
   const { register, handleSubmit, formState, getValues, control, watch } =
     useForm<Usuario>({
@@ -71,25 +68,30 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
 
   async function handleGetQuery() {
     if (type == "crear") {
-      return postCrearUsuarioService(localUser?.token!!, getValues());
+      return postCrearUsuarioService(token, getValues());
     } else {
-      return postModificarUsuarioService(
-        getValues().id!!,
-        localUser?.token!!,
-        getValues()
-      );
+      return postModificarUsuarioService(getValues().id!!, token, getValues());
     }
   }
 
   const { errors } = formState;
 
-  console.log(getValues())
+  const [photo, setPhoto] = useState<string | null>(getValues("fotoDePerfil"));
 
-  console.log(errors);
+  const [imgFile, setImgFile] = useState<Blob | undefined>(undefined);
+
+  const {
+    handleAlertClose: handleAlertCloseUpdateImg,
+    initQuery: initQueryUpdateImg,
+    message: messageUpdateImg,
+    open: openUpdateImg,
+  } = useQuery<unknown>(
+    () => patchSubirFotoPerfil(id!!, token, imgFile!!),
+    true,
+    "Operación realizada de manera correcta"
+  );
 
   const [showButton, setShowButton] = useState(false);
-
-  const [detectChangeImage, setDetectChangeImage] = useState(false);
 
   const { open: openConfirmation, setOpen: setOpenConfirmation } =
     useAlertDialog();
@@ -99,8 +101,8 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
   };
 
   useEffect(() => {
-    setShowButton(formState.isDirty || detectChangeImage);
-  }, [formState.isDirty, detectChangeImage]);
+    setShowButton(formState.isDirty || photo != getValues("fotoDePerfil"));
+  }, [formState.isDirty, photo]);
 
   const navigate = useNavigate();
 
@@ -117,22 +119,31 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
     handleAlertClose: handleAlertCloseUpdateUser,
   } = useQuery<UsuarioService>(
     () => handleGetQuery(),
-    false,
+    true,
     "Usuario Actualizado con éxito!"
   );
+
+  const [changeImage, setChangeImage] = useState(true);
 
   const handleUpdateUser = async () => {
     await initQueryUpdateUser();
   };
 
+  useEffect(() => {
+    if (responseDataUpdateUser) {
+      if (imgFile != undefined) {
+        setId(responseDataUpdateUser.id);
+      } else setChangeImage(false);
+    }
+  }, [responseDataUpdateUser]);
+
   const CURRENT_USER_TYPE = (useContext(AccountContext)!!.localUser?.tipo ??
     "E") as TiposUsuario;
 
   useEffect(() => {
-    if (!responseDataUpdateUser) return;
-    setId(responseDataUpdateUser.id);
-    setUpdateImageCondition(true);
-  }, [responseDataUpdateUser]);
+    if (!id) return;
+    initQueryUpdateImg();
+  }, [id]);
 
   return (
     <Container component={"form"} onSubmit={handleSubmit(onSubmit)}>
@@ -149,7 +160,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
           open={openConfirmation}
           handleCancel={() => setOpenConfirmation(false)}
         />
-        {errorUpdateUser && (
+        {(errorUpdateUser || !changeImage) && (
           <AlertDialog
             title="Modificación de usuarios"
             textBody={messageUpdateUser}
@@ -157,6 +168,14 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
             handleAccept={handleAlertCloseUpdateUser}
           />
         )}
+        {
+          <AlertDialog
+            title="Modificación de usuarios"
+            textBody={messageUpdateImg}
+            open={openUpdateImg}
+            handleAccept={handleAlertCloseUpdateImg}
+          />
+        }
         <Stack
           direction={"row"}
           alignItems={"center"}
@@ -198,29 +217,31 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
                   disabled={type != "crear"}
                 />
               </Grid2>
-              {getValues('tipo') && <Grid2 size={{ md: 6, xs: 12 }}>
-                <Controller
-                  name="tipo"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      label="Tipo de usuario"
-                      select
-                      disabled={CURRENT_USER_TYPE == "E" || type != "crear"}
-                      error={!!errors.tipo}
-                      helperText={errors.tipo?.message}
-                    >
-                      {getUserTypesArray.map(([valor, clave]) => (
-                        <MenuItem value={valor} key={valor}>
-                          {clave}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  )}
-                />
-              </Grid2>}
+              {getValues("tipo") && (
+                <Grid2 size={{ md: 6, xs: 12 }}>
+                  <Controller
+                    name="tipo"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        fullWidth
+                        label="Tipo de usuario"
+                        select
+                        disabled={CURRENT_USER_TYPE == "E" || type != "crear"}
+                        error={!!errors.tipo}
+                        helperText={errors.tipo?.message}
+                      >
+                        {getUserTypesArray.map(([valor, clave]) => (
+                          <MenuItem value={valor} key={valor}>
+                            {clave}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    )}
+                  />
+                </Grid2>
+              )}
               {type == "crear" && (
                 <>
                   <Grid2 size={{ md: 6, xs: 12 }}>
@@ -274,10 +295,9 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
           <Grid2 size={{ md: 3, xs: 12 }}>
             {
               <ProfilePhotoUploader
-                actualImg={getValues("fotoDePerfil") || ""}
-                userId={id}
-                initQueryCondition={updateImageCondition}
-                setDetectChangeImage={setDetectChangeImage}
+                photo={photo}
+                setFile={setImgFile}
+                setPhoto={setPhoto}
               />
             }
           </Grid2>
@@ -442,55 +462,26 @@ const HiddenInput = styled("input")({
 });
 
 type ProfilePhotoUploaderProps = {
-  userId: number | undefined;
-  actualImg: string | null;
-  initQueryCondition: boolean;
-  setDetectChangeImage: React.Dispatch<boolean>;
+  photo: string | null;
+  setPhoto: React.Dispatch<string | null>;
+  setFile: React.Dispatch<Blob | undefined>;
 };
 
 export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
-  userId,
-  actualImg,
-  initQueryCondition,
-  setDetectChangeImage,
+  photo,
+  setFile,
+  setPhoto,
 }) => {
-  const [photo, setPhoto] = useState<string | null>(actualImg);
-
-  const [fileValue, setFileValue] = useState<Blob | undefined>(undefined);
-
-  const token = useContext(AccountContext)!!.localUser?.token ?? "";
-
   useEffect(() => {
     const f = async () => {
-      if (photo && photo != actualImg) {
-        setFileValue(await urlToBlob(photo));
+      if (photo) {
+        setFile(await urlToBlob(photo));
       } else if (!photo) {
-        const response = await fetch(getImage["defaultProfileImage"].ruta);
-        setFileValue(await response.blob());
-      }
-
-      if (photo != actualImg) {
-        setDetectChangeImage(true);
+        setFile(undefined);
       }
     };
     f();
   }, [photo]);
-
-  const { handleAlertClose, initQuery, message, open, error, setOpen } =
-    useQuery<unknown>(
-      () => patchSubirFotoPerfil(userId!!, token, fileValue!!),
-      true,
-      "Perfil Actualizado Correctamente"
-    );
-
-  useEffect(() => {
-    if (!initQueryCondition) return;
-    if (photo != actualImg) {
-      initQuery();
-    } else {
-      setOpen(true);
-    }
-  }, [initQueryCondition]);
 
   const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -509,30 +500,8 @@ export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
     }
   };
 
-  const navigate = useNavigate();
-
-  function handleRefresh() {
-    navigate(0);
-  }
-
   return (
     <Stack alignItems="center" spacing={3}>
-      {error && (
-        <AlertDialog
-          handleAccept={handleAlertClose}
-          open={open}
-          title="Gestión de Usuarios"
-          textBody={message}
-        />
-      )}
-      {
-        <AlertDialog
-          handleAccept={handleRefresh}
-          open={open}
-          title="Gestión de Usuarios"
-          textBody={"Se ha actualizado la información correctamente"}
-        />
-      }
       <Avatar
         src={photo || undefined}
         sx={{ width: 100, height: 100, border: "1px solid #ddd" }}

@@ -8,7 +8,7 @@ export const patchSubirFotoPerfil = async (
 ) => {
   const formData = new FormData();
 
-  console.log(imgFile)
+  console.log(imgFile, token, id)
 
   formData.append("image", imgFile, `${id}.png`);
 

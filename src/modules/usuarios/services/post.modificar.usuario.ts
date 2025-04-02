@@ -15,6 +15,7 @@ export const postModificarUsuarioService = async (
     descripcion: string;
     red_social: string;
     est_fecha_inicio?: string; // Formato ISO (YYYY-MM-DD)
+    foto_perfil: string;
   };
 
   const body: Body = {
@@ -23,6 +24,7 @@ export const postModificarUsuarioService = async (
     fecha_nacimiento: user.fechaDeNacimiento, // Formato ISO (YYYY-MM-DD)
     sexo: user.sexo, // Si hay más opciones, puedes usar string
     descripcion: user.descripcion,
+    foto_perfil: "",
     red_social:
       typeof user.redSocial === "object"
         ? JSON.stringify(user.redSocial)
