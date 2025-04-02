@@ -13,7 +13,15 @@ export function adaptCursoService(curso: CursoService): Curso {
           }
         : null,
     estado: curso.estado,
-    estudiantes: [],
+    estudiantes: curso.estudiantes
+      ? curso.estudiantes.map((user) => ({
+          foto: user.foto_perfil,
+          nombre: `${user.nombre} ${user.apellido}`,
+          correo: user.correo,
+          estado: user.estado as "A" | "I", // Explicit type assertion
+          id: user.id.toString(),
+        }))
+      : [],
     id: curso.id,
     grupo: curso.grupo,
     semestre: curso.semestre,

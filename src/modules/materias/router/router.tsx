@@ -1,20 +1,22 @@
 import { RouteObject } from "react-router-dom";
-import VerInformacionCurso from "../pages/explorar/id/id";
+import VerInformacionCurso from "../pages/explorar/grupos/id";
 import ExplorarMaterias from "../pages/explorar";
-import VerCursosMateria from "../pages/explorar/id";
+import VerCursosMateria from "../pages/explorar/grupos";
 import ListarMaterias from "../pages/listarMaterias";
 import ListarCursos from "../pages/listarCursos";
 import VistaCrearMateria from "../pages/crearMateria";
+import VistaEditarCurso from "../pages/editarCurso";
 
 export const rutaBase = "/app/materias";
 
 export enum rutasMaterias {
   explorar = rutaBase + "/explorar",
-  // verCursos = rutaBase + "/:id",
-  verInformacionCursos = rutaBase + "/:id",
+  //verInformacionCursos = rutaBase + "/:id",
   listarMaterias = rutaBase + "/listar",
   listarCursos = rutaBase + '/:idMateria/cursos/listar',
-  crearMateria = rutaBase + '/crear'
+  verCurso = rutaBase + "/cursos/:idCurso",
+  editarCurso = rutaBase + "/cursos/editar/:idCurso",
+  crearMateria = rutaBase + '/crear',
 }
 
 export const routerMaterias: RouteObject[] = [
@@ -30,16 +32,22 @@ export const routerMaterias: RouteObject[] = [
     path: rutasMaterias.listarCursos,
     element: <ListarCursos/>
   },
+  {
+    path: rutasMaterias.verCurso,
+    element: <VerInformacionCurso />,
+  },
+  {
+    path: rutasMaterias.editarCurso,
+    element: <VistaEditarCurso />,
+  },
   // {
   //   path: rutasMaterias.verCursos,
   //   element: <VerCursosMateria />,
   // },
-  {
-    path: rutasMaterias.verInformacionCursos,
-    element: <VerInformacionCurso />,
-  },
+
   {
     path: rutasMaterias.crearMateria,
     element: <VistaCrearMateria />,
   },
+
 ];

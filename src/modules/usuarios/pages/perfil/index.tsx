@@ -12,7 +12,7 @@ import { useContext, useEffect, useState } from "react";
 function VistaPerfil() {
   const [usuario, setUsuario] = useState<Usuario | undefined>(undefined);
 
-  const {localUser} = useContext(AccountContext);
+  const localUser = useContext(AccountContext)?.localUser;
 
   const {error, handleAlertClose, initQuery, open, responseData, message, setOpen} = useQuery<UsuarioService>(() => getUsuarioService(localUser?.id ?? 0, localUser?.token ?? ''), false);
 

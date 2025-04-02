@@ -1,7 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { default as ModalBase, ModalProps } from "@mui/material/Modal";
-import { Card, SxProps, Typography } from "@mui/material";
+import { SxProps } from "@mui/material";
 
 /**
  * Componente Modal reutilizable basado en Material UI.
@@ -20,10 +20,8 @@ const Modal: React.FC<
     children: React.ReactNode;
     open: boolean;
     handleClose: () => void;
-    titulo?: string;
-    iconoTitulo?: React.ReactNode;
   }
-> = ({ children, open, handleClose, titulo, iconoTitulo, ...props }) => {
+> = ({ children, open, handleClose, ...props }) => {
   /**
    * Estilos base del modal.
    */
@@ -54,35 +52,6 @@ const Modal: React.FC<
         aria-describedby="modal-modal-description"
       >
         <Box sx={styles}>
-          {/* Encabezado del modal */}
-          {titulo && (
-            <Card
-              sx={{
-                backgroundColor: "#607d8b",
-                padding: 2,
-                marginBottom: 1,
-                display: "flex",
-                justifyContent: "center",
-                gap: 2,
-                alignItems: "center",
-              }}
-            >
-              <Typography variant="h4Bold" color="white">
-                {titulo}
-              </Typography>
-              <Box
-                sx={{
-                  color: "white",
-                  fontSize: 48,
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                {iconoTitulo && iconoTitulo}
-              </Box>
-            </Card>
-          )}
-          {/* Contenido del modal */}
           {children}
         </Box>
       </ModalBase>

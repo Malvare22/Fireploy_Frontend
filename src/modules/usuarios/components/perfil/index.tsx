@@ -66,7 +66,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
 
   const { register, handleSubmit, formState, getValues, control, watch } =
     useForm<UsuarioForm>({
-      resolver: zodResolver(UsuarioForm),
+      resolver: zodResolver(type == 'crear' ? UsuarioForm : UsuarioForm.omi),
       defaultValues:
         type == "crear"
           ? usuarioFormTemplate
@@ -89,6 +89,8 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
   }
 
   const { errors } = formState;
+
+  console.log(errors)
 
   const [showButton, setShowButton] = useState(false);
 

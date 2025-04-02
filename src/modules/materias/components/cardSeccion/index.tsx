@@ -72,6 +72,8 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion }) => {
             }}
             defaultValue={JSON.stringify({ key: undefined, order: undefined })}
             sx={{ width: 300 }}
+            variant="outlined"
+            size="small"
           >
             <MenuItem
               value={JSON.stringify({ key: undefined, order: undefined })}
@@ -96,9 +98,9 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion }) => {
             </MenuItem>
           </Select>
         </Stack>
-        <Grid2 container sx={{ padding: 2 }}>
+        <Grid2 container rowSpacing={2}>
           {stableSort(proyectos).map((proyecto, key) => (
-            <Grid2 size={{lg: 4, sm: 6, xs: 12}} display={'flex'} justifyContent={'center'}>
+            <Grid2 size={{lg: 4, md: 6, xs: 12}} display={'flex'} justifyContent={'center'}>
               <ProjectCardPortafolio
                 handleOpen={() => {}}
                 proyecto={proyecto}

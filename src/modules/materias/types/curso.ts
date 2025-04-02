@@ -1,4 +1,5 @@
 import { Seccion } from "./seccion";
+import { EstudianteCurso } from "../utils/forms/form.schema";
 
 export type UsuarioCurso = {
   id: string;
@@ -13,7 +14,7 @@ export type Curso = {
   descripcion: string;
   estado: "A" | "I";
   docente?: UsuarioCurso | null;
-  estudiantes?: UsuarioCurso[];
+  estudiantes?: EstudianteCurso[];
   secciones?: Seccion[] | null;
   materia?: {
     id: number | null;
@@ -44,8 +45,7 @@ export const exampleCursos: Curso[] = [
       correo: "juan.perez@example.com",
     },
     estudiantes: [
-      { id: "201", nombre: "María Gómez", correo: "maria.gomez@example.com" },
-      { id: "202", nombre: "Carlos Ruiz", correo: "carlos.ruiz@example.com" },
+      
     ],
     secciones: [],
     materia: {

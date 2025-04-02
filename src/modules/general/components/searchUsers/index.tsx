@@ -2,7 +2,7 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
 import { FC } from "react";
-import { Box, Typography } from "@mui/material";
+import { Avatar, Box, Typography } from "@mui/material";
 import { UsuarioCampoBusqueda } from "../searchUsers/hook";
 
 export const exampleUsuarioCampoBusqueda: UsuarioCampoBusqueda[] = [
@@ -62,7 +62,7 @@ const SearchUsers: FC<Props> = ({ users, setSelectUser, selectUser }) => {
         getOptionLabel={(option) =>
           typeof option === "string" ? option : option.nombreCompleto
         }
-        renderInput={(params) => <TextField size="small" {...params} />}
+        renderInput={(params) => <TextField {...params} />}
         onChange={(_e, value) => {
           setSelectUser(value as UsuarioCampoBusqueda);
         }}
@@ -89,8 +89,8 @@ type UserFrameProps = {
  */
 const UserFrame: React.FC<UserFrameProps> = ({ user }) => {
   return (
-    <Box sx={{ display: "flex", alignItems: "center" }}>
-      <Box component={"img"} sx={{ width: 48, height: 48 }} />
+    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+      <Avatar src={user.foto}/>
       <Box>
         <Typography>{user.nombreCompleto}</Typography>
       </Box>

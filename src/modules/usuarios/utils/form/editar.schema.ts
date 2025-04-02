@@ -107,6 +107,8 @@ export const correoSchema = z
   .string()
   .email({ message: "Debe ser un correo válido" });
 
+  export type UsuarioForm = Usuario & { confirmarContrasenia: string };
+
 export const UsuarioForm = z
   .object({
     id: z.number().optional(),
@@ -138,7 +140,6 @@ export const UsuarioForm = z
     }
   );
 
-export type UsuarioForm = Usuario & { confirmarContrasenia: string };
 
 export const usuarioFormTemplate: UsuarioForm = {
   id: 1,
@@ -146,7 +147,7 @@ export const usuarioFormTemplate: UsuarioForm = {
   apellidos: "",
   correo: "",
   fechaDeNacimiento: "",
-  estFechaInicio: "",
+  estFechaInicio: "2002-04-04",
   estado: "A",
   sexo: "" as SexoUsuario,
   tipo: "E",

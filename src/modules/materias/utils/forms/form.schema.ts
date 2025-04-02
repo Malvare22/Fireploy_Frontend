@@ -19,6 +19,16 @@ export const UsuarioCursoSchema: z.ZodType<UsuarioCurso> = z.object({
   correo: z.string().email("El correo debe ser válido").optional(),
 });
 
+export const EstudianteCurso = z.object({
+  nombre: z.string(),
+  id: z.string(),
+  correo: z.string(),
+  foto: z.string(),
+  estado: z.enum(["A", "I"]),
+});
+
+export type EstudianteCurso = z.infer<typeof EstudianteCurso>;
+
 export const MateriaSchema: z.ZodType<Materia> = z.object({
   estado: z.enum(["A", "I"]),
   nombre: z.string().min(1, "El nombre es requerido"),
@@ -27,26 +37,24 @@ export const MateriaSchema: z.ZodType<Materia> = z.object({
   cursos: z.array(z.lazy(() => CursoSchema)).optional(),
 });
 
-export const CursoSchema: z.ZodType<Curso> = z
-  .object({
-    id: z.string().optional(),
-    grupo: z.string().min(1, "El grupo es requerido"),
-    semestre: z.string().min(1, "El semestre es requerido"),
-    descripcion: z.string().min(1, "La descripción es requerida"),
-    estado: z.enum(["A", "I"]),
-    docente: z
-      .lazy(() => UsuarioCursoSchema)
-      .nullable()
-      .optional(),
-    estudiantes: z.array(z.lazy(() => UsuarioCursoSchema)).optional(),
-    secciones: z.array(z.lazy(() => SeccionSchema)).nullable(),
-    materia: z
-      .object({
-        id: z.number().int().positive().nullable(),
-        nombre: z.string().min(1, "El nombre de la materia es requerido"),
-        semestre: z.string().min(1, "El semestre de la materia es requerido"),
-        estado: z.string().min(1, "El estado de la materia es requerido"),
-      })
-      .optional(),
-  })
-  .omit({ secciones: true });
+export const CursoSchema: z.ZodType<Curso> = z.object({
+  id: z.string().optional(),
+  grupo: z.string().min(1, "El grupo es requerido"),
+  semestre: z.string().min(1, "El semestre es requerido"),
+  descripcion: z.string().min(1, "La descripción es requerida"),
+  estado: z.enum(["A", "I"]),
+  docente: z
+    .lazy(() => UsuarioCursoSchema)
+    .nullable()
+    .optional(),
+  estudiantes: z.array(z.lazy(() => EstudianteCurso)).optional(),
+  secciones: z.array(z.lazy(() => SeccionSchema)).optional(),
+  materia: z
+    .object({
+      id: z.number().int().positive().nullable(),
+      nombre: z.string().min(1, "El nombre de la materia es requerido"),
+      semestre: z.string().min(1, "El semestre de la materia es requerido"),
+      estado: z.string().min(1, "El estado de la materia es requerido"),
+    })
+    .optional(),
+});

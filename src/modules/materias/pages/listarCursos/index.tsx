@@ -5,9 +5,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import useSearch from "@modules/general/hooks/useSearch";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import { useFiltersByConditions } from "@modules/general/hooks/useFiltersByCondition";
-import {
-  CursoTabla,
-} from "@modules/materias/types/curso.tabla";
+import { CursoTabla } from "@modules/materias/types/curso.tabla";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
 import TablaCursos from "@modules/materias/components/tablaCursos";
 import { useParams } from "react-router";
@@ -29,7 +27,10 @@ function ListarCursos() {
    * Variables de Consulta de Materias
    */
   const { error, handleAlertClose, initQuery, responseData, message, open } =
-    useQuery<CursoService[]>(() => getCursoByMateriaId(token!!, idMateria!!), false);
+    useQuery<CursoService[]>(
+      () => getCursoByMateriaId(token!!, idMateria || ""),
+      false
+    );
 
   useEffect(() => {
     initQuery();

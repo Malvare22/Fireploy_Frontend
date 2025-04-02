@@ -13,6 +13,7 @@ import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import { CursoTabla } from "@modules/materias/types/curso.tabla";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
+import { rutasMaterias } from "@modules/materias/router/router";
 
 type TablaCursosProps = {
   cursos: CursoTabla[];
@@ -29,7 +30,7 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
     setOpenHandleStatus(true);
   };
 
-  function ModalChangeStatus(status: CursoTabla['estado']) {
+  function ModalChangeStatus(status: CursoTabla["estado"]) {
     const label = status == "I" ? "habilitar" : "deshabilitar";
 
     return (
@@ -76,7 +77,7 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
     },
     {
       name: labelListarCursos.cantidad,
-      selector : row => row.cantidadEstudiantes,
+      selector: (row) => row.cantidadEstudiantes,
       sortable: true,
     },
     {
@@ -84,7 +85,12 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
       cell: (row) => {
         return (
           <Stack direction={"row"} justifyContent={"center"}>
-            <ActionButton mode={actionButtonTypes.ver} />
+            <ActionButton
+              mode={actionButtonTypes.ver}
+              onClick={() =>
+                navigate(rutasMaterias.verCurso.replace(":idCurso", row.id))
+              }
+            />
             {row.estado == "A" ? (
               <ActionButton
                 sx={{ color: theme.palette.error.main }}
