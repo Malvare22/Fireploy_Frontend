@@ -17,6 +17,7 @@ export enum rutasMaterias {
   verCurso = rutaBase + "/cursos/:idCurso",
   editarCurso = rutaBase + "/cursos/editar/:idCurso",
   crearMateria = rutaBase + '/crear',
+  explorarCursos = rutaBase + '/explorar/:idMateria/cursos',
 }
 
 export const routerMaterias: RouteObject[] = [
@@ -40,10 +41,10 @@ export const routerMaterias: RouteObject[] = [
     path: rutasMaterias.editarCurso,
     element: <VistaEditarCurso />,
   },
-  // {
-  //   path: rutasMaterias.verCursos,
-  //   element: <VerCursosMateria />,
-  // },
+  {
+    path: rutasMaterias.explorarCursos,
+    element: <VerCursosMateria />,
+  },
 
   {
     path: rutasMaterias.crearMateria,

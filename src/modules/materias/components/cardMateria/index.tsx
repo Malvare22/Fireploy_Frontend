@@ -39,7 +39,7 @@ const CardMateria: React.FC<CardMateriaProps> = ({ materia }) => {
             endIcon={<StyleIcon />}
             onClick={() =>
               navigate(
-                rutasMaterias.verCursos.replace(":id", materia.id.toString())
+                rutasMaterias.explorarCursos.replace(":idMateria", materia.id?.toString() || '404')
               )
             }
           >

@@ -3,22 +3,22 @@ import { AccountContext } from "@modules/general/context/accountContext";
 import useQuery from "@modules/general/hooks/useQuery";
 import CardCurso from "@modules/materias/components/cardCurso";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
-import { getCursosMateria } from "@modules/materias/services/get.curso";
+import { getMateriaById } from "@modules/materias/services/get.materia.services";
 import { Materia } from "@modules/materias/types/materia";
 import { MateriaService } from "@modules/materias/types/materia.service";
-import { adaptarMateriaService } from "@modules/materias/utils/adapters/materia.service";
+import { adaptMateriaServiceToMateria } from "@modules/materias/utils/adapters/materia.service";
 import { Alert, Card, Grid2, Stack, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 function VerCursosMateria() {
-  const { id } = useParams();
+  const { idMateria } = useParams();
 
-  const token = useContext(AccountContext).localUser?.token;
+  const token = useContext(AccountContext)?.localUser.token ?? '';
 
   const { error, handleAlertClose, initQuery, message, open, responseData } =
     useQuery<MateriaService>(
-      () => getCursosMateria(token!!, id!!),
+      () => getMateriaById(token, idMateria || ''),
       false,
       "Obtener Cursos"
     );
@@ -26,16 +26,18 @@ function VerCursosMateria() {
   const [materia, setMateria] = useState<Materia | undefined>(undefined);
 
   useEffect(() => {
-    if (token && id) {
+    if (token && idMateria) {
       initQuery();
     }
-  }, [token, id]);
+  }, [token, idMateria]);
 
   useEffect(() => {
     if (responseData) {
-      setMateria(adaptarMateriaService(responseData));
+      setMateria(adaptMateriaServiceToMateria(responseData));
     }
   }, [responseData]);
+
+  console.log(idMateria, materia)
 
   return (
     <>
@@ -52,12 +54,6 @@ function VerCursosMateria() {
           <Card>
             <Stack spacing={3} margin={4}>
               <Typography variant="h3">{materia.nombre}</Typography>
-              <Typography
-                variant="h6"
-                sx={{ wordWrap: "break-word", overflowWrap: "break-word" }}
-              >
-                {materia.descripcion}
-              </Typography>
             </Stack>
           </Card>
           {materia.cursos && materia.cursos.length > 0 ? (

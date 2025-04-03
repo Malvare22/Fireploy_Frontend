@@ -1,6 +1,4 @@
 import {
-  EstadoCurso,
-  EstadoMateria,
   Materia,
 } from "@modules/materias/types/materia";
 import { MateriaService } from "@modules/materias/types/materia.service";
@@ -10,7 +8,7 @@ export function adaptMateriaService(materia: MateriaService): MateriaTabla {
   return {
     cantidadGruposActivos: materia.cursos?.length || 0,
     codigo: materia.id,
-    estado: materia.estado as EstadoMateria,
+    estado: materia.estado as Materia['estado'],
     nombre: materia.nombre,
     semestre: parseInt(materia.semestre) || 0,
   };
@@ -20,14 +18,14 @@ export function adaptMateriaServiceToMateria(materia: MateriaService): Materia {
   return {
     id: materia.id,
     nombre: materia.nombre,
-    semestre: materia.semestre,
+    semestre: parseInt(materia.semestre),
     cursos: materia.cursos?.map((curso) => ({
       semestre: curso.semestre,
       descripcion: curso.descripcion,
       id: curso.id,
       grupo: curso.grupo,
-      estado: curso.estado as EstadoCurso,
+      estado: curso.estado as Materia['estado'],
     })),
-    estado: materia.estado as EstadoMateria,
+    estado: materia.estado as Materia['estado'],
   };
 }
