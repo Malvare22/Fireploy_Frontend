@@ -56,12 +56,12 @@ function VistaCrearMateria() {
     watch,
   } = methods;
 
-  const token = useContext(AccountContext)?.localUser.token;
+  const token = useContext(AccountContext)?.localUser.token ?? '';
 
   function getQueryToMake(type: "editar" | "crear") {
     const querys = {
-      editar: () => postCreateMateriaService(token!!, getValues()),
-      crear: () => postCreateMateriaService(token!!, getValues()),
+      editar: () => postCreateMateriaService(token, getValues()),
+      crear: () => postCreateMateriaService(token, getValues()),
     };
 
     return querys[type];

@@ -12,10 +12,11 @@ import { labelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
 
 type TablaEstudiantesEditarCursoProps = {
   estudiante: EstudianteCurso[];
+  setSelectUsers: React.Dispatch<number[]>;
 };
 const TablaEstudiantesEditarCurso: React.FC<
   TablaEstudiantesEditarCursoProps
-> = ({ estudiante }) => {
+> = ({ estudiante, setSelectUsers }) => {
   const theme = useTheme();
 
   const [selectUsuario, setSelectUsuario] = useState<
@@ -115,6 +116,11 @@ const TablaEstudiantesEditarCurso: React.FC<
         data={dataConIndice}
         customStyles={customStyles}
         conditionalRowStyles={conditionalRowStyles}
+        selectableRows // Habilita checkboxes
+        selectableRowsHighlight // Resalta filas seleccionadas
+        onSelectedRowsChange={({ selectedRows }) => {
+          setSelectUsers(selectedRows.map((user) => user.id));
+        }}
       ></DataTable>
     </>
   );

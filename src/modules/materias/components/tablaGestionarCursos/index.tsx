@@ -10,7 +10,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import Status from "@modules/general/components/status";
 import InfoIcon from "@mui/icons-material/Info";
 import ActionButton from "@modules/general/components/actionButton";
@@ -20,7 +20,10 @@ import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
 import SearchUsers, {
   exampleUsuarioCampoBusqueda,
 } from "@modules/general/components/searchUsers";
-import { useSearchUsers } from "@modules/general/components/searchUsers/hook";
+import {
+  useSearchUsers,
+  UsuarioCampoBusqueda,
+} from "@modules/general/components/searchUsers/hook";
 import { getMateriaStatesArray } from "@modules/materias/utils/materias";
 import SchoolIcon from "@mui/icons-material/School";
 import {
@@ -35,6 +38,12 @@ import { Materia } from "@modules/materias/types/materia";
 import { adaptCursoToCursoTabla } from "@modules/materias/utils/adapters/curso";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
+import useQuery from "@modules/general/hooks/useQuery";
+import { getUsuariosPorTipo } from "@modules/usuarios/services/get.usuarios.[tipo]";
+import { UsuarioService } from "@modules/usuarios/types/services.usuario";
+import { AccountContext } from "@modules/general/context/accountContext";
+import AlertDialog from "@modules/general/components/alertDialog";
+import { adaptarUsuarioServiceAUsuarioCampoDeBusqueda } from "@modules/usuarios/utils/adaptar.usuario";
 
 const TablaGestionarCursos = () => {
   const theme = useTheme();
@@ -69,6 +78,36 @@ const TablaGestionarCursos = () => {
       },
     ]);
   }
+
+  const token = useContext(AccountContext)?.localUser.token ?? "";
+
+  const {
+    error: errorGetDocentes,
+    handleAlertClose: handleAlertCloseGetDocentes,
+    initQuery: initQueryGetDocentes,
+    message: messageGetDocentes,
+    responseData: responseDataGetDocentes,
+    open: openGetDocentes,
+  } = useQuery<UsuarioService[]>(
+    () => getUsuariosPorTipo("Docente", token),
+    true
+  );
+
+  const [docentes, setDocentes] = useState<UsuarioCampoBusqueda[]>([]);
+
+  useEffect(() => {
+    initQueryGetDocentes();
+  }, []);
+
+  useEffect(() => {
+    if (responseDataGetDocentes) {
+      setDocentes(
+        responseDataGetDocentes.map((docente) =>
+          adaptarUsuarioServiceAUsuarioCampoDeBusqueda(docente)
+        )
+      );
+    }
+  }, [responseDataGetDocentes]);
 
   function handleSave() {
     setValue(`cursos.${currentEdit}`, getValuesCurso());
@@ -117,6 +156,7 @@ const TablaGestionarCursos = () => {
         }
       },
       sortable: true,
+      maxWidth: '120px'
     },
     {
       name: labelListarCursos.estado,
@@ -151,6 +191,7 @@ const TablaGestionarCursos = () => {
         return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
       },
       sortable: true,
+      maxWidth: '130px'
     },
     {
       name: labelListarCursos.docente,
@@ -181,7 +222,7 @@ const TablaGestionarCursos = () => {
             <SearchUsers
               selectUser={selectUser}
               setSelectUser={setSelectUser}
-              users={exampleUsuarioCampoBusqueda}
+              users={docentes}
             />
           );
         }
@@ -190,6 +231,7 @@ const TablaGestionarCursos = () => {
         return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
       },
       sortable: true,
+      maxWidth: '250px'
     },
     {
       cell: (row) => {
@@ -228,6 +270,8 @@ const TablaGestionarCursos = () => {
         return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
       },
       sortable: true,
+      maxWidth: '250px'
+
     },
   ];
 
@@ -281,41 +325,23 @@ const TablaGestionarCursos = () => {
     }));
   }, [watch("cursos"), currentEdit]);
 
-  // const bodyQuery = useMemo(() => {
-  //   return {
-  //     nombre: selectCurso?.nombre as string,
-  //     estado: selectCurso?.estado == "A" ? "I" : ("A" as string),
-  //     semestre: selectCurso?.semestre as string,
-  //   };
-  // }, [selectCurso]);
-
-  // const { error, handleAlertClose, initQuery, message, open } = useQuery(
-  //   () => postEstadocursoservice(token!!, bodyQuery, selectCurso?.codigo!!),
-  //   true,
-  //   "Materia Modificada Exitosamente"
-  // );
-
-  const onSubmit = () => {
-    // data contiene los valores validados del formulario
-    // handleSave(currentEdit);
-  };
-
   return (
     <>
-      {/* {
+      {errorGetDocentes && (
         <AlertDialog
-          open={open}
-          handleAccept={handleAlertClose}
-          title="Cambiar Estado de Materia"
-          textBody={message}
+          open={openGetDocentes}
+          handleAccept={handleAlertCloseGetDocentes}
+          title="Obtener docentes"
+          textBody={messageGetDocentes}
         />
-      } */}
+      )}
       <form onSubmit={(e) => e.preventDefault()}>
         <DataTable
           columns={columns}
           data={dataConIndice}
           customStyles={customStyles}
           conditionalRowStyles={conditionalRowStyles}
+          responsive
         ></DataTable>
         <Stack alignItems={"end"} padding={3}>
           <Box>

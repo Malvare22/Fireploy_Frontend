@@ -7,8 +7,17 @@ export type CursoService = {
   grupo: string;
   semestre: string;
   descripcion: string;
-  estado: Curso['estado'];
+  estado: Curso["estado"];
   materia: MateriaService;
   docente: UsuarioService | null;
   estudiantes: UsuarioService[];
+};
+
+export type SeccionesService = {
+  id: number;
+  titulo: string;
+  descripcion: string;
+  fecha_inicio: string;
+  fecha_fin: string;
+  estado: string;
 };

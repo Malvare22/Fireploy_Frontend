@@ -2,7 +2,7 @@ import { Seccion } from "./seccion";
 import { EstudianteCurso } from "../utils/forms/form.schema";
 
 export type UsuarioCurso = {
-  id: string;
+  id: number;
   nombre: string;
   correo?: string | undefined;
 };
@@ -40,7 +40,7 @@ export const exampleCursos: Curso[] = [
     descripcion: "Curso de Matemáticas Avanzadas",
     estado: "A",
     docente: {
-      id: "101",
+      id: 10,
       nombre: "Juan Pérez",
       correo: "juan.perez@example.com",
     },
@@ -62,7 +62,7 @@ export const exampleCursos: Curso[] = [
     descripcion: "Curso de Física Clásica",
     estado: "A",
     docente: {
-      id: "102",
+      id: 102,
       nombre: "Ana López",
       correo: "ana.lopez@example.com",
     },

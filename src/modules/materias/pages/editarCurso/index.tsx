@@ -8,7 +8,7 @@ import { getMateriaStatesArray } from "@modules/materias/utils/materias";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useQuery from "@modules/general/hooks/useQuery";
 import { getCursoById } from "@modules/materias/services/get.curso";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { AccountContext } from "@modules/general/context/accountContext";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
 import AlertDialog from "@modules/general/components/alertDialog";
@@ -25,6 +25,7 @@ import {
   UsuarioCampoBusqueda,
 } from "@modules/general/components/searchUsers/hook";
 import AddUsers from "@modules/usuarios/components/addUsers";
+import { patchEstudiantesCurso } from "@modules/materias/services/patch.curso.estudiantes";
 
 export enum labelEditarCurso {
   titulo = "Editar Curso",
@@ -98,14 +99,37 @@ function VistaEditarCurso() {
     []
   );
 
+  const [selectStudentsToRemove, setSelectStudentsToRemove] = useState<number[]>([]);
+
+  const usersToAddCodes = useMemo(() => {
+     return usersSelected.map((user)=> user.id);
+  }, [usersSelected]);
+
+  const {
+    handleAlertClose: handleAlertCloseAddStudents,
+    initQuery: initQueryAddStudents,
+    message: messageAddStudents,
+    open: openAddStudents,
+  } = useQuery<unknown>(() => patchEstudiantesCurso(token!!, usersToAddCodes,'A', idCurso!!), true, "Estudiantes registrados de manera correcta");
+  
+  const {
+    handleAlertClose: handleAlertCloseRemoveStudents,
+    initQuery: initQueryRemoveStudents,
+    message: messageRemoveStudents,
+    open: openRemoveStudents,
+} = useQuery<unknown>(() => patchEstudiantesCurso(token!!, selectStudentsToRemove, 'D', idCurso!!), true, "Estudiantes eliminados de manera correcta");
+
+  console.log(errors)
+
   return (
     <>
+    <AlertDialog handleAccept={handleAlertCloseAddStudents} open={openAddStudents} title="Agregar Estudiantes" textBody={messageAddStudents}/>
       <Modal sx={{ maxWidth: 700}} handleClose={handleClose} open={open}>
       <AddUsers
         typeUsers="Estudiante"
         selectUsers={usersSelected}
         setSelectUsers={setUsersSelected}
-        handleAccept={() => console.log('TOLIS')}
+        handleAccept={initQueryAddStudents}
         handleCancel={handleClose}
       />
       </Modal>
@@ -122,6 +146,12 @@ function VistaEditarCurso() {
         open={openPostQuery}
         title="Información del Curso"
         textBody={messagePostQuery}
+      />
+            <AlertDialog
+        handleAccept={handleAlertCloseRemoveStudents}
+        open={openRemoveStudents}
+        title="Información del Curso"
+        textBody={messageRemoveStudents}
       />
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -169,10 +199,11 @@ function VistaEditarCurso() {
           <Stack>
             <TablaEstudiantesEditarCurso
               estudiante={curso?.estudiantes || []}
+              setSelectUsers={setSelectStudentsToRemove}
             />
             <Stack alignItems={"end"}>
               <Box>
-                <GeneralButton color="error" mode={buttonTypes.remove} />
+                <GeneralButton color="error" mode={buttonTypes.remove} disabled={selectStudentsToRemove.length == 0} onClick={initQueryRemoveStudents}/>
                 <GeneralButton mode={buttonTypes.add} onClick={handleOpen} />
               </Box>
             </Stack>

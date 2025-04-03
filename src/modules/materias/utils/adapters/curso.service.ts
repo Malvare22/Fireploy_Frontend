@@ -7,7 +7,7 @@ export function adaptCursoService(curso: CursoService): Curso {
     docente:
       curso.docente != null && curso.docente != undefined
         ? {
-            id: curso.docente.id.toString(),
+            id: curso.docente.id,
             nombre: curso.docente.nombre,
             correo: curso.docente.correo,
           }
@@ -15,11 +15,11 @@ export function adaptCursoService(curso: CursoService): Curso {
     estado: curso.estado,
     estudiantes: curso.estudiantes
       ? curso.estudiantes.map((user) => ({
-          foto: user.foto_perfil,
+          foto: user.foto_perfil || '',
           nombre: `${user.nombre} ${user.apellido}`,
           correo: user.correo,
           estado: user.estado as "A" | "I", // Explicit type assertion
-          id: user.id.toString(),
+          id: user.id,
         }))
       : [],
     id: curso.id,

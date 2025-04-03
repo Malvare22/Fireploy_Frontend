@@ -14,14 +14,14 @@ export const SeccionSchema: z.ZodType<Seccion> = z.object({
 });
 
 export const UsuarioCursoSchema: z.ZodType<UsuarioCurso> = z.object({
-  id: z.string().min(1, "El ID es requerido"),
+  id: z.number().min(1, "El ID es requerido"),
   nombre: z.string().min(1, "El nombre es requerido"),
   correo: z.string().email("El correo debe ser válido").optional(),
 });
 
 export const EstudianteCurso = z.object({
   nombre: z.string(),
-  id: z.string(),
+  id: z.number(),
   correo: z.string(),
   foto: z.string(),
   estado: z.enum(["A", "I"]),

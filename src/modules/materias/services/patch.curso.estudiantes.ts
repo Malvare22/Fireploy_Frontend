@@ -1,7 +1,7 @@
 import { patchData } from "@core/services";
 import { CursoService } from "../types/curso.service";
 
-export const gestionarEstudiantesCursoService = async (
+export const patchEstudiantesCurso = async (
   token: string,
   data: number[],
   operacion: 'A' | 'D',
