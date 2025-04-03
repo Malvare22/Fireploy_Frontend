@@ -3,116 +3,71 @@ import { TableColumn, TableStyles } from "react-data-table-component";
 import {
   Alert,
   Box,
-  Chip,
   MenuItem,
   Stack,
   TextField,
   Typography,
   useTheme,
 } from "@mui/material";
-import  { useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Status from "@modules/general/components/status";
-import InfoIcon from "@mui/icons-material/Info";
 import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
-import { CursoTabla } from "@modules/materias/types/curso.tabla";
-import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
-import SearchUsers, {
-} from "@modules/general/components/searchUsers";
-import {
-  useSearchUsers,
-  UsuarioCampoBusqueda,
-} from "@modules/general/components/searchUsers/hook";
+
 import { getMateriaStatesArray } from "@modules/materias/utils/materias";
-import SchoolIcon from "@mui/icons-material/School";
+
 import {
   Controller,
   FieldError,
+  get,
   useForm,
   useFormContext,
 } from "react-hook-form";
-import { Curso, cursoTemplate } from "@modules/materias/types/curso";
-import { Materia } from "@modules/materias/types/materia";
-import { adaptCursoToCursoTabla } from "@modules/materias/utils/adapters/curso";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
-import useQuery from "@modules/general/hooks/useQuery";
-import { getUsuariosPorTipo } from "@modules/usuarios/services/get.usuarios.[tipo]";
-import { UsuarioService } from "@modules/usuarios/types/services.usuario";
-import { AccountContext } from "@modules/general/context/accountContext";
-import AlertDialog from "@modules/general/components/alertDialog";
-import { adaptarUsuarioServiceAUsuarioCampoDeBusqueda } from "@modules/usuarios/utils/adaptar.usuario";
+import { Seccion, seccionTemplate } from "@modules/materias/types/seccion";
+import { SeccionSchema } from "@modules/materias/utils/forms/form.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { labelListarSecciones } from "@modules/materias/enums/labelListarSecciones";
+import { Curso } from "@modules/materias/types/curso";
 
-const TablaGestionarCursos = () => {
+
+const TablaGestionarSecciones = () => {
   const theme = useTheme();
 
   /**
    * Definición de estado de editar por fila
    */
   const {
-    register,
+    watch,
     formState: { errors },
     getValues,
     setValue,
-  } = useFormContext<Materia>();
+  } = useFormContext<Curso>();
 
   const {
-    register: registerCurso,
+    register: registerSeccion,
     formState: { errors: errorsCurso },
-    reset: resetCurso,
-    getValues: getValuesCurso,
-    setValue: setValuesCurso,
-    handleSubmit: handleSubmitCurso,
-    control: controlCurso,
-  } = useForm<Curso>();
+    reset: resetSeccion,
+    getValues: getValuesSeccion,
+    control: controlSeccion,
+  } = useForm<Seccion>({
+    resolver: zodResolver(SeccionSchema), // 🔹 Resolver correcto para Zod
+  });
 
   function handleAdd() {
-    setValue("cursos", [
-      ...(getValues("cursos") ?? []),
-      {
-        ...cursoTemplate,
-        grupo: (getValues("cursos")?.length ?? 0).toString(),
-      },
-    ]);
+    const aux = { ...seccionTemplate, cursoId: getValues("id") || "" }; // 🔹 Evita error si "id" es undefined
+    const seccionesActuales = get("secciones") ?? [];
+    setValue("secciones", [...seccionesActuales, aux]); // 🔹 Asegura que "secciones" no sea undefined
   }
 
-  const token = useContext(AccountContext)?.localUser.token ?? "";
-
-  const {
-    error: errorGetDocentes,
-    handleAlertClose: handleAlertCloseGetDocentes,
-    initQuery: initQueryGetDocentes,
-    message: messageGetDocentes,
-    responseData: responseDataGetDocentes,
-    open: openGetDocentes,
-  } = useQuery<UsuarioService[]>(
-    () => getUsuariosPorTipo("Docente", token),
-    true
-  );
-
-  const [docentes, setDocentes] = useState<UsuarioCampoBusqueda[]>([]);
-
-  useEffect(() => {
-    initQueryGetDocentes();
-  }, []);
-
-  useEffect(() => {
-    if (responseDataGetDocentes) {
-      setDocentes(
-        responseDataGetDocentes.map((docente) =>
-          adaptarUsuarioServiceAUsuarioCampoDeBusqueda(docente)
-        )
-      );
-    }
-  }, [responseDataGetDocentes]);
-
   function handleSave() {
-    setValue(`cursos.${currentEdit}`, getValuesCurso());
+    setValue(`secciones.${currentEdit}`, getValuesSeccion());
     setCurrentEdit(-1);
   }
 
   function handleEdit(i: number) {
-    resetCurso(getValues(`cursos.${i}`));
+    resetSeccion(getValues(`secciones.${i}`));
     setCurrentEdit(i);
   }
 
@@ -122,48 +77,124 @@ const TablaGestionarCursos = () => {
 
   function handleDelete() {
     setCurrentEdit(-1);
-    const newerCursos: Curso[] =
-      getValues("cursos")?.filter((_y, index) => index != currentEdit) || [];
+    const newerSeccion: Seccion[] =
+      getValues("secciones")?.filter((_y, index) => index != currentEdit) || [];
 
-    setValue("cursos", newerCursos);
+    setValue("secciones", newerSeccion);
   }
 
   useEffect(() => {
-    if (!getValues("cursos")) handleAdd();
-  }, [watch("cursos")]);
+    if (!getValues("secciones")) handleAdd();
+  }, [watch("secciones")]);
 
   const [currentEdit, setCurrentEdit] = useState<number>(-1);
 
-  const columns: TableColumn<CursoTabla & { rowIndex: number }>[] = [
+  const columns: TableColumn<Seccion & { rowIndex: number }>[] = [
     {
-      name: labelListarCursos.grupo,
+      name: labelListarSecciones.id,
+      selector: (row) => row.id ?? 0,
+      sortable: true,
+      maxWidth: "120px",
+    },
+    {
+      name: labelListarSecciones.titulo,
       cell: (row) => {
         if (currentEdit != row.rowIndex)
-          return <Typography>{row.grupo}</Typography>;
+          return <Typography>{row.titulo}</Typography>;
         else {
           return (
             <TextField
               sx={{ marginLeft: -1 }}
-              error={!!errorsCurso?.grupo}
-              helperText={!!errorsCurso?.grupo?.message}
-              {...registerCurso("grupo")}
+              error={!!errorsCurso?.titulo}
+              helperText={!!errorsCurso?.titulo?.message}
+              {...registerSeccion("titulo")}
               size="small"
             />
           );
         }
       },
       sortable: true,
-      maxWidth: '120px'
+      maxWidth: "120px",
     },
     {
-      name: labelListarCursos.estado,
+      name: labelListarSecciones.fechaDeInicio,
+      cell: (row) => {
+        if (currentEdit != row.rowIndex)
+          return <Typography>{row.fechaDeInicio}</Typography>;
+        else {
+          return (
+            <TextField
+              sx={{ marginLeft: -1 }}
+              error={!!errorsCurso?.fechaDeInicio}
+              helperText={!!errorsCurso?.fechaDeInicio?.message}
+              {...registerSeccion("fechaDeInicio")}
+              size="small"
+              type="date"
+            />
+          );
+        }
+      },
+      sortable: true,
+      maxWidth: "120px",
+    },
+    {
+      name: labelListarSecciones.fechaLimite,
+      cell: (row) => {
+        if (currentEdit != row.rowIndex)
+          return <Typography>{row.fechaDeCierre}</Typography>;
+        else {
+          return (
+            <TextField
+              sx={{ marginLeft: -1 }}
+              error={!!errorsCurso?.fechaDeCierre}
+              helperText={!!errorsCurso?.fechaDeCierre?.message}
+              {...registerSeccion("fechaDeCierre")}
+              size="small"
+              type="date"
+            />
+          );
+        }
+      },
+      sortable: true,
+      maxWidth: "120px",
+    },
+    {
+      name: labelListarSecciones.cantidadDeProyectos,
+      cell: (row) => {
+        return <Typography>{row.proyectos?.length ?? 0}</Typography>;
+      },
+      sortable: true,
+      maxWidth: "120px",
+    },
+    {
+      name: labelListarSecciones.descripcion,
+      cell: (row) => {
+        if (currentEdit != row.rowIndex)
+          return <Typography>{row.descripcion}</Typography>;
+        else {
+          return (
+            <TextField
+              sx={{ marginLeft: -1 }}
+              error={!!errorsCurso?.descripcion}
+              helperText={!!errorsCurso?.descripcion?.message}
+              {...registerSeccion("descripcion")}
+              size="small"
+            />
+          );
+        }
+      },
+      sortable: true,
+      maxWidth: "120px",
+    },
+    {
+      name: labelListarSecciones.estado,
       cell: (row) => {
         if (currentEdit != row.rowIndex) return <Status status={row.estado} />;
         else {
           return (
             <Controller
               name="estado"
-              control={controlCurso} // Pasamos el control de useFormContext o useForm
+              control={controlSeccion} // Pasamos el control de useFormContext o useForm
               defaultValue={row.estado} // Valor por defecto cuando se inicia la edición
               render={({ field }) => (
                 <TextField
@@ -188,47 +219,7 @@ const TablaGestionarCursos = () => {
         return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
       },
       sortable: true,
-      maxWidth: '130px'
-    },
-    {
-      name: labelListarCursos.docente,
-      cell: (row) => {
-        const { selectUser, setSelectUser } = useSearchUsers();
-
-        useEffect(() => {
-          if (selectUser && selectUser?.nombreCompleto)
-            setValuesCurso("docente.id", (selectUser?.id));
-          setValuesCurso("docente.nombre", selectUser?.nombreCompleto!!);
-        }, [selectUser]);
-
-        if (currentEdit != row.rowIndex) {
-          if (row.docente == null)
-            return <Chip icon={<InfoIcon />} label={"Docente sin asignar"} />;
-          else {
-            return (
-              <Chip
-                sx={{ width: 150 }}
-                icon={<SchoolIcon />}
-                color="info"
-                label={row.docente.nombre}
-              />
-            );
-          }
-        } else {
-          return (
-            <SearchUsers
-              selectUser={selectUser}
-              setSelectUser={setSelectUser}
-              users={docentes}
-            />
-          );
-        }
-      },
-      sortFunction: (rowA, rowB) => {
-        return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
-      },
-      sortable: true,
-      maxWidth: '250px'
+      maxWidth: "130px",
     },
     {
       cell: (row) => {
@@ -267,8 +258,7 @@ const TablaGestionarCursos = () => {
         return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
       },
       sortable: true,
-      maxWidth: '250px'
-
+      maxWidth: "250px",
     },
   ];
 
@@ -300,7 +290,7 @@ const TablaGestionarCursos = () => {
   };
 
   const conditionalRowStyles: ConditionalStyles<
-    CursoTabla & { rowIndex: number }
+    Seccion & { rowIndex: number }
   >[] = [
     {
       when: (row) => row.rowIndex % 2 !== 0, // Filas impares
@@ -315,23 +305,15 @@ const TablaGestionarCursos = () => {
   ];
 
   const dataConIndice = useMemo(() => {
-    const cursos = watch("cursos") ?? [];
-    return cursos.map((curso, index) => ({
-      ...adaptCursoToCursoTabla(curso),
+    const secciones = watch("secciones") ?? [];
+    return secciones.map((seccion, index) => ({
+      ...seccion,
       rowIndex: index,
     }));
-  }, [watch("cursos"), currentEdit]);
+  }, [watch("secciones"), currentEdit]);
 
   return (
     <>
-      {errorGetDocentes && (
-        <AlertDialog
-          open={openGetDocentes}
-          handleAccept={handleAlertCloseGetDocentes}
-          title="Obtener docentes"
-          textBody={messageGetDocentes}
-        />
-      )}
       <form onSubmit={(e) => e.preventDefault()}>
         <DataTable
           columns={columns}
@@ -349,11 +331,11 @@ const TablaGestionarCursos = () => {
             />
           </Box>
         </Stack>
-        {errors?.cursos &&
-          Array.isArray(errors.cursos) &&
-          errors.cursos.map((cursoError, index) => (
+        {errors?.secciones &&
+          Array.isArray(errors.secciones) &&
+          errors.secciones.map((seccionError, index) => (
             <div key={index}>
-              {Object.entries(cursoError).map(([field, error]) => (
+              {Object.entries(seccionError).map(([field, error]) => (
                 <Alert severity="error" key={`${index}-${field}`}>
                   {`${field}: ${(error as FieldError)?.message || "Error desconocido"}`}
                 </Alert>
@@ -365,4 +347,4 @@ const TablaGestionarCursos = () => {
   );
 };
 
-export default TablaGestionarCursos;
+export default TablaGestionarSecciones;

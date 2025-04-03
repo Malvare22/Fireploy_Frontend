@@ -91,6 +91,12 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
                 navigate(rutasMaterias.verCurso.replace(":idCurso", row.id))
               }
             />
+            <ActionButton
+              mode={actionButtonTypes.editar}
+              onClick={() =>
+                navigate(rutasMaterias.editarCurso.replace(":idCurso", row.id))
+              }
+            />
             {row.estado == "A" ? (
               <ActionButton
                 sx={{ color: theme.palette.error.main }}

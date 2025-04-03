@@ -18,7 +18,7 @@ export const postCreateCursoService = async (
 
   const body = {
     descripcion: data.descripcion,
-    docenteId: data.docente?.id ? parseInt(data.docente.id) : null,
+    docenteId: data.docente?.id ? (data.docente.id) : null,
     estado: data.estado,
     grupo: data.grupo,
     materiaId: idMateria,

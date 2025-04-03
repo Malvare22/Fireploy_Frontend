@@ -7,7 +7,7 @@ export const patchEditCurso = async (token: string, data: Curso) => {
   type Body = {
     descripcion: string;
     estado: string;
-    docente: string | null;
+    docente: number | null;
   };
 
   const body: Body = {

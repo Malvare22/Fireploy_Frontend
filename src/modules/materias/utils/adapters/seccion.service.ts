@@ -1,15 +1,14 @@
 import { adaptarFechaBackend } from "@modules/general/utils/fechas";
-import { EstadoMateria } from "@modules/materias/types/materia";
-import { SeccionCurso } from "@modules/materias/types/seccion";
-import { SeccionService } from "@modules/materias/types/seccion.services";
+import { SeccionesService } from "@modules/materias/types/curso.service";
+import { Materia } from "@modules/materias/types/materia";
+import { Seccion } from "@modules/materias/types/seccion";
 
-export function adaptarSeccionServiceASeccion(
-  seccion: SeccionService
-): SeccionCurso {
+export function adaptSeccionService(
+  seccion: SeccionesService
+): Seccion {
   return {
-    cursoId: seccion.cursoId,
     descripcion: seccion.descripcion,
-    estado: seccion.estado as EstadoMateria,
+    estado: seccion.estado as Materia['estado'],
     fechaDeCierre: adaptarFechaBackend(seccion.fecha_fin),
     id: seccion.id,
     fechaDeInicio: adaptarFechaBackend(seccion.fecha_inicio),
@@ -17,16 +16,3 @@ export function adaptarSeccionServiceASeccion(
   };
 }
 
-export function adaptarSeccionASeccionService(
-  seccion: SeccionCurso
-): SeccionService {
-  return {
-    cursoId: seccion.cursoId,
-    descripcion: seccion.descripcion,
-    estado: seccion.estado,
-    fecha_fin: seccion.fechaDeCierre,
-    id: seccion.id,
-    fecha_inicio: seccion.fechaDeInicio,
-    titulo: seccion.titulo,
-  };
-}

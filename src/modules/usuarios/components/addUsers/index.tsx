@@ -1,7 +1,5 @@
 import AlertDialog from "@modules/general/components/alertDialog";
 import GeneralButton from "@modules/general/components/button";
-import Modal from "@modules/general/components/modal";
-import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import SearchUsers from "@modules/general/components/searchUsers";
 import {
   useSearchUsers,
@@ -33,6 +31,7 @@ type Props = {
   handleAccept: () => void,
   handleCancel: () => void
 };
+
 const AddUsers: React.FC<Props> = ({
   typeUsers,
   selectUsers,

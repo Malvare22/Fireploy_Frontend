@@ -11,6 +11,7 @@ export type CursoService = {
   materia: MateriaService;
   docente: UsuarioService | null;
   estudiantes: UsuarioService[];
+  secciones: SeccionesService[]
 };
 
 export type SeccionesService = {
@@ -20,4 +21,6 @@ export type SeccionesService = {
   fecha_inicio: string;
   fecha_fin: string;
   estado: string;
+  proyectos: number[];
+
 };
