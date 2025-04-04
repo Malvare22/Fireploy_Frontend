@@ -54,6 +54,7 @@ const TablaGestionarCursos = () => {
     formState: { errors },
     getValues,
     setValue,
+    watch
   } = useFormContext<Materia>();
 
   const {

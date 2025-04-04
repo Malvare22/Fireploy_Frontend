@@ -8,14 +8,12 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import GeneralButton from "../../button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { useNavigate } from "react-router-dom";
 import { rutasGeneral } from "@modules/general/router/router";
-import DrawerCustom from "./drawer";
-import AccountMenu from "./accountMenu";
-import { AccountContext } from "@modules/general/context/accountContext";
+
 
 const pages = ["Inicio", "Iniciar Sesión", "Registrarse"];
 
@@ -44,22 +42,14 @@ function NavbarPrelogin() {
     setAnchorElUser(null);
   };
 
-  const localUser = useContext(AccountContext)?.localUser
-
-  useEffect(()=> {
-    if(localUser) setSession(true)
-      else setSession(false)
-  }, [localUser])
-
   const navigate = useNavigate();
 
   return (
     <AppBar position="fixed">
-      <Container maxWidth="xl" sx={{paddingY: 1}}>
+      <Container maxWidth="xl" sx={{ paddingY: 1 }}>
         <Toolbar disableGutters>
           {/* <Box component={'img'} src={getImage['logo_fireploy'].ruta} alt={getImage['logo_fireploy'].nombre} sx={{width: 48, height: 48}}/> */}
           {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
-          {session && <DrawerCustom/>}
 
           <Typography
             variant="h6"
@@ -79,7 +69,7 @@ function NavbarPrelogin() {
             FIREPLOY
           </Typography>
 
-          {!session &&<Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -90,7 +80,7 @@ function NavbarPrelogin() {
             >
               <MenuIcon />
             </IconButton>
-             <Menu
+            <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
@@ -112,7 +102,7 @@ function NavbarPrelogin() {
                 </MenuItem>
               ))}
             </Menu>
-          </Box>}
+          </Box>
           <Typography
             variant="h5"
             noWrap
@@ -131,7 +121,7 @@ function NavbarPrelogin() {
           >
             FIREPLOY
           </Typography>
-        {!session && <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page}
@@ -141,25 +131,23 @@ function NavbarPrelogin() {
                 {page}
               </Button>
             ))}
-          </Box>}
+          </Box>
           <Box
             sx={{
               flexGrow: 1,
-              display: 'flex',
+              display: "flex",
               justifyContent: "end",
             }}
           >
-             <Box>
-
-             {session ? <AccountMenu/> : <GeneralButton
+            <Box>
+              <GeneralButton
                 mode={buttonTypes.login}
                 color={"secondary"}
                 onClick={() => navigate(rutasGeneral.login)}
-              />}
+              />
+            </Box>
           </Box>
-           
-          </Box>
-         
+
           {/* <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -191,7 +179,6 @@ function NavbarPrelogin() {
               ))}
             </Menu>
           </Box> */}
-         
         </Toolbar>
       </Container>
     </AppBar>
