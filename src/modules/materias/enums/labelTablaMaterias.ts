@@ -1,5 +1,3 @@
-import { obtenerEstadoMateria } from "../utils/map.materias";
-
 export enum labelTablaMaterias{
     idMateria = 'Id Materia',
     nombre = 'Nombre',

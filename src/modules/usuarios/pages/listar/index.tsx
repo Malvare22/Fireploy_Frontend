@@ -22,7 +22,7 @@ import { useNavigate } from "react-router";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 
 function ListarUsuarios() {
-  const token = useContext(AccountContext).localUser?.token;
+  const token = useContext(AccountContext)?.localUser.token ?? '';
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
 
   // 🔹 Estado temporal para capturar la entrada del usuario

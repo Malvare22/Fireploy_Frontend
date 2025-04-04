@@ -12,7 +12,7 @@ import { useParams } from "react-router";
 function GestionarPerfil() {
   const { id } = useParams();
 
-  const token = useContext(AccountContext).localUser?.token;
+  const token = useContext(AccountContext)?.localUser.token;
 
   const [usuario, setUsuario] = useState<Usuario | undefined>(undefined);
 

@@ -1,5 +1,5 @@
 import { RouterProvider } from "react-router-dom";
-import { PaletteMode, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import { useEffect, useState } from "react";
 import { getTheme } from "./themes";
 import { router } from "./router/router";
@@ -28,8 +28,6 @@ function App(): JSX.Element {
     accountInformationTemplate
   );
 
-  const [mode, setMode] = useState<PaletteMode | undefined>(undefined);
-
   /**
    * Efecto que escucha cambios en el almacenamiento local y actualiza la información del usuario en el estado.
    * Se ejecuta al montar el componente y cada vez que cambia el almacenamiento local.
@@ -45,14 +43,6 @@ function App(): JSX.Element {
           localStorage.getItem("ACCOUNT") as string
         ) as AccountInformation;
         setLocalUser(user);
-      }
-
-      if (localStorage.getItem("MODE")) {
-        const colorMode = localStorage.getItem("MODE") as PaletteMode;
-        setMode(colorMode);
-      } else {
-        localStorage.setItem("MODE", "light");
-        setMode("light");
       }
     };
 

@@ -1,17 +1,14 @@
 import AlertDialog from "@modules/general/components/alertDialog";
-import { ProjectCardAvatar } from "@modules/general/components/projectCardAvatar";
 import { AccountContext } from "@modules/general/context/accountContext";
 import useQuery from "@modules/general/hooks/useQuery";
 import CardSeccion from "@modules/materias/components/cardSeccion";
-import { labelCardCurso } from "@modules/materias/enums/labelCardCurso";
 import { LabelCurso } from "@modules/materias/enums/labelCurso";
 import { getCursoById } from "@modules/materias/services/get.curso";
 import { Curso } from "@modules/materias/types/curso";
 import { CursoService } from "@modules/materias/types/curso.service";
 import { exampleSecciones } from "@modules/materias/types/seccion";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
-import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
-import { Card, Grid2, Stack, Typography, useTheme } from "@mui/material";
+import { Card, Grid2, Stack, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 
@@ -79,30 +76,30 @@ function VerInformacionCurso() {
   );
 }
 
-type FrameDocenteProps = {
-  docente: UsuarioPortafolioCard;
-};
-const FrameDocente: React.FC<FrameDocenteProps> = ({ docente }) => {
-  const theme = useTheme();
+// type FrameDocenteProps = {
+//   docente: UsuarioPortafolioCard;
+// };
+// const FrameDocente: React.FC<FrameDocenteProps> = ({ docente }) => {
+//   const theme = useTheme();
 
-  return (
-    <Card
-      sx={{
-        height: "auto",
-        padding: 2,
-        color: "white",
-        backgroundColor: theme.palette.terciary.main,
-      }}
-    >
-      <Stack>
-        <Typography variant="h5">{labelCardCurso.docente}</Typography>
-        <Stack>
-          <ProjectCardAvatar usuario={docente} sx={{ width: 64, height: 64 }} />
-          <Typography variant="h6">{docente.nombres}</Typography>
-        </Stack>
-      </Stack>
-    </Card>
-  );
-};
+//   return (
+//     <Card
+//       sx={{
+//         height: "auto",
+//         padding: 2,
+//         color: "white",
+//         backgroundColor: theme.palette.terciary.main,
+//       }}
+//     >
+//       <Stack>
+//         <Typography variant="h5">{labelCardCurso.docente}</Typography>
+//         <Stack>
+//           <ProjectCardAvatar usuario={docente} sx={{ width: 64, height: 64 }} />
+//           <Typography variant="h6">{docente.nombres}</Typography>
+//         </Stack>
+//       </Stack>
+//     </Card>
+//   );
+// };
 
 export default VerInformacionCurso;

@@ -3,27 +3,21 @@ import {
   proyecto2,
   ProyectoCard,
 } from "@modules/proyectos/types/proyecto.card";
-import { Usuario, usuarioEjemplo } from "@modules/usuarios/types/usuario";
+import { usuarioEjemplo } from "@modules/usuarios/types/usuario";
 import { showSocialNetworks } from "@modules/usuarios/utils/showSocialNetworks";
 import {
   Box,
-  Button,
   Card,
-  Divider,
   FormControl,
   Grid2,
   InputLabel,
   MenuItem,
-  Palette,
-  PaletteMode,
   Select,
   Stack,
-  TextField,
   Typography,
-  useTheme,
 } from "@mui/material";
 
-import React, { useContext, useState } from "react";
+import  { useState } from "react";
 import ProjectCard from "@modules/general/components/projectCard";
 import { labelPortafolio } from "@modules/usuarios/enum/labelPortafolio";
 import useSpringModal from "@modules/general/hooks/useSpringModal";
@@ -31,8 +25,8 @@ import SpringModal from "@modules/general/components/springModal";
 import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyectoPortafolio";
 import { useFilters } from "@modules/general/hooks/useFilters";
 import useOrderSelect, { Order } from "@modules/general/hooks/useOrderSelect";
-import { ShowGoal } from "@modules/general/components/PortafolioCard";
 import { labelSelects } from "@modules/general/enums/labelSelects";
+import { ShowGoal } from "@modules/general/components/portafolioCard";
 
 // interface Props {
 //   usuario: Usuario;
@@ -55,21 +49,7 @@ const Portafolio = () => {
 
   const { handleClose, handleOpen, open } = useSpringModal();
 
-  type Filtros = {
-    backend: string;
-    frontend: string;
-    dataBase: string;
-    semestre: string;
-  };
-
-  const [filtros, setFiltros] = useState<Filtros>({
-    backend: "",
-    frontend: "",
-    dataBase: "",
-    semestre: "",
-  });
-
-  const { filterData, toggleFilter } = useFilters<ProyectoCard>();
+  const { filterData } = useFilters<ProyectoCard>();
 
   const handleCard = (proyecto: ProyectoCard) => {
     setSelectProyecto(proyecto);
@@ -85,7 +65,6 @@ const Portafolio = () => {
     <Box>
       <SpringModal
         handleClose={handleClose}
-        handleOpen={handleOpen}
         open={open}
       >
         {selectProyecto != undefined && (

@@ -85,7 +85,7 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
   const columns: TableColumn<Usuario & { rowIndex: number }>[] = [
     {
       name: labelUsuario.id,
-      selector: (row) => row.id,
+      selector: (row) => row.id ?? 0,
       width: "70px",
       sortable: true,
     },
@@ -97,7 +97,7 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
     {
       name: labelUsuario.rol,
       cell: (row) => {
-        const label = getUserTypes.get(row.tipo);
+        const label = getUserTypes.get(row.tipo ?? 'E');
         switch (row.tipo) {
           case "A":
             return (
@@ -222,7 +222,7 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
             mode={actionButtonTypes.ver}
             onClick={() =>
               navigate(
-                rutasUsuarios.modificarPerfil.replace(":id", row.id.toString())
+                rutasUsuarios.modificarPerfil.replace(":id", row.id!!.toString())
               )
             }
           />

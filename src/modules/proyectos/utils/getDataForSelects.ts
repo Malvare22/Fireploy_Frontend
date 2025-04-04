@@ -1,10 +1,6 @@
 import { Proyecto } from "../types/proyecto.tipo";
 
 export function getDataForSelects(projects: Proyecto[]) {
-  type Output = {
-    backends: string[];
-    frontends: string[];
-  };
 
   let backends: Set<string> = new Set();
   let frontends: Set<string> = new Set();

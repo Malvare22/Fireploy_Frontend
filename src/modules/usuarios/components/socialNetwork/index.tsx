@@ -1,4 +1,4 @@
-import { RedSocialUsuario } from "@modules/usuarios/types/usuario.redSocial";
+import { RedSocialUsuario } from "@modules/usuarios/types/usuario";
 import {
   Facebook,
   Instagram,

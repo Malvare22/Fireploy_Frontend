@@ -1,18 +1,11 @@
-import AlertDialog from "@modules/general/components/alertDialog";
-import { AccountContext } from "@modules/general/context/accountContext";
-import useQuery from "@modules/general/hooks/useQuery";
-import { getCursosMateria } from "@modules/materias/services/get.curso";
-import { MateriaService } from "@modules/materias/types/materia.service";
 import { labelListarPortafolios } from "@modules/usuarios/enum/labelListarPortafolios";
 import { UsuarioPortafolioCard, usuarioPrueba } from "@modules/usuarios/types/usuario.portafolio";
-import { Alert, Box, Grid2, InputAdornment, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
-import { useContext, useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import {  Grid2, InputAdornment, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import {  useState } from "react";
 import SearchIcon from '@mui/icons-material/Search';
 import useOrderSelect from "@modules/general/hooks/useOrderSelect";
 import { labelSelects } from "@modules/general/enums/labelSelects";
-import PortafolioCard from "@modules/general/components/PortafolioCard";
-import { UsuarioService } from "@modules/usuarios/types/services.usuario";
+import PortafolioCard from "@modules/general/components/portafolioCard";
 
 function ExplorarPortafolios() {
   // const { id } = useParams();
@@ -26,7 +19,7 @@ function ExplorarPortafolios() {
   //     "Obtener Cursos"
   //   );
 
-  const [usuarios, setUsuarios] = useState<UsuarioPortafolioCard[]>([]);
+  const [_usuarios, _setUsuarios] = useState<UsuarioPortafolioCard[]>([]);
 
   // useEffect(() => {
   //   if (token && id) {
@@ -40,17 +33,17 @@ function ExplorarPortafolios() {
   //   }
   // }, [responseData]);
 
-    const {handleRequestSort, stableSort, setOrderBy} = useOrderSelect();
+    const {handleRequestSort, setOrderBy} = useOrderSelect();
 
     const [search, setSearch] = useState<string>("");
   
-    const filterSearchData = useMemo(() => {
-      // if (search != "")
-      //   return stableSort(usuarios).filter((usuario) =>
-      //     usuario[''].toLowerCase().includes(search.toLowerCase())
-      //   );
-      return stableSort(usuarios);
-    }, [search, usuarios, stableSort]);
+    // const _filterSearchData = useMemo(() => {
+    //   // if (search != "")
+    //   //   return stableSort(usuarios).filter((usuario) =>
+    //   //     usuario[''].toLowerCase().includes(search.toLowerCase())
+    //   //   );
+    //   return stableSort(usuarios);
+    // }, [search, usuarios, stableSort]);
 
   return (
     <>

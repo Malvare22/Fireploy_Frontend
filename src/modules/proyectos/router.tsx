@@ -1,4 +1,3 @@
-import LayoutStandard from "@modules/general/layouts/auth";
 import { RouteObject } from "react-router-dom";
 import VerProyecto from "./pages/ver";
 import CrearProyecto from "./pages/crear";

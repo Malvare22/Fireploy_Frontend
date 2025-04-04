@@ -50,7 +50,6 @@ function VistaCrearMateria() {
   });
 
   const {
-    formState: { errors },
     setValue,
     getValues,
     watch,
