@@ -1,25 +1,39 @@
 import { labelListarPortafolios } from "@modules/usuarios/enum/labelListarPortafolios";
-import { UsuarioPortafolioCard, usuarioPrueba } from "@modules/usuarios/types/usuario.portafolio";
+import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import {  Grid2, InputAdornment, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
-import {  useState } from "react";
+import {  useContext, useEffect, useState } from "react";
 import SearchIcon from '@mui/icons-material/Search';
 import useOrderSelect from "@modules/general/hooks/useOrderSelect";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import PortafolioCard from "@modules/general/components/portafolioCard";
+import { AccountContext } from "@modules/general/context/accountContext";
+import { UsuarioService } from "@modules/usuarios/types/services.usuario";
+import { getUsuariosPorTipo } from "@modules/usuarios/services/get.usuarios.[tipo]";
+import useQuery from "@modules/general/hooks/useQuery";
+import { adaptarUsuarioAUsuarioCardPortafolio, adapterUsuario } from "@modules/usuarios/utils/adaptar.usuario";
 
 function ExplorarPortafolios() {
-  // const { id } = useParams();
 
-  // const token = useContext(AccountContext).localUser?.token;
+  const token = useContext(AccountContext)?.localUser?.token;
 
-  // const { error, handleAlertClose, initQuery, message, open, responseData } =
-  //   useQuery<UsuarioService>(
-  //     () => getCursosMateria(token!!, id!!),
-  //     false,
-  //     "Obtener Cursos"
-  //   );
+  const { initQuery, responseData } =
+    useQuery<UsuarioService[]>(
+      () => getUsuariosPorTipo('todos', token!!),
+      false,
+      "Obtener Usuarios"
+    );
 
-  const [_usuarios, _setUsuarios] = useState<UsuarioPortafolioCard[]>([]);
+  const [usuarios, setUsuarios] = useState<UsuarioPortafolioCard[]>([]);
+
+    useEffect(() => {
+     if(token) initQuery();
+    }, [token]);
+
+    useEffect(() => {
+      if(responseData){
+        setUsuarios(responseData.map((usuario) => adaptarUsuarioAUsuarioCardPortafolio(adapterUsuario(usuario))))
+      };
+     }, [responseData]);
 
   // useEffect(() => {
   //   if (token && id) {
@@ -77,7 +91,6 @@ function ExplorarPortafolios() {
           spacing={1}
         >
           <TextField
-            label="Buscar Materia"
             slotProps={{
               input: {
                 endAdornment: (
@@ -124,13 +137,12 @@ function ExplorarPortafolios() {
             </MenuItem>
           </Select>
         </Stack>
-        <Grid2 container spacing={5} paddingX={{ md: 10 }} justifyContent={'center'}>
-          <Grid2 size={8}><PortafolioCard usuario={usuarioPrueba}/></Grid2>
-          {/* {filterSearchData.map((materia, key) => (
-            <Grid2 size={{ xl: 4, sm: 6, xs: 12 }}>
-              <CardMateria materia={materia} key={key} />
+        <Grid2 container spacing={5} display={'flex'} justifyContent={'center'}>
+          {usuarios.map((usuario, key) => (
+            <Grid2 size={{ xl: 8, xs: 10 }}>
+              <PortafolioCard usuario={usuario} key={key} />
             </Grid2>
-          ))} */}
+          ))}
         </Grid2>
       </Stack>
     </>

@@ -3,13 +3,17 @@ import React from "react";
 import AnimatedCard from "../animatedCard";
 import { Logro, UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import { ProjectCardAvatar } from "../projectCardAvatar";
+import { getUserTypes } from "@modules/usuarios/utils/usuario.map";
+import { Usuario } from "@modules/usuarios/types/usuario";
+import { useNavigate } from "react-router";
+import { rutasUsuarios } from "@modules/usuarios/router/router";
 
 type Props = {
   usuario: UsuarioPortafolioCard;
 };
 
 /**
- * PortafolioCard component that displays user profile information, 
+ * PortafolioCard component that displays user profile information,
  * including name, role, and achievements.
  *
  * @param {Props} props - Component props.
@@ -18,8 +22,11 @@ type Props = {
  * @returns {JSX.Element} A styled user portfolio card.
  */
 const PortafolioCard: React.FC<Props> = ({ usuario }) => {
+
+  const navigate = useNavigate();
+
   return (
-    <AnimatedCard sx={{ padding: 2 }}>
+    <AnimatedCard sx={{ padding: 2, cursor: 'pointer' }} onClick={() => navigate(rutasUsuarios.portafolio.replace(':id', usuario.id))}>
       <Box
         sx={{
           display: "flex",
@@ -48,7 +55,9 @@ const PortafolioCard: React.FC<Props> = ({ usuario }) => {
 
             {/* User Role */}
             <Box sx={{ textAlign: { xs: "center", md: "left" } }}>
-              <Typography variant="body1">{usuario.rol}</Typography>
+              <Typography variant="body1">
+                {getUserTypes.get((usuario.rol as Usuario["tipo"]) ?? "E")}
+              </Typography>
             </Box>
           </Stack>
         </Box>
@@ -81,19 +90,19 @@ export const ShowGoal: React.FC<ShowGoalProps> = ({ logro }) => {
         color: "white",
         padding: 1,
         borderRadius: 2,
+        maxWidth: 170,
       }}
       direction={"column"}
-      alignItems={"center"}
     >
       {/* Achievement Title */}
-      <Box>
-        <Typography variant="body2">{logro.titulo}</Typography>
-      </Box>
+      <Typography variant="body2" textAlign={"center"}>
+        {logro.titulo}
+      </Typography>
 
       {/* Achievement Value */}
-      <Box>
-        <Typography variant="body1">{logro.valor}</Typography>
-      </Box>
+      <Typography variant="h6" textAlign={"center"}>
+        {logro.valor}
+      </Typography>
     </Stack>
   );
 };

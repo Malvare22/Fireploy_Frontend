@@ -16,75 +16,162 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { rutasMaterias } from "@modules/materias/router/router";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { rutasProyectos } from "@modules/proyectos/router";
-import { AccountContext } from "@modules/general/context/accountContext";
+import { AccountContext, AccountInformation } from "@modules/general/context/accountContext";
 import CastForEducationIcon from "@mui/icons-material/CastForEducation";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import StorageIcon from "@mui/icons-material/Storage";
 import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
+import { BoxesIcon, PersonLinesFillIcon } from "../customIcons";
+import PlagiarismIcon from "@mui/icons-material/Plagiarism";
+import PersonSearchIcon from "@mui/icons-material/PersonSearch";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 
 /**
- * Navigation menu configuration for **Student users**.
+ * Mi perfil y cerrar sesión X
+ * Portafolios (Explorar y Mi Portafolio) X
+ * Proyectos (Mis Proyectos (Mis Repos y Bases de datos), explorar proyectos), solicitudes integración (GENERAL) X
+ * Materias (Cursos (Mis Cursos, Explorar Cursos)), listar materias y crear materias
+ * Usuarios (Solicitudes, listar usuarios, y crear usuario) X
  */
-const navigationStudent: Navigation = [
-  {
-    title: "Profile",
-    icon: <AccountCircleIcon />,
-    children: [
-      { segment: rutasUsuarios.perfil as string, title: "Edit Profile", icon: <ManageAccountsIcon /> },
-      { segment: rutasUsuarios.logout as string, title: "Logout", icon: <PowerSettingsNewIcon /> },
-    ],
-  },
-  { kind: "divider" },
-  { segment: rutasMaterias.explorar as string, title: "Subjects", icon: <MenuBookIcon /> },
-  { segment: rutasProyectos.listar as string, title: "Projects", icon: <AccountTreeIcon /> },
-  { segment: rutasUsuarios.explorarPortafolios as string, title: "Portfolios", icon: <ContactMailIcon /> },
-];
-
-/**
- * Navigation menu configuration for **Admin users**.
- */
-const navigationAdmin: Navigation = [
-  {
-    title: "Profile",
-    icon: <AccountCircleIcon />,
-    children: [
-      { segment: rutasUsuarios.perfil as string, title: "Edit Profile", icon: <ManageAccountsIcon /> },
-      { segment: rutasUsuarios.logout as string, title: "Logout", icon: <PowerSettingsNewIcon /> },
-    ],
-  },
-  { kind: "divider" },
-  { segment: rutasUsuarios.explorarPortafolios as string, title: "Portfolios", icon: <ContactMailIcon /> },
-  { kind: "divider" },
-  {
-    title: "Users",
-    icon: <SupervisedUserCircleIcon />,
-    children: [
-      { segment: rutasUsuarios.listarUsuarios as string, title: "List Users", icon: <PeopleIcon /> },
-      { segment: rutasUsuarios.agregarUsuario as string, title: "Add User", icon: <GroupAddIcon /> },
-      { segment: rutasUsuarios.solicitudes as string, title: "Teacher Role Requests", icon: <CastForEducationIcon /> },
-    ],
-  },
-  {
-    title: "Projects",
-    icon: <AccountTreeIcon />,
-    children: [
-      { segment: rutasProyectos.listar as string, title: "Explore Projects", icon: <AccountTreeIcon /> },
-      { segment: rutasProyectos.repositorios as string, title: "Repositories", icon: <GitHubIcon /> },
-      { segment: rutasProyectos.basesDeDatos as string, title: "Databases", icon: <StorageIcon /> },
-    ],
-  },
-  {
-    title: "Subjects",
-    icon: <MenuBookIcon />,
-    children: [
-      { segment: rutasMaterias.explorar as string, title: "Explore", icon: <AutoStoriesIcon /> },
-      { segment: rutasMaterias.listarMaterias as string, title: "List", icon: <CollectionsBookmarkIcon /> },
-      { segment: rutasMaterias.crearMateria as string, title: "Create", icon: <BookmarkAddIcon /> },
-    ],
-  },
-];
+function getNavigationElements(userInformation: AccountInformation): Navigation {
+  return [
+    {
+      title: "Perfil",
+      icon: <AccountCircleIcon />,
+      children: [
+        {
+          segment: rutasUsuarios.perfil as string,
+          title: "Editar Perfil",
+          icon: <ManageAccountsIcon />,
+        },
+        {
+          segment: rutasUsuarios.logout as string,
+          title: "Cerrar Sesión",
+          icon: <PowerSettingsNewIcon />,
+        },
+      ],
+    },
+    { kind: "divider" },
+    {
+      title: "Portfolios",
+      icon: <ContactMailIcon />,
+      children: [
+        {
+          segment: rutasUsuarios.portafolio.replace(":id", userInformation.id.toString()) as string,
+          title: "Mi Portafolio",
+          icon: <PersonLinesFillIcon sx={{color:'black'}}/>,
+        },
+        {
+          segment: rutasUsuarios.explorarPortafolios as string,
+          title: "Explorar Portafolios",
+          icon: <PersonSearchIcon />,
+        },
+      ],
+    },
+    ...(userInformation.tipo == "A"
+      ? [
+          {
+            title: "Usuarios",
+            icon: <SupervisedUserCircleIcon />,
+            children: [
+              {
+                segment: rutasUsuarios.listarUsuarios as string,
+                title: "Listar Usuarios",
+                icon: <PeopleIcon />,
+              },
+              {
+                segment: rutasUsuarios.agregarUsuario as string,
+                title: "Agregar Usuarios",
+                icon: <GroupAddIcon />,
+              },
+              {
+                segment: rutasUsuarios.solicitudes as string,
+                title: "Solicitudes de promover rol",
+                icon: <CastForEducationIcon />,
+              },
+            ],
+          },
+        ]
+      : []),
+    { kind: "divider" },
+    {
+      title: "Proyectos",
+      icon: <AccountTreeIcon />,
+      children: [
+        {
+          title: "Mis Proyectos",
+          icon: <BoxesIcon />,
+          children: [
+            {
+              segment: rutasProyectos.repositorios as string,
+              title: "Repositorios",
+              icon: <GitHubIcon />,
+            },
+            {
+              segment: rutasProyectos.basesDeDatos as string,
+              title: "Bases de Datos",
+              icon: <StorageIcon />,
+            },
+          ],
+        },
+        {
+          segment: rutasProyectos.listar as string,
+          title: "Explorar Proyectos",
+          icon: <PlagiarismIcon />,
+        },
+      ],
+    },
+    ...(userInformation.tipo != "A"
+      ? [
+          {
+            title: "Cursos",
+            icon: <MenuBookIcon />,
+            children: [
+              {
+                segment: rutasMaterias.explorar as string,
+                title: "Explorar Materias y Cursos",
+                icon: <AutoStoriesIcon />,
+              },
+              {
+                segment: rutasMaterias.listarMaterias as string,
+                title: "Explorar Materias y Cursos",
+                icon: <CollectionsBookmarkIcon />,
+              },
+              {
+                segment: rutasMaterias.crearMateria as string,
+                title: "Mis Cursos",
+                icon: <LibraryBooksIcon />,
+              },
+            ],
+          },
+        ]
+      : [
+          {
+            title: "Materias",
+            icon: <MenuBookIcon />,
+            children: [
+              {
+                segment: rutasMaterias.explorar as string,
+                title: "Explorar Materias y Cursos",
+                icon: <AutoStoriesIcon />,
+              },
+              {
+                segment: rutasMaterias.listarMaterias as string,
+                title: "Listar Materias",
+                icon: <CollectionsBookmarkIcon />,
+              },
+              {
+                segment: rutasMaterias.crearMateria as string,
+                title: "Crear Materia",
+                icon: <BookmarkAddIcon />,
+              },
+            ],
+          },
+        ]),
+  ];
+}
 
 /**
  * Custom hook to manage the router logic for the **dashboard navigation**.
@@ -113,7 +200,7 @@ function useDemoRouter(): Router {
 }
 
 /**
- * **Dashboard Layout Component**  
+ * **Dashboard Layout Component**
  * Provides a structured layout for the dashboard, including:
  * - **Navigation** (Admin/Student based on user role)
  * - **Routing Management**
@@ -133,9 +220,9 @@ export default function DashboardLayoutBasic(props: any) {
 
   return (
     <>
-      {localUser?.tipo && (
+      {localUser && (
         <AppProvider
-          navigation={localUser.tipo == "A" ? navigationAdmin : navigationStudent}
+          navigation={getNavigationElements(localUser)}
           router={router}
           theme={theme}
           branding={{

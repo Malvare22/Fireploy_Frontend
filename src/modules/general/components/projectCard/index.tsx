@@ -1,10 +1,7 @@
 import { Avatar, Box, Card, Stack, Typography } from "@mui/material";
 import AnimatedCard from "../animatedCard";
 import Score from "../score";
-import {
-  proyecto1,
-  ProyectoCard,
-} from "@modules/proyectos/types/proyecto.card";
+import { proyecto1, ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import React from "react";
 import { getImage } from "../../utils/getImage";
 import { ProjectCardMembers } from "../projectCardAvatar";
@@ -18,7 +15,7 @@ type ProjectCardProps = {
 };
 
 /**
- * `ProjectCard` component that dynamically renders either a home-style project card 
+ * `ProjectCard` component that dynamically renders either a home-style project card
  * or a portfolio-style project card based on the `tipo` prop.
  *
  * @param {ProjectCardProps} props - Component props.
@@ -67,9 +64,7 @@ type ProjectCardPortafolioProps = {
  *
  * @returns {JSX.Element} A home-style project card.
  */
-export const ProjectCardHome: React.FC<ProjectCardHomeProps> = ({
-  proyecto,
-}) => {
+export const ProjectCardHome: React.FC<ProjectCardHomeProps> = ({ proyecto }) => {
   return (
     <AnimatedCard
       sx={{
@@ -85,7 +80,7 @@ export const ProjectCardHome: React.FC<ProjectCardHomeProps> = ({
           src={proyecto.imagen}
           alt={proyecto.titulo}
         />
-        
+
         {/* Title and Score */}
         <Box textAlign={"center"}>
           <Typography variant="h4">{proyecto.titulo}</Typography>
@@ -93,20 +88,20 @@ export const ProjectCardHome: React.FC<ProjectCardHomeProps> = ({
         </Box>
 
         {/* Members Section */}
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Typography variant="h6">{labelProjectCard.integrantes}</Typography>
+        <Stack spacing={1} alignItems={"center"}>
+          <Typography variant="body1">{labelProjectCard.integrantes}</Typography>
           <ProjectCardMembers integrantes={proyecto.integrantes} />
-        </Box>
+        </Stack>
 
         {/* Technologies Section */}
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Typography variant="h6">{labelProjectCard.tecnologias}</Typography>
-          <Box>
-            <Avatar src={getImage[proyecto.frontend.imagen].ruta}/>
-            <Avatar src={getImage[proyecto.backend.imagen].ruta}/>
-            <Avatar src={getImage[proyecto.dataBase.imagen].ruta}/>
-          </Box>
-        </Box>
+        <Stack spacing={1} alignItems={"center"}>
+          <Typography variant="body1">{labelProjectCard.tecnologias}</Typography>
+          <Stack direction={"row"} spacing={2}>
+            <Avatar src={getImage[proyecto.frontend.imagen].ruta} />
+            <Avatar src={getImage[proyecto.backend.imagen].ruta} />
+            <Avatar src={getImage[proyecto.dataBase.imagen].ruta} />
+          </Stack>
+        </Stack>
       </Stack>
     </AnimatedCard>
   );
@@ -164,20 +159,20 @@ export const ProjectCardPortafolio: React.FC<ProjectCardPortafolioProps> = ({
           </Box>
 
           {/* Members Section */}
-          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Stack spacing={1} alignItems={"center"}>
             <Typography variant="body1">{labelProjectCard.integrantes}</Typography>
             <ProjectCardMembers integrantes={proyecto.integrantes} />
-          </Box>
+          </Stack>
 
           {/* Technologies Section */}
-          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Stack spacing={1} alignItems={"center"}>
             <Typography variant="body1">{labelProjectCard.tecnologias}</Typography>
-            <Box>
-              <Avatar src={getImage[proyecto.frontend.imagen].ruta}/>
-              <Avatar src={getImage[proyecto.backend.imagen].ruta}/>
-              <Avatar src={getImage[proyecto.dataBase.imagen].ruta}/>
-            </Box>
-          </Box>
+            <Stack direction={"row"} spacing={2}>
+              <Avatar src={getImage[proyecto.frontend.imagen].ruta} />
+              <Avatar src={getImage[proyecto.backend.imagen].ruta} />
+              <Avatar src={getImage[proyecto.dataBase.imagen].ruta} />
+            </Stack>
+          </Stack>
         </Stack>
       </Stack>
     </AnimatedCard>

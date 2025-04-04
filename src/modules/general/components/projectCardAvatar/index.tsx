@@ -1,10 +1,4 @@
-import {
-  Avatar,
-  IconButton,
-  Tooltip,
-  AvatarGroup,
-  SxProps,
-} from "@mui/material";
+import { Avatar, IconButton, Tooltip, AvatarGroup, SxProps, Stack } from "@mui/material";
 import React from "react";
 // import { useNavigate } from "react-router-dom";
 import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
@@ -35,9 +29,7 @@ type ProjectCardMembersProps = {
   integrantes: ProyectoCard["integrantes"];
 };
 
-export const ProjectCardMembers: React.FC<ProjectCardMembersProps> = ({
-  integrantes,
-}) => {
+export const ProjectCardMembers: React.FC<ProjectCardMembersProps> = ({ integrantes }) => {
   if (integrantes.length > 4) {
     return (
       <AvatarGroup max={4}>
@@ -47,7 +39,11 @@ export const ProjectCardMembers: React.FC<ProjectCardMembersProps> = ({
       </AvatarGroup>
     );
   } else
-    return integrantes.map((integrante) => (
-      <ProjectCardAvatar usuario={integrante}/>
-    ));
+    return (
+      <Stack direction={'row'} spacing={2}>
+        {integrantes.map((integrante) => (
+          <ProjectCardAvatar usuario={integrante} />
+        ))}
+      </Stack>
+    );
 };
