@@ -135,12 +135,6 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
                 icon: <AutoStoriesIcon />,
               },
               {
-                segment: rutasMaterias.listarMaterias as string,
-                title: "Explorar Materias y Cursos",
-                icon: <CollectionsBookmarkIcon />,
-              },
-              {
-                segment: rutasMaterias.crearMateria as string,
                 title: "Mis Cursos",
                 icon: <LibraryBooksIcon />,
               },
