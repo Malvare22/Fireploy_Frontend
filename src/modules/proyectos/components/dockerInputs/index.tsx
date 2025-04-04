@@ -2,7 +2,7 @@ import {
   getDockerRepositories,
   getDockerTags,
 } from "@modules/proyectos/services/get.docker.information";
-import { Autocomplete, Grid2, Stack, TextField } from "@mui/material";
+import { Autocomplete, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
 type DockerInputsProps = {

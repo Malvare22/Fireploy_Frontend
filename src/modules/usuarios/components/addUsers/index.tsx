@@ -4,7 +4,7 @@ import SearchUsers from "@modules/general/components/searchUsers";
 import {
   useSearchUsers,
   UsuarioCampoBusqueda,
-} from "@modules/general/components/searchUsers/hook";
+} from "@modules/general/hooks/useSearchUsers";
 import { AccountContext } from "@modules/general/context/accountContext";
 import useQuery from "@modules/general/hooks/useQuery";
 import { buttonTypes } from "@modules/general/types/buttons";

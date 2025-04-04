@@ -20,155 +20,90 @@ import { AccountContext } from "@modules/general/context/accountContext";
 import CastForEducationIcon from "@mui/icons-material/CastForEducation";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import StorageIcon from "@mui/icons-material/Storage";
-import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
-import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
-import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
+import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
+import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 
+/**
+ * Navigation menu configuration for **Student users**.
+ */
 const navigationStudent: Navigation = [
   {
-    title: "Perfil",
+    title: "Profile",
     icon: <AccountCircleIcon />,
     children: [
-      {
-        segment: rutasUsuarios.perfil as string,
-        title: "Configurar Perfil",
-        icon: <ManageAccountsIcon />,
-      },
-      {
-        segment: rutasUsuarios.logout as string,
-        title: "Cerrar Sesión",
-        icon: <PowerSettingsNewIcon />,
-      },
+      { segment: rutasUsuarios.perfil as string, title: "Edit Profile", icon: <ManageAccountsIcon /> },
+      { segment: rutasUsuarios.logout as string, title: "Logout", icon: <PowerSettingsNewIcon /> },
     ],
   },
-  {
-    kind: "divider",
-  },
-  {
-    segment: rutasMaterias.explorar as string,
-    title: "Materias",
-    icon: <MenuBookIcon />,
-  },
-  {
-    segment: rutasProyectos.listar as string,
-    title: "Proyectos",
-    icon: <AccountTreeIcon />,
-  },
-  {
-    segment: rutasUsuarios.explorarPortafolios as string,
-    title: "Portafolios",
-    icon: <ContactMailIcon />,
-  },
+  { kind: "divider" },
+  { segment: rutasMaterias.explorar as string, title: "Subjects", icon: <MenuBookIcon /> },
+  { segment: rutasProyectos.listar as string, title: "Projects", icon: <AccountTreeIcon /> },
+  { segment: rutasUsuarios.explorarPortafolios as string, title: "Portfolios", icon: <ContactMailIcon /> },
 ];
 
+/**
+ * Navigation menu configuration for **Admin users**.
+ */
 const navigationAdmin: Navigation = [
   {
-    title: "Perfil",
+    title: "Profile",
     icon: <AccountCircleIcon />,
     children: [
-      {
-        segment: rutasUsuarios.perfil as string,
-        title: "Configurar Perfil",
-        icon: <ManageAccountsIcon />,
-      },
-      {
-        segment: rutasUsuarios.logout as string,
-        title: "Cerrar Sesión",
-        icon: <PowerSettingsNewIcon />,
-      },
+      { segment: rutasUsuarios.perfil as string, title: "Edit Profile", icon: <ManageAccountsIcon /> },
+      { segment: rutasUsuarios.logout as string, title: "Logout", icon: <PowerSettingsNewIcon /> },
     ],
   },
+  { kind: "divider" },
+  { segment: rutasUsuarios.explorarPortafolios as string, title: "Portfolios", icon: <ContactMailIcon /> },
+  { kind: "divider" },
   {
-    kind: "divider",
-  },
-  {
-    segment: rutasUsuarios.explorarPortafolios as string,
-    title: "Portafolios",
-    icon: <ContactMailIcon />,
-  },
-  {
-    kind: "divider",
-  },
-  {
-    title: "Usuarios",
+    title: "Users",
     icon: <SupervisedUserCircleIcon />,
     children: [
-      {
-        segment: rutasUsuarios.listarUsuarios as string,
-        title: "Listar Usuarios",
-        icon: <PeopleIcon />,
-      },
-      {
-        segment: rutasUsuarios.agregarUsuario as string,
-        title: "Agregar Usuario",
-        icon: <GroupAddIcon />,
-      },
-      {
-        segment: rutasUsuarios.solicitudes as string,
-        title: "Solicitudes de Rol Docente",
-        icon: <CastForEducationIcon />,
-      },
+      { segment: rutasUsuarios.listarUsuarios as string, title: "List Users", icon: <PeopleIcon /> },
+      { segment: rutasUsuarios.agregarUsuario as string, title: "Add User", icon: <GroupAddIcon /> },
+      { segment: rutasUsuarios.solicitudes as string, title: "Teacher Role Requests", icon: <CastForEducationIcon /> },
     ],
   },
   {
-    title: "Proyectos",
+    title: "Projects",
     icon: <AccountTreeIcon />,
     children: [
-      {
-        segment: rutasProyectos.listar as string,
-        title: "Explorar proyectos",
-        icon: <AccountTreeIcon />,
-      },
-      {
-        segment: rutasProyectos.repositorios as string,
-        title: "Repositorios",
-        icon: <GitHubIcon />,
-      },
-      {
-        segment: rutasProyectos.basesDeDatos as string,
-        title: "Bases de Datos",
-        icon: <StorageIcon />,
-      },
+      { segment: rutasProyectos.listar as string, title: "Explore Projects", icon: <AccountTreeIcon /> },
+      { segment: rutasProyectos.repositorios as string, title: "Repositories", icon: <GitHubIcon /> },
+      { segment: rutasProyectos.basesDeDatos as string, title: "Databases", icon: <StorageIcon /> },
     ],
   },
   {
-    title: "Materias",
+    title: "Subjects",
     icon: <MenuBookIcon />,
     children: [
-      {
-        segment: rutasMaterias.explorar as string,
-        title: "Explorar",
-        icon: <AutoStoriesIcon />,
-      },
-      {
-        segment: rutasMaterias.listarMaterias as string,
-        title: "Listar",
-        icon: <CollectionsBookmarkIcon />,
-      },
-      {
-        segment: rutasMaterias.crearMateria as string,
-        title: "Crear",
-        icon: <BookmarkAddIcon />,
-      },
+      { segment: rutasMaterias.explorar as string, title: "Explore", icon: <AutoStoriesIcon /> },
+      { segment: rutasMaterias.listarMaterias as string, title: "List", icon: <CollectionsBookmarkIcon /> },
+      { segment: rutasMaterias.crearMateria as string, title: "Create", icon: <BookmarkAddIcon /> },
     ],
   },
 ];
 
+/**
+ * Custom hook to manage the router logic for the **dashboard navigation**.
+ *
+ * @returns {Router} Custom router object with navigation handling.
+ */
 function useDemoRouter(): Router {
   const navigate = useNavigate();
   const location = useLocation();
 
   React.useEffect(() => {
-    // Solo redirige si la ruta no comienza con /app y no es la raíz
+    // Redirect to "/app" prefix if not already there
     if (location.pathname !== "/" && !location.pathname.startsWith("/app")) {
       navigate("/app" + location.pathname, { replace: true });
     }
   }, [location.pathname, navigate]);
 
   return {
-    pathname: location.pathname.startsWith("/app")
-      ? location.pathname
-      : `/app${location.pathname}`,
+    pathname: location.pathname.startsWith("/app") ? location.pathname : `/app${location.pathname}`,
     searchParams: new URLSearchParams(location.search),
     navigate: (path: string | URL) => {
       const pathStr = String(path);
@@ -177,29 +112,35 @@ function useDemoRouter(): Router {
   };
 }
 
+/**
+ * **Dashboard Layout Component**  
+ * Provides a structured layout for the dashboard, including:
+ * - **Navigation** (Admin/Student based on user role)
+ * - **Routing Management**
+ * - **Theme Configuration**
+ * - **User Authentication Context**
+ *
+ * @component
+ * @param {any} props - Props including children components to render inside the layout.
+ * @returns {JSX.Element} The structured **dashboard layout** with navigation and content.
+ */
 export default function DashboardLayoutBasic(props: any) {
   const router = useDemoRouter();
-
-  // Remove this const when copying and pasting into your project.
-
   const theme = useTheme();
 
+  // Get the logged-in user data from context
   const { localUser } = React.useContext(AccountContext)!!;
 
   return (
     <>
       {localUser?.tipo && (
         <AppProvider
-          navigation={
-            localUser.tipo == "A" ? navigationAdmin : navigationStudent
-          }
+          navigation={localUser.tipo == "A" ? navigationAdmin : navigationStudent}
           router={router}
           theme={theme}
           branding={{
             logo: (
-              <Box
-                sx={{ display: "flex", alignItems: "center", height: "100%" }}
-              >
+              <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
                 <RocketLaunchIcon sx={{ fontSize: 32 }} />
               </Box>
             ),
@@ -207,16 +148,8 @@ export default function DashboardLayoutBasic(props: any) {
             homeUrl: "/toolpad/core/introduction",
           }}
         >
-          <DashboardLayout
-            sx={{
-              "& .MuiListSubheader-root": {
-                fontSize: "4rem",
-              },
-            }}
-          >
-            <Box marginTop={-10} sx={{}}>
-              {props.children}
-            </Box>
+          <DashboardLayout sx={{ "& .MuiListSubheader-root": { fontSize: "4rem" } }}>
+            <Box marginTop={-10}>{props.children}</Box>
           </DashboardLayout>
         </AppProvider>
       )}

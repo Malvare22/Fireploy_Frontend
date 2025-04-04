@@ -20,7 +20,7 @@ import {
 import { useMemo, useState } from "react";
 
 function VistaBasesDeDatos() {
-  const [basesDeDatos, setBasesDeDatos] =
+  const [basesDeDatos, _setBasesDeDatos] =
     useState<BaseDeDatos[]>(exampleBasesDeDatos);
 
   const {

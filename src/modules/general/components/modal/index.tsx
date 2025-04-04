@@ -4,16 +4,16 @@ import { default as ModalBase, ModalProps } from "@mui/material/Modal";
 import { SxProps } from "@mui/material";
 
 /**
- * Componente Modal reutilizable basado en Material UI.
+ * Reusable Modal component based on Material UI.
  *
- * @param {ModalProps} props - Propiedades del modal.
- * @param {React.ReactNode} props.children - Contenido a renderizar dentro del modal.
- * @param {boolean} props.open - Controla si el modal está abierto o cerrado.
- * @param {() => void} props.handleClose - Función que cierra el modal.
- * @param {string} [props.titulo] - Título opcional del modal.
- * @param {React.ReactNode} [props.iconoTitulo] - Ícono opcional para el título del modal.
+ * @param {ModalProps} props - Modal properties.
+ * @param {React.ReactNode} props.children - Content to be rendered inside the modal.
+ * @param {boolean} props.open - Controls whether the modal is open or closed.
+ * @param {() => void} props.handleClose - Function that closes the modal.
+ * @param {string} [props.titulo] - Optional title for the modal.
+ * @param {React.ReactNode} [props.iconoTitulo] - Optional icon for the modal title.
  *
- * @returns {JSX.Element} Componente modal personalizado.
+ * @returns {JSX.Element} Custom modal component.
  */
 const Modal: React.FC<
   ModalProps & {
@@ -22,8 +22,9 @@ const Modal: React.FC<
     handleClose: () => void;
   }
 > = ({ children, open, handleClose, ...props }) => {
+  
   /**
-   * Estilos base del modal.
+   * Base styles for the modal.
    */
   const style = {
     position: "absolute",
@@ -39,7 +40,7 @@ const Modal: React.FC<
   } as SxProps;
 
   /**
-   * Fusiona los estilos base con los estilos recibidos como props.
+   * Merges the base styles with any additional styles received as props.
    */
   const styles: SxProps = { ...style, ...props.sx } as SxProps;
 

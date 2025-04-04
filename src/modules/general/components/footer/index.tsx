@@ -1,15 +1,16 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { LabelFooter } from "@modules/general/enums/labelFooter";
-import { getImage } from "../roundedIcon/utils";
+import { getImage } from "../../utils/getImage";
 
 /**
- * Componente Footer que muestra información sobre Fireploy,
- * recursos, redes sociales, términos legales y logos institucionales.
+ * `Footer` component that displays information about Fireploy,
+ * resources, social media, legal terms, and institutional logos.
  *
- * @returns {JSX.Element} Estructura del footer con la información distribuida en columnas.
+ * @returns {JSX.Element} The footer structure with information distributed into columns.
  */
 function Footer(): JSX.Element {
-
+  
+  // Get the Material-UI theme
   const theme = useTheme();
 
   return (
@@ -25,7 +26,7 @@ function Footer(): JSX.Element {
         fontWeight: '550'
       }}
     >
-      {/* Columna Fireploy */}
+      {/* Fireploy Column */}
       <Box
         sx={{
           width: { md: "25%" },
@@ -34,6 +35,7 @@ function Footer(): JSX.Element {
           gap: 2,
         }}
       >
+        {/* Logo and Name */}
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <img
@@ -49,6 +51,8 @@ function Footer(): JSX.Element {
             <Typography variant="body1">®</Typography>
           </Box>
         </Box>
+
+        {/* Fireploy Description */}
         <Box>
           <Typography variant="body2">
             {LabelFooter.descripcionFireploy}
@@ -56,7 +60,7 @@ function Footer(): JSX.Element {
         </Box>
       </Box>
 
-      {/* Columna Recursos */}
+      {/* Resources Column */}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <Box>
           <Typography variant="h6">{LabelFooter.recursos}</Typography>
@@ -69,7 +73,7 @@ function Footer(): JSX.Element {
         </Box>
       </Box>
 
-      {/* Columna Redes Sociales */}
+      {/* Social Media Column */}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <Box>
           <Typography variant="h6">
@@ -84,7 +88,7 @@ function Footer(): JSX.Element {
         </Box>
       </Box>
 
-      {/* Columna Términos Legales */}
+      {/* Legal Terms Column */}
       <Box
         sx={{
           width: { md: "20%" },
@@ -103,7 +107,7 @@ function Footer(): JSX.Element {
         </Box>
       </Box>
 
-      {/* Logo UFPS */}
+      {/* UFPS Logo */}
       <Box
         sx={{
           borderRadius: 4,
@@ -126,7 +130,7 @@ function Footer(): JSX.Element {
         />
       </Box>
 
-      {/* Logo Ingeniería de Sistemas */}
+      {/* Systems Engineering Logo */}
       <Box
         sx={{
           borderRadius: 4,

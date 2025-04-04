@@ -5,47 +5,60 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ReactNode } from "react";
 
 /**
- * @typedef Props
- * @property {ReactNode} title - Título del acordeón que se muestra en el resumen.
- * @property {ReactNode} children - Contenido del acordeón que se muestra al expandirlo.
- * @property {boolean} [defaultExpanded] - Si el acordeón debe estar expandido por defecto.
- * @property {boolean} [disabled] - Si el acordeón debe estar deshabilitado.
- * @property {boolean} [disableGutters] - Si el acordeón debe eliminar los márgenes.
- * @property {boolean} [square] - Si el acordeón debe tener bordes cuadrados en lugar de redondeados.
- * @property {string} [className] - Clase CSS opcional para estilos personalizados.
+ * Properties for the AccordionUsage component.
  */
 type Props = {
+  /** Title of the accordion, displayed in the header. */
   title: ReactNode;
+  
+  /** Content inside the accordion. */
   children: ReactNode;
+  
+  /** Determines whether the accordion should be expanded by default. */
   defaultExpanded?: boolean;
+  
+  /** Indicates whether the accordion should be disabled. */
   disabled?: boolean;
+  
+  /** If true, removes the accordion's default margins. */
   disableGutters?: boolean;
+  
+  /** If true, the accordion will have square corners instead of rounded ones. */
   square?: boolean;
+  
+  /** Optional CSS class for styling the accordion container. */
   className?: string;
 };
 
 /**
- * Componente reutilizable de acordeón que muestra un título y su contenido al expandirse.
+ * Reusable accordion component based on Material-UI.
  * 
- * @component
- * @param {Props} props - Propiedades del componente.
- * @param {ReactNode} props.title - Título del acordeón.
- * @param {ReactNode} props.children - Contenido del acordeón.
- * @param {boolean} [props.defaultExpanded] - Si el acordeón debe estar expandido por defecto.
- * @param {boolean} [props.disabled] - Si el acordeón debe estar deshabilitado.
- * @param {boolean} [props.disableGutters] - Si el acordeón debe eliminar los márgenes.
- * @param {boolean} [props.square] - Si el acordeón debe tener bordes cuadrados en lugar de redondeados.
- * @param {string} [props.className] - Clase CSS opcional para estilos personalizados.
- * @returns {JSX.Element} Un acordeón interactivo con un título y contenido oculto que se expande al hacer clic.
+ * @param {Props} props - Component properties.
+ * @returns {JSX.Element} An interactive accordion component.
  */
-const AccordionUsage: React.FC<Props> = ({ children, title, defaultExpanded, disabled, disableGutters, square, className }: Props) => {
+const AccordionUsage: React.FC<Props> = ({
+  children,
+  title,
+  defaultExpanded,
+  disabled,
+  disableGutters,
+  square,
+  className
+}: Props) => {
   return (
     <div className={className}>
-      <Accordion defaultExpanded={defaultExpanded} disabled={disabled} disableGutters={disableGutters} square={square}>
+      <Accordion
+        defaultExpanded={defaultExpanded}
+        disabled={disabled}
+        disableGutters={disableGutters}
+        square={square}
+      >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           {title}
         </AccordionSummary>
-        <AccordionDetails>{children}</AccordionDetails>
+        <AccordionDetails>
+          {children}
+        </AccordionDetails>
       </Accordion>
     </div>
   );

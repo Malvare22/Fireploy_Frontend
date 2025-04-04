@@ -1,6 +1,4 @@
-import { capitalizeFirstLetter } from "@modules/general/utils/capitalCase";
-
-// Importar todas las imágenes
+// Import all images
 import logoFireploy from "@modules/general/assets/fireploy/fireployLogo.png";
 import facebookLogo from "@modules/general/assets/redesSociales/facebookLogo.png";
 import instagramLogo from "@modules/general/assets/redesSociales/instagramLogo.png";
@@ -18,17 +16,26 @@ import ufpsLogoCompleto from "@modules/general/assets/ufps/UFPSLogoCompleto.png"
 import defaultProfileImage from "@modules/general/assets/profile/defaultProfileImage.png";
 import defaultProjectImage from "@modules/general/assets/project/defaultImage.jpg";
 
-export const Imagenes = {
-  // Fireploy
+/**
+ * **Collection of imported images.**
+ *
+ * This object provides a structured way to access image assets across the app.
+ * 
+ * The `as const` ensures that the object is **readonly**, preventing accidental modifications.
+ *
+ * @constant {Readonly<Record<string, string>>} assetImages - Object containing image paths.
+ */
+export const assetImages = {
+  // Fireploy Logo
   logo_fireploy: logoFireploy,
 
-  // Redes Sociales
+  // Social Media Logos
   facebook_logo: facebookLogo,
   instagram_logo: instagramLogo,
   linkedin_logo: linkedinLogo,
   x_logo: xLogo,
 
-  // Tecnologías
+  // Technologies Logos
   mongodb: mongodb,
   mysql: mysql,
   nodejs: nodejs,
@@ -36,30 +43,34 @@ export const Imagenes = {
   springboot: springboot,
   angular: angular,
 
-  // UFPS
+  // UFPS Logos
   ing_sistemas_logo: ingSistemasLogo,
   ufps_logo: ufpsLogo,
   ufps_logo_completo: ufpsLogoCompleto,
 
+  // Default Images
   defaultProfileImage: defaultProfileImage,
-
   defaultProjectImage: defaultProjectImage,
+} as const;
 
-} as const; // "as const" asegura que los valores sean de solo lectura
-
-// Mapa para obtener las imágenes con sus rutas y nombres
+/**
+ * **Map of images with names and paths.**
+ *
+ * This dynamically generates an object where each key corresponds to an image in `assetImages`,
+ * allowing structured access to the name and path.
+ *
+ * @constant {Record<string, { nombre: string; ruta: string }>} getImage - Image lookup table.
+ */
 export const getImage: Record<
-  keyof typeof Imagenes,
+  keyof typeof assetImages,
   { nombre: string; ruta: string }
-> = Object.keys(Imagenes).reduce(
-  (mapa, clave) => {
-    return {
-      ...mapa,
-      [clave]: {
-        nombre: capitalizeFirstLetter(clave),
-        ruta: Imagenes[clave as keyof typeof Imagenes],
-      },
-    };
-  },
-  {} as Record<keyof typeof Imagenes, { nombre: string; ruta: string }>
+> = Object.keys(assetImages).reduce(
+  (map, key) => ({
+    ...map,
+    [key]: {
+      nombre: key,
+      ruta: assetImages[key as keyof typeof assetImages],
+    },
+  }),
+  {} as Record<keyof typeof assetImages, { nombre: string; ruta: string }>
 );

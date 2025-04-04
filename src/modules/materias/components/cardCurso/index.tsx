@@ -1,28 +1,19 @@
 import AnimatedCard from "@modules/general/components/animatedCard";
-import { Materia } from "@modules/materias/types/materia";
 import {
-  Box,
   Button,
   Card,
-  Divider,
   Stack,
   Typography,
   useTheme,
 } from "@mui/material";
 import React from "react";
-import StyleIcon from "@mui/icons-material/Style";
-import { CursoMateria } from "@modules/materias/types/curso";
 import { labelCardCurso } from "@modules/materias/enums/labelCardCurso";
-import { ProjectCardAvatar } from "@modules/general/components/avatar";
-import {
-  adaptarUsuarioAUsuarioCardPortafolio,
-} from "@modules/usuarios/utils/adaptar.usuario";
 import InputIcon from '@mui/icons-material/Input';
-import { Usuario } from "@modules/usuarios/types/usuario";
 import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
+import { Curso } from "@modules/materias/types/curso";
 
 type CardCursoProps = {
-  curso: CursoMateria;
+  curso: Curso;
 };
 
 const CardCurso: React.FC<CardCursoProps> = ({ curso }) => {
@@ -30,9 +21,9 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso }) => {
 
   let docente: undefined | UsuarioPortafolioCard = undefined;
 
-  if(curso.docente){
-    docente =  adaptarUsuarioAUsuarioCardPortafolio(curso.docente);
-  }
+  // if(curso.docente){
+  //   docente =  adaptarUsuarioAUsuarioCardPortafolio(curso.docente);
+  // }
 
   return (
     <AnimatedCard>
@@ -50,13 +41,13 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso }) => {
               fontWeight: 500,
             }}
           >
-            {docente && <Stack direction={"row"} alignItems={"center"} spacing={1}>
+            {/* {docente && <Stack direction={"row"} alignItems={"center"} spacing={1}>
               <ProjectCardAvatar
                 usuario={docente}
                 sx={{ width: 32, height: 32 }}
               />
               <Typography variant="body2">{docente.nombres}</Typography>
-            </Stack>}
+            </Stack>} */}
           </Card>
         </Stack>
         {/* <Card sx={{ padding: 2 }}>

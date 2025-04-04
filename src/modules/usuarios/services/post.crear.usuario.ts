@@ -2,7 +2,7 @@ import { postData } from "@core/services";
 import { UsuarioService } from "../types/services.usuario";
 import { Usuario } from "../types/usuario";
 import { getUserTypes } from "../utils/usuario.map";
-import { getImage } from "@modules/general/components/roundedIcon/utils";
+import { getImage } from "@modules/general/utils/getImage";
 
 export const postCrearUsuarioService = async (token: string, user: Usuario) => {
   type Body = {

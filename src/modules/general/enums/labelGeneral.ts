@@ -1,4 +1,4 @@
-export const LabelGeneral = {
+export const labelGeneral = {
     guardar: 'Guardar',
     cancelar: 'Cancelar',
     editar: 'Editar',

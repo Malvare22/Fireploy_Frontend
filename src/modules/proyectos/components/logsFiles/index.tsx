@@ -11,7 +11,6 @@ import React, { useMemo, useRef, useState } from "react";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
 import { generateLog } from "@modules/proyectos/utils/generateLog";
-import { capitalizeFirstLetter } from "@modules/general/utils/capitalCase";
 import { ArchivoLog } from "@modules/proyectos/types/archivoLog.tipo";
 import { archivosLogsPrueba } from "@modules/proyectos/test/datos/archivosLog.prueba";
 
@@ -101,7 +100,7 @@ const CardLog: React.FC<{
           <Box sx={{ display: "flex", marginBottom: 1 }}>
               <Typography variant="body1">{labelLogs.instancia}</Typography>
               <Typography variant="body1" marginLeft={1}>
-                {capitalizeFirstLetter(currentLog.instancia)}
+                {(currentLog.instancia)}
               </Typography>
             </Box>
             <Box sx={{ display: "flex", marginBottom: 1 }}>

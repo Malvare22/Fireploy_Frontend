@@ -1,4 +1,4 @@
-export enum LabelCambiarContrasenia{
+export enum labelCambiarContrasenia{
   contrasenia = 'Contraseña',
   confirmarContrasenia = 'Confirmar Contraseña',
   correoElectronico = 'Correo Electrónico',

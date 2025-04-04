@@ -1,4 +1,4 @@
-import { getImage } from "@modules/general/components/roundedIcon/utils";
+import { getImage } from "@modules/general/utils/getImage";
 import { ProyectoCard } from "../types/proyecto.card";
 import { ProyectoService } from "../types/proyecto.service";
 import { BaseDeDatosProyecto, EstadoEjecucionProyecto } from "../types/proyecto.tipo";

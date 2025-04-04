@@ -74,7 +74,6 @@ function ExplorarProyectos() {
     <>
       <SpringModal
         handleClose={handleCloseModal}
-        handleOpen={handleOpenModal}
         open={openModal}
       >
         {selectProyecto != undefined && (

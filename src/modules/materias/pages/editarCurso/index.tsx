@@ -27,7 +27,7 @@ import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import AddUsers from "@modules/usuarios/components/addUsers";
 import { patchEstudiantesCurso } from "@modules/materias/services/patch.curso.estudiantes";
 import TablaGestionarSecciones from "@modules/materias/components/tablaSecciones";
-import { UsuarioCampoBusqueda } from "@modules/general/components/searchUsers/hook";
+import { UsuarioCampoBusqueda } from "@modules/general/hooks/useSearchUsers";
 import { postCreateSeccion } from "@modules/materias/services/post.crear.seccion";
 import { patchEditSeccion } from "@modules/materias/services/patch.modificar.seccion";
 import { Seccion } from "@modules/materias/types/seccion";

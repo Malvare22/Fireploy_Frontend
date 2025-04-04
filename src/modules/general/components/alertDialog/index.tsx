@@ -7,14 +7,13 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 
 /**
  * @interface Props
- * @description Propiedades del componente AlertDialog.
- * @property {string} titulo - Título del diálogo.
- * @property {React.ReactNode} [botones] - Botones personalizados a mostrar en el diálogo.
- * @property {string | undefined} cuerpo - Texto principal del diálogo.
- * @property {React.ReactNode} [children] - Contenido adicional dentro del diálogo.
- * @property {boolean} open - Estado que indica si el diálogo está abierto o cerrado.
- * @property {React.Dispatch<boolean>} [setOpen] - Función para actualizar el estado de apertura del diálogo.
- * @property {boolean} [reloader] - Indica si se debe recargar la página al cerrar el diálogo.
+ * @description Properties for the AlertDialog component.
+ * @property {string} title - Title of the dialog.
+ * @property {React.ReactNode} [body] - Optional custom content inside the dialog.
+ * @property {string} [textBody] - Main text of the dialog (used if `body` is not provided).
+ * @property {() => void} handleAccept - Function executed when the accept button is clicked.
+ * @property {() => void} [handleCancel] - Optional function executed when the cancel button is clicked.
+ * @property {boolean} open - State indicating whether the dialog is open or closed.
  */
 interface Props {
   title: string;
@@ -22,10 +21,24 @@ interface Props {
   textBody?: string;
   handleAccept: () => void;
   handleCancel?: () => void;
-  open: boolean
-  
+  open: boolean;
 }
 
+/**
+ * AlertDialog Component
+ *
+ * A reusable dialog component that displays a title, a message, and action buttons.
+ *
+ * @component
+ * @param {Props} props - Properties of the AlertDialog component.
+ * @param {string} props.title - The dialog's title.
+ * @param {React.ReactNode} [props.body] - Optional custom content inside the dialog.
+ * @param {string} [props.textBody] - The main text displayed in the dialog if `body` is not provided.
+ * @param {() => void} props.handleAccept - Function executed when clicking the accept button.
+ * @param {() => void} [props.handleCancel] - Optional function executed when clicking the cancel button.
+ * @param {boolean} props.open - Boolean indicating whether the dialog is open or not.
+ * @returns {JSX.Element} A modal dialog with an optional message and action buttons.
+ */
 const AlertDialog: React.FC<Props> = ({
   title,
   handleAccept,
@@ -34,10 +47,8 @@ const AlertDialog: React.FC<Props> = ({
   handleCancel,
   textBody
 }) => {
-
-
   return (
-    <React.Fragment >
+    <React.Fragment>
       <Dialog
         open={open}
         aria-labelledby="alert-dialog-title"
@@ -52,16 +63,22 @@ const AlertDialog: React.FC<Props> = ({
           )}
         </DialogContent>
         <DialogActions>
-          
-           { <Stack direction={"row"} spacing={2}>
-              {handleAccept && <Box>
-                <Button variant="contained" onClick={handleAccept}>Aceptar</Button>
-              </Box>}
-              {handleCancel && <Box>
-                <Button variant="contained" color="inherit" onClick={handleCancel}>Cancelar</Button>
-              </Box>}
-            </Stack>
-              }
+          <Stack direction={"row"} spacing={2}>
+            {handleAccept && (
+              <Box>
+                <Button variant="contained" onClick={handleAccept}>
+                  Accept
+                </Button>
+              </Box>
+            )}
+            {handleCancel && (
+              <Box>
+                <Button variant="contained" color="inherit" onClick={handleCancel}>
+                  Cancel
+                </Button>
+              </Box>
+            )}
+          </Stack>
         </DialogActions>
       </Dialog>
     </React.Fragment>

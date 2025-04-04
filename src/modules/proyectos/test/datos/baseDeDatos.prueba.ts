@@ -1,4 +1,4 @@
-import { BaseDeDatosProyecto } from "@modules/proyectos/types/proyecto.baseDeDatos";
+import { BaseDeDatosProyecto } from "@modules/proyectos/types/proyecto.tipo";
 
 export const BasesDeDatosPrueba: BaseDeDatosProyecto[] = [
   {

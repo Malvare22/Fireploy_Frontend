@@ -1,4 +1,4 @@
-import { Proyecto } from "@modules/proyectos/types/proyecto";
+import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
 import { archivosLogsPrueba } from "./archivosLog.prueba";
 import { BasesDeDatosPrueba } from "./baseDeDatos.prueba";
 import { repositoriosPrueba } from "./repositorios.prueba";

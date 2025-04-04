@@ -69,7 +69,7 @@ const TablaBasesDeDatos: React.FC<TablaBasesDeDatosProps> = ({
     },
     {
       name: labelBaseDeDatos.gestionar,
-      cell: (row) => (
+      cell: (_row) => (
         <Button variant="contained" color="secondary" size="small" endIcon={<StorageIcon />}>
           {labelBaseDeDatos.gestionar}
         </Button>

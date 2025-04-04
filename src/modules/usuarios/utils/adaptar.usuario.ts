@@ -7,7 +7,7 @@ import {
   TiposUsuario,
   Usuario,
 } from "../types/usuario";
-import { UsuarioCampoBusqueda } from "@modules/general/components/searchUsers/hook";
+import { UsuarioCampoBusqueda } from "@modules/general/hooks/useSearchUsers";
 import { UsuarioPortafolioCard } from "../types/usuario.portafolio";
 import { getUserLetterTypes, UserTypeFullString } from "./usuario.map";
 

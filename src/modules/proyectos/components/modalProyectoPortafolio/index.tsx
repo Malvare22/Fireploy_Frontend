@@ -1,4 +1,4 @@
-import { ProjectCardAvatar } from "@modules/general/components/avatar";
+import { ProjectCardAvatar } from "@modules/general/components/projectCardAvatar";
 import PortafolioCard from "@modules/general/components/portafolioCard";
 import Score from "@modules/general/components/score";
 import { labelModalProyectoPortafolio } from "@modules/proyectos/enum/labelModalProyectoPortafolio";
@@ -27,22 +27,29 @@ type Props = {
 const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto = proyecto1 }) => {
   return (
     <Stack
-      sx={{ overflowY: "scroll", width: { md: "80vw", xs: "70vw" }, maxHeight: '85vh', backgroundColor: 'none'}}
+      sx={{
+        overflowY: "scroll",
+        width: { md: "80vw", xs: "70vw" },
+        maxHeight: "85vh",
+        backgroundColor: "none",
+      }}
       spacing={3}
     >
-      <Box><CardEstado estado={proyecto.estado} /></Box>
+      <Box>
+        <CardEstado estado={proyecto.estado} />
+      </Box>
       <Box>
         <Typography variant="h4" fontWeight={"bold"}>
           {proyecto.titulo}
         </Typography>
       </Box>
-      <Stack direction={{xl:"row"}} alignItems={'center'} spacing={6}>
+      <Stack direction={{ xl: "row" }} alignItems={"center"} spacing={6}>
         <Box
           component={"img"}
-          sx={{ width: { md: 550, xs: '100%' } }}
+          sx={{ width: { md: 550, xs: "100%" } }}
           src={proyecto.imagen}
         />
-        <Stack spacing={2} marginTop={2} width={'100%'}>
+        <Stack spacing={2} marginTop={2} width={"100%"}>
           <Typography variant="h5" fontWeight={"bold"}>
             {labelModalProyectoPortafolio.calificador}
           </Typography>
@@ -58,9 +65,9 @@ const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto = proyecto1 }) => {
             {labelModalProyectoPortafolio.tecnologias}
           </Typography>
           <Stack direction={"row"} spacing={2}>
-              <CardTecnologia tecnologia={proyecto.frontend.imagen} />
-              <CardTecnologia tecnologia={proyecto.backend.imagen} />
-              <CardTecnologia tecnologia={proyecto.dataBase.imagen} />
+            <CardTecnologia tecnologia={proyecto.frontend.imagen} />
+            <CardTecnologia tecnologia={proyecto.backend.imagen} />
+            <CardTecnologia tecnologia={proyecto.dataBase.imagen} />
           </Stack>
         </Stack>
       </Stack>
@@ -77,7 +84,7 @@ const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto = proyecto1 }) => {
         </Typography>
         <Grid2 container spacing={2} paddingY={2}>
           {proyecto.integrantes.map((integrante) => (
-            <Grid2 size={{ md: 4, sm: 6, xs:12 }}>
+            <Grid2 size={{ md: 4, sm: 6, xs: 12 }}>
               <PortafolioCard usuario={integrante} key={integrante.id} />
             </Grid2>
           ))}
@@ -101,7 +108,6 @@ const CardCalificador: React.FC<CardCalificadorProps> = ({
   materia,
   puntuacion,
   seccion,
-  semestre,
 }) => {
   return (
     <Card sx={{ padding: 2 }}>
@@ -111,11 +117,13 @@ const CardCalificador: React.FC<CardCalificadorProps> = ({
           sx={{ width: 48, height: 48 }}
         />
         <Stack>
-          <Stack direction={{md:"row"}} spacing={2}>
+          <Stack direction={{ md: "row" }} spacing={2}>
             <Typography variant="h6">{calificador.nombres}</Typography>
             <Score value={puntuacion} />
           </Stack>
-          <Box><Typography>{`${materia} / ${grupo} / ${seccion}`}</Typography></Box>
+          <Box>
+            <Typography>{`${materia} / ${grupo} / ${seccion}`}</Typography>
+          </Box>
         </Stack>
       </Stack>
     </Card>
@@ -123,28 +131,36 @@ const CardCalificador: React.FC<CardCalificadorProps> = ({
 };
 
 type CardEstadoProps = {
-  estado: ProyectoCard['estado'];
+  estado: ProyectoCard["estado"];
 };
 const CardEstado: React.FC<CardEstadoProps> = ({ estado }) => {
   const theme = useTheme();
 
   function getColor() {
-    return estado == "A"
+    return estado == "E"
       ? theme.palette.success.light
       : theme.palette.warning.light;
   }
 
   function getLabel() {
     return (
-      <Stack direction={{md: "row", xs: 'column'}} alignItems={"center"} spacing={1}>
-        {estado == "A" ? (
+      <Stack
+        direction={{ md: "row", xs: "column" }}
+        alignItems={"center"}
+        spacing={1}
+      >
+        {estado == "E" ? (
           <>
-            <Typography  fontWeight='bold' textAlign={'center'}>{labelModalProyectoPortafolio.online}</Typography>
+            <Typography fontWeight="bold" textAlign={"center"}>
+              {labelModalProyectoPortafolio.online}
+            </Typography>
             <CheckCircleOutlineIcon />
           </>
         ) : (
           <>
-            <Typography  fontWeight='bold' textAlign={'center'}>{labelModalProyectoPortafolio.offline}</Typography>
+            <Typography fontWeight="bold" textAlign={"center"}>
+              {labelModalProyectoPortafolio.offline}
+            </Typography>
             <CloudOffIcon />
           </>
         )}
@@ -153,11 +169,20 @@ const CardEstado: React.FC<CardEstadoProps> = ({ estado }) => {
   }
 
   return (
-    <Card sx={{ backgroundColor: getColor(), color: 'white', paddingY: 1 }}>
-      <Stack direction={{md: "row", sm: 'column'}} alignItems={"center"} justifyContent={'center'} spacing={2}>
+    <Card sx={{ backgroundColor: getColor(), color: "white", paddingY: 1 }}>
+      <Stack
+        direction={{ md: "row", sm: "column" }}
+        alignItems={"center"}
+        justifyContent={"center"}
+        spacing={2}
+      >
         {getLabel()}
-        {estado == "A" && (
-          <Box sx={{marginY: {xs: 1, md: 0}}}><Button variant="outlined" color="inherit">{labelModalProyectoPortafolio.visitar}</Button></Box>
+        {estado == "E" && (
+          <Box sx={{ marginY: { xs: 1, md: 0 } }}>
+            <Button variant="outlined" color="inherit">
+              {labelModalProyectoPortafolio.visitar}
+            </Button>
+          </Box>
         )}
       </Stack>
     </Card>

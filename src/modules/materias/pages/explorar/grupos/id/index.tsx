@@ -1,5 +1,5 @@
 import AlertDialog from "@modules/general/components/alertDialog";
-import { ProjectCardAvatar } from "@modules/general/components/avatar";
+import { ProjectCardAvatar } from "@modules/general/components/projectCardAvatar";
 import { AccountContext } from "@modules/general/context/accountContext";
 import useQuery from "@modules/general/hooks/useQuery";
 import CardSeccion from "@modules/materias/components/cardSeccion";

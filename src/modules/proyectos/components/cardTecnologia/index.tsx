@@ -1,12 +1,12 @@
 import AnimatedCard from "@modules/general/components/animatedCard";
 import {
-  Imagenes,
+  assetImages,
   getImage,
-} from "@modules/general/components/roundedIcon/utils";
+} from "@modules/general/utils/getImage";
 import { Box, Card, Stack, Typography, useTheme } from "@mui/material";
 
 type CardTecnologiaProps = {
-  tecnologia: keyof typeof Imagenes;
+  tecnologia: keyof typeof assetImages;
 };
 const CardTecnologia: React.FC<CardTecnologiaProps> = ({ tecnologia }) => {
   const theme = useTheme();

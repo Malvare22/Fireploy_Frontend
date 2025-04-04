@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 import SearchIcon from '@mui/icons-material/Search';
 import useOrderSelect from "@modules/general/hooks/useOrderSelect";
 import { labelSelects } from "@modules/general/enums/labelSelects";
-import PortafolioCard from "@modules/general/components/portafolioCard";
+import PortafolioCard from "@modules/general/components/PortafolioCard";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 
 function ExplorarPortafolios() {

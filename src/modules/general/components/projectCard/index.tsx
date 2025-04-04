@@ -1,5 +1,4 @@
-import { Box, Card, Stack, Typography } from "@mui/material";
-
+import { Avatar, Box, Card, Stack, Typography } from "@mui/material";
 import AnimatedCard from "../animatedCard";
 import Score from "../score";
 import {
@@ -7,10 +6,10 @@ import {
   ProyectoCard,
 } from "@modules/proyectos/types/proyecto.card";
 import React from "react";
-import RoundedIcon from "../roundedIcon";
-import { getImage } from "../roundedIcon/utils";
-import { ProjectCardMembers } from "../avatar";
+import { getImage } from "../../utils/getImage";
+import { ProjectCardMembers } from "../projectCardAvatar";
 import Status from "../status";
+import { labelProjectCard } from "@modules/general/enums/labelProjectCard";
 
 type ProjectCardProps = {
   proyecto?: ProyectoCard;
@@ -18,26 +17,33 @@ type ProjectCardProps = {
   handleOpen?: () => void;
 };
 
-export enum LabelProjectCard {
-  titulo = "Título",
-  integrantes = "Integrantes",
-  tecnologias = "Tecnologías",
-}
-
+/**
+ * `ProjectCard` component that dynamically renders either a home-style project card 
+ * or a portfolio-style project card based on the `tipo` prop.
+ *
+ * @param {ProjectCardProps} props - Component props.
+ * @param {ProyectoCard} [props.proyecto] - Project data (defaults to `proyecto1`).
+ * @param {"home" | "portafolio"} [props.tipo] - Determines the type of card to render.
+ * @param {() => void} [props.handleOpen] - Function to handle opening the project details (only for portfolio view).
+ *
+ * @returns {JSX.Element} A project card (either home-style or portfolio-style).
+ */
 export const ProjectCard: React.FC<ProjectCardProps> = ({
   proyecto = proyecto1,
   tipo = "home",
   handleOpen = () => {},
 }) => {
+  /**
+   * Determines which card layout to render based on `tipo`.
+   *
+   * @returns {JSX.Element} The appropriate project card component.
+   */
   function getCard() {
     switch (tipo) {
       case "home":
         return <ProjectCardHome proyecto={proyecto} />;
-
       case "portafolio":
-        return (
-          <ProjectCardPortafolio handleOpen={handleOpen} proyecto={proyecto} />
-        );
+        return <ProjectCardPortafolio handleOpen={handleOpen} proyecto={proyecto} />;
     }
   }
 
@@ -53,8 +59,16 @@ type ProjectCardPortafolioProps = {
   handleOpen: () => void;
 };
 
+/**
+ * `ProjectCardHome` component that displays project details in a home page style.
+ *
+ * @param {ProjectCardHomeProps} props - Component props.
+ * @param {ProyectoCard} props.proyecto - Project data.
+ *
+ * @returns {JSX.Element} A home-style project card.
+ */
 export const ProjectCardHome: React.FC<ProjectCardHomeProps> = ({
-  proyecto = proyecto1,
+  proyecto,
 }) => {
   return (
     <AnimatedCard
@@ -64,52 +78,33 @@ export const ProjectCardHome: React.FC<ProjectCardHomeProps> = ({
       }}
     >
       <Stack direction={"column"} spacing={2}>
+        {/* Project Image */}
         <Box
           component={"img"}
           sx={{ width: "100%", height: 200, border: "1px solid black" }}
           src={proyecto.imagen}
+          alt={proyecto.titulo}
         />
+        
+        {/* Title and Score */}
         <Box textAlign={"center"}>
           <Typography variant="h4">{proyecto.titulo}</Typography>
           <Score value={proyecto.puntuacion} />
         </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyItems: "center",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="h6">{LabelProjectCard.integrantes}</Typography>
-          <Box>
-            <ProjectCardMembers integrantes={proyecto.integrantes} />
-          </Box>
+
+        {/* Members Section */}
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Typography variant="h6">{labelProjectCard.integrantes}</Typography>
+          <ProjectCardMembers integrantes={proyecto.integrantes} />
         </Box>
-        <Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyItems: "center",
-              alignItems: "center",
-            }}
-          >
-            <Typography variant="h6">{LabelProjectCard.tecnologias}</Typography>
-            <Box>
-              <RoundedIcon
-                imagen={getImage[proyecto.frontend.imagen].ruta}
-                nombre={getImage[proyecto.frontend.imagen].nombre}
-              />
-              <RoundedIcon
-                imagen={getImage[proyecto.backend.imagen].ruta}
-                nombre={getImage[proyecto.backend.imagen].nombre}
-              />
-              <RoundedIcon
-                imagen={getImage[proyecto.dataBase.imagen].ruta}
-                nombre={getImage[proyecto.dataBase.imagen].nombre}
-              />
-            </Box>
+
+        {/* Technologies Section */}
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Typography variant="h6">{labelProjectCard.tecnologias}</Typography>
+          <Box>
+            <Avatar src={getImage[proyecto.frontend.imagen].ruta}/>
+            <Avatar src={getImage[proyecto.backend.imagen].ruta}/>
+            <Avatar src={getImage[proyecto.dataBase.imagen].ruta}/>
           </Box>
         </Box>
       </Stack>
@@ -117,6 +112,15 @@ export const ProjectCardHome: React.FC<ProjectCardHomeProps> = ({
   );
 };
 
+/**
+ * `ProjectCardPortafolio` component that displays project details in a portfolio-style card.
+ *
+ * @param {ProjectCardPortafolioProps} props - Component props.
+ * @param {ProyectoCard} props.proyecto - Project data.
+ * @param {() => void} props.handleOpen - Function to handle opening the project details.
+ *
+ * @returns {JSX.Element} A portfolio-style project card.
+ */
 export const ProjectCardPortafolio: React.FC<ProjectCardPortafolioProps> = ({
   proyecto,
   handleOpen,
@@ -131,11 +135,13 @@ export const ProjectCardPortafolio: React.FC<ProjectCardPortafolioProps> = ({
       onClick={handleOpen}
     >
       <Stack direction={"column"} spacing={2}>
+        {/* Project Image with Status Badge */}
         <Box sx={{ position: "relative" }}>
           <Box
             component={"img"}
             sx={{ width: "100%", border: "1px solid black" }}
             src={proyecto.imagen}
+            alt={proyecto.titulo}
           />
           <Card
             sx={{
@@ -149,56 +155,29 @@ export const ProjectCardPortafolio: React.FC<ProjectCardPortafolioProps> = ({
             <Status status="A" />
           </Card>
         </Box>
-        <Stack spacing={2}>
-          <Stack spacing={2} sx={{ paddingX: 2 }}>
-            <Box textAlign={"center"}>
-              <Typography variant="h5">{proyecto.titulo}</Typography>
-              <Score value={proyecto.puntuacion} />
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyItems: "center",
-                alignItems: "center",
-              }}
-            >
-              <Typography variant="body1">
-                {LabelProjectCard.integrantes}
-              </Typography>
-              <Box>
-                <ProjectCardMembers integrantes={proyecto.integrantes} />
-              </Box>
-            </Box>
+
+        {/* Project Details */}
+        <Stack spacing={2} sx={{ paddingX: 2 }}>
+          <Box textAlign={"center"}>
+            <Typography variant="h5">{proyecto.titulo}</Typography>
+            <Score value={proyecto.puntuacion} />
+          </Box>
+
+          {/* Members Section */}
+          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <Typography variant="body1">{labelProjectCard.integrantes}</Typography>
+            <ProjectCardMembers integrantes={proyecto.integrantes} />
+          </Box>
+
+          {/* Technologies Section */}
+          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <Typography variant="body1">{labelProjectCard.tecnologias}</Typography>
             <Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyItems: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Typography variant="body1">
-                  {LabelProjectCard.tecnologias}
-                </Typography>
-                <Box>
-                  <RoundedIcon
-                    imagen={getImage[proyecto.frontend.imagen].ruta}
-                    nombre={getImage[proyecto.frontend.imagen].nombre}
-                  />
-                  <RoundedIcon
-                    imagen={getImage[proyecto.backend.imagen].ruta}
-                    nombre={getImage[proyecto.backend.imagen].nombre}
-                  />
-                  <RoundedIcon
-                    imagen={getImage[proyecto.dataBase.imagen].ruta}
-                    nombre={getImage[proyecto.dataBase.imagen].nombre}
-                  />
-                </Box>
-              </Box>
+              <Avatar src={getImage[proyecto.frontend.imagen].ruta}/>
+              <Avatar src={getImage[proyecto.backend.imagen].ruta}/>
+              <Avatar src={getImage[proyecto.dataBase.imagen].ruta}/>
             </Box>
-          </Stack>
+          </Box>
         </Stack>
       </Stack>
     </AnimatedCard>

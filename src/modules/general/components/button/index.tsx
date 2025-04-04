@@ -2,14 +2,14 @@ import { Box, Button, ButtonProps } from "@mui/material";
 import SaveAsIcon from "@mui/icons-material/SaveAs";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-import CheckIcon from '@mui/icons-material/Check';
+import CheckIcon from "@mui/icons-material/Check";
 import { ReactNode } from "react";
 import { buttonTypes } from "@modules/general/types/buttons";
-import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
-import LoginIcon from '@mui/icons-material/Login';
+import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
+import LoginIcon from "@mui/icons-material/Login";
 
 /**
- * Mapa de iconos asociados a cada tipo de botón.
+ * Map of icons associated with each button type.
  */
 const iconMap = {
   [buttonTypes.save]: <SaveAsIcon />,
@@ -21,7 +21,7 @@ const iconMap = {
 };
 
 /**
- * Mapa de etiquetas asociadas a cada tipo de botón.
+ * Map of labels associated with each button type.
  */
 const labelMap = {
   [buttonTypes.save]: "guardar",
@@ -34,11 +34,11 @@ const labelMap = {
 
 /**
  * @interface GeneralButtonProps
- * @description Propiedades del componente GeneralButton.
+ * @description Properties for the GeneralButton component.
  * @extends {ButtonProps}
- * @property {buttonTypes} mode - Tipo de botón a renderizar.
- * @property {boolean} [withIcon=true] - Indica si se muestra el icono en el botón.
- * @property {ReactNode} [icon] - Icono personalizado para el botón.
+ * @property {buttonTypes} mode - The type of button to render.
+ * @property {boolean} [withIcon=true] - Determines whether the button should display an icon.
+ * @property {ReactNode} [icon] - Custom icon to display instead of the default one.
  */
 interface GeneralButtonProps extends ButtonProps {
   mode: buttonTypes;
@@ -47,16 +47,16 @@ interface GeneralButtonProps extends ButtonProps {
 }
 
 /**
- * Componente GeneralButton
- * 
- * Renderiza un botón estilizado con un icono y una etiqueta según el tipo de botón seleccionado.
+ * GeneralButton Component
+ *
+ * Renders a styled button with an icon and label based on the selected button type.
  *
  * @component
- * @param {GeneralButtonProps} props - Propiedades del componente.
- * @param {buttonTypes} props.mode - Define el tipo de botón.
- * @param {boolean} [props.withIcon=true] - Indica si debe mostrar un icono.
- * @param {ReactNode} [props.icon] - Icono personalizado a mostrar en lugar del predefinido.
- * @returns {JSX.Element} Componente de botón.
+ * @param {GeneralButtonProps} props - Component properties.
+ * @param {buttonTypes} props.mode - Defines the type of button.
+ * @param {boolean} [props.withIcon=true] - Determines whether an icon should be displayed.
+ * @param {ReactNode} [props.icon] - Custom icon to use instead of the predefined one.
+ * @returns {JSX.Element} A button component.
  */
 const GeneralButton: React.FC<GeneralButtonProps> = ({
   mode,
@@ -77,27 +77,22 @@ const GeneralButton: React.FC<GeneralButtonProps> = ({
 
 /**
  * @interface ButtonContainerProps
- * @description Propiedades del contenedor de botones.
- * @property {React.ReactNode} children - Botones a mostrar dentro del contenedor.
- * @property {"flex-start" | "center" | "flex-end" | "space-between" | "space-around" | "space-evenly"} [_justifyContent="flex-start"] - Controla la alineación horizontal de los botones.
- * @property {number} [_spacing=2] - Define el espacio entre los botones.
+ * @description Properties for the ButtonContainer component.
+ * @property {React.ReactNode} children - Buttons to be displayed inside the container.
  */
 interface ButtonContainerProps {
   children: React.ReactNode;
-  
 }
 
 /**
- * Componente ButtonContainer
- * 
- * Contenedor flexible para agrupar botones con un espacio definido entre ellos.
+ * ButtonContainer Component
+ *
+ * A flexible container for grouping buttons with defined spacing.
  *
  * @component
- * @param {ButtonContainerProps} props - Propiedades del componente.
- * @param {React.ReactNode} props.children - Botones a mostrar dentro del contenedor.
- * @param {"flex-start" | "center" | "flex-end" | "space-between" | "space-around" | "space-evenly"} [props._justifyContent="flex-start"] - Define la alineación horizontal de los botones.
- * @param {number} [props._spacing=2] - Define el espacio entre los botones.
- * @returns {JSX.Element} Contenedor de botones.
+ * @param {ButtonContainerProps} props - Component properties.
+ * @param {React.ReactNode} props.children - Buttons to be displayed inside the container.
+ * @returns {JSX.Element} A button container.
  */
 export const ButtonContainer: React.FC<ButtonContainerProps> = ({
   children,

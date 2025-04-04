@@ -12,7 +12,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import SaveIcon from '@mui/icons-material/Save';
 
 /**
- * Mapa de iconos asociados a cada tipo de acción.
+ * Map of icons associated with each action type.
  */
 const iconMap = {
   [actionButtonTypes.ver]: <VisibilityIcon />,
@@ -27,7 +27,7 @@ const iconMap = {
 };
 
 /**
- * Mapa de etiquetas asociadas a cada tipo de acción.
+ * Map of labels associated with each action type.
  */
 const labelMap = {
   [actionButtonTypes.ver]: "ver",
@@ -44,8 +44,8 @@ const labelMap = {
 /**
  * @interface ActionButtonProps
  * @extends {IconButtonProps}
- * @property {actionButtonTypes} mode - Tipo de acción que representa el botón.
- * @property {ReactNode} [icon] - Icono personalizado opcional para el botón.
+ * @property {actionButtonTypes} mode - Type of action represented by the button.
+ * @property {ReactNode} [icon] - Optional custom icon for the button.
  */
 interface ActionButtonProps extends IconButtonProps {
   mode: actionButtonTypes;
@@ -53,13 +53,13 @@ interface ActionButtonProps extends IconButtonProps {
 }
 
 /**
- * Componente de botón de acción que muestra un icono y un tooltip descriptivo.
+ * Action button component that displays an icon and a descriptive tooltip.
  *
  * @component
- * @param {ActionButtonProps} props - Propiedades del botón de acción.
- * @param {actionButtonTypes} props.mode - Define el tipo de acción que representa el botón.
- * @param {ReactNode} [props.icon] - Icono personalizado opcional para el botón.
- * @returns {JSX.Element} Un botón interactivo con un icono y tooltip descriptivo.
+ * @param {ActionButtonProps} props - Action button properties.
+ * @param {actionButtonTypes} props.mode - Defines the type of action represented by the button.
+ * @param {ReactNode} [props.icon] - Optional custom icon for the button.
+ * @returns {JSX.Element} An interactive button with an icon and a descriptive tooltip.
  */
 const ActionButton: React.FC<ActionButtonProps> = ({ mode, icon, ...props }) => {
   return (

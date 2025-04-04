@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Tabs,
@@ -7,9 +7,6 @@ import {
   Typography,
   TextField,
   Paper,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
   Button,
   Grid2,
   Stack,
@@ -19,14 +16,13 @@ import {
   IconButton,
   Tooltip,
   Autocomplete,
-  debounce,
 } from "@mui/material";
 import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
 import {
   UsuarioPortafolioCard,
   usuarioPrueba,
 } from "@modules/usuarios/types/usuario.portafolio";
-import { ProjectCardAvatar } from "@modules/general/components/avatar";
+import { ProjectCardAvatar } from "@modules/general/components/projectCardAvatar";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LogsFiles from "../logsFiles";
 import ActionButton from "@modules/general/components/actionButton";
@@ -66,7 +62,7 @@ export default function ProjectSettings() {
 
           <Tabs
             value={tabIndex}
-            onChange={(e, newIndex) => setTabIndex(newIndex)}
+            onChange={(_e, newIndex) => setTabIndex(newIndex)}
             sx={{ borderBottom: 1, borderColor: "divider" }}
           >
             <Tab label="Información" />

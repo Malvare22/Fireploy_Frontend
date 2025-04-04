@@ -22,7 +22,7 @@ import SearchUsers, {
 import {
   useSearchUsers,
   UsuarioCampoBusqueda,
-} from "@modules/general/components/searchUsers/hook";
+} from "@modules/general/hooks/useSearchUsers";
 import { getMateriaStatesArray } from "@modules/materias/utils/materias";
 import SchoolIcon from "@mui/icons-material/School";
 import {
@@ -50,7 +50,6 @@ const TablaGestionarCursos = () => {
    * Definición de estado de editar por fila
    */
   const {
-    register,
     formState: { errors },
     getValues,
     setValue,
@@ -63,7 +62,6 @@ const TablaGestionarCursos = () => {
     reset: resetCurso,
     getValues: getValuesCurso,
     setValue: setValuesCurso,
-    handleSubmit: handleSubmitCurso,
     control: controlCurso,
   } = useForm<Curso>();
 

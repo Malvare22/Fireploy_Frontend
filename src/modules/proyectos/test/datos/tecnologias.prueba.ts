@@ -1,6 +1,6 @@
-import { TecnologiaRepositorio } from "@modules/proyectos/types/repositorio.tecnologia";
+import { TecnologiaRepositorio } from "@modules/proyectos/types/proyecto.tipo";
 
-export const TecnologiasPrueba: TecnologiaRepositorio[] = [
+export const tecnologiasPrueba: TecnologiaRepositorio = [
   {
     id: 0,
     nombre: "React",

@@ -8,7 +8,6 @@ import {
   AccountInformation,
   accountInformationTemplate,
 } from "@modules/general/context/accountContext";
-import { ModeContext } from "@modules/general/context/modeContext";
 
 /**
  * Componente principal de la aplicación.
@@ -25,7 +24,9 @@ function App(): JSX.Element {
    * @state {React.Dispatch<React.SetStateAction<AccountInformation | null>>} setLocalUser -
    * Función para actualizar la información del usuario.
    */
-  const [localUser, setLocalUser] = useState<AccountInformation>(accountInformationTemplate);
+  const [localUser, setLocalUser] = useState<AccountInformation>(
+    accountInformationTemplate
+  );
 
   const [mode, setMode] = useState<PaletteMode | undefined>(undefined);
 
@@ -71,14 +72,11 @@ function App(): JSX.Element {
       value={{ localUser: localUser, setLocalUser: setLocalUser }}
     >
       {/* Proveedor de tema para la aplicación */}
-      {mode && (
-        <ThemeProvider theme={getTheme(mode)}>
-          {/* Proveedor de enrutamiento para manejar la navegación */}
-          <ModeContext.Provider value={{ mode: mode, setMode: setMode }}>
-            <RouterProvider router={router} />
-          </ModeContext.Provider>
-        </ThemeProvider>
-      )}
+
+      <ThemeProvider theme={getTheme("light")}>
+        {/* Proveedor de enrutamiento para manejar la navegación */}
+        <RouterProvider router={router} />
+      </ThemeProvider>
     </AccountContext.Provider>
   );
 }

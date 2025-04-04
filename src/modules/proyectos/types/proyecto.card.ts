@@ -1,7 +1,7 @@
-import { Imagenes } from "@modules/general/components/roundedIcon/utils";
+import { assetImages } from "@modules/general/utils/getImage";
 import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import { EstadoEjecucionProyecto } from "./proyecto.tipo";
-type Tecnologia = { nombre: string; imagen: keyof typeof Imagenes };
+type Tecnologia = { nombre: string; imagen: keyof typeof assetImages };
 export type ProyectoCard = {
   titulo: string;
   descripcion: string;

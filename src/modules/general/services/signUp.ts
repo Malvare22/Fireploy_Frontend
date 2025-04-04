@@ -1,12 +1,12 @@
 // import { postData } from "@core/services";
 
 import { postData } from "@core/services";
-import { TiposUsuarioStringCompleto } from "@modules/usuarios/utils/usuario.map";
+import { UserTypeFullString } from "@modules/usuarios/utils/usuario.map";
 
 export type SignUpResponse = {
   access_token: string;
   nombre: string;
-  tipo: TiposUsuarioStringCompleto;
+  tipo: UserTypeFullString;
   foto: string;
   id: number;
 };

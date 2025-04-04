@@ -4,7 +4,6 @@ import LayoutPrelogin from "../layouts/prelogin";
 import Login from "../pages/login";
 import Registrar from "../pages/registro";
 import LayoutAuthenticated from "../layouts/auth";
-import Dashboard from "../pages/dashboard";
 import { routerMaterias } from "@modules/materias/router/router";
 import { routerUsuarios } from "@modules/usuarios/router/router";
 import { routerProyectos } from "@modules/proyectos/router";
@@ -46,10 +45,6 @@ export const authenticatedRoutes: RouteObject = {
   path: "/app",
   element: <LayoutAuthenticated />, // Layout para rutas privadas
   children: [
-    {
-      path: "dashboard",
-      element: <Dashboard />, // Dashboard del usuario
-    },
     ...(routerMaterias || []),
     ...(routerUsuarios || []),
     ...(routerProyectos || []),

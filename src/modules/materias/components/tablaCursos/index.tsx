@@ -1,14 +1,11 @@
 import DataTable, { ConditionalStyles } from "react-data-table-component";
 import { TableColumn, TableStyles } from "react-data-table-component";
-import { Chip, Stack, Typography, useTheme } from "@mui/material";
-import React, { useContext, useMemo, useState } from "react";
+import { Stack, Typography, useTheme } from "@mui/material";
+import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
-import useQuery from "@modules/general/hooks/useQuery";
-import { AccountContext } from "@modules/general/context/accountContext";
 import AlertDialog from "@modules/general/components/alertDialog";
 import Status from "@modules/general/components/status";
-import InfoIcon from "@mui/icons-material/Info";
 import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import { CursoTabla } from "@modules/materias/types/curso.tabla";
@@ -46,8 +43,6 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
     useAlertDialog();
 
   const navigate = useNavigate();
-
-  const token = useContext(AccountContext)!!.localUser?.token;
 
   const columns: TableColumn<CursoTabla & { rowIndex: number }>[] = [
     {

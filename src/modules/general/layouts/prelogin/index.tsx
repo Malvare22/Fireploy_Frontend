@@ -1,5 +1,5 @@
 import Footer from "@modules/general/components/footer";
-import NavbarPrelogin from "@modules/general/components/navbars/prelogin";
+import NavbarPrelogin from "@modules/general/components/navbars/navbarPrelogin";
 import { Box, useTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
 

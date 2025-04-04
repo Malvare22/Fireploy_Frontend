@@ -1,4 +1,4 @@
-import { Imagenes } from "@modules/general/components/roundedIcon/utils";
+import { assetImages } from "@modules/general/utils/getImage";
 import { Usuario } from "@modules/usuarios/types/usuario";
 
 export type EstadoEjecucionProyecto = "F" | "N" | "E" | "L";
@@ -19,7 +19,7 @@ export type BaseDeDatosProyecto = {
 export type TecnologiaRepositorio = {
   id: number;
   nombre: string;
-  logo: keyof typeof Imagenes;
+  logo: keyof typeof assetImages;
 
 };
 

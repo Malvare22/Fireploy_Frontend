@@ -8,38 +8,41 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import React, { useState } from "react";
+import React from "react";
 import GeneralButton from "../../button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { useNavigate } from "react-router-dom";
 import { rutasGeneral } from "@modules/general/router/router";
 
-
+/** List of navigation options available before logging in. */
 const pages = ["Inicio", "Iniciar Sesión", "Registrarse"];
 
-function NavbarPrelogin() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+/**
+ * **Pre-login Navigation Bar Component**
+ *
+ * Displays a responsive navbar with:
+ * - A **brand title ("FIREPLOY")**.
+ * - A **hamburger menu** (for small screens).
+ * - Navigation buttons for login and registration.
+ *
+ * @component
+ * @returns {JSX.Element} The pre-login navigation bar.
+ */
+function NavbarPrelogin(): JSX.Element {
+  // State to manage the mobile menu anchor
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 
-  const [session, setSession] = useState<boolean | undefined>(undefined);
-
+  /**
+   * Opens the navigation menu on mobile.
+   * @param {React.MouseEvent<HTMLElement>} event - The event triggered by clicking the menu button.
+   */
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
 
+  /** Closes the navigation menu. */
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
   };
 
   const navigate = useNavigate();
@@ -48,9 +51,7 @@ function NavbarPrelogin() {
     <AppBar position="fixed">
       <Container maxWidth="xl" sx={{ paddingY: 1 }}>
         <Toolbar disableGutters>
-          {/* <Box component={'img'} src={getImage['logo_fireploy'].ruta} alt={getImage['logo_fireploy'].nombre} sx={{width: 48, height: 48}}/> */}
-          {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
-
+          {/* Brand title (shown only on larger screens) */}
           <Typography
             variant="h6"
             noWrap
@@ -69,10 +70,11 @@ function NavbarPrelogin() {
             FIREPLOY
           </Typography>
 
+          {/* Mobile menu button */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
-              aria-label="account of current user"
+              aria-label="toggle navigation menu"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
@@ -80,18 +82,14 @@ function NavbarPrelogin() {
             >
               <MenuIcon />
             </IconButton>
+
+            {/* Mobile dropdown menu */}
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
+              anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
               keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
+              transformOrigin={{ vertical: "top", horizontal: "left" }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: "block", md: "none" } }}
@@ -103,6 +101,8 @@ function NavbarPrelogin() {
               ))}
             </Menu>
           </Box>
+
+          {/* Brand title (shown only on smaller screens) */}
           <Typography
             variant="h5"
             noWrap
@@ -121,6 +121,8 @@ function NavbarPrelogin() {
           >
             FIREPLOY
           </Typography>
+
+          {/* Navigation buttons (visible on larger screens) */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
@@ -132,53 +134,15 @@ function NavbarPrelogin() {
               </Button>
             ))}
           </Box>
-          <Box
-            sx={{
-              flexGrow: 1,
-              display: "flex",
-              justifyContent: "end",
-            }}
-          >
-            <Box>
-              <GeneralButton
-                mode={buttonTypes.login}
-                color={"secondary"}
-                onClick={() => navigate(rutasGeneral.login)}
-              />
-            </Box>
-          </Box>
 
-          {/* <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: "center" }}>
-                    {setting}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box> */}
+          {/* Login button aligned to the right */}
+          <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "end" }}>
+            <GeneralButton
+              mode={buttonTypes.login}
+              color={"secondary"}
+              onClick={() => navigate(rutasGeneral.login)}
+            />
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>

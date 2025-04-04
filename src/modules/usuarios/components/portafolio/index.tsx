@@ -31,7 +31,7 @@ import SpringModal from "@modules/general/components/springModal";
 import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyectoPortafolio";
 import { useFilters } from "@modules/general/hooks/useFilters";
 import useOrderSelect, { Order } from "@modules/general/hooks/useOrderSelect";
-import { ShowGoal } from "@modules/general/components/portafolioCard";
+import { ShowGoal } from "@modules/general/components/PortafolioCard";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 
 // interface Props {

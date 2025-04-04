@@ -1,46 +1,33 @@
 import * as React from "react";
 import Backdrop from "@mui/material/Backdrop";
-import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import Button from "@mui/material/Button";
 import { useSpring, animated } from "@react-spring/web";
 import { Card, SxProps, useTheme } from "@mui/material";
 
+/**
+ * Props for the `Fade` animation component.
+ */
 interface FadeProps {
-  children: React.ReactElement<any>;
+  children: React.ReactElement;
   in?: boolean;
-  onClick?: any;
-  onEnter?: (node: HTMLElement, isAppearing: boolean) => void;
-  onExited?: (node: HTMLElement, isAppearing: boolean) => void;
-  ownerState?: any;
+  onClick?: () => void;
+  onEnter?: (node: HTMLElement | null, isAppearing: boolean) => void;
+  onExited?: (node: HTMLElement | null, isAppearing: boolean) => void;
+  ownerState?: Record<string, any>;
 }
 
+/**
+ * Custom `Fade` animation for modal transitions.
+ */
 const Fade = React.forwardRef<HTMLDivElement, FadeProps>(function Fade(
-  props,
+  { children, in: open, onClick, onEnter, onExited, ownerState = {}, ...other },
   ref
 ) {
-  const {
-    children,
-    in: open,
-    onClick,
-    onEnter,
-    onExited,
-    ownerState,
-    ...other
-  } = props;
   const style = useSpring({
     from: { opacity: 0 },
     to: { opacity: open ? 1 : 0 },
-    onStart: () => {
-      if (open && onEnter) {
-        onEnter(null as any, true);
-      }
-    },
-    onRest: () => {
-      if (!open && onExited) {
-        onExited(null as any, true);
-      }
-    },
+    onStart: () => open && onEnter?.(null, true),
+    onRest: () => !open && onExited?.(null, true),
   });
 
   return (
@@ -50,21 +37,28 @@ const Fade = React.forwardRef<HTMLDivElement, FadeProps>(function Fade(
   );
 });
 
-type Props = {
+interface SpringModalProps {
   children: React.ReactNode;
   open: boolean;
-  handleOpen: () => void;
   handleClose: () => void;
-};
-const SpringModal: React.FC<Props> = ({
+}
+
+/**
+ * Custom modal component with spring animation.
+ *
+ * @param {React.ReactNode} children - Modal content.
+ * @param {boolean} open - Controls whether the modal is open.
+ * @param {() => void} handleClose - Function to close the modal.
+ * @returns {JSX.Element} The `SpringModal` component.
+ */
+const SpringModal: React.FC<SpringModalProps> = ({
   children,
   open,
-  handleOpen,
   handleClose,
 }) => {
   const theme = useTheme();
 
-  const style = {
+  const sxStyle: SxProps = {
     position: "absolute",
     top: "50%",
     left: "50%",
@@ -73,28 +67,25 @@ const SpringModal: React.FC<Props> = ({
     boxShadow: 24,
     paddingX: 4,
     paddingY: 3,
-  } as SxProps;
+    borderRadius: 2,
+  };
 
   return (
-    <div>
-      <Modal
-        aria-labelledby="spring-modal-title"
-        aria-describedby="spring-modal-description"
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        slots={{ backdrop: Backdrop }}
-        slotProps={{
-          backdrop: {
-            TransitionComponent: Fade,
-          },
-        }}
-      >
-        <Fade in={open}>
-          <Card sx={style}>{children}</Card>
-        </Fade>
-      </Modal>
-    </div>
+    <Modal
+      aria-labelledby="spring-modal-title"
+      aria-describedby="spring-modal-description"
+      open={open}
+      onClose={handleClose}
+      closeAfterTransition
+      BackdropComponent={Backdrop} // ✅ Explicitly set BackdropComponent
+      BackdropProps={{
+        timeout: 500, // ✅ Ensure smooth animation
+      }}
+    >
+      <Fade in={open}>
+        <Card sx={sxStyle}>{children}</Card>
+      </Fade>
+    </Modal>
   );
 };
 

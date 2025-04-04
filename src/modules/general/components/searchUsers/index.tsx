@@ -3,8 +3,11 @@ import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
 import { FC } from "react";
 import { Avatar, Box, Typography } from "@mui/material";
-import { UsuarioCampoBusqueda } from "../searchUsers/hook";
+import { UsuarioCampoBusqueda } from "../../hooks/useSearchUsers";
 
+/**
+ * Example list of users for testing purposes.
+ */
 export const exampleUsuarioCampoBusqueda: UsuarioCampoBusqueda[] = [
   {
     foto: "https://randomuser.me/api/portraits/men/1.jpg",
@@ -40,18 +43,20 @@ interface Props {
 }
 
 /**
- * Componente de búsqueda con autocompletado para seleccionar usuarios.
+ * `SearchUsers` component: An autocomplete search field for selecting users.
  * 
- * @param {UsuarioCampoBusqueda[]} users - Lista de usuarios disponibles para la búsqueda.
- * @param {React.Dispatch<UsuarioCampoBusqueda | null>} setSelectUser - Función para actualizar el usuario seleccionado.
- * @param {UsuarioCampoBusqueda | null} selectUser - Usuario actualmente seleccionado.
- * @returns {JSX.Element} Elemento JSX del componente.
+ * @component
+ * @param {Props} props - Component properties.
+ * @param {UsuarioCampoBusqueda[]} props.users - List of available users.
+ * @param {React.Dispatch<UsuarioCampoBusqueda | null>} props.setSelectUser - Function to update the selected user.
+ * @param {UsuarioCampoBusqueda | null} props.selectUser - Currently selected user.
+ * @returns {JSX.Element} The search component with autocomplete functionality.
  */
 const SearchUsers: FC<Props> = ({ users, setSelectUser, selectUser }) => {
   return (
     <Stack spacing={2} sx={{ width: "100%" }}>
       <Autocomplete
-      size="small"
+        size="small"
         freeSolo
         options={users}
         renderOption={(props, option) => (
@@ -73,24 +78,27 @@ const SearchUsers: FC<Props> = ({ users, setSelectUser, selectUser }) => {
 };
 
 /**
- * Propiedades del componente `UserFrame`.
+ * Properties for the `UserFrame` component.
  * 
- * @property {UsuarioCampoBusqueda} user - Datos del usuario a mostrar.
+ * @typedef {Object} UserFrameProps
+ * @property {UsuarioCampoBusqueda} user - The user data to display.
  */
 type UserFrameProps = {
   user: UsuarioCampoBusqueda;
 };
 
 /**
- * Componente que muestra el nombre y la imagen de un usuario en la lista de opciones.
+ * `UserFrame` component: Displays a user's avatar and name in the search results.
  * 
- * @param {UsuarioCampoBusqueda} user - Datos del usuario a mostrar.
- * @returns {JSX.Element} Elemento JSX con la información del usuario.
+ * @component
+ * @param {UserFrameProps} props - Component properties.
+ * @param {UsuarioCampoBusqueda} props.user - User data to display.
+ * @returns {JSX.Element} A box displaying the user's avatar and name.
  */
-const UserFrame: React.FC<UserFrameProps> = ({ user }) => {
+const UserFrame: FC<UserFrameProps> = ({ user }) => {
   return (
     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-      <Avatar src={user.foto}/>
+      <Avatar src={user.foto} />
       <Box>
         <Typography>{user.nombreCompleto}</Typography>
       </Box>

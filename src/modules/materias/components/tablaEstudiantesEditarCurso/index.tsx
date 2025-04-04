@@ -1,12 +1,9 @@
 import DataTable, { ConditionalStyles } from "react-data-table-component";
 import { TableColumn, TableStyles } from "react-data-table-component";
 import { Avatar, useTheme } from "@mui/material";
-import React, { useContext, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 
 import Status from "@modules/general/components/status";
-import { useNavigate } from "react-router";
-
-import { AccountContext } from "@modules/general/context/accountContext";
 import { EstudianteCurso } from "@modules/materias/utils/forms/form.schema";
 import { labelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
 
@@ -18,14 +15,6 @@ const TablaEstudiantesEditarCurso: React.FC<
   TablaEstudiantesEditarCursoProps
 > = ({ estudiante, setSelectUsers }) => {
   const theme = useTheme();
-
-  const [selectUsuario, setSelectUsuario] = useState<
-    EstudianteCurso | undefined
-  >(undefined);
-
-  const token = useContext(AccountContext)!!.localUser?.token;
-
-  const navigate = useNavigate();
 
   const columns: TableColumn<EstudianteCurso & { rowIndex: number }>[] = [
     {

@@ -6,27 +6,26 @@ import {
   SxProps,
 } from "@mui/material";
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { rutasUsuarios } from "@modules/usuarios/router/router";
+// import { useNavigate } from "react-router-dom";
 import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 
 type Props = {
   usuario: UsuarioPortafolioCard;
-  sx?: SxProps
+  sx?: SxProps;
 };
 
 export const ProjectCardAvatar: React.FC<Props> = ({ usuario, sx }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   return (
     <Tooltip title={usuario.nombres}>
       <IconButton
-        onClick={() =>
-          navigate(rutasUsuarios.verPortafolio.replace(":id", usuario.id))
-        }
+      // onClick={() =>
+      //   navigate(rutasUsuarios.verPortafolio.replace(":id", usuario.id))
+      // }
       >
-        <Avatar alt={usuario.nombres} src={usuario.foto} sx={sx}/>
+        <Avatar alt={usuario.nombres} src={usuario.foto} sx={sx} />
       </IconButton>
     </Tooltip>
   );
@@ -49,6 +48,6 @@ export const ProjectCardMembers: React.FC<ProjectCardMembersProps> = ({
     );
   } else
     return integrantes.map((integrante) => (
-      <ProjectCardAvatar usuario={integrante} key={integrante.id} />
+      <ProjectCardAvatar usuario={integrante}/>
     ));
 };

@@ -8,7 +8,6 @@ import {
   useTheme,
 } from "@mui/material";
 import React from "react";
-import { SeccionCurso } from "@modules/materias/types/seccion";
 import AccordionUsage from "@modules/general/components/accordionUsage";
 import { ProjectCardPortafolio } from "@modules/general/components/projectCard";
 import {
@@ -18,9 +17,10 @@ import {
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import useOrderSelect from "@modules/general/hooks/useOrderSelect";
 import { labelCardSeccion } from "@modules/materias/enums/labelCardSeccion";
+import { Seccion } from "@modules/materias/types/seccion";
 
 type CardSeccionProps = {
-  seccion: SeccionCurso;
+  seccion: Seccion;
 };
 
 const CardSeccion: React.FC<CardSeccionProps> = ({ seccion }) => {
@@ -28,7 +28,7 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion }) => {
 
   const theme = useTheme();
 
-  const { handleRequestSort, orderBy, stableSort } =
+  const { handleRequestSort, stableSort } =
     useOrderSelect<ProyectoCard>();
 
   const Title = () => {

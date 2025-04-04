@@ -1,6 +1,6 @@
 import { useTheme } from "@mui/material";
 import { BaseDeDatos } from "../types/baseDeDatos";
-import { getImage } from "@modules/general/components/roundedIcon/utils";
+import { getImage } from "@modules/general/utils/getImage";
 
 export const getDataBaseTypesMap: Map<BaseDeDatos["tipo"], string> = new Map([
   ["S", "SQL"],

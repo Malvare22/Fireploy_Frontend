@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LabelGeneral } from "@modules/general/enums/labelGeneral";
+import { labelGeneral } from "@modules/general/enums/labelGeneral";
 import useQuery from "@modules/general/hooks/useQuery";
 import { rutasGeneral } from "@modules/general/router/router";
 import { obtenerFechaActual } from "@modules/general/utils/fechas";
@@ -174,12 +174,12 @@ function Registrar() {
                   variant="outlined"
                   onClick={() => navigate(rutasGeneral.login)}
                 >
-                  {LabelGeneral.volver}
+                  {labelGeneral.volver}
                 </Button>
               </Box>
               <Box>
                 <Button onClick={onSubmit} variant="contained">
-                  {LabelGeneral.registrar}
+                  {labelGeneral.registrar}
                 </Button>
               </Box>
             </Stack>

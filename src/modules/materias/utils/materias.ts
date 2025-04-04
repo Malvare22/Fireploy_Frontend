@@ -10,7 +10,7 @@ const materiaStates: Record<Materia["estado"], string> = {
   I: "Inactivo",
 } as const;
 
-export const getMateriaEstadoMap = new Map(
+export const getMateriaStateMap = new Map(
   Object.entries(materiaStates) as [Materia["estado"], string][]
 );
 

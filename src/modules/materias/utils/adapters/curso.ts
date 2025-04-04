@@ -5,7 +5,7 @@ export function adaptCursoToCursoTabla(x: Curso): CursoTabla {
   return {
     cantidadEstudiantes: x.estudiantes?.length || 0,
     docente: x.docente
-      ? { id: parseInt(x.docente?.id), nombre: x.docente?.nombre }
+      ? { id: (x.docente?.id), nombre: x.docente?.nombre }
       : null,
     estado: x.estado,
     grupo: x.grupo,

@@ -11,8 +11,8 @@ import Carousel from "react-material-ui-carousel";
 import AnimatedCard from "@modules/general/components/animatedCard";
 import AtomicModel from "@modules/general/components/animations/atomicModel";
 import ProjectCard from "@modules/general/components/projectCard";
-import PortafolioCard from "@modules/general/components/portafolioCard";
 import { usuarioPrueba } from "@modules/usuarios/types/usuario.portafolio";
+import PortafolioCard from "@modules/general/components/portafolioCard";
 
 export default function Home() {
 
@@ -113,7 +113,7 @@ const SeccionSegunda = () => {
         >
           {isMobile
             ? // Una carta por slide en pantallas pequeñas
-              items.map((item, index) => (
+              items.map((_item, index) => (
                 <Box
                   key={index}
                   sx={{ display: "flex", justifyContent: "center", margin: 0 }}
@@ -172,7 +172,7 @@ const SeccionTercera = () => {
         >
           {isMobile
             ? // Una carta por slide en pantallas pequeñas
-              items.map((item, index) => (
+              items.map((_item, _index) => (
                 <Box sx={{ width: "100%" }}>
                   <PortafolioCard usuario={usuarioPrueba} />
                 </Box>
