@@ -16,7 +16,6 @@ import {
 
 import { useContext, useEffect, useState } from "react";
 import ProjectCard from "@modules/general/components/projectCard";
-import { labelPortafolio } from "@modules/usuarios/enum/labelPortafolio";
 import useSpringModal from "@modules/general/hooks/useSpringModal";
 import SpringModal from "@modules/general/components/springModal";
 import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyectoPortafolio";
@@ -30,6 +29,7 @@ import { getUsuarioService } from "@modules/usuarios/services/get.usuario";
 import { AccountContext } from "@modules/general/context/accountContext";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 import { adapterUsuario } from "@modules/usuarios/utils/adaptar.usuario";
+import { labelPortafolio } from "@modules/usuarios/enum/LabelPortafolio";
 // import AlertDialog from "@modules/general/components/alertDialog";
 
 // interface Props {
