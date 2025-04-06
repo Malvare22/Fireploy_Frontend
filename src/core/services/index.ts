@@ -42,13 +42,13 @@ type MetodoConsulta = "get" | "post" | "put" | "delete" | "patch";
  * @param headers los respectivos headers de la consulta
  * @returns Una APIResponse con los errores e información posibles de la consulta
  */
-const fetchData = async <T>(
+export const fetchData = async <T>(
   method: MetodoConsulta,
   url: string,
   data?: unknown,
   params?: Record<string, unknown>,
   headers?: Record<string, string>
-): Promise<ApiResponse<T>> => {
+): Promise<T> => {
   try {
     const config: AxiosRequestConfig = {
       method,
@@ -60,15 +60,27 @@ const fetchData = async <T>(
         ...(headers || {}),
       },
     };
-    const response: ApiResponse<T> = await apiClient(config);
-    return response;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+    const response = await apiClient<ApiResponse<T>>(config);
+
+    const responseData = response;
+
+    if (responseData.data.error) {
+      throw {
+        message: responseData.data.error.message || "Error en la API",
+        statusCode: responseData.data.error.statusCode || 500,
+      };
+    }
+
+
+    return responseData.data as T;
   } catch (error: any) {
-    console.error(
-      "Error en la petición:",
-      error.response?.data || error.message
-    );
-    return { error: error.response?.data || error.message };
+    // Manejo de errores de red o de Axios
+    const errData = error?.response?.data;
+    throw {
+      message: errData?.error?.message || errData?.message || error.message,
+      statusCode: errData?.error?.statusCode || errData?.statusCode || error.response?.status || 500,
+    };
   }
 };
 

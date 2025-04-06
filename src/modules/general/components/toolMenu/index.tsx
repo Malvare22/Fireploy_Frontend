@@ -16,7 +16,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { rutasMaterias } from "@modules/materias/router/router";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { rutasProyectos } from "@modules/proyectos/router";
-import { AccountContext, AccountInformation } from "@modules/general/context/accountContext";
+import { AccountInformation, useAuth } from "@modules/general/context/accountContext";
 import CastForEducationIcon from "@mui/icons-material/CastForEducation";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import StorageIcon from "@mui/icons-material/Storage";
@@ -210,13 +210,13 @@ export default function DashboardLayoutBasic(props: any) {
   const theme = useTheme();
 
   // Get the logged-in user data from context
-  const { localUser } = React.useContext(AccountContext)!!;
+  const {accountInformation} = useAuth();
 
   return (
     <>
-      {localUser && (
+      {accountInformation && (
         <AppProvider
-          navigation={getNavigationElements(localUser)}
+          navigation={getNavigationElements(accountInformation)}
           router={router}
           theme={theme}
           branding={{

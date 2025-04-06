@@ -1,19 +1,19 @@
 import AlertDialog from "@modules/general/components/alertDialog";
-import { AccountContext } from "@modules/general/context/accountContext";
+import { useAuth } from "@modules/general/context/accountContext";
 import useQuery from "@modules/general/hooks/useQuery";
 import Perfil from "@modules/usuarios/components/perfil";
 import { getUsuarioService } from "@modules/usuarios/services/get.usuario";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { adapterUsuario } from "@modules/usuarios/utils/adaptar.usuario";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 function GestionarPerfil() {
   const { id } = useParams();
 
-  const token = useContext(AccountContext)?.localUser.token;
-
+  const { accountInformation } = useAuth();
+  const { token } = accountInformation;
   const [usuario, setUsuario] = useState<Usuario | undefined>(undefined);
 
   const { error, handleAlertClose, initQuery, message, open, responseData } =

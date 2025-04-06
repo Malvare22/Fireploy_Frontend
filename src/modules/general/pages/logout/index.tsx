@@ -1,17 +1,17 @@
-import { AccountContext, accountInformationTemplate } from "@modules/general/context/accountContext";
+import { accountInformationTemplate, useAuth } from "@modules/general/context/accountContext";
 import { rutasGeneral } from "@modules/general/router/router";
 import { Typography } from "@mui/material";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 function Logout() {
   const navigate = useNavigate();
 
-  const setLocalUser = useContext(AccountContext)?.setLocalUser!!;
+  const {setAccountInformation} = useAuth();
 
   useEffect(() => {
     localStorage.clear();
-    setLocalUser(accountInformationTemplate);
+    setAccountInformation(accountInformationTemplate);
     navigate(rutasGeneral.login);
   }, []);
 

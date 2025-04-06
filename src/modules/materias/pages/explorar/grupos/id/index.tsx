@@ -1,5 +1,5 @@
 import AlertDialog from "@modules/general/components/alertDialog";
-import { AccountContext } from "@modules/general/context/accountContext";
+import { useAuth } from "@modules/general/context/accountContext";
 import useQuery from "@modules/general/hooks/useQuery";
 import CardSeccion from "@modules/materias/components/cardSeccion";
 import { LabelCurso } from "@modules/materias/enums/labelCurso";
@@ -15,8 +15,8 @@ import { useParams } from "react-router";
 function VerInformacionCurso() {
   const { idCurso } = useParams();
 
-  const token = useContext(AccountContext)?.localUser.token;
-
+  const { accountInformation } = useAuth();
+  const { token } = accountInformation;
   const { error, handleAlertClose, initQuery, open, responseData, message } =
     useQuery<CursoService>(() => getCursoById(token!!, idCurso || ""), false);
 

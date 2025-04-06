@@ -1,5 +1,5 @@
 import { TiposUsuario } from "@modules/usuarios/types/usuario";
-import React, { createContext } from "react";
+import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 /**
  * **Type representing user account information.**
@@ -34,14 +34,67 @@ export const accountInformationTemplate: AccountInformation = {
   id: -1,
 };
 
-/**
- * **React Context for user account information.**
- *
- * Provides and manages user-related data throughout the application.
- *
- * @constant {React.Context<{localUser: AccountInformation, setLocalUser: React.Dispatch<AccountInformation>} | null>} AccountContext
- */
-export const AccountContext = createContext<{
-  localUser: AccountInformation;
-  setLocalUser: React.Dispatch<AccountInformation>;
-} | null>(null);
+export type AuthContext = {
+  showSessionExpired: boolean;
+  triggerSessionExpired: React.Dispatch<boolean>;
+  accountInformation: AccountInformation;
+  setAccountInformation: React.Dispatch<AccountInformation>;
+};
+
+export const AuthContext = createContext<AuthContext>({
+  showSessionExpired: false,
+  triggerSessionExpired: () => {},
+  accountInformation: accountInformationTemplate,
+  setAccountInformation: () => {},
+});
+
+type AuthProviderProps = {
+  children: ReactNode;
+};
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [localUser, setLocalUser] = useState<AccountInformation>(accountInformationTemplate);
+
+  /**
+   * Efecto que escucha cambios en el almacenamiento local y actualiza la información del usuario en el estado.
+   * Se ejecuta al montar el componente y cada vez que cambia el almacenamiento local.
+   */
+  useEffect(() => {
+    /**
+     * Función que obtiene los datos de la cuenta del usuario desde `localStorage`
+     * y actualiza el estado `localUser`.
+     */
+    const handleStorageChange = () => {
+      if (localStorage.getItem("ACCOUNT")) {
+        const user = JSON.parse(localStorage.getItem("ACCOUNT") as string) as AccountInformation;
+        setLocalUser(user);
+      }
+    };
+
+    // Inicializa el estado con los datos actuales de `localStorage`
+    handleStorageChange();
+
+    // Agrega un listener para detectar cambios en `localStorage`
+    window.addEventListener("storage", handleStorageChange);
+  }, []);
+  const [showSessionExpired, setShowSessionExpired] = useState(false);
+
+  const triggerSessionExpired = () => {
+    setShowSessionExpired(true);
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        showSessionExpired,
+        triggerSessionExpired,
+        accountInformation: localUser,
+        setAccountInformation: setLocalUser,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => useContext(AuthContext)
+

@@ -21,7 +21,6 @@ import { useState } from "react";
 import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, Container, styled } from "@mui/system";
-import { AccountContext } from "@modules/general/context/accountContext";
 import {
   getGenderArray,
   getUserTypesArray,
@@ -49,6 +48,7 @@ import TextFieldPassword from "@modules/general/components/textFieldPassword";
 import { getSolicitudService } from "@modules/usuarios/services/get.solicitud";
 import { postCrearSolicitud } from "@modules/usuarios/services/post.solicitud.crear";
 import { UsuarioSchema } from "@modules/usuarios/utils/form/usuario.schema";
+import { useAuth } from "@modules/general/context/accountContext";
 
 interface PerfilProps {
   usuario: Usuario;
@@ -56,8 +56,8 @@ interface PerfilProps {
 }
 
 const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
-  const token = useContext(AccountContext)?.localUser.token ?? "";
-
+  const { accountInformation } = useAuth();
+  const { token } = accountInformation;
   const [id, setId] = useState<number | undefined>(undefined);
 
   const { register, handleSubmit, formState, getValues, control, watch } =
@@ -137,8 +137,8 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
     }
   }, [responseDataUpdateUser]);
 
-  const CURRENT_USER_TYPE = (useContext(AccountContext)!!.localUser?.tipo ??
-    "E") as TiposUsuario;
+  const { tipo } = accountInformation;
+  const CURRENT_USER_TYPE =tipo ?? "E";
 
   useEffect(() => {
     if (!id) return;
@@ -533,9 +533,8 @@ export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
 };
 
 const ButtonUpdaterRol = () => {
-  const token = useContext(AccountContext)!!.localUser?.token;
-
-  const id = useContext(AccountContext)!!.localUser?.id;
+  const { accountInformation } = useAuth();
+  const { token, id } = accountInformation;
 
   const theme = useTheme();
 

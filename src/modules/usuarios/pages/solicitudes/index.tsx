@@ -1,18 +1,8 @@
 import useSearch from "@modules/general/hooks/useSearch";
 import TablaSolicitudes from "@modules/usuarios/components/promover";
 import { labelSolicitudes } from "@modules/usuarios/enum/labelSolicitudes";
-import {
-  getDatesSolicitudes,
-  SolicitudPromover,
-} from "@modules/usuarios/types/solicitud.promover";
-import {
-  Divider,
-  Grid2,
-  MenuItem,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { getDatesSolicitudes, SolicitudPromover } from "@modules/usuarios/types/solicitud.promover";
+import { Divider, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import { useFiltersByConditions } from "@modules/general/hooks/useFiltersByCondition";
@@ -20,31 +10,27 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import useQuery from "@modules/general/hooks/useQuery";
 import { SolicitudService } from "@modules/usuarios/types/solicitud.service";
 import { getSolicitudesServices } from "@modules/usuarios/services/get.solicitud";
-import { AccountContext } from "@modules/general/context/accountContext";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { adaptSolicitudService } from "@modules/usuarios/utils/adapt.solicitudes";
+import { useAuth } from "@modules/general/context/accountContext";
 
 function VistaSolicitudes() {
-  const {
-    searchValue,
-    setSearchValue,
-    filteredData: filterDataFunction,
-  } = useSearch();
+  const { searchValue, setSearchValue, filteredData: filterDataFunction } = useSearch();
 
   const [solicitudes, setSolicitudes] = useState<SolicitudPromover[]>([]);
 
-  const token = useContext(AccountContext)!!.localUser.token;
-
-  const { initQuery, error, handleAlertClose, open, message, responseData } =
-    useQuery<SolicitudService[]>(() => getSolicitudesServices(token));
+  const { accountInformation } = useAuth();
+  const { token } = accountInformation;
+  const { initQuery, error, handleAlertClose, open, message, responseData } = useQuery<
+    SolicitudService[]
+  >(() => getSolicitudesServices(token));
 
   useEffect(() => {
     initQuery();
   }, []);
 
   useEffect(() => {
-    if (responseData)
-      setSolicitudes(responseData.map((res) => adaptSolicitudService(res)));
+    if (responseData) setSolicitudes(responseData.map((res) => adaptSolicitudService(res)));
   }, [responseData]);
 
   const { filterData, toggleFilter, filters } = useFiltersByConditions();
@@ -56,11 +42,7 @@ function VistaSolicitudes() {
       (item: SolicitudPromover[]) => {
         if (y == "") return item;
         return item.filter((solicitud) => {
-          const x = (
-            solicitud.id +
-            solicitud.usuario.id +
-            solicitud.usuario.nombres
-          ).toLowerCase();
+          const x = (solicitud.id + solicitud.usuario.id + solicitud.usuario.nombres).toLowerCase();
           return x.includes(y);
         });
       }
@@ -77,8 +59,7 @@ function VistaSolicitudes() {
         fullWidth
         onChange={(e) => {
           const value = e.target.value || "";
-          if (value != "")
-            toggleFilter("usuario.fechaRecepcion", (x: any) => x == value);
+          if (value != "") toggleFilter("usuario.fechaRecepcion", (x: any) => x == value);
           else toggleFilter("usuario.fechaRecepcion", (_x: any) => true);
         }}
         defaultValue={""}
@@ -101,8 +82,7 @@ function VistaSolicitudes() {
         fullWidth
         onChange={(e) => {
           const value = e.target.value || "";
-          if (value != "")
-            toggleFilter("usuario.fechaAceptacion", (x: any) => x == value);
+          if (value != "") toggleFilter("usuario.fechaAceptacion", (x: any) => x == value);
           else toggleFilter("usuario.fechaAceptacion", (_x: any) => true);
         }}
         defaultValue={""}

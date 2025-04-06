@@ -1,13 +1,11 @@
 import { RouterProvider } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
-import { useEffect, useState } from "react";
 import { getTheme } from "./themes";
 import { router } from "./router/router";
-import {
-  AccountContext,
-  AccountInformation,
-  accountInformationTemplate,
-} from "@modules/general/context/accountContext";
+import { AuthProvider } from "@modules/general/context/accountContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 /**
  * Componente principal de la aplicación.
@@ -24,50 +22,20 @@ function App(): JSX.Element {
    * @state {React.Dispatch<React.SetStateAction<AccountInformation | null>>} setLocalUser -
    * Función para actualizar la información del usuario.
    */
-  const [localUser, setLocalUser] = useState<AccountInformation>(
-    accountInformationTemplate
-  );
-
-  /**
-   * Efecto que escucha cambios en el almacenamiento local y actualiza la información del usuario en el estado.
-   * Se ejecuta al montar el componente y cada vez que cambia el almacenamiento local.
-   */
-  useEffect(() => {
-    /**
-     * Función que obtiene los datos de la cuenta del usuario desde `localStorage`
-     * y actualiza el estado `localUser`.
-     */
-    const handleStorageChange = () => {
-      if (localStorage.getItem("ACCOUNT")) {
-        const user = JSON.parse(
-          localStorage.getItem("ACCOUNT") as string
-        ) as AccountInformation;
-        setLocalUser(user);
-      }
-    };
-
-    // Inicializa el estado con los datos actuales de `localStorage`
-    handleStorageChange();
-
-    // Agrega un listener para detectar cambios en `localStorage`
-    window.addEventListener("storage", handleStorageChange);
-  }, []);
 
   return (
     /**
      * Proveedor de contexto que almacena la información del usuario.
      * Permite que otros componentes accedan y actualicen el estado del usuario.
      */
-    <AccountContext.Provider
-      value={{ localUser: localUser, setLocalUser: setLocalUser }}
-    >
-      {/* Proveedor de tema para la aplicación */}
-
-      <ThemeProvider theme={getTheme}>
-        {/* Proveedor de enrutamiento para manejar la navegación */}
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </AccountContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <ThemeProvider theme={getTheme}>
+          {/* Proveedor de enrutamiento para manejar la navegación */}
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
 

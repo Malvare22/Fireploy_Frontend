@@ -1,4 +1,3 @@
-import { AccountContext } from "@modules/general/context/accountContext";
 import { Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
@@ -15,14 +14,15 @@ import useQuery from "@modules/general/hooks/useQuery";
 import { adaptCursoToCursoTabla } from "@modules/materias/utils/adapters/curso";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
 import AlertDialog from "@modules/general/components/alertDialog";
+import { useAuth } from "@modules/general/context/accountContext";
 
 function ListarCursos() {
   const { idMateria } = useParams();
 
   const [cursos, setCursos] = useState<CursoTabla[]>([]);
 
-  const token = useContext(AccountContext)!!.localUser?.token;
-
+  const { accountInformation } = useAuth();
+  const { token } = accountInformation;
   /**
    * Variables de Consulta de Materias
    */

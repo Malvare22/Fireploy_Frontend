@@ -6,7 +6,6 @@ import {
   Typography,
 } from "@mui/material";
 import AlertDialog from "@modules/general/components/alertDialog";
-import { AccountContext } from "@modules/general/context/accountContext";
 import useQuery from "@modules/general/hooks/useQuery";
 import useSearch from "@modules/general/hooks/useSearch";
 import TablaUsuarios from "@modules/usuarios/components/tablaUsuarios";
@@ -20,10 +19,11 @@ import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { useNavigate } from "react-router";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { useAuth } from "@modules/general/context/accountContext";
 
 function ListarUsuarios() {
-  const token = useContext(AccountContext)?.localUser.token ?? '';
-  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  const { accountInformation } = useAuth();
+  const { token } = accountInformation;  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
 
   // 🔹 Estado temporal para capturar la entrada del usuario
   const [inputValue, setInputValue] = useState("");

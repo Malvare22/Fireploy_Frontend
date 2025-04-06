@@ -16,17 +16,17 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import useQuery from "@modules/general/hooks/useQuery";
 import { MateriaService } from "@modules/materias/types/materia.service";
-import { AccountContext } from "@modules/general/context/accountContext";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { adaptMateriaServiceToMateria } from "@modules/materias/utils/adapters/materia.service";
 import { labelListarMaterias } from "@modules/materias/enums/labelListarMaterias";
 import { getMateriasService } from "@modules/materias/services/get.materias.services";
+import { useAuth } from "@modules/general/context/accountContext";
 
 function ExplorarMaterias() {
   const [materias, setMaterias] = useState<Materia[]>([]);
 
-  const token = useContext(AccountContext)!!.localUser?.token;
-
+  const { accountInformation } = useAuth();
+  const { token } = accountInformation;
   const { error, handleAlertClose, initQuery, message, open, responseData } =
     useQuery<MateriaService[]>(() => getMateriasService(token!!), false);
 

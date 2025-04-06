@@ -10,7 +10,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import  { useContext, useEffect, useMemo, useState } from "react";
+import  { useEffect, useMemo, useState } from "react";
 import Status from "@modules/general/components/status";
 import InfoIcon from "@mui/icons-material/Info";
 import ActionButton from "@modules/general/components/actionButton";
@@ -39,9 +39,9 @@ import { buttonTypes } from "@modules/general/types/buttons";
 import useQuery from "@modules/general/hooks/useQuery";
 import { getUsuariosPorTipo } from "@modules/usuarios/services/get.usuarios.[tipo]";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
-import { AccountContext } from "@modules/general/context/accountContext";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { adaptarUsuarioServiceAUsuarioCampoDeBusqueda } from "@modules/usuarios/utils/adaptar.usuario";
+import { useAuth } from "@modules/general/context/accountContext";
 
 const TablaGestionarCursos = () => {
   const theme = useTheme();
@@ -75,7 +75,8 @@ const TablaGestionarCursos = () => {
     ]);
   }
 
-  const token = useContext(AccountContext)?.localUser.token ?? "";
+  const { accountInformation } = useAuth();
+  const { token } = accountInformation;
 
   const {
     error: errorGetDocentes,

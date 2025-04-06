@@ -1,5 +1,5 @@
 import AlertDialog from "@modules/general/components/alertDialog";
-import { AccountContext } from "@modules/general/context/accountContext";
+import { useAuth } from "@modules/general/context/accountContext";
 import useQuery from "@modules/general/hooks/useQuery";
 import VerPerfil from "@modules/usuarios/components/perfil";
 import { getUsuarioService } from "@modules/usuarios/services/get.usuario";
@@ -12,16 +12,16 @@ import { useContext, useEffect, useState } from "react";
 function VistaPerfil() {
   const [usuario, setUsuario] = useState<Usuario | undefined>(undefined);
 
-  const localUser = useContext(AccountContext)?.localUser;
-
+  const { accountInformation } = useAuth();
+  const { } = accountInformation;
   const {error, handleAlertClose, initQuery, open, responseData, message} = useQuery<UsuarioService>(() => getUsuarioService(localUser?.id ?? 0, localUser?.token ?? ''), false);
 
-  useEffect(
-    () => {
-      if(localUser == null) return;
-      initQuery();
-    }, [localUser]
-  );
+  // useEffect(
+  //   () => {
+  //     if(localUser == null) return;
+  //     initQuery();
+  //   }, [localUser]
+  // );
 
   useEffect(
     () => {

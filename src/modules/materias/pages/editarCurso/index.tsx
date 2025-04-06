@@ -1,12 +1,7 @@
 import { Curso } from "@modules/materias/types/curso";
 import { CursoSchema } from "@modules/materias/utils/forms/form.schema";
 import { Box, MenuItem, Stack, TextField, Typography } from "@mui/material";
-import {
-  Controller,
-  FormProvider,
-  useForm,
-  useFormContext,
-} from "react-hook-form";
+import { Controller, FormProvider, useForm, useFormContext } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import EditIcon from "@mui/icons-material/Edit";
 import { getMateriaStatesArray } from "@modules/materias/utils/materias";
@@ -14,7 +9,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useQuery from "@modules/general/hooks/useQuery";
 import { getCursoById } from "@modules/materias/services/get.curso";
 import { useContext, useEffect, useMemo, useState } from "react";
-import { AccountContext } from "@modules/general/context/accountContext";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { patchEditCurso } from "@modules/materias/services/patch.curso";
@@ -31,6 +25,7 @@ import { UsuarioCampoBusqueda } from "@modules/general/hooks/useSearchUsers";
 import { postCreateSeccion } from "@modules/materias/services/post.crear.seccion";
 import { patchEditSeccion } from "@modules/materias/services/patch.modificar.seccion";
 import { Seccion } from "@modules/materias/types/seccion";
+import { useAuth } from "@modules/general/context/accountContext";
 
 export enum labelEditarCurso {
   titulo = "Editar Curso",
@@ -71,7 +66,8 @@ function EstadoField() {
 
 function VistaEditarCurso() {
   const { idCurso } = useParams();
-  const token = useContext(AccountContext)?.localUser.token ?? "";
+  const { accountInformation } = useAuth();
+  const { token } = accountInformation;
   const [curso, setCurso] = useState<Curso | undefined>(undefined);
 
   const methods = useForm<Curso>({
@@ -118,17 +114,10 @@ function VistaEditarCurso() {
   }, [curso, methods.reset]);
 
   const { handleClose, handleOpen, open } = useModal();
-  const [usersSelected, setUsersSelected] = useState<UsuarioCampoBusqueda[]>(
-    []
-  );
-  const [selectStudentsToRemove, setSelectStudentsToRemove] = useState<
-    number[]
-  >([]);
+  const [usersSelected, setUsersSelected] = useState<UsuarioCampoBusqueda[]>([]);
+  const [selectStudentsToRemove, setSelectStudentsToRemove] = useState<number[]>([]);
 
-  const usersToAddCodes = useMemo(
-    () => usersSelected.map((user) => user.id),
-    [usersSelected]
-  );
+  const usersToAddCodes = useMemo(() => usersSelected.map((user) => user.id), [usersSelected]);
 
   const {
     handleAlertClose: handleAlertCloseAddStudents,
@@ -147,8 +136,7 @@ function VistaEditarCurso() {
     message: messageRemoveStudents,
     open: openRemoveStudents,
   } = useQuery<unknown>(
-    () =>
-      patchEstudiantesCurso(token!!, selectStudentsToRemove, "D", idCurso!!),
+    () => patchEstudiantesCurso(token!!, selectStudentsToRemove, "D", idCurso!!),
     true,
     "Estudiantes eliminados de manera correcta"
   );

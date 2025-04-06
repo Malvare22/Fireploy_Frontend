@@ -14,7 +14,6 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { AccountContext } from "@modules/general/context/accountContext";
 import { SolicitudPromover } from "@modules/usuarios/types/solicitud.promover";
 import { labelSolicitudes } from "@modules/usuarios/enum/labelSolicitudes";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
@@ -25,6 +24,7 @@ import { patchSolicitud } from "@modules/usuarios/services/patch.solicitud";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { useAuth } from "@modules/general/context/accountContext";
 
 type Props = {
   solicitudes: SolicitudPromover[];
@@ -40,10 +40,8 @@ const TablaSolicitudes: React.FC<Props> = ({ solicitudes }) => {
     open: openAlertDialogConfirmation,
     setOpen: setOpenAlertDialongConfirmation,
   } = useAlertDialog();
-
-  const token = useContext(AccountContext)!!.localUser?.token;
-
-  const idAdmin = useContext(AccountContext)!!.localUser?.id;
+  const { accountInformation } = useAuth();
+  const { token } = accountInformation;
   
   const [estadoSolicitud, setEstadoSolicitud] = useState<"A" | "R">("R");
  

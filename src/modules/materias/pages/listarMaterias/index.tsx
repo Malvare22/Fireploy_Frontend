@@ -1,5 +1,4 @@
 import AlertDialog from "@modules/general/components/alertDialog";
-import { AccountContext } from "@modules/general/context/accountContext";
 import useQuery from "@modules/general/hooks/useQuery";
 import TablaMaterias from "@modules/materias/components/tablaMaterias";
 import { labelListarMaterias } from "@modules/materias/enums/labelListarMaterias";
@@ -27,12 +26,13 @@ import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { useNavigate } from "react-router";
 import { rutasMaterias } from "@modules/materias/router/router";
+import { useAuth } from "@modules/general/context/accountContext";
 
 function ListarMaterias() {
   const [materias, setMaterias] = useState<MateriaTabla[]>([]);
 
-  const token = useContext(AccountContext)!!.localUser?.token;
-
+  const { accountInformation } = useAuth();
+  const { token } = accountInformation;
   /**
    * Variables de Consulta de Materias
    */

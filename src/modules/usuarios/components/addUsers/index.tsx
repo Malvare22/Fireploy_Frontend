@@ -5,7 +5,6 @@ import {
   useSearchUsers,
   UsuarioCampoBusqueda,
 } from "@modules/general/hooks/useSearchUsers";
-import { AccountContext } from "@modules/general/context/accountContext";
 import useQuery from "@modules/general/hooks/useQuery";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { getUsuariosPorTipo } from "@modules/usuarios/services/get.usuarios.[tipo]";
@@ -23,6 +22,7 @@ import {
   useTheme,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
+import { useAuth } from "@modules/general/context/accountContext";
 
 type Props = {
   typeUsers: UserTypeFullString;
@@ -39,8 +39,8 @@ const AddUsers: React.FC<Props> = ({
   handleAccept,
   handleCancel
 }) => {
-  const token = useContext(AccountContext)?.localUser.token;
-
+  const { accountInformation } = useAuth();
+  const { token } = accountInformation;
   const { selectUser, setSelectUser } = useSearchUsers();
 
   const {

@@ -5,7 +5,6 @@ import React, { useContext, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import useQuery from "@modules/general/hooks/useQuery";
-import { AccountContext } from "@modules/general/context/accountContext";
 import { MateriaTabla } from "@modules/materias/types/materia.tabla";
 import { labelTablaMaterias } from "@modules/materias/enums/labelTablaMaterias";
 import AlertDialog from "@modules/general/components/alertDialog";
@@ -15,6 +14,7 @@ import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import { patchChangeStatusMateria } from "@modules/materias/services/patch.change.materia";
 import { rutasMaterias } from "@modules/materias/router/router";
+import { useAuth } from "@modules/general/context/accountContext";
 
 type TablaMateriasProps = {
   materias: MateriaTabla[];
@@ -48,7 +48,8 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
 
   const navigate = useNavigate();
 
-  const token = useContext(AccountContext)!!.localUser?.token;
+  const { accountInformation } = useAuth();
+  const { token } = accountInformation;
 
   const columns: TableColumn<MateriaTabla & { rowIndex: number }>[] = [
     {

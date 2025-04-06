@@ -1,5 +1,5 @@
 import AlertDialog from "@modules/general/components/alertDialog";
-import { AccountContext } from "@modules/general/context/accountContext";
+import { useAuth } from "@modules/general/context/accountContext";
 import useQuery from "@modules/general/hooks/useQuery";
 import CardCurso from "@modules/materias/components/cardCurso";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
@@ -8,14 +8,14 @@ import { Materia } from "@modules/materias/types/materia";
 import { MateriaService } from "@modules/materias/types/materia.service";
 import { adaptMateriaServiceToMateria } from "@modules/materias/utils/adapters/materia.service";
 import { Alert, Card, Grid2, Stack, Typography } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 function VerCursosMateria() {
   const { idMateria } = useParams();
 
-  const token = useContext(AccountContext)?.localUser.token ?? '';
-
+  const { accountInformation } = useAuth();
+  const { token } = accountInformation;
   const { error, handleAlertClose, initQuery, message, open, responseData } =
     useQuery<MateriaService>(
       () => getMateriaById(token, idMateria || ''),

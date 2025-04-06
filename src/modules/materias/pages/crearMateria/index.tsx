@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import AlertDialog from "@modules/general/components/alertDialog";
-import { AccountContext } from "@modules/general/context/accountContext";
+import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import useQuery from "@modules/general/hooks/useQuery";
 import TablaGestionarCursos from "@modules/materias/components/tablaGestionarCursos";
@@ -55,8 +55,8 @@ function VistaCrearMateria() {
     watch,
   } = methods;
 
-  const token = useContext(AccountContext)?.localUser.token ?? '';
-
+  const { accountInformation } = useAuth();
+  const { token } = accountInformation;
   function getQueryToMake(type: "editar" | "crear") {
     const querys = {
       editar: () => postCreateMateriaService(token, getValues()),

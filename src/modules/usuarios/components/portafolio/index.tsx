@@ -26,10 +26,10 @@ import { ShowGoal } from "@modules/general/components/portafolioCard";
 import { useParams } from "react-router";
 import useQuery from "@modules/general/hooks/useQuery";
 import { getUsuarioService } from "@modules/usuarios/services/get.usuario";
-import { AccountContext } from "@modules/general/context/accountContext";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 import { adapterUsuario } from "@modules/usuarios/utils/adaptar.usuario";
 import { labelPortafolio } from "@modules/usuarios/enum/LabelPortafolio";
+import { useAuth } from "@modules/general/context/accountContext";
 // import AlertDialog from "@modules/general/components/alertDialog";
 
 // interface Props {
@@ -40,8 +40,8 @@ import { labelPortafolio } from "@modules/usuarios/enum/LabelPortafolio";
 const Portafolio = () => {
   const { id } = useParams();
 
-  const token = useContext(AccountContext)?.localUser.token;
-
+  const { accountInformation } = useAuth();
+  const { token } = accountInformation;
   const [usuario, setUsuario] = useState<Usuario | undefined>(undefined);
 
   const { initQuery, responseData } = useQuery<UsuarioService>(

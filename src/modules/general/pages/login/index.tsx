@@ -10,21 +10,23 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { labelLogin } from "@modules/general/enums/labelLogin";
 import { rutasGeneral } from "@modules/general/router/router";
-import useQuery from "@modules/general/hooks/useQuery";
 import { postSignUp, SignUpResponse } from "@modules/general/services/signUp";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { useNavigate } from "react-router-dom";
 import {
-  AccountContext,
   AccountInformation,
+  useAuth,
 } from "@modules/general/context/accountContext";
 import { getUserLetterTypes } from "@modules/usuarios/utils/usuario.map";
 import { TiposUsuario } from "@modules/usuarios/types/usuario";
 import { rutasProyectos } from "@modules/proyectos/router";
+import { useMutation } from "@tanstack/react-query";
+import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import TextFieldPassword from "@modules/general/components/textFieldPassword";
 
 function Copyright() {
   return (
@@ -52,44 +54,44 @@ const SignIn: React.FC = () => {
   const handleInput = (key: keyof SignUp, value: string) => {
     setSingUp({ ...singUp, [key]: value });
   };
-
-  const { setOpen, initQuery, open, responseData, error } =
-    useQuery<SignUpResponse>(
-      () => postSignUp(singUp.email, singUp.password),
-      false
-    );
-
-  const handleQuery = async () => {
-    await initQuery();
-  };
+  
+  const { mutate, isError, isSuccess, data, isPending } = useMutation({
+    mutationFn: () => postSignUp(singUp.email, singUp.password),
+    onError: () => setOpen(true)
+  });
+  const { setAccountInformation } = useAuth();
 
   const navigate = useNavigate();
 
-  const setLocalUser = useContext(AccountContext)?.setLocalUser;
+  const { open, setOpen } = useAlertDialog();
 
-  useEffect(() => {
-    if (responseData) {
-      const _localUser: AccountInformation = {
-        foto: responseData.foto,
-        id: responseData.id,
-        nombre: responseData.nombre,
-        tipo: getUserLetterTypes.get(responseData.tipo) as TiposUsuario,
-        token: responseData.access_token,
-      };
-      localStorage.setItem("ACCOUNT", JSON.stringify(_localUser));
-      if (setLocalUser) setLocalUser(_localUser);
-      navigate(rutasProyectos.listar);
-    }
-  }, [responseData]);
+  const onSuccess = (data: SignUpResponse) => {
+    const _localUser: AccountInformation = {
+      foto: data.foto,
+      id: data.id,
+      nombre: data.nombre,
+      tipo: getUserLetterTypes.get(data.tipo) as TiposUsuario,
+      token: data.access_token,
+    };
+    localStorage.setItem("ACCOUNT", JSON.stringify(_localUser));
+    setAccountInformation(_localUser);
+    navigate(rutasProyectos.listar);
+  };
+
+  useEffect(()=> {
+    if(isSuccess && data) onSuccess(data)
+  }, [isSuccess, data])
 
   return (
     <Card sx={{ padding: 2, maxWidth: 600 }}>
-      {error && <AlertDialog
-        textBody="Combinación de Usuario y Contraseña no encontrados en el sistema"
-        open={open}
-        title="Iniciar Sesión"
-        handleAccept={()=> setOpen(false)}
-      />}
+      {isError && (
+        <AlertDialog
+          textBody="Combinación de Usuario y Contraseña no encontrados en el sistema"
+          open={open}
+          title="Iniciar Sesión"
+          handleAccept={() => setOpen(false)}
+        />
+      )}
       <CssBaseline />
       <div>
         <Box
@@ -119,12 +121,11 @@ const SignIn: React.FC = () => {
           autoFocus
           onChange={(e) => handleInput("email", e.target.value)}
         />
-        <TextField
+        <TextFieldPassword
           variant="outlined"
           margin="normal"
           required
           fullWidth
-          name="password"
           label={labelLogin.contrasenia}
           type="password"
           id="password"
@@ -137,16 +138,12 @@ const SignIn: React.FC = () => {
           variant="contained"
           color="primary"
           sx={{ marginY: 3 }}
-          onClick={handleQuery}
+          onClick={() => mutate()}
+          loading={isPending}
         >
           {labelLogin.ingresar}
         </Button>
-        <Stack
-          spacing={2}
-          direction={"row"}
-          alignItems={"center"}
-          justifyContent={"center"}
-        >
+        <Stack spacing={2} direction={"row"} alignItems={"center"} justifyContent={"center"}>
           <Link href="#" variant="body2">
             {labelLogin.olvide}
           </Link>

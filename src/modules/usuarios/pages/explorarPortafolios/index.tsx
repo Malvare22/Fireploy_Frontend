@@ -6,16 +6,16 @@ import SearchIcon from '@mui/icons-material/Search';
 import useOrderSelect from "@modules/general/hooks/useOrderSelect";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import PortafolioCard from "@modules/general/components/portafolioCard";
-import { AccountContext } from "@modules/general/context/accountContext";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 import { getUsuariosPorTipo } from "@modules/usuarios/services/get.usuarios.[tipo]";
 import useQuery from "@modules/general/hooks/useQuery";
 import { adaptarUsuarioAUsuarioCardPortafolio, adapterUsuario } from "@modules/usuarios/utils/adaptar.usuario";
+import { useAuth } from "@modules/general/context/accountContext";
 
 function ExplorarPortafolios() {
 
-  const token = useContext(AccountContext)?.localUser?.token;
-
+  const { accountInformation } = useAuth();
+  const { token } = accountInformation;
   const { initQuery, responseData } =
     useQuery<UsuarioService[]>(
       () => getUsuariosPorTipo('todos', token!!),

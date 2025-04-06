@@ -27,7 +27,7 @@ import AlertDialog from "@modules/general/components/alertDialog";
 import useQuery from "@modules/general/hooks/useQuery";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 import { postModificarEstadoUsuarioService } from "@modules/usuarios/services/post.modificar.usuario";
-import { AccountContext } from "@modules/general/context/accountContext";
+import { useAuth } from "@modules/general/context/accountContext";
 
 type TablaUsuariosProps = {
   usuarios: Usuario[];
@@ -41,7 +41,8 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
     undefined
   );
 
-  const token = useContext(AccountContext)!!.localUser?.token;
+  const { accountInformation } = useAuth();
+  const { token } = accountInformation;
 
   const {
     handleAlertClose: handleAlertCloseChangeStatus,

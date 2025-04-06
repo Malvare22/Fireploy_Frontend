@@ -15,7 +15,7 @@ import { createBrowserRouter, RouteObject } from "react-router-dom";
  */
 const allRoutes: RouteObject = {
   path: "/",
-  children: [routerGeneral, authenticatedRoutes],
+  children: [routerGeneral],
 };
 
 /**
