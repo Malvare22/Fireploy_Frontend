@@ -6,13 +6,14 @@ import { Divider, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/mat
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import { useFiltersByConditions } from "@modules/general/hooks/useFiltersByCondition";
-import { useContext, useEffect, useMemo, useState } from "react";
-import useQuery from "@modules/general/hooks/useQuery";
-import { SolicitudService } from "@modules/usuarios/types/solicitud.service";
+import { useEffect, useMemo, useState } from "react";
 import { getSolicitudesServices } from "@modules/usuarios/services/get.solicitud";
-import AlertDialog from "@modules/general/components/alertDialog";
 import { adaptSolicitudService } from "@modules/usuarios/utils/adapt.solicitudes";
 import { useAuth } from "@modules/general/context/accountContext";
+import { useQuery } from "@tanstack/react-query";
+import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import LoaderElement from "@modules/general/components/loaderElement";
+import AlertDialogError from "@modules/general/components/alertDialogError";
 
 function VistaSolicitudes() {
   const { searchValue, setSearchValue, filteredData: filterDataFunction } = useSearch();
@@ -21,17 +22,27 @@ function VistaSolicitudes() {
 
   const { accountInformation } = useAuth();
   const { token } = accountInformation;
-  const { initQuery, error, handleAlertClose, open, message, responseData } = useQuery<
-    SolicitudService[]
-  >(() => getSolicitudesServices(token));
+
+  const {
+    open: openFetchSolicitudes,
+    handleClose: handleCloseFetchSolicitudes,
+    handleOpen: handleOpenFetchSolicitudes,
+  } = useAlertDialog();
+
+  const { data, isError, isLoading, error, isSuccess } = useQuery({
+    queryFn: () => getSolicitudesServices(token),
+    queryKey: ["solicitudes"],
+  });
 
   useEffect(() => {
-    initQuery();
-  }, []);
+    if (isSuccess && data) {
+      setSolicitudes(data.map((solicitud) => adaptSolicitudService(solicitud)));
+    }
+  }, [isSuccess, data]);
 
   useEffect(() => {
-    if (responseData) setSolicitudes(responseData.map((res) => adaptSolicitudService(res)));
-  }, [responseData]);
+    if (isError && error) handleOpenFetchSolicitudes();
+  }, [isError, error]);
 
   const { filterData, toggleFilter, filters } = useFiltersByConditions();
 
@@ -98,54 +109,58 @@ function VistaSolicitudes() {
   return (
     <>
       {error && (
-        <AlertDialog
-          handleAccept={handleAlertClose}
-          open={open}
+        <AlertDialogError
+          handleClose={handleCloseFetchSolicitudes}
+          open={openFetchSolicitudes}
           title="Consultar Solicitudes"
-          textBody={message}
+          error={error}
         />
       )}
-      <Stack spacing={3}>
-        <Stack>
-          <Typography variant="h4">{labelSolicitudes.solicitudes}</Typography>
-          <Divider />
+      {isLoading ? (
+        <LoaderElement />
+      ) : (
+        <Stack spacing={3}>
+          <Stack>
+            <Typography variant="h4">{labelSolicitudes.solicitudes}</Typography>
+            <Divider />
+          </Stack>
+          <Grid2 container>
+            <Grid2 size={{ xs: 12, md: 6 }}>
+              <TextFieldSearch
+                setSearchValue={setSearchValue}
+                label={labelSolicitudes.buscarSolicitud}
+                fullWidth
+              />
+            </Grid2>
+          </Grid2>
+          <Grid2 container columnSpacing={4}>
+            <Grid2 size={{ xs: 12, md: 4 }}>
+              <TextField
+                select
+                size="small"
+                label={labelSolicitudes.estado}
+                variant="standard"
+                fullWidth
+                onChange={(e) => {
+                  const value = e.target.value || "";
+                  console.log(value);
+                  if (value != "") toggleFilter("estado", (x: any) => x == value);
+                  else toggleFilter("estado", (_x: any) => true);
+                }}
+                defaultValue={""}
+              >
+                <MenuItem value="">{labelSelects.noAplicar}</MenuItem>
+                <MenuItem value="A">{labelSelects.aprobada}</MenuItem>
+                <MenuItem value="P">{labelSelects.pendiente}</MenuItem>
+                <MenuItem value="R">{labelSelects.rechazada}</MenuItem>
+              </TextField>
+            </Grid2>
+            <Grid2 size={{ xs: 12, md: 4 }}>{selectDatesAnswer}</Grid2>
+            <Grid2 size={{ xs: 12, md: 4 }}>{selectDatesReceipt}</Grid2>
+          </Grid2>
+          <TablaSolicitudes solicitudes={solicitudesToRender} />
         </Stack>
-        <Grid2 container>
-          <Grid2 size={{ xs: 12, md: 6 }}>
-            <TextFieldSearch
-              setSearchValue={setSearchValue}
-              label={labelSolicitudes.buscarSolicitud}
-              fullWidth
-            />
-          </Grid2>
-        </Grid2>
-        <Grid2 container columnSpacing={4}>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <TextField
-              select
-              size="small"
-              label={labelSolicitudes.estado}
-              variant="standard"
-              fullWidth
-              onChange={(e) => {
-                const value = e.target.value || "";
-                console.log(value);
-                if (value != "") toggleFilter("estado", (x: any) => x == value);
-                else toggleFilter("estado", (_x: any) => true);
-              }}
-              defaultValue={""}
-            >
-              <MenuItem value="">{labelSelects.noAplicar}</MenuItem>
-              <MenuItem value="A">{labelSelects.aprobada}</MenuItem>
-              <MenuItem value="P">{labelSelects.pendiente}</MenuItem>
-              <MenuItem value="R">{labelSelects.rechazada}</MenuItem>
-            </TextField>
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>{selectDatesAnswer}</Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>{selectDatesReceipt}</Grid2>
-        </Grid2>
-        <TablaSolicitudes solicitudes={solicitudesToRender} />
-      </Stack>
+      )}
     </>
   );
 }

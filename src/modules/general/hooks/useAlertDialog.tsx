@@ -3,7 +3,15 @@ import { useState } from "react";
 function useAlertDialog() {
   const [open, setOpen] = useState(false);
 
-  return { open, setOpen };
+  function handleClose() {
+    setOpen(false);
+  }
+
+  function handleOpen() {
+    setOpen(true);
+  }
+
+  return { open, setOpen, handleClose, handleOpen };
 }
 
 export default useAlertDialog;

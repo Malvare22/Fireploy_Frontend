@@ -5,6 +5,7 @@ import Login from "../pages/login";
 import Registrar from "../pages/registro";
 import LayoutAuthenticated from "../layouts/auth";
 import ErrorPage from "../pages/404";
+import { routerUsuarios } from "@modules/usuarios/router/router";
 
 export const rutaBase = "/";
 
@@ -41,10 +42,10 @@ export const routerGeneral: RouteObject = {
 export const authenticatedRoutes: RouteObject = {
   path: "/app",
   element: <LayoutAuthenticated />, // Layout para rutas privadas
-  // children: [
-  //   ...(routerMaterias || []),
-  //   ...(routerUsuarios || []),
-  //   ...(routerProyectos || []),
+  children: [
+    //...(routerMaterias || []),
+    ...(routerUsuarios || []),
+    //...(routerProyectos || []),
 
-  // ],
+  ],
 };

@@ -1,6 +1,5 @@
 import { accountInformationTemplate, useAuth } from "@modules/general/context/accountContext";
 import { rutasGeneral } from "@modules/general/router/router";
-import { Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
@@ -15,7 +14,7 @@ function Logout() {
     navigate(rutasGeneral.login);
   }, []);
 
-  return <Typography>AAAs</Typography>;
+  return <></>;
 }
 
 export default Logout;
