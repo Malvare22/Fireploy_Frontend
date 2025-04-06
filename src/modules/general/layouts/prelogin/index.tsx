@@ -11,14 +11,12 @@ function LayoutPrelogin() {
       <NavbarPrelogin />
       <Box
         sx={{
-          paddingX: { md: 10, xs: 2 },
-          backgroundColor:
-             theme.palette.background.default,
           paddingY: 5,
           marginTop: 10,
           display: "flex",
           justifyContent: "center",
           "> div": { width: "100%" },
+          minHeight: '70vh'
         }}
       >
         <Outlet />

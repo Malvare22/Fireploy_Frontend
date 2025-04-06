@@ -63,7 +63,7 @@ function App(): JSX.Element {
     >
       {/* Proveedor de tema para la aplicación */}
 
-      <ThemeProvider theme={getTheme("light")}>
+      <ThemeProvider theme={getTheme}>
         {/* Proveedor de enrutamiento para manejar la navegación */}
         <RouterProvider router={router} />
       </ThemeProvider>

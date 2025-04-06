@@ -1,4 +1,4 @@
-import { createTheme, PaletteMode, responsiveFontSizes } from "@mui/material";
+import { createTheme, responsiveFontSizes } from "@mui/material";
 
 declare module "@mui/material/styles" {
   interface Palette {
@@ -14,58 +14,42 @@ declare module "@mui/material/styles" {
   }
 }
 
-export const getTheme = (mode: PaletteMode) =>
-  responsiveFontSizes(
-    createTheme({
-      components: {
-
+export const getTheme = responsiveFontSizes(
+  createTheme({
+    components: {},
+    palette: {
+      primary: {
+        main: "#92AFE2",
+        contrastText: "rgba(255,255,255,0.87)",
       },
-      palette: {
-        mode: mode,
-        primary:
-          mode == "light"
-            ? {
-                main: "#0A192F",
-                contrastText: "rgba(255,255,255,0.87)",
-              }
-            : {
-                main: "#92AFE2",
-                contrastText: "rgba(255,255,255,0.87)",
-              },
-        secondary: {
-          main: "#8e3110",
-        },
-        terciary: {
-          main: "#757780",
-        },
-        info: {
-          main: "#5a727f",
-        },
-        warning: {
-          main: "#edad02",
-        },
-        success: {
-          main: "#59bd5c",
-        },
-        error: {
-          main: "#d05353",
-        },
-        background:
-          mode == "light"
-            ? {
-                default: "#fffbfb",
-                paper: "#fff",
-              }
-            : {
-                default: "#252323",
-                paper: "#121212",
-              },
+      secondary: {
+        main: "#4C5B61",
       },
-      typography: {
-        fontFamily: "Open Sans",
+      terciary: {
+        main: "#A8D4AD",
       },
-      shape: {
-        borderRadius: 8,
+      info: {
+        main: "#5a727f",
       },
-    })
-  );
+      warning: {
+        main: "#edad02",
+      },
+      success: {
+        main: "#59bd5c",
+      },
+      error: {
+        main: "#d05353",
+      },
+      background: {
+        default: "white",
+        paper: "#fff",
+      },
+    },
+    typography: {
+      fontFamily: "Open Sans",
+    },
+    shape: {
+      borderRadius: 8,
+    },
+  })
+);

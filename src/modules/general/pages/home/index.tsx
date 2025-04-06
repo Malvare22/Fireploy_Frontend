@@ -1,225 +1,132 @@
 import {
   Box,
   Button,
-  Stack,
+  Container,
+  Grid,
   Typography,
-  useMediaQuery,
+  Card,
+  CardContent,
   useTheme,
+  Stack,
 } from "@mui/material";
-import { LabelHome } from "../../enums/labelHome";
-import Carousel from "react-material-ui-carousel";
-import AnimatedCard from "@modules/general/components/animatedCard";
-import AtomicModel from "@modules/general/components/animations/atomicModel";
-import ProjectCard from "@modules/general/components/projectCard";
-import { usuarioPrueba } from "@modules/usuarios/types/usuario.portafolio";
-import PortafolioCard from "@modules/general/components/portafolioCard";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
+import FolderSpecialIcon from "@mui/icons-material/FolderSpecial";
+import CodeIcon from "@mui/icons-material/Code";
 
 export default function Home() {
+  const theme = useTheme();
 
   return (
     <Box>
-      <Stack direction={"column"} spacing={{ xl: 10, xs: 4 }}>
-        <SeccionPrimera />
-        <SeccionSegunda />
-        <SeccionTercera />
-      </Stack>
-    </Box>
-  );
-}
-
-const items = [1, 2, 3, 4, 5];
-
-const SeccionPrimera = () => {
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: { md: "row", xs: "column" },
-        gap: 4,
-        justifyContent: "center",
-      }}
-    >
-      <AnimatedCard sx={{ padding: 4, width: { md: 700 } }}>
-        <Stack direction={"column"} spacing={4}>
-          <Box>
-            <Typography variant="h3">
-              {LabelHome.seccionPrimeraTitulo}
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              width: { xs: "100%" },
-            }}
-          >
-            <Typography variant="h5">
-              {LabelHome.seccionPrimeraCuerpo}
-            </Typography>
-          </Box>
-          <Box>
-            <Button variant="contained">{LabelHome.seccionPrimeraBoton}</Button>
-          </Box>
-        </Stack>
-      </AnimatedCard>
-      <AtomicModel />
-    </Box>
-  );
-};
-
-const SeccionSegunda = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("xl"));
-
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: { xl: "row", xs: "column" },
-        justifyContent: "center",
-        flexGrow: 1,
-        gap: 3,
-      }}
-    >
-      <AnimatedCard sx={{ padding: 3 }}>
-        <Stack direction={"column"} spacing={5} sx={{ maxWidth: "520px" }}>
-          <Box>
-            <Typography variant="h3">
-              {LabelHome.seccionSegundaTitulo}
-            </Typography>
-          </Box>
-          <Box>
-            <Typography variant="h5">
-              {LabelHome.seccionSegundaCuerpo}
-            </Typography>
-          </Box>
-          <Box>
-            <Button variant="contained">{LabelHome.seccionSegundaBoton}</Button>
-          </Box>
-        </Stack>
-      </AnimatedCard>
+      {/* Hero */}
       <Box
         sx={{
-          flexGrow: 1,
-          display: "flex",
-          flexDirection: { md: "row", xs: "column" },
-          gap: 2,
-          alignItems: "center",
+          py: 10,
+          backgroundColor: theme.palette.background.default,
+          textAlign: "center",
         }}
       >
-        <Carousel
-          autoPlay={true} // Desactiva el autoplay para que el usuario controle el cambio
-          animation="fade" // Animación de deslizamiento
-          sx={{ width: "100%", padding: 0, height: "100%", paddingBottom: 2 }}
-          indicators={true} // Oculta los indicadores (puntos) del carrusel
-        >
-          {isMobile
-            ? // Una carta por slide en pantallas pequeñas
-              items.map((_item, index) => (
-                <Box
-                  key={index}
-                  sx={{ display: "flex", justifyContent: "center", margin: 0 }}
-                >
-                  <ProjectCard />
-                </Box>
-              ))
-            : // Dos cartas por slide en pantallas grandes
-              Array(Math.ceil(items.length / 2))
-                .fill(0)
-                .map((_, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: "flex",
-                      gap: 2,
-                      justifyContent: "center",
-                      margin: 2,
-                    }}
-                  >
-                    <ProjectCard />
-                    {items[index * 2 + 1] && <ProjectCard />}
-                    {/* Renderiza la segunda carta si existe */}
-                  </Box>
-                ))}
-        </Carousel>
+        <Container maxWidth="md">
+          <Typography variant="h2" fontWeight="bold" gutterBottom>
+            Despliega proyectos al instante y crea portafolios profesionales
+          </Typography>
+          <Typography variant="h6" color="text.secondary" mb={4}>
+            Una plataforma moderna para automatizar despliegues, gestionar proyectos y mostrar tu trabajo al mundo.
+          </Typography>
+          <Button variant="contained" size="large" endIcon={<RocketLaunchIcon />}>
+            Comienza ahora
+          </Button>
+        </Container>
+      </Box>
+
+      {/* Features */}
+      <Container sx={{ py: 10 }}>
+        <Grid container spacing={4}>
+          {[
+            {
+              title: "Automatización de despliegues",
+              icon: <AutoFixHighIcon fontSize="large" color="primary" />,
+              desc: "Configura tus despliegues con un solo clic. Integración con Git, Docker, y más.",
+            },
+            {
+              title: "Creación de portafolios",
+              icon: <FolderSpecialIcon fontSize="large" color="primary" />,
+              desc: "Organiza tus proyectos y muéstralos en un portafolio personalizable y profesional.",
+            },
+            {
+              title: "Integración continua",
+              icon: <CodeIcon fontSize="large" color="primary" />,
+              desc: "Conecta tus repos y activa pipelines para automatizar pruebas, builds y releases.",
+            },
+          ].map(({ title, icon, desc }) => (
+            <Grid item xs={12} md={4} key={title}>
+              <Card variant="outlined" sx={{ height: "100%" }}>
+                <CardContent>
+                  <Stack spacing={2} alignItems="center" textAlign="center">
+                    {icon}
+                    <Typography variant="h6">{title}</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {desc}
+                    </Typography>
+                  </Stack>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+
+      {/* Cómo Funciona */}
+      <Box sx={{ py: 10, backgroundColor: theme.palette.grey[50] }}>
+        <Container>
+          <Typography variant="h4" textAlign="center" mb={6}>
+            ¿Cómo funciona?
+          </Typography>
+          <Grid container spacing={4}>
+            {[
+              "Conecta tu cuenta de GitHub o GitLab",
+              "Configura tu pipeline de despliegue",
+              "Publica y comparte tu portafolio con un link único",
+            ].map((step, index) => (
+              <Grid item xs={12} md={4} key={index}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="h5" gutterBottom>
+                      Paso {index + 1}
+                    </Typography>
+                    <Typography variant="body1" color="text.secondary">
+                      {step}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </Box>
+
+      {/* CTA Final */}
+      <Box sx={{ py: 10, textAlign: "center" }}>
+        <Container>
+          <Typography variant="h4" gutterBottom>
+            ¿Listo para acelerar tus despliegues?
+          </Typography>
+          <Typography variant="body1" color="text.secondary" mb={3}>
+            Únete a cientos de desarrolladores que ya usan nuestra plataforma.
+          </Typography>
+          <Button variant="contained" size="large" endIcon={<RocketLaunchIcon />}>
+            Empieza Gratis
+          </Button>
+        </Container>
+      </Box>
+
+      {/* Footer simple */}
+      <Box sx={{ py: 4, backgroundColor: theme.palette.grey[200], textAlign: "center" }}>
+        <Typography variant="body2" color="text.secondary">
+          © {new Date().getFullYear()} TuSoftware.dev — Todos los derechos reservados.
+        </Typography>
       </Box>
     </Box>
   );
-};
-
-const SeccionTercera = () => {
-  const theme = useTheme();
-
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: { xl: "row", xs: "column-reverse" },
-        gap: 3,
-      }}
-    >
-      <Stack spacing={2} sx={{ width: "100%" }}>
-        <Carousel
-          autoPlay={true} // Desactiva el autoplay para que el usuario controle el cambio
-          animation="fade" // Animación de deslizamiento
-          sx={{
-            padding: 0,
-            height: "100%",
-            paddingBottom: 2,
-          }}
-          indicators={true} // Oculta los indicadores (puntos) del carrusel,
-          fullHeightHover
-        >
-          {isMobile
-            ? // Una carta por slide en pantallas pequeñas
-              items.map((_item, _index) => (
-                <Box sx={{ width: "100%" }}>
-                  <PortafolioCard usuario={usuarioPrueba} />
-                </Box>
-              ))
-            : // Dos cartas por slide en pantallas grandes
-              Array(Math.ceil(items.length / 2))
-                .fill(0)
-                .map((_, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 2,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <PortafolioCard usuario={usuarioPrueba} />
-                    {items[index * 2 + 1] ? (
-                      <PortafolioCard usuario={usuarioPrueba} />
-                    ) : (
-                      <Box sx={{ visibility: "hidden" }}>
-                        <PortafolioCard usuario={usuarioPrueba} />
-                      </Box>
-                    )}
-                    {/* Renderiza la segunda carta si existe */}
-                  </Box>
-                ))}
-        </Carousel>
-      </Stack>
-      <AnimatedCard sx={{ marginLeft: { xl: 4 }, flexGrow: 1, padding: 2 }}>
-        <Stack direction={"column"} spacing={5}>
-          <Box>
-            <Typography variant="h3">
-              {LabelHome.seccionTerceraTitulo}
-            </Typography>
-          </Box>
-          <Box>
-            <Typography variant="h5">
-              {LabelHome.seccionTerceraCuerpo}
-            </Typography>
-          </Box>
-          <Box>
-            <Button variant="contained">{LabelHome.seccionTerceraBoton}</Button>
-          </Box>
-        </Stack>
-      </AnimatedCard>
-    </Box>
-  );
-};
+}

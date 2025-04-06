@@ -37,14 +37,7 @@ function Footer(): JSX.Element {
       >
         {/* Logo and Name */}
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <img
-              src={getImage["logo_fireploy"].ruta}
-              alt={getImage["logo_fireploy"].nombre}
-              width={60}
-            />
-          </Box>
-          <Box sx={{ marginLeft: 1 }}>
+          <Box >
             <Typography variant="h5">{LabelFooter.fireploy}</Typography>
           </Box>
           <Box>
