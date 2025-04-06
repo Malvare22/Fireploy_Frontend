@@ -2,7 +2,7 @@ import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import { useFiltersByConditions } from "@modules/general/hooks/useFiltersByCondition";
 import useSearch from "@modules/general/hooks/useSearch";
-import RepositoryCard from "@modules/proyectos/components/cardRepository";
+import RepositoryCard from "@modules/proyectos/components/CardRepository";
 import { labelRepositorios } from "@modules/proyectos/enum/labelRepositorios";
 import {
   exampleRepositorios,
