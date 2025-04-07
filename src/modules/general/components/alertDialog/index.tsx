@@ -22,6 +22,7 @@ interface Props {
   handleAccept: () => void;
   handleCancel?: () => void;
   open: boolean;
+  isLoading?: boolean;
 }
 
 /**
@@ -45,7 +46,8 @@ const AlertDialog: React.FC<Props> = ({
   open,
   body,
   handleCancel,
-  textBody
+  textBody,
+  isLoading
 }) => {
   return (
     <React.Fragment>
@@ -66,7 +68,7 @@ const AlertDialog: React.FC<Props> = ({
           <Stack direction={"row"} spacing={2}>
             {handleAccept && (
               <Box>
-                <Button variant="contained" onClick={handleAccept}>
+                <Button variant="contained" loading={isLoading} onClick={handleAccept}>
                   Accept
                 </Button>
               </Box>

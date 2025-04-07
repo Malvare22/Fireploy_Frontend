@@ -49,6 +49,7 @@ type AuthProviderProps = {
 };
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [localUser, setLocalUser] = useState<AccountInformation>(accountInformationTemplate);
+  const [preload, setPreload] = useState(false);
   /**
    * Efecto que escucha cambios en el almacenamiento local y actualiza la información del usuario en el estado.
    * Se ejecuta al montar el componente y cada vez que cambia el almacenamiento local.
@@ -70,6 +71,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     // Agrega un listener para detectar cambios en `localStorage`
     window.addEventListener("storage", handleStorageChange);
+
+    setPreload(true);
   }, []);
 
   return (
@@ -79,7 +82,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setAccountInformation: setLocalUser,
       }}
     >
-      {children}
+      {preload && children}
     </AuthContext.Provider>
   );
 };

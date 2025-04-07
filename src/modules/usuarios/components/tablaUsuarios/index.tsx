@@ -2,15 +2,8 @@ import { labelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
 import { EstadoUsuario, Usuario } from "@modules/usuarios/types/usuario";
 import DataTable, { ConditionalStyles } from "react-data-table-component";
 import { TableColumn, TableStyles } from "react-data-table-component";
-import {
-  Chip,
-  Stack,
-  Tooltip,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import React, { useContext, useMemo, useState } from "react";
+import { Chip, Stack, Tooltip, Typography, useMediaQuery, useTheme } from "@mui/material";
+import React, { useEffect, useMemo, useState } from "react";
 import { getUserTypes } from "@modules/usuarios/utils/usuario.map";
 import SchoolIcon from "@mui/icons-material/School";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
@@ -24,65 +17,115 @@ import { useNavigate } from "react-router";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
-import useQuery from "@modules/general/hooks/useQuery";
-import { UsuarioService } from "@modules/usuarios/types/services.usuario";
-import { postModificarEstadoUsuarioService } from "@modules/usuarios/services/post.modificar.usuario";
 import { useAuth } from "@modules/general/context/accountContext";
+import { useMutation } from "@tanstack/react-query";
+import { postChangeUserStateService } from "@modules/usuarios/services/post.modificar.usuario";
+import AlertDialogError from "@modules/general/components/alertDialogError";
+import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
 
 type TablaUsuariosProps = {
   usuarios: Usuario[];
 };
+
+/**
+ * TablaUsuarios component displays a user table with data, status control, and actions.
+ *
+ * @component
+ * @param {Usuario[]} usuarios - Array of user objects to display in the table.
+ *
+ * @returns {React.ReactElement}
+ */
 const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
   const theme = useTheme();
-
   const matches = useMediaQuery(theme.breakpoints.up("md"));
 
-  const [selectUsuario, setSelectUsuario] = useState<Usuario | undefined>(
-    undefined
-  );
-
+  const [selectUsuario, setSelectUsuario] = useState<Usuario | undefined>(undefined);
   const { accountInformation } = useAuth();
   const { token } = accountInformation;
-
-  const {
-    handleAlertClose: handleAlertCloseChangeStatus,
-    initQuery: initQueryChangeStatus,
-    message: messageChangeStatus,
-    open: openChangeStatus,
-  } = useQuery<UsuarioService>(
-    () =>
-      postModificarEstadoUsuarioService(
-        selectUsuario?.id!!,
-        token!!,
-        selectUsuario?.estado == "A" ? "I" : "A"
-      ),
-    true,
-    "Estado cambiado correctamente"
-  );
-
-  const handleSelect = (usuario: Usuario) => {
-    setSelectUsuario(usuario);
-    setOpenHandleStatus(true);
-  };
-
   const navigate = useNavigate();
 
-  const { open: openHandleStatus, setOpen: setOpenHandleStatus } =
-    useAlertDialog();
+  // Mutation to toggle user status (active/inactive)
+  const { isSuccess, isError, isPending, error, mutate, data } = useMutation({
+    mutationFn: () =>
+      postChangeUserStateService(
+        token,
+        selectUsuario?.id ?? -1,
+        selectUsuario?.estado == "A" ? "I" : "A"
+      ),
+    mutationKey: ["changeUser"],
+  });
 
+  const {
+    open: openHandleStatus,
+    handleClose: handleCloseChangeStatus,
+    handleOpen: handleOpenChangeStatus,
+  } = useAlertDialog();
+
+  const {
+    handleOpen: handleOpenError,
+    handleClose: handleCloseError,
+    open: openError,
+  } = useAlertDialog();
+
+  const {
+    handleOpen: handleOpenSuccess,
+    handleClose: handleCloseSuccess,
+    open: openSuccess,
+  } = useAlertDialog();
+
+  /**
+   * Handles user selection and opens confirmation dialog.
+   * @param {Usuario} usuario - The selected user.
+   */
+  const handleSelect = (usuario: Usuario) => {
+    setSelectUsuario(usuario);
+    handleOpenChangeStatus();
+  };
+
+  /**
+   * Renders the modal content based on user status.
+   * @param {EstadoUsuario} status - Current status of the selected user.
+   * @returns {JSX.Element}
+   */
   function ModalChangeStatus(status: EstadoUsuario) {
     const label = status == "I" ? "habilitar" : "deshabilitar";
 
     return (
       <Stack>
         <Typography>
-          `¿Está seguro de que desea ${label} al usuario $
-          {selectUsuario?.nombres} ${selectUsuario?.apellidos}?`
+          {`¿Estás seguro de que desear ${label} al usuario ${selectUsuario?.nombres} ${selectUsuario?.apellidos}?`}
         </Typography>
       </Stack>
     );
   }
 
+  /**
+   * Triggers user status change mutation.
+   */
+  function handleChangeStatus() {
+    console.log(selectUsuario)
+    mutate();
+  }
+
+  // Close dialog after request ends
+  useEffect(() => {
+    if (!isPending) handleCloseChangeStatus();
+  }, [isPending]);
+
+  // Open error dialog if mutation fails
+  useEffect(() => {
+    if (error && isError) handleOpenError();
+  }, [isError, error]);
+
+  // Open success dialog if mutation succeeds
+  useEffect(() => {
+    console.log(data)
+    if (isSuccess) handleOpenSuccess();
+  }, [isSuccess]);
+
+  /**
+   * Table columns definition for DataTable
+   */
   const columns: TableColumn<Usuario & { rowIndex: number }>[] = [
     {
       name: labelUsuario.id,
@@ -98,115 +141,32 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
     {
       name: labelUsuario.rol,
       cell: (row) => {
-        const label = getUserTypes.get(row.tipo ?? 'E');
+        const label = getUserTypes.get(row.tipo ?? "E");
         switch (row.tipo) {
           case "A":
-            return (
-              <>
-                <Chip
-                  label={label}
-                  color="primary"
-                  icon={<ManageAccountsIcon />}
-                  sx={{
-                    padding: 1,
-                    color: "white",
-                    display: { xs: "none", md: "flex" },
-                  }}
-                />
-                <Stack
-                  sx={{
-                    backgroundColor: theme.palette.primary.main,
-                    color: "white",
-                    borderRadius: "100%",
-                    padding: 0.5,
-                    display: { md: "none", xs: "flex" },
-                  }}
-                >
-                  <Tooltip title={label}>
-                    <ManageAccountsIcon />
-                  </Tooltip>
-                </Stack>
-              </>
-            );
-
+            return renderChip(label as string, <ManageAccountsIcon />, "primary");
           case "D":
-            return (
-              <>
-                <Chip
-                  label={label}
-                  color="error"
-                  icon={<RecordVoiceOverIcon />}
-                  sx={{
-                    padding: 1,
-                    color: "white",
-                    display: { xs: "none", md: "flex" },
-                  }}
-                />
-                <Stack
-                  sx={{
-                    backgroundColor: theme.palette.error.main,
-                    color: "white",
-                    borderRadius: "100%",
-                    padding: 0.5,
-                    display: { md: "none", xs: "flex" },
-                  }}
-                >
-                  <Tooltip title={label}>
-                    <RecordVoiceOverIcon />
-                  </Tooltip>
-                </Stack>
-              </>
-            );
-
+            return renderChip(label as string, <RecordVoiceOverIcon />, "error");
           case "E":
-            return (
-              <>
-                <Chip
-                  label={label}
-                  color="warning"
-                  icon={<SchoolIcon />}
-                  sx={{
-                    padding: 1,
-                    color: "white",
-                    display: { xs: "none", md: "flex" },
-                  }}
-                />
-                <Stack
-                  sx={{
-                    backgroundColor: theme.palette.warning.main,
-                    color: "white",
-                    borderRadius: "100%",
-                    padding: 0.5,
-                    display: { md: "none", xs: "flex" },
-                  }}
-                >
-                  <Tooltip title={label}>
-                    <SchoolIcon />
-                  </Tooltip>
-                </Stack>
-              </>
-            );
+            return renderChip(label as string, <SchoolIcon />, "warning");
         }
       },
       width: matches ? "auto" : "70px",
     },
-
     {
       name: labelUsuario.estado,
       cell: (row) => <Status status={row.estado} />,
       sortable: true,
-      sortFunction: (rowA, rowB) => {
-        return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
-      },
+      sortFunction: (rowA, rowB) => rowA.estado.localeCompare(rowB.estado),
     },
     {
-      name: "Redes Sociales", // Nueva columna con un botón
+      name: "Social Networks",
       cell: (row) => {
         const redesSociales = showSocialNetworks(row.redSocial);
         if (redesSociales.length == 0)
           return (
             <Chip
-              label="No dispone"
+              label="Not Available"
               icon={<ErrorOutlineIcon />}
               color="info"
               sx={{ padding: 1, color: "white" }}
@@ -216,15 +176,13 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
       },
     },
     {
-      name: "Acciones", // Nueva columna con un botón
+      name: "Actions",
       cell: (row) => (
         <Stack direction={"row"}>
           <ActionButton
             mode={actionButtonTypes.ver}
             onClick={() =>
-              navigate(
-                rutasUsuarios.modificarPerfil.replace(":id", row.id!!.toString())
-              )
+              navigate(rutasUsuarios.modificarPerfil.replace(":id", row.id!!.toString()))
             }
           />
           <ActionButton mode={actionButtonTypes.editar} />
@@ -243,27 +201,55 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
           )}
         </Stack>
       ),
-      ignoreRowClick: true, // Evita que la fila se seleccione al hacer clic en el botón
+      ignoreRowClick: true,
       style: { display: "flex", justifyContent: "center" },
     },
   ];
 
+  /**
+   * Renders responsive Chip with tooltip icon for role.
+   * @param {string} label - Role label.
+   * @param {JSX.Element} icon - Icon for the role.
+   * @param {"primary" | "error" | "warning"} color - MUI color scheme.
+   * @returns {JSX.Element}
+   */
+  const renderChip = (label: string, icon: JSX.Element, color: "primary" | "error" | "warning") => (
+    <>
+      <Chip
+        label={label}
+        color={color}
+        icon={icon}
+        sx={{
+          padding: 1,
+          color: "white",
+          display: { xs: "none", md: "flex" },
+        }}
+      />
+      <Stack
+        sx={{
+          backgroundColor: theme.palette[color].main as string,
+          color: "white",
+          borderRadius: "100%",
+          padding: 0.5,
+          display: { md: "none", xs: "flex" },
+        }}
+      >
+        <Tooltip title={label}>{icon}</Tooltip>
+      </Stack>
+    </>
+  );
+
+  // Custom table styles
   const customStyles: TableStyles = {
     headCells: {
       style: {
-        backgroundColor: theme.palette.background.paper, // override the row height
+        backgroundColor: theme.palette.background.paper,
         color: theme.palette.text.primary,
         fontSize: theme.typography.h6.fontSize,
         fontWeight: theme.typography.body1.fontWeight,
         fontFamily: theme.typography.body1.fontFamily,
       },
     },
-    // table: {
-    //   style: {
-    //     border: "1px solid red",
-    //      borderRadius: '20px'
-    //   },
-    // },
     rows: {
       style: {
         color: theme.palette.text.primary,
@@ -275,21 +261,17 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
     },
   };
 
-  const conditionalRowStyles: ConditionalStyles<
-    Usuario & { rowIndex: number }
-  >[] = [
+  // Alternating row styles for better readability
+  const conditionalRowStyles: ConditionalStyles<Usuario & { rowIndex: number }>[] = [
     {
-      when: (row) => row.rowIndex % 2 !== 0, // Filas impares
+      when: (row) => row.rowIndex % 2 !== 0,
       style: {
-        color: theme.palette.text.primary,
-        fontSize: theme.typography.body1.fontSize,
-        fontWeight: theme.typography.body1.fontWeight,
-        fontFamily: theme.typography.body1.fontFamily,
         backgroundColor: theme.palette.background.paper,
       },
     },
   ];
 
+  // Add row index for conditional styling
   const dataConIndice = useMemo(
     () =>
       usuarios.map((usuario, index) => ({
@@ -303,26 +285,34 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
     <>
       <AlertDialog
         open={openHandleStatus}
-        handleAccept={() => {
-          initQueryChangeStatus();
-          setOpenHandleStatus(false);
-        }}
-        title="Cambiar Estado del Usuario"
+        handleAccept={handleChangeStatus}
+        title="Cambiar estado del Usuario"
         body={ModalChangeStatus(selectUsuario?.estado!!)}
-        handleCancel={() => setOpenHandleStatus(false)}
+        isLoading={isPending}
+        handleCancel={handleCloseChangeStatus}
       />
-      <AlertDialog
-        open={openChangeStatus}
-        handleAccept={handleAlertCloseChangeStatus}
-        title="Cambiar Estado del Usuario"
-        textBody={messageChangeStatus}
-      />
+      {isSuccess && (
+        <AlertDialogSuccess
+          open={openSuccess}
+          handleClose={handleCloseSuccess}
+          title="Cambiar estado del Usuario"
+          message={"User updated successfully"}
+        />
+      )}
+      {error && (
+        <AlertDialogError
+          error={error}
+          handleClose={handleCloseError}
+          title="Error Updating User"
+          open={openError}
+        />
+      )}
       <DataTable
         columns={columns}
         data={dataConIndice}
         customStyles={customStyles}
         conditionalRowStyles={conditionalRowStyles}
-      ></DataTable>
+      />
     </>
   );
 };

@@ -162,20 +162,6 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
       : [];
   }, [cursos]);
 
-  // const bodyQuery = useMemo(() => {
-  //   return {
-  //     nombre: selectCurso?.nombre as string,
-  //     estado: selectCurso?.estado == "A" ? "I" : ("A" as string),
-  //     semestre: selectCurso?.semestre as string,
-  //   };
-  // }, [selectCurso]);
-
-  // const { error, handleAlertClose, initQuery, message, open } = useQuery(
-  //   () => postEstadocursoservice(token!!, bodyQuery, selectCurso?.codigo!!),
-  //   true,
-  //   "Materia Modificada Exitosamente"
-  // );
-
   return (
     <>
       <AlertDialog
@@ -187,14 +173,6 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
         body={ModalChangeStatus(selectCurso?.estado!!)}
         handleCancel={() => setOpenHandleStatus(false)}
       />
-      {/* {
-        <AlertDialog
-          open={open}
-          handleAccept={handleAlertClose}
-          title="Cambiar Estado de Materia"
-          textBody={message}
-        />
-      } */}
       <DataTable
         columns={columns}
         data={dataConIndice}

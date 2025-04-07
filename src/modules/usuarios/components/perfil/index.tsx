@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   TextField,
   Typography,
@@ -10,21 +10,14 @@ import {
   MenuItem,
   IconButton,
 } from "@mui/material";
-import {
-  TiposUsuario,
-  Usuario,
-  usuarioTemplate,
-} from "@modules/usuarios/types/usuario";
+import { Usuario, usuarioTemplate } from "@modules/usuarios/types/usuario";
 import { labelPerfil } from "@modules/usuarios/enum/labelPerfil";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import { useState } from "react";
 import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, Container, styled } from "@mui/system";
-import {
-  getGenderArray,
-  getUserTypesArray,
-} from "@modules/usuarios/utils/usuario.map";
+import { getGenderArray, getUserTypesArray } from "@modules/usuarios/utils/usuario.map";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,18 +30,18 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
-import useQuery from "@modules/general/hooks/useQuery";
-import { postModificarUsuarioService } from "@modules/usuarios/services/post.modificar.usuario";
-import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 import { urlToBlob } from "@modules/general/utils/urlToBlod";
-import { patchSubirFotoPerfil } from "@modules/usuarios/services/patch.foto";
 import { useNavigate } from "react-router-dom";
-import { postCrearUsuarioService } from "@modules/usuarios/services/post.crear.usuario";
 import TextFieldPassword from "@modules/general/components/textFieldPassword";
-import { getSolicitudService } from "@modules/usuarios/services/get.solicitud";
-import { postCrearSolicitud } from "@modules/usuarios/services/post.solicitud.crear";
 import { UsuarioSchema } from "@modules/usuarios/utils/form/usuario.schema";
 import { useAuth } from "@modules/general/context/accountContext";
+import { postCreateUsuarioService } from "@modules/usuarios/services/post.crear.usuario";
+import { postChangeUsuarioService } from "@modules/usuarios/services/post.modificar.usuario";
+import { useMutation } from "@tanstack/react-query";
+import { patchUpdatePhotoService } from "@modules/usuarios/services/patch.foto";
+import AlertDialogError, { CustomError } from "@modules/general/components/alertDialogError";
+import { postCreateSolicitudRolDocenteService } from "@modules/usuarios/services/post.solicitud.crear";
+import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
 
 interface PerfilProps {
   usuario: Usuario;
@@ -57,20 +50,19 @@ interface PerfilProps {
 
 const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
   const { accountInformation } = useAuth();
-  const { token } = accountInformation;
+  const { token, tipo } = accountInformation;
   const [id, setId] = useState<number | undefined>(undefined);
 
-  const { register, handleSubmit, formState, getValues, control, watch } =
-    useForm<Usuario>({
-      resolver: zodResolver(UsuarioSchema),
-      defaultValues: type == "crear" ? usuarioTemplate : usuario,
-    });
+  const { register, handleSubmit, formState, getValues, control, watch, setValue } = useForm<Usuario>({
+    resolver: zodResolver(UsuarioSchema),
+    defaultValues: type == "crear" ? usuarioTemplate : usuario,
+  });
 
   async function handleGetQuery() {
     if (type == "crear") {
-      return postCrearUsuarioService(token, getValues());
+      return postCreateUsuarioService(token, getValues());
     } else {
-      return postModificarUsuarioService(getValues().id!!, token, getValues());
+      return postChangeUsuarioService(getValues().id!!, token, getValues());
     }
   }
 
@@ -81,20 +73,18 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
   const [imgFile, setImgFile] = useState<Blob | undefined>(undefined);
 
   const {
-    handleAlertClose: handleAlertCloseUpdateImg,
-    initQuery: initQueryUpdateImg,
-    message: messageUpdateImg,
-    open: openUpdateImg,
-  } = useQuery<unknown>(
-    () => patchSubirFotoPerfil(id!!, token, imgFile!!),
-    true,
-    "Operación realizada de manera correcta"
-  );
+    isSuccess: isSuccessPhoto,
+    isError: isErrorPhoto,
+    error: errorPhoto,
+    mutate: mutatePhoto,
+  } = useMutation({
+    mutationFn: () => patchUpdatePhotoService(token, id ?? -1, imgFile!!),
+    mutationKey: ["chagePhoto"],
+  });
 
   const [showButton, setShowButton] = useState(false);
 
-  const { open: openConfirmation, setOpen: setOpenConfirmation } =
-    useAlertDialog();
+  const { open: openConfirmation, setOpen: setOpenConfirmation } = useAlertDialog();
 
   const onSubmit = () => {
     setOpenConfirmation(true);
@@ -110,40 +100,57 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
     navigate(0);
   };
 
-  const {
-    initQuery: initQueryUpdateUser,
-    responseData: responseDataUpdateUser,
-    open: openUpdateUser,
-    message: messageUpdateUser,
-    error: errorUpdateUser,
-    handleAlertClose: handleAlertCloseUpdateUser,
-  } = useQuery<UsuarioService>(
-    () => handleGetQuery(),
-    true,
-    "Usuario Actualizado con éxito!"
-  );
-
-  const [changeImage, setChangeImage] = useState(true);
+  const { isSuccess, isError, isPending, error, mutate, data } = useMutation({
+    mutationFn: () => handleGetQuery(),
+    mutationKey: ["changeUser"],
+  });
 
   const handleUpdateUser = async () => {
-    await initQueryUpdateUser();
+    await mutate();
   };
 
   useEffect(() => {
-    if (responseDataUpdateUser) {
+    if (data && isSuccess) {
       if (imgFile != undefined) {
-        setId(responseDataUpdateUser.id);
-      } else setChangeImage(false);
+        setId(data.id);
+      } else {
+        handleOpenSuccess();
+      }
     }
-  }, [responseDataUpdateUser]);
+  }, [data, isSuccess]);
 
-  const { tipo } = accountInformation;
-  const CURRENT_USER_TYPE =tipo ?? "E";
+  const {
+    handleOpen: handleOpenError,
+    handleClose: handleCloseError,
+    open: openError,
+  } = useAlertDialog();
+
+  useEffect(() => {
+    if (error && isError) handleOpenError();
+  }, [isError, error]);
+
+  const {
+    handleOpen: handleOpenSuccess,
+    handleClose: handleCloseSuccess,
+    open: openSuccess,
+  } = useAlertDialog();
+
+  const CURRENT_USER_TYPE = tipo ?? "E";
 
   useEffect(() => {
     if (!id) return;
-    initQueryUpdateImg();
+    mutatePhoto();
   }, [id]);
+
+  useEffect(() => {
+    if (isError || isErrorPhoto) {
+      handleOpenError();
+    }
+  }, [isError, isErrorPhoto]);
+
+  useEffect(() => {
+    if (isSuccessPhoto) handleOpenSuccess();
+  }, [isSuccessPhoto, isSuccess]);
 
   return (
     <Container component={"form"} onSubmit={handleSubmit(onSubmit)}>
@@ -154,34 +161,30 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
           title="Modificación de usuarios"
           textBody="¿Está seguro de que desea aplicar estas modificaciones?"
           handleAccept={() => {
-            setOpenConfirmation(false);
             handleUpdateUser();
           }}
           open={openConfirmation}
           handleCancel={() => setOpenConfirmation(false)}
+          isLoading={isPending}
         />
-        {(errorUpdateUser || !changeImage) && (
-          <AlertDialog
-            title="Modificación de usuarios"
-            textBody={messageUpdateUser}
-            open={openUpdateUser}
-            handleAccept={handleAlertCloseUpdateUser}
+        {(error || errorPhoto) && (
+          <AlertDialogError
+            error={error || (errorPhoto as CustomError)}
+            handleClose={handleCloseError}
+            open={openError}
+            title="Modificar usuario"
           />
         )}
+
         {
-          <AlertDialog
+          <AlertDialogSuccess
             title="Modificación de usuarios"
-            textBody={messageUpdateImg}
-            open={openUpdateImg}
-            handleAccept={handleAlertCloseUpdateImg}
+            message={"Modificación exitosa"}
+            open={openSuccess}
+            handleClose={handleCloseSuccess}
           />
         }
-        <Stack
-          direction={"row"}
-          alignItems={"center"}
-          spacing={2}
-          justifyContent={"center"}
-        >
+        <Stack direction={"row"} alignItems={"center"} spacing={2} justifyContent={"center"}>
           <Typography variant="h4">{labelPerfil.perfil}</Typography>
           <AccountBoxIcon sx={{ fontSize: 48 }} />
         </Stack>
@@ -298,6 +301,8 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
                 photo={photo}
                 setFile={setImgFile}
                 setPhoto={setPhoto}
+                inital={getValues("fotoDePerfil")}
+                onChange={() => setValue('fotoDePerfil', '')}
               />
             }
           </Grid2>
@@ -465,19 +470,24 @@ type ProfilePhotoUploaderProps = {
   photo: string | null;
   setPhoto: React.Dispatch<string | null>;
   setFile: React.Dispatch<Blob | undefined>;
+  inital: string;
+  onChange: () => void
 };
 
 export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
   photo,
   setFile,
   setPhoto,
+  inital,
+  onChange
 }) => {
   useEffect(() => {
     const f = async () => {
       if (photo) {
-        setFile(await urlToBlob(photo));
+        if (photo != inital) setFile(await urlToBlob(photo));
       } else if (!photo) {
         setFile(undefined);
+        onChange();
       }
     };
     f();
@@ -502,16 +512,8 @@ export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
 
   return (
     <Stack alignItems="center" spacing={3}>
-      <Avatar
-        src={photo || undefined}
-        sx={{ width: 100, height: 100, border: "1px solid #ddd" }}
-      />
-      <Stack
-        direction="row"
-        spacing={1}
-        alignItems={"center"}
-        justifyContent={"center"}
-      >
+      <Avatar src={photo || undefined} sx={{ width: 100, height: 100, border: "1px solid #ddd" }} />
+      <Stack direction="row" spacing={1} alignItems={"center"} justifyContent={"center"}>
         <label htmlFor="upload-photo">
           <HiddenInput
             accept="image/*"
@@ -536,66 +538,86 @@ const ButtonUpdaterRol = () => {
   const { accountInformation } = useAuth();
   const { token, id } = accountInformation;
 
+  if(id == -1) return <></>;
+
   const theme = useTheme();
 
-  const { open, setOpen } = useAlertDialog();
+  const {
+    isSuccess: isSuccessPost,
+    isError: isErrorPost,
+    isPending: isPendingPost,
+    error: errorPost,
+    mutate: mutatePost,
+  } = useMutation({
+    mutationFn: () => postCreateSolicitudRolDocenteService(id, token),
+    mutationKey: ["update rol"],
+  });
 
-  const { error, initQuery } = useQuery<unknown>(
-    () => getSolicitudService(id!!, token!!),
-    false
-  );
-
-  useEffect(() => {
-    if (token && id) initQuery();
-  }, [token, id]);
-
-  const [valid, setValid] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (error == true) {
-      setValid(true);
-    }
-  }, [error]);
+  function handlePost() {
+    mutatePost();
+  }
 
   const {
-    initQuery: initQueryUpperUser,
-    open: openUpperUser,
-    message: messageUpperUser,
-    setOpen: setOpenUpperUser,
-  } = useQuery<unknown>(
-    () => postCrearSolicitud(id!!, token!!),
-    false,
-    "Solicitud enviada de manera correcta"
-  );
+    handleClose: handleCloseConfirmation,
+    handleOpen: handleOpenConfirmation,
+    open: openConfirmation,
+  } = useAlertDialog();
 
-  const fetch = async () => await initQueryUpperUser();
+  const {
+    handleOpen: handleOpenError,
+    handleClose: handleCloseError,
+    open: openError,
+  } = useAlertDialog();
+
+  useEffect(() => {
+    if (isErrorPost && errorPost) handleOpenError();
+  }, [isErrorPost, errorPost]);
+
+  const {
+    handleOpen: handleOpenSuccess,
+    handleClose: handleCloseSuccess,
+    open: openSuccess,
+  } = useAlertDialog();
+
+  useEffect(() => {
+    if (isSuccessPost) handleOpenSuccess();
+  }, [isSuccessPost]);
+
+  useEffect(() => {
+    if (!isPendingPost) handleCloseConfirmation();
+  }, [isPendingPost]);
 
   return (
     <>
       <AlertDialog
         title="Solicitar promoción a Rol Docente"
         textBody="¿Está seguro de que desea solicitar la promoción al rol de docente?"
-        handleAccept={fetch}
-        open={open}
-        handleCancel={() => setOpen(false)}
+        handleAccept={handlePost}
+        open={openConfirmation}
+        handleCancel={handleCloseConfirmation}
+        isLoading={isPendingPost}
       />
       <AlertDialog
+        handleAccept={handleCloseSuccess}
+        textBody="Solicitud enviada correctamente"
         title="Solicitar promoción a Rol Docente"
-        textBody={messageUpperUser}
-        handleAccept={() => {
-          setOpen(false);
-          setOpenUpperUser(false);
-        }}
-        open={openUpperUser}
+        open={openSuccess}
       />
+      {errorPost && (
+        <AlertDialogError
+          error={errorPost as CustomError}
+          handleClose={handleCloseError}
+          open={openError}
+          title="Solicitar promoción a Rol Docente"
+        />
+      )}
 
       <Button
         variant="contained"
-        onClick={() => setOpen(true)}
+        onClick={handleOpenConfirmation}
         sx={{ backgroundColor: theme.palette.terciary.main }}
-        disabled={!valid}
       >
-        {valid ? labelPerfil.solicitarRolDocente : labelPerfil.solicitudEnviada}
+        {labelPerfil.solicitarRolDocente}
       </Button>
     </>
   );

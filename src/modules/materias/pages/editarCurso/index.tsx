@@ -2,19 +2,17 @@ import { Curso } from "@modules/materias/types/curso";
 import { CursoSchema } from "@modules/materias/utils/forms/form.schema";
 import { Box, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { Controller, FormProvider, useForm, useFormContext } from "react-hook-form";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import EditIcon from "@mui/icons-material/Edit";
 import { getMateriaStatesArray } from "@modules/materias/utils/materias";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useQuery from "@modules/general/hooks/useQuery";
 import { getCursoById } from "@modules/materias/services/get.curso";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { patchEditCurso } from "@modules/materias/services/patch.curso";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
-import { CursoService } from "@modules/materias/types/curso.service";
 import TablaEstudiantesEditarCurso from "@modules/materias/components/tablaEstudiantesEditarCurso";
 import Modal from "@modules/general/components/modal";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
@@ -22,10 +20,14 @@ import AddUsers from "@modules/usuarios/components/addUsers";
 import { patchEstudiantesCurso } from "@modules/materias/services/patch.curso.estudiantes";
 import TablaGestionarSecciones from "@modules/materias/components/tablaSecciones";
 import { UsuarioCampoBusqueda } from "@modules/general/hooks/useSearchUsers";
-import { postCreateSeccion } from "@modules/materias/services/post.crear.seccion";
 import { patchEditSeccion } from "@modules/materias/services/patch.modificar.seccion";
 import { Seccion } from "@modules/materias/types/seccion";
 import { useAuth } from "@modules/general/context/accountContext";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
+import AlertDialogError, { CustomError } from "@modules/general/components/alertDialogError";
+import LoaderElement from "@modules/general/components/loaderElement";
 
 export enum labelEditarCurso {
   titulo = "Editar Curso",
@@ -76,36 +78,55 @@ function VistaEditarCurso() {
   });
 
   const {
-    handleAlertClose: handleAlertCloseFetchCurso,
-    error: errorFetchCurso,
-    initQuery: initQueryFetchCurso,
-    message: messageFetchCurso,
-    open: openFetchCurso,
-    responseData: responseDataFetchCurso,
-  } = useQuery(() => getCursoById(token!!, idCurso || ""), false);
+    handleOpen: handleOpenError,
+    handleClose: handleCloseError,
+    open: openError,
+  } = useAlertDialog();
 
   const {
-    handleAlertClose: handleAlertClosePostQuery,
-    initQuery: initQueryPostQuery,
-    message: messagePostQuery,
-    open: openPostQuery,
-    responseData: responseDataPostQuery,
-    error: errorPostQuery,
-  } = useQuery<CursoService>(
-    () => patchEditCurso(token!!, methods.getValues()),
-    true,
-    "Curso modificado correctamente"
-  );
+    handleOpen: handleOpenSuccess,
+    handleClose: handleCloseSuccess,
+    open: openSuccess,
+  } = useAlertDialog();
+
+  const {
+    handleClose: handleCloseRemoveStudents,
+    handleOpen: handleOpenRemoveStudents,
+    open: openRemoveStudents,
+  } = useAlertDialog();
+
+  const {
+    handleClose: handleCloseAddStudents,
+    handleOpen: handleOpenAddStudents,
+    open: openAddStudents,
+  } = useAlertDialog();
+
+  const {
+    data: dataFetchCurso,
+    isLoading: isLoadingFetchCurso,
+    error: errorFetchCurso,
+  } = useQuery({
+    queryKey: ["fetchCurso"],
+    queryFn: () => getCursoById(token, idCurso ?? "-1"),
+  });
+
+  const {
+    mutate: mutatePatchCurso,
+    isPending: isPendingPatchCurso,
+    error: errorPatchCurso,
+    data: dataPatchCurso,
+  } = useMutation({
+    mutationFn: () => patchEditCurso(token, methods.getValues()),
+    mutationKey: ["patchCurso"],
+    onSuccess: handleOpenSuccess,
+    onError: handleOpenError,
+  });
 
   useEffect(() => {
-    if (token && idCurso) initQueryFetchCurso();
-  }, [token, idCurso]);
-
-  useEffect(() => {
-    if (responseDataFetchCurso) {
-      setCurso(adaptCursoService(responseDataFetchCurso));
+    if (dataFetchCurso) {
+      setCurso(adaptCursoService(dataFetchCurso));
     }
-  }, [responseDataFetchCurso]);
+  }, [dataFetchCurso]);
 
   useEffect(() => {
     if (curso) {
@@ -114,172 +135,161 @@ function VistaEditarCurso() {
   }, [curso, methods.reset]);
 
   const { handleClose, handleOpen, open } = useModal();
+
   const [usersSelected, setUsersSelected] = useState<UsuarioCampoBusqueda[]>([]);
+
   const [selectStudentsToRemove, setSelectStudentsToRemove] = useState<number[]>([]);
 
   const usersToAddCodes = useMemo(() => usersSelected.map((user) => user.id), [usersSelected]);
 
   const {
-    handleAlertClose: handleAlertCloseAddStudents,
-    initQuery: initQueryAddStudents,
-    message: messageAddStudents,
-    open: openAddStudents,
-  } = useQuery<unknown>(
-    () => patchEstudiantesCurso(token!!, usersToAddCodes, "A", idCurso!!),
-    true,
-    "Estudiantes registrados de manera correcta"
-  );
+    mutate: mutateAddStudents,
+    isPending: isPendingAddStudents,
+    error: errorAddStudents,
+  } = useMutation({
+    mutationFn: () => patchEstudiantesCurso(token, usersToAddCodes, "A", idCurso ?? "-1"),
+    mutationKey: ["addStudents"],
+    onSuccess: handleOpenSuccess,
+    onError: handleOpenError,
+  });
 
   const {
-    handleAlertClose: handleAlertCloseRemoveStudents,
-    initQuery: initQueryRemoveStudents,
-    message: messageRemoveStudents,
-    open: openRemoveStudents,
-  } = useQuery<unknown>(
-    () => patchEstudiantesCurso(token!!, selectStudentsToRemove, "D", idCurso!!),
-    true,
-    "Estudiantes eliminados de manera correcta"
-  );
+    mutate: mutateRemoveStudents,
+    isPending: isPendingRemoveStudents,
+    error: errorRemoveStudents,
+  } = useMutation({
+    mutationFn: () => patchEstudiantesCurso(token, selectStudentsToRemove, "D", idCurso ?? "-1"),
+    mutationKey: ["removeStudents"],
+    onSuccess: handleOpenSuccess,
+    onError: handleOpenError,
+  });
 
-  const [finishRequest, setFinishRequest] = useState(false);
+  const requestSetForSections = async (secciones: Seccion[]) => {
+    const seccionesConId = secciones.filter((seccion) => seccion.id);
 
-  const successMessage = "Edición de Secciones realizada correctamente";
+    await Promise.all(
+      seccionesConId.map(async (seccion) => {
+        await patchEditSeccion(token, seccion);
+      })
+    );
 
-  const [requestMessage, setRequestMessage] = useState<string>("");
-
-  const requestSet = async (secciones: Seccion[]) => {
-    secciones.forEach(async (seccion) => {
-      if (seccion.id) {
-        const response = await patchEditSeccion(token, seccion);
-        if (response.error) {
-          setFinishRequest(true);
-          setRequestMessage(response.error.message);
-          return;
-        }
-      } else {
-        const response = await postCreateSeccion(token, seccion);
-        if (response.error) {
-          setFinishRequest(true);
-          setRequestMessage(response.error.message);
-          return;
-        }
-      }
-    });
-    setRequestMessage(successMessage);
-    setFinishRequest(true);
+    handleOpenSuccess();
   };
 
   const onSubmit = async () => {
-    await initQueryPostQuery();
+    await mutatePatchCurso();
   };
 
   const { getValues } = methods;
 
-  const navigate = useNavigate();
-
   useEffect(() => {
-    if (responseDataPostQuery) {
-      if (getValues("secciones")) requestSet(getValues("secciones") || []);
+    if (dataPatchCurso) {
+      if (getValues("secciones")) requestSetForSections(getValues("secciones") || []);
       else {
-        setFinishRequest(true);
-        setRequestMessage(successMessage);
+        handleOpenSuccess();
       }
     }
-  }, [responseDataPostQuery]);
+  }, [dataPatchCurso]);
 
   return (
     <>
       <AlertDialog
-        open={finishRequest}
-        title="Edición de Secciones"
-        textBody={requestMessage}
-        handleAccept={() => navigate(0)}
-      />
-      <AlertDialog
-        handleAccept={handleAlertCloseAddStudents}
+        handleAccept={mutateAddStudents}
         open={openAddStudents}
         title="Agregar Estudiantes"
-        textBody={messageAddStudents}
+        textBody={"¿Desea agregar a los estudiantes seleccionados?"}
+        isLoading={isPendingAddStudents}
+        handleCancel={handleCloseAddStudents}
       />
       <Modal sx={{ maxWidth: 700 }} handleClose={handleClose} open={open}>
         <AddUsers
           typeUsers="Estudiante"
           selectUsers={usersSelected}
           setSelectUsers={setUsersSelected}
-          handleAccept={initQueryAddStudents}
-          handleCancel={handleClose}
+          handleAccept={handleOpenAddStudents}
+          handleCancel={handleCloseAddStudents}
         />
       </Modal>
-      {errorFetchCurso && (
-        <AlertDialog
-          handleAccept={handleAlertCloseFetchCurso}
-          open={openFetchCurso}
-          title="Información del Curso"
-          textBody={messageFetchCurso}
-        />
-      )}
-      {errorPostQuery && (
-        <AlertDialog
-          handleAccept={handleAlertClosePostQuery}
-          open={openPostQuery}
-          title="Información del Curso"
-          textBody={messagePostQuery}
+      {(errorFetchCurso || errorAddStudents || errorRemoveStudents || errorPatchCurso) && (
+        <AlertDialogError
+          error={
+            (errorFetchCurso ||
+              errorPatchCurso ||
+              errorAddStudents ||
+              errorRemoveStudents) as CustomError
+          }
+          handleClose={handleCloseError}
+          open={openError}
+          title="Edición de Curso"
         />
       )}
       <AlertDialog
-        handleAccept={handleAlertCloseRemoveStudents}
+        handleAccept={mutateRemoveStudents}
         open={openRemoveStudents}
+        handleCancel={handleCloseRemoveStudents}
         title="Información del Curso"
-        textBody={messageRemoveStudents}
+        textBody={"¿Está seguro de remover a los usuarios seleccionados?"}
+        isLoading={isPendingRemoveStudents}
       />
 
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <Stack spacing={3}>
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <EditIcon color="primary" />
-              <Typography variant="h5" fontWeight="bold">
-                {labelEditarCurso.titulo}
-              </Typography>
-            </Stack>
+      <AlertDialogSuccess
+        handleClose={handleCloseSuccess}
+        message="Operación realizada exitosamente"
+        open={openSuccess}
+        title="Edición de Curso"
+      />
 
-            <TextField
-              label={labelEditarCurso.descripcion}
-              {...methods.register("descripcion")}
-              error={!!methods.formState.errors.descripcion}
-              helperText={methods.formState.errors.descripcion?.message}
-              fullWidth
-              InputLabelProps={{ shrink: true }}
-            />
-
-            <EstadoField />
-
-            <Stack>
-              <TablaEstudiantesEditarCurso
-                estudiante={curso?.estudiantes || []}
-                setSelectUsers={setSelectStudentsToRemove}
-              />
-              <Stack alignItems="end">
-                <Box>
-                  <GeneralButton
-                    color="error"
-                    mode={buttonTypes.remove}
-                    disabled={selectStudentsToRemove.length == 0}
-                    onClick={initQueryRemoveStudents}
-                  />
-                  <GeneralButton mode={buttonTypes.add} onClick={handleOpen} />
-                </Box>
+      {isLoadingFetchCurso ? (
+        <LoaderElement />
+      ) : (
+        <FormProvider {...methods}>
+          <form onSubmit={methods.handleSubmit(onSubmit)}>
+            <Stack spacing={3}>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <EditIcon color="primary" />
+                <Typography variant="h5" fontWeight="bold">
+                  {labelEditarCurso.titulo}
+                </Typography>
               </Stack>
-            </Stack>
 
-            <Stack>
-              <TablaGestionarSecciones />
-            </Stack>
+              <TextField
+                label={labelEditarCurso.descripcion}
+                {...methods.register("descripcion")}
+                error={!!methods.formState.errors.descripcion}
+                helperText={methods.formState.errors.descripcion?.message}
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+              />
 
-            <GeneralButton mode={buttonTypes.save} type="submit" />
-          </Stack>
-        </form>
-      </FormProvider>
+              <EstadoField />
+
+              <Stack>
+                <TablaEstudiantesEditarCurso
+                  estudiante={curso?.estudiantes || []}
+                  setSelectUsers={setSelectStudentsToRemove}
+                />
+                <Stack alignItems="end">
+                  <Box>
+                    <GeneralButton
+                      color="error"
+                      mode={buttonTypes.remove}
+                      disabled={selectStudentsToRemove.length == 0}
+                      onClick={handleOpenRemoveStudents}
+                    />
+                    <GeneralButton mode={buttonTypes.add} onClick={handleOpen} />
+                  </Box>
+                </Stack>
+              </Stack>
+
+              <Stack>
+                <TablaGestionarSecciones />
+              </Stack>
+
+              <GeneralButton mode={buttonTypes.save} loading={isPendingPatchCurso} type="submit" />
+            </Stack>
+          </form>
+        </FormProvider>
+      )}
     </>
   );
 }

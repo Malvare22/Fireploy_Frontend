@@ -13,7 +13,7 @@ export const getSolicitudService = async (id: number, token: string) => {
   return response;
 };
 
-export const getSolicitudesServices = async (token: string) => {
+export const getSolicitudesService = async (token: string) => {
   const response = await getData<SolicitudService[]>(
     `/solicitud`,
     {},

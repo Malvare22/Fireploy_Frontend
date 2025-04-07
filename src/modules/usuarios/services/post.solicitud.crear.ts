@@ -1,10 +1,11 @@
 import { postData } from "@core/services";
 
-export const postCrearSolicitud = async (usuarioId: number, token: string) => {
+export const postCreateSolicitudRolDocenteService = async (usuarioId: number, token: string) => {
   const response = await postData<unknown>(
     `/solicitud`,
     {
       usuario: usuarioId,
+      tipo_solicitud: 1
     },
     {
       sessiontoken: token,

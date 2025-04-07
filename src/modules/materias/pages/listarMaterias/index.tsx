@@ -1,22 +1,10 @@
-import AlertDialog from "@modules/general/components/alertDialog";
-import useQuery from "@modules/general/hooks/useQuery";
 import TablaMaterias from "@modules/materias/components/tablaMaterias";
 import { labelListarMaterias } from "@modules/materias/enums/labelListarMaterias";
 import { getMateriasService } from "@modules/materias/services/get.materias.services";
-import { MateriaService } from "@modules/materias/types/materia.service";
-import {
-  MateriaTabla,
-} from "@modules/materias/types/materia.tabla";
+import { MateriaTabla } from "@modules/materias/types/materia.tabla";
 import { adaptMateriaService } from "@modules/materias/utils/adapters/materia.service";
-import {
-  Box,
-  Grid2,
-  MenuItem,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { Box, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import useSearch from "@modules/general/hooks/useSearch";
 import { labelSelects } from "@modules/general/enums/labelSelects";
@@ -27,37 +15,46 @@ import { buttonTypes } from "@modules/general/types/buttons";
 import { useNavigate } from "react-router";
 import { rutasMaterias } from "@modules/materias/router/router";
 import { useAuth } from "@modules/general/context/accountContext";
+import { useQuery } from "@tanstack/react-query";
+import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import AlertDialogError from "@modules/general/components/alertDialogError";
+import LoaderElement from "@modules/general/components/loaderElement";
 
 function ListarMaterias() {
   const [materias, setMaterias] = useState<MateriaTabla[]>([]);
 
   const { accountInformation } = useAuth();
   const { token } = accountInformation;
-  /**
-   * Variables de Consulta de Materias
-   */
-  const { error, handleAlertClose, initQuery, responseData, message, open } =
-    useQuery<MateriaService[]>(() => getMateriasService(token!!), false);
 
-  useEffect(() => {
-    initQuery();
-  }, []);
-
-  useEffect(() => {
-    if (responseData) {
-      setMaterias(responseData.map((materia) => adaptMateriaService(materia)));
-    }
-  }, [responseData]);
+  const { data, isLoading, isError, error } = useQuery({
+    queryFn: () => getMateriasService(token),
+    queryKey: ["get Materias"],
+  });
 
   const { filteredData, handleKeyDown, searchValue, setBuffer } = useSearch();
 
   const sorter = (materia: MateriaTabla[]) => {
     return materia.filter((mat) =>
-      (mat.codigo + mat.nombre)
-        .toLowerCase()
-        .includes(searchValue.toLowerCase())
+      (mat.codigo + mat.nombre).toLowerCase().includes(searchValue.toLowerCase())
     );
   };
+  const {
+    handleClose: handleCloseFailFetch,
+    open: openFailFetch,
+    handleOpen: handleOpenFailFetch,
+  } = useAlertDialog();
+
+  useEffect(() => {
+    if (data) {
+      setMaterias(data.map(materia => adaptMateriaService(materia)));
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (isError) {
+      handleOpenFailFetch();
+    }
+  }, [isError]);
 
   const { filterData, toggleFilter } = useFiltersByConditions<MateriaTabla>();
 
@@ -71,14 +68,14 @@ function ListarMaterias() {
   return (
     <>
       {error && (
-        <AlertDialog
-          open={open}
-          handleAccept={handleAlertClose}
-          title="Consultar Materias"
-          textBody={message}
+        <AlertDialogError
+          error={error}
+          handleClose={handleCloseFailFetch}
+          open={openFailFetch}
+          title="Consultar Portafolios"
         />
       )}
-      <Stack spacing={3}>
+     {isLoading ? <LoaderElement/> : <Stack spacing={3}>
         <Typography variant="h4">{labelListarMaterias.titulo}</Typography>
         <TextField
           placeholder={labelListarMaterias.buscarMateria}
@@ -97,15 +94,9 @@ function ListarMaterias() {
               label={labelSelects.filtrarCursosActivos}
               onChange={(e) => {
                 if (e.target.value == "0")
-                  toggleFilter(
-                    "cantidadGruposActivos",
-                    (value: any) => value == 0
-                  );
+                  toggleFilter("cantidadGruposActivos", (value: any) => value == 0);
                 if (e.target.value == "1")
-                  toggleFilter(
-                    "cantidadGruposActivos",
-                    (value: any) => value != 0
-                  );
+                  toggleFilter("cantidadGruposActivos", (value: any) => value != 0);
                 if (e.target.value == "-1")
                   toggleFilter("cantidadGruposActivos", (_value: any) => true);
               }}
@@ -123,12 +114,9 @@ function ListarMaterias() {
               select
               label={labelSelects.filtrarEstado}
               onChange={(e) => {
-                if (e.target.value == "0")
-                  toggleFilter("estado", (value: any) => value == "A");
-                if (e.target.value == "1")
-                  toggleFilter("estado", (value: any) => value == "I");
-                if (e.target.value == "-1")
-                  toggleFilter("estado", (_value: any) => true);
+                if (e.target.value == "0") toggleFilter("estado", (value: any) => value == "A");
+                if (e.target.value == "1") toggleFilter("estado", (value: any) => value == "I");
+                if (e.target.value == "-1") toggleFilter("estado", (_value: any) => true);
               }}
               defaultValue={-1}
               fullWidth
@@ -144,13 +132,9 @@ function ListarMaterias() {
               select
               label={labelSelects.filtrarSemestre}
               onChange={(e) => {
-                if (e.target.value == "-1")
-                  toggleFilter("semestre", (_value: any) => true);
+                if (e.target.value == "-1") toggleFilter("semestre", (_value: any) => true);
                 else {
-                  toggleFilter(
-                    "semestre",
-                    (value: any) => value == e.target.value
-                  );
+                  toggleFilter("semestre", (value: any) => value == e.target.value);
                 }
               }}
               defaultValue={-1}
@@ -175,7 +159,7 @@ function ListarMaterias() {
             />
           </Box>
         </Stack>
-      </Stack>
+      </Stack>}
     </>
   );
 }

@@ -2,6 +2,7 @@ import { getData } from "@core/services";
 import { CursoService } from "../types/curso.service";
 
 export const getCursoByMateriaId = async (token: string, id: string) => {
+
   const response = await getData<CursoService[]>(
     `/curso`,
     {

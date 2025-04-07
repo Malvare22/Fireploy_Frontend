@@ -40,25 +40,17 @@ interface Props {
   users: UsuarioCampoBusqueda[]; 
   setSelectUser: React.Dispatch<UsuarioCampoBusqueda | null>; 
   selectUser: UsuarioCampoBusqueda | null; 
+  loading: boolean
 }
 
-/**
- * `SearchUsers` component: An autocomplete search field for selecting users.
- * 
- * @component
- * @param {Props} props - Component properties.
- * @param {UsuarioCampoBusqueda[]} props.users - List of available users.
- * @param {React.Dispatch<UsuarioCampoBusqueda | null>} props.setSelectUser - Function to update the selected user.
- * @param {UsuarioCampoBusqueda | null} props.selectUser - Currently selected user.
- * @returns {JSX.Element} The search component with autocomplete functionality.
- */
-const SearchUsers: FC<Props> = ({ users, setSelectUser, selectUser }) => {
+const SearchUsers: FC<Props> = ({ users, setSelectUser, selectUser, loading }) => {
   return (
     <Stack spacing={2} sx={{ width: "100%" }}>
       <Autocomplete
         size="small"
         freeSolo
         options={users}
+        loading={loading}
         renderOption={(props, option) => (
           <li {...props}>
             <UserFrame user={option} />

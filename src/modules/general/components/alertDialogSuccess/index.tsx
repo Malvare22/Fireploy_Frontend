@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router";
 import AlertDialog from "../alertDialog";
-import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { Alert, Typography } from "@mui/material";
 
 export type CustomError = Error & {
@@ -8,24 +7,25 @@ export type CustomError = Error & {
 };
 
 type Props = {
-  error: CustomError;
   handleClose: () => void;
   open: boolean;
   title: string;
+  reload?: boolean;
+  message: string;
 };
-function AlertDialogError({ error, handleClose, open, title }: Props) {
+function AlertDialogSuccess({ handleClose, open, title, reload = true, message }: Props) {
   const navigate = useNavigate();
 
   function onClose() {
-    if (error.statusCode == 401) {
-      navigate(rutasUsuarios.logout);
+    if (reload) {
+      navigate(0);
     } else handleClose();
   }
 
   function body() {
     return (
-      <Alert severity="error">
-        <Typography sx={{ whiteSpace: "pre-wrap" }}>{error.message}</Typography>
+      <Alert severity="info">
+        <Typography sx={{ whiteSpace: "pre-wrap" }}>{message}</Typography>
       </Alert>
     );
   }
@@ -33,4 +33,4 @@ function AlertDialogError({ error, handleClose, open, title }: Props) {
   return <AlertDialog handleAccept={onClose} open={open} body={body()} title={title} />;
 }
 
-export default AlertDialogError;
+export default AlertDialogSuccess;

@@ -1,14 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import AlertDialog from "@modules/general/components/alertDialog";
+import AlertDialogError, { CustomError } from "@modules/general/components/alertDialogError";
+import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
-import useQuery from "@modules/general/hooks/useQuery";
 import TablaGestionarCursos from "@modules/materias/components/tablaGestionarCursos";
 import { postCreateCursoService } from "@modules/materias/services/post.crear.grupo";
 import { postCreateMateriaService } from "@modules/materias/services/post.crear.materia";
 import { Curso } from "@modules/materias/types/curso";
 import { Materia } from "@modules/materias/types/materia";
-import { MateriaService } from "@modules/materias/types/materia.service";
 import { MateriaSchema } from "@modules/materias/utils/forms/form.schema";
 import {
   getMateriasSemestresLabels,
@@ -27,9 +26,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
 
 enum labelCrearMateria {
   titulo = "Crear Materia",
@@ -49,11 +48,7 @@ function VistaCrearMateria() {
     resolver: zodResolver(MateriaSchema),
   });
 
-  const {
-    setValue,
-    getValues,
-    watch,
-  } = methods;
+  const { setValue, getValues } = methods;
 
   const { accountInformation } = useAuth();
   const { token } = accountInformation;
@@ -68,37 +63,49 @@ function VistaCrearMateria() {
 
   const [idMateria, setIdMateria] = useState<null | number>(null);
 
-  const { handleAlertClose, message, initQuery, open, responseData, error } =
-    useQuery<MateriaService>(
-      getQueryToMake("crear"),
-      true,
-      "Operación realizada correctamente"
-    );
+  const {
+    handleOpen: handleOpenError,
+    handleClose: handleCloseError,
+    open: openError,
+  } = useAlertDialog();
 
-  const successCreateGroups = "Se ha creado todo exitosamente";
-  const [messageCreateGroups, setMessageCreateGroups] =
-    useState(successCreateGroups);
+  const {
+    handleOpen: handleOpenSuccess,
+    open: openSuccess,
+    handleClose: handleCloseSuccess,
+  } = useAlertDialog();
 
-  const { open: openGroupsDialog, setOpen: setOpenGroupsDialog } =
-    useAlertDialog();
+  const { isPending, error, mutate, data } = useMutation({
+    mutationFn: getQueryToMake("crear"),
+    mutationKey: ["create materia"],
+    onError: () => {
+      handleOpenError();
+      setDisableCheck(false);
+    },
+    onSuccess: () => {
+      if (data) setIdMateria(data.id);
+      mutatePostGrupos();
+    },
+  });
 
   async function createGroupsRequest(groups: Curso[]) {
-    groups.forEach(async (group) => {
-      const response = await postCreateCursoService(
-        token!!,
-        idMateria!!,
-        group
-      );
-      if (response.error) {
-        setMessageCreateGroups(response.error.message);
-        setOpenGroupsDialog(true);
-        return;
-      }
-    });
-
-    setMessageCreateGroups(successCreateGroups);
-    setOpenGroupsDialog(true);
+    try {
+      await Promise.all(groups.map((group) => postCreateCursoService(token!!, idMateria!!, group)));
+    } catch (error) {
+      throw error;
+    }
   }
+
+  const {
+    isPending: isPendingPostGrupos,
+    mutate: mutatePostGrupos,
+    error: errorPostGrupos,
+  } = useMutation({
+    mutationFn: () => createGroupsRequest(getValues("cursos") || []),
+    mutationKey: ["edit grupos"],
+    onError: handleOpenError,
+    onSuccess: handleOpenSuccess,
+  });
 
   function handleCheck() {
     if (createGroups) {
@@ -108,18 +115,9 @@ function VistaCrearMateria() {
   }
 
   const onSubmit: SubmitHandler<Materia> = () => {
-    initQuery();
+    mutate();
     setDisableCheck(true);
   };
-
-  useEffect(() => {
-    if (error) {
-      setDisableCheck(false);
-    }
-    if (responseData) {
-      setIdMateria(responseData.id);
-    }
-  }, [responseData, error]);
 
   useEffect(() => {
     if (idMateria) {
@@ -128,35 +126,22 @@ function VistaCrearMateria() {
     }
   }, [idMateria]);
 
-  const navigate = useNavigate();
-
-  function handleCreateGroupDialong(){
-    if(messageCreateGroups == successCreateGroups){
-      navigate(0);
-    }
-    else{
-      navigate(0);
-    }
-  }
-
   return (
     <>
-      {(error || !watch("cursos")) && (
-        <AlertDialog
-          handleAccept={handleAlertClose}
-          open={open}
+      {(error || errorPostGrupos) && (
+        <AlertDialogError
+          handleClose={handleCloseError}
+          open={openError}
           title="Crear Materia"
-          textBody={message}
+          error={(error ?? errorPostGrupos) as CustomError}
         />
       )}
-      {
-        <AlertDialog
-          handleAccept={handleCreateGroupDialong}
-          open={openGroupsDialog}
-          title="Creación de Grupos"
-          textBody={messageCreateGroups}
-        />
-      }
+      <AlertDialogSuccess
+        handleClose={handleCloseSuccess}
+        message="Operación exitosamente realizada"
+        open={openSuccess}
+        title="Creación de Materia"
+      />
       <Card sx={{ padding: 2 }}>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -209,9 +194,7 @@ function VistaCrearMateria() {
                 </Grid2>
                 <Grid2 size={{ xs: 12, md: 8 }}>
                   <FormControlLabel
-                    control={
-                      <Checkbox onClick={handleCheck} disabled={disableCheck} />
-                    }
+                    control={<Checkbox onClick={handleCheck} disabled={disableCheck} />}
                     label={labelCrearMateria.checkBox}
                   />
                 </Grid2>
@@ -220,7 +203,7 @@ function VistaCrearMateria() {
                 </Grid2>
               </Grid2>
               <Box>
-                <Button type="submit" variant="contained">
+                <Button type="submit" variant="contained" loading={isPending || isPendingPostGrupos}>
                   {labelCrearMateria.crearMateria}
                 </Button>
               </Box>

@@ -4,31 +4,37 @@ import { SexoUsuario, Usuario } from "@modules/usuarios/types/usuario";
 import { fechaSchema } from "./fechaSchema";
 
 /**
- * Atributo Zod para la validación de Estados de Usuario
+ * Zod schema for validating user status (EstadoUsuario).
+ * Accepts only "A" (Active) or "I" (Inactive).
  */
-export const estadoUsuarioSchema = z.enum(
-  Array.from(getUserStatus.keys()) as ["A", "I"],
-  { message: "Ingrese un estado válido" }
-);
+export const estadoUsuarioSchema = z.enum(Array.from(getUserStatus.keys()) as ["A", "I"], {
+  message: "Ingrese un estado válido",
+});
 
 /**
- * Atributo Zod para la validación de Tipos de Usuario
+ * Zod schema for validating user types (TiposUsuario).
+ * Accepts only "A" (Admin), "D" (Teacher), or "E" (Student).
  */
-export const tiposUsuarioSchema = z.enum(
-  Array.from(getUserTypes.keys()) as ["A", "D", "E"],
-  { message: "Ingrese un tipo de usuario válido" }
-);
+export const tiposUsuarioSchema = z.enum(Array.from(getUserTypes.keys()) as ["A", "D", "E"], {
+  message: "Ingrese un tipo de usuario válido",
+});
 
 /**
- * Atributo Zod para la validación del sexo de Usuario
+ * Zod schema for validating gender (SexoUsuario).
+ * Accepts only "M", "F", or "O".
  */
-export const sexoUsuarioSchema = z.enum(
-  Array.from(getGender.keys()) as ["M", "F", "O"],
-  { message: "Ingrese un sexo válido" }
-);
+export const sexoUsuarioSchema = z.enum(Array.from(getGender.keys()) as ["M", "F", "O"], {
+  message: "Ingrese un sexo válido",
+});
 
 /**
- * Objeto Zod para la validación de contraseñas de Usuario
+ * Zod schema for validating user passwords.
+ * Enforces:
+ * - Minimum length of 8 characters
+ * - At least one uppercase letter
+ * - At least one lowercase letter
+ * - At least one number
+ * - At least one special character
  */
 export const contraseniaSchema = z
   .string()
@@ -43,15 +49,14 @@ export const contraseniaSchema = z
     message: "La contraseña debe contener al menos un número.",
   })
   .regex(/[@$!%*?&#]/, {
-    message:
-      "La contraseña debe contener al menos un carácter especial (@$!%*?&#).",
+    message: "La contraseña debe contener al menos un carácter especial (@$!%*?&#).",
   });
 
-const msgRedSocial =
-  "Ingrese un link válido para la respectiva red social o deje en blanco";
+const msgRedSocial = "Ingrese un link válido para la respectiva red social o deje en blanco";
 
 /**
- * Atributo Zod para la validación de redes sociales de Usuario
+ * Zod schema for validating user's social network links.
+ * Each field must be either a valid URL for the given platform or an empty string.
  */
 export const redSocialUsuarioSchema = z
   .object({
@@ -76,13 +81,11 @@ export const redSocialUsuarioSchema = z
     x: z
       .string()
       .optional()
-      .optional()
       .refine((s) => s?.includes("x.com") || s?.length == 0, {
         message: msgRedSocial,
       }),
     github: z
       .string()
-      .optional()
       .optional()
       .refine((s) => s?.includes("github.com") || s?.length == 0, {
         message: msgRedSocial,
@@ -91,39 +94,42 @@ export const redSocialUsuarioSchema = z
   .strict();
 
 /**
- * Validación de información personal del usuario.
+ * Zod schemas for individual personal data fields of the user.
  */
-export const nombresSchema = z
-  .string()
-  .min(0, { message: "El nombre no puede estar vacío" });
-export const apellidosSchema = z
-  .string()
-  .min(1, { message: "El apellido no puede estar vacío" });
+export const nombresSchema = z.string().min(0, { message: "El nombre no puede estar vacío" });
+
+export const apellidosSchema = z.string().min(1, { message: "El apellido no puede estar vacío" });
+
 export const fotoDePerfilSchema = z
   .string()
-  .min(1, { message: "Es obligatorio agregar una imagen" });
-export const descripcionSchema = z.string();
-export const correoSchema = z
-  .string()
-  .email({ message: "Debe ser un correo válido" });
+  .min(0, { message: "Es obligatorio agregar una imagen" });
 
+export const descripcionSchema = z.string();
+
+export const correoSchema = z.string().email({ message: "Debe ser un correo válido" });
+
+/**
+ * Full Zod schema for validating a complete Usuario object.
+ * Includes validations for fields, conditional logic, and password matching.
+ */
 export const UsuarioSchema: z.ZodType<Usuario> = z
   .object({
     id: z.number().optional(),
-    correo: z.string().email(),
-    nombres: z.string(),
-    apellidos: z.string(),
+    correo: correoSchema,
+    nombres: nombresSchema,
+    apellidos: apellidosSchema,
     fechaDeNacimiento: fechaSchema,
     estFechaInicio: z.string().optional(),
-    estado: z.enum(["A", "I"]),
-    sexo: z.enum(["F", "M", "O"]),
-    tipo: z.enum(["A", "D", "E"]).optional(),
+    estado: estadoUsuarioSchema,
+    sexo: sexoUsuarioSchema,
+    tipo: tiposUsuarioSchema.optional(),
     redSocial: redSocialUsuarioSchema,
-    descripcion: z.string(),
-    fotoDePerfil: z.string(),
-    contrasenia: z.string().optional(),
+    descripcion: descripcionSchema,
+    fotoDePerfil: fotoDePerfilSchema,
+    contrasenia: contraseniaSchema.optional(),
     confirmarContrasenia: z.string().optional(),
   })
+  // Passwords must match if provided
   .refine(
     (data) => {
       if (data.contrasenia || data.confirmarContrasenia) {
@@ -136,13 +142,17 @@ export const UsuarioSchema: z.ZodType<Usuario> = z
       path: ["confirmarContrasenia"],
     }
   )
+  // If user type is "E" (student), estFechaInicio must be a valid date
   .refine((data) => {
-    if (data.tipo == "E") {
+    if (data.tipo === "E") {
       return fechaSchema.safeParse(data.estFechaInicio).success;
     }
     return true;
   });
 
+/**
+ * Default template object for creating a new Usuario instance.
+ */
 export const usuarioTemplate: Usuario = {
   id: 1,
   nombres: "",

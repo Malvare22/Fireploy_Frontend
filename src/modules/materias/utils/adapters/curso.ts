@@ -1,7 +1,7 @@
 import { Curso } from "@modules/materias/types/curso";
 import { CursoTabla } from "@modules/materias/types/curso.tabla";
 
-export function adaptCursoToCursoTabla(x: Curso): CursoTabla {
+export function adaptCursoTabla(x: Curso): CursoTabla {
   return {
     cantidadEstudiantes: x.estudiantes?.length || 0,
     docente: x.docente

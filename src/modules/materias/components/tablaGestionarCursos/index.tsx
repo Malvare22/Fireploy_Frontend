@@ -1,47 +1,29 @@
 import DataTable, { ConditionalStyles } from "react-data-table-component";
 import { TableColumn, TableStyles } from "react-data-table-component";
-import {
-  Alert,
-  Box,
-  Chip,
-  MenuItem,
-  Stack,
-  TextField,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import  { useEffect, useMemo, useState } from "react";
+import { Alert, Box, Chip, MenuItem, Stack, TextField, Typography, useTheme } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
 import Status from "@modules/general/components/status";
 import InfoIcon from "@mui/icons-material/Info";
 import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import { CursoTabla } from "@modules/materias/types/curso.tabla";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
-import SearchUsers, {
-} from "@modules/general/components/searchUsers";
-import {
-  useSearchUsers,
-  UsuarioCampoBusqueda,
-} from "@modules/general/hooks/useSearchUsers";
+import SearchUsers from "@modules/general/components/searchUsers";
+import { useSearchUsers, UsuarioCampoBusqueda } from "@modules/general/hooks/useSearchUsers";
 import { getMateriaStatesArray } from "@modules/materias/utils/materias";
 import SchoolIcon from "@mui/icons-material/School";
-import {
-  Controller,
-  FieldError,
-  useForm,
-  useFormContext,
-} from "react-hook-form";
+import { Controller, FieldError, useForm, useFormContext } from "react-hook-form";
 import { Curso, cursoTemplate } from "@modules/materias/types/curso";
 import { Materia } from "@modules/materias/types/materia";
-import { adaptCursoToCursoTabla } from "@modules/materias/utils/adapters/curso";
+import { adaptCursoTabla } from "@modules/materias/utils/adapters/curso";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
-import useQuery from "@modules/general/hooks/useQuery";
-import { getUsuariosPorTipo } from "@modules/usuarios/services/get.usuarios.[tipo]";
-import { UsuarioService } from "@modules/usuarios/types/services.usuario";
-import AlertDialog from "@modules/general/components/alertDialog";
-import { adaptarUsuarioServiceAUsuarioCampoDeBusqueda } from "@modules/usuarios/utils/adaptar.usuario";
 import { useAuth } from "@modules/general/context/accountContext";
+import { adaptUserServiceToCB } from "@modules/usuarios/utils/adapt.usuario";
+import { getUsuariosByTypeService } from "@modules/usuarios/services/get.usuarios.[tipo]";
+import { useQuery } from "@tanstack/react-query";
+import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import AlertDialogError from "@modules/general/components/alertDialogError";
 
 const TablaGestionarCursos = () => {
   const theme = useTheme();
@@ -53,7 +35,7 @@ const TablaGestionarCursos = () => {
     formState: { errors },
     getValues,
     setValue,
-    watch
+    watch,
   } = useFormContext<Materia>();
 
   const {
@@ -79,32 +61,21 @@ const TablaGestionarCursos = () => {
   const { token } = accountInformation;
 
   const {
-    error: errorGetDocentes,
-    handleAlertClose: handleAlertCloseGetDocentes,
-    initQuery: initQueryGetDocentes,
-    message: messageGetDocentes,
-    responseData: responseDataGetDocentes,
-    open: openGetDocentes,
-  } = useQuery<UsuarioService[]>(
-    () => getUsuariosPorTipo("Docente", token),
-    true
-  );
+    data: dataFetchDocentes,
+    isLoading: isLoadingFetchDocentes,
+    error: errorFetchDocentes,
+  } = useQuery({
+    queryFn: () => getUsuariosByTypeService("Docente", token),
+    queryKey: ["Docentes"],
+  });
+
+  const {handleClose: handleCloseFetchDocentes, open: openFetchDocentes} = useAlertDialog();
 
   const [docentes, setDocentes] = useState<UsuarioCampoBusqueda[]>([]);
 
   useEffect(() => {
-    initQueryGetDocentes();
-  }, []);
-
-  useEffect(() => {
-    if (responseDataGetDocentes) {
-      setDocentes(
-        responseDataGetDocentes.map((docente) =>
-          adaptarUsuarioServiceAUsuarioCampoDeBusqueda(docente)
-        )
-      );
-    }
-  }, [responseDataGetDocentes]);
+    if(dataFetchDocentes) setDocentes(dataFetchDocentes.map((docente) => adaptUserServiceToCB(docente)));
+  }, [dataFetchDocentes]);
 
   function handleSave() {
     setValue(`cursos.${currentEdit}`, getValuesCurso());
@@ -138,8 +109,7 @@ const TablaGestionarCursos = () => {
     {
       name: labelListarCursos.grupo,
       cell: (row) => {
-        if (currentEdit != row.rowIndex)
-          return <Typography>{row.grupo}</Typography>;
+        if (currentEdit != row.rowIndex) return <Typography>{row.grupo}</Typography>;
         else {
           return (
             <TextField
@@ -153,7 +123,7 @@ const TablaGestionarCursos = () => {
         }
       },
       sortable: true,
-      maxWidth: '120px'
+      maxWidth: "120px",
     },
     {
       name: labelListarCursos.estado,
@@ -188,7 +158,7 @@ const TablaGestionarCursos = () => {
         return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
       },
       sortable: true,
-      maxWidth: '130px'
+      maxWidth: "130px",
     },
     {
       name: labelListarCursos.docente,
@@ -197,7 +167,7 @@ const TablaGestionarCursos = () => {
 
         useEffect(() => {
           if (selectUser && selectUser?.nombreCompleto)
-            setValuesCurso("docente.id", (selectUser?.id));
+            setValuesCurso("docente.id", selectUser?.id);
           setValuesCurso("docente.nombre", selectUser?.nombreCompleto!!);
         }, [selectUser]);
 
@@ -216,11 +186,7 @@ const TablaGestionarCursos = () => {
           }
         } else {
           return (
-            <SearchUsers
-              selectUser={selectUser}
-              setSelectUser={setSelectUser}
-              users={docentes}
-            />
+            <SearchUsers loading={isLoadingFetchDocentes} selectUser={selectUser} setSelectUser={setSelectUser} users={docentes} />
           );
         }
       },
@@ -228,7 +194,7 @@ const TablaGestionarCursos = () => {
         return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
       },
       sortable: true,
-      maxWidth: '250px'
+      maxWidth: "250px",
     },
     {
       cell: (row) => {
@@ -243,14 +209,8 @@ const TablaGestionarCursos = () => {
                 }}
                 type="button"
               />
-              <ActionButton
-                mode={actionButtonTypes.eliminar}
-                onClick={() => handleDelete()}
-              />
-              <ActionButton
-                mode={actionButtonTypes.cancelar}
-                onClick={handleCancel}
-              />
+              <ActionButton mode={actionButtonTypes.eliminar} onClick={() => handleDelete()} />
+              <ActionButton mode={actionButtonTypes.cancelar} onClick={handleCancel} />
             </Stack>
           );
         } else {
@@ -267,8 +227,7 @@ const TablaGestionarCursos = () => {
         return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
       },
       sortable: true,
-      maxWidth: '250px'
-
+      maxWidth: "250px",
     },
   ];
 
@@ -299,9 +258,7 @@ const TablaGestionarCursos = () => {
     },
   };
 
-  const conditionalRowStyles: ConditionalStyles<
-    CursoTabla & { rowIndex: number }
-  >[] = [
+  const conditionalRowStyles: ConditionalStyles<CursoTabla & { rowIndex: number }>[] = [
     {
       when: (row) => row.rowIndex % 2 !== 0, // Filas impares
       style: {
@@ -317,19 +274,19 @@ const TablaGestionarCursos = () => {
   const dataConIndice = useMemo(() => {
     const cursos = watch("cursos") ?? [];
     return cursos.map((curso, index) => ({
-      ...adaptCursoToCursoTabla(curso),
+      ...adaptCursoTabla(curso),
       rowIndex: index,
     }));
   }, [watch("cursos"), currentEdit]);
 
   return (
     <>
-      {errorGetDocentes && (
-        <AlertDialog
-          open={openGetDocentes}
-          handleAccept={handleAlertCloseGetDocentes}
+      {errorFetchDocentes && (
+        <AlertDialogError
+          open={openFetchDocentes}
+          error={errorFetchDocentes}
+          handleClose={handleCloseFetchDocentes}
           title="Obtener docentes"
-          textBody={messageGetDocentes}
         />
       )}
       <form onSubmit={(e) => e.preventDefault()}>
@@ -342,11 +299,7 @@ const TablaGestionarCursos = () => {
         ></DataTable>
         <Stack alignItems={"end"} padding={3}>
           <Box>
-            <GeneralButton
-              onClick={handleAdd}
-              mode={buttonTypes.add}
-              size="small"
-            />
+            <GeneralButton onClick={handleAdd} mode={buttonTypes.add} size="small" />
           </Box>
         </Stack>
         {errors?.cursos &&

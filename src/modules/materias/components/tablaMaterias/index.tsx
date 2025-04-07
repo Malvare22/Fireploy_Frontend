@@ -1,10 +1,9 @@
 import DataTable, { ConditionalStyles } from "react-data-table-component";
 import { TableColumn, TableStyles } from "react-data-table-component";
 import { Chip, Stack, Typography, useTheme } from "@mui/material";
-import React, { useContext, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
-import useQuery from "@modules/general/hooks/useQuery";
 import { MateriaTabla } from "@modules/materias/types/materia.tabla";
 import { labelTablaMaterias } from "@modules/materias/enums/labelTablaMaterias";
 import AlertDialog from "@modules/general/components/alertDialog";
@@ -15,6 +14,10 @@ import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import { patchChangeStatusMateria } from "@modules/materias/services/patch.change.materia";
 import { rutasMaterias } from "@modules/materias/router/router";
 import { useAuth } from "@modules/general/context/accountContext";
+import { useMutation } from "@tanstack/react-query";
+import AlertDialogError from "@modules/general/components/alertDialogError";
+import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
+import LoaderElement from "@modules/general/components/loaderElement";
 
 type TablaMateriasProps = {
   materias: MateriaTabla[];
@@ -22,9 +25,7 @@ type TablaMateriasProps = {
 const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
   const theme = useTheme();
 
-  const [selectMateria, setSelectMateria] = useState<MateriaTabla | undefined>(
-    undefined
-  );
+  const [selectMateria, setSelectMateria] = useState<MateriaTabla | undefined>(undefined);
 
   const handleSelect = (materia: MateriaTabla) => {
     setSelectMateria(materia);
@@ -43,8 +44,19 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
     );
   }
 
-  const { open: openHandleStatus, setOpen: setOpenHandleStatus } =
-    useAlertDialog();
+  const {
+    handleOpen: handleOpenError,
+    handleClose: handleCloseError,
+    open: openError,
+  } = useAlertDialog();
+
+  const {
+    handleOpen: handleOpenSuccess,
+    handleClose: handleCloseSuccess,
+    open: openSuccess,
+  } = useAlertDialog();
+
+  const { open: openHandleStatus, setOpen: setOpenHandleStatus } = useAlertDialog();
 
   const navigate = useNavigate();
 
@@ -81,19 +93,8 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
       name: labelTablaMaterias.cantidadCursos,
       cell: (row) => {
         if (!row.cantidadGruposActivos)
-          return (
-            <Chip
-              color="primary"
-              label={labelTablaMaterias.noDispone}
-              icon={<InfoIcon />}
-            />
-          );
-        else
-          return (
-            <Typography textAlign={"center"}>
-              {row.cantidadGruposActivos}
-            </Typography>
-          );
+          return <Chip color="primary" label={labelTablaMaterias.noDispone} icon={<InfoIcon />} />;
+        else return <Typography textAlign={"center"}>{row.cantidadGruposActivos}</Typography>;
       },
       sortable: true,
       sortFunction: (rowA, rowB) => {
@@ -108,9 +109,7 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
             <ActionButton
               mode={actionButtonTypes.ver}
               onClick={() =>
-                navigate(
-                  rutasMaterias.listarCursos.replace(":idMateria", (row.codigo).toString())
-                )
+                navigate(rutasMaterias.listarCursos.replace(":idMateria", row.codigo.toString()))
               }
             />
             {row.estado == "A" ? (
@@ -159,9 +158,7 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
     },
   };
 
-  const conditionalRowStyles: ConditionalStyles<
-    MateriaTabla & { rowIndex: number }
-  >[] = [
+  const conditionalRowStyles: ConditionalStyles<MateriaTabla & { rowIndex: number }>[] = [
     {
       when: (row) => row.rowIndex % 2 !== 0, // Filas impares
       style: {
@@ -191,38 +188,45 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
     };
   }, [selectMateria]);
 
-  const { handleAlertClose, initQuery, message, open } = useQuery(
-    () => patchChangeStatusMateria(token!!, bodyQuery, selectMateria?.codigo!!),
-    true,
-    "Materia Modificada Exitosamente"
-  );
+  const { isPending, error, mutate } = useMutation({
+    mutationFn: () => patchChangeStatusMateria(token, bodyQuery, selectMateria?.codigo ?? -1),
+    mutationKey: ["changeUser"],
+    onSuccess: handleOpenSuccess,
+    onError: handleOpenError,
+  });
 
   return (
     <>
       <AlertDialog
         open={openHandleStatus}
         handleAccept={() => {
-          initQuery();
+          mutate();
           setOpenHandleStatus(false);
         }}
         title="Cambiar Estado de Materia"
         body={ModalChangeStatus(selectMateria?.estado!!)}
         handleCancel={() => setOpenHandleStatus(false)}
       />
-      {
-        <AlertDialog
-          open={open}
-          handleAccept={handleAlertClose}
-          title="Cambiar Estado de Materia"
-          textBody={message}
+      {error && (
+        <AlertDialogError
+          handleClose={handleCloseError}
+          error={error}
+          open={openError}
+          title="Modificar Materia"
         />
-      }
-      <DataTable
+      )}
+      <AlertDialogSuccess
+        handleClose={handleCloseSuccess}
+        message="Materia modificado exitosamente"
+        open={openSuccess}
+        title="Modificar Materia"
+      />
+      {isPending ? <LoaderElement/> : <DataTable
         columns={columns}
         data={dataConIndice}
         customStyles={customStyles}
         conditionalRowStyles={conditionalRowStyles}
-      ></DataTable>
+      ></DataTable>}
     </>
   );
 };

@@ -1,146 +1,162 @@
-import AlertDialog from "@modules/general/components/alertDialog";
 import GeneralButton from "@modules/general/components/button";
 import SearchUsers from "@modules/general/components/searchUsers";
-import {
-  useSearchUsers,
-  UsuarioCampoBusqueda,
-} from "@modules/general/hooks/useSearchUsers";
-import useQuery from "@modules/general/hooks/useQuery";
+import { useSearchUsers, UsuarioCampoBusqueda } from "@modules/general/hooks/useSearchUsers";
 import { buttonTypes } from "@modules/general/types/buttons";
-import { getUsuariosPorTipo } from "@modules/usuarios/services/get.usuarios.[tipo]";
-import { UsuarioService } from "@modules/usuarios/types/services.usuario";
-import { adaptarUsuarioServiceAUsuarioCampoDeBusqueda } from "@modules/usuarios/utils/adaptar.usuario";
+import { getUsuariosByTypeService } from "@modules/usuarios/services/get.usuarios.[tipo]";
 import { UserTypeFullString } from "@modules/usuarios/utils/usuario.map";
-import {
-  Avatar,
-  Box,
-  Card,
-  Chip,
-  Grid2,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import { Avatar, Box, Card, Chip, Grid2, Stack, Typography, useTheme } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "@modules/general/context/accountContext";
+import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import { useQuery } from "@tanstack/react-query";
+import LoaderElement from "@modules/general/components/loaderElement";
+import AlertDialogError from "@modules/general/components/alertDialogError";
+import { adaptUserServiceToCB } from "@modules/usuarios/utils/adapt.usuario";
 
 type Props = {
+  /**
+   * Type of users to fetch (e.g., "student", "teacher").
+   */
   typeUsers: UserTypeFullString;
+
+  /**
+   * List of users currently selected.
+   */
   selectUsers: UsuarioCampoBusqueda[];
+
+  /**
+   * Function to update the selected users list.
+   */
   setSelectUsers: React.Dispatch<UsuarioCampoBusqueda[]>;
-  handleAccept: () => void,
-  handleCancel: () => void
+
+  /**
+   * Function to handle the "Accept" action.
+   */
+  handleAccept: () => void;
+
+  /**
+   * Function to handle the "Cancel" action.
+   */
+  handleCancel: () => void;
 };
 
+/**
+ * AddUsers component allows the selection of multiple users from a predefined list
+ * based on user type. Users can be searched, selected, visualized in a chip list,
+ * and either confirmed or canceled.
+ *
+ * Features:
+ * - Fetches users by type from backend
+ * - Integrates live search and filtering
+ * - Displays selected users as deletable chips
+ * - Handles loading and error states gracefully
+ *
+ * @component
+ * @param {Props} props - Props containing user type and selection handlers
+ * @returns {JSX.Element} A user selection UI with confirmation actions
+ */
 const AddUsers: React.FC<Props> = ({
   typeUsers,
   selectUsers,
   setSelectUsers,
   handleAccept,
-  handleCancel
+  handleCancel,
 }) => {
+  const theme = useTheme();
   const { accountInformation } = useAuth();
   const { token } = accountInformation;
-  const { selectUser, setSelectUser } = useSearchUsers();
+
+  const { data, isLoading, isError, error, isSuccess } = useQuery({
+    queryFn: () => getUsuariosByTypeService(typeUsers, token),
+    queryKey: [],
+  });
 
   const {
-    error,
-    handleAlertClose,
-    initQuery,
-    message,
-    open: openAlertDialog,
-    responseData,
-  } = useQuery<UsuarioService[]>(
-    () => getUsuariosPorTipo(typeUsers, token!!),
-    false
-  );
+    handleClose: handleCloseFailFetch,
+    open: openFailFetch,
+    handleOpen: handleOpenFailFetch,
+  } = useAlertDialog();
 
   const [users, setUsers] = useState<UsuarioCampoBusqueda[]>([]);
+  const { selectUser, setSelectUser } = useSearchUsers();
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      setUsers(data.map((user) => adaptUserServiceToCB(user)));
+    }
+  }, [isSuccess, data]);
+
+  useEffect(() => {
+    if (isError) handleOpenFailFetch();
+  }, [isError]);
 
   useEffect(() => {
     if (selectUser) {
       setSelectUsers([
-        ...selectUsers.filter((u) => u.id != selectUser.id),
+        ...selectUsers.filter((u) => u.id !== selectUser.id),
         selectUser,
       ]);
     }
   }, [selectUser]);
 
-  useEffect(() => {
-    if (token) {
-      initQuery();
-    }
-  }, [token]);
-
-  useEffect(() => {
-    if (responseData) {
-      setUsers(
-        responseData.map((user) =>
-          adaptarUsuarioServiceAUsuarioCampoDeBusqueda(user)
-        )
-      );
-    }
-  }, [responseData]);
-
+  /**
+   * Removes a user from the selected list.
+   * 
+   * @param {number} id - ID of the user to remove
+   */
   function handleDelete(id: number) {
-    setSelectUsers([...selectUsers.filter((u) => u.id != id)]);
+    setSelectUsers(selectUsers.filter((u) => u.id !== id));
   }
-
-  const theme = useTheme();
 
   return (
     <>
       {error && (
-        <AlertDialog
-          handleAccept={handleAlertClose}
-          open={openAlertDialog}
-          title="Consultar Usuarios"
-          textBody={message}
+        <AlertDialogError
+          error={error}
+          handleClose={handleCloseFailFetch}
+          open={openFailFetch}
+          title="Fetch Users"
         />
       )}
-      <Card sx={{ padding: 2 }}>
-        <Stack spacing={3}>
-          <Typography
-            variant="h4"
-            sx={{ fontWeight: 500 }}
-            textAlign={"center"}
-          >
-            Agregar Usuarios
-          </Typography>
-          <SearchUsers
-            selectUser={selectUser}
-            setSelectUser={setSelectUser}
-            users={users}
-          />
-          <Box sx={{ display: "flex", justifyContent: "center" , width: '100%'}}>
-            <Grid2
-              container
-              sx={{
-                backgroundColor: theme.palette.action.hover,
-                maxWidth: 600,
-                minHeight: 150,
-                padding: 2,
-                flexGrow: 1
-              }}
-            >
-              {selectUsers.map((user) => (
-                <Grid2 size={{ xs: 6, md: 4 }}>
-                  <Chip
-                    onDelete={() => handleDelete(user.id)}
-                    avatar={<Avatar src={user.foto}></Avatar>}
-                    label={user.nombreCompleto}
-                    color="info"
-                  />
-                </Grid2>
-              ))}
-            </Grid2>
-          </Box>
-          <Stack direction={"row"} spacing={2} justifyContent={"center"}>
-            <GeneralButton mode={buttonTypes.save} onClick={handleAccept}/>
-            <GeneralButton color="inherit" mode={buttonTypes.cancel} onClick={handleCancel}/>
+      {isLoading ? (
+        <LoaderElement />
+      ) : (
+        <Card sx={{ padding: 2 }}>
+          <Stack spacing={3}>
+            <Typography variant="h4" sx={{ fontWeight: 500 }} textAlign="center">
+              Add Users
+            </Typography>
+            <SearchUsers selectUser={selectUser} setSelectUser={setSelectUser} users={users} />
+            <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+              <Grid2
+                container
+                sx={{
+                  backgroundColor: theme.palette.action.hover,
+                  maxWidth: 600,
+                  minHeight: 150,
+                  padding: 2,
+                  flexGrow: 1,
+                }}
+              >
+                {selectUsers.map((user) => (
+                  <Grid2 key={user.id} size={{ xs: 6, md: 4 }}>
+                    <Chip
+                      onDelete={() => handleDelete(user.id)}
+                      avatar={<Avatar src={user.foto} />}
+                      label={user.nombreCompleto}
+                      color="info"
+                    />
+                  </Grid2>
+                ))}
+              </Grid2>
+            </Box>
+            <Stack direction="row" spacing={2} justifyContent="center">
+              <GeneralButton mode={buttonTypes.save} onClick={handleAccept} />
+              <GeneralButton color="inherit" mode={buttonTypes.cancel} onClick={handleCancel} />
+            </Stack>
           </Stack>
-        </Stack>
-      </Card>
+        </Card>
+      )}
     </>
   );
 };

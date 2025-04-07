@@ -1,6 +1,6 @@
 import { patchData } from "@core/services";
 
-export const patchSolicitud = async (
+export const patchSolicitudService = async (
   id: number,
   estado: "A" | "P" | "R",
   idOfUpdater: number,

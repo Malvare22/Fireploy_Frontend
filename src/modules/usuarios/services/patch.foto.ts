@@ -1,14 +1,12 @@
 import { patchData } from "@core/services";
 import { UsuarioService } from "../types/services.usuario";
 
-export const patchSubirFotoPerfil = async (
-  id: number,
+export const patchUpdatePhotoService = async (
   token: string,
+  id: number,
   imgFile: Blob
 ) => {
   const formData = new FormData();
-
-  console.log(imgFile, token, id)
 
   formData.append("image", imgFile, `${id}.png`);
 

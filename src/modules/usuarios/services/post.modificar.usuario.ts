@@ -2,11 +2,7 @@ import { patchData } from "@core/services";
 import { UsuarioService } from "../types/services.usuario";
 import { Usuario } from "../types/usuario";
 
-export const postModificarUsuarioService = async (
-  id: number,
-  token: string,
-  user: Usuario
-) => {
+export const postChangeUsuarioService = async (id: number, token: string, user: Usuario) => {
   type Body = {
     nombre: string;
     apellido: string;
@@ -24,11 +20,9 @@ export const postModificarUsuarioService = async (
     fecha_nacimiento: user.fechaDeNacimiento, // Formato ISO (YYYY-MM-DD)
     sexo: user.sexo, // Si hay más opciones, puedes usar string
     descripcion: user.descripcion,
-    foto_perfil: "",
+    foto_perfil: user.fotoDePerfil,
     red_social:
-      typeof user.redSocial === "object"
-        ? JSON.stringify(user.redSocial)
-        : user.redSocial,
+      typeof user.redSocial === "object" ? JSON.stringify(user.redSocial) : user.redSocial,
   };
 
   if (user.estFechaInicio) {
@@ -42,14 +36,13 @@ export const postModificarUsuarioService = async (
   return response;
 };
 
-export const postModificarEstadoUsuarioService = async (
-  id: number,
-  token: string,
-  estado: "A" | "I"
-) => {
+export const postChangeUserStateService = async (token: string, id: number, estado: "A" | "I") => {
+
+  console.log(id, estado)
+
   const response = await patchData<UsuarioService>(
     `/usuario/${id}`,
-    { estado },
+    { estado: estado },
     {
       sessiontoken: token,
     }

@@ -4,7 +4,7 @@ import { Usuario } from "../types/usuario";
 import { getUserTypes } from "../utils/usuario.map";
 import { getImage } from "@modules/general/utils/getImage";
 
-export const postCrearUsuarioService = async (token: string, user: Usuario) => {
+export const postCreateUsuarioService = async (token: string, user: Usuario) => {
   type Body = {
     nombre: string;
     apellido: string;
