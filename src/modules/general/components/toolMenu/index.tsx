@@ -1,14 +1,12 @@
 import * as React from "react";
 import { AppProvider, Navigation, Router } from "@toolpad/core/AppProvider";
-import { DashboardLayout } from "@toolpad/core/DashboardLayout";
-import { Box, useTheme } from "@mui/material";
+import { DashboardLayout, SidebarFooterProps } from "@toolpad/core/DashboardLayout";
+import { Box, Button, Divider, Stack, useTheme } from "@mui/material";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import PeopleIcon from "@mui/icons-material/People";
@@ -27,7 +25,10 @@ import { BoxesIcon, PersonLinesFillIcon } from "../customIcons";
 import PlagiarismIcon from "@mui/icons-material/Plagiarism";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-
+import { Account, AccountPreview, AccountPreviewProps } from "@toolpad/core/Account";
+import type { Session } from "@toolpad/core/AppProvider";
+import LogoutIcon from "@mui/icons-material/Logout";
+import LoaderElement from "../loaderElement";
 /**
  * Mi perfil y cerrar sesión X
  * Portafolios (Explorar y Mi Portafolio) X
@@ -38,30 +39,13 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 function getNavigationElements(userInformation: AccountInformation): Navigation {
   return [
     {
-      title: "Perfil",
-      icon: <AccountCircleIcon />,
-      children: [
-        {
-          segment: rutasUsuarios.perfil as string,
-          title: "Editar Perfil",
-          icon: <ManageAccountsIcon />,
-        },
-        {
-          segment: rutasUsuarios.logout as string,
-          title: "Cerrar Sesión",
-          icon: <PowerSettingsNewIcon />,
-        },
-      ],
-    },
-    { kind: "divider" },
-    {
       title: "Portfolios",
       icon: <ContactMailIcon />,
       children: [
         {
           segment: rutasUsuarios.portafolio.replace(":id", userInformation.id.toString()) as string,
           title: "Mi Portafolio",
-          icon: <PersonLinesFillIcon sx={{color:'black'}}/>,
+          icon: <PersonLinesFillIcon sx={{ color: "black" }} />,
         },
         {
           segment: rutasUsuarios.explorarPortafolios as string,
@@ -193,6 +177,92 @@ function useDemoRouter(): Router {
   };
 }
 
+function AccountSidebarPreview(props: AccountPreviewProps & { mini: boolean }) {
+  const { handleClick, open, mini } = props;
+  return (
+    <Stack direction="column" p={0}>
+      <Divider />
+      <AccountPreview
+        variant={mini ? "condensed" : "expanded"}
+        handleClick={handleClick}
+        open={open}
+      />
+    </Stack>
+  );
+}
+
+function SidebarFooterAccountPopover() {
+  const navigate = useNavigate();
+
+  return (
+    <Stack direction="column" spacing={1} sx={{ padding: 2 }}>
+      <Button
+        variant="outlined"
+        startIcon={<ManageAccountsIcon />}
+        onClick={() => navigate(rutasUsuarios.perfil)}
+      >
+        Configurar Cuenta
+      </Button>
+      <Button
+        variant="outlined"
+        startIcon={<LogoutIcon />}
+        onClick={() => navigate(rutasUsuarios.logout)}
+      >
+        Cerrar Sesión
+      </Button>
+    </Stack>
+  );
+}
+
+const createPreviewComponent = (mini: boolean) => {
+  function PreviewComponent(props: AccountPreviewProps) {
+    return <AccountSidebarPreview {...props} mini={mini} />;
+  }
+  return PreviewComponent;
+};
+
+function SidebarFooterAccount({ mini }: SidebarFooterProps) {
+  const PreviewComponent = React.useMemo(() => createPreviewComponent(mini), [mini]);
+  return (
+    <Account
+      slots={{
+        preview: PreviewComponent,
+        popoverContent: SidebarFooterAccountPopover,
+      }}
+      slotProps={{
+        popover: {
+          transformOrigin: { horizontal: "left", vertical: "bottom" },
+          anchorOrigin: { horizontal: "right", vertical: "bottom" },
+          disableAutoFocus: true,
+          slotProps: {
+            paper: {
+              elevation: 0,
+              sx: {
+                overflow: "visible",
+                filter: (theme) =>
+                  `drop-shadow(0px 2px 8px ${theme.palette.mode === "dark" ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.32)"})`,
+                mt: 1,
+                "&::before": {
+                  content: '""',
+                  display: "block",
+                  position: "absolute",
+                  bottom: 10,
+                  left: 0,
+                  width: 10,
+                  height: 10,
+                  bgcolor: "background.paper",
+                  transform: "translate(-50%, -50%) rotate(45deg)",
+                  zIndex: 0,
+                },
+              },
+            },
+          },
+        },
+      }}
+    />
+  );
+}
+
 /**
  * **Dashboard Layout Component**
  * Provides a structured layout for the dashboard, including:
@@ -210,15 +280,33 @@ export default function DashboardLayoutBasic(props: any) {
   const theme = useTheme();
 
   // Get the logged-in user data from context
-  const {accountInformation} = useAuth();
+  const { accountInformation } = useAuth();
+
+  const currentSession: Session = {
+    user: {
+      email: accountInformation?.correo ?? "",
+      id: accountInformation?.id.toString() ?? "",
+      image: accountInformation?.foto ?? "",
+      name: accountInformation?.nombre ?? "",
+    },
+  };
+
+  const authentication = React.useMemo(() => {
+    return {
+      signIn: () => {},
+      signOut: () => {},
+    };
+  }, []);
 
   return (
     <>
-      {accountInformation && (
+      {accountInformation ? (
         <AppProvider
           navigation={getNavigationElements(accountInformation)}
           router={router}
           theme={theme}
+          authentication={authentication}
+          session={currentSession}
           branding={{
             logo: (
               <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
@@ -229,10 +317,15 @@ export default function DashboardLayoutBasic(props: any) {
             homeUrl: "/toolpad/core/introduction",
           }}
         >
-          <DashboardLayout sx={{ "& .MuiListSubheader-root": { fontSize: "4rem" } }}>
+          <DashboardLayout
+            sx={{ "& .MuiListSubheader-root": { fontSize: "4rem" } }}
+            slots={{ toolbarAccount: () => null, sidebarFooter: SidebarFooterAccount }}
+          >
             <Box marginTop={-10}>{props.children}</Box>
           </DashboardLayout>
         </AppProvider>
+      ) : (
+        <Box sx={{height: '100vh'}}><LoaderElement /></Box>
       )}
     </>
   );

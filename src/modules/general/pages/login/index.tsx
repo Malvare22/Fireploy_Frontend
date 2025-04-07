@@ -17,12 +17,6 @@ import { rutasGeneral } from "@modules/general/router/router";
 import { postSignUp, SignUpResponse } from "@modules/general/services/signUp";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { useNavigate } from "react-router-dom";
-import {
-  AccountInformation,
-  useAuth,
-} from "@modules/general/context/accountContext";
-import { getUserLetterTypes } from "@modules/usuarios/utils/usuario.map";
-import { TiposUsuario } from "@modules/usuarios/types/usuario";
 import { rutasProyectos } from "@modules/proyectos/router";
 import { useMutation } from "@tanstack/react-query";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
@@ -54,33 +48,26 @@ const SignIn: React.FC = () => {
   const handleInput = (key: keyof SignUp, value: string) => {
     setSingUp({ ...singUp, [key]: value });
   };
-  
+
   const { mutate, isError, isSuccess, data, isPending } = useMutation({
     mutationFn: () => postSignUp(singUp.email, singUp.password),
-    onError: () => setOpen(true)
+    onError: () => setOpen(true),
   });
-  const { setAccountInformation } = useAuth();
 
   const navigate = useNavigate();
 
   const { open, setOpen } = useAlertDialog();
 
   const onSuccess = (data: SignUpResponse) => {
-    const _localUser: AccountInformation = {
-      foto: data.foto,
-      id: data.id,
-      nombre: data.nombre,
-      tipo: getUserLetterTypes.get(data.tipo) as TiposUsuario,
-      token: data.access_token,
-    };
-    localStorage.setItem("ACCOUNT", JSON.stringify(_localUser));
-    setAccountInformation(_localUser);
+    localStorage.setItem("TOKEN", data.access_token);
+    localStorage.setItem("CURRENT_ID", data.id.toString());
+
     navigate(rutasProyectos.listar);
   };
 
-  useEffect(()=> {
-    if(isSuccess && data) onSuccess(data)
-  }, [isSuccess, data])
+  useEffect(() => {
+    if (isSuccess && data) onSuccess(data);
+  }, [isSuccess, data]);
 
   return (
     <Card sx={{ padding: 2, maxWidth: 600 }}>

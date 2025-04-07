@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import AlertDialog from "../alertDialog";
-import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { Alert, Typography } from "@mui/material";
+import { rutasGeneral } from "@modules/general/router/router";
 
 export type CustomError = Error & {
   statusCode?: number;
@@ -18,7 +18,8 @@ function AlertDialogError({ error, handleClose, open, title }: Props) {
 
   function onClose() {
     if (error.statusCode == 401) {
-      navigate(rutasUsuarios.logout);
+      localStorage.clear();
+      navigate(rutasGeneral.login);
     } else handleClose();
   }
 

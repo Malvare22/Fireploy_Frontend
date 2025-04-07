@@ -2,7 +2,6 @@ import { RouterProvider } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import { getTheme } from "./themes";
 import { router } from "./router/router";
-import { AuthProvider } from "@modules/general/context/accountContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
@@ -29,12 +28,10 @@ function App(): JSX.Element {
      * Permite que otros componentes accedan y actualicen el estado del usuario.
      */
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <ThemeProvider theme={getTheme}>
-          {/* Proveedor de enrutamiento para manejar la navegación */}
-          <RouterProvider router={router} />
-        </ThemeProvider>
-      </AuthProvider>
+      <ThemeProvider theme={getTheme}>
+        {/* Proveedor de enrutamiento para manejar la navegación */}
+        <RouterProvider router={router} />
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
