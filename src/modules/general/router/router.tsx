@@ -7,19 +7,33 @@ import LayoutAuthenticated from "../layouts/auth";
 import ErrorPage from "../pages/404";
 import { routerUsuarios } from "@modules/usuarios/router/router";
 import { routerMaterias } from "@modules/materias/router/router";
+import { routerProyectos } from "@modules/proyectos/router";
+import RecuperarContrasenia from "../pages/recuperar";
+import ReestablecerContrasenia from "../pages/reestablecerContrasenia";
 
+/** 
+ * Base route path of the application
+ */
 export const rutaBase = "/";
 
+/**
+ * Enum defining the general public routes of the application
+ */
 export enum rutasGeneral {
   home = rutaBase,
   login = rutaBase + "login",
   recuperar = rutaBase + "recuperar",
   registrar = rutaBase + "registrar",
+  cambiarContrasenia = rutaBase + "reset-password/:token",
 }
 
+/**
+ * Route configuration for public routes.
+ * These routes use the LayoutPrelogin layout and are accessible without authentication.
+ */
 export const routerGeneral: RouteObject = {
   path: "/",
-  element: <LayoutPrelogin />, // Usar el Layout para rutas que necesitan el Navbar
+  element: <LayoutPrelogin />, // Use layout with navbar for pre-login pages
   children: [
     {
       path: "/",
@@ -34,19 +48,30 @@ export const routerGeneral: RouteObject = {
       element: <Registrar />,
     },
     {
+      path: rutasGeneral.recuperar,
+      element: <RecuperarContrasenia />,
+    },
+    {
+      path: rutasGeneral.cambiarContrasenia,
+      element: <ReestablecerContrasenia />,
+    },
+    {
       path: "*",
       element: <ErrorPage />,
     },
   ],
 };
 
+/**
+ * Route configuration for authenticated (private) routes.
+ * These routes use the LayoutAuthenticated layout and are loaded only when the user is logged in.
+ */
 export const authenticatedRoutes: RouteObject = {
   path: "/app",
-  element: <LayoutAuthenticated />, // Layout para rutas privadas
+  element: <LayoutAuthenticated />, // Layout for private routes
   children: [
     ...(routerMaterias || []),
     ...(routerUsuarios || []),
-    //...(routerProyectos || []),
-
+    ...(routerProyectos || []),
   ],
 };

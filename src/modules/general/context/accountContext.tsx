@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         correo: localData.correo,
         foto: localData.fotoDePerfil,
         id: localData.id ?? -1,
-        nombre: localData.tipo ?? "",
+        nombre: localData.nombres + " " + localData.apellidos,
         tipo: localData.tipo ?? "E",
         token: localStorage.getItem("TOKEN") ?? "",
       });

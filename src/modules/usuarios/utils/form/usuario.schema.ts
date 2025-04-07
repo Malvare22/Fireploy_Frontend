@@ -102,11 +102,14 @@ export const apellidosSchema = z.string().min(1, { message: "El apellido no pued
 
 export const fotoDePerfilSchema = z
   .string()
+  .min(1, { message: "El correo es obligatorio" })
   .min(0, { message: "Es obligatorio agregar una imagen" });
 
 export const descripcionSchema = z.string();
 
 export const correoSchema = z.string().email({ message: "Debe ser un correo válido" });
+
+export const CorreoSchema = z.object({ correo: correoSchema });
 
 /**
  * Full Zod schema for validating a complete Usuario object.

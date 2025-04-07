@@ -1,4 +1,4 @@
-import { adaptarFechaBackend } from "@modules/general/utils/fechas";
+import { adaptDateBackend } from "@modules/general/utils/fechas";
 import { UsuarioService } from "../types/services.usuario";
 import {
   EstadoUsuario,
@@ -21,7 +21,7 @@ export const adaptUser = (usuario: UsuarioService): Usuario => {
   const _usuario: Usuario = {
     correo: usuario.correo,
     id: usuario.id,
-    fechaDeNacimiento: adaptarFechaBackend(usuario.fecha_nacimiento),
+    fechaDeNacimiento: adaptDateBackend(usuario.fecha_nacimiento),
     estado: usuario.estado as EstadoUsuario,
     tipo: getUserLetterTypes.get(usuario.tipo as UserTypeFullString) as TiposUsuario,
     nombres: usuario.nombre,
@@ -36,7 +36,7 @@ export const adaptUser = (usuario: UsuarioService): Usuario => {
   };
 
   if (usuario.est_fecha_inicio) {
-    _usuario.estFechaInicio = adaptarFechaBackend(usuario.est_fecha_inicio);
+    _usuario.estFechaInicio = adaptDateBackend(usuario.est_fecha_inicio);
   }
   return _usuario;
 };

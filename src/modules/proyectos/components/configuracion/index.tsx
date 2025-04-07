@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Container,
   Tabs,
@@ -15,18 +15,13 @@ import {
   useTheme,
   IconButton,
   Tooltip,
-  Autocomplete,
 } from "@mui/material";
 import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
-import {
-  UsuarioPortafolioCard,
-  usuarioPrueba,
-} from "@modules/usuarios/types/usuario.portafolio";
+import { UsuarioPortafolioCard, usuarioPrueba } from "@modules/usuarios/types/usuario.portafolio";
 import { ProjectCardAvatar } from "@modules/general/components/projectCardAvatar";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LogsFiles from "../logsFiles";
-import ActionButton from "@modules/general/components/actionButton";
-import { actionButtonTypes } from "@modules/general/types/actionButtons";
+import Editor, { OnMount, useMonaco } from "@monaco-editor/react";
 import { EstadoEjecucionProyecto } from "@modules/proyectos/types/proyecto.tipo";
 import StopIcon from "@mui/icons-material/Stop";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
@@ -36,10 +31,11 @@ import {
   getExecutionState,
 } from "@modules/proyectos/utils/getExecutionState";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { getDockerRepositories, getDockerTags } from "@modules/proyectos/services/get.docker.information";
+import * as monaco from 'monaco-editor';
+
 
 export default function ProjectSettings() {
-  const [tabIndex, setTabIndex] = useState(0);
+  const [tabIndex, setTabIndex] = useState(5);
 
   return (
     <Grid2 container>
@@ -51,7 +47,7 @@ export default function ProjectSettings() {
           </IconButton>
         </Stack>
       </Grid2>
-      <Grid2 size={10}>
+      <Grid2 size={12}>
         <Container component={Paper} sx={{ p: 4 }}>
           <Typography variant="h4" sx={{ mb: 2 }}>
             {labelConfiguracion.configuracion}
@@ -95,9 +91,9 @@ export default function ProjectSettings() {
           </Stack>
         </Container>
       </Grid2>
-      <Grid2 size={2}>
+      {/* <Grid2 size={2}>
         <Status status={"E"} />
-      </Grid2>
+      </Grid2> */}
     </Grid2>
   );
 }
@@ -109,20 +105,12 @@ export const Information = () => {
         <Typography variant="h5">{labelConfiguracion.informacion}</Typography>
         <Divider />
       </Stack>
-      <Typography variant="body1">
-        {labelConfiguracion.informacionParrafo}
-      </Typography>
+      <Typography variant="body1">{labelConfiguracion.informacionParrafo}</Typography>
       <Grid2 container spacing={2}>
         <Grid2 size={6}>
           <TextField fullWidth label={labelConfiguracion.nombre} value={""} />
         </Grid2>
-        <TextField
-          fullWidth
-          label={labelConfiguracion.descripcion}
-          value={""}
-          multiline
-          rows={6}
-        />
+        <TextField fullWidth label={labelConfiguracion.descripcion} value={""} multiline rows={6} />
       </Grid2>
       <Grid2 container spacing={2}>
         <Grid2 size={4}>
@@ -140,99 +128,15 @@ export const Information = () => {
 };
 
 export const Repositories = () => {
-  const [repository, setRepository] = useState<string | null>(null);
-  const [repositoryResults, setRepositoryResults] = useState<string[]>([]);
-  const [buffer, setBuffer] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [showTagsInput, setShowTagsInput] = useState<boolean>(false);
-  const [tagsResults, setTagsResults] = useState<string[]>([]);
-  const [selectTag, setSelectTag] = useState<string | null>(null);
-
-  console.log(repository)
-
-  useEffect(() => {
-    const fetchRepositories = async (query: string) => {
-      if (query.trim() === "") {
-        setRepositoryResults([]);
-        return;
-      }
-
-      setIsLoading(true);
-      const results = await getDockerRepositories(query);
-      setRepositoryResults(results);
-      setIsLoading(false);
-    };
-
-    const timer = setTimeout(() => {
-      fetchRepositories(buffer);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [buffer]);
-
-  useEffect(() => {
-    if(!repository) return;
-    const fetchTags = async () => {
-
-      const results = await getDockerTags(repository);
-      setTagsResults(results);
-    };
-
-    const timer = setTimeout(() => {
-      fetchTags();
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [repository]);
-
-  useEffect(() => {
-    setShowTagsInput(repository != null);
-  }, [repository]);
 
   return (
     <Stack spacing={3}>
-      <Autocomplete
-        freeSolo
-        disablePortal
-        loading={isLoading}
-        options={repositoryResults}
-        sx={{ width: 300 }}
-        onInputChange={(_e, value) => setBuffer(value ?? "")}
-        inputValue={buffer}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Repositorio"
-            placeholder="Escribe para buscar..."
-          />
-        )}
-        onChange={(_e, value) => setRepository(value)}
-        value={repository}
-      />
-      {showTagsInput && (
-        <Autocomplete
-          freeSolo
-          disablePortal
-          options={tagsResults}
-          sx={{ width: 300 }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Tags"
-              placeholder="Escribe para buscar..."
-            />
-          )}
-          onChange={(_e, value) => setSelectTag(value)}
-          value={selectTag}
-        />
-      )}
+
       <Stack>
         <Typography variant="h5">{labelConfiguracion.repositorios}</Typography>
         <Divider />
       </Stack>
-      <Typography variant="body2">
-        {labelConfiguracion.repositoriosParrafo}
-      </Typography>
+      <Typography variant="body2">{labelConfiguracion.repositoriosParrafo}</Typography>
       <Grid2 container spacing={2}>
         <Typography variant="h6">{labelConfiguracion.frontend}</Typography>
       </Grid2>
@@ -242,26 +146,9 @@ export const Repositories = () => {
         value={""}
         sx={{ width: "50%" }}
       />
-      <Select
-        fullWidth
-        label={labelConfiguracion.tecnologiaFrontend}
-        value={""}
-        sx={{ width: "50%" }}
-      />
       <Divider />
       <Typography variant="h6">{labelConfiguracion.backend}</Typography>
-      <TextField
-        fullWidth
-        label={labelConfiguracion.urlBackend}
-        value={""}
-        sx={{ width: "50%" }}
-      />
-      <Select
-        fullWidth
-        label={labelConfiguracion.tecnologiaBackend}
-        value={""}
-        sx={{ width: "50%" }}
-      />
+      <TextField fullWidth label={labelConfiguracion.urlBackend} value={""} sx={{ width: "50%" }} />
     </Stack>
   );
 };
@@ -274,9 +161,7 @@ export const DataBase = () => {
         <Divider />
       </Stack>
       <Stack>
-        <Typography variant="body1">
-          {labelConfiguracion.baseDeDatosParrafo}
-        </Typography>
+        <Typography variant="body1">{labelConfiguracion.baseDeDatosParrafo}</Typography>
       </Stack>
       <TextField
         fullWidth
@@ -285,9 +170,7 @@ export const DataBase = () => {
         sx={{ width: "50%" }}
       />
       <Box>
-        <Button variant="contained">
-          {labelConfiguracion.gestionarBaseDatos}
-        </Button>
+        <Button variant="contained">{labelConfiguracion.gestionarBaseDatos}</Button>
       </Box>
     </Stack>
   );
@@ -299,14 +182,8 @@ export const Members = () => {
   return (
     <Stack spacing={0}>
       <Stack>
-        <Stack
-          marginBottom={2}
-          direction={"row"}
-          justifyContent={"space-between"}
-        >
-          <Typography variant="h5">
-            {labelConfiguracion.colaboradores}
-          </Typography>
+        <Stack marginBottom={2} direction={"row"} justifyContent={"space-between"}>
+          <Typography variant="h5">{labelConfiguracion.colaboradores}</Typography>
           <Button variant="contained" size="small">
             {labelConfiguracion.invitarIntegrantes}
           </Button>
@@ -330,48 +207,30 @@ export const Members = () => {
 };
 
 export const EnviromentVariables = () => {
-  const theme = useTheme();
+  const monaco = useMonaco();
 
-  function Row() {
-    return (
-      <Stack position={"relative"}>
-        <Grid2 container padding={2}>
-          <Grid2 size={6}>
-            <Typography>
-              {labelConfiguracion.variablesDeEntornoNombre}
-            </Typography>
-          </Grid2>
-          <Grid2 size={6}>
-            <Typography>
-              {labelConfiguracion.variablesDeEntornoValor}
-            </Typography>
-          </Grid2>
-        </Grid2>
-        <Divider />
-        <Box
-          sx={{
-            position: "absolute",
-            right: 3,
-            top: 8,
-          }}
-        >
-          <ActionButton mode={actionButtonTypes.editar} />
-        </Box>
-      </Stack>
-    );
+  useEffect(() => {
+    if (monaco) {
+      console.log("here is the monaco instance:", monaco);
+    }
+  }, [monaco]);
+  
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  
+  const handleEditorDidMount: OnMount = (editor, monacoInstance) => {
+    editorRef.current = editor;
+  };
+  
+  function getEditorValue() {
+    const value = editorRef.current?.getValue(); // Added optional chaining for safety
+    console.log("Contenido del editor:", value);
   }
 
   return (
     <Stack spacing={3}>
       <Stack>
-        <Stack
-          marginBottom={2}
-          direction={"row"}
-          justifyContent={"space-between"}
-        >
-          <Typography variant="h6">
-            {labelConfiguracion.variablesDeEntorno}
-          </Typography>
+        <Stack marginBottom={2} direction={"row"} justifyContent={"space-between"}>
+          <Typography variant="h6">{labelConfiguracion.variablesDeEntorno}</Typography>
           <Divider />
         </Stack>
         <Typography variant="body1" marginBottom={3}>
@@ -380,25 +239,31 @@ export const EnviromentVariables = () => {
         <Divider />
       </Stack>
       <Divider />
-      <Box sx={{ backgroundColor: theme.palette.action.hover, padding: 2 }}>
-        <Grid2 container>
-          <Grid2 size={6}>
-            <Typography>
-              {labelConfiguracion.variablesDeEntornoNombre}
-            </Typography>
-          </Grid2>
-          <Grid2 size={6}>
-            <Typography>
-              {labelConfiguracion.variablesDeEntornoValor}
-            </Typography>
-          </Grid2>
-        </Grid2>
-      </Box>
-      <Divider />
-      <Row />
-      <Box marginY={2}>
-        <Button variant="contained">{labelConfiguracion.agregar}</Button>
-      </Box>
+      <div>
+        <div
+          style={{
+            backgroundColor: "#1e1e1e",
+            color: "white",
+            padding: "8px 12px",
+            fontFamily: "monospace",
+            borderTopLeftRadius: "4px",
+            borderTopRightRadius: "4px",
+          }}
+        >
+          {"Archivo .env"}
+        </div>
+
+        <div style={{ height: "500px" }}>
+          <Editor
+            defaultLanguage="ini"
+            defaultValue="// tu código aquí"
+            theme="vs-dark"
+            onMount={handleEditorDidMount}
+            options={{ fontSize: 14 }}
+            onChange={() => getEditorValue()}
+          />
+        </div>
+      </div>
     </Stack>
   );
 };
@@ -446,6 +311,7 @@ const CardMember: React.FC<CardMemberProps> = ({ member }) => {
 type StatusProps = {
   status: EstadoEjecucionProyecto;
 };
+
 const Status: React.FC<StatusProps> = ({ status }) => {
   const colorState = getColorExecutionState(status) as string;
 
@@ -484,11 +350,7 @@ const Status: React.FC<StatusProps> = ({ status }) => {
       </Box>
       <Grid2 container rowSpacing={1}>
         <Grid2 size={12} sx={{ display: "flex", justifyContent: "center" }}>
-          <Button
-            size="small"
-            variant="contained"
-            endIcon={<StopIcon sx={{ fontSize: 32 }} />}
-          >
+          <Button size="small" variant="contained" endIcon={<StopIcon sx={{ fontSize: 32 }} />}>
             {labelConfiguracion.detener}
           </Button>
         </Grid2>

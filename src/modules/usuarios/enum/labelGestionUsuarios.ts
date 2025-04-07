@@ -27,7 +27,8 @@ export const labelUsuario = {
   registroExitoso: 'Usuario Registrado con éxito',
   seleccioneUnSexo: 'Seleccione un Sexo',
   seleccioneUnTipo: 'Seleccione su tipo de usuario',
-  id: 'Id'
+  id: 'Id',
+  cambiarContrasenia: 'Reestablecer Contraseña'
 };
 
 export const obtenerLabelHabilitarUsuario = (usuario: Usuario) => (`¿Está seguro de que desea habilitar al usuario ${usuario.apellidos} ${usuario.nombres}?`);

@@ -1,193 +1,208 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { labelGeneral } from "@modules/general/enums/labelGeneral";
-import useQuery from "@modules/general/hooks/useQuery";
 import { rutasGeneral } from "@modules/general/router/router";
-import { obtenerFechaActual } from "@modules/general/utils/fechas";
+import { getCurrentDate } from "@modules/general/utils/fechas";
 import { labelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
-import { UsuarioService } from "@modules/usuarios/types/services.usuario";
-import {
-  Box,
-  Button,
-  Card,
-  MenuItem,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Card, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import TextFieldPassword from "@modules/general/components/textFieldPassword";
 import { Usuario, usuarioTemplate } from "@modules/usuarios/types/usuario";
 import { getGender } from "@modules/usuarios/utils/usuario.map";
-import AlertDialog from "@modules/general/components/alertDialog";
-import { useEffect } from "react";
 import { UsuarioSchema } from "@modules/usuarios/utils/form/usuario.schema";
+import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import { useMutation } from "@tanstack/react-query";
+import { postCreateUsuarioService } from "@modules/usuarios/services/post.crear.usuario";
+import AlertDialogError from "@modules/general/components/alertDialogError";
+import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
 
+/**
+ * Registrar component renders the user registration form.
+ * It handles form validation, submission, and UI feedback.
+ *
+ * @component
+ * @returns {JSX.Element} User registration form component
+ */
 function Registrar() {
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  //   getValues,
-  // } = useForm<Usuario>({
-  //   resolver: zodResolver(UsuarioSchema),
-  //   defaultValues: usuarioTemplate,
-  // });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm<Usuario>({
+    resolver: zodResolver(UsuarioSchema),
+    defaultValues: usuarioTemplate,
+  });
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // const successAction = () => {
-  //   navigate(rutasGeneral.login);
-  // };
+  /**
+   * Navigates to the login page after successful registration.
+   */
+  const successAction = () => {
+    navigate(rutasGeneral.login);
+  };
 
-  // const { handleAlertClose, initQuery, message, open, responseData, setOpen } =
-  //   useQuery<UsuarioService>(
-  //     () => postCrearUsuarioService("", getValues()),
-  //     false,
-  //     labelUsuario.registroExitoso,
-  //     successAction
-  //   );
+  const {
+    handleOpen: handleOpenError,
+    handleClose: handleCloseError,
+    open: openError,
+  } = useAlertDialog();
 
-  // const onSubmit = async () => {
-  //   await initQuery();
-  // };
+  const { handleOpen: handleOpenSuccess, open: openSuccess } = useAlertDialog();
 
-  // useEffect(() => {
-  //   if (!responseData) return;
-  //   setOpen(true);
-  // }, [responseData]);
+  /**
+   * Handles the registration mutation.
+   * Displays success or error dialog based on the result.
+   */
+  const { error, mutate, isPending } = useMutation({
+    mutationKey: ["registrar estudiante"],
+    mutationFn: () => postCreateUsuarioService("", getValues()),
+    onSuccess: handleOpenSuccess,
+    onError: handleOpenError,
+  });
 
-  // return (
-  //   <Card sx={{ maxWidth: 600, padding: 4 }}>
-  //     <AlertDialog
-  //       handleAccept={handleAlertClose}
-  //       open={open}
-  //       title="Iniciar Sesión"
-  //       textBody={message}
-  //     />
-  //     <Stack spacing={3}>
-  //       <Stack spacing={1} direction={"row"} alignItems={"center"}>
-  //         <Typography variant="h4" textAlign={"center"}>
-  //           {labelUsuario.registrarUsuario}
-  //         </Typography>
-  //         <AssignmentIndIcon fontSize="large" />
-  //       </Stack>
-  //       <form
-  //         onSubmit={handleSubmit(onSubmit)}
-  //         style={{
-  //           width: "100%",
-  //         }}
-  //       >
-  //         {/* Fila 1: Nombres y Apellidos */}
-  //         <Stack spacing={4}>
-  //           <TextField
-  //             label="Nombres"
-  //             type="text"
-  //             error={!!errors.nombres}
-  //             helperText={errors.nombres?.message}
-  //             {...register("nombres")}
-  //             fullWidth
-  //           />
-  //           <TextField
-  //             label="Apellidos"
-  //             type="text"
-  //             error={!!errors.apellidos}
-  //             helperText={errors.apellidos?.message}
-  //             {...register("apellidos")}
-  //             fullWidth
-  //           />
+  /**
+   * Submits the registration form.
+   */
+  const onSubmit = async () => {
+    await mutate();
+  };
 
-  //           {/* Fila 2: Correo y Fecha de Nacimiento */}
+  return (
+    <Card sx={{ maxWidth: 600, padding: 4 }}>
+      {error && (
+        <AlertDialogError
+          error={error}
+          handleClose={handleCloseError}
+          open={openError}
+          title="Registrar Usuario"
+        />
+      )}
+      <AlertDialogSuccess
+        message="Usuario Registrado Correctamente"
+        handleClose={successAction}
+        open={openSuccess}
+        title="Registrar Usuario"
+        reload={false}
+      />
+      <Stack spacing={3}>
+        <Stack spacing={1} direction={"row"} alignItems={"center"}>
+          <Typography variant="h4" textAlign={"center"}>
+            {labelUsuario.registrarUsuario}
+          </Typography>
+          <AssignmentIndIcon fontSize="large" />
+        </Stack>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          style={{
+            width: "100%",
+          }}
+        >
+          {/* Row 1: First Name and Last Name */}
+          <Stack spacing={4}>
+            <TextField
+              label="Nombres"
+              type="text"
+              error={!!errors.nombres}
+              helperText={errors.nombres?.message}
+              {...register("nombres")}
+              fullWidth
+            />
+            <TextField
+              label="Apellidos"
+              type="text"
+              error={!!errors.apellidos}
+              helperText={errors.apellidos?.message}
+              {...register("apellidos")}
+              fullWidth
+            />
 
-  //           <TextField
-  //             label="Correo"
-  //             type="email"
-  //             error={!!errors.correo}
-  //             helperText={errors.correo?.message}
-  //             {...register("correo")}
-  //             fullWidth
-  //           />
+            {/* Row 2: Email and Gender */}
+            <TextField
+              label="Correo"
+              type="email"
+              error={!!errors.correo}
+              helperText={errors.correo?.message}
+              {...register("correo")}
+              fullWidth
+            />
 
-  //           <TextField
-  //             label="Sexo"
-  //             select
-  //             error={!!errors.sexo}
-  //             helperText={errors.sexo?.message}
-  //             {...register("sexo")}
-  //             fullWidth
-  //           >
-  //             {Array.from(getGender.entries()).map(([valor, texto]) => (
-  //               <MenuItem key={valor} value={valor}>
-  //                 {texto}
-  //               </MenuItem>
-  //             ))}
-  //           </TextField>
+            <TextField
+              label="Sexo"
+              select
+              error={!!errors.sexo}
+              helperText={errors.sexo?.message}
+              {...register("sexo")}
+              fullWidth
+            >
+              {Array.from(getGender.entries()).map(([valor, texto]) => (
+                <MenuItem key={valor} value={valor}>
+                  {texto}
+                </MenuItem>
+              ))}
+            </TextField>
 
-  //           {/* Fila 3: Fecha de Ingreso y Sexo */}
+            {/* Row 3: Start Date and Birth Date */}
+            <TextField
+              label="Fecha de Ingreso"
+              type="date"
+              error={!!errors.estFechaInicio}
+              helperText={errors.estFechaInicio?.message}
+              {...register("estFechaInicio")}
+              InputLabelProps={{ shrink: true }}
+              inputProps={{ max: getCurrentDate() }}
+              fullWidth
+            />
+            <TextField
+              label="Fecha de Nacimiento"
+              type="date"
+              error={!!errors.fechaDeNacimiento}
+              helperText={errors.fechaDeNacimiento?.message}
+              {...register("fechaDeNacimiento")}
+              InputLabelProps={{ shrink: true }}
+              inputProps={{ max: getCurrentDate() }}
+              fullWidth
+            />
 
-  //           <TextField
-  //             label="Fecha de Ingreso"
-  //             type="date"
-  //             error={!!errors.estFechaInicio}
-  //             helperText={errors.estFechaInicio?.message}
-  //             {...register("estFechaInicio")}
-  //             InputLabelProps={{ shrink: true }}
-  //             inputProps={{ max: obtenerFechaActual() }}
-  //             fullWidth
-  //           />
-  //           <TextField
-  //             label="Fecha de Nacimiento"
-  //             type="date"
-  //             error={!!errors.fechaDeNacimiento}
-  //             helperText={errors.fechaDeNacimiento?.message}
-  //             {...register("fechaDeNacimiento")}
-  //             InputLabelProps={{ shrink: true }}
-  //             inputProps={{ max: obtenerFechaActual() }}
-  //             fullWidth
-  //           />
+            {/* Row 4: Password and Confirm Password */}
+            <TextFieldPassword
+              label="Contraseña"
+              type="password"
+              error={!!errors.contrasenia}
+              helperText={errors.contrasenia?.message}
+              {...register("contrasenia")}
+              fullWidth
+            />
+            <TextFieldPassword
+              label="Confirmar Contraseña"
+              type="password"
+              error={!!errors.confirmarContrasenia}
+              helperText={errors.confirmarContrasenia?.message}
+              {...register("confirmarContrasenia")}
+              fullWidth
+            />
 
-  //           {/* Fila 4: Contraseña y Confirmar Contraseña */}
-
-  //           <TextFieldPassword
-  //             label="Contraseña"
-  //             type="password"
-  //             error={!!errors.contrasenia}
-  //             helperText={errors.contrasenia?.message}
-  //             {...register("contrasenia")}
-  //             fullWidth
-  //           />
-  //           <TextFieldPassword
-  //             label="Confirmar Contraseña"
-  //             type="password"
-  //             error={!!errors.confirmarContrasenia}
-  //             helperText={errors.confirmarContrasenia?.message}
-  //             {...register("confirmarContrasenia")}
-  //             fullWidth
-  //           />
-
-  //           {/* Botones */}
-  //           <Stack spacing={2} direction="row" justifyContent="center">
-  //             <Box>
-  //               <Button
-  //                 variant="outlined"
-  //                 onClick={() => navigate(rutasGeneral.login)}
-  //               >
-  //                 {labelGeneral.volver}
-  //               </Button>
-  //             </Box>
-  //             <Box>
-  //               <Button onClick={onSubmit} variant="contained">
-  //                 {labelGeneral.registrar}
-  //               </Button>
-  //             </Box>
-  //           </Stack>
-  //         </Stack>
-  //       </form>
-  //     </Stack>
-  //   </Card>
-  // );
-  return <></>
+            {/* Buttons */}
+            <Stack spacing={2} direction="row" justifyContent="center">
+              <Box>
+                <Button variant="outlined" onClick={() => navigate(rutasGeneral.login)}>
+                  {labelGeneral.volver}
+                </Button>
+              </Box>
+              <Box>
+                <Button onClick={onSubmit} variant="contained" loading={isPending}>
+                  {labelGeneral.registrar}
+                </Button>
+              </Box>
+            </Stack>
+          </Stack>
+        </form>
+      </Stack>
+    </Card>
+  );
+  return <></>;
 }
 
 export default Registrar;

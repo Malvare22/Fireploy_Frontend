@@ -1,10 +1,21 @@
+/**
+ * Converts a base64 data URL into a Blob object.
+ *
+ * This is commonly used to transform image or file previews (in data URL format)
+ * into binary objects suitable for uploads or processing.
+ *
+ * @async
+ * @function urlToBlob
+ * @param {string} dataURL - The data URL string containing base64-encoded data.
+ * @returns {Promise<Blob>} A promise that resolves to a Blob object representing the data.
+ */
 export async function urlToBlob(dataURL: string) {
-  // Separar la parte de los datos de la data URL
+  // Separate the metadata and the actual base64 data
   const partes = dataURL.split(",");
-  const tipoMIME = partes[0].match(/:(.*?);/)?.[1]; // Extraer el tipo MIME
-  const datosBase64 = partes[1]; // Extraer los datos en base64
+  const tipoMIME = partes[0].match(/:(.*?);/)?.[1]; // Extract MIME type
+  const datosBase64 = partes[1]; // Extract base64 data
 
-  // Convertir los datos base64 a un array de bytes
+  // Decode base64 to binary string
   const byteCharacters = atob(datosBase64);
   const byteArrays = [];
 
@@ -14,6 +25,6 @@ export async function urlToBlob(dataURL: string) {
 
   const byteArray = new Uint8Array(byteArrays);
 
-  // Crear el Blob
+  // Create and return the Blob
   return new Blob([byteArray], { type: tipoMIME });
 }

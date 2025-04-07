@@ -1,4 +1,4 @@
-import { adaptarFechaBackend } from "@modules/general/utils/fechas";
+import { adaptDateBackend } from "@modules/general/utils/fechas";
 import { SolicitudPromover } from "../types/solicitud.promover";
 import { SolicitudService } from "../types/solicitud.service";
 
@@ -8,12 +8,12 @@ export function adaptSolicitudService(x: SolicitudService): SolicitudPromover {
     estado: x.estado,
     id: x.id,
     usuario: {
-      fechaRecepcion: adaptarFechaBackend(x.fecha_solicitud),
+      fechaRecepcion: adaptDateBackend(x.fecha_solicitud),
       id: x.usuario.id.toString(),
       nombres: x.usuario.nombre,
       fechaAceptacion:
         x.fecha_respuesta != null
-          ? adaptarFechaBackend(x.fecha_respuesta)
+          ? adaptDateBackend(x.fecha_respuesta)
           : null,
     },
   };

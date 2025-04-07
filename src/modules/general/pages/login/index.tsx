@@ -14,7 +14,7 @@ import React, { useEffect, useState } from "react";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { labelLogin } from "@modules/general/enums/labelLogin";
 import { rutasGeneral } from "@modules/general/router/router";
-import { postSignUp, SignUpResponse } from "@modules/general/services/signUp";
+import { postSignUp, SignUpResponse } from "@modules/general/services/post.signUp";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { useNavigate } from "react-router-dom";
 import { rutasProyectos } from "@modules/proyectos/router";
@@ -22,6 +22,10 @@ import { useMutation } from "@tanstack/react-query";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import TextFieldPassword from "@modules/general/components/textFieldPassword";
 
+/**
+ * Renders the copyright footer.
+ * @returns {JSX.Element} The copyright text component.
+ */
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -35,9 +39,20 @@ function Copyright() {
   );
 }
 
+/**
+ * SignIn component handles user login functionality.
+ * Displays login form with email and password fields.
+ * Handles authentication request and redirects on success.
+ *
+ * @component
+ * @returns {JSX.Element} The login form component.
+ */
 const SignIn: React.FC = () => {
   const theme = useTheme();
 
+  /** 
+   * Represents the login credentials 
+   */
   type SignUp = {
     email: string;
     password: string;
@@ -45,19 +60,32 @@ const SignIn: React.FC = () => {
 
   const [singUp, setSingUp] = useState<SignUp>({ email: "", password: "" });
 
+  /**
+   * Handles input change for form fields
+   * @param key Field name
+   * @param value Field value
+   */
   const handleInput = (key: keyof SignUp, value: string) => {
     setSingUp({ ...singUp, [key]: value });
   };
 
+  /**
+   * Performs login mutation using email and password.
+   * Shows error dialog if authentication fails.
+   */
   const { mutate, isError, isSuccess, data, isPending } = useMutation({
     mutationFn: () => postSignUp(singUp.email, singUp.password),
     onError: () => setOpen(true),
+    mutationKey: ['iniciar sesion']
   });
 
   const navigate = useNavigate();
-
   const { open, setOpen } = useAlertDialog();
 
+  /**
+   * Handles successful login by storing token and navigating.
+   * @param data SignUpResponse from backend
+   */
   const onSuccess = (data: SignUpResponse) => {
     localStorage.setItem("TOKEN", data.access_token);
     localStorage.setItem("CURRENT_ID", data.id.toString());
@@ -65,6 +93,9 @@ const SignIn: React.FC = () => {
     navigate(rutasProyectos.listar);
   };
 
+  /**
+   * Executes success handler when mutation result is available.
+   */
   useEffect(() => {
     if (isSuccess && data) onSuccess(data);
   }, [isSuccess, data]);
@@ -131,7 +162,7 @@ const SignIn: React.FC = () => {
           {labelLogin.ingresar}
         </Button>
         <Stack spacing={2} direction={"row"} alignItems={"center"} justifyContent={"center"}>
-          <Link href="#" variant="body2">
+          <Link href={rutasGeneral.recuperar} variant="body2">
             {labelLogin.olvide}
           </Link>
           <Link href={rutasGeneral.registrar} variant="body2">
