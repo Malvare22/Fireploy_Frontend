@@ -43,7 +43,7 @@ function ExplorarMaterias() {
   // Fetch materias using React Query
   const { data, isLoading, error } = useQuery({
     queryFn: () => getMateriasService(token),
-    queryKey: [],
+    queryKey: ["cursos for materia"],
   });
 
   // Dialog control for handling fetch errors

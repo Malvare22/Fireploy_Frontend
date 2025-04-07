@@ -5,7 +5,7 @@ function LoaderElement() {
   const theme = useTheme();
 
   return (
-    <>
+    <Box sx={{ width: '100%', height: '70vh',display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
       {/* Global styles for orbit and blink animations */}
       <GlobalStyles
         styles={{
@@ -26,12 +26,13 @@ function LoaderElement() {
 
       <Box
         sx={{
-          position: "relative",
           width: 100,
           height: 100,
+          position: 'relative',
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          // border: '1px solid red'
         }}
       >
         {/* Orbit paths */}
@@ -75,7 +76,7 @@ function LoaderElement() {
           }}
         />
       </Box>
-    </>
+    </Box>
   );
 }
 

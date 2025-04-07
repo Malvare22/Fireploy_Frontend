@@ -31,6 +31,16 @@ const apiClient: AxiosInstance = axios.create({
   },
 });
 
+apiClient.interceptors.response.use(
+  async (response) => {
+    if (import.meta.env.DEV) {
+      await new Promise((res) => setTimeout(res, 1750)); // 1.5 segundos
+    }
+    return response;
+  },
+  (error) => Promise.reject(error)
+);
+
 type MetodoConsulta = "get" | "post" | "put" | "delete" | "patch";
 
 /**
@@ -71,6 +81,7 @@ export const fetchData = async <T>(
         statusCode: responseData.data.error.statusCode || 500,
       };
     }
+
 
 
     return responseData.data as T;
