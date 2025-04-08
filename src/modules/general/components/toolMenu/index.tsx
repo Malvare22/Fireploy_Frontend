@@ -300,7 +300,7 @@ export default function DashboardLayoutBasic(props: any) {
 
   return (
     <>
-      {accountInformation ? (
+      {accountInformation.id != -1 ? (
         <AppProvider
           navigation={getNavigationElements(accountInformation)}
           router={router}

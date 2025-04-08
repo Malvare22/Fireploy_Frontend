@@ -1,6 +1,6 @@
 import DataTable, { ConditionalStyles } from "react-data-table-component";
 import { TableColumn, TableStyles } from "react-data-table-component";
-import { Avatar, useTheme } from "@mui/material";
+import { Avatar, Typography, useTheme } from "@mui/material";
 import React, { useMemo } from "react";
 
 import Status from "@modules/general/components/status";
@@ -18,34 +18,35 @@ const TablaEstudiantesEditarCurso: React.FC<
 
   const columns: TableColumn<EstudianteCurso & { rowIndex: number }>[] = [
     {
-      name: labelUsuario.id,
-      selector: (row) => row.id,
+      name: <Typography>{labelUsuario.id}</Typography>,
+      cell: (row) => <Typography>{row.id}</Typography>,
       width: "70px",
       sortable: true,
     },
     {
-      name: labelUsuario.fotoPerfil,
+      name: <Typography>{labelUsuario.fotoPerfil}</Typography>,
       cell: (row) => <Avatar src={row.foto} />,
     },
     {
-      name: labelUsuario.nombres,
-      selector: (row) => row.nombre,
+      name: <Typography>{labelUsuario.nombres}</Typography>,
+      cell: (row) => <Typography>{row.nombre}</Typography>,
       sortable: true,
     },
     {
-      name: labelUsuario.correo,
-      selector: (row) => row.correo,
+      name: <Typography>{labelUsuario.correo}</Typography>,
+      cell: (row) => <Typography>{row.correo}</Typography>,
       sortable: true,
     },
     {
-      name: labelUsuario.estado,
+      name: <Typography>{labelUsuario.estado}</Typography>,
       cell: (row) => <Status status={row.estado} />,
       sortable: true,
       sortFunction: (rowA, rowB) => {
-        return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
+        return rowA.estado.localeCompare(rowB.estado);
       },
     },
   ];
+  
 
   const customStyles: TableStyles = {
     headCells: {

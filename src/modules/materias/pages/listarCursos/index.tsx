@@ -16,6 +16,8 @@ import { useQuery } from "@tanstack/react-query";
 import AlertDialogError from "@modules/general/components/alertDialogError";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
+import GeneralButton from "@modules/general/components/button";
+import { buttonTypes } from "@modules/general/types/buttons";
 
 function ListarCursos() {
   const { idMateria } = useParams();
@@ -110,6 +112,7 @@ function ListarCursos() {
             </Grid2>
           </Grid2>
           {<TablaCursos cursos={materiasToRender()} />}
+          <GeneralButton mode={buttonTypes.add}/>
         </Stack>
       )}
     </>

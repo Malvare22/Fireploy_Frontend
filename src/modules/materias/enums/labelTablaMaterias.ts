@@ -5,7 +5,8 @@ export enum labelTablaMaterias{
     cantidadCursos = 'Cursos Activos',
     semestre = 'Semestre',
     acciones = 'Acciones',
-    noDispone = 'No dispone'
+    noDispone = 'No dispone',
+    id = 'Id'
 }
 
 // export const labelAvisoCambioEstadoMateria = (nombre: string, estado: EstadoMateria) => {

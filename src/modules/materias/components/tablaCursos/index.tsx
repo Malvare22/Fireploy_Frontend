@@ -18,9 +18,7 @@ type TablaCursosProps = {
 const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
   const theme = useTheme();
 
-  const [selectCurso, setSelectCurso] = useState<CursoTabla | undefined>(
-    undefined
-  );
+  const [selectCurso, setSelectCurso] = useState<CursoTabla | undefined>(undefined);
 
   const handleSelect = (materia: CursoTabla) => {
     setSelectCurso(materia);
@@ -39,75 +37,64 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
     );
   }
 
-  const { open: openHandleStatus, setOpen: setOpenHandleStatus } =
-    useAlertDialog();
+  const { open: openHandleStatus, setOpen: setOpenHandleStatus } = useAlertDialog();
 
   const navigate = useNavigate();
 
   const columns: TableColumn<CursoTabla & { rowIndex: number }>[] = [
     {
-      name: labelListarCursos.id,
-      selector: (row) => row.id,
+      name: <Typography>{labelListarCursos.id}</Typography>,
+      cell: (row) => <Typography>{row.id}</Typography>,
       sortable: true,
     },
     {
-      name: labelListarCursos.grupo,
-      selector: (row) => row.grupo,
+      name: <Typography>{labelListarCursos.grupo}</Typography>,
+      cell: (row) => <Typography>{row.grupo}</Typography>,
       sortable: true,
     },
     {
-      name: labelListarCursos.semestre,
-      selector: (row) => row.semestre,
+      name: <Typography>{labelListarCursos.semestre}</Typography>,
+      cell: (row) => <Typography>{row.semestre}</Typography>,
       sortable: true,
     },
     {
-      name: labelListarCursos.estado,
-      cell: (row) => {
-        return <Status status={row.estado} />;
-      },
-      sortFunction: (rowA, rowB) => {
-        return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
-      },
+      name: <Typography>{labelListarCursos.estado}</Typography>,
+      cell: (row) => <Status status={row.estado} />,
+      sortFunction: (rowA, rowB) => rowA.estado.localeCompare(rowB.estado),
       sortable: true,
     },
     {
-      name: labelListarCursos.cantidad,
-      selector: (row) => row.cantidadEstudiantes,
+      name: <Typography>{labelListarCursos.cantidad}</Typography>,
+      cell: (row) => <Typography>{row.cantidadEstudiantes}</Typography>,
       sortable: true,
     },
     {
-      name: labelListarCursos.acciones,
-      cell: (row) => {
-        return (
-          <Stack direction={"row"} justifyContent={"center"}>
+      name: <Typography>{labelListarCursos.acciones}</Typography>,
+      cell: (row) => (
+        <Stack direction="row" justifyContent="center">
+          <ActionButton
+            mode={actionButtonTypes.ver}
+            onClick={() => navigate(rutasMaterias.verCurso.replace(":idCurso", row.id))}
+          />
+          <ActionButton
+            mode={actionButtonTypes.editar}
+            onClick={() => navigate(rutasMaterias.editarCurso.replace(":idCurso", row.id))}
+          />
+          {row.estado === "A" ? (
             <ActionButton
-              mode={actionButtonTypes.ver}
-              onClick={() =>
-                navigate(rutasMaterias.verCurso.replace(":idCurso", row.id))
-              }
+              sx={{ color: theme.palette.error.main }}
+              mode={actionButtonTypes.deshabilitar}
+              onClick={() => handleSelect(row)}
             />
+          ) : (
             <ActionButton
-              mode={actionButtonTypes.editar}
-              onClick={() =>
-                navigate(rutasMaterias.editarCurso.replace(":idCurso", row.id))
-              }
+              sx={{ color: theme.palette.warning.main }}
+              mode={actionButtonTypes.habilitar}
+              onClick={() => handleSelect(row)}
             />
-            {row.estado == "A" ? (
-              <ActionButton
-                sx={{ color: theme.palette.error.main }}
-                mode={actionButtonTypes.deshabilitar}
-                onClick={() => handleSelect(row)}
-              />
-            ) : (
-              <ActionButton
-                sx={{ color: theme.palette.warning.main }}
-                mode={actionButtonTypes.habilitar}
-                onClick={() => handleSelect(row)}
-              />
-            )}
-          </Stack>
-        );
-      },
+          )}
+        </Stack>
+      ),
     },
   ];
 
@@ -138,9 +125,7 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
     },
   };
 
-  const conditionalRowStyles: ConditionalStyles<
-    CursoTabla & { rowIndex: number }
-  >[] = [
+  const conditionalRowStyles: ConditionalStyles<CursoTabla & { rowIndex: number }>[] = [
     {
       when: (row) => row.rowIndex % 2 !== 0, // Filas impares
       style: {

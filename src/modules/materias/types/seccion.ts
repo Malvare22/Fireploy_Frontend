@@ -9,13 +9,15 @@ export type Seccion = {
   proyectos?: number[];
 };
 
-export const seccionTemplate = {
+export const seccionTemplate: Seccion = {
   titulo: "",
   descripcion: "",
   fechaDeCierre: "",
   fechaDeInicio: "",
   estado: "A" as Seccion['estado'],
-  cursoId: -1,
+  cursoId: "-1",
+  id: 0
+
 };
 
 export const exampleSecciones: Seccion[] = [

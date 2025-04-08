@@ -1,8 +1,19 @@
 import { Curso } from "@modules/materias/types/curso";
 import { CursoSchema } from "@modules/materias/utils/forms/form.schema";
-import { Box, MenuItem, Stack, TextField, Typography } from "@mui/material";
-import { Controller, FormProvider, useForm, useFormContext } from "react-hook-form";
-import { useParams } from "react-router";
+import {
+  Alert,
+  Box,
+  Divider,
+  MenuItem,
+  Paper,
+  Stack,
+  Tab,
+  Tabs,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { Controller, FormProvider, useForm } from "react-hook-form";
+import { useParams, useSearchParams } from "react-router";
 import EditIcon from "@mui/icons-material/Edit";
 import { getMateriaStatesArray } from "@modules/materias/utils/materias";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,35 +46,8 @@ export enum labelEditarCurso {
   estado = "Estado",
   secciones = "Secciones",
   tituloModalEstudiante = "Agregar Estudiantes",
-}
-
-function EstadoField() {
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext<Curso>();
-
-  return (
-    <Controller
-      name="estado"
-      control={control}
-      render={({ field }) => (
-        <TextField
-          select
-          size="small"
-          {...field}
-          error={!!errors.estado}
-          helperText={errors.estado?.message}
-        >
-          {getMateriaStatesArray.map(([clave, valor]) => (
-            <MenuItem value={clave} key={clave}>
-              {valor}
-            </MenuItem>
-          ))}
-        </TextField>
-      )}
-    />
-  );
+  noHayEstudiantes = "Actualmente no hay estudiantes registrados",
+  noHaySecciones = "Actualmente no hay secciones registradas",
 }
 
 function VistaEditarCurso() {
@@ -72,10 +56,29 @@ function VistaEditarCurso() {
   const { token } = accountInformation;
   const [curso, setCurso] = useState<Curso | undefined>(undefined);
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = searchParams.get("page") ?? "0";
+
+  const [tab, setTab] = useState(page);
+
+  useEffect(() => {
+    setTab(page);
+  }, [page]);
+
+  function handleChangeTab(_event: React.SyntheticEvent, value: string) {
+    console.log(value, "EYYYY");
+    setTab(value);
+    setSearchParams({ ["page"]: value });
+  }
+
   const methods = useForm<Curso>({
     resolver: zodResolver(CursoSchema),
     defaultValues: {} as Curso,
   });
+
+  const { getValues, control, formState } = methods;
+
+  const {errors} = formState
 
   const {
     handleOpen: handleOpenError,
@@ -152,7 +155,7 @@ function VistaEditarCurso() {
     onSuccess: handleOpenSuccess,
     onError: handleOpenError,
   });
-
+  console.log(errors)
   const {
     mutate: mutateRemoveStudents,
     isPending: isPendingRemoveStudents,
@@ -177,10 +180,9 @@ function VistaEditarCurso() {
   };
 
   const onSubmit = async () => {
+    console.log("EAAJDAJS");
     await mutatePatchCurso();
   };
-
-  const { getValues } = methods;
 
   useEffect(() => {
     if (dataPatchCurso) {
@@ -243,51 +245,94 @@ function VistaEditarCurso() {
         <LoaderElement />
       ) : (
         <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)}>
-            <Stack spacing={3}>
-              <Stack direction="row" alignItems="center" spacing={1}>
-                <EditIcon color="primary" />
-                <Typography variant="h5" fontWeight="bold">
-                  {labelEditarCurso.titulo}
-                </Typography>
-              </Stack>
-
-              <TextField
-                label={labelEditarCurso.descripcion}
-                {...methods.register("descripcion")}
-                error={!!methods.formState.errors.descripcion}
-                helperText={methods.formState.errors.descripcion?.message}
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-              />
-
-              <EstadoField />
-
-              <Stack>
-                <TablaEstudiantesEditarCurso
-                  estudiante={curso?.estudiantes || []}
-                  setSelectUsers={setSelectStudentsToRemove}
-                />
-                <Stack alignItems="end">
-                  <Box>
-                    <GeneralButton
-                      color="error"
-                      mode={buttonTypes.remove}
-                      disabled={selectStudentsToRemove.length == 0}
-                      onClick={handleOpenRemoveStudents}
-                    />
-                    <GeneralButton mode={buttonTypes.add} onClick={handleOpen} />
-                  </Box>
+          <Stack spacing={3} component={Paper} sx={{ padding: 2 }}>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <EditIcon color="primary" />
+              <Typography variant="h5" fontWeight="bold">
+                {labelEditarCurso.titulo}
+              </Typography>
+            </Stack>
+            <Stack>
+              <Tabs onChange={handleChangeTab}>
+                <Tab label="Información" value={"0"} />
+                <Tab label="Estudiantes" value={"1"} />
+                <Tab label="Secciones" value={"2"} />
+              </Tabs>
+              <Divider sx={{ paddingTop: -200 }} />
+            </Stack>
+            {tab == "0" && (
+              <form onSubmit={methods.handleSubmit(onSubmit)}>
+                <Stack spacing={2}>
+                  <TextField
+                    label={labelEditarCurso.descripcion}
+                    {...methods.register("descripcion")}
+                    error={!!methods.formState.errors.descripcion}
+                    helperText={methods.formState.errors.descripcion?.message}
+                    fullWidth
+                    InputLabelProps={{ shrink: true }}
+                  />
+                  <Controller
+                    name="estado"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        select
+                        size="small"
+                        fullWidth
+                        label="Estado"
+                        error={!!errors.estado}
+                        helperText={errors.estado?.message}
+                      >
+                        {getMateriaStatesArray.map(([clave, valor]) => (
+                          <MenuItem value={clave} key={clave}>
+                            {valor}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    )}
+                  />
                 </Stack>
-              </Stack>
+                <GeneralButton
+                  mode={buttonTypes.save}
+                  loading={isPendingPatchCurso}
+                  type="submit"
+                />
+              </form>
+            )}
+            {tab == "1" && (
+              <>
+                <Stack spacing={2}>
+                  {!curso?.estudiantes || curso.estudiantes.length != 0 ? (
+                    <TablaEstudiantesEditarCurso
+                      estudiante={curso?.estudiantes || []}
+                      setSelectUsers={setSelectStudentsToRemove}
+                    />
+                  ) : (
+                    <Alert severity="warning">{labelEditarCurso.noHayEstudiantes}</Alert>
+                  )}
 
-              <Stack>
+                  <Stack alignItems="end">
+                    <Box>
+                      <GeneralButton
+                        color="error"
+                        mode={buttonTypes.remove}
+                        disabled={selectStudentsToRemove.length == 0}
+                        onClick={handleOpenRemoveStudents}
+                      />
+                      <GeneralButton mode={buttonTypes.add} onClick={handleOpen} />
+                    </Box>
+                  </Stack>
+                </Stack>
+              </>
+            )}
+
+            {tab == "2" && (
+              <Stack spacing={2}>
                 <TablaGestionarSecciones />
               </Stack>
-
-              <GeneralButton mode={buttonTypes.save} loading={isPendingPatchCurso} type="submit" />
-            </Stack>
-          </form>
+            )}
+          </Stack>
         </FormProvider>
       )}
     </>

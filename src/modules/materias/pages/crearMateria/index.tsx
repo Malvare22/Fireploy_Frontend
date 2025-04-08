@@ -75,23 +75,24 @@ function VistaCrearMateria() {
     handleClose: handleCloseSuccess,
   } = useAlertDialog();
 
-  const { isPending, error, mutate, data } = useMutation({
+  const { isPending, error, mutate } = useMutation({
     mutationFn: getQueryToMake("crear"),
     mutationKey: ["create materia"],
     onError: () => {
       handleOpenError();
       setDisableCheck(false);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log(data)
       if (data) setIdMateria(data.id);
-      mutatePostGrupos();
     },
   });
 
   async function createGroupsRequest(groups: Curso[]) {
     try {
-      await Promise.all(groups.map((group) => postCreateCursoService(token!!, idMateria!!, group)));
+      await Promise.all(groups.map((group) => postCreateCursoService(token, idMateria!!, group)));
     } catch (error) {
+      console.log(error)
       throw error;
     }
   }
@@ -121,8 +122,7 @@ function VistaCrearMateria() {
 
   useEffect(() => {
     if (idMateria) {
-      if (getValues("cursos") != null && getValues("cursos") != undefined)
-        createGroupsRequest(getValues("cursos") || []);
+      mutatePostGrupos();
     }
   }, [idMateria]);
 

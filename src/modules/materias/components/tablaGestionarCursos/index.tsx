@@ -107,7 +107,7 @@ const TablaGestionarCursos = () => {
 
   const columns: TableColumn<CursoTabla & { rowIndex: number }>[] = [
     {
-      name: labelListarCursos.grupo,
+      name: <Typography>{labelListarCursos.grupo}</Typography>,
       cell: (row) => {
         if (currentEdit != row.rowIndex) return <Typography>{row.grupo}</Typography>;
         else {
@@ -126,15 +126,15 @@ const TablaGestionarCursos = () => {
       maxWidth: "120px",
     },
     {
-      name: labelListarCursos.estado,
+      name: <Typography>{labelListarCursos.estado}</Typography>,
       cell: (row) => {
         if (currentEdit != row.rowIndex) return <Status status={row.estado} />;
         else {
           return (
             <Controller
               name="estado"
-              control={controlCurso} // Pasamos el control de useFormContext o useForm
-              defaultValue={row.estado} // Valor por defecto cuando se inicia la edición
+              control={controlCurso}
+              defaultValue={row.estado}
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -155,22 +155,22 @@ const TablaGestionarCursos = () => {
         }
       },
       sortFunction: (rowA, rowB) => {
-        return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
+        return rowA.estado.localeCompare(rowB.estado);
       },
       sortable: true,
       maxWidth: "130px",
     },
     {
-      name: labelListarCursos.docente,
+      name: <Typography>{labelListarCursos.docente}</Typography>,
       cell: (row) => {
         const { selectUser, setSelectUser } = useSearchUsers();
-
+  
         useEffect(() => {
           if (selectUser && selectUser?.nombreCompleto)
             setValuesCurso("docente.id", selectUser?.id);
           setValuesCurso("docente.nombre", selectUser?.nombreCompleto!!);
         }, [selectUser]);
-
+  
         if (currentEdit != row.rowIndex) {
           if (row.docente == null)
             return <Chip icon={<InfoIcon />} label={"Docente sin asignar"} />;
@@ -186,17 +186,23 @@ const TablaGestionarCursos = () => {
           }
         } else {
           return (
-            <SearchUsers loading={isLoadingFetchDocentes} selectUser={selectUser} setSelectUser={setSelectUser} users={docentes} />
+            <SearchUsers
+              loading={isLoadingFetchDocentes}
+              selectUser={selectUser}
+              setSelectUser={setSelectUser}
+              users={docentes}
+            />
           );
         }
       },
       sortFunction: (rowA, rowB) => {
-        return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
+        return rowA.estado.localeCompare(rowB.estado);
       },
       sortable: true,
       maxWidth: "250px",
     },
     {
+      name: <Typography>{labelListarCursos.acciones}</Typography>,
       cell: (row) => {
         if (currentEdit == row.rowIndex) {
           return (
@@ -224,12 +230,13 @@ const TablaGestionarCursos = () => {
         }
       },
       sortFunction: (rowA, rowB) => {
-        return rowA.estado.localeCompare(rowB.estado); // Ordena alfabéticamente
+        return rowA.estado.localeCompare(rowB.estado);
       },
       sortable: true,
       maxWidth: "250px",
     },
   ];
+  
 
   const customStyles: TableStyles = {
     headCells: {

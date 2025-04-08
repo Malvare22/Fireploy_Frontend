@@ -42,8 +42,8 @@ export const accountInformationTemplate: AccountInformation = {
 };
 
 export type AuthContext = {
-  accountInformation: AccountInformation | null;
-  setAccountInformation: React.Dispatch<AccountInformation | null>;
+  accountInformation: AccountInformation;
+  setAccountInformation: React.Dispatch<AccountInformation>;
 };
 
 export const AuthContext = createContext<AuthContext>({
@@ -55,7 +55,7 @@ type AuthProviderProps = {
   children: ReactNode;
 };
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [localUser, setLocalUser] = useState<AccountInformation | null>(null);
+  const [localUser, setLocalUser] = useState<AccountInformation>(accountInformationTemplate);
 
   const { data, error } = useQuery({
     queryFn: () =>

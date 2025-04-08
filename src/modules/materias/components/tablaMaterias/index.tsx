@@ -65,19 +65,21 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
 
   const columns: TableColumn<MateriaTabla & { rowIndex: number }>[] = [
     {
-      name: labelTablaMaterias.idMateria,
-      selector: (row) => row.codigo,
+      name: labelTablaMaterias.id,
+      cell: (row) => <Typography>{row.codigo}</Typography>,
       sortable: true,
+      width: "90px",
     },
     {
       name: labelTablaMaterias.nombre,
-      selector: (row) => row.nombre,
+      cell: (row) => <Typography>{row.nombre}</Typography>,
       sortable: true,
     },
     {
       name: labelTablaMaterias.semestre,
-      selector: (row) => row.semestre,
+      cell: (row) => <Typography>{row.semestre}</Typography>,
       sortable: true,
+      center: true,
     },
     {
       name: labelTablaMaterias.estado,
@@ -90,11 +92,17 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
       sortable: true,
     },
     {
-      name: labelTablaMaterias.cantidadCursos,
+      name: <Typography>{labelTablaMaterias.cantidadCursos}</Typography>,
+      center: true,
       cell: (row) => {
         if (!row.cantidadGruposActivos)
           return <Chip color="primary" label={labelTablaMaterias.noDispone} icon={<InfoIcon />} />;
-        else return <Typography textAlign={"center"}>{row.cantidadGruposActivos}</Typography>;
+        else
+          return (
+            <Typography textAlign={"center"} width={"100%"}>
+              {row.cantidadGruposActivos}
+            </Typography>
+          );
       },
       sortable: true,
       sortFunction: (rowA, rowB) => {
@@ -221,12 +229,16 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
         open={openSuccess}
         title="Modificar Materia"
       />
-      {isPending ? <LoaderElement/> : <DataTable
-        columns={columns}
-        data={dataConIndice}
-        customStyles={customStyles}
-        conditionalRowStyles={conditionalRowStyles}
-      ></DataTable>}
+      {isPending ? (
+        <LoaderElement />
+      ) : (
+        <DataTable
+          columns={columns}
+          data={dataConIndice}
+          customStyles={customStyles}
+          conditionalRowStyles={conditionalRowStyles}
+        ></DataTable>
+      )}
     </>
   );
 };

@@ -4,13 +4,13 @@ import { Seccion } from "@modules/materias/types/seccion";
 import { number, z } from "zod";
 
 export const SeccionSchema: z.ZodType<Seccion> = z.object({
-  id: z.number().min(1, "El ID es requerido").optional(),
+  id: z.number().min(0, "El ID es requerido").optional(),
   titulo: z.string().min(1, "El título es requerido"),
   descripcion: z.string().min(1, "La descripción es requerida"),
   fechaDeCierre: z.string().min(1, "La fecha de cierre es requerida"),
   fechaDeInicio: z.string().min(1, "La fecha de inicio es requerida"),
   estado: z.enum(["A", "I"]),
-  cursoId: z.string().min(1, "El ID del curso es requerido"),
+  cursoId: z.string().min(1, "El ID del curso es requerido").optional(),
   proyectos: z.array(number()).optional()
 });
 
