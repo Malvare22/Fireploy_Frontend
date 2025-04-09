@@ -41,20 +41,15 @@ interface SpringModalProps {
   children: React.ReactNode;
   open: boolean;
   handleClose: () => void;
+  sx: SxProps
 }
 
-/**
- * Custom modal component with spring animation.
- *
- * @param {React.ReactNode} children - Modal content.
- * @param {boolean} open - Controls whether the modal is open.
- * @param {() => void} handleClose - Function to close the modal.
- * @returns {JSX.Element} The `SpringModal` component.
- */
+
 const SpringModal: React.FC<SpringModalProps> = ({
   children,
   open,
   handleClose,
+  sx
 }) => {
   const theme = useTheme();
 
@@ -83,7 +78,7 @@ const SpringModal: React.FC<SpringModalProps> = ({
       }}
     >
       <Fade in={open}>
-        <Card sx={sxStyle}>{children}</Card>
+        <Card sx={{...sxStyle, ...sx}}>{children}</Card>
       </Fade>
     </Modal>
   );

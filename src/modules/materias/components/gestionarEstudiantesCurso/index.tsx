@@ -1,4 +1,4 @@
-import { Alert, Box, Stack } from "@mui/material";
+import { Alert, Box, Stack, Typography } from "@mui/material";
 import TablaEstudiantesEditarCurso from "../tablaEstudiantesEditarCurso";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
@@ -15,6 +15,8 @@ import Modal from "@modules/general/components/modal";
 import { Curso } from "@modules/materias/types/curso";
 import { useAuth } from "@modules/general/context/accountContext";
 import AlertDialogError, { CustomError } from "@modules/general/components/alertDialogError";
+import { useCustomTableStyles } from "@modules/general/styles";
+import SpringModal from "@modules/general/components/springModal";
 
 type Props = {
   curso: Curso;
@@ -22,7 +24,11 @@ type Props = {
 };
 
 function GestionarEstudiantesCurso({ curso, idCurso }: Props) {
-  const { handleClose, handleOpen, open } = useAlertDialog();
+  const {
+    handleClose: handleCloseModal,
+    handleOpen: handleOpenModal,
+    open: openModal,
+  } = useAlertDialog();
 
   const token = useAuth().accountInformation.token;
 
@@ -102,23 +108,26 @@ function GestionarEstudiantesCurso({ curso, idCurso }: Props) {
         />
       )}
       <AlertDialog
-        handleAccept={mutateAddStudents}
+        handleAccept={() => {
+          mutateAddStudents();
+          handleCloseAddStudents();
+        }}
         open={openAddStudents}
         title="Agregar Estudiantes"
         textBody={"¿Desea agregar a los estudiantes seleccionados?"}
         isLoading={isPendingAddStudents}
         handleCancel={handleCloseAddStudents}
       />
-      <Modal sx={{ maxWidth: 700 }} handleClose={handleClose} open={open}>
+      <SpringModal sx={{ width: 800 }} handleClose={handleCloseModal} open={openModal}>
         <AddUsers
           typeUsers="Estudiante"
           selectUsers={usersSelected}
           setSelectUsers={setUsersSelected}
           handleAccept={handleOpenAddStudents}
-          handleCancel={handleCloseAddStudents}
+          handleCancel={handleCloseModal}
         />
-      </Modal>
-      <Stack spacing={2}>
+      </SpringModal>
+      <Stack spacing={3}>
         {!curso?.estudiantes || curso.estudiantes.length != 0 ? (
           <TablaEstudiantesEditarCurso
             estudiante={curso?.estudiantes || []}
@@ -128,19 +137,16 @@ function GestionarEstudiantesCurso({ curso, idCurso }: Props) {
           <Alert severity="warning">{labelEditarCurso.noHayEstudiantes}</Alert>
         )}
 
-        <Stack alignItems="end">
-          <Box>
-            <GeneralButton
-              color="error"
-              mode={buttonTypes.remove}
-              disabled={selectStudentsToRemove.length == 0}
-              onClick={handleOpenRemoveStudents}
-            />
-            <GeneralButton mode={buttonTypes.add} onClick={handleOpen} />
-          </Box>
+        <Stack justifyContent="end" spacing={2} alignContent={"end"} direction={"row"}>
+          <GeneralButton
+            color="error"
+            mode={buttonTypes.remove}
+            disabled={selectStudentsToRemove.length == 0}
+            onClick={handleOpenRemoveStudents}
+          />
+          <GeneralButton mode={buttonTypes.add} onClick={handleOpenModal} />
         </Stack>
       </Stack>
-      )
     </>
   );
 }

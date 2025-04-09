@@ -1,6 +1,6 @@
 import DataTable from "react-data-table-component";
 import { TableColumn } from "react-data-table-component";
-import { Alert, Box, Button, Stack, Typography } from "@mui/material";
+import { Alert, Box, Button, Divider, Stack, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import Status from "@modules/general/components/status";
 import ActionButton from "@modules/general/components/actionButton";
@@ -52,7 +52,6 @@ const TablaGestionarSecciones = () => {
   async function getRequest(secciones: Seccion[]) {
     await Promise.all(
       secciones.filter((seccion) => {
-        
         if (seccion.id != 0) {
           return patchEditSeccion(token, seccion);
         } else {
@@ -157,7 +156,7 @@ const TablaGestionarSecciones = () => {
             />
             <ActionButton
               mode={actionButtonTypes.eliminar}
-              disabled={currentEdit !== -1 || row.id === 0 }
+              disabled={currentEdit !== -1 || row.id === 0}
               onClick={() => handleDelete(row.rowIndex)}
             />
           </Stack>
@@ -182,7 +181,7 @@ const TablaGestionarSecciones = () => {
     setCurrentEdit(-1);
   }
 
-  function handleUpdate(){
+  function handleUpdate() {
     mutate();
   }
 
@@ -209,14 +208,15 @@ const TablaGestionarSecciones = () => {
           <SeccionesForm index={currentEdit} onAccept={onCloseModal} onCancel={onCloseModal} />
         </Modal>
       }
+      <Typography variant="h6">{labelEditarCurso.secciones}</Typography>
       {watch("secciones")?.length != 0 ? (
-        <DataTable
-          columns={columns}
-          data={dataConIndice}
-          customStyles={customStyles}
-          conditionalRowStyles={conditionalRowStyles}
-          responsive
-        ></DataTable>
+        <><Divider/><DataTable
+        columns={columns}
+        data={dataConIndice}
+        customStyles={customStyles}
+        conditionalRowStyles={conditionalRowStyles}
+        responsive
+      ></DataTable></>
       ) : (
         <Alert severity="warning">{labelEditarCurso.noHaySecciones}</Alert>
       )}
@@ -236,7 +236,9 @@ const TablaGestionarSecciones = () => {
             ))}
           </div>
         ))}
-        <Button variant="contained" loading={isPending} color="secondary" onClick={handleUpdate}>{labelEditarCurso.modificarSecciones}</Button>
+      <Button variant="contained" loading={isPending} color="secondary" onClick={handleUpdate}>
+        {labelEditarCurso.modificarSecciones}
+      </Button>
     </>
   );
 };

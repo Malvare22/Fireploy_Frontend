@@ -121,25 +121,25 @@ const AddUsers: React.FC<Props> = ({
       {isLoading ? (
         <LoaderElement />
       ) : (
-        <Card sx={{ padding: 2 }}>
-          <Stack spacing={3}>
+        <>
+          <Stack spacing={3} sx={{width: '100%'}}>
             <Typography variant="h4" sx={{ fontWeight: 500 }} textAlign="center">
-              Add Users
+              Añadir Estudiantes
             </Typography>
             <SearchUsers selectUser={selectUser} setSelectUser={setSelectUser} users={users} />
             <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
               <Grid2
+              spacing={2}
                 container
                 sx={{
                   backgroundColor: theme.palette.action.hover,
-                  maxWidth: 600,
                   minHeight: 150,
                   padding: 2,
                   flexGrow: 1,
                 }}
               >
                 {selectUsers.map((user) => (
-                  <Grid2 key={user.id} size={{ xs: 6, md: 4 }}>
+                  <Grid2 key={user.id}>
                     <Chip
                       onDelete={() => handleDelete(user.id)}
                       avatar={<Avatar src={user.foto} />}
@@ -155,7 +155,7 @@ const AddUsers: React.FC<Props> = ({
               <GeneralButton color="inherit" mode={buttonTypes.cancel} onClick={handleCancel} />
             </Stack>
           </Stack>
-        </Card>
+        </>
       )}
     </>
   );

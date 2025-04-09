@@ -40,7 +40,7 @@ interface Props {
   users: UsuarioCampoBusqueda[]; 
   setSelectUser: React.Dispatch<UsuarioCampoBusqueda | null>; 
   selectUser: UsuarioCampoBusqueda | null; 
-  loading: boolean
+  loading?: boolean
 }
 
 const SearchUsers: FC<Props> = ({ users, setSelectUser, selectUser, loading }) => {

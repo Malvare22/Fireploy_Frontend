@@ -1,6 +1,16 @@
 import { Curso } from "@modules/materias/types/curso";
 import { CursoSchema } from "@modules/materias/utils/forms/form.schema";
-import { Divider, MenuItem, Paper, Stack, Tab, Tabs, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Divider,
+  MenuItem,
+  Paper,
+  Stack,
+  Tab,
+  Tabs,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useParams, useSearchParams } from "react-router";
 import EditIcon from "@mui/icons-material/Edit";
@@ -31,7 +41,7 @@ export enum labelEditarCurso {
   tituloModalEstudiante = "Agregar Estudiantes",
   noHayEstudiantes = "Actualmente no hay estudiantes registrados",
   noHaySecciones = "Actualmente no hay secciones registradas",
-  modificarSecciones = 'Guardar Cambios Secciones'
+  modificarSecciones = "Guardar Cambios Secciones",
 }
 
 function VistaEditarCurso() {
@@ -43,14 +53,14 @@ function VistaEditarCurso() {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = searchParams.get("page") ?? "0";
 
-  const [tab, setTab] = useState(page);
+  const [tabIndex, setTabIndex] = useState(page);
 
   useEffect(() => {
-    setTab(page);
+    setTabIndex(page);
   }, [page]);
 
   function handleChangeTab(_event: React.SyntheticEvent, value: string) {
-    setTab(value);
+    setTabIndex(value);
     setSearchParams({ ["page"]: value });
   }
 
@@ -59,11 +69,11 @@ function VistaEditarCurso() {
     defaultValues: {} as Curso,
   });
 
-  const { getValues, control, formState } = methods;
+  const { getValues, control, formState, watch } = methods;
 
   const { errors } = formState;
 
-  console.log(errors)
+  console.log(errors);
 
   const {
     handleOpen: handleOpenError,
@@ -164,18 +174,19 @@ function VistaEditarCurso() {
                 {labelEditarCurso.titulo}
               </Typography>
             </Stack>
-            <Stack>
-              <Tabs onChange={handleChangeTab}>
-                <Tab label="Información" value={"0"} />
-                <Tab label="Estudiantes" value={"1"} />
-                <Tab label="Secciones" value={"2"} />
-              </Tabs>
-              <Divider sx={{ paddingTop: -200 }} />
-            </Stack>
-            {tab == "0" && (
+            <Tabs
+              value={tabIndex}
+              onChange={(_e, newIndex) => setTabIndex(newIndex)}
+              sx={{ borderBottom: 1, borderColor: "divider" }}
+            >
+              <Tab label="Información" />
+              <Tab label="Estudiantes" />
+            </Tabs>
+
+            {tabIndex == "0" && (
               <>
                 <form onSubmit={methods.handleSubmit(onSubmit)}>
-                  <Stack spacing={2}>
+                  <Stack spacing={3}>
                     <TextField
                       label={labelEditarCurso.descripcion}
                       {...methods.register("descripcion")}
@@ -196,6 +207,7 @@ function VistaEditarCurso() {
                           label="Estado"
                           error={!!errors.estado}
                           helperText={errors.estado?.message}
+                          value={watch("estado") || "A"}
                         >
                           {getMateriaStatesArray.map(([clave, valor]) => (
                             <MenuItem value={clave} key={clave}>
@@ -205,22 +217,25 @@ function VistaEditarCurso() {
                         </TextField>
                       )}
                     />
+                    <Box>
+                      <GeneralButton
+                        mode={buttonTypes.save}
+                        loading={isPendingPatchCurso}
+                        type="submit"
+                      />
+                    </Box>
+                    <Divider />
                   </Stack>
-                  <GeneralButton
-                    mode={buttonTypes.save}
-                    loading={isPendingPatchCurso}
-                    type="submit"
-                  />
                 </form>
                 <Stack spacing={2}>
                   <TablaGestionarSecciones />
                 </Stack>
               </>
             )}
-            {tab == "1" && (
-              <>
-                <GestionarEstudiantesCurso curso={getValues()} idCurso={idCurso || ''} />
-              </>
+            {tabIndex == "1" && (
+              <Box>
+                <GestionarEstudiantesCurso curso={getValues()} idCurso={idCurso || ""} />
+              </Box>
             )}
           </Stack>
         </FormProvider>
