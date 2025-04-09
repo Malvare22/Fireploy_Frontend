@@ -18,6 +18,9 @@ import { useMutation } from "@tanstack/react-query";
 import AlertDialogError from "@modules/general/components/alertDialogError";
 import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
 import LoaderElement from "@modules/general/components/loaderElement";
+import { useModal } from "@modules/general/components/modal/hooks/useModal";
+import EditarMateria from "@modules/materias/pages/editarMateria";
+import SpringModal from "@modules/general/components/springModal";
 
 type TablaMateriasProps = {
   materias: MateriaTabla[];
@@ -30,6 +33,13 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
   const handleSelect = (materia: MateriaTabla) => {
     setSelectMateria(materia);
     setOpenHandleStatus(true);
+  };
+
+  const { handleClose: handleCloseEdit, handleOpen: handleOpenEdit, open: openEdit } = useModal();
+
+  const handleEditMateria = (materia: MateriaTabla) => {
+    setSelectMateria(materia);
+    handleOpenEdit();
   };
 
   function ModalChangeStatus(status: MateriaTabla["estado"]) {
@@ -120,6 +130,7 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
                 navigate(rutasMaterias.listarCursos.replace(":idMateria", row.codigo.toString()))
               }
             />
+            <ActionButton mode={actionButtonTypes.editar} onClick={() => handleEditMateria(row)} />
             {row.estado == "A" ? (
               <ActionButton
                 sx={{ color: theme.palette.error.main }}
@@ -229,6 +240,9 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
         open={openSuccess}
         title="Modificar Materia"
       />
+      <SpringModal handleClose={handleCloseEdit} open={openEdit}>
+        <EditarMateria id={selectMateria?.codigo ?? -1} handleCloseModal={handleCloseEdit} />
+      </SpringModal>
       {isPending ? (
         <LoaderElement />
       ) : (

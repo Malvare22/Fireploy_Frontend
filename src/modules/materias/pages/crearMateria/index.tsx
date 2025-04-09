@@ -4,6 +4,7 @@ import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import TablaGestionarCursos from "@modules/materias/components/tablaGestionarCursos";
+import { labelGestionarMateria } from "@modules/materias/enums/labelGestionarMateria";
 import { postCreateCursoService } from "@modules/materias/services/post.crear.grupo";
 import { postCreateMateriaService } from "@modules/materias/services/post.crear.materia";
 import { Curso } from "@modules/materias/types/curso";
@@ -30,14 +31,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
-enum labelCrearMateria {
-  titulo = "Crear Materia",
-  checkBox = "Predefinir Grupos",
-  nombre = "Nombre",
-  semestre = "Semestre",
-  estado = "Estado",
-  crearMateria = "Crear Materia",
-}
+
 
 function VistaCrearMateria() {
   const [createGroups, setCreateGroups] = useState<boolean>(false);
@@ -147,14 +141,14 @@ function VistaCrearMateria() {
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <Stack>
               <Stack>
-                <Typography variant="h4">{labelCrearMateria.titulo}</Typography>
+                <Typography variant="h4">{labelGestionarMateria.titulo}</Typography>
                 <Divider />
               </Stack>
               <Grid2 container spacing={3} padding={2}>
                 <Grid2 size={{ xs: 12, md: 8 }}>
                   <TextField
                     fullWidth
-                    label={labelCrearMateria.nombre}
+                    label={labelGestionarMateria.nombre}
                     {...methods.register("nombre")}
                     error={!!methods.formState.errors.nombre}
                     helperText={methods.formState.errors.nombre?.message}
@@ -164,7 +158,7 @@ function VistaCrearMateria() {
                   <TextField
                     fullWidth
                     select
-                    label={labelCrearMateria.semestre}
+                    label={labelGestionarMateria.semestre}
                     {...methods.register("semestre")}
                     error={!!methods.formState.errors.semestre}
                     helperText={methods.formState.errors.semestre?.message}
@@ -179,7 +173,7 @@ function VistaCrearMateria() {
                 <Grid2 size={{ xs: 12, md: 8 }}>
                   <TextField
                     fullWidth
-                    label={labelCrearMateria.estado}
+                    label={labelGestionarMateria.estado}
                     select
                     {...methods.register("estado")}
                     error={!!methods.formState.errors.estado}
@@ -195,7 +189,7 @@ function VistaCrearMateria() {
                 <Grid2 size={{ xs: 12, md: 8 }}>
                   <FormControlLabel
                     control={<Checkbox onClick={handleCheck} disabled={disableCheck} />}
-                    label={labelCrearMateria.checkBox}
+                    label={labelGestionarMateria.checkBox}
                   />
                 </Grid2>
                 <Grid2 size={{ xl: 10, xs: 12 }}>
@@ -204,7 +198,7 @@ function VistaCrearMateria() {
               </Grid2>
               <Box>
                 <Button type="submit" variant="contained" loading={isPending || isPendingPostGrupos}>
-                  {labelCrearMateria.crearMateria}
+                  {labelGestionarMateria.crearMateria}
                 </Button>
               </Box>
             </Stack>

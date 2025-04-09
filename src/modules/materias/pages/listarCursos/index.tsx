@@ -32,8 +32,6 @@ function ListarCursos() {
     queryKey: [`get curso ${idMateria}`],
   });
 
-  console.log('render', idMateria)
-
   useEffect(() => {
     if (data) setCursos(data.map((curso) => adaptCursoTabla(adaptCursoService(curso))));
   }, [data]);
