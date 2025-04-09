@@ -1,11 +1,11 @@
 import DataTable from "react-data-table-component";
 import { TableColumn } from "react-data-table-component";
-import { Alert, Box, Button, Divider, Stack, Typography } from "@mui/material";
-import { useMemo, useState } from "react";
+import { Alert, Box, Button, Divider, Stack, Tooltip, Typography } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
 import Status from "@modules/general/components/status";
 import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
-import { FieldError, useFormContext } from "react-hook-form";
+import { FieldError, FormProvider, useForm, useFormContext } from "react-hook-form";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { Seccion, seccionTemplate } from "@modules/materias/types/seccion";
@@ -23,19 +23,35 @@ import { useAuth } from "@modules/general/context/accountContext";
 import { useMutation } from "@tanstack/react-query";
 import AlertDialog from "@modules/general/components/alertDialog";
 import AlertDialogError from "@modules/general/components/alertDialogError";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SeccionesSchema } from "@modules/materias/utils/forms/form.schema";
+import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
 
 const TablaGestionarSecciones = () => {
-  const { watch, getValues, setValue, formState } = useFormContext<Curso>();
+  const { getValues: getValuesCurso } = useFormContext<Curso>();
+  const methods = useForm<Zod.TypeOf<typeof SeccionesSchema>>({
+    resolver: zodResolver(SeccionesSchema),
+    defaultValues: { secciones: getValuesCurso("secciones") || [] },
+  });
 
-  const { errors } = formState;
+  const { watch, getValues, setValue, reset } = methods;
 
-  const [currentEdit, setCurrentEdit] = useState<number>(-1);
+  console.log(getValues());
+
+  useEffect(() => {
+    reset({ secciones: getValuesCurso("secciones") || [] });
+  }, [getValuesCurso("secciones")]);
+
+  const [currentEdit, setCurrentEdit] = useState<number | null>(null);
 
   const { accountInformation } = useAuth();
 
   const { token } = accountInformation;
 
-  const [successRequest, setSuccesRequest] = useState([]);
+  const conditionToShowButton = () => {
+    return JSON.stringify(getValues("secciones")) !== JSON.stringify(getValuesCurso("secciones"));
+  };
 
   const {
     handleOpen: handleOpenError,
@@ -49,16 +65,23 @@ const TablaGestionarSecciones = () => {
     open: openSuccess,
   } = useAlertDialog();
 
+  const [successMessages, setSuccessMessages] = useState<string>("");
+
   async function getRequest(secciones: Seccion[]) {
-    await Promise.all(
-      secciones.filter((seccion) => {
-        if (seccion.id != 0) {
-          return patchEditSeccion(token, seccion);
-        } else {
-          return postCreateSeccion(token, seccion);
+    let mensajes = "";
+    for (const seccion of secciones) {
+      try {
+        if (seccion.id) {
+          await patchEditSeccion(token, seccion);
+          mensajes += `✅ Sección "${seccion.titulo}" actualizada.` + "\n";
         }
-      })
-    );
+      } catch {
+        await postCreateSeccion(token, seccion);
+        mensajes += `✅ Sección "${seccion.titulo}" creada.` + "\n";
+      }
+    }
+
+    return setSuccessMessages(mensajes);
   }
 
   const { isSuccess, error, isPending, mutate } = useMutation({
@@ -75,7 +98,7 @@ const TablaGestionarSecciones = () => {
   } = useAlertDialog();
 
   function handleAdd() {
-    const aux = { ...seccionTemplate, cursoId: getValues("id") || "" };
+    const aux = { ...seccionTemplate, cursoId: getValuesCurso("id") || "" };
     const seccionesActuales = getValues("secciones") ?? [];
     setValue("secciones", [...seccionesActuales, aux]);
     const currentPos = seccionesActuales.length;
@@ -89,7 +112,7 @@ const TablaGestionarSecciones = () => {
   }
 
   function handleDelete(i: number) {
-    setCurrentEdit(-1);
+    setCurrentEdit(null);
     const newerSeccion: Seccion[] = getValues("secciones")?.filter((_y, index) => i != index) || [];
 
     setValue("secciones", newerSeccion);
@@ -98,8 +121,19 @@ const TablaGestionarSecciones = () => {
   const columns: TableColumn<Seccion & { rowIndex: number }>[] = [
     {
       name: <Typography variant="body2">{labelListarSecciones.id}</Typography>,
-      cell: (row) => <Typography variant="body2">{row.id ?? 0}</Typography>,
+      cell: (row) => (
+        <>
+          {!row.id ? (
+            <Tooltip title="Código aún no asignado por el sistema">
+              <HelpOutlineIcon />
+            </Tooltip>
+          ) : (
+            <Typography variant="body2">{row.id}</Typography>
+          )}
+        </>
+      ),
       sortable: true,
+      center: true,
       width: "120px",
     },
     {
@@ -151,14 +185,14 @@ const TablaGestionarSecciones = () => {
           <Stack direction={"row"} spacing={2}>
             <ActionButton
               mode={actionButtonTypes.editar}
-              disabled={currentEdit !== -1}
               onClick={() => handleEdit(row.rowIndex)}
             />
-            <ActionButton
-              mode={actionButtonTypes.eliminar}
-              disabled={currentEdit !== -1 || row.id === 0}
-              onClick={() => handleDelete(row.rowIndex)}
-            />
+            {row.id == undefined && (
+              <ActionButton
+                mode={actionButtonTypes.eliminar}
+                onClick={() => handleDelete(row.rowIndex)}
+              />
+            )}
           </Stack>
         );
       },
@@ -176,9 +210,8 @@ const TablaGestionarSecciones = () => {
   const { conditionalRowStyles, customStyles } = useCustomTableStyles();
 
   function onCloseModal() {
-    console.log("AA");
     handleCloseEdit();
-    setCurrentEdit(-1);
+    setCurrentEdit(null);
   }
 
   function handleUpdate() {
@@ -186,13 +219,17 @@ const TablaGestionarSecciones = () => {
   }
 
   return (
-    <>
+    <FormProvider {...methods}>
       {isSuccess && (
-        <AlertDialog
+        <AlertDialogSuccess
           open={openSuccess}
-          handleAccept={handleCloseSuccess}
-          title="Cambiar estado del Usuario"
-          textBody={"User updated successfully"}
+          handleClose={handleCloseSuccess}
+          title="Edición de Secciones"
+          message={
+            successMessages != ""
+              ? successMessages
+              : "Actualización de Secciones realizada correctamente"
+          }
         />
       )}
       {error && (
@@ -205,18 +242,22 @@ const TablaGestionarSecciones = () => {
       )}
       {
         <Modal handleClose={handleCloseEdit} open={openEdit}>
-          <SeccionesForm index={currentEdit} onAccept={onCloseModal} onCancel={onCloseModal} />
+          <SeccionesForm index={currentEdit!!} onAccept={onCloseModal} onCancel={onCloseModal} />
         </Modal>
       }
       <Typography variant="h6">{labelEditarCurso.secciones}</Typography>
+      <Alert severity="info">{labelListarSecciones.informacion}</Alert>
       {watch("secciones")?.length != 0 ? (
-        <><Divider/><DataTable
-        columns={columns}
-        data={dataConIndice}
-        customStyles={customStyles}
-        conditionalRowStyles={conditionalRowStyles}
-        responsive
-      ></DataTable></>
+        <>
+          <Divider />
+          <DataTable
+            columns={columns}
+            data={dataConIndice}
+            customStyles={customStyles}
+            conditionalRowStyles={conditionalRowStyles}
+            responsive
+          ></DataTable>
+        </>
       ) : (
         <Alert severity="warning">{labelEditarCurso.noHaySecciones}</Alert>
       )}
@@ -225,9 +266,9 @@ const TablaGestionarSecciones = () => {
           <GeneralButton onClick={handleAdd} mode={buttonTypes.add} size="small" />
         </Box>
       </Stack>
-      {errors?.secciones &&
-        Array.isArray(errors.secciones) &&
-        errors.secciones.map((seccionError, index) => (
+      {methods.formState.errors?.secciones &&
+        Array.isArray(methods.formState.errors.secciones) &&
+        methods.formState.errors.secciones.map((seccionError, index) => (
           <div key={index}>
             {Object.entries(seccionError).map(([field, error]) => (
               <Alert severity="error" key={`${index}-${field}`}>
@@ -236,10 +277,18 @@ const TablaGestionarSecciones = () => {
             ))}
           </div>
         ))}
-      <Button variant="contained" loading={isPending} color="secondary" onClick={handleUpdate}>
-        {labelEditarCurso.modificarSecciones}
-      </Button>
-    </>
+      <Box>
+        {conditionToShowButton() && (
+          <GeneralButton
+            mode={buttonTypes.save}
+            variant="contained"
+            loading={isPending}
+            color="primary"
+            onClick={handleUpdate}
+          />
+        )}
+      </Box>
+    </FormProvider>
   );
 };
 

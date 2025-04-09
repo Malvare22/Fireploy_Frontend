@@ -1,9 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
-import { Curso } from "@modules/materias/types/curso";
 import { Seccion } from "@modules/materias/types/seccion";
-import { SeccionSchema } from "@modules/materias/utils/forms/form.schema";
+import { SeccionesSchema, SeccionSchema } from "@modules/materias/utils/forms/form.schema";
 import { getMateriaStatesArray } from "@modules/materias/utils/materias";
 import { MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useEffect } from "react";
@@ -15,7 +14,7 @@ type Props = {
   index: number;
 };
 function SeccionesForm({ onAccept, onCancel, index }: Props) {
-  const { getValues, setValue } = useFormContext<Curso>();
+  const { getValues, setValue } = useFormContext<SeccionesSchema>();
   const {
     reset: resetBuffer,
     control: controlBuffer,
@@ -49,6 +48,7 @@ function SeccionesForm({ onAccept, onCancel, index }: Props) {
       <Typography variant="h5" textAlign={"center"}>
         Editar Sección
       </Typography>
+
       <TextField
         label="Título"
         error={!!errorsBuffer?.titulo}

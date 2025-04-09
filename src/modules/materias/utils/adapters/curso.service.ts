@@ -9,7 +9,7 @@ export function adaptCursoService(curso: CursoService): Curso {
       curso.docente != null && curso.docente != undefined
         ? {
             id: curso.docente.id,
-            nombre: curso.docente.nombre,
+            nombre: curso.docente.nombre + ' ' + curso.docente.apellido,
             correo: curso.docente.correo,
           }
         : null,

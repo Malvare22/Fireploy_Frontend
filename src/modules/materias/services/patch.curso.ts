@@ -22,3 +22,19 @@ export const patchEditCurso = async (token: string, data: Curso) => {
 
   return response;
 };
+
+export const patchChangeStatusCurso = async (token: string, id: string, data: "A" | "I") => {
+  type Body = {
+    estado: string;
+  };
+
+  const body: Body = {
+    estado: data,
+  };
+
+  const response = await patchData<CursoService>(`/curso/${id}`, body, {
+    sessiontoken: token,
+  });
+
+  return response;
+};

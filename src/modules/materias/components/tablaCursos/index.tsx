@@ -1,5 +1,5 @@
-import DataTable, { ConditionalStyles } from "react-data-table-component";
-import { TableColumn, TableStyles } from "react-data-table-component";
+import DataTable from "react-data-table-component";
+import { TableColumn } from "react-data-table-component";
 import { Stack, Typography, useTheme } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
@@ -11,6 +11,12 @@ import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import { CursoTabla } from "@modules/materias/types/curso.tabla";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
 import { rutasMaterias } from "@modules/materias/router/router";
+import { useCustomTableStyles } from "@modules/general/styles";
+import { useMutation } from "@tanstack/react-query";
+import { patchChangeStatusCurso } from "@modules/materias/services/patch.curso";
+import { useAuth } from "@modules/general/context/accountContext";
+import AlertDialogError from "@modules/general/components/alertDialogError";
+import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
 
 type TablaCursosProps = {
   cursos: CursoTabla[];
@@ -25,19 +31,53 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
     setOpenHandleStatus(true);
   };
 
+  const {
+    handleOpen: handleOpenError,
+    handleClose: handleCloseError,
+    open: openError,
+  } = useAlertDialog();
+
+  const {
+    handleOpen: handleOpenSuccess,
+    handleClose: handleCloseSuccess,
+    open: openSuccess,
+  } = useAlertDialog();
+
+  const token = useAuth().accountInformation.token;
+
+  const {
+    isPending: isPendingChangeStatus,
+    error: errorChangeStatus,
+    isSuccess: isSuccessChangeStatus,
+    mutate: mutateChangeStatus,
+  } = useMutation({
+    mutationFn: () =>
+      patchChangeStatusCurso(token, selectCurso?.id || "", selectCurso?.estado == "I" ? "A" : "I"),
+    mutationKey: ["change status curso"],
+    onSuccess: () => {
+      handleOpenSuccess();
+      handleCloseHandleStatus();
+    },
+    onError: handleOpenError,
+  });
+
   function ModalChangeStatus(status: CursoTabla["estado"]) {
     const label = status == "I" ? "habilitar" : "deshabilitar";
 
     return (
       <Stack>
         <Typography>
-          {`¿Está seguro de que desea ${label} el curso: ${selectCurso?.grupo}?`}
+          {`¿Está seguro de que desea ${label} el grupo: ${selectCurso?.grupo}?`}
         </Typography>
       </Stack>
     );
   }
 
-  const { open: openHandleStatus, setOpen: setOpenHandleStatus } = useAlertDialog();
+  const {
+    open: openHandleStatus,
+    setOpen: setOpenHandleStatus,
+    handleClose: handleCloseHandleStatus,
+  } = useAlertDialog();
 
   const navigate = useNavigate();
 
@@ -70,6 +110,7 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
     },
     {
       name: <Typography>{labelListarCursos.acciones}</Typography>,
+      center: true,
       cell: (row) => (
         <Stack direction="row" justifyContent="center">
           <ActionButton
@@ -98,45 +139,7 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
     },
   ];
 
-  const customStyles: TableStyles = {
-    headCells: {
-      style: {
-        backgroundColor: theme.palette.background.paper, // override the row height
-        color: theme.palette.text.primary,
-        fontSize: theme.typography.h6.fontSize,
-        fontWeight: theme.typography.body1.fontWeight,
-        fontFamily: theme.typography.body1.fontFamily,
-      },
-    },
-    // table: {
-    //   style: {
-    //     border: "1px solid red",
-    //      borderRadius: '20px'
-    //   },
-    // },
-    rows: {
-      style: {
-        color: theme.palette.text.primary,
-        fontSize: theme.typography.body1.fontSize,
-        fontWeight: theme.typography.body1.fontWeight,
-        fontFamily: theme.typography.body1.fontFamily,
-        backgroundColor: theme.palette.background.default,
-      },
-    },
-  };
-
-  const conditionalRowStyles: ConditionalStyles<CursoTabla & { rowIndex: number }>[] = [
-    {
-      when: (row) => row.rowIndex % 2 !== 0, // Filas impares
-      style: {
-        color: theme.palette.text.primary,
-        fontSize: theme.typography.body1.fontSize,
-        fontWeight: theme.typography.body1.fontWeight,
-        fontFamily: theme.typography.body1.fontFamily,
-        backgroundColor: theme.palette.background.paper,
-      },
-    },
-  ];
+  const { conditionalRowStyles, customStyles } = useCustomTableStyles();
 
   const dataConIndice = useMemo(() => {
     return cursos
@@ -151,13 +154,28 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
     <>
       <AlertDialog
         open={openHandleStatus}
-        handleAccept={() => {
-          setOpenHandleStatus(false);
-        }}
+        handleAccept={mutateChangeStatus}
+        isLoading={isPendingChangeStatus}
         title="Cambiar Estado de Materia"
         body={ModalChangeStatus(selectCurso?.estado!!)}
         handleCancel={() => setOpenHandleStatus(false)}
       />
+      {isSuccessChangeStatus && (
+        <AlertDialogSuccess
+          open={openSuccess}
+          handleClose={handleCloseSuccess}
+          title="Cambiar estado del Usuario"
+          message={"User updated successfully"}
+        />
+      )}
+      {errorChangeStatus && (
+        <AlertDialogError
+          error={errorChangeStatus}
+          handleClose={handleCloseError}
+          title="Error Updating User"
+          open={openError}
+        />
+      )}
       <DataTable
         columns={columns}
         data={dataConIndice}

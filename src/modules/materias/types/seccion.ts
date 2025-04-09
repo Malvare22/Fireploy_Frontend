@@ -16,7 +16,7 @@ export const seccionTemplate: Seccion = {
   fechaDeInicio: "",
   estado: "A" as Seccion['estado'],
   cursoId: "-1",
-  id: 0
+  id: undefined
 
 };
 

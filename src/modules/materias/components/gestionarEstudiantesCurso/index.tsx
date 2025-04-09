@@ -1,9 +1,9 @@
-import { Alert, Box, Stack, Typography } from "@mui/material";
+import { Alert, Stack } from "@mui/material";
 import TablaEstudiantesEditarCurso from "../tablaEstudiantesEditarCurso";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
-import { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { UsuarioCampoBusqueda } from "@modules/general/hooks/useSearchUsers";
 import { useMutation } from "@tanstack/react-query";
 import { patchEstudiantesCurso } from "@modules/materias/services/patch.curso.estudiantes";
@@ -11,11 +11,9 @@ import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
 import { labelEditarCurso } from "@modules/materias/pages/editarCurso";
 import AlertDialog from "@modules/general/components/alertDialog";
 import AddUsers from "@modules/usuarios/components/addUsers";
-import Modal from "@modules/general/components/modal";
 import { Curso } from "@modules/materias/types/curso";
 import { useAuth } from "@modules/general/context/accountContext";
 import AlertDialogError, { CustomError } from "@modules/general/components/alertDialogError";
-import { useCustomTableStyles } from "@modules/general/styles";
 import SpringModal from "@modules/general/components/springModal";
 
 type Props = {
