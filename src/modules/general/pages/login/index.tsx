@@ -21,6 +21,7 @@ import { rutasProyectos } from "@modules/proyectos/router";
 import { useMutation } from "@tanstack/react-query";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import TextFieldPassword from "@modules/general/components/textFieldPassword";
+import { GoogleLogin } from "@react-oauth/google";
 
 /**
  * Renders the copyright footer.
@@ -50,8 +51,8 @@ function Copyright() {
 const SignIn: React.FC = () => {
   const theme = useTheme();
 
-  /** 
-   * Represents the login credentials 
+  /**
+   * Represents the login credentials
    */
   type SignUp = {
     email: string;
@@ -76,7 +77,7 @@ const SignIn: React.FC = () => {
   const { mutate, isError, isSuccess, data, isPending } = useMutation({
     mutationFn: () => postSignUp(singUp.email, singUp.password),
     onError: () => setOpen(true),
-    mutationKey: ['iniciar sesion']
+    mutationKey: ["iniciar sesion"],
   });
 
   const navigate = useNavigate();
@@ -149,6 +150,11 @@ const SignIn: React.FC = () => {
           id="password"
           autoComplete="current-password"
           onChange={(e) => handleInput("password", e.target.value)}
+        />
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            console.log(credentialResponse);
+          }}
         />
         <Button
           type="submit"

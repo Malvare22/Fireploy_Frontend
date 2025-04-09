@@ -1,6 +1,6 @@
 import DataTable from "react-data-table-component";
 import { TableColumn } from "react-data-table-component";
-import { Alert, Box, Stack, Typography } from "@mui/material";
+import { Alert, Box, Button, Stack, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import Status from "@modules/general/components/status";
 import ActionButton from "@modules/general/components/actionButton";
@@ -35,6 +35,8 @@ const TablaGestionarSecciones = () => {
 
   const { token } = accountInformation;
 
+  const [successRequest, setSuccesRequest] = useState([]);
+
   const {
     handleOpen: handleOpenError,
     handleClose: handleCloseError,
@@ -49,8 +51,9 @@ const TablaGestionarSecciones = () => {
 
   async function getRequest(secciones: Seccion[]) {
     await Promise.all(
-      secciones.map((seccion) => {
-        if (seccion.id !== 0) {
+      secciones.filter((seccion) => {
+        
+        if (seccion.id != 0) {
           return patchEditSeccion(token, seccion);
         } else {
           return postCreateSeccion(token, seccion);
@@ -59,7 +62,7 @@ const TablaGestionarSecciones = () => {
     );
   }
 
-  const { isSuccess, error, isPending } = useMutation({
+  const { isSuccess, error, isPending, mutate } = useMutation({
     mutationKey: ["modificar sección"],
     mutationFn: () => getRequest(getValues("secciones") || []),
     onSuccess: handleOpenSuccess,
@@ -154,6 +157,7 @@ const TablaGestionarSecciones = () => {
             />
             <ActionButton
               mode={actionButtonTypes.eliminar}
+              disabled={currentEdit !== -1 || row.id === 0 }
               onClick={() => handleDelete(row.rowIndex)}
             />
           </Stack>
@@ -176,6 +180,10 @@ const TablaGestionarSecciones = () => {
     console.log("AA");
     handleCloseEdit();
     setCurrentEdit(-1);
+  }
+
+  function handleUpdate(){
+    mutate();
   }
 
   return (
@@ -228,6 +236,7 @@ const TablaGestionarSecciones = () => {
             ))}
           </div>
         ))}
+        <Button variant="contained" loading={isPending} color="secondary" onClick={handleUpdate}>{labelEditarCurso.modificarSecciones}</Button>
     </>
   );
 };

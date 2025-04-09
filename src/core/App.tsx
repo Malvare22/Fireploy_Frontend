@@ -3,6 +3,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { getTheme } from "./themes";
 import { router } from "./router/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const queryClient = new QueryClient();
 
@@ -28,10 +29,12 @@ function App(): JSX.Element {
      * Permite que otros componentes accedan y actualicen el estado del usuario.
      */
     <QueryClientProvider client={queryClient}>
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_ID_GOOGLE_CLIENT}>
       <ThemeProvider theme={getTheme}>
         {/* Proveedor de enrutamiento para manejar la navegación */}
         <RouterProvider router={router} />
       </ThemeProvider>
+      </GoogleOAuthProvider>
     </QueryClientProvider>
   );
 }

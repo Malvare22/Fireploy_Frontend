@@ -10,6 +10,7 @@ interface ImportMetaEnv {
    * Esta variable se define en el archivo `.env` y es accesible en el código cliente.
    */
   readonly VITE_URL_BACKEND: string;
+  readonly VITE_ID_GOOGLE_CLIENT: string;
 }
 
 /**
