@@ -1,4 +1,4 @@
-export enum labelCrear{
+export enum labelCreateProject{
     crearProyecto = 'Crear Proyecto',
     informacion = 'Información',
     baseDeDatos = 'Base de Datos',

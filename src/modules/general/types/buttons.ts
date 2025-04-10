@@ -20,5 +20,7 @@ export enum buttonTypes {
   remove = "eliminar",
 
   /** Initiate user login */
-  login = "iniciar sesión"
+  login = "iniciar sesión",
+
+  next = 'siguiente'
 }

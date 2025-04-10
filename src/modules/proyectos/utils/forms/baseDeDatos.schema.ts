@@ -1,14 +1,17 @@
 import { z } from "zod";
 import { BaseDeDatos } from "@modules/proyectos/types/baseDeDatos";
 import { contraseniaSchema } from "@modules/usuarios/utils/form/usuario.schema";
+import { UrlSchema } from "../../../materias/utils/forms/url.schema";
+import { StandardStringRequiredSchema } from "@modules/materias/utils/forms/string.schema";
 
 export const BaseDeDatosSchema: z.ZodType<BaseDeDatos> = z.object({
-  proyecto: z.string().min(1, { message: "El nombre del proyecto es obligatorio." }),
-  tipo: z.enum(["S", "N", "E"], {
-    message: "El tipo debe ser 'S', 'N' o 'E'.",
-  }),
-  id: z.string().min(1, { message: "El ID es obligatorio." }),
-  proyectoId: z.string().min(1, { message: "El ID del proyecto es obligatorio." }),
-  nombre: z.string().min(1, {message: "El nombre es obligatorio"}),
+  proyecto: z.string().optional(),
+  id: z.number().optional(),
+  proyectoId: z.string().optional(),
+  nombre: StandardStringRequiredSchema,
   contrasenia: contraseniaSchema,
+  url: UrlSchema.min(1, "Campo Obligatorio"),
+  tipo: z.enum(["S", "N", "E"], {
+    errorMap: () => ({ message: "Selecciona un tipo de base de datos válido" }),
+  }),
 });

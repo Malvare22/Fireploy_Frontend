@@ -7,6 +7,7 @@ import { ReactNode } from "react";
 import { buttonTypes } from "@modules/general/types/buttons";
 import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
 import LoginIcon from "@mui/icons-material/Login";
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 /**
  * Map of icons associated with each button type.
@@ -18,6 +19,7 @@ const iconMap = {
   [buttonTypes.accept]: <CheckIcon />,
   [buttonTypes.remove]: <DeleteSweepIcon />,
   [buttonTypes.login]: <LoginIcon />,
+  [buttonTypes.next]: <NavigateNextIcon />,
 };
 
 /**
@@ -30,6 +32,7 @@ const labelMap = {
   [buttonTypes.accept]: "aceptar",
   [buttonTypes.remove]: "eliminar",
   [buttonTypes.login]: "iniciar sesión",
+  [buttonTypes.next]: "siguiente",
 };
 
 /**
@@ -67,7 +70,7 @@ const GeneralButton: React.FC<GeneralButtonProps> = ({
   return (
     <Button
       {...props}
-      startIcon={withIcon && (icon || iconMap[mode])}
+      endIcon={withIcon && (icon || iconMap[mode])}
       variant="contained"
     >
       {labelMap[mode]}

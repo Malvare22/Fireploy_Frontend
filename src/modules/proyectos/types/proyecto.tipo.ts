@@ -1,27 +1,19 @@
 import { assetImages } from "@modules/general/utils/getImage";
 import { UsuarioCurso } from "@modules/materias/types/curso";
-import { Usuario } from "@modules/usuarios/types/usuario";
+import { BaseDeDatos } from "./baseDeDatos";
+import { Repositorio } from "./repositorio";
 
 export type EstadoEjecucionProyecto = "F" | "N" | "E" | "L";
 export type EstadoProyecto = "A" | "I"; // Ejemplo, ajusta según tus necesidades
 export type ArchivoLog = { id: number; nombre: string; url: string };
-export type MateriaInformacion = { id?: number; nombre?: string, seccionId: string, materiaId: string, cursoId: string };
+export type MateriaInformacion = { seccionId: number; materiaId: number; cursoId: string };
 
-export type TipoRepositorio = 'B' | 'F' | 'I'
-
-export type BaseDeDatosProyecto = {
-    id?: number;
-    usuario: string;
-    url: string;
-    contrasenia: string;
-    tipo: 'S' | 'N';
-  };
+export type TipoRepositorio = "B" | "F" | "I";
 
 export type TecnologiaRepositorio = {
   id: number;
   nombre: string;
   logo: keyof typeof assetImages;
-
 };
 
 export type RepositorioProyecto = {
@@ -39,16 +31,18 @@ export type Proyecto = {
   calificacion?: number;
   imagen?: string;
   url: string;
+  idSeccion?: string;
   estadoDeEjecucion?: EstadoEjecucionProyecto;
   estadoDeProyecto?: EstadoProyecto;
-  baseDeDatos: BaseDeDatosProyecto;
-  backend?: RepositorioProyecto,
-  frontend?: RepositorioProyecto,
-  integrado?: RepositorioProyecto,
+  baseDeDatos: BaseDeDatos;
+  tipo: "D" | "M";
+  backend?: Repositorio;
+  frontend?: Repositorio;
+  integrado?: Repositorio;
   archivosLogs?: ArchivoLog[];
   materiaInformacion: MateriaInformacion;
   fechaUltimaModificacion?: string;
-  colaboradores: UsuarioCurso[]
+  integrantes: UsuarioCurso[];
 };
 
 export const proyectos: Proyecto[] = [

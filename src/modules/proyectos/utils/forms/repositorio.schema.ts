@@ -1,11 +1,12 @@
 import { Repositorio } from "@modules/proyectos/types/repositorio";
 import { z } from "zod";
+import { UrlSchema } from "../../../materias/utils/forms/url.schema";
 
 export const RepositorioSchema: z.ZodType<Repositorio> = z.object({
   id: z.number().min(1, { message: "El ID debe ser un número positivo." }).optional(),
   proyecto: z
     .string(),
-  url: z.string().url({ message: "La URL debe ser válida." }),
+  url: UrlSchema,
   imagen: z.string().min(1, { message: "La imagen es obligatoria." }),
   tipo: z.enum(["B", "F", "I"], {
     message: "El tipo debe ser Backend, Frontend o Monolito",

@@ -1,9 +1,10 @@
 export type BaseDeDatos = {
   proyecto?: string | undefined;
-  id?: string | undefined;
+  id?: number | undefined;
   proyectoId?: string | undefined;
   nombre: string;
   contrasenia: string;
+  url?: string,
   tipo: "S" | "N" | "E";
 };
 
