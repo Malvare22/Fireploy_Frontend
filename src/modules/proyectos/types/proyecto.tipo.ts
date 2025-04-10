@@ -1,10 +1,11 @@
 import { assetImages } from "@modules/general/utils/getImage";
+import { UsuarioCurso } from "@modules/materias/types/curso";
 import { Usuario } from "@modules/usuarios/types/usuario";
 
 export type EstadoEjecucionProyecto = "F" | "N" | "E" | "L";
 export type EstadoProyecto = "A" | "I"; // Ejemplo, ajusta según tus necesidades
 export type ArchivoLog = { id: number; nombre: string; url: string };
-export type MateriaInformacion = { id: number; nombre: string, seccionId: string, materiaId: string, cursoId: string };
+export type MateriaInformacion = { id?: number; nombre?: string, seccionId: string, materiaId: string, cursoId: string };
 
 export type TipoRepositorio = 'B' | 'F' | 'I'
 
@@ -32,14 +33,14 @@ export type RepositorioProyecto = {
 };
 
 export type Proyecto = {
-  id: number;
+  id?: number;
   titulo: string;
   descripcion: string;
-  calificacion: number;
-  imagen: string;
+  calificacion?: number;
+  imagen?: string;
   url: string;
-  estadoDeEjecucion: EstadoEjecucionProyecto;
-  estadoDeProyecto: EstadoProyecto;
+  estadoDeEjecucion?: EstadoEjecucionProyecto;
+  estadoDeProyecto?: EstadoProyecto;
   baseDeDatos: BaseDeDatosProyecto;
   backend?: RepositorioProyecto,
   frontend?: RepositorioProyecto,
@@ -47,7 +48,7 @@ export type Proyecto = {
   archivosLogs?: ArchivoLog[];
   materiaInformacion: MateriaInformacion;
   fechaUltimaModificacion?: string;
-  colaboradores?: Usuario[]
+  colaboradores: UsuarioCurso[]
 };
 
 export const proyectos: Proyecto[] = [

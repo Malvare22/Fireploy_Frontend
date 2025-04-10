@@ -1,8 +1,10 @@
 export type BaseDeDatos = {
-  proyecto: string;
+  proyecto?: string | undefined;
+  id?: string | undefined;
+  proyectoId?: string | undefined;
+  nombre: string;
+  contrasenia: string;
   tipo: "S" | "N" | "E";
-  id: string;
-  proyectoId: string;
 };
 
 export const exampleBasesDeDatos: BaseDeDatos[] = [
@@ -37,3 +39,9 @@ export const exampleBasesDeDatos: BaseDeDatos[] = [
     proyectoId: "proj-1005",
   },
 ];
+
+export const templateBaseDeDatos: BaseDeDatos = {
+  tipo: "E",
+  nombre: "",
+  contrasenia: "",
+};

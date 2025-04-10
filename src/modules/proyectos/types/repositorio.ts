@@ -1,5 +1,5 @@
 export type Repositorio = {
-  id: number;
+  id?: number | undefined;
   proyecto: string;
   url: string;
   tipo: "B" | "F" | "I";

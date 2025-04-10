@@ -1,8 +1,8 @@
 import { Repositorio } from "@modules/proyectos/types/repositorio";
 import { z } from "zod";
 
-export const repositorioSchema: z.ZodType<Repositorio> = z.object({
-  id: z.number().min(1, { message: "El ID debe ser un número positivo." }),
+export const RepositorioSchema: z.ZodType<Repositorio> = z.object({
+  id: z.number().min(1, { message: "El ID debe ser un número positivo." }).optional(),
   proyecto: z
     .string(),
   url: z.string().url({ message: "La URL debe ser válida." }),

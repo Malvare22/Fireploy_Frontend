@@ -4,13 +4,13 @@ import { Repositorio } from "../types/repositorio";
 export const getRepositoryTypesMap: Map<Repositorio["tipo"], string> = new Map([
   ["B", "Backend"],
   ["F", "Frontend"],
-  ["I", "Infraestructura"],
+  ["I", "Monolito"],
 ]);
 
 export const getRepositoryTypesArray: [Repositorio["tipo"], string][] = [
   ["B", "Backend"],
   ["F", "Frontend"],
-  ["I", "Infraestructura"],
+  ["I", "Monolito"],
 ];
 
 export const getRepositoryTypeColor = () => {

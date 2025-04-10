@@ -5,6 +5,7 @@ export type UsuarioCurso = {
   id: number;
   nombre: string;
   correo?: string | undefined;
+  imagen?: string | undefined;
 };
 
 export type Curso = {
@@ -44,9 +45,7 @@ export const exampleCursos: Curso[] = [
       nombre: "Juan Pérez",
       correo: "juan.perez@example.com",
     },
-    estudiantes: [
-      
-    ],
+    estudiantes: [],
     secciones: [],
     materia: {
       id: 1,

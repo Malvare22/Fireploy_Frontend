@@ -31,8 +31,7 @@ import {
   getExecutionState,
 } from "@modules/proyectos/utils/getExecutionState";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import * as monaco from 'monaco-editor';
-
+import * as monaco from "monaco-editor";
 
 export default function ProjectSettings() {
   const [tabIndex, setTabIndex] = useState(5);
@@ -127,31 +126,57 @@ export const Information = () => {
   );
 };
 
-export const Repositories = () => {
-
+type RepositoriesProps = {
+  type: "M" | "X";
+};
+export function Repositories({ type }: RepositoriesProps) {
+  function Content() {
+    if (type)
+      return (
+        <>
+          <Grid2 container spacing={2}>
+            <Typography variant="h6">{labelConfiguracion.frontend}</Typography>
+          </Grid2>
+          <TextField
+            fullWidth
+            label={labelConfiguracion.urlFrontend}
+            value={""}
+            sx={{ width: "50%" }}
+          />
+          <Divider />
+          <Typography variant="h6">{labelConfiguracion.backend}</Typography>
+          <TextField
+            fullWidth
+            label={labelConfiguracion.urlBackend}
+            value={""}
+            sx={{ width: "50%" }}
+          />
+        </>
+      );
+    else {
+      return (
+        <>
+          <TextField
+            fullWidth
+            label={labelConfiguracion.urlFrontend}
+            value={""}
+            sx={{ width: "50%" }}
+          />
+        </>
+      );
+    }
+  }
   return (
     <Stack spacing={3}>
-
       <Stack>
         <Typography variant="h5">{labelConfiguracion.repositorios}</Typography>
         <Divider />
       </Stack>
       <Typography variant="body2">{labelConfiguracion.repositoriosParrafo}</Typography>
-      <Grid2 container spacing={2}>
-        <Typography variant="h6">{labelConfiguracion.frontend}</Typography>
-      </Grid2>
-      <TextField
-        fullWidth
-        label={labelConfiguracion.urlFrontend}
-        value={""}
-        sx={{ width: "50%" }}
-      />
-      <Divider />
-      <Typography variant="h6">{labelConfiguracion.backend}</Typography>
-      <TextField fullWidth label={labelConfiguracion.urlBackend} value={""} sx={{ width: "50%" }} />
+      <Content />
     </Stack>
   );
-};
+}
 
 export const DataBase = () => {
   return (
@@ -214,13 +239,13 @@ export const EnviromentVariables = () => {
       console.log("here is the monaco instance:", monaco);
     }
   }, [monaco]);
-  
+
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  
+
   const handleEditorDidMount: OnMount = (editor, monacoInstance) => {
     editorRef.current = editor;
   };
-  
+
   function getEditorValue() {
     const value = editorRef.current?.getValue(); // Added optional chaining for safety
     console.log("Contenido del editor:", value);

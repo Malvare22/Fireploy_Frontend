@@ -5,7 +5,9 @@ import { labelCardCurso } from "@modules/materias/enums/labelCardCurso";
 import InputIcon from "@mui/icons-material/Input";
 import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import { Curso } from "@modules/materias/types/curso";
-import HowToRegIcon from "@mui/icons-material/HowToReg";
+import LoginIcon from "@mui/icons-material/Login";
+import { useNavigate } from "react-router";
+import { rutasMaterias } from "@modules/materias/router/router";
 
 type CardCursoProps = {
   curso: Curso;
@@ -17,6 +19,8 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, isRegister }) => 
   const theme = useTheme();
 
   let docente: undefined | UsuarioPortafolioCard = undefined;
+
+  const navigate = useNavigate();
 
   // if(curso.docente){
   //   docente =  adaptarUsuarioAUsuarioCardPortafolio(curso.docente);
@@ -61,11 +65,19 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, isRegister }) => 
         </Card> */}
         <Stack alignItems={"end"}>
           <Button
-            color="primary"
-            disabled={isRegister}
             variant="contained"
-            endIcon={isRegister ? <HowToRegIcon /> : <InputIcon />}
-            onClick={onClick}
+            sx={{
+              color: "white",
+              backgroundColor: isRegister
+                ? theme.palette.terciary.main
+                : theme.palette.primary.main,
+            }}
+            endIcon={isRegister ? <LoginIcon /> : <InputIcon />}
+            onClick={
+              isRegister
+                ? () => navigate(rutasMaterias.verCurso.replace(":idCurso", curso.id ?? "-1"))
+                : onClick
+            }
           >
             {isRegister ? labelCardCurso.inscrito : labelCardCurso.inscribirme}
           </Button>
