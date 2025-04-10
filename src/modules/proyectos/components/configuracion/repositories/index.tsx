@@ -11,6 +11,7 @@ export function Repositories() {
   // Suponiendo que tienes un campo llamado "tipo" en tu formulario que determina si es monolito o separado
   const tipo = watch("integrado.tipo") === "I"; // o como manejes el tipo (B, F, I)
 
+
   return (
     <Stack spacing={3}>
       <Stack>

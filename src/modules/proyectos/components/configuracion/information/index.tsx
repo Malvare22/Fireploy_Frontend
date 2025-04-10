@@ -13,7 +13,7 @@ import {
 import { getProjectTypesMap } from "@modules/proyectos/utils/getProjectTypes";
 import { Box, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useFormContext, Controller, useForm } from "react-hook-form";
 
 export const Information = () => {
@@ -38,13 +38,21 @@ export const Information = () => {
 
   const { handleNext } = useContext(StepperContext);
 
-  console.log(errors);
-
-  const { mutate: mutateCreate, isPending: isPendingCreate } = useMutation({
+  const {
+    mutate: mutateCreate,
+    isPending: isPendingCreate,
+    data: dataCreate,
+    isSuccess: isSuccessCreate,
+  } = useMutation({
     mutationFn: () => postCreateProject(token, getValues()),
     mutationKey: ["Create Project"],
-    onSuccess: handleNext,
   });
+
+  useEffect(() => {
+    if (!dataCreate || !isSuccessCreate) return;
+    localStorage.setItem("PROJECT_ID_CREATE", dataCreate.id.toString());
+    handleNext();
+  }, [dataCreate, isSuccessCreate]);
 
   function onSubmit() {
     mutateCreate();

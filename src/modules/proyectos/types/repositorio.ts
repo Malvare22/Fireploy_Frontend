@@ -1,11 +1,16 @@
 export type Repositorio = {
   id?: number | undefined;
-  proyecto: string;
+  proyectoId?: number;
   url: string;
   tipo: "B" | "F" | "I";
-  variables: { nombre: string; valor: string }[];
+  variables: VariableDeEntorno[];
   docker?: { tecnologia: string; tag: string };
   dockerText: string;
+};
+
+export type VariableDeEntorno = {
+  clave: string;
+  valor: string;
 };
 
 export const exampleRepositorios: Repositorio[] = [
@@ -22,7 +27,7 @@ export const exampleRepositorios: Repositorio[] = [
       tecnologia: "NodeJS",
       tag: "1.0",
     },
-    dockerText: ""
+    dockerText: "",
   },
   {
     id: 2,
@@ -33,7 +38,7 @@ export const exampleRepositorios: Repositorio[] = [
       { nombre: "DB_HOST", valor: "db.example.com" },
       { nombre: "DB_USER", valor: "admin" },
     ],
-    dockerText: ""
+    dockerText: "",
   },
   {
     id: 3,
@@ -44,7 +49,7 @@ export const exampleRepositorios: Repositorio[] = [
       { nombre: "CLOUD_PROVIDER", valor: "AWS" },
       { nombre: "REGION", valor: "us-east-1" },
     ],
-    dockerText: ""
+    dockerText: "",
   },
   {
     id: 4,
@@ -55,6 +60,6 @@ export const exampleRepositorios: Repositorio[] = [
       { nombre: "API_URL", valor: "https://api.example.com" },
       { nombre: "APP_ENV", valor: "staging" },
     ],
-    dockerText: ""
+    dockerText: "",
   },
 ];

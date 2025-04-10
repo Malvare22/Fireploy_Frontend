@@ -31,7 +31,6 @@ export type Proyecto = {
   calificacion?: number;
   imagen?: string;
   url: string;
-  idSeccion?: string;
   estadoDeEjecucion?: EstadoEjecucionProyecto;
   estadoDeProyecto?: EstadoProyecto;
   baseDeDatos: BaseDeDatos;

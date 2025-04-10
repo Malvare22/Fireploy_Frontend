@@ -1,3 +1,5 @@
+import { CursoService, SeccionesService } from "@modules/materias/types/curso.service";
+import { MateriaService } from "@modules/materias/types/materia.service";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 
 export type ProyectoService = {
@@ -9,20 +11,23 @@ export type ProyectoService = {
   imagen: string | null;
   estado_proyecto: string;
   estado_ejecucion: string;
+  puerto: number;
   fecha_creacion: string;
+  tipo_proyecto: string;
   estudiantes: UsuarioService[];
-  seccion: {
-    id: number;
-    titulo: string;
-    descripcion: string;
-    fecha_inicio: string;
-    fecha_fin: string;
-    estado: string;
-  };
+  seccion: SeccionesService & { curso: CursoService & { materia: MateriaService } };
   tutor: UsuarioService;
-  repositorios: any[];
-  base_de_datos: {
-    id: number;
-    tipo: string;
-  };
+  repositorios: RepositorioService[];
+  base_de_datos: any;
+  creador: UsuarioService[];
+};
+
+export type RepositorioService = {
+  proyecto: number,
+  id: number;
+  url: string | null;
+  tipo: string;
+  tecnologia: string | null;
+  variables_de_entorno: string | null;
+  version: string | null;
 };
