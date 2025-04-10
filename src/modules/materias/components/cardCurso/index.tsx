@@ -1,22 +1,19 @@
 import AnimatedCard from "@modules/general/components/animatedCard";
-import {
-  Button,
-  Card,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Button, Card, Stack, Typography, useTheme } from "@mui/material";
 import React from "react";
 import { labelCardCurso } from "@modules/materias/enums/labelCardCurso";
-import InputIcon from '@mui/icons-material/Input';
+import InputIcon from "@mui/icons-material/Input";
 import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import { Curso } from "@modules/materias/types/curso";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
 
 type CardCursoProps = {
   curso: Curso;
+  onClick: () => void;
+  isRegister: boolean;
 };
 
-const CardCurso: React.FC<CardCursoProps> = ({ curso }) => {
+const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, isRegister }) => {
   const theme = useTheme();
 
   let docente: undefined | UsuarioPortafolioCard = undefined;
@@ -32,7 +29,9 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso }) => {
           {`${labelCardCurso.grupo}: ${curso.grupo}`}
         </Typography>
         <Stack direction={"row"} alignItems={"center"} spacing={2}>
-          <Typography>{docente ? labelCardCurso.docente : labelCardCurso.docenteSinAsignar}</Typography>
+          <Typography>
+            {docente ? labelCardCurso.docente : labelCardCurso.docenteSinAsignar}
+          </Typography>
           <Card
             sx={{
               paddingX: 1,
@@ -61,7 +60,15 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso }) => {
           </Stack>
         </Card> */}
         <Stack alignItems={"end"}>
-          <Button variant="contained" endIcon={<InputIcon />}>{labelCardCurso.inscribirme}</Button>
+          <Button
+            color="primary"
+            disabled={isRegister}
+            variant="contained"
+            endIcon={isRegister ? <HowToRegIcon /> : <InputIcon />}
+            onClick={onClick}
+          >
+            {isRegister ? labelCardCurso.inscrito : labelCardCurso.inscribirme}
+          </Button>
         </Stack>
       </Stack>
     </AnimatedCard>

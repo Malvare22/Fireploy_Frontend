@@ -27,3 +27,18 @@ export const getCursoById = async (token: string, id: string) => {
 
   return response;
 };
+
+export const getCursosByIdStudent = async (token: string, id: number) => {
+  const response = await getData<CursoService[]>(
+    `/curso`,
+    {
+      estudiantes: id
+    },
+    {
+      sessiontoken: token,
+    }
+  );
+
+  return response;
+};
+
