@@ -1,40 +1,45 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { CustomError } from "../components/alertDialogError";
 import { rutasGeneral } from "../router/router";
-import useAlertDialog from "./useAlertDialog";
-import { useEffect, useMemo, useState } from "react";
+import { ShowDialogParams } from "./useAlertDialog2";
 
-function useErrorReader() {
+
+
+type ShowDialogFn = (params: ShowDialogParams) => void;
+
+/**
+ * Hook para manejar errores centralizados, recibiendo una función showDialog en la inicialización.
+ *
+ * @param showDialog - Función que muestra el diálogo.
+ */
+function useErrorReader(showDialog: ShowDialogFn) {
   const [error, setError] = useState<CustomError | null>(null);
-
-  const errorMessage = useMemo(() => {
-    return error?.message;
-  }, [error]);
-
-  const {
-    handleClose: handleCloseError,
-    handleOpen: handleOpenError,
-    open: openError,
-  } = useAlertDialog();
-
-  useEffect(() => {
-    if (error) handleOpenError();
-  }, [error]);
-
   const navigate = useNavigate();
 
-  function onCloseError() {
-    if (error?.statusCode == 401) {
-      localStorage.clear();
-      navigate(rutasGeneral.login);
-    } else handleCloseError();
-  }
+  useEffect(() => {
+    if (!error) return;
+
+    showDialog({
+      type: "error",
+      title: "Error",
+      message: error.message,
+      isLoading: false,
+      onAccept: () => {
+        if (error.statusCode === 401) {
+          localStorage.clear();
+          navigate(rutasGeneral.login);
+        }
+      },
+      onClose: () => {
+        setError(null);
+      },
+      reload: false
+    });
+  }, [error]);
 
   return {
-    errorMessage,
     setError,
-    onCloseError,
-    openError,
   };
 }
 

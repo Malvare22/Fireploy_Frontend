@@ -3,7 +3,7 @@ import TablaEstudiantesEditarCurso from "../tablaEstudiantesEditarCurso";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
-import React, { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { UsuarioCampoBusqueda } from "@modules/general/hooks/useSearchUsers";
 import { useMutation } from "@tanstack/react-query";
 import { patchEstudiantesCurso } from "@modules/materias/services/patch.curso.estudiantes";

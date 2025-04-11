@@ -35,6 +35,7 @@ export enum labelConfiguracion{
     invitarIntegrantes = 'Invitar Integrantes',
     eresTu = 'Eres Tú',
     opciones = 'Opciones',
+    propietario = 'Propietario del Proyecto',
 
     variablesDeEntorno = 'Variables de Entorno',
     variablesDeEntornoParrafo = 'Gestiona la creación y edición de las variables de entorno indispensables para el funcionamiento de tu software',

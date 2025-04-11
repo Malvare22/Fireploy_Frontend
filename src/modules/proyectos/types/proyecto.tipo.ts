@@ -48,6 +48,7 @@ export type Proyecto = {
   materiaInformacion: MateriaInformacion;
   fechaUltimaModificacion?: string;
   integrantes: UsuarioCurso[];
+  propietario?: UsuarioCurso
 };
 
 export const proyectos: Proyecto[] = [

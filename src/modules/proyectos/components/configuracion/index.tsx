@@ -74,7 +74,7 @@ export default function ProjectSettings({ project }: Props) {
 
           <Stack spacing={3} padding={2}>
             {tabIndex == 0 && <Information type="edit"/>}
-            {tabIndex == 1 && <Repositories />}
+            {tabIndex == 1 && <Repositories type="edit"/>}
             {tabIndex == 2 && <DataBase />}
             {tabIndex == 3 && (
               <>

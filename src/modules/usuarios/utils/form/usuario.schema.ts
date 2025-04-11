@@ -96,13 +96,12 @@ export const redSocialUsuarioSchema = z
 /**
  * Zod schemas for individual personal data fields of the user.
  */
-export const nombresSchema = z.string().min(0, { message: "El nombre no puede estar vacío" });
+export const nombresSchema = z.string().min(1, { message: "El nombre no puede estar vacío" });
 
 export const apellidosSchema = z.string().min(1, { message: "El apellido no puede estar vacío" });
 
 export const fotoDePerfilSchema = z
   .string()
-  .min(1, { message: "El correo es obligatorio" })
   .min(0, { message: "Es obligatorio agregar una imagen" });
 
 export const descripcionSchema = z.string();

@@ -19,7 +19,7 @@ export type ProyectoService = {
   tutor: UsuarioService;
   repositorios: RepositorioService[];
   base_de_datos: any;
-  creador: UsuarioService[];
+  creador: UsuarioService;
 };
 
 export type RepositorioService = {

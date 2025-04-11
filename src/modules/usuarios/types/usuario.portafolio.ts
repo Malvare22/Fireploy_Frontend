@@ -6,8 +6,8 @@ export type Logro = {
 export type UsuarioPortafolioCard = {
   nombres: string;
   foto: string;
-  rol: string;
-  logros: Logro[];
+  rol?: string;
+  logros?: Logro[];
   id: string;
 };
 

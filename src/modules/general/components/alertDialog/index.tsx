@@ -6,6 +6,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Alert, Box, Button, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
 
+export type AlertDialogTypes = "error" | "success" | "default"
 
 interface Props {
   title: string;
@@ -15,7 +16,7 @@ interface Props {
   handleCancel?: () => void;
   open: boolean;
   isLoading?: boolean;
-  type?: "error" | "success" | "default";
+  type?: AlertDialogTypes;
   reload?: boolean;
 }
 
@@ -94,6 +95,7 @@ const AlertDialog: React.FC<Props> = ({
         open={open}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        fullWidth
       >
         <Box>
           <DialogTitle id="alert-dialog-title">{title}</DialogTitle>

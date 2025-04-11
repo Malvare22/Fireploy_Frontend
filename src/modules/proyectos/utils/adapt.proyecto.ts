@@ -61,6 +61,7 @@ export function adaptProject(project: ProyectoService): Proyecto {
           frontend: adaptRepository(project.repositorios[0]),
           backend: adaptRepository(project.repositorios[1]),
         }),
+    propietario: project.creador,
   };
 }
 
