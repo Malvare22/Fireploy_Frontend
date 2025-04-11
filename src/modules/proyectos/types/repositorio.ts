@@ -3,7 +3,7 @@ export type Repositorio = {
   proyectoId?: number;
   url: string;
   tipo: "B" | "F" | "I";
-  variables?: string | undefined;
+  variables: string;
   docker?: { tecnologia: string | null; tag: string | null };
   dockerText: string | null;
 };

@@ -41,7 +41,7 @@ interface SpringModalProps {
   children: React.ReactNode;
   open: boolean;
   handleClose: () => void;
-  sx: SxProps
+  sx?: SxProps
 }
 
 
@@ -49,7 +49,7 @@ const SpringModal: React.FC<SpringModalProps> = ({
   children,
   open,
   handleClose,
-  sx
+  sx = {}
 }) => {
   const theme = useTheme();
 

@@ -1,68 +1,39 @@
 import { Editor, OnMount, useMonaco } from "@monaco-editor/react";
 import { useEffect, useRef } from "react";
-import * as monaco from "monaco-editor";
-import { Divider, Stack, Typography } from "@mui/material";
+import { Alert, Stack, Typography } from "@mui/material";
 import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
-import { Repositorio } from "@modules/proyectos/types/repositorio";
-import { useFormContext } from "react-hook-form";
-import { ProyectoSchema } from "@modules/proyectos/utils/forms/proyecto.schema";
+import { ProyectoRepositoriesSchema } from "@modules/proyectos/utils/forms/proyecto.schema";
+import { KeysOfRepository } from "@modules/proyectos/types/keysOfRepository";
+import * as monaco from "monaco-editor";
+import { useFormContext, Controller } from "react-hook-form";
 
 type Props = {
-  type: Repositorio["tipo"];
+  type: KeysOfRepository; // "frontend" | "backend" | "integrado"
 };
 
 export default function EnviromentVariablesEditor({ type }: Props) {
-  const monaco = useMonaco();
+  const monacoInstance = useMonaco();
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const { setValue, getValues } = useFormContext<ProyectoSchema>();
 
-  const keyProp = (): keyof ProyectoSchema => {
-    switch (type) {
-      case "B":
-        return "backend";
-      case "F":
-        return "frontend";
-      case "I":
-        return "integrado";
-    }
-  };
-
-  const getRepoValue = (key: keyof ProyectoSchema): Repositorio | undefined => {
-    const value = getValues()[key];
-    return typeof value === "object" && value !== null && "variables" in value
-      ? (value as Repositorio)
-      : undefined;
-  };
+  const {
+    getValues,
+    formState: { errors },
+  } = useFormContext<ProyectoRepositoriesSchema>();
 
   useEffect(() => {
-    if (monaco) {
-      console.log("Monaco instance loaded:", monaco);
+    if (monacoInstance) {
+      console.log("Monaco instance loaded:", monacoInstance);
     }
-  }, [monaco]);
+  }, [monacoInstance]);
 
   const handleEditorDidMount: OnMount = (editor, _monacoInstance) => {
     editorRef.current = editor;
-
-    const key = keyProp();
-    const repo = getRepoValue(key);
-    const initialValue = repo?.variables;
-
-    editor.setValue(initialValue ?? '');
+    const initialValue = getValues(`${type}.variables`) || "";
+    editor.setValue(initialValue);
   };
 
-  const handleEditorChange = () => {
-    const value = editorRef.current?.getValue() || "";
-
-    const key = keyProp();
-    const repo = getRepoValue(key);
-
-    // if (repo) {
-    //   setValue(key, {
-    //     ...repo,
-    //     variables: value,
-    //   });
-    // }
-  };
+  // 🧠 Obtener error del campo actual (frontend.variables, etc)
+  const fieldError = errors?.[type]?.variables;
 
   return (
     <Stack spacing={0}>
@@ -74,6 +45,7 @@ export default function EnviromentVariablesEditor({ type }: Props) {
           {labelConfiguracion.variablesDeEntornoParrafo}
         </Typography>
       </Stack>
+
       <div>
         <div
           style={{
@@ -85,19 +57,33 @@ export default function EnviromentVariablesEditor({ type }: Props) {
             borderTopRightRadius: "4px",
           }}
         >
-          {"Archivo .env"}
+          Archivo .env
         </div>
 
         <div style={{ height: "300px" }}>
-          <Editor
-            defaultLanguage="ini"
-            theme="vs-dark"
-            onMount={handleEditorDidMount}
-            options={{ fontSize: 14 }}
-            onChange={handleEditorChange}
+          <Controller
+            name={`${type}.variables`}
+            render={({ field }) => (
+              <Editor
+                value={field.value}
+                onChange={(value) => field.onChange(value ?? "")}
+                onMount={handleEditorDidMount}
+                defaultLanguage="ini"
+                theme="vs-dark"
+                options={{ fontSize: 14 }}
+              />
+            )}
           />
+
+
         </div>
       </div>
+                {/* 🔥 Mostrar error si existe */}
+                {fieldError && (
+            <Alert severity="error" sx={{ mt: 1 }}>
+              {fieldError.message?.toString()}
+            </Alert>
+          )}
     </Stack>
   );
 }

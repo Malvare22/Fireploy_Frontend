@@ -1,8 +1,7 @@
 import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
-import { Divider, Stack, TextField, Typography } from "@mui/material";
+import { Box, Divider, Stack, TextField, Typography } from "@mui/material";
 import { Controller, useForm, useFormContext } from "react-hook-form";
 import EnviromentVariablesEditor from "../enviroment";
-import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
 import DockerInputs from "../../dockerInputs";
 import {
   ProyectoRepositoriesSchema,
@@ -16,199 +15,182 @@ import { patchEditRepository } from "@modules/proyectos/services/patch.edit.repo
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import useAlertDialog2 from "@modules/general/hooks/useAlertDialog2";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
+import { FormProvider } from "react-hook-form";
+import { transformStringToKV } from "@modules/general/utils/string";
 
 type Props = {
   type: "edit" | "create";
 };
+
+function t(p: ProyectoRepositoriesSchema) {
+  console.log(transformStringToKV(p.backend?.variables ?? ""));
+}
+
 export function Repositories({ type }: Props) {
   const { getValues: getValuesProject } = useFormContext<ProyectoSchema>();
-
   const { token } = useAuth().accountInformation;
-
   const { handleNext } = useContext(StepperContext);
 
-  const { getValues, control, watch, setValue, handleSubmit, reset } =
-    useForm<ProyectoRepositoriesSchema>({
-      defaultValues: getValuesProject(),
-      resolver: zodResolver(ProyectoRepositoriesSchema),
-    });
+  // ✅ El hook principal del form local
+  const methods = useForm<ProyectoRepositoriesSchema>({
+    defaultValues: getValuesProject(),
+    resolver: zodResolver(ProyectoRepositoriesSchema),
+  });
+
+  const { getValues, control, watch, reset } = methods;
 
   useEffect(() => {
     reset(getValuesProject());
   }, [getValuesProject("backend"), getValuesProject("frontend"), getValuesProject("integrado")]);
 
-  const { errorMessage, handleAcceptError, openError, setError, handleOpenError } =
-    useErrorReader();
-
-  const { handleClose, handleOpen, open } = useAlertDialog();
-
   const {
-    handleClose: handleCloseSuccess,
-    handleOpen: handleOpenSuccess,
-    open: openSuccess,
-  } = useAlertDialog();
+    showDialog,
+    handleAccept,
+    handleClose,
+    open,
+    isLoading,
+    title,
+    message,
+    type: dialogType,
+  } = useAlertDialog2();
+
+  const { setError } = useErrorReader(showDialog);
 
   const { mutate, isPending } = useMutation({
     mutationFn: () => patchEditRepository(token, getValues()),
     onSuccess: () => {
-      if (type == "create") {
-        handleNext;
+      if (type === "create") {
+        handleNext();
       } else {
-        handleClose();
-        handleOpenSuccess();
+        showDialog({
+          message: "Repositorios actualizados correctamente",
+          type: "success",
+          title: "Éxito",
+          onAccept: handleClose,
+          reload: true,
+        });
       }
     },
     onError: (error) => {
       setError(error);
-      handleOpenError();
     },
   });
 
-  const onChangeDocker = (
-    repository: string | null,
-    tag: string | null,
-    key: keyof Pick<Proyecto, "backend" | "frontend" | "integrado">
-  ) => {
-    const vals = { tecnologia: repository, tag: tag };
-    setValue(
-      `${key}.dockerText`,
-      !vals.tecnologia || !vals.tag ? null : vals.tecnologia + ":" + vals.tag
-    );
-    setValue(`${key}.docker`, vals);
-  };
+  t(getValues());
 
   function onSubmit() {
-    if (type == "edit") handleOpen();
-    else mutate();
-  }
-
-  function handleAcceptEdit() {
-    mutate();
+    if (type === "edit") {
+      showDialog({
+        title: "Cambios Repositorio",
+        message: "¿Está seguro de que desea modificar la información de repositorios?",
+        onAccept: () => mutate(),
+        isLoading: isPending,
+      });
+    } else {
+      mutate();
+    }
   }
 
   return (
     <>
       <AlertDialog
-        handleAccept={handleAcceptEdit}
         open={open}
-        title="Cambios Repositorio"
+        title={title}
+        textBody={message}
+        isLoading={isLoading}
+        type={dialogType}
+        handleAccept={handleAccept}
         handleCancel={handleClose}
-        isLoading={isPending}
-        textBody="¿Está seguro de que desea modificar la información de repositorios?"
       />
-      <AlertDialog
-        handleAccept={handleCloseSuccess}
-        open={openSuccess}
-        title="Cambios Repositorio"
-        type="success"
-        reload={true}
-      />
-      <AlertDialog
-        type="error"
-        handleAccept={handleAcceptError}
-        open={openError}
-        title="Cambios Repositorio"
-        textBody={errorMessage}
-      />
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={3}>
-          <Stack>
-            <Typography variant="h5">{labelConfiguracion.repositorios}</Typography>
-            <Divider />
+
+      {/* ✅ FormProvider para compartir el contexto */}
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
+          <Stack spacing={3}>
+            <Stack>
+              <Typography variant="h5">{labelConfiguracion.repositorios}</Typography>
+              <Divider />
+            </Stack>
+            <Typography variant="body2">{labelConfiguracion.repositoriosParrafo}</Typography>
+
+            <Stack spacing={2}>
+              {watch("frontend") && (
+                <>
+                  <Typography variant="h6">{labelConfiguracion.frontend}</Typography>
+                  <Controller
+                    name="frontend.url"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                      <TextField
+                        size="small"
+                        {...field}
+                        fullWidth
+                        label={labelConfiguracion.urlFrontend}
+                        error={!!fieldState.error}
+                        helperText={fieldState.error?.message}
+                        sx={{ width: "50%" }}
+                      />
+                    )}
+                  />
+                  <DockerInputs fieldName="frontend" />
+                  <EnviromentVariablesEditor type="frontend" />
+                </>
+              )}
+
+              {watch("backend") && (
+                <>
+                  <Typography variant="h6">{labelConfiguracion.backend}</Typography>
+                  <Controller
+                    name="backend.url"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                      <TextField
+                        size="small"
+                        {...field}
+                        fullWidth
+                        label={labelConfiguracion.urlBackend}
+                        error={!!fieldState.error}
+                        helperText={fieldState.error?.message}
+                        sx={{ width: "50%" }}
+                      />
+                    )}
+                  />
+                  <DockerInputs fieldName="backend" />
+                  <EnviromentVariablesEditor type="backend" />
+                </>
+              )}
+
+              {watch("integrado") && (
+                <>
+                  <Typography variant="h6">Repositorio Integrado</Typography>
+                  <Controller
+                    name="integrado.url"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                      <TextField
+                        size="small"
+                        {...field}
+                        fullWidth
+                        label="URL del Monolito"
+                        error={!!fieldState.error}
+                        helperText={fieldState.error?.message}
+                        sx={{ width: "50%" }}
+                      />
+                    )}
+                  />
+                  <DockerInputs fieldName="integrado" />
+                  <EnviromentVariablesEditor type="integrado" />
+                </>
+              )}
+            </Stack>
+
+            <Stack alignItems={'end'}><Box><GeneralButton loading={isPending} mode={type=='create' ? buttonTypes.next: buttonTypes.save} type="submit" /></Box></Stack>
           </Stack>
-          <Typography variant="body2">{labelConfiguracion.repositoriosParrafo}</Typography>
-
-          <Stack spacing={2}>
-            {/* FRONTEND */}
-            {watch("frontend") && (
-              <>
-                <Typography variant="h6">{labelConfiguracion.frontend}</Typography>
-                <Controller
-                  name="frontend.url"
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <TextField
-                      size="small"
-                      {...field}
-                      fullWidth
-                      label={labelConfiguracion.urlFrontend}
-                      error={!!fieldState.error}
-                      helperText={fieldState.error?.message}
-                      sx={{ width: "50%" }}
-                    />
-                  )}
-                />
-                <DockerInputs
-                  onChange={(repository, tag) => onChangeDocker(repository, tag, "frontend")}
-                  repositoryInitial={getValues("frontend.docker.tecnologia")}
-                  tagInitial={getValues("frontend.docker.tag")}
-                />
-                <EnviromentVariablesEditor type="F" />
-              </>
-            )}
-
-            {/* BACKEND */}
-            {watch("backend") && (
-              <>
-                <Typography variant="h6">{labelConfiguracion.backend}</Typography>
-                <Controller
-                  name="backend.url"
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <TextField
-                      size="small"
-                      {...field}
-                      fullWidth
-                      label={labelConfiguracion.urlBackend}
-                      error={!!fieldState.error}
-                      helperText={fieldState.error?.message}
-                      sx={{ width: "50%" }}
-                    />
-                  )}
-                />
-                <DockerInputs
-                  onChange={(repository, tag) => onChangeDocker(repository, tag, "backend")}
-                  repositoryInitial={getValues("backend.docker.tecnologia")}
-                  tagInitial={getValues("backend.docker.tag")}
-                />
-                <EnviromentVariablesEditor type="B" />
-              </>
-            )}
-
-            {/* INTEGRADO */}
-            {watch("integrado") && (
-              <>
-                <Typography variant="h6">Repositorio Integrado</Typography>
-                <Controller
-                  name="integrado.url"
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <TextField
-                      size="small"
-                      {...field}
-                      fullWidth
-                      label="URL del Monolito"
-                      error={!!fieldState.error}
-                      helperText={fieldState.error?.message}
-                      sx={{ width: "50%" }}
-                    />
-                  )}
-                />
-                <DockerInputs
-                  onChange={(repository, tag) => onChangeDocker(repository, tag, "integrado")}
-                  repositoryInitial={getValues("integrado.docker.tecnologia")}
-                  tagInitial={getValues("integrado.docker.tag")}
-                />
-                <EnviromentVariablesEditor type="I" />
-              </>
-            )}
-          </Stack>
-          <GeneralButton loading={isPending} mode={buttonTypes.next} type="submit" />
-        </Stack>
-      </form>
+        </form>
+      </FormProvider>
     </>
   );
 }

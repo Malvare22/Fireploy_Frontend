@@ -1,0 +1,1 @@
+export type KeysOfRepository = "backend" | "frontend" | "integrado";

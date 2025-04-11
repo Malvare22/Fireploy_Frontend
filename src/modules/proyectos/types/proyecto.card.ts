@@ -1,6 +1,6 @@
 import { assetImages } from "@modules/general/utils/getImage";
 import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
-import { EstadoEjecucionProyecto } from "./proyecto.tipo";
+import {  Proyecto } from "./proyecto.tipo";
 type Tecnologia = { nombre: string; imagen: keyof typeof assetImages };
 export type ProyectoCard = {
   titulo: string;
@@ -16,7 +16,7 @@ export type ProyectoCard = {
   grupo: string;
   seccion: string;
   semestre: string;
-  estado: EstadoEjecucionProyecto;
+  estado: Proyecto['estadoDeEjecucion'];
 };
 
 export const proyecto1: ProyectoCard = {

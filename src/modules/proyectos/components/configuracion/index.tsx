@@ -29,70 +29,81 @@ import { DataBase } from "./database";
 import { Members } from "./members";
 import { ProyectoSchema } from "@modules/proyectos/utils/forms/proyecto.schema";
 import { FormProvider, useForm } from "react-hook-form";
+import { openInNewTab } from "@modules/general/utils/openTab";
 
 type Props = {
   project: ProyectoSchema;
 };
 export default function ProjectSettings({ project }: Props) {
-  const [tabIndex, setTabIndex] = useState(5);
+  const [tabIndex, setTabIndex] = useState(0);
 
   const methods = useForm<ProyectoSchema>({
     defaultValues: project,
   });
 
+  const { getValues } = methods;
+
+  const url = getValues("url");
+
+  function handleUrl(url: string) {
+    if (url) openInNewTab(url);
+  }
+
   return (
     <FormProvider {...methods}>
       <Grid2 container>
-      <Grid2 size={12} marginBottom={2}>
-        <Stack direction={"row"} spacing={1}>
-          <Typography variant="h4">{project.titulo}</Typography>
-          <IconButton>
-            <OpenInNewIcon />
-          </IconButton>
-        </Stack>
-      </Grid2>
-      <Grid2 size={12}>
-        <Container component={Paper} sx={{ p: 4 }}>
-          <Typography variant="h4" sx={{ mb: 2 }}>
-            {labelConfiguracion.configuracion}
-          </Typography>
-          <Typography variant="subtitle1" sx={{ mb: 3 }}>
-            {labelConfiguracion.configuracionParrafo}
-          </Typography>
-
-          <Tabs
-            value={tabIndex}
-            onChange={(_e, newIndex) => setTabIndex(newIndex)}
-            sx={{ borderBottom: 1, borderColor: "divider" }}
-          >
-            <Tab label="Información" />
-            <Tab label="Repositorios" />
-            <Tab label="Bases de Datos" />
-            <Tab label="Colaboradores" />
-            <Tab label="Archivos Logs" />
-          </Tabs>
-
-          <Stack spacing={3} padding={2}>
-            {tabIndex == 0 && <Information type="edit"/>}
-            {tabIndex == 1 && <Repositories type="edit"/>}
-            {tabIndex == 2 && <DataBase />}
-            {tabIndex == 3 && (
-              <>
-                <Members />
-              </>
-            )}
-            {tabIndex == 4 && (
-              <>
-                <LogsFiles />
-              </>
+        <Grid2 size={12} marginBottom={2}>
+          <Stack direction={"row"} spacing={1}>
+            <Typography variant="h4">{project.titulo}</Typography>
+            {url != "" && (
+              <IconButton onClick={() => handleUrl(url)}>
+                <OpenInNewIcon />
+              </IconButton>
             )}
           </Stack>
-        </Container>
-      </Grid2>
-      {/* <Grid2 size={2}>
+        </Grid2>
+        <Grid2 size={12}>
+          <Container component={Paper} sx={{ p: 4 }}>
+            <Typography variant="h4" sx={{ mb: 2 }}>
+              {labelConfiguracion.configuracion}
+            </Typography>
+            <Typography variant="subtitle1" sx={{ mb: 3 }}>
+              {labelConfiguracion.configuracionParrafo}
+            </Typography>
+
+            <Tabs
+              value={tabIndex}
+              onChange={(_e, newIndex) => setTabIndex(newIndex)}
+              sx={{ borderBottom: 1, borderColor: "divider" }}
+            >
+              <Tab label="Información" />
+              <Tab label="Repositorios" />
+              <Tab label="Bases de Datos" />
+              <Tab label="Colaboradores" />
+              <Tab label="Archivos Logs" />
+            </Tabs>
+
+            <Stack spacing={3} padding={2}>
+              {tabIndex == 0 && <Information type="edit" />}
+              {tabIndex == 1 && <Repositories type="edit" />}
+              {tabIndex == 2 && <DataBase type="edit" />}
+              {tabIndex == 3 && (
+                <>
+                  <Members />
+                </>
+              )}
+              {tabIndex == 4 && (
+                <>
+                  <LogsFiles />
+                </>
+              )}
+            </Stack>
+          </Container>
+        </Grid2>
+        {/* <Grid2 size={2}>
         <Status status={"E"} />
       </Grid2> */}
-    </Grid2>
+      </Grid2>
     </FormProvider>
   );
 }
