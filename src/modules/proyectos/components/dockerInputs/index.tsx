@@ -3,25 +3,24 @@ import {
   getDockerTags,
 } from "@modules/proyectos/services/get.docker.information";
 import { Autocomplete, TextField } from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 
 type DockerInputsProps = {
-  repositoryInitial?: string;
-  tagInitial?: string;
-  onChange: (repository: string | null, tag: string | null) => void;
+  repositoryInitial?: string | null;
+  tagInitial?: string | null;
+  onChange: (repository: string | null, tag: string | null, ...args: any[]) => void;
 };
 export const DockerInputs: React.FC<DockerInputsProps> = ({
   repositoryInitial,
   tagInitial,
   onChange,
 }) => {
-  const [repository, setRepository] = useState<string | null>(null);
-  const [repositoryResults, setRepositoryResults] = useState<string[]>([]);
+  const [repository, setRepository] = useState<string | null>("");
+  const [selectTag, setSelectTag] = useState<string | null>("");
   const [buffer, setBuffer] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(false);
   const [showTagsInput, setShowTagsInput] = useState<boolean>(false);
   const [tagsResults, setTagsResults] = useState<string[]>([]);
-  const [selectTag, setSelectTag] = useState<string | null>(null);
 
   useEffect(() => {
     if (repositoryInitial && tagInitial) {
@@ -30,56 +29,66 @@ export const DockerInputs: React.FC<DockerInputsProps> = ({
     }
   }, []);
 
+  const {
+    data: repositoriesDocker,
+    error: errorRepositories,
+    mutate: mutateRepositories,
+    isPending: isPendingRepositories,
+  } = useMutation({
+    mutationFn: () => getDockerRepositories(buffer ?? ""),
+    mutationKey: ["Get Docker Repositories", buffer],
+  });
+
+  const {
+    data:tagsDocker,
+    error: errorTag,
+    mutate: mutateTag,
+    isPending: isPendingTag,
+  } = useMutation({
+    mutationFn: () => getDockerTags(repository ?? ''),
+    mutationKey: ["Get Docker Tags", repository],
+    onSuccess: setTagsResults
+  });
+
   useEffect(() => {
     onChange(repository, selectTag);
   }, [repository, selectTag]);
 
   useEffect(() => {
-    const fetchRepositories = async (query: string) => {
-      if (query.trim() === "") {
-        setRepositoryResults([]);
-        return;
-      }
+    setSelectTag(null);
 
-      setIsLoading(true);
-      const results = await getDockerRepositories(query);
-      setRepositoryResults(results);
-      setIsLoading(false);
-    };
+    if (buffer.trim() === "") {
+      return;
+    }
 
     const timer = setTimeout(() => {
-      fetchRepositories(buffer);
+      mutateRepositories();
     }, 300);
 
     return () => clearTimeout(timer);
   }, [buffer]);
 
   useEffect(() => {
-    if (!repository) return;
-    const fetchTags = async () => {
-      const results = await getDockerTags(repository);
-      setTagsResults(results);
-    };
-
+    setShowTagsInput(repository != null);
+    if (!repository) {
+      return;
+    }
     const timer = setTimeout(() => {
-      fetchTags();
+      mutateTag();
     }, 300);
 
     return () => clearTimeout(timer);
   }, [repository]);
 
-  useEffect(() => {
-    setShowTagsInput(repository != null);
-  }, [repository]);
   return (
-
-    <> <Autocomplete
+    <>
+      <Autocomplete
         freeSolo
         disablePortal
-        loading={isLoading}
-        options={repositoryResults}
+        loading={isPendingRepositories}
+        options={repositoriesDocker || []}
         sx={{ width: 300 }}
-        onInputChange={(_e, value) => setBuffer(value ?? "")}
+        onInputChange={(_e, value) => setBuffer(value)}
         inputValue={buffer}
         size="small"
         renderInput={(params) => (
@@ -93,26 +102,21 @@ export const DockerInputs: React.FC<DockerInputsProps> = ({
         onChange={(_e, value) => setRepository(value)}
         value={repository}
       />
-
       <Autocomplete
         freeSolo
         disablePortal
         options={tagsResults}
         sx={{ width: 300 }}
         disabled={!showTagsInput}
+        loading={isPendingTag}
         renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Tags"
-            placeholder="Escribe para buscar..."
-            fullWidth
-          />
+          <TextField {...params} label="Tags" placeholder="Escribe para buscar..." fullWidth />
         )}
         onChange={(_e, value) => setSelectTag(value)}
         value={selectTag}
         size="small"
-      /></>
-   
+      />
+    </>
   );
 };
 

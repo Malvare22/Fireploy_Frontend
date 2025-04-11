@@ -1,5 +1,7 @@
 import { CursoService, SeccionesService } from "@modules/materias/types/curso.service";
+import { Materia } from "@modules/materias/types/materia";
 import { MateriaService } from "@modules/materias/types/materia.service";
+import { Seccion } from "@modules/materias/types/seccion";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 
 export type ProyectoService = {
@@ -15,7 +17,11 @@ export type ProyectoService = {
   fecha_creacion: string;
   tipo_proyecto: string;
   estudiantes: UsuarioService[];
-  seccion: SeccionesService & { curso: CursoService & { materia: MateriaService } };
+  seccion: {
+    id: Seccion["id"];
+    curso?: CursoService["id"];
+    materia?: Materia["id"];
+  };
   tutor: UsuarioService;
   repositorios: RepositorioService[];
   base_de_datos: any;
@@ -23,7 +29,7 @@ export type ProyectoService = {
 };
 
 export type RepositorioService = {
-  proyecto: number,
+  proyecto: number;
   id: number;
   url: string | null;
   tipo: string;

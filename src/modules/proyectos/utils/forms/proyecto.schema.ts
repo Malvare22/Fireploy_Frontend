@@ -20,7 +20,7 @@ export const ProyectoSchema: z.ZodType<Proyecto> = z.object({
   backend: RepositorioSchema.optional(),
   frontend: RepositorioSchema.optional(),
   integrado: RepositorioSchema.optional(),
-  tipo: z.enum(["M", "D"]),
+  tipo: z.enum(["M", "S"]),
   materiaInformacion: MateriaInformacionSchema,
   integrantes: z.array(z.lazy(() => EstudianteCursoSchema)),
 });
@@ -31,9 +31,19 @@ export const ProyectoInformationSchema: z.ZodType<
   titulo: StandardStringRequiredSchema,
   descripcion: StandardStringRequiredSchema,
   materiaInformacion: MateriaInformacionSchema,
-  tipo: z.enum(["M", "D"]),
+  tipo: z.enum(["M", "S"]),
+});
+
+export const ProyectoRepositoriesSchema: z.ZodType<
+  Pick<Proyecto, "backend" | "frontend" | "integrado">
+> = z.object({
+  backend: RepositorioSchema.optional(),
+  frontend: RepositorioSchema.optional(),
+  integrado: RepositorioSchema.optional(),
 });
 
 export type ProyectoSchema = z.infer<typeof ProyectoSchema>;
 
 export type ProyectoInformationSchema = z.infer<typeof ProyectoInformationSchema>;
+
+export type ProyectoRepositoriesSchema = z.infer<typeof ProyectoRepositoriesSchema>;

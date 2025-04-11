@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import GeneralButton from "@modules/general/components/button";
 import LoaderElement from "@modules/general/components/loaderElement";
 import { useAuth } from "@modules/general/context/accountContext";
+import { ParamsContext } from "@modules/general/context/paramasContext";
 import { StepperContext } from "@modules/general/context/stepper.Contex";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { getAllAcademicInformation } from "@modules/materias/services/get.materias.services";
@@ -18,6 +19,8 @@ import { useFormContext, Controller, useForm } from "react-hook-form";
 
 export const Information = () => {
   const { getValues: getValuesPrincipal } = useFormContext<ProyectoSchema>();
+
+  const { updateSearchParams, searchParams } = useContext(ParamsContext);
 
   const {
     control,
@@ -50,13 +53,18 @@ export const Information = () => {
 
   useEffect(() => {
     if (!dataCreate || !isSuccessCreate) return;
-    localStorage.setItem("PROJECT_ID_CREATE", dataCreate.id.toString());
-    handleNext();
+    updateSearchParams("id", dataCreate.id.toString());
   }, [dataCreate, isSuccessCreate]);
+
+  useEffect(() => {
+    if (dataCreate && isSuccessCreate) handleNext();
+  }, [searchParams]);
 
   function onSubmit() {
     mutateCreate();
   }
+
+  console.log(errors)
 
   if (!dataMaterias) return <LoaderElement />;
 

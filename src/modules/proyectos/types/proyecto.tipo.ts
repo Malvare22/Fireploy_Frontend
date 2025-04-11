@@ -1,12 +1,18 @@
 import { assetImages } from "@modules/general/utils/getImage";
-import { UsuarioCurso } from "@modules/materias/types/curso";
+import { Curso, UsuarioCurso } from "@modules/materias/types/curso";
 import { BaseDeDatos } from "./baseDeDatos";
 import { Repositorio } from "./repositorio";
+import { Materia } from "@modules/materias/types/materia";
+import { Seccion } from "@modules/materias/types/seccion";
 
 export type EstadoEjecucionProyecto = "F" | "N" | "E" | "L";
 export type EstadoProyecto = "A" | "I"; // Ejemplo, ajusta según tus necesidades
 export type ArchivoLog = { id: number; nombre: string; url: string };
-export type MateriaInformacion = { seccionId: number; materiaId: number; cursoId: string };
+export type MateriaInformacion = {
+  seccionId: Seccion["id"];
+  materiaId: Materia["id"];
+  cursoId: Curso["id"];
+};
 
 export type TipoRepositorio = "B" | "F" | "I";
 
@@ -33,8 +39,8 @@ export type Proyecto = {
   url: string;
   estadoDeEjecucion?: EstadoEjecucionProyecto;
   estadoDeProyecto?: EstadoProyecto;
-  baseDeDatos: BaseDeDatos;
-  tipo: "D" | "M";
+  baseDeDatos?: BaseDeDatos;
+  tipo: "S" | "M";
   backend?: Repositorio;
   frontend?: Repositorio;
   integrado?: Repositorio;

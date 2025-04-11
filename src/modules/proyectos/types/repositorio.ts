@@ -3,9 +3,9 @@ export type Repositorio = {
   proyectoId?: number;
   url: string;
   tipo: "B" | "F" | "I";
-  variables: VariableDeEntorno[];
-  docker?: { tecnologia: string; tag: string };
-  dockerText: string;
+  variables?: string | undefined;
+  docker?: { tecnologia: string | null; tag: string | null };
+  dockerText: string | null;
 };
 
 export type VariableDeEntorno = {

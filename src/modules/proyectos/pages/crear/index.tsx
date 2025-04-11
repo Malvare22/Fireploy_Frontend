@@ -16,22 +16,25 @@ import { useEffect, useState } from "react";
 import { adaptProject } from "@modules/proyectos/utils/adapt.proyecto";
 import { getProjectById } from "@modules/proyectos/services/get.project";
 import { useAuth } from "@modules/general/context/accountContext";
+import { ParamsContext } from "@modules/general/context/paramasContext";
+import { useParamsCustom } from "@modules/general/hooks/useParamsContext";
 
 export default function CrearProyecto() {
+  const [projectId, setProjectId] = useState<number | null>(null);
 
+  const {searchParams,  setSearchParams, updateSearchParams} = useParamsCustom();
 
-  const [idProject] = useState(() => {
-    const stored = localStorage.getItem("PROJECT_ID_CREATE");
-    return parseInt(stored ?? '10');
-  });
-  
+  useEffect(() => {
+    const id = parseInt(searchParams.get("id") ?? "-1");
+    setProjectId(id);
+  }, [searchParams]);
 
   const { token } = useAuth().accountInformation;
 
-  const { data: project, error: errorProject } = useQuery({
-    queryFn: () => getProjectById(token, idProject),
+  const { data: project, error: _errorProject } = useQuery({
+    queryFn: () => getProjectById(token, projectId ?? -1),
     queryKey: ["Get Project In Create Proccess"],
-    enabled: idProject !== -1,
+    enabled: projectId !== -1,
     retry: 2,
   });
 
@@ -48,8 +51,6 @@ export default function CrearProyecto() {
       descripcion: "",
     },
   });
-
-  console.log(idProject);
 
   const { reset } = methods;
 
@@ -70,6 +71,7 @@ export default function CrearProyecto() {
   return (
     <FormProvider {...methods}>
       <StepperContext.Provider value={{ handleNext: handleNext }}>
+      <ParamsContext.Provider value={{searchParams: searchParams, setSearchParams: setSearchParams, updateSearchParams: updateSearchParams}}>
         <Stack spacing={3} component={Paper} padding={{ xs: 1, md: 3 }}>
           <Stack direction={"row"} spacing={1} alignItems={"center"}>
             <Typography variant="h4" sx={{ fontWeight: "500" }}>
@@ -77,8 +79,13 @@ export default function CrearProyecto() {
             </Typography>
             <PolylineIcon sx={{ fontSize: 32 }} />
           </Stack>
-          <StepperStandard activeStep={1} isStepSkipped={isStepSkipped} contents={contents} />
+          <StepperStandard
+            activeStep={activeStep}
+            isStepSkipped={isStepSkipped}
+            contents={contents}
+          />
         </Stack>
+        </ParamsContext.Provider>
       </StepperContext.Provider>
     </FormProvider>
   );

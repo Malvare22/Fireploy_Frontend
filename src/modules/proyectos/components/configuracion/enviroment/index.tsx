@@ -45,9 +45,9 @@ export default function EnviromentVariablesEditor({ type }: Props) {
 
     const key = keyProp();
     const repo = getRepoValue(key);
-    const initialValue = repo?.variables || {};
+    const initialValue = repo?.variables;
 
-    editor.setValue(JSON.stringify(initialValue));
+    editor.setValue(initialValue ?? '');
   };
 
   const handleEditorChange = () => {

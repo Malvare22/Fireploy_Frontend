@@ -1,8 +1,6 @@
-import { getImage } from "@modules/general/utils/getImage";
-import { ProyectoCard } from "../types/proyecto.card";
 import { ProyectoService, RepositorioService } from "../types/proyecto.service";
-import { EstadoEjecucionProyecto, Proyecto } from "../types/proyecto.tipo";
-import { Repositorio, VariableDeEntorno } from "../types/repositorio";
+import { Proyecto } from "../types/proyecto.tipo";
+import { Repositorio } from "../types/repositorio";
 
 // export function adaptaProyectoService(proyecto: ProyectoService): ProyectoCard {
 //   return {
@@ -42,18 +40,17 @@ import { Repositorio, VariableDeEntorno } from "../types/repositorio";
 // }
 
 export function adaptProject(project: ProyectoService): Proyecto {
-  console.log(project)
   return {
     baseDeDatos: project.base_de_datos,
     descripcion: project.descripcion,
     integrantes: project.estudiantes,
     materiaInformacion: {
-      cursoId: project.seccion.curso.id,
-      materiaId: project.seccion.curso.materia.id,
+      cursoId: project.seccion.curso ?? "1",
+      materiaId: project.seccion.materia ?? 1,
       seccionId: project.seccion.id,
     },
     titulo: project.titulo,
-    tipo: project.tipo_proyecto != "M" ? "M" : "D",
+    tipo: project.tipo_proyecto == "M" ? "M" : "S",
     url: project.url,
     id: project.id,
     estadoDeEjecucion: (project.estado_ejecucion as Proyecto["estadoDeEjecucion"]) ?? "E",
@@ -69,11 +66,12 @@ export function adaptProject(project: ProyectoService): Proyecto {
 
 export function adaptRepository(repository: RepositorioService): Repositorio {
   return {
-    dockerText: repository.tecnologia + ":" + repository.version,
-    variables: JSON.parse(repository.variables_de_entorno ?? '{}') as VariableDeEntorno[] ?? {},
+    dockerText: (repository.tecnologia ?? '') + ":" + (repository.version ?? ''),
+    variables: repository.variables_de_entorno ?? '',
     url: repository.url ?? "",
     tipo: (repository.tipo as Repositorio["tipo"]) ?? "I",
     docker: { tag: repository.version ?? "", tecnologia: repository.tecnologia ?? "" },
     proyectoId: repository.proyecto,
+    id: repository.id ?? -1
   };
 }
