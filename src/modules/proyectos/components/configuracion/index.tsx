@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import {
   Container,
   Tabs,
@@ -27,16 +27,25 @@ import { Information } from "./information";
 import { Repositories } from "./repositories";
 import { DataBase } from "./database";
 import { Members } from "./members";
-import EnviromentVariables from "../enviromentVariblesTable";
+import { ProyectoSchema } from "@modules/proyectos/utils/forms/proyecto.schema";
+import { FormProvider, useForm } from "react-hook-form";
 
-export default function ProjectSettings() {
+type Props = {
+  project: ProyectoSchema;
+};
+export default function ProjectSettings({ project }: Props) {
   const [tabIndex, setTabIndex] = useState(5);
 
+  const methods = useForm<ProyectoSchema>({
+    defaultValues: project,
+  });
+
   return (
-    <Grid2 container>
+    <FormProvider {...methods}>
+      <Grid2 container>
       <Grid2 size={12} marginBottom={2}>
         <Stack direction={"row"} spacing={1}>
-          <Typography variant="h4">TITULO DE PRUEBA</Typography>
+          <Typography variant="h4">{project.titulo}</Typography>
           <IconButton>
             <OpenInNewIcon />
           </IconButton>
@@ -64,7 +73,7 @@ export default function ProjectSettings() {
           </Tabs>
 
           <Stack spacing={3} padding={2}>
-            {tabIndex == 0 && <Information />}
+            {tabIndex == 0 && <Information type="edit"/>}
             {tabIndex == 1 && <Repositories />}
             {tabIndex == 2 && <DataBase />}
             {tabIndex == 3 && (
@@ -77,11 +86,6 @@ export default function ProjectSettings() {
                 <LogsFiles />
               </>
             )}
-            {tabIndex == 5 && (
-              <>
-                <EnviromentVariables />
-              </>
-            )}
           </Stack>
         </Container>
       </Grid2>
@@ -89,9 +93,9 @@ export default function ProjectSettings() {
         <Status status={"E"} />
       </Grid2> */}
     </Grid2>
+    </FormProvider>
   );
 }
-
 
 type StatusProps = {
   status: EstadoEjecucionProyecto;

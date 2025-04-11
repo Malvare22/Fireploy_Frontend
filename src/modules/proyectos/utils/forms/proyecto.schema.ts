@@ -26,8 +26,9 @@ export const ProyectoSchema: z.ZodType<Proyecto> = z.object({
 });
 
 export const ProyectoInformationSchema: z.ZodType<
-  Pick<Proyecto, "titulo" | "descripcion" | "materiaInformacion" | "tipo">
+  Pick<Proyecto, "titulo" | "descripcion" | "materiaInformacion" | "tipo" | "id">
 > = z.object({
+  id: z.number().optional(),
   titulo: StandardStringRequiredSchema,
   descripcion: StandardStringRequiredSchema,
   materiaInformacion: MateriaInformacionSchema,

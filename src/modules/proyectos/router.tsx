@@ -5,12 +5,13 @@ import { RouteObject } from "react-router-dom";
 // import VistaRepositorios from "./pages/repositorios";
 // import VistaBasesDeDatos from "./pages/basesDeDatos";
 import CrearProyecto from "./pages/crear";
+import VerProyecto from "./pages/ver";
 
 const rutaBase = "/app/proyectos";
 
 export const rutasProyectos = {
   listar: rutaBase + "/listar",
-  ver: rutaBase + "/listar/ver/:id",
+  ver: rutaBase + "/:id",
   crear: rutaBase + "/crear",
   explorar: rutaBase + "/explorar",
   repositorios: rutaBase + "/repositorios",
@@ -22,10 +23,10 @@ export const routerProyectos: RouteObject[] = [
   //   path: rutasProyectos.listar,
   //   element: <VerProyectos/>,
   // },
-  // {
-  //   path: rutasProyectos.ver,
-  //   element: <VerProyecto />,
-  // },
+  {
+    path: rutasProyectos.ver,
+    element: <VerProyecto />,
+  },
   // {
   //   path: rutasProyectos.listar,
   //   element: <ListarProyectos />,

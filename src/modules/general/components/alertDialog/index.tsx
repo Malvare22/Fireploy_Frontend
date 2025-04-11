@@ -3,18 +3,10 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Alert, Box, Button, Stack, Typography } from "@mui/material";
+import { useNavigate } from "react-router";
 
-/**
- * @interface Props
- * @description Properties for the AlertDialog component.
- * @property {string} title - Title of the dialog.
- * @property {React.ReactNode} [body] - Optional custom content inside the dialog.
- * @property {string} [textBody] - Main text of the dialog (used if `body` is not provided).
- * @property {() => void} handleAccept - Function executed when the accept button is clicked.
- * @property {() => void} [handleCancel] - Optional function executed when the cancel button is clicked.
- * @property {boolean} open - State indicating whether the dialog is open or closed.
- */
+
 interface Props {
   title: string;
   body?: React.ReactNode;
@@ -23,22 +15,42 @@ interface Props {
   handleCancel?: () => void;
   open: boolean;
   isLoading?: boolean;
+  type?: "error" | "success" | "default";
+  reload?: boolean;
 }
 
 /**
- * AlertDialog Component
- *
- * A reusable dialog component that displays a title, a message, and action buttons.
- *
+ * AlertDialog component - a customizable modal dialog that displays a title, body content,
+ * and action buttons, with optional styling based on a type ("error", "success", "default").
+ * 
+ * This component supports both static text and fully custom body content. It also handles 
+ * optional reloading behavior and button loading state.
+ * 
  * @component
- * @param {Props} props - Properties of the AlertDialog component.
- * @param {string} props.title - The dialog's title.
- * @param {React.ReactNode} [props.body] - Optional custom content inside the dialog.
- * @param {string} [props.textBody] - The main text displayed in the dialog if `body` is not provided.
- * @param {() => void} props.handleAccept - Function executed when clicking the accept button.
- * @param {() => void} [props.handleCancel] - Optional function executed when clicking the cancel button.
- * @param {boolean} props.open - Boolean indicating whether the dialog is open or not.
- * @returns {JSX.Element} A modal dialog with an optional message and action buttons.
+ * 
+ * @param {string} title - The title displayed at the top of the dialog.
+ * @param {React.ReactNode} [body] - Optional custom content to render in the dialog body. Overrides `textBody` if provided.
+ * @param {string} [textBody] - Fallback plain text content shown in the dialog body if `body` is not provided.
+ * @param {() => void} handleAccept - Callback triggered when the "Accept" button is clicked.
+ * @param {() => void} [handleCancel] - Optional callback triggered when the "Cancel" button is clicked.
+ * @param {boolean} open - Controls whether the dialog is visible or not.
+ * @param {boolean} [isLoading=false] - If `true`, shows a loading state in the "Accept" button.
+ * @param {"error" | "success" | "default"} [type="default"] - Determines the visual styling of the dialog content.
+ * @param {boolean} [reload=false] - If `true`, triggers a full page reload when the "Accept" button is clicked.
+ * 
+ * @returns {JSX.Element} A Material UI Dialog component with optional alert styling and customizable content.
+ * 
+ * @example
+ * ```tsx
+ * <AlertDialog
+ *   title="Error"
+ *   textBody="An unexpected error occurred"
+ *   handleAccept={() => console.log('Accepted')}
+ *   handleCancel={() => console.log('Cancelled')}
+ *   open={isDialogOpen}
+ *   type="error"
+ * />
+ * ```
  */
 const AlertDialog: React.FC<Props> = ({
   title,
@@ -47,8 +59,35 @@ const AlertDialog: React.FC<Props> = ({
   body,
   handleCancel,
   textBody,
-  isLoading
+  isLoading,
+  type = "default",
+  reload = false,
 }) => {
+  function TypeProvider({ children }: { children: React.ReactNode }) {
+    switch (type) {
+      case "default":
+        return children;
+
+      case "error":
+        return <Alert severity="error">{children}</Alert>;
+
+      case "success":
+        return <Alert severity="success">{children}</Alert>;
+    }
+    return <></>;
+  }
+
+  const navigate = useNavigate();
+
+  function acceptAction() {
+    if (reload) {
+      navigate(0);
+      handleAccept();
+    } else {
+      handleAccept();
+    }
+  }
+
   return (
     <React.Fragment>
       <Dialog
@@ -61,22 +100,26 @@ const AlertDialog: React.FC<Props> = ({
         </Box>
         <DialogContent>
           {body || (
-            <Typography sx={{ whiteSpace: "pre-wrap" }}>{textBody}</Typography>
+            <TypeProvider>
+              <Typography sx={{ whiteSpace: "pre-wrap" }}>
+                {textBody || "Operación Realizada Correctamente"}
+              </Typography>
+            </TypeProvider>
           )}
         </DialogContent>
         <DialogActions>
           <Stack direction={"row"} spacing={2}>
-            {handleAccept && (
+            {
               <Box>
-                <Button variant="contained" loading={isLoading} onClick={handleAccept}>
-                  Accept
+                <Button variant="contained" size="small" loading={isLoading} onClick={acceptAction}>
+                  Aceptar
                 </Button>
               </Box>
-            )}
+            }
             {handleCancel && (
               <Box>
-                <Button variant="contained" color="inherit" onClick={handleCancel}>
-                  Cancel
+                <Button variant="contained" size="small" color="inherit" onClick={handleCancel}>
+                  Cancelar
                 </Button>
               </Box>
             )}

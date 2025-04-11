@@ -63,7 +63,7 @@ export default function CrearProyecto() {
   const { activeStep, handleNext, isStepSkipped } = useStepper();
 
   const contents: [string, React.ReactNode][] = [
-    ["Definir Información Básica", <Information />],
+    ["Definir Información Básica", <Information type="create"/>],
     ["Registrar Proyectos", <Repositories />],
     ["Definir Base de Datos", <DataBase />],
   ];

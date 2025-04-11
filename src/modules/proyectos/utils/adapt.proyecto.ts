@@ -45,8 +45,8 @@ export function adaptProject(project: ProyectoService): Proyecto {
     descripcion: project.descripcion,
     integrantes: project.estudiantes,
     materiaInformacion: {
-      cursoId: project.seccion.curso ?? "1",
-      materiaId: project.seccion.materia ?? 1,
+      cursoId: project.seccion.curso.id ?? "1",
+      materiaId: project.seccion.curso.materia.id ?? 1,
       seccionId: project.seccion.id,
     },
     titulo: project.titulo,
@@ -66,12 +66,12 @@ export function adaptProject(project: ProyectoService): Proyecto {
 
 export function adaptRepository(repository: RepositorioService): Repositorio {
   return {
-    dockerText: (repository.tecnologia ?? '') + ":" + (repository.version ?? ''),
-    variables: repository.variables_de_entorno ?? '',
+    dockerText: (repository.tecnologia ?? "") + ":" + (repository.version ?? ""),
+    variables: repository.variables_de_entorno ?? "",
     url: repository.url ?? "",
     tipo: (repository.tipo as Repositorio["tipo"]) ?? "I",
     docker: { tag: repository.version ?? "", tecnologia: repository.tecnologia ?? "" },
     proyectoId: repository.proyecto,
-    id: repository.id ?? -1
+    id: repository.id ?? -1,
   };
 }
