@@ -15,3 +15,18 @@ export const BaseDeDatosSchema: z.ZodType<BaseDeDatos> = z.object({
     errorMap: () => ({ message: "Selecciona un tipo de base de datos válido" }),
   }),
 });
+
+export type BaseDeDatosSchema = z.infer<typeof BaseDeDatosSchema>;
+
+export const BaseDeDatosRegisterSchema: z.ZodType<
+  Pick<BaseDeDatos, "contrasenia" | "nombre" | "tipo" | "proyectoId">
+> = z.object({
+  proyectoId: z.number().optional(),
+  nombre: StandardStringRequiredSchema,
+  contrasenia: contraseniaSchema,
+  tipo: z.enum(["S", "N", "E"], {
+    errorMap: () => ({ message: "Selecciona un tipo de base de datos válido" }),
+  }),
+});
+
+export type BaseDeDatosRegisterSchema = z.infer<typeof BaseDeDatosRegisterSchema>;
