@@ -1,16 +1,14 @@
-import { proyecto1, proyecto2, ProyectoCard } from "@modules/proyectos/types/proyecto.card";
+import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { showSocialNetworks } from "@modules/usuarios/utils/showSocialNetworks";
 import {
   Avatar,
   Box,
   Card,
-  FormControl,
   Grid2,
-  InputLabel,
   MenuItem,
-  Select,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -27,14 +25,17 @@ import { useAuth } from "@modules/general/context/accountContext";
 import { useQuery } from "@tanstack/react-query";
 import { getUsuarioService } from "@modules/usuarios/services/get.usuario";
 import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
-import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import { labelPortafolio } from "@modules/usuarios/enum/labelPortafolio";
 import LoaderElement from "@modules/general/components/loaderElement";
-import AlertDialogError from "@modules/general/components/alertDialogError";
+import { getProjectByUserId } from "@modules/proyectos/services/get.project";
+import { adaptProject, adaptProjectToCard } from "@modules/proyectos/utils/adapt.proyecto";
+import useAlertDialog2 from "@modules/general/hooks/useAlertDialog2";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
+import AlertDialog from "@modules/general/components/alertDialog";
 
 /**
  * Portfolio component responsible for rendering a user's public profile and projects.
- * 
+ *
  * Fetches and displays user information, a list of their projects, social media links,
  * and achievements. Allows sorting and filtering of the project list and opens a modal
  * for detailed project view.
@@ -48,33 +49,36 @@ const Portafolio = () => {
   const { accountInformation } = useAuth();
   const { token } = accountInformation;
   const [usuario, setUsuario] = useState<Usuario | undefined>(undefined);
+  const [projects, setProjects] = useState<ProyectoCard[]>([]);
 
-  const { data, isLoading, isError, error, isSuccess } = useQuery({
-    queryFn: () => getUsuarioService(parseInt(id || "-1"), token),
-    queryKey: [],
+  const { data, isLoading, error, isSuccess } = useQuery({
+    queryFn: async () => {
+      const userInfo = await getUsuarioService(parseInt(id || "-1"), token);
+      const projectInfo = await getProjectByUserId(token, parseInt(id || "-1"));
+      return { userInfo, projectInfo };
+    },
+    queryKey: ["Project & User Information"],
   });
 
-  const {
-    handleClose: handleCloseFailFetch,
-    open: openFailFetch,
-    handleOpen: handleOpenFailFetch,
-  } = useAlertDialog();
-
+  const { showDialog, handleAccept, title, type, open, message } = useAlertDialog2();
+  const { setError } = useErrorReader(showDialog);
   useEffect(() => {
     if (isSuccess && data) {
-      setUsuario(adaptUser(data));
+      setUsuario(adaptUser(data.userInfo));
+      setProjects(data.projectInfo.map((project) => adaptProjectToCard(adaptProject(project))));
     }
   }, [isSuccess, data]);
 
   useEffect(() => {
-    if (isError) {
-      handleOpenFailFetch();
-    }
-  }, [isError]);
+    if (error) setError(error);
+  }, [error]);
 
-  const proyectos: ProyectoCard[] = [proyecto1, proyecto2, proyecto1, proyecto2];
   const [selectProyecto, setSelectProyecto] = useState<ProyectoCard | undefined>(undefined);
-  const { handleClose, handleOpen, open } = useSpringModal();
+  const {
+    handleClose: handleCloseModal,
+    handleOpen: handleOpenModal,
+    open: openModal,
+  } = useSpringModal();
   const { filterData } = useFilters<ProyectoCard>();
 
   /**
@@ -84,7 +88,7 @@ const Portafolio = () => {
    */
   const handleCard = (proyecto: ProyectoCard) => {
     setSelectProyecto(proyecto);
-    handleOpen();
+    handleOpenModal();
   };
 
   const { handleRequestSort, orderBy, stableSort } = useOrderSelect<ProyectoCard>();
@@ -93,21 +97,20 @@ const Portafolio = () => {
 
   return (
     <>
-      {error && (
-        <AlertDialogError
-          error={error}
-          handleClose={handleCloseFailFetch}
-          open={openFailFetch}
-          title="Consultar Portafolios"
-        />
-      )}
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        type={type}
+        textBody={message}
+      />
       {isLoading ? (
         <LoaderElement />
       ) : (
         <>
           {usuario ? (
             <Box>
-              <SpringModal handleClose={handleClose} open={open}>
+              <SpringModal handleClose={handleCloseModal} open={openModal}>
                 {selectProyecto != undefined && (
                   <ModalProyectoPortafolio proyecto={selectProyecto} />
                 )}
@@ -148,64 +151,76 @@ const Portafolio = () => {
                   </Stack>
                 </Stack>
               </Card>
-              <Stack direction={{ md: "row", xs: "column" }} spacing={4} marginTop={3}>
-                <Card sx={{ width: { md: 360, xs: "100%" }, height: "100%" }}>
-                  <Stack spacing={2} sx={{ margin: 2, marginBottom: 4 }}>
-                    <Typography variant="h6" fontWeight="bold">
-                      {labelPortafolio.ordenarPor}
-                    </Typography>
-
-                    <FormControl variant="standard" sx={{ width: "100%" }}>
-                      <InputLabel id="puntuacion-label">{labelPortafolio.puntuacion}</InputLabel>
-                      <Select
-                        labelId="puntuacion-label"
+              <Stack spacing={4} marginTop={3}>
+                <Card sx={{ width: "100%" }}>
+                  <Grid2
+                    container
+                    spacing={2}
+                    direction={"row"}
+                    alignItems={"center"}
+                    sx={{ margin: 2, marginBottom: 4 }}
+                  >
+                    <Grid2
+                      size={{ md: 2, xs: 12 }}
+                      height={"100%"}
+                      display={"flex"}
+                      alignItems={"center"}
+                    >
+                      <Typography variant="body1" fontWeight="bold" marginTop={2}>
+                        {labelPortafolio.ordenarPor}
+                      </Typography>
+                    </Grid2>
+                    <Grid2 size={{ md: 4, xs: 12 }}>
+                      <TextField
+                        select
                         value={orderBy.puntuacion}
                         onChange={(e) =>
                           handleRequestSort("puntuacion", (e.target.value as Order) || undefined)
                         }
-                        displayEmpty
+                        InputLabelProps={{ shrink: true }}
+                        variant="outlined"
+                        label={labelPortafolio.puntuacion}
+                        fullWidth
                       >
-                        <MenuItem value="">
+                        <MenuItem value="No Aplicar">
                           <em>No aplicar</em>
                         </MenuItem>
                         <MenuItem value="asc">{labelSelects.mayor}</MenuItem>
                         <MenuItem value="desc">{labelSelects.menor}</MenuItem>
-                      </Select>
-                    </FormControl>
+                      </TextField>
+                    </Grid2>
 
-                    <FormControl variant="standard" sx={{ width: "100%" }}>
-                      <InputLabel id="semestre-label">{labelPortafolio.semestre}</InputLabel>
-                      <Select
-                        labelId="semestre-label"
+                    <Grid2 size={{ md: 4, xs: 12 }}>
+                      <TextField
                         value={orderBy.semestre}
                         onChange={(e) =>
                           handleRequestSort("semestre", (e.target.value as Order) || undefined)
                         }
-                        displayEmpty
+                        select
+                        InputLabelProps={{ shrink: true }}
+                        variant="outlined"
+                        label={labelPortafolio.semestre}
+                        fullWidth
                       >
-                        <MenuItem value="">
+                        <MenuItem value="No Aplicar">
                           <em>No aplicar</em>
                         </MenuItem>
                         <MenuItem value="asc">{labelSelects.mayor}</MenuItem>
                         <MenuItem value="desc">{labelSelects.menor}</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Stack>
+                      </TextField>
+                    </Grid2>
+                  </Grid2>
                 </Card>
 
                 <Box sx={{ flexGrow: 1 }}>
                   <Grid2 container spacing={1} rowSpacing={4} justifyContent={"space-between"}>
-                    {filterData(stableSort(proyectos)).map((proyecto) => (
+                    {filterData(stableSort(projects)).map((proyecto) => (
                       <Grid2
                         size={{ xl: 4, sm: 6, xs: 12 }}
                         display={"flex"}
                         justifyContent={"center"}
                       >
-                        <ProjectCard
-                          tipo="portafolio"
-                          handleOpen={() => handleCard(proyecto)}
-                          proyecto={proyecto}
-                        />
+                        <ProjectCard handleOpen={() => handleCard(proyecto)} proyecto={proyecto} />
                       </Grid2>
                     ))}
                   </Grid2>

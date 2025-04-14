@@ -3,13 +3,14 @@ import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafoli
 import {  Proyecto } from "./proyecto.tipo";
 type Tecnologia = { nombre: string; imagen: keyof typeof assetImages };
 export type ProyectoCard = {
+  id: number;
   titulo: string;
   descripcion: string;
   imagen: string;
   integrantes: UsuarioPortafolioCard[];
-  frontend: Tecnologia;
-  backend: Tecnologia;
-  dataBase: Tecnologia;
+  frontend: string;
+  backend: string;
+  dataBase: string;
   puntuacion: number;
   calificador: UsuarioPortafolioCard;
   materia: string;

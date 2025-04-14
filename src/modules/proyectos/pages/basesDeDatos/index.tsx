@@ -1,33 +1,57 @@
+import AlertDialog from "@modules/general/components/alertDialog";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
+import { useAuth } from "@modules/general/context/accountContext";
 import { labelSelects } from "@modules/general/enums/labelSelects";
+import useAlertDialog2 from "@modules/general/hooks/useAlertDialog2";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { useFiltersByConditions } from "@modules/general/hooks/useFiltersByCondition";
 import useSearch from "@modules/general/hooks/useSearch";
 import TablaBasesDeDatos from "@modules/proyectos/components/tablaBasesDeDatos";
 import { labelBaseDeDatos } from "@modules/proyectos/enum/labelBaseDeDatos";
 import { labelRepositorios } from "@modules/proyectos/enum/labelRepositorios";
-import { BaseDeDatos, exampleBasesDeDatos } from "@modules/proyectos/types/baseDeDatos";
+import { getDataBaseById } from "@modules/proyectos/services/get.database";
+import { getProjectByUserId } from "@modules/proyectos/services/get.project";
+import { BaseDeDatos } from "@modules/proyectos/types/baseDeDatos";
+import { adaptDataBase } from "@modules/proyectos/utils/adaptDataBase";
 import { getDataBaseTypesArray } from "@modules/proyectos/utils/database";
 import { getNoRepeatValuesBasesDeDatos } from "@modules/proyectos/utils/getNoRepeatValues.basesDeDatos";
-
-import {
-  Divider,
-  Grid2,
-  MenuItem,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useMemo, useState } from "react";
+import { Alert, Divider, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useMemo } from "react";
 
 function VistaBasesDeDatos() {
-  const [basesDeDatos, _setBasesDeDatos] =
-    useState<BaseDeDatos[]>(exampleBasesDeDatos);
+  const { showDialog, open, title, message, type, handleAccept } = useAlertDialog2();
 
-  const {
-    searchValue,
-    setSearchValue,
-    filteredData: filterByText,
-  } = useSearch();
+  const { token, id } = useAuth().accountInformation;
+
+  const { data: dataBases = [], error } = useQuery({
+    queryFn: async (): Promise<BaseDeDatos[]> => {
+      const projectsByUser = await getProjectByUserId(token, id);
+      if (projectsByUser) {
+        const dataBases = await Promise.all(
+          projectsByUser.map(async (project) => {
+            if (project.base_de_datos != null) {
+              const dataBase = await getDataBaseById(project.base_de_datos.id ?? -1, token);
+              if (dataBase) {
+                return adaptDataBase(dataBase);
+              }
+            }
+          })
+        );
+        return dataBases.filter(Boolean) as BaseDeDatos[];
+      }
+      return [];
+    },
+    queryKey: ["get DataBases"],
+  });
+
+  const { setError } = useErrorReader(showDialog);
+
+  useEffect(() => {
+    if (error) setError(error);
+  }, [error]);
+
+  const { searchValue, setSearchValue, filteredData: filterByText } = useSearch();
 
   const { filterData, filters, toggleFilter } = useFiltersByConditions();
 
@@ -48,9 +72,7 @@ function VistaBasesDeDatos() {
           defaultValue={""}
         >
           <MenuItem value="">{labelSelects.noAplicar}</MenuItem>
-          {Array.from(
-            getNoRepeatValuesBasesDeDatos(basesDeDatos, "proyecto")
-          ).map((element) => (
+          {Array.from(getNoRepeatValuesBasesDeDatos(dataBases, "proyecto")).map((element) => (
             <MenuItem value={element} key={element}>
               {element}
             </MenuItem>
@@ -77,7 +99,7 @@ function VistaBasesDeDatos() {
       >
         <MenuItem value="">{labelSelects.noAplicar}</MenuItem>
         {getDataBaseTypesArray.map(([value, key]) => (
-          <MenuItem value={value} key={key}>
+          value != 'E' &&<MenuItem value={value} key={key}>
             {key}
           </MenuItem>
         ))}
@@ -89,30 +111,36 @@ function VistaBasesDeDatos() {
     const filterText = (x: BaseDeDatos[]) => {
       const textValue = searchValue.toLowerCase();
       if (searchValue == "") return x;
-      return x.filter((y) => y.proyecto.toLowerCase().includes(textValue));
+      return x.filter((y) => y.proyecto?.titulo.toLowerCase().includes(textValue));
     };
 
-    return filterData(filterByText(basesDeDatos, filterText)) as BaseDeDatos[];
-  }, [filters, searchValue]);
+    return filterData(filterByText(dataBases, filterText)) as BaseDeDatos[];
+  }, [filters, searchValue, dataBases]);
 
   return (
-    <Stack spacing={3}>
-      <Stack>
-        <Typography variant="h4">{labelBaseDeDatos.basesDeDatos}</Typography>
-        <Divider />
-      </Stack>
-      <Stack spacing={1}>
-        <TextFieldSearch
-          setSearchValue={setSearchValue}
-          sx={{ maxWidth: 500 }}
-        />
-        <Grid2 container columnSpacing={4}>
-          <Grid2 size={{ xs: 12, md: 4 }}>{filterProject}</Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>{filterType}</Grid2>
-        </Grid2>
-      </Stack>
-      <TablaBasesDeDatos basesDeDatos={dataToRender}/>
-    </Stack>
+    <>
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+      />
+      <Stack spacing={3}>
+        <Stack>
+          <Typography variant="h4">{labelBaseDeDatos.basesDeDatos}</Typography>
+          <Divider />
+        </Stack>
+        <Stack spacing={1}>
+          <TextFieldSearch setSearchValue={setSearchValue} sx={{ maxWidth: 500 }} />
+          <Grid2 container columnSpacing={4}>
+            <Grid2 size={{ xs: 12, md: 4 }}>{filterProject}</Grid2>
+            <Grid2 size={{ xs: 12, md: 4 }}>{filterType}</Grid2>
+          </Grid2>
+        </Stack>
+{ dataBases.length == 0? <Alert severity="info">Actualmente no dispone de bases de datos</Alert>:       <TablaBasesDeDatos basesDeDatos={dataToRender} />
+}      </Stack>
+    </>
   );
 }
 

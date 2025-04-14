@@ -10,18 +10,24 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { labelLogin } from "@modules/general/enums/labelLogin";
 import { rutasGeneral } from "@modules/general/router/router";
-import { postSignUp, SignUpResponse } from "@modules/general/services/post.signUp";
-import AlertDialog from "@modules/general/components/alertDialog";
+import {
+  postSignUp,
+  postSignUpWithGoogle,
+  SignUpResponse,
+} from "@modules/general/services/post.signUp";
 import { useNavigate } from "react-router-dom";
 import { rutasProyectos } from "@modules/proyectos/router";
 import { useMutation } from "@tanstack/react-query";
-import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import TextFieldPassword from "@modules/general/components/textFieldPassword";
 import { GoogleLogin } from "@react-oauth/google";
+import { VARIABLES_LOCAL_STORAGE } from "@modules/general/enums/variablesLocalStorage";
+import useAlertDialog2 from "@modules/general/hooks/useAlertDialog2";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
+import AlertDialog from "@modules/general/components/alertDialog";
 
 /**
  * Renders the copyright footer.
@@ -59,59 +65,55 @@ const SignIn: React.FC = () => {
     password: string;
   };
 
+  const { handleAccept, message, open, title, showDialog, type } = useAlertDialog2();
+  const { setError } = useErrorReader(showDialog);
+
   const [singUp, setSingUp] = useState<SignUp>({ email: "", password: "" });
 
-  /**
-   * Handles input change for form fields
-   * @param key Field name
-   * @param value Field value
-   */
   const handleInput = (key: keyof SignUp, value: string) => {
     setSingUp({ ...singUp, [key]: value });
   };
 
-  /**
-   * Performs login mutation using email and password.
-   * Shows error dialog if authentication fails.
-   */
-  const { mutate, isError, isSuccess, data, isPending } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: () => postSignUp(singUp.email, singUp.password),
-    onError: () => setOpen(true),
     mutationKey: ["iniciar sesion"],
+    onSuccess: (data) => onSuccess(data),
+    onError: (error) => setError(error),
+  });
+
+  const { mutate: mutateGoogle } = useMutation({
+    mutationFn: (googleToken: string) => postSignUpWithGoogle(googleToken),
+    mutationKey: ["login with Google"],
+    onSuccess: (data) => onSuccess(data),
+    onError: (error) => setError(error),
   });
 
   const navigate = useNavigate();
-  const { open, setOpen } = useAlertDialog();
 
   /**
    * Handles successful login by storing token and navigating.
    * @param data SignUpResponse from backend
    */
   const onSuccess = (data: SignUpResponse) => {
-    localStorage.setItem("TOKEN", data.access_token);
-    localStorage.setItem("CURRENT_ID", data.id.toString());
+    localStorage.setItem(VARIABLES_LOCAL_STORAGE.TOKEN, data.access_token);
+    localStorage.setItem(VARIABLES_LOCAL_STORAGE.CURRENT_ID, data.id.toString());
 
+    if (data.googleRegister) {
+      localStorage.setItem(VARIABLES_LOCAL_STORAGE.NEW_GOOGLE_REGISTER, "TRUE");
+    } 
     navigate(rutasProyectos.listar);
   };
 
-  /**
-   * Executes success handler when mutation result is available.
-   */
-  useEffect(() => {
-    if (isSuccess && data) onSuccess(data);
-  }, [isSuccess, data]);
-
   return (
     <Card sx={{ padding: 2, maxWidth: 600 }}>
-      {isError && (
-        <AlertDialog
-          textBody="Combinación de Usuario y Contraseña no encontrados en el sistema"
-          open={open}
-          title="Iniciar Sesión"
-          handleAccept={() => setOpen(false)}
-        />
-      )}
       <CssBaseline />
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+      />
       <div>
         <Box
           sx={{
@@ -153,7 +155,7 @@ const SignIn: React.FC = () => {
         />
         <GoogleLogin
           onSuccess={(credentialResponse) => {
-            console.log(credentialResponse);
+            if (credentialResponse.credential) mutateGoogle(credentialResponse.credential);
           }}
         />
         <Button

@@ -1,17 +1,13 @@
 import { authenticatedRoutes, routerGeneral } from "@modules/general/router/router";
-// import { routerMaterias } from "@modules/materias/router/router";
-// import { routerProyectos } from "@modules/proyectos/router";
-// import { routerUsuarios } from "@modules/usuarios/router/router";
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 
 /**
- * Objeto que define todas las rutas principales de la aplicación.
- * Contiene rutas agrupadas en diferentes módulos, como rutas generales,
- * de usuarios, materias y proyectos.
+ * Main route object defining the root structure of the application.
+ * Includes child routes grouped by modules such as general routes and authenticated routes.
  *
- * @constant {RouteObject} allRoutes - Configuración de las rutas principales.
- * @property {string} path - Ruta base de la aplicación ("/").
- * @property {RouteObject[]} children - Rutas hijas que incluyen los módulos de la aplicación.
+ * @constant {RouteObject} allRoutes - The complete configuration for application routing.
+ * @property {string} path - The base path for the application ("/").
+ * @property {RouteObject[]} children - Nested child routes representing app modules.
  */
 const allRoutes: RouteObject = {
   path: "/",
@@ -19,11 +15,9 @@ const allRoutes: RouteObject = {
 };
 
 /**
- * Creación del enrutador de la aplicación utilizando `createBrowserRouter`.
- * Este enrutador se basa en la configuración de `allRoutes` y es utilizado 
- * para gestionar la navegación en la aplicación.
+ * Creates the browser router instance for the application using `createBrowserRouter`.
+ * This router handles client-side navigation based on the configuration provided in `allRoutes`.
  *
- * @constant {ReturnType<typeof createBrowserRouter>} router - Enrutador de la aplicación.
+ * @constant {ReturnType<typeof createBrowserRouter>} router - The application’s router instance.
  */
 export const router = createBrowserRouter([allRoutes]);
-

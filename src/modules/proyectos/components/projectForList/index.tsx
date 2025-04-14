@@ -1,4 +1,4 @@
-import { Box, Card, Stack, Tooltip, Typography } from "@mui/material";
+import { Box, Button, Card, Stack, Tooltip, Typography } from "@mui/material";
 import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
 import CardTecnologia from "../cardTecnologia";
 import { labelProjectForList } from "@modules/proyectos/enum/labelProjectForList";
@@ -6,23 +6,31 @@ import {
   getColorExecutionState,
   getExecutionState,
 } from "@modules/proyectos/utils/getExecutionState";
+import { useNavigate } from "react-router";
+import { rutasProyectos } from "@modules/proyectos/router";
 
 interface Props {
   proyecto: Proyecto;
 }
 
 const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
-  const colorState = getColorExecutionState(
-    proyecto.estadoDeEjecucion
-  ) as string;
+  const colorState = getColorExecutionState(proyecto.estadoDeEjecucion ?? "E") as string;
+
+  const navigate = useNavigate();
+
+  function onClick(id: number) {
+    navigate(rutasProyectos.ver.replace(":id", id.toString()));
+  }
 
   return (
     <Card sx={{ padding: 4 }}>
       <Stack spacing={2}>
-        <Typography variant="h5" textAlign={{xs: 'center', sm: 'start'}} color="info">
-          {proyecto.titulo}
-        </Typography>
-        <Stack direction={{lg: "row", xs: 'column'}} alignItems={'center'} spacing={3}>
+        <Button variant="text" onClick={() => onClick(proyecto.id ?? -1)}>
+          <Typography variant="h5" textAlign={{ xs: "center", sm: "start" }} color="info">
+            {proyecto.titulo}
+          </Typography>
+        </Button>
+        <Stack direction={{ lg: "row", xs: "column" }} alignItems={"center"} spacing={3}>
           <Box
             component={"img"}
             src={proyecto.imagen}
@@ -34,11 +42,9 @@ const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
           <Box>
             <Stack spacing={2}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <Typography variant="body1">
-                  {labelProjectForList.estado}
-                </Typography>
+                <Typography variant="body1">{labelProjectForList.estado}</Typography>
                 <Tooltip
-                  title={getExecutionState[proyecto.estadoDeEjecucion]}
+                  title={getExecutionState[proyecto.estadoDeEjecucion ?? "E"]}
                   placement="top"
                 >
                   <Box
@@ -55,20 +61,23 @@ const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
               {/* Ultima Modificación */}
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <Box>
-                  <Typography variant="body1">
-                    {labelProjectForList.ultimaModificacion}
-                  </Typography>
+                  <Typography variant="body1">{labelProjectForList.ultimaModificacion}</Typography>
                 </Box>
                 <Box>
-                  <Typography variant="body1">
-                    {proyecto.fechaUltimaModificacion}
-                  </Typography>
+                  <Typography variant="body1">{proyecto.fechaUltimaModificacion}</Typography>
                 </Box>
               </Box>
-              <Stack direction={{sm: "row", xs: 'column'}} sx={{'> div': {
-                width: {xs: '70%'}
-              }}} alignItems={'center'} spacing={3}>
-               <CardTecnologia tecnologia="angular" />
+              <Stack
+                direction={{ sm: "row", xs: "column" }}
+                sx={{
+                  "> div": {
+                    width: { xs: "70%" },
+                  },
+                }}
+                alignItems={"center"}
+                spacing={3}
+              >
+                <CardTecnologia tecnologia="angular" />
                 <CardTecnologia tecnologia="springboot" />
                 <CardTecnologia tecnologia="mongodb" />
               </Stack>

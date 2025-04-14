@@ -4,42 +4,53 @@ import { CustomError } from "../components/alertDialogError";
 import { rutasGeneral } from "../router/router";
 import { ShowDialogParams } from "./useAlertDialog2";
 
-
-
+/**
+ * Type definition for the function that shows a dialog.
+ * The `showDialog` function accepts a `ShowDialogParams` object to configure
+ * the dialog's appearance and behavior.
+ */
 type ShowDialogFn = (params: ShowDialogParams) => void;
 
 /**
- * Hook para manejar errores centralizados, recibiendo una función showDialog en la inicialización.
+ * Custom hook to handle centralized error handling and display error dialogs.
+ * This hook listens for error changes and shows a dialog with the error message
+ * when an error occurs. It also handles specific logic such as navigating on 401 errors.
  *
- * @param showDialog - Función que muestra el diálogo.
+ * @param showDialog - A function used to show the dialog with the error details.
+ *
+ * @returns An object containing the `setError` function to trigger the error state.
  */
 function useErrorReader(showDialog: ShowDialogFn) {
   const [error, setError] = useState<CustomError | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    // If there is no error, exit the effect early
     if (!error) return;
 
+    // Show the error dialog with the provided error details
     showDialog({
       type: "error",
       title: "Error",
       message: error.message,
       isLoading: false,
       onAccept: () => {
+        // Handle specific error status (e.g., 401 for unauthorized)
         if (error.statusCode === 401) {
-          localStorage.clear();
-          navigate(rutasGeneral.login);
+          localStorage.clear(); // Clear the local storage on 401 error
+          navigate(rutasGeneral.login); // Navigate to the login page
         }
       },
       onClose: () => {
+        // Clear the error state when the dialog is closed
         setError(null);
       },
-      reload: false
+      reload: false,
     });
-  }, [error]);
+  }, [error, navigate, showDialog]);
 
   return {
-    setError,
+    setError, // Function to set an error that triggers the dialog
   };
 }
 

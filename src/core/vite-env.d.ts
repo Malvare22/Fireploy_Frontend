@@ -1,24 +1,39 @@
 /// <reference types="vite/client" />
 
 /**
- * Interfaz que define las variables de entorno utilizadas en el proyecto.
- * Estas variables son inyectadas en tiempo de compilación por Vite.
+ * Interface defining the environment variables used in the project.
+ * These variables are injected at build time by Vite.
+ *
+ * @interface ImportMetaEnv
  */
 interface ImportMetaEnv {
   /**
-   * URL del backend utilizada en la aplicación.
-   * Esta variable se define en el archivo `.env` y es accesible en el código cliente.
+   * Backend URL used in the application.
+   * This variable is defined in the `.env` file and accessible in client-side code.
+   *
+   * @type {string}
    */
   readonly VITE_URL_BACKEND: string;
+
+  /**
+   * Google OAuth client ID used for authentication.
+   * Also defined in the `.env` file and available at runtime.
+   *
+   * @type {string}
+   */
   readonly VITE_ID_GOOGLE_CLIENT: string;
 }
 
 /**
- * Interfaz que extiende `ImportMeta` para incluir las variables de entorno personalizadas.
+ * Interface extending `ImportMeta` to include the custom environment variables.
+ *
+ * @interface ImportMeta
  */
 interface ImportMeta {
   /**
-   * Objeto que contiene las variables de entorno definidas en `ImportMetaEnv`.
+   * Object containing environment variables defined in `ImportMetaEnv`.
+   *
+   * @type {ImportMetaEnv}
    */
   readonly env: ImportMetaEnv;
 }

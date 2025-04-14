@@ -5,7 +5,6 @@ import { transformStringToKV } from "@modules/general/utils/string";
 
 export const RepositorioSchema: z.ZodType<Repositorio> = z.object({
   id: z.number(),
-  proyecto: z.string().optional(),
   url: UrlSchema,
   tipo: z.enum(["B", "F", "I"], {
     message: "El tipo debe ser Backend, Frontend o Monolito",

@@ -152,6 +152,8 @@ export const UsuarioSchema: z.ZodType<Usuario> = z
     return true;
   });
 
+export type UsuarioSchema = z.infer<typeof UsuarioSchema>
+
 /**
  * Default template object for creating a new Usuario instance.
  */

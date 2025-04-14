@@ -3,7 +3,7 @@ import { UserTypeFullString } from "@modules/usuarios/utils/usuario.map";
 
 /**
  * Represents the structure of the response received after a successful sign-in.
- * 
+ *
  * @typedef {Object} SignUpResponse
  * @property {string} access_token - The access token for the authenticated session.
  * @property {string} nombre - The full name of the user.
@@ -17,6 +17,7 @@ export type SignUpResponse = {
   tipo: UserTypeFullString;
   foto: string;
   id: number;
+  googleRegister?: boolean;
 };
 
 /**
@@ -30,7 +31,16 @@ export type SignUpResponse = {
  */
 export const postSignUp = async (email: string, contrasenia: string) => {
   const data = { username: email, password: contrasenia };
-  
+
   const response = await postData<SignUpResponse>("/auth/login", data);
+  return response;
+};
+
+export const postSignUpWithGoogle = async (idToken: string) => {
+  const data = { idToken: idToken };
+
+  const response = await postData<SignUpResponse & { message: string }>("/auth/loginGoogle", data);
+  response.googleRegister = response.message != "Usario logueado con exito";
+
   return response;
 };

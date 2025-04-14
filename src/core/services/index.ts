@@ -1,12 +1,11 @@
-// import { config } from "@external/config";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 /**
+ * Template for handling HTTP responses using Axios.
  *
- * Plantilla de las consultas HTTP (axios)
  * @export
  * @interface ApiResponse
- * @template T tipo de datos que va a retornar la consulta en caso de ser exitosa
+ * @template T - Type of data expected in a successful response.
  */
 export interface ApiResponse<T> {
   data?: T;
@@ -21,7 +20,9 @@ export interface ApiResponse<T> {
 }
 
 /**
- * Configuración de la instancias de Axios para consultas
+ * Axios instance configuration for making HTTP requests.
+ *
+ * @constant {AxiosInstance} apiClient - Axios client with default settings.
  */
 const apiClient: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_URL_BACKEND as string,
@@ -31,26 +32,18 @@ const apiClient: AxiosInstance = axios.create({
   },
 });
 
-// apiClient.interceptors.response.use(
-//   async (response) => {
-//     if (import.meta.env.DEV) {
-//       await new Promise((res) => setTimeout(res, 1750)); // 1.5 segundos
-//     }
-//     return response;
-//   },
-//   (error) => Promise.reject(error)
-// );
-
 type MetodoConsulta = "get" | "post" | "put" | "delete" | "patch";
 
 /**
- * 
- * @param method tipo de método a aplicar
- * @param url enlace de la consulta
- * @param data información del body
- * @param params los respectivos params de la consulta
- * @param headers los respectivos headers de la consulta
- * @returns Una APIResponse con los errores e información posibles de la consulta
+ * Generic function for executing HTTP requests using Axios.
+ *
+ * @template T - Type of the expected response data.
+ * @param {MetodoConsulta} method - HTTP method to be used.
+ * @param {string} url - Endpoint URL for the request.
+ * @param {unknown} [data] - Optional request body data.
+ * @param {Record<string, unknown>} [params] - Optional query parameters.
+ * @param {Record<string, string>} [headers] - Optional request headers.
+ * @returns {Promise<T>} - Promise resolving with the response data or throwing an error.
  */
 export const fetchData = async <T>(
   method: MetodoConsulta,
@@ -72,35 +65,35 @@ export const fetchData = async <T>(
     };
 
     const response = await apiClient<ApiResponse<T>>(config);
-
     const responseData = response;
 
     if (responseData.data.error) {
       throw {
-        message: responseData.data.error.message || "Error en la API",
+        message: responseData.data.error.message || "API error",
         statusCode: responseData.data.error.statusCode || 500,
       };
     }
 
-
-
     return responseData.data as T;
   } catch (error: any) {
-    // Manejo de errores de red o de Axios
+    // Error handling for network or Axios-related errors
     const errData = error?.response?.data;
     throw {
       message: errData?.error?.message || errData?.message || error.message,
-      statusCode: errData?.error?.statusCode || errData?.statusCode || error.response?.status || 500,
+      statusCode:
+        errData?.error?.statusCode || errData?.statusCode || error.response?.status || 500,
     };
   }
 };
 
 /**
- * Ejecución de Consultas de tipo Get
- * @param url enlace de la consulta
- * @param params los respectivos params de la consulta
- * @param headers los respectivos headers de la consulta
- * @returns Una APIResponse con los errores e información posibles de la consulta
+ * Executes a GET request.
+ *
+ * @template T - Type of the expected response data.
+ * @param {string} url - Endpoint URL for the request.
+ * @param {Record<string, unknown>} [params] - Optional query parameters.
+ * @param {Record<string, string>} [headers] - Optional request headers.
+ * @returns {Promise<T>} - Response data.
  */
 export const getData = <T>(
   url: string,
@@ -109,51 +102,55 @@ export const getData = <T>(
 ) => fetchData<T>("get", url, undefined, params, headers);
 
 /**
- * Ejecución de Consultas de tipo Post
- * @param url enlace de la consulta
- * @param data información del body
- * @param headers los respectivos headers de la consulta
- * @returns Una APIResponse con los errores e información posibles de la consulta
+ * Executes a POST request.
+ *
+ * @template T - Type of the expected response data.
+ * @param {string} url - Endpoint URL for the request.
+ * @param {unknown} data - Request body data.
+ * @param {Record<string, string>} [headers] - Optional request headers.
+ * @returns {Promise<T>} - Response data.
  */
-export const postData = <T>(
-  url: string,
-  data: unknown,
-  headers?: Record<string, string>
-) => fetchData<T>("post", url, data, {}, headers);
+export const postData = <T>(url: string, data: unknown, headers?: Record<string, string>) =>
+  fetchData<T>("post", url, data, {}, headers);
 
 /**
- * Ejecución de Consultas de tipo Put
- * @param url enlace de la consulta
- * @param data información del body
- * @param headers los respectivos headers de la consultalos respectivos params de la consulta
- * @returns Una APIResponse con los errores e información posibles de la consulta
+ * Executes a PUT request.
+ *
+ * @template T - Type of the expected response data.
+ * @param {string} url - Endpoint URL for the request.
+ * @param {unknown} data - Request body data.
+ * @param {Record<string, string>} [headers] - Optional request headers.
+ * @returns {Promise<T>} - Response data.
  */
-export const putData = <T>(
-  url: string,
-  data: unknown,
-  headers?: Record<string, string>
-) => fetchData<T>("put", url, data, headers);
+export const putData = <T>(url: string, data: unknown, headers?: Record<string, string>) =>
+  fetchData<T>("put", url, data, headers);
 
 /**
- * Ejecución de Consultas de tipo Delete
- * @param url enlace de la consulta
- * @param headers los respectivos headers de la consultalos respectivos params de la consulta
- * @returns Una APIResponse con los errores e información posibles de la consulta
+ * Executes a DELETE request.
+ *
+ * @template T - Type of the expected response data.
+ * @param {string} url - Endpoint URL for the request.
+ * @param {Record<string, string>} headers - Request headers.
+ * @returns {Promise<T>} - Response data.
  */
 export const deleteData = <T>(url: string, headers: Record<string, string>) =>
   fetchData<T>("delete", url, headers);
 
 /**
- * Ejecución de Consultas de tipo Patch
- * @param url enlace de la consulta
- * @param data información del body
- * @param headers los respectivos headers de la consulta
- * @returns Una APIResponse con los errores e información posibles de la consulta
+ * Executes a PATCH request.
+ *
+ * @template T - Type of the expected response data.
+ * @param {string} url - Endpoint URL for the request.
+ * @param {unknown} data - Request body data.
+ * @param {Record<string, string>} [headers] - Optional request headers.
+ * @returns {Promise<T>} - Response data.
  */
-export const patchData = <T>(
-  url: string,
-  data: unknown,
-  headers?: Record<string, string>
-) => fetchData<T>("patch", url, data, {}, headers);
+export const patchData = <T>(url: string, data: unknown, headers?: Record<string, string>) =>
+  fetchData<T>("patch", url, data, {}, headers);
 
+/**
+ * Default Axios client export.
+ *
+ * @default
+ */
 export default apiClient;

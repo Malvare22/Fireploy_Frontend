@@ -1,33 +1,28 @@
-import DataTable, { ConditionalStyles } from "react-data-table-component";
-import { TableColumn, TableStyles } from "react-data-table-component";
-import { Button, Chip, useTheme } from "@mui/material";
+import DataTable from "react-data-table-component";
+import { TableColumn } from "react-data-table-component";
+import {  Button, Chip, Typography } from "@mui/material";
 import React, { useMemo } from "react";
 import InfoIcon from "@mui/icons-material/Info";
 import { BaseDeDatos } from "@modules/proyectos/types/baseDeDatos";
 import { labelBaseDeDatos } from "@modules/proyectos/enum/labelBaseDeDatos";
-import {
-  getDataBaseTypeColor,
-  getDataBaseTypesMap,
-} from "@modules/proyectos/utils/database";
+import { getDataBaseTypeColor, getDataBaseTypesMap } from "@modules/proyectos/utils/database";
 import StorageIcon from "@mui/icons-material/Storage";
+import { useCustomTableStyles } from "@modules/general/styles";
+import { openInNewTab } from "@modules/general/utils/openTab";
 
 type TablaBasesDeDatosProps = {
   basesDeDatos: BaseDeDatos[];
 };
-const TablaBasesDeDatos: React.FC<TablaBasesDeDatosProps> = ({
-  basesDeDatos,
-}) => {
-  const theme = useTheme();
-
+const TablaBasesDeDatos: React.FC<TablaBasesDeDatosProps> = ({ basesDeDatos }) => {
   const columns: TableColumn<BaseDeDatos & { rowIndex: number }>[] = [
     {
       name: labelBaseDeDatos.id,
-      selector: (row) => row.id,
+      selector: (row) => row.id ?? 0,
       sortable: true,
     },
     {
       name: labelBaseDeDatos.proyecto,
-      selector: (row) => row.proyecto,
+      selector: (row) => row.proyecto?.titulo ?? "",
       sortable: true,
     },
     {
@@ -68,56 +63,31 @@ const TablaBasesDeDatos: React.FC<TablaBasesDeDatosProps> = ({
       },
     },
     {
+      center: true,
       name: labelBaseDeDatos.gestionar,
-      cell: (_row) => (
-        <Button variant="contained" color="secondary" size="small" endIcon={<StorageIcon />}>
-          {labelBaseDeDatos.gestionar}
-        </Button>
+      cell: (row) => (
+        <>
+          {row.url ? (
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              endIcon={<StorageIcon />}
+              onClick={() => {
+                if (row.url) openInNewTab(row.url);
+              }}
+            >
+              {labelBaseDeDatos.gestionar}
+            </Button>
+          ) : (
+            <Chip color="info" sx={{color: 'white'}} icon={<InfoIcon/>} label={<Typography variant="caption">No disponible</Typography>}/>
+          )}
+        </>
       ),
     },
   ];
 
-  const customStyles: TableStyles = {
-    headCells: {
-      style: {
-        backgroundColor: theme.palette.background.paper, // override the row height
-        color: theme.palette.text.primary,
-        fontSize: theme.typography.h6.fontSize,
-        fontWeight: theme.typography.body1.fontWeight,
-        fontFamily: theme.typography.body1.fontFamily,
-      },
-    },
-    // table: {
-    //   style: {
-    //     border: "1px solid red",
-    //      borderRadius: '20px'
-    //   },
-    // },
-    rows: {
-      style: {
-        color: theme.palette.text.primary,
-        fontSize: theme.typography.body1.fontSize,
-        fontWeight: theme.typography.body1.fontWeight,
-        fontFamily: theme.typography.body1.fontFamily,
-        backgroundColor: theme.palette.background.default,
-      },
-    },
-  };
-
-  const conditionalRowStyles: ConditionalStyles<
-    BaseDeDatos & { rowIndex: number }
-  >[] = [
-    {
-      when: (row) => row.rowIndex % 2 !== 0, // Filas impares
-      style: {
-        color: theme.palette.text.primary,
-        fontSize: theme.typography.body1.fontSize,
-        fontWeight: theme.typography.body1.fontWeight,
-        fontFamily: theme.typography.body1.fontFamily,
-        backgroundColor: theme.palette.background.paper,
-      },
-    },
-  ];
+  const { conditionalRowStyles, customStyles } = useCustomTableStyles();
 
   const dataConIndice = useMemo(
     () =>

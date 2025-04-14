@@ -1,12 +1,15 @@
 import { Repositorio } from "../types/repositorio";
 
-export function getNoRepeatValuesRepositorios(
+export function getNoRepeatValuesRepositorios<T>(
   repos: Repositorio[],
-  key: keyof Repositorio
-): Set<string> {
-  const set = new Set<string>();
-  repos.forEach((element) => {
-    set.add(element[key] as string);
+  getValue: (repo: Repositorio) => T
+): Set<T> {
+  const set = new Set<T>();
+  repos.forEach((repo) => {
+    const value = getValue(repo);
+    if (value !== undefined && value !== null) {
+      set.add(value);
+    }
   });
   return set;
 }

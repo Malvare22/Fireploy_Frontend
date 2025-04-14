@@ -1,49 +1,82 @@
+import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import { ProyectoCard } from "../types/proyecto.card";
 import { ProyectoService, RepositorioService } from "../types/proyecto.service";
 import { Proyecto } from "../types/proyecto.tipo";
 import { Repositorio } from "../types/repositorio";
+import { adaptDataBase } from "./adaptDataBase";
 
-export function apdatProjectCard(project: Proyecto): ProyectoCard{
-  return {
-    
-  }
-}
+const adaptUsuarioToPortafolioCard = (usuario: any): UsuarioPortafolioCard => ({
+  id: usuario.id,
+  nombres: usuario.nombre || usuario.nombres || "Usuario",
+  foto: usuario.imagen || "",
+});
 
-export function adaptProject(project: ProyectoService): Proyecto {
+export function adaptProjectToCard(proyecto: Proyecto): ProyectoCard {
   return {
-    baseDeDatos: project.base_de_datos,
-    descripcion: project.descripcion,
-    integrantes: project.estudiantes,
-    materiaInformacion: {
-      cursoId: project.seccion.curso.id ?? "1",
-      materiaId: project.seccion.curso.materia.id ?? 1,
-      seccionId: project.seccion.id,
-    },
-    titulo: project.titulo,
-    tipo: project.tipo_proyecto == "M" ? "M" : "S",
-    url: project.url,
-    id: project.id,
-    estadoDeEjecucion: (project.estado_ejecucion as Proyecto["estadoDeEjecucion"]) ?? "E",
-    estadoDeProyecto: (project.estado_proyecto as Proyecto["estadoDeProyecto"]) ?? "A",
-    ...(project.tipo_proyecto == "M"
-      ? { integrado: adaptRepository(project.repositorios[0]) }
-      : {
-          frontend: adaptRepository(project.repositorios[0]),
-          backend: adaptRepository(project.repositorios[1]),
-        }),
-    propietario: project.creador,
+    id: proyecto.id || 0,
+    titulo: proyecto.titulo,
+    descripcion: proyecto.descripcion,
+    imagen: proyecto.imagen || "",
+
+    integrantes: ([...proyecto.integrantes, proyecto.propietario]).map(adaptUsuarioToPortafolioCard),
+
+    frontend: proyecto.frontend?.dockerText || "No especificado",
+    backend: proyecto.backend?.dockerText || "No especificado",
+    dataBase: proyecto.baseDeDatos?.nombre || "",
+
+    puntuacion: proyecto.calificacion ?? 0,
+    calificador: adaptUsuarioToPortafolioCard(proyecto.propietario || {}),
+
+    materia: proyecto.materiaInformacion?.materiaId?.toString() || "N/A",
+    grupo: proyecto.materiaInformacion?.cursoId?.toString() || "N/A",
+    seccion: proyecto.materiaInformacion?.seccionId?.toString() || "N/A",
+
+    semestre: "2024-1", // Puedes cambiar esto si tienes lógica real
+    estado: proyecto.estadoDeEjecucion || "E",
   };
 }
 
+export function adaptProject(project: Partial<ProyectoService>): Proyecto {
+  const repos = project.repositorios ?? [];
+
+  const repositoriosAsignados =
+    project.tipo_proyecto === "M"
+      ? repos[0]
+        ? { integrado: adaptRepository(repos[0]) }
+        : undefined
+      : {
+          ...(repos[0] ? { frontend: adaptRepository(repos[0]) } : {}),
+          ...(repos[1] ? { backend: adaptRepository(repos[1]) } : {}),
+        };
+
+  return {
+    baseDeDatos: adaptDataBase({...project.base_de_datos, proyecto: null}),
+    descripcion: project.descripcion ?? '',
+    integrantes: project.estudiantes ?? [],
+    materiaInformacion: {
+      cursoId: project.seccion?.curso?.id ?? "1",
+      materiaId: project.seccion?.curso?.materia?.id ?? 1,
+      seccionId: project.seccion?.id ?? 1,
+    },
+    titulo: project.titulo ?? '',
+    tipo: project.tipo_proyecto === "M" ? "M" : "S",
+    url: project.url ?? '',
+    id: project.id,
+    estadoDeEjecucion: (project.estado_ejecucion as Proyecto["estadoDeEjecucion"]) ?? "E",
+    estadoDeProyecto: (project.estado_proyecto as Proyecto["estadoDeProyecto"]) ?? "A",
+    propietario: project.creador,
+    ...repositoriosAsignados, 
+  };
+}
+
+
 export function adaptRepository(repository: RepositorioService): Repositorio {
-  console.log(repository.variables_de_entorno)
   return {
     dockerText: (repository.tecnologia ?? "") + ":" + (repository.version ?? ""),
     variables: repository.variables_de_entorno == null ? '': repository.variables_de_entorno,
     url: repository.url ?? "",
     tipo: (repository.tipo as Repositorio["tipo"]) ?? "I",
     docker: { tag: repository.version ?? "", tecnologia: repository.tecnologia ?? "" },
-    proyectoId: repository.proyecto,
     id: repository.id ?? -1,
   };
 }

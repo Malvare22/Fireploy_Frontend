@@ -50,6 +50,7 @@ export default function CrearProyecto() {
       titulo: "",
       descripcion: "",
     },
+    shouldFocusError: true
   });
 
   const { reset } = methods;
@@ -64,8 +65,8 @@ export default function CrearProyecto() {
 
   const contents: [string, React.ReactNode][] = [
     ["Definir Información Básica", <Information type="create"/>],
-    ["Registrar Proyectos", <Repositories />],
-    ["Definir Base de Datos", <DataBase />],
+    ["Registrar Proyectos", <Repositories type="create"/>],
+    ["Definir Base de Datos", <DataBase type="create"/>],
   ];
 
   return (

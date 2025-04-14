@@ -1,12 +1,21 @@
 import { createTheme, responsiveFontSizes } from "@mui/material";
 
+/**
+ * Extending MUI's default theme to include a custom "terciary" color in the palette.
+ */
 declare module "@mui/material/styles" {
+  /**
+   * Interface extension for the `Palette` object to include a custom "terciary" color.
+   */
   interface Palette {
     terciary: {
       main: string;
     };
   }
 
+  /**
+   * Interface extension for `PaletteOptions` to optionally define "terciary".
+   */
   interface PaletteOptions {
     terciary?: {
       main: string;
@@ -14,6 +23,11 @@ declare module "@mui/material/styles" {
   }
 }
 
+/**
+ * Returns a responsive MUI theme configuration with custom palette and typography settings.
+ *
+ * @constant {Theme} getTheme - Customized theme including primary, secondary, and custom terciary colors.
+ */
 export const getTheme = responsiveFontSizes(
   createTheme({
     components: {},

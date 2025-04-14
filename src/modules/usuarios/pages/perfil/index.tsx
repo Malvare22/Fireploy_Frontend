@@ -14,10 +14,11 @@
  * @component
  */
 
-import AlertDialogError from "@modules/general/components/alertDialogError";
+import AlertDialog from "@modules/general/components/alertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
 import { useAuth } from "@modules/general/context/accountContext";
-import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import useAlertDialog2 from "@modules/general/hooks/useAlertDialog2";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
 import VerPerfil from "@modules/usuarios/components/perfil";
 import { getUsuarioService } from "@modules/usuarios/services/get.usuario";
 import { Usuario } from "@modules/usuarios/types/usuario";
@@ -34,52 +35,41 @@ function VistaPerfil() {
   const { accountInformation } = useAuth();
   const { token, id } = accountInformation;
 
-  console.log("render")
-
   /**
    * Fetch user profile data using React Query
    */
-  const { data, isLoading, isError, error, isSuccess } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryFn: () => getUsuarioService(id, token),
     queryKey: ["profile"],
   });
 
   /** Error dialog state and handlers */
-  const {
-    handleClose: handleCloseFailFetch,
-    open: openFailFetch,
-    handleOpen: handleOpenFailFetch,
-  } = useAlertDialog();
+  const {handleAccept, message, open, showDialog, title, type} = useAlertDialog2();
+
+  const {setError} = useErrorReader(showDialog);
 
   /**
    * When data is successfully fetched, adapt it and store it in state
    */
   useEffect(() => {
-    if (isSuccess && data) {
+    if (data) {
       setUsuario(adaptUser(data));
     }
-  }, [isSuccess, data]);
+  }, [data]);
 
   /**
    * If there's an error during fetch, open the error dialog
    */
   useEffect(() => {
-    if (isError) {
-      handleOpenFailFetch();
+    if (error) {
+     setError(error);
     }
-  }, [isError]);
+  }, [error]);
 
   return (
     <>
       {/* Error dialog for failed fetch */}
-      {error && (
-        <AlertDialogError
-          error={error}
-          handleClose={handleCloseFailFetch}
-          open={openFailFetch}
-          title="Consultar Portafolios"
-        />
-      )}
+      <AlertDialog handleAccept={handleAccept} open={open} title={title} type={type} textBody={message}/>
 
       {/* Loader or profile display */}
       {isLoading ? (

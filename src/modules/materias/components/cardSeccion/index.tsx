@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import React from "react";
 import AccordionUsage from "@modules/general/components/accordionUsage";
-import { ProjectCardPortafolio } from "@modules/general/components/projectCard";
 import {
   proyecto1,
   ProyectoCard,
@@ -18,6 +17,7 @@ import { labelSelects } from "@modules/general/enums/labelSelects";
 import useOrderSelect from "@modules/general/hooks/useOrderSelect";
 import { labelCardSeccion } from "@modules/materias/enums/labelCardSeccion";
 import { Seccion } from "@modules/materias/types/seccion";
+import ProjectCard from "@modules/general/components/projectCard";
 
 type CardSeccionProps = {
   seccion: Seccion;
@@ -101,7 +101,7 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion }) => {
         <Grid2 container rowSpacing={2}>
           {stableSort(proyectos).map((proyecto, key) => (
             <Grid2 size={{lg: 4, md: 6, xs: 12}} display={'flex'} justifyContent={'center'}>
-              <ProjectCardPortafolio
+              <ProjectCard
                 handleOpen={() => {}}
                 proyecto={proyecto}
                 key={key}

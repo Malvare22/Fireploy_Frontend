@@ -4,7 +4,7 @@ import { useSearchUsers, UsuarioCampoBusqueda } from "@modules/general/hooks/use
 import { buttonTypes } from "@modules/general/types/buttons";
 import { getUsuariosByTypeService } from "@modules/usuarios/services/get.usuarios.[tipo]";
 import { UserTypeFullString } from "@modules/usuarios/utils/usuario.map";
-import { Avatar, Box, Card, Chip, Grid2, Stack, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, Chip, Grid2, Stack, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";

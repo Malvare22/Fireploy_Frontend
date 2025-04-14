@@ -31,3 +31,20 @@ export const postChangePasswordForget = async (data: data, token: string) => {
   });
   return response;
 };
+
+
+/**
+ * Sends a request to change the user's password using a recovery token.
+ *
+ * @async
+ * @function postChangePasswordForget
+ * @param {data} data - Object containing email, current password, and new password.
+ * @param {string} token - Password recovery token.
+ * @returns {Promise<string>} The response from the server.
+ */
+export const postChangePassword = async (data: data, token: string) => {
+  const response = await postData<string>(`/auth/updatePassword`, data, {
+    sessiontoken: token,
+  });
+  return response;
+};

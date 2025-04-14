@@ -1,11 +1,10 @@
 import { RouteObject } from "react-router-dom";
-// import VerProyecto from "./pages/ver";
 import ListarProyectos from "./pages/listar";
 import ExplorarProyectos from "./pages/explorar";
-// import VistaRepositorios from "./pages/repositorios";
-// import VistaBasesDeDatos from "./pages/basesDeDatos";
 import CrearProyecto from "./pages/crear";
 import VerProyecto from "./pages/ver";
+import VistaRepositorios from "./pages/repositorios";
+import VistaBasesDeDatos from "./pages/basesDeDatos";
 
 const rutaBase = "/app/proyectos";
 
@@ -36,12 +35,12 @@ export const routerProyectos: RouteObject[] = [
     path: rutasProyectos.explorar,
     element: <ExplorarProyectos />,
   },
-  // {
-  //   path: rutasProyectos.repositorios,
-  //   element: <VistaRepositorios />,
-  // },
-  // {
-  //   path: rutasProyectos.basesDeDatos,
-  //   element: <VistaBasesDeDatos />,
-  // },
+  {
+    path: rutasProyectos.repositorios,
+    element: <VistaRepositorios />,
+  },
+  {
+    path: rutasProyectos.basesDeDatos,
+    element: <VistaBasesDeDatos />,
+  },
 ];

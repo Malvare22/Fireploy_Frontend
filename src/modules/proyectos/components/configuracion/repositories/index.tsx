@@ -19,25 +19,22 @@ import useAlertDialog2 from "@modules/general/hooks/useAlertDialog2";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { FormProvider } from "react-hook-form";
-import { transformStringToKV } from "@modules/general/utils/string";
+import useAutoFocusOnError from "@modules/general/hooks/useAutoFocusOnError";
+import AutoFocusOnError from "@modules/general/hooks/useAutoFocusOnError";
 
 type Props = {
   type: "edit" | "create";
 };
-
-function t(p: ProyectoRepositoriesSchema) {
-  console.log(transformStringToKV(p.backend?.variables ?? ""));
-}
 
 export function Repositories({ type }: Props) {
   const { getValues: getValuesProject } = useFormContext<ProyectoSchema>();
   const { token } = useAuth().accountInformation;
   const { handleNext } = useContext(StepperContext);
 
-  // ✅ El hook principal del form local
   const methods = useForm<ProyectoRepositoriesSchema>({
     defaultValues: getValuesProject(),
     resolver: zodResolver(ProyectoRepositoriesSchema),
+    shouldFocusError: true,
   });
 
   const { getValues, control, watch, reset } = methods;
@@ -79,18 +76,37 @@ export function Repositories({ type }: Props) {
     },
   });
 
-  t(getValues());
+  function handleMutate(options: { isEdit: boolean }) {
+    mutate(undefined, {
+      onSuccess: () => {
+        if (options.isEdit) {
+          showDialog({
+            message: "Repositorios actualizados correctamente",
+            type: "success",
+            title: "Éxito",
+            onAccept: handleClose,
+            reload: true,
+          });
+        } else {
+          handleNext();
+        }
+      },
+      onError: (error) => {
+        setError(error);
+      },
+    });
+  }
 
   function onSubmit() {
     if (type === "edit") {
       showDialog({
         title: "Cambios Repositorio",
         message: "¿Está seguro de que desea modificar la información de repositorios?",
-        onAccept: () => mutate(),
+        onAccept: () => handleMutate({ isEdit: true }),
         isLoading: isPending,
       });
     } else {
-      mutate();
+      handleMutate({ isEdit: false });
     }
   }
 
@@ -108,6 +124,7 @@ export function Repositories({ type }: Props) {
 
       {/* ✅ FormProvider para compartir el contexto */}
       <FormProvider {...methods}>
+        <AutoFocusOnError<ProyectoRepositoriesSchema>/>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Stack spacing={3}>
             <Stack>
@@ -132,6 +149,7 @@ export function Repositories({ type }: Props) {
                         error={!!fieldState.error}
                         helperText={fieldState.error?.message}
                         sx={{ width: "50%" }}
+                        inputRef={field.ref}
                       />
                     )}
                   />
@@ -155,6 +173,7 @@ export function Repositories({ type }: Props) {
                         error={!!fieldState.error}
                         helperText={fieldState.error?.message}
                         sx={{ width: "50%" }}
+                        inputRef={field.ref}
                       />
                     )}
                   />
@@ -178,6 +197,7 @@ export function Repositories({ type }: Props) {
                         error={!!fieldState.error}
                         helperText={fieldState.error?.message}
                         sx={{ width: "50%" }}
+                        inputRef={field.ref}
                       />
                     )}
                   />
@@ -187,7 +207,15 @@ export function Repositories({ type }: Props) {
               )}
             </Stack>
 
-            <Stack alignItems={'end'}><Box><GeneralButton loading={isPending} mode={type=='create' ? buttonTypes.next: buttonTypes.save} type="submit" /></Box></Stack>
+            <Stack alignItems={"end"}>
+              <Box>
+                <GeneralButton
+                  loading={isPending}
+                  mode={type == "create" ? buttonTypes.next : buttonTypes.save}
+                  type="submit"
+                />
+              </Box>
+            </Stack>
           </Stack>
         </form>
       </FormProvider>

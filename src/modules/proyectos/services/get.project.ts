@@ -12,3 +12,17 @@ export async function getProjectById(token: string, id: number) {
 
   return response;
 }
+
+export async function getProjectByUserId(token: string, id: number) {
+  const response = await getData<ProyectoService[]>(
+    `/proyecto/estudiante/${id}`,
+    {},
+    {
+      sessiontoken: token,
+    }
+  );
+
+
+  return response;
+}
+

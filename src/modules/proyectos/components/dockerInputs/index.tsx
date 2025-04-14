@@ -100,6 +100,7 @@ export const DockerInputs: React.FC<DockerInputsProps> = ({ fieldName = "backend
                 label="Repositorio"
                 placeholder="Escribe para buscar..."
                 fullWidth
+                inputRef={field.ref}
                 error={!!errors?.[fieldName]?.docker?.tecnologia}
                 helperText={errors?.[fieldName]?.docker?.tecnologia?.message?.toString() || ""}
               />
@@ -127,6 +128,7 @@ export const DockerInputs: React.FC<DockerInputsProps> = ({ fieldName = "backend
               <TextField
                 {...params}
                 label="Tag"
+                inputRef={field.ref}
                 placeholder="Selecciona una versión"
                 fullWidth
                 error={!!errors?.[fieldName]?.docker?.tag}

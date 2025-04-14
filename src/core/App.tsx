@@ -3,37 +3,38 @@ import { ThemeProvider } from "@mui/material/styles";
 import { getTheme } from "./themes";
 import { router } from "./router/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const queryClient = new QueryClient();
 
 /**
- * Componente principal de la aplicación.
- * Configura el tema, el enrutamiento y la gestión del estado de la cuenta del usuario.
+ * Main application component.
+ * Sets up global providers such as theming, routing, Google OAuth, and query client.
  *
  * @component
- * @returns {JSX.Element} - Retorna el componente raíz de la aplicación.
+ * @returns {JSX.Element} - Returns the root component of the application.
  */
 function App(): JSX.Element {
   /**
-   * Estado para almacenar la información del usuario autenticado.
+   * Local user state could be defined here to store authenticated user information.
    *
-   * @state {AccountInformation | null} localUser - Información de la cuenta del usuario.
+   * @state {AccountInformation | null} localUser - Authenticated user's account information.
    * @state {React.Dispatch<React.SetStateAction<AccountInformation | null>>} setLocalUser -
-   * Función para actualizar la información del usuario.
+   * Function to update the user's account information.
    */
 
   return (
     /**
-     * Proveedor de contexto que almacena la información del usuario.
-     * Permite que otros componentes accedan y actualicen el estado del usuario.
+     * QueryClientProvider provides React Query functionalities across the app.
      */
     <QueryClientProvider client={queryClient}>
+      {/* GoogleOAuthProvider provides authentication using Google accounts. */}
       <GoogleOAuthProvider clientId={import.meta.env.VITE_ID_GOOGLE_CLIENT}>
-      <ThemeProvider theme={getTheme}>
-        {/* Proveedor de enrutamiento para manejar la navegación */}
-        <RouterProvider router={router} />
-      </ThemeProvider>
+        {/* ThemeProvider applies the custom MUI theme globally. */}
+        <ThemeProvider theme={getTheme}>
+          {/* RouterProvider enables client-side routing using React Router. */}
+          <RouterProvider router={router} />
+        </ThemeProvider>
       </GoogleOAuthProvider>
     </QueryClientProvider>
   );

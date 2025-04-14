@@ -1,34 +1,57 @@
+import AlertDialog from "@modules/general/components/alertDialog";
+import LoaderElement from "@modules/general/components/loaderElement";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
+import { useAuth } from "@modules/general/context/accountContext";
 import { labelSelects } from "@modules/general/enums/labelSelects";
+import useAlertDialog2 from "@modules/general/hooks/useAlertDialog2";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { useFiltersByConditions } from "@modules/general/hooks/useFiltersByCondition";
 import useSearch from "@modules/general/hooks/useSearch";
-import RepositoryCard from "@modules/proyectos/components/CardRepository";
+import RepositoryCard from "@modules/proyectos/components/cardRepository";
 import { labelRepositorios } from "@modules/proyectos/enum/labelRepositorios";
-import {
-  exampleRepositorios,
-  Repositorio,
-} from "@modules/proyectos/types/repositorio";
+import { getProjectByUserId } from "@modules/proyectos/services/get.project";
+import { Repositorio } from "@modules/proyectos/types/repositorio";
+import { adaptRepository } from "@modules/proyectos/utils/adapt.proyecto";
 import { getNoRepeatValuesRepositorios } from "@modules/proyectos/utils/getNoRepeatValues.repositorios";
 import { getRepositoryTypesArray } from "@modules/proyectos/utils/repository";
-import {
-  Divider,
-  Grid2,
-  MenuItem,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useMemo, useState } from "react";
+import { Divider, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useMemo } from "react";
 
 function VistaRepositorios() {
-  const [repositorios, _useStateRepositorios] =
-    useState<Repositorio[]>(exampleRepositorios);
+  const { showDialog, open, title, message, type, handleAccept } = useAlertDialog2();
+
+  const { token, id } = useAuth().accountInformation;
+
+  const { setError } = useErrorReader(showDialog);
 
   const {
-    searchValue,
-    setSearchValue,
-    filteredData: filterByText,
-  } = useSearch();
+    isLoading,
+    error,
+    data: repositorios = []
+  } = useQuery({
+    queryKey: ["repositories by user"],
+    queryFn: async () => {
+      const projects = await getProjectByUserId(token, id);
+      const repos: Repositorio[] = [];
+      if (projects) {
+        for (const project of projects) {
+          
+          for (const repo of project.repositorios) {
+            repos.push(adaptRepository(repo));
+          }
+        }
+       
+      }
+      return repos;
+    },
+  });
+
+  useEffect(() => {
+    if (error) setError(error);
+  }, [error]);
+
+  const { searchValue, setSearchValue, filteredData: filterByText } = useSearch();
 
   const { filterData, filters, toggleFilter } = useFiltersByConditions();
 
@@ -49,13 +72,13 @@ function VistaRepositorios() {
           defaultValue={""}
         >
           <MenuItem value="">{labelSelects.noAplicar}</MenuItem>
-          {Array.from(
-            getNoRepeatValuesRepositorios(repositorios, "proyecto")
-          ).map((element) => (
-            <MenuItem value={element} key={element}>
-              {element}
-            </MenuItem>
-          ))}
+          {Array.from(getNoRepeatValuesRepositorios(repositorios, (r) => r.proyecto)).map(
+            (element) => (
+              <MenuItem value={element} key={element}>
+                {element}
+              </MenuItem>
+            )
+          )}
         </TextField>
       </>
     );
@@ -102,13 +125,13 @@ function VistaRepositorios() {
         defaultValue={""}
       >
         <MenuItem value="">{labelSelects.noAplicar}</MenuItem>
-        {Array.from(
-          getNoRepeatValuesRepositorios(repositorios, "dockerText")
-        ).map((element) => (
-          <MenuItem value={element} key={element}>
-            {element}
-          </MenuItem>
-        ))}
+        {Array.from(getNoRepeatValuesRepositorios(repositorios, (r) => r.dockerText)).map(
+          (element) => (
+            <MenuItem value={element ?? undefined} key={element}>
+              {element}
+            </MenuItem>
+          )
+        )}
       </TextField>
     );
   }, []);
@@ -117,37 +140,51 @@ function VistaRepositorios() {
     const filterText = (x: Repositorio[]) => {
       const textValue = searchValue.toLowerCase();
       if (searchValue == "") return x;
-      return x.filter((y) => y.proyecto.toLowerCase().includes(textValue));
+      return x.filter((y) => y.proyecto?.toLowerCase().includes(textValue));
     };
 
     return filterData(filterByText(repositorios, filterText)) as Repositorio[];
-  }, [filters, searchValue]);
+  }, [filters, searchValue, repositorios]);
+
+  console.log(repositorios)
 
   return (
-    <Stack spacing={3}>
-      <Stack>
-        <Typography variant="h4">{labelRepositorios.titulo}</Typography>
-        <Divider />
-      </Stack>
-      <Stack spacing={1}>
-        <TextFieldSearch
-          setSearchValue={setSearchValue}
-          sx={{ maxWidth: 500 }}
-        />
-        <Grid2 container columnSpacing={4}>
-          <Grid2 size={{ xs: 12, md: 4 }}>{filterProject}</Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>{filterType}</Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>{filterDocker}</Grid2>
-        </Grid2>
-      </Stack>
-      <Grid2 container justifyContent={"center"} rowSpacing={3}>
-        {dataToRender.map((repo) => (
-          <Grid2 size={{ md: 8, xs: 12 }}>
-            <RepositoryCard repositorio={repo} key={repo.id}/>
-          </Grid2>
-        ))}
-      </Grid2>
-    </Stack>
+    <>
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+      />
+      <>
+        {isLoading ? (
+          <LoaderElement />
+        ) : (
+          <Stack spacing={3}>
+            <Stack>
+              <Typography variant="h4">{labelRepositorios.titulo}</Typography>
+              <Divider />
+            </Stack>
+            <Stack spacing={1}>
+              <TextFieldSearch setSearchValue={setSearchValue} sx={{ maxWidth: 500 }} />
+              <Grid2 container columnSpacing={4}>
+                <Grid2 size={{ xs: 12, md: 4 }}>{filterProject}</Grid2>
+                <Grid2 size={{ xs: 12, md: 4 }}>{filterType}</Grid2>
+                <Grid2 size={{ xs: 12, md: 4 }}>{filterDocker}</Grid2>
+              </Grid2>
+            </Stack>
+            <Grid2 container justifyContent={"center"} rowSpacing={3}>
+              {dataToRender.map((repo) => (
+                <Grid2 size={{ md: 8, xs: 12 }}>
+                  <RepositoryCard repositorio={repo} key={repo.id} />
+                </Grid2>
+              ))}
+            </Grid2>
+          </Stack>
+        )}
+      </>
+    </>
   );
 }
 

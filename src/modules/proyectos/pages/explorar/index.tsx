@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import {  useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -26,7 +26,7 @@ import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import { ProyectoService } from "@modules/proyectos/types/proyecto.service";
 import { labelExplorarProyectos } from "@modules/proyectos/enum/labelExplorarProyectos";
 import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyectoPortafolio";
-import { adaptProject } from "@modules/proyectos/utils/adapt.proyecto";
+import { adaptProject, adaptProjectToCard } from "@modules/proyectos/utils/adapt.proyecto";
 
 function ExplorarProyectos() {
   const [search, setSearch] = useState("");
@@ -36,9 +36,12 @@ function ExplorarProyectos() {
   const {
     handleRequestSort,
     stableSort,
-    currentOrder,
-    currentKey,
+    orderBy,
   } = useOrderSelect<ProyectoCard>();
+
+  // Obtener key y order actual para el Select
+  const currentKey = Object.keys(orderBy)[0];
+  const currentOrder = orderBy[currentKey];
 
   const {
     data,
@@ -54,7 +57,7 @@ function ExplorarProyectos() {
 
   const proyectos: ProyectoCard[] = useMemo(() => {
     if (!data) return [];
-    return data.map(adaptProject);
+    return data.map((project) => adaptProjectToCard(adaptProject(project)));
   }, [data]);
 
   const filteredProyectos = useMemo(() => {
@@ -62,7 +65,7 @@ function ExplorarProyectos() {
     return stableSort(proyectos).filter((p) =>
       p.titulo.toLowerCase().includes(searchLower)
     );
-  }, [search, proyectos, currentOrder, currentKey]);
+  }, [search, proyectos, orderBy]);
 
   return (
     <>
@@ -71,7 +74,7 @@ function ExplorarProyectos() {
         {selectProyecto && <ModalProyectoPortafolio proyecto={selectProyecto} />}
       </SpringModal>
 
-      {/* Alert de error */}
+      {/* Alerta de error */}
       <AlertDialog
         open={isError}
         handleAccept={refetch}
@@ -81,6 +84,7 @@ function ExplorarProyectos() {
 
       {/* Contenido */}
       <Stack spacing={5}>
+        {/* Título */}
         <Stack direction="row" alignItems="center" justifyContent="center" spacing={2}>
           <Typography variant="h3" textAlign="center">
             {labelExplorarProyectos.explorarProyectos}
@@ -105,6 +109,7 @@ function ExplorarProyectos() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+
           <Select
             size="small"
             sx={{ width: 250 }}
@@ -140,30 +145,35 @@ function ExplorarProyectos() {
 
         {/* Lista de proyectos */}
         <Stack>
-          <Grid2
-            container
-            spacing={4}
-            paddingX={{ md: 10 }}
-            marginTop={4}
-            marginBottom={6}
-          >
-            {filteredProyectos.map((proyecto) => (
-              <Grid2
-                key={proyecto.id}
-                size={{ xl: 4, sm: 6, xs: 12 }}
-                sx={{ display: "flex", justifyContent: "center" }}
-              >
-                <ProjectCard
-                  proyecto={proyecto}
-                  tipo="portafolio"
-                  handleOpen={() => {
-                    setSelectProyecto(proyecto);
-                    openModal();
-                  }}
-                />
-              </Grid2>
-            ))}
-          </Grid2>
+          {isLoading ? (
+            <Typography textAlign="center" mt={4}>Cargando proyectos...</Typography>
+          ) : filteredProyectos.length === 0 ? (
+            <Typography textAlign="center" mt={4}>No se encontraron proyectos.</Typography>
+          ) : (
+            <Grid2
+              container
+              spacing={4}
+              paddingX={{ md: 10 }}
+              marginTop={4}
+              marginBottom={6}
+            >
+              {filteredProyectos.map((proyecto) => (
+                <Grid2
+                  key={proyecto.titulo + proyecto.materia + proyecto.seccion}
+                  size={{ xl: 4, sm: 6, xs: 12 }}
+                  sx={{ display: "flex", justifyContent: "center" }}
+                >
+                  <ProjectCard
+                    proyecto={proyecto}
+                    handleOpen={() => {
+                      setSelectProyecto(proyecto);
+                      openModal();
+                    }}
+                  />
+                </Grid2>
+              ))}
+            </Grid2>
+          )}
         </Stack>
       </Stack>
     </>
