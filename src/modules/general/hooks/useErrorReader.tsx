@@ -41,13 +41,11 @@ function useErrorReader(showDialog: ShowDialogFn) {
           navigate(rutasGeneral.login); // Navigate to the login page
         }
       },
-      onClose: () => {
-        // Clear the error state when the dialog is closed
-        setError(null);
-      },
+      onClose: undefined,
       reload: false,
+      closeOnAccept: true
     });
-  }, [error, navigate, showDialog]);
+  }, [error]);
 
   return {
     setError, // Function to set an error that triggers the dialog

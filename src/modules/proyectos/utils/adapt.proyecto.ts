@@ -73,7 +73,7 @@ export function adaptProject(project: Partial<ProyectoService>): Proyecto {
 export function adaptRepository(repository: RepositorioService): Repositorio {
   return {
     dockerText: (repository.tecnologia ?? "") + ":" + (repository.version ?? ""),
-    variables: repository.variables_de_entorno == null ? '': repository.variables_de_entorno,
+    variables: !repository.variables_de_entorno ? '': repository.variables_de_entorno,
     url: repository.url ?? "",
     tipo: (repository.tipo as Repositorio["tipo"]) ?? "I",
     docker: { tag: repository.version ?? "", tecnologia: repository.tecnologia ?? "" },

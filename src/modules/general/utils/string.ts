@@ -14,6 +14,7 @@ function spacesBetween(s: string) {
 
 export function transformStringToKV(s: string): VariablesDeEntorno[] | undefined {
   let isInvalid = false;
+  console.log('Fijate',s)
 
   const result = s
     .split("\n")

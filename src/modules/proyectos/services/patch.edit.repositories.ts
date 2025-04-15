@@ -11,7 +11,7 @@ type Body = {
 };
 
 async function query(repository: Repositorio, token: string) {
-  const t = transformStringToKV(repository.variables);
+  const t = transformStringToKV(repository.variables ?? "");
   const body: Body = {
     tecnologia: repository.docker?.tecnologia ?? null,
     url: repository.url,
@@ -36,14 +36,13 @@ export async function patchEditRepository(
 ): Promise<unknown | unknown[]> {
   const allowedKeys: (keyof ProyectoRepositoriesSchema)[] = ["backend", "frontend", "integrado"];
 
-  if ("id" in repoOrRepos) {
+  if ("variables" in repoOrRepos) {
     return await query(repoOrRepos, token);
   }
 
-  const validEntries = Object.entries(repoOrRepos).filter(
-    ([key, value]) =>
-      allowedKeys.includes(key as keyof ProyectoRepositoriesSchema) && value?.id !== -1
-  );
+  const validEntries = Object.entries(repoOrRepos).filter(([key, value]) => {
+    return allowedKeys.includes(key as keyof ProyectoRepositoriesSchema) && value;
+  });
 
   const promises = validEntries.map(async ([_key, value]) => {
     return await query(value, token);

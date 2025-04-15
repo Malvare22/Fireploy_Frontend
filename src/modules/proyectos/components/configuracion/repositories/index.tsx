@@ -19,7 +19,6 @@ import useAlertDialog2 from "@modules/general/hooks/useAlertDialog2";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { FormProvider } from "react-hook-form";
-import useAutoFocusOnError from "@modules/general/hooks/useAutoFocusOnError";
 import AutoFocusOnError from "@modules/general/hooks/useAutoFocusOnError";
 
 type Props = {
@@ -52,10 +51,11 @@ export function Repositories({ type }: Props) {
     title,
     message,
     type: dialogType,
+    setOpen
   } = useAlertDialog2();
 
   const { setError } = useErrorReader(showDialog);
-
+  
   const { mutate, isPending } = useMutation({
     mutationFn: () => patchEditRepository(token, getValues()),
     onSuccess: () => {
@@ -66,7 +66,7 @@ export function Repositories({ type }: Props) {
           message: "Repositorios actualizados correctamente",
           type: "success",
           title: "Éxito",
-          onAccept: handleClose,
+          onAccept: () => {setOpen(false)},
           reload: true,
         });
       }
@@ -84,7 +84,7 @@ export function Repositories({ type }: Props) {
             message: "Repositorios actualizados correctamente",
             type: "success",
             title: "Éxito",
-            onAccept: handleClose,
+            onAccept: () => {setOpen(false)},
             reload: true,
           });
         } else {

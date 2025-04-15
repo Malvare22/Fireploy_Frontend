@@ -45,6 +45,8 @@ export type ShowDialogParams = {
    * Defaults to false if not provided.
    */
   reload?: boolean;
+
+  closeOnAccept?: boolean;
 };
 
 /**
@@ -61,7 +63,7 @@ function useAlertDialog2() {
   const [type, setType] = useState<AlertDialogTypes>("default");
   const [isLoading, setIsLoading] = useState(false);
   const [handleAccept, setHandleAccept] = useState<() => void>(() => () => {});
-  const [handleClose, setHandleClose] = useState<() => void>(() => () => {});
+  const [handleClose, setHandleClose] = useState<undefined | (() => void)>(undefined);
 
   /**
    * Function to show the dialog with the provided options.
@@ -78,6 +80,7 @@ function useAlertDialog2() {
       onAccept,
       onClose,
       reload = false,
+      closeOnAccept = false,
     } = options;
 
     // Update dialog state with provided options
@@ -90,13 +93,18 @@ function useAlertDialog2() {
     setHandleAccept(() => () => {
       onAccept?.(); // ✅ Executes only if onAccept is defined
       if (reload) window.location.reload(); // Reloads the page if specified
+      if (closeOnAccept) setOpen(false);
     });
 
     // Set the close handler with the provided callback
-    setHandleClose(() => () => {
-      onClose?.(); // Executes if onClose is defined
-      setOpen(false); // Close the dialog after closure
-    });
+    setHandleClose(
+      onClose
+        ? () => () => {
+            onClose(); // Executes if onClose is defined
+            setOpen(false); // Close the dialog after closure
+          }
+        : undefined
+    );
 
     setOpen(true); // Open the dialog
   }
@@ -118,6 +126,7 @@ function useAlertDialog2() {
     handleAccept,
     handleClose,
     isFinish,
+    setOpen,
   };
 }
 
