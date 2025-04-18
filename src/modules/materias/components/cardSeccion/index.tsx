@@ -14,7 +14,7 @@ import {
   ProyectoCard,
 } from "@modules/proyectos/types/proyecto.card";
 import { labelSelects } from "@modules/general/enums/labelSelects";
-import useOrderSelect from "@modules/general/hooks/useOrderSelect";
+import useOrderSelect from "@modules/general/hooks/useOrder";
 import { labelCardSeccion } from "@modules/materias/enums/labelCardSeccion";
 import { Seccion } from "@modules/materias/types/seccion";
 import ProjectCard from "@modules/general/components/projectCard";

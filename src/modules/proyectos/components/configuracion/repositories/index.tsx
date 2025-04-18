@@ -15,7 +15,7 @@ import { patchEditRepository } from "@modules/proyectos/services/patch.edit.repo
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useAlertDialog2 from "@modules/general/hooks/useAlertDialog2";
+import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { FormProvider } from "react-hook-form";

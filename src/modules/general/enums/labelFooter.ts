@@ -1,6 +1,3 @@
-/**
- * Enum que contiene los textos utilizados en el footer.
- */
 export enum LabelFooter {
     fireploy = "Fireploy",
     descripcionFireploy = "Software Web para la automatización de despliegues de proyectos web gratuito y open source",

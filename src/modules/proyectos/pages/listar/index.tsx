@@ -1,5 +1,5 @@
 import { useFilters } from "@modules/general/hooks/useFilters";
-import useOrderSelect, { Order } from "@modules/general/hooks/useOrderSelect";
+import useOrderSelect, { Order } from "@modules/general/hooks/useOrder";
 import ProjectForList from "@modules/proyectos/components/projectForList";
 import { labelProjectForList } from "@modules/proyectos/enum/labelProjectForList";
 import { labelListarProyecto } from "@modules/proyectos/enum/labelListarProyectos";
@@ -26,7 +26,7 @@ import { useNavigate } from "react-router-dom";
 import { rutasProyectos } from "@modules/proyectos/router";
 import { useQuery } from "@tanstack/react-query";
 import { getProjectByUserId } from "@modules/proyectos/services/get.project";
-import useAlertDialog2 from "@modules/general/hooks/useAlertDialog2";
+import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import LoaderElement from "@modules/general/components/loaderElement";
 import { useAuth } from "@modules/general/context/accountContext";

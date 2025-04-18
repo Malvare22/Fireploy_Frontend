@@ -18,7 +18,7 @@ import ProjectCard from "@modules/general/components/projectCard";
 import SpringModal from "@modules/general/components/springModal";
 
 import { labelSelects } from "@modules/general/enums/labelSelects";
-import useOrderSelect from "@modules/general/hooks/useOrderSelect";
+import useOrderSelect from "@modules/general/hooks/useOrder";
 import useSpringModal from "@modules/general/hooks/useSpringModal";
 
 import { getProyectosAllService } from "@modules/proyectos/services/get.proyectos.all";

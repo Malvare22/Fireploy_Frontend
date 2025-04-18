@@ -17,7 +17,7 @@
 import AlertDialog from "@modules/general/components/alertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
 import { useAuth } from "@modules/general/context/accountContext";
-import useAlertDialog2 from "@modules/general/hooks/useAlertDialog2";
+import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import VerPerfil from "@modules/usuarios/components/perfil";
 import { getUsuarioService } from "@modules/usuarios/services/get.usuario";

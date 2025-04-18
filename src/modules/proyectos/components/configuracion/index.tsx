@@ -1,27 +1,18 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Container,
   Tabs,
   Tab,
-  Box,
   Typography,
   Paper,
   Button,
   Grid2,
   Stack,
-  useTheme,
   IconButton,
 } from "@mui/material";
 import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
 import LogsFiles from "../logsFiles";
-import { EstadoEjecucionProyecto } from "@modules/proyectos/types/proyecto.tipo";
-import StopIcon from "@mui/icons-material/Stop";
-import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
-import {
-  getColorExecutionState,
-  getExecutionState,
-} from "@modules/proyectos/utils/getExecutionState";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Information } from "./information";
 import { Repositories } from "./repositories";
@@ -38,7 +29,7 @@ import ArticleIcon from "@mui/icons-material/Article";
 import { useMutation } from "@tanstack/react-query";
 import { postLoadProject } from "@modules/proyectos/services/post.load.project";
 import { useAuth } from "@modules/general/context/accountContext";
-import useAlertDialog2 from "@modules/general/hooks/useAlertDialog2";
+import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 
@@ -144,72 +135,3 @@ export default function ProjectSettings({ project }: Props) {
     </FormProvider>
   );
 }
-
-type StatusProps = {
-  status: EstadoEjecucionProyecto;
-};
-
-const Status: React.FC<StatusProps> = ({ status }) => {
-  const colorState = getColorExecutionState(status) as string;
-
-  const label = getExecutionState[status] as string;
-
-  const theme = useTheme();
-
-  return (
-    <Stack spacing={2} component={Paper} sx={{ padding: 2 }}>
-      <Typography variant="h6" textAlign={"center"}>
-        {labelConfiguracion.estadoActual}
-      </Typography>
-      <Box display={"inline-flex"} justifyContent={"center"}>
-        <Stack
-          sx={{
-            backgroundColor: theme.palette.terciary.main,
-            borderRadius: 1,
-            color: "white",
-          }}
-          direction={"row"}
-          spacing={1}
-          padding={1}
-        >
-          <Stack direction={"row"} spacing={1} justifyContent={"center"}>
-            <Typography variant="body1">{label}</Typography>
-            <Box
-              sx={{
-                width: 24,
-                height: 24,
-                backgroundColor: colorState,
-                borderRadius: "100%",
-              }}
-            ></Box>
-          </Stack>
-        </Stack>
-      </Box>
-      <Grid2 container rowSpacing={1}>
-        <Grid2 size={12} sx={{ display: "flex", justifyContent: "center" }}>
-          <Button size="small" variant="contained" endIcon={<StopIcon sx={{ fontSize: 32 }} />}>
-            {labelConfiguracion.detener}
-          </Button>
-        </Grid2>
-        <Grid2 size={12} sx={{ display: "flex", justifyContent: "center" }}>
-          <Button
-            size="small"
-            variant="contained"
-            endIcon={<PlayCircleIcon sx={{ fontSize: 32 }} />}
-          >
-            {labelConfiguracion.reanudar}
-          </Button>
-        </Grid2>
-        <Grid2 size={12} sx={{ display: "flex", justifyContent: "center" }}>
-          <Button
-            size="small"
-            variant="contained"
-            endIcon={<RocketLaunchIcon sx={{ fontSize: 32 }} />}
-          >
-            {labelConfiguracion.desplegar}
-          </Button>
-        </Grid2>
-      </Grid2>
-    </Stack>
-  );
-};

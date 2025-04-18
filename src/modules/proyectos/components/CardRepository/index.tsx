@@ -18,7 +18,7 @@ import { buttonTypes } from "@modules/general/types/buttons";
 import { useMutation } from "@tanstack/react-query";
 import { patchEditRepository } from "@modules/proyectos/services/patch.edit.repositories";
 import { useAuth } from "@modules/general/context/accountContext";
-import useAlertDialog2 from "@modules/general/hooks/useAlertDialog2";
+import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 

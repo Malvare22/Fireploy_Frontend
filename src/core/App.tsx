@@ -4,6 +4,8 @@ import { getTheme } from "./themes";
 import { router } from "./router/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorPage from "@modules/general/pages/404";
 
 const queryClient = new QueryClient();
 
@@ -32,8 +34,10 @@ function App(): JSX.Element {
       <GoogleOAuthProvider clientId={import.meta.env.VITE_ID_GOOGLE_CLIENT}>
         {/* ThemeProvider applies the custom MUI theme globally. */}
         <ThemeProvider theme={getTheme}>
-          {/* RouterProvider enables client-side routing using React Router. */}
-          <RouterProvider router={router} />
+          <ErrorBoundary fallback={<ErrorPage />}>
+            {/* RouterProvider enables client-side routing using React Router. */}
+            <RouterProvider router={router} />
+          </ErrorBoundary>
         </ThemeProvider>
       </GoogleOAuthProvider>
     </QueryClientProvider>

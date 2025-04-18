@@ -1,7 +1,7 @@
 import Footer from "@modules/general/components/footer";
 import DashboardLayoutBasic from "@modules/general/components/toolMenu";
 import { AuthProvider } from "@modules/general/context/accountContext";
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, useTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
 /**
@@ -19,13 +19,15 @@ import { Outlet } from "react-router-dom";
  * - Displays a consistent footer at the bottom.
  */
 function LayoutAuthenticated() {
+  const theme = useTheme();
+
   return (
     <AuthProvider>
       <Box sx={{ overflowX: "hidden" }}>
         <DashboardLayoutBasic>
           <Box
             sx={{
-              backgroundColor: "#fafafa",
+              backgroundColor: theme.palette.background.default,
               paddingY: 2,
               marginTop: 10,
               display: "flex",
@@ -48,4 +50,3 @@ function LayoutAuthenticated() {
 }
 
 export default LayoutAuthenticated;
-

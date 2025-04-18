@@ -26,7 +26,7 @@ import { ProyectoSchema } from "@modules/proyectos/utils/forms/proyecto.schema";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { patchEditProjectMembers } from "@modules/proyectos/services/patch.edit.project";
-import useAlertDialog2 from "@modules/general/hooks/useAlertDialog2";
+import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { getCursoById } from "@modules/materias/services/get.curso";
 import { UsuarioCurso } from "@modules/materias/types/curso";

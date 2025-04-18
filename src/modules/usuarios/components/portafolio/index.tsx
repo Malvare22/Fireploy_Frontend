@@ -17,7 +17,7 @@ import useSpringModal from "@modules/general/hooks/useSpringModal";
 import SpringModal from "@modules/general/components/springModal";
 import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyectoPortafolio";
 import { useFilters } from "@modules/general/hooks/useFilters";
-import useOrderSelect, { Order } from "@modules/general/hooks/useOrderSelect";
+import useOrderSelect, { Order } from "@modules/general/hooks/useOrder";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import { ShowGoal } from "@modules/general/components/portafolioCard";
 import { useParams } from "react-router";
@@ -29,7 +29,7 @@ import { labelPortafolio } from "@modules/usuarios/enum/labelPortafolio";
 import LoaderElement from "@modules/general/components/loaderElement";
 import { getProjectByUserId } from "@modules/proyectos/services/get.project";
 import { adaptProject, adaptProjectToCard } from "@modules/proyectos/utils/adapt.proyecto";
-import useAlertDialog2 from "@modules/general/hooks/useAlertDialog2";
+import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 

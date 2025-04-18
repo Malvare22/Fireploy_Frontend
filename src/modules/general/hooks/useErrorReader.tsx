@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { CustomError } from "../components/alertDialogError";
 import { rutasGeneral } from "../router/router";
-import { ShowDialogParams } from "./useAlertDialog2";
+import { ShowDialogParams } from "./useAlertDialog";
 
 /**
  * Type definition for the function that shows a dialog.

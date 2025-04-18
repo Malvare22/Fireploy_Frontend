@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
-import useOrderSelect from "@modules/general/hooks/useOrderSelect";
+import useOrderSelect from "@modules/general/hooks/useOrder";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import PortafolioCard from "@modules/general/components/portafolioCard";
 import { getUsuariosByTypeService } from "@modules/usuarios/services/get.usuarios.[tipo]";

@@ -18,7 +18,7 @@ import { Box, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/materia
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useContext, useEffect } from "react";
 import { useFormContext, Controller, useForm } from "react-hook-form";
-import useAlertDialog2 from "@modules/general/hooks/useAlertDialog2";
+import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 
 type Props = {

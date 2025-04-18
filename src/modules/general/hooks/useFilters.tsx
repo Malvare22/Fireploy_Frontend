@@ -1,45 +1,60 @@
 import { useState } from "react";
 
 /**
- * Hook para el uso de filtros de información de <T>
- * @returns {Object}
- * @returns {Function} toggleFilter - función que aplica los filtros a nivel lógico
- * @returns {Function} filterData - datos con los filtros ya aplicados
+ * Custom hook to manage dynamic filters on objects of type T.
+ *
+ * This hook allows you to define filters by providing keys (including nested keys using dot notation)
+ * and corresponding conditions (predicate functions). It returns a method to set filters and another to apply them.
+ *
+ * @template T - The shape of the data objects being filtered.
+ * @returns {{
+ *   toggleFilter: (key: string, condition: (value: any) => boolean) => void;
+ *   filterData: (data: T[]) => T[];
+ *   filters: Record<string, (value: any) => boolean>;
+ * }}
  */
 export const useFilters = <T extends object>() => {
-  const [filters, setFilters] = useState<Record<string, string | undefined>>({});
+  /**
+   * Stores active filters, where each key represents an attribute (dot notation supported)
+   * and the value is a condition function to test against.
+   */
+  const [filters, setFilters] = useState<Record<string, (value: any) => boolean>>({});
 
   /**
-   * Modificador de los filtros que se van a aplicar
-   * @param key identificador del atributo sobre el que se aplica el filtro (puede ser anidado con "dot notation")
-   * @param value valor que se va a aplicar sobre el identificador
+   * Adds or updates a filter for a specific attribute.
+   *
+   * @param {string} key - Attribute identifier (can be nested using dot notation, e.g. "profile.name").
+   * @param {(value: any) => boolean} condition - Predicate function to evaluate values of the given attribute.
    */
-  const toggleFilter = (key: string, value: unknown) => {
+  const handleFilter = (key: string, condition: (value: any) => boolean): void => {
     setFilters((prev) => ({
       ...prev,
-      [key]: value as string | undefined,
+      [key]: condition,
     }));
   };
 
   /**
-   * Función que accede a valores anidados de un objeto dado un path en "dot notation"
+   * Retrieves the value of a nested property in an object using dot notation.
+   *
+   * @param {object} obj - The object from which to retrieve the value.
+   * @param {string} path - Dot-notated path to the desired value (e.g., "profile.name").
+   * @returns {any} - The value found at the specified path, or undefined if not found.
    */
   const getNestedValue = (obj: any, path: string): any => {
     return path.split(".").reduce((acc, key) => acc?.[key], obj);
   };
 
   /**
-   * Función que aplica los filtros sobre los datos
-   * @param data datos sobre los que se van a aplicar los filtros
-   * @returns una copia de los datos con los filtros aplicados
+   * Applies all active filters to a list of data.
+   *
+   * @param {T[]} data - Array of items to be filtered.
+   * @returns {T[]} - Filtered data, including only items that match all conditions.
    */
-  const filterData = (data: T[]) => {
-    return Object.entries(filters).reduce((filteredData, [key, value]) => {
-      return filteredData.filter(
-        (element) => value === undefined || getNestedValue(element, key) === value
-      );
+  const filterDataFn = (data: T[]): T[] => {
+    return Object.entries(filters).reduce((filteredData, [key, condition]) => {
+      return filteredData.filter((element) => condition(getNestedValue(element, key)));
     }, data);
   };
 
-  return { toggleFilter, filterData, filters };
+  return { handleFilter, filterDataFn, filters };
 };

@@ -6,7 +6,7 @@ import { Autocomplete, TextField } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { useFormContext, Controller } from "react-hook-form";
-import useAlertDialog2 from "@modules/general/hooks/useAlertDialog2";
+import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { ProyectoRepositoriesSchema } from "@modules/proyectos/utils/forms/proyecto.schema";
 import { KeysOfRepository } from "@modules/proyectos/types/keysOfRepository";

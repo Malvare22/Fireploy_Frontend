@@ -1,6 +1,6 @@
 import DataTable from "react-data-table-component";
 import { TableColumn } from "react-data-table-component";
-import { Alert, Box, Button, Divider, Stack, Tooltip, Typography } from "@mui/material";
+import { Alert, Box, Divider, Stack, Tooltip, Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import Status from "@modules/general/components/status";
 import ActionButton from "@modules/general/components/actionButton";
@@ -21,12 +21,11 @@ import { patchEditSeccion } from "@modules/materias/services/patch.modificar.sec
 import { postCreateSeccion } from "@modules/materias/services/post.crear.seccion";
 import { useAuth } from "@modules/general/context/accountContext";
 import { useMutation } from "@tanstack/react-query";
-import AlertDialog from "@modules/general/components/alertDialog";
-import AlertDialogError from "@modules/general/components/alertDialogError";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SeccionesSchema } from "@modules/materias/utils/forms/form.schema";
 import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
+import AlertDialogError from "@modules/general/components/alertDialogError";
 
 const TablaGestionarSecciones = () => {
   const { getValues: getValuesCurso } = useFormContext<Curso>();

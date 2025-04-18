@@ -6,7 +6,7 @@ import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import TextFieldPassword from "@modules/general/components/textFieldPassword";
 import { useAuth } from "@modules/general/context/accountContext";
 import { VARIABLES_LOCAL_STORAGE } from "@modules/general/enums/variablesLocalStorage";
-import useAlertDialog2 from "@modules/general/hooks/useAlertDialog2";
+import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { postChangePassword } from "@modules/general/services/post.change.password";
 import { buttonTypes } from "@modules/general/types/buttons";
