@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import useSearch from "@modules/general/hooks/useSearch";
 import { labelSelects } from "@modules/general/enums/labelSelects";
-import { useFiltersByConditions } from "@modules/general/hooks/useFilters";
 import { getMateriasSemestresLabels } from "@modules/materias/utils/materias";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";

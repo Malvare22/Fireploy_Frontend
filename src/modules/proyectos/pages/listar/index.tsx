@@ -4,7 +4,6 @@ import ProjectForList from "@modules/proyectos/components/projectForList";
 import { labelProjectForList } from "@modules/proyectos/enum/labelProjectForList";
 import { labelListarProyecto } from "@modules/proyectos/enum/labelListarProyectos";
 import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
-import { getDataForSelects } from "@modules/proyectos/utils/getDataForSelects";
 import { getExecutionStateArray } from "@modules/proyectos/utils/getExecutionState";
 import {
   Alert,

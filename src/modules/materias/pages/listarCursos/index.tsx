@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import useSearch from "@modules/general/hooks/useSearch";
 import { labelSelects } from "@modules/general/enums/labelSelects";
-import { useFiltersByConditions } from "@modules/general/hooks/useFilters";
 import { CursoTabla } from "@modules/materias/types/curso.tabla";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
 import TablaCursos from "@modules/materias/components/tablaCursos";

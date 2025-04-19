@@ -6,7 +6,7 @@
  * @param {(x: T) => unknown} getValue - A function that selects the value to extract from each item.
  * @returns {Set<unknown>} A set containing unique values extracted from the items.
  */
-export function getNoRepeatValuess<T>(data: T[], getValue: (x: T) => unknown): Set<unknown> {
+export function getNoRepeatValues<T>(data: T[], getValue: (x: T) => unknown): Set<unknown> {
   const set = new Set<unknown>();
 
   data.forEach((item) => {

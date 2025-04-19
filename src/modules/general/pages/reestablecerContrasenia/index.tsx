@@ -11,7 +11,6 @@ import AlertDialogError from "@modules/general/components/alertDialogError";
 import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
 import { z } from "zod";
 import { labelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
-import { labelGeneral } from "@modules/general/enums/labelGeneral";
 import { useParams } from "react-router";
 import { CambiarContrasenaSchema } from "@modules/usuarios/utils/form/cambiarContrasenia";
 import { postChangePasswordForget } from "@modules/general/services/post.change.password";

@@ -5,11 +5,9 @@ import Login from "../pages/login";
 import Registrar from "../pages/registro";
 import LayoutAuthenticated from "../layouts/auth";
 import ErrorPage from "../pages/404";
-import { routerUsuarios } from "@modules/usuarios/router/router";
-import { routerMaterias } from "@modules/materias/router/router";
-import { routerProyectos } from "@modules/proyectos/router";
 import RecuperarContrasenia from "../pages/recuperar";
 import ReestablecerContrasenia from "../pages/reestablecerContrasenia";
+import { routerMaterias } from "@modules/materias/router/router";
 
 /** 
  * Base route path of the application
@@ -71,7 +69,7 @@ export const authenticatedRoutes: RouteObject = {
   element: <LayoutAuthenticated />, // Layout for private routes
   children: [
     ...(routerMaterias || []),
-    ...(routerUsuarios || []),
-    ...(routerProyectos || []),
+    // ...(routerUsuarios || []),
+    // ...(routerProyectos || []),
   ],
 };

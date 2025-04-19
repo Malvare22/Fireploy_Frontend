@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import ProjectCard from "@modules/general/components/projectCard";
-import useSpringModal from "@modules/general/hooks/useSpringModal";
 import SpringModal from "@modules/general/components/springModal";
 import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyectoPortafolio";
 import { useFilters } from "@modules/general/hooks/useFilters";

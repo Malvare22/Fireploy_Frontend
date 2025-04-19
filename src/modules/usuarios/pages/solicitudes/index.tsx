@@ -20,7 +20,6 @@ import { getDatesSolicitudes, SolicitudPromover } from "@modules/usuarios/types/
 import { Divider, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import { labelSelects } from "@modules/general/enums/labelSelects";
-import { useFiltersByConditions } from "@modules/general/hooks/useFilters";
 import { useEffect, useMemo, useState } from "react";
 import { adaptSolicitudService } from "@modules/usuarios/utils/adapt.solicitudes";
 import { useAuth } from "@modules/general/context/accountContext";
