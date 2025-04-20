@@ -1,131 +1,95 @@
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Typography,
-  Card,
-  CardContent,
-  useTheme,
-  Stack,
-} from "@mui/material";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
-import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
-import FolderSpecialIcon from "@mui/icons-material/FolderSpecial";
-import CodeIcon from "@mui/icons-material/Code";
+import { Box, Button, Stack, SxProps, Typography, useTheme } from "@mui/material";
+import styles from "./home.module.css";
+import {
+  BracesAsteriskIcon,
+  DatabaseFillGearIcon,
+  PaletteIcon,
+  PersonBoundingBoxIcon,
+  PersonLinesFillIcon,
+} from "@modules/general/components/customIcons";
 
+export enum labelHome {
+  princialContent = "Despliega tus aplicativos web con unos clicks y compártelos con los de los demás",
+  princialButtonText = "Registrarme",
+}
 export default function Home() {
   const theme = useTheme();
 
   return (
-    <Box>
-      {/* Hero */}
+    // Frame
+    <Stack>
+      <Princial />
+    </Stack>
+  );
+}
+
+function Princial() {
+  return (
+    <Stack spacing={3} alignItems={"center"}>
+      <PrincipalAnimation />
+      <Typography variant="h4">{labelHome.princialContent}</Typography>
+      <Box>
+        <Button variant="contained">{labelHome.princialButtonText}</Button>
+      </Box>
+    </Stack>
+  );
+}
+function PrincipalAnimation() {
+  const totalSpikes = 16;
+  const radius = 120;
+
+  const rays = Array.from({ length: totalSpikes }, (_, i) => {
+    const angle = (360 / totalSpikes) * i;
+    return (
       <Box
+        key={i}
+        className={styles.ray}
         sx={{
-          py: 10,
-          backgroundColor: theme.palette.background.default,
-          textAlign: "center",
+          position: "absolute",
+          transform: `
+            rotate(${angle}deg)
+            translate(${radius}px)
+          `,
+          transformOrigin: "0 0",
         }}
-      >
-        <Container maxWidth="md">
-          <Typography variant="h2" fontWeight="bold" gutterBottom>
-            Despliega proyectos al instante y crea portafolios profesionales
-          </Typography>
-          <Typography variant="h6" color="text.secondary" mb={4}>
-            Una plataforma moderna para automatizar despliegues, gestionar proyectos y mostrar tu trabajo al mundo.
-          </Typography>
-          <Button variant="contained" size="large" endIcon={<RocketLaunchIcon />}>
-            Comienza ahora
-          </Button>
-        </Container>
+      />
+    );
+  });
+
+  return (
+    <Box className={styles.container}>
+      <Box className={styles.containerRaysWrapper}>
+        <Box className={styles.containerRays}>{rays}</Box>
       </Box>
-
-      {/* Features */}
-      <Container sx={{ py: 10 }}>
-        <Grid container spacing={4}>
-          {[
-            {
-              title: "Automatización de despliegues",
-              icon: <AutoFixHighIcon fontSize="large" color="primary" />,
-              desc: "Configura tus despliegues con un solo clic. Integración con Git, Docker, y más.",
-            },
-            {
-              title: "Creación de portafolios",
-              icon: <FolderSpecialIcon fontSize="large" color="primary" />,
-              desc: "Organiza tus proyectos y muéstralos en un portafolio personalizable y profesional.",
-            },
-            {
-              title: "Integración continua",
-              icon: <CodeIcon fontSize="large" color="primary" />,
-              desc: "Conecta tus repos y activa pipelines para automatizar pruebas, builds y releases.",
-            },
-          ].map(({ title, icon, desc }) => (
-            <Grid item xs={12} md={4} key={title}>
-              <Card variant="outlined" sx={{ height: "100%" }}>
-                <CardContent>
-                  <Stack spacing={2} alignItems="center" textAlign="center">
-                    {icon}
-                    <Typography variant="h6">{title}</Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {desc}
-                    </Typography>
-                  </Stack>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-
-      {/* Cómo Funciona */}
-      <Box sx={{ py: 10, backgroundColor: theme.palette.grey[50] }}>
-        <Container>
-          <Typography variant="h4" textAlign="center" mb={6}>
-            ¿Cómo funciona?
-          </Typography>
-          <Grid container spacing={4}>
-            {[
-              "Conecta tu cuenta de GitHub o GitLab",
-              "Configura tu pipeline de despliegue",
-              "Publica y comparte tu portafolio con un link único",
-            ].map((step, index) => (
-              <Grid item xs={12} md={4} key={index}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h5" gutterBottom>
-                      Paso {index + 1}
-                    </Typography>
-                    <Typography variant="body1" color="text.secondary">
-                      {step}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
+      <Box className={styles.sun} />
+      <Box className={styles.iconContainer}>
+        <RocketLaunchIcon sx={{fontSize: 96}} className={styles.icon} />
       </Box>
-
-      {/* CTA Final */}
-      <Box sx={{ py: 10, textAlign: "center" }}>
-        <Container>
-          <Typography variant="h4" gutterBottom>
-            ¿Listo para acelerar tus despliegues?
-          </Typography>
-          <Typography variant="body1" color="text.secondary" mb={3}>
-            Únete a cientos de desarrolladores que ya usan nuestra plataforma.
-          </Typography>
-          <Button variant="contained" size="large" endIcon={<RocketLaunchIcon />}>
-            Empieza Gratis
-          </Button>
-        </Container>
+      <Box>
+        <DatabaseFillGearIcon sx={{ fontSize: 48 }} className={styles.iconElement} />
+        <BracesAsteriskIcon sx={{ fontSize: 48 }} className={styles.iconElement} />
+        <PaletteIcon sx={{ fontSize: 48 }} className={styles.iconElement} />
+        <PersonLinesFillIcon sx={{ fontSize: 48 }} className={styles.iconElement} />
       </Box>
+      <Box height="100%" width="100%">
+        <svg className={styles.containerLines} height="100%" width="100%">
+          <line x1="150" y1="120" x2="300" y2="120" />
+          <line x1="300" y1="120" x2="300" y2="200" />
+          <line x1="300" y1="200" x2="500" y2="200" />
 
-      {/* Footer simple */}
-      <Box sx={{ py: 4, backgroundColor: theme.palette.grey[200], textAlign: "center" }}>
-        <Typography variant="body2" color="text.secondary">
-          © {new Date().getFullYear()} TuSoftware.dev — Todos los derechos reservados.
-        </Typography>
+          <line x1="500" y1="200" x2="700" y2="200" />
+          <line x1="700" y1="200" x2="700" y2="120" />
+          <line x1="700" y1="120" x2="800" y2="120" />
+
+          <line x1="300" y1="280" x2="500" y2="280" />
+          <line x1="300" y1="280" x2="300" y2="360" />
+          <line x1="300" y1="360" x2="140" y2="360" />
+
+          <line x1="500" y1="280" x2="700" y2="280" />
+          <line x1="700" y1="280" x2="700" y2="360" />
+          <line x1="700" y1="360" x2="820" y2="360" />
+        </svg>
       </Box>
     </Box>
   );
