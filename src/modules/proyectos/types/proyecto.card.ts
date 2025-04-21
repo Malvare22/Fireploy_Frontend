@@ -1,7 +1,5 @@
-import { assetImages } from "@modules/general/utils/getImage";
-import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
+import { UsuarioPortafolioCard, usuarioPrueba } from "@modules/usuarios/types/usuario.portafolio";
 import {  Proyecto } from "./proyecto.tipo";
-type Tecnologia = { nombre: string; imagen: keyof typeof assetImages };
 export type ProyectoCard = {
   id: number;
   titulo: string;
@@ -20,94 +18,22 @@ export type ProyectoCard = {
   estado: Proyecto['estadoDeEjecucion'];
 };
 
-export const proyecto1: ProyectoCard = {
-  titulo: "Plataforma de Aprendizaje AI",
-  descripcion:
-    "Una plataforma interactiva basada en inteligencia artificial para ayudar a los estudiantes a mejorar sus habilidades.",
-  imagen: "https://backiee.com/static/wallpapers/560x315/278140.jpg",
-  integrantes: [
-    {
-      nombres: "Carlos Pérez",
-      id: "1",
-      foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnLAwnCxV26w3jNd5ARMQl_WXk9yn7IRAi5Q&s",
-      rol: "Desarrollador Full Stack",
-      logros: [{ titulo: "Repositorios en GitHub", valor: "50+" }],
-    },
-    {
-      nombres: "Ana Gómez",
-      id: "1",
-      foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnLAwnCxV26w3jNd5ARMQl_WXk9yn7IRAi5Q&s",
-      rol: "Diseñadora UI/UX",
-      logros: [{ titulo: "Proyectos completados", valor: "30+" }],
-    },
-    {
-      nombres: "Ana Gómez",
-      id: "1",
-      foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnLAwnCxV26w3jNd5ARMQl_WXk9yn7IRAi5Q&s",
-      rol: "Diseñadora UI/UX",
-      logros: [{ titulo: "Proyectos completados", valor: "30+" }],
-    },
-  ],
-  frontend: { nombre: "React", imagen: "react" },
-  backend: { nombre: "Node.js", imagen: "nodejs" },
-  dataBase: { nombre: "MongoDB", imagen: "mongodb" },
-  puntuacion: 5,
-  calificador: {
-    id: "1",
-    nombres: "Laura Martínez",
-    foto: "s",
-    rol: "Gerente de Producto",
-    logros: [{ titulo: "Años de experiencia", valor: "10+" }],
-  },
-  materia: "Análisis de Algoritmos",
-  grupo: "A",
-  seccion: "Teoría de grafos",
-  semestre: "2025-2",
-  estado: "F",
+export const proyectoEjemplo: ProyectoCard = {
+  id: 101,
+  titulo: "Sistema de Gestión Académica",
+  descripcion: "Aplicación web para administrar cursos, estudiantes y calificaciones en una institución educativa.",
+  imagen: "https://images.unsplash.com/photo-1605379399642-870262d3d051?auto=format&fit=crop&w=800&q=80",
+  integrantes: [usuarioPrueba],
+  frontend: "React, TypeScript, Tailwind CSS",
+  backend: "Node.js, Express",
+  dataBase: "PostgreSQL",
+  puntuacion: 4.8,
+  calificador: usuarioPrueba,
+  materia: "Ingeniería de Software",
+  grupo: "Grupo 3",
+  seccion: "A",
+  semestre: "2024-1",
+  estado: "E", // asumí que 'estadoDeEjecucion' es algo como 'En desarrollo', 'Finalizado', etc.
 };
 
-export const proyecto2: ProyectoCard = {
-  titulo: "Fireploy",
-  descripcion:
-    "Una plataforma interactiva basada en amor para ayudar a los estudiantes a mejorar sus habilidades.",
-  imagen: "https://backiee.com/static/wallpapers/560x315/278140.jpg",
-  integrantes: [
-    {
-      nombres: "Rodrigo Malaver",
-      id: "1",
-      foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnLAwnCxV26w3jNd5ARMQl_WXk9yn7IRAi5Q&s",
-      rol: "Desarrollador Full Stack",
-      logros: [{ titulo: "Años de experiencia", valor: "10+" }],
-    },
-    {
-      nombres: "José Julian",
-      id: "1",
-      foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnLAwnCxV26w3jNd5ARMQl_WXk9yn7IRAi5Q&s",
-      rol: "Diseñadora UI/UX",
-      logros: [{ titulo: "Años de experiencia", valor: "10+" }],
-    },
-    {
-      nombres: "Julian Quiroz",
-      id: "1",
-      foto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnLAwnCxV26w3jNd5ARMQl_WXk9yn7IRAi5Q&s",
-      rol: "Diseñadora UI/UX",
-      logros: [{ titulo: "Años de experiencia", valor: "10+" }],
-    },
-  ],
-  frontend: { nombre: "Angular", imagen: "angular" },
-  backend: { nombre: "Springboot", imagen: "springboot" },
-  dataBase: { nombre: "MySQL", imagen: "mysql" },
-  puntuacion: 3,
-  calificador: {
-    id: "1",
-    nombres: "Laura Martínez",
-    foto: "s",
-    rol: "Gerente de Producto",
-    logros: [{ titulo: "Años de experiencia", valor: "10+" }],
-  },
-  materia: "Análisis de Algoritmos",
-  grupo: "A",
-  seccion: "Teoría de grafos",
-  semestre: "2025-1",
-  estado: "L",
-};
+

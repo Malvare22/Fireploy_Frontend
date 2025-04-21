@@ -29,7 +29,6 @@ type ProjectCardProps = {
  */
 export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }) => {
   const theme = useTheme();
-  console.log(proyecto)
 
   return (
     <AnimatedCard
@@ -74,13 +73,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }
           </Box>
 
           {/* Members Section */}
-          <Stack spacing={1} alignItems={"center"}>
+          {/* <Stack spacing={1} alignItems={"center"}>
             <Typography variant="body1">{labelProjectCard.integrantes}</Typography>
             <ProjectCardMembers integrantes={proyecto.integrantes} />
-          </Stack>
+          </Stack> */}
 
           {/* Technologies Section */}
-          <Stack spacing={1} alignItems={"center"}>
+          {/* <Stack spacing={1} alignItems={"center"}>
             <Typography variant="body1">{labelProjectCard.tecnologias}</Typography>
             <Stack spacing={2}>
               <Chip color="error" label={proyecto.backend} />
@@ -90,7 +89,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }
               />
               <Chip color="primary" label={proyecto.frontend} />
             </Stack>
-          </Stack>
+          </Stack> */}
         </Stack>
       </Stack>
     </AnimatedCard>

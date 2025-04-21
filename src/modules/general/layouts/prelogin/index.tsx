@@ -19,7 +19,7 @@ import { Outlet } from "react-router-dom";
 function LayoutPrelogin() {
 
   return (
-    <Box>
+    <Box width={'100vw'}>
       <NavbarPrelogin />
       <Box
         sx={{

@@ -136,13 +136,13 @@ function NavbarPrelogin(): JSX.Element {
           </Box>
 
           {/* Login button aligned to the right */}
-          <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "end" }}>
+          {/* <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "end" }}>
             <GeneralButton
               mode={buttonTypes.login}
               color={"secondary"}
               onClick={() => navigate(rutasGeneral.login)}
             />
-          </Box>
+          </Box> */}
         </Toolbar>
       </Container>
     </AppBar>

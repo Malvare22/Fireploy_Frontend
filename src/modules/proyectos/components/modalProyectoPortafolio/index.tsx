@@ -2,7 +2,7 @@ import { ProjectCardAvatar } from "@modules/general/components/projectCardAvatar
 import PortafolioCard from "@modules/general/components/portafolioCard";
 import Score from "@modules/general/components/score";
 import { labelModalProyectoPortafolio } from "@modules/proyectos/enum/labelModalProyectoPortafolio";
-import { proyecto1, ProyectoCard } from "@modules/proyectos/types/proyecto.card";
+import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import { Box, Button, Card, Chip, Grid2, Stack, Typography, useTheme } from "@mui/material";
 import React from "react";
@@ -10,9 +10,9 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CloudOffIcon from "@mui/icons-material/CloudOff";
 
 type Props = {
-  proyecto?: ProyectoCard;
+  proyecto: ProyectoCard;
 };
-const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto = proyecto1 }) => {
+const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto }) => {
 
   const theme = useTheme();
 

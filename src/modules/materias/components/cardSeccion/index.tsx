@@ -1,7 +1,7 @@
 import { Box, Grid2, Stack, Typography, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import AccordionUsage from "@modules/general/components/accordionUsage";
-import { proyecto1, ProyectoCard } from "@modules/proyectos/types/proyecto.card";
+import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import { labelCardSeccion } from "@modules/materias/enums/labelCardSeccion";
 import { Seccion } from "@modules/materias/types/seccion";
