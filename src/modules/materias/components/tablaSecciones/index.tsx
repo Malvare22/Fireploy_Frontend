@@ -13,7 +13,7 @@ import { labelListarSecciones } from "@modules/materias/enums/labelListarSeccion
 import { Curso } from "@modules/materias/types/curso";
 import { labelEditarCurso } from "@modules/materias/pages/editarCurso";
 import { useCustomTableStyles } from "@modules/general/styles";
-import CustomWidthTooltip from "@modules/general/components/CustomWidthTooltip";
+import CustomWidthTooltip from "@modules/general/components/customWidthTooltip";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import SeccionesForm from "../formSecciones";
 import Modal from "@modules/general/components/modal";

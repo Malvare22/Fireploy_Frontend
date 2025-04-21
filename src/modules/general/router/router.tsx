@@ -8,6 +8,7 @@ import ErrorPage from "../pages/404";
 import RecuperarContrasenia from "../pages/recuperar";
 import ReestablecerContrasenia from "../pages/reestablecerContrasenia";
 import { routerMaterias } from "@modules/materias/router/router";
+import TeamView from "../pages/team";
 
 /** 
  * Base route path of the application
@@ -23,6 +24,7 @@ export enum rutasGeneral {
   recuperar = rutaBase + "recuperar",
   registrar = rutaBase + "registrar",
   cambiarContrasenia = rutaBase + "reset-password/:token",
+  developTeam = rutaBase + '/developTeam'
 }
 
 /**
@@ -52,6 +54,10 @@ export const routerGeneral: RouteObject = {
     {
       path: rutasGeneral.cambiarContrasenia,
       element: <ReestablecerContrasenia />,
+    },
+    {
+      path: rutasGeneral.developTeam,
+      element: <TeamView />,
     },
     {
       path: "*",
