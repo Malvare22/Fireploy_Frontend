@@ -19,16 +19,15 @@ import { Outlet } from "react-router-dom";
 function LayoutPrelogin() {
 
   return (
-    <Box width={'100vw'}>
+    <Box>
       <NavbarPrelogin />
       <Box
         sx={{
-          paddingY: 5,
-          marginTop: 10,
           display: "flex",
           justifyContent: "center",
           "> div": { width: "100%" },
-          minHeight: '70vh'
+          minHeight: '70vh',
+          overflow: 'hidden'
         }}
       >
         <Outlet />

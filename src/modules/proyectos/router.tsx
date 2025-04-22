@@ -23,10 +23,10 @@ export const routerProyectos: RouteObject[] = [
     path: rutasProyectos.ver,
     element: <VerProyecto />,
   },
-  {
-    path: rutasProyectos.listar,
-    element: <ListarProyectos />,
-  },
+  // {
+  //   path: rutasProyectos.listar,
+  //   element: <ListarProyectos />,
+  // },
   {
     path: rutasProyectos.crear,
     element: <CrearProyecto />,
@@ -35,10 +35,10 @@ export const routerProyectos: RouteObject[] = [
     path: rutasProyectos.explorar,
     element: <ExplorarProyectos />,
   },
-  {
-    path: rutasProyectos.repositorios,
-    element: <VistaRepositorios />,
-  },
+  // {
+  //   path: rutasProyectos.repositorios,
+  //   element: <VistaRepositorios />,
+  // },
   {
     path: rutasProyectos.basesDeDatos,
     element: <VistaBasesDeDatos />,

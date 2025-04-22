@@ -1,8 +1,8 @@
 import { getImage } from "@modules/general/utils/getImage";
-import { Box, Grid2, IconButton, Stack, Typography } from "@mui/material";
+import { Box, Grid2, IconButton, Stack, Typography, useTheme } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { labelTeam } from "@modules/general/enums/labelTeam";
-
+import styles from "./team.module.css";
 /**
  * Array of team member data.
  * Each item contains: [imagePath, name, LinkedIn URL, description]
@@ -34,8 +34,25 @@ const labels: [string, string, string, string][] = [
  * @component
  */
 function TeamView() {
+  const theme = useTheme();
+  const Wave = () => (
+    <div className={styles.waveContainer}>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+        <path
+          fill={theme.palette.primary.main}
+          fillOpacity="1"
+          d="M0,224L40,218.7C80,213,160,203,240,170.7C320,139,400,85,480,96C560,107,640,181,720,224C800,267,880,277,960,250.7C1040,224,1120,160,1200,144C1280,128,1360,160,1400,176L1440,192L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"
+        />
+      </svg>
+      <Box
+        className={styles.waveBottomFill}
+        sx={{ backgroundColor: theme.palette.primary.main }}
+      ></Box>
+    </div>
+  );
   return (
-    <Stack spacing={3}>
+    <Stack spacing={3} sx={{ position: "relative" }} paddingBottom={4} paddingX={4}>
+      <Wave />
       {/* Section title */}
       <Typography textAlign="center" variant="h4">
         {labelTeam.title}
@@ -47,14 +64,14 @@ function TeamView() {
       </Typography>
 
       {/* Team cards layout */}
-      <Grid2 container padding={2} display={"flex"} justifyContent={"center"} spacing={6}>
-        <Grid2 size={{ md: 3, xs: 12 }}>
+      <Grid2 container display={"flex"} justifyContent={"center"} padding={2} spacing={6}>
+        <Grid2 className={styles.card01} size={{ md: 4, xs: 12 }}>
           <TeamCard member={labels[0]} />
         </Grid2>
-        <Grid2 size={{ md: 3, xs: 12 }}>
+        <Grid2 className={styles.card02} size={{ md: 4, xs: 12 }}>
           <TeamCard member={labels[1]} />
         </Grid2>
-        <Grid2 size={{ md: 3, xs: 12 }}>
+        <Grid2 className={styles.card03} size={{ md: 4, xs: 12 }}>
           <TeamCard member={labels[2]} />
         </Grid2>
       </Grid2>
@@ -111,14 +128,15 @@ function TeamCard({ member }: TeamCardProps) {
   };
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} alignItems={"center"} sx={{ color: "white", textAlign: "center" }}>
       {/* Profile image */}
+
       <Box
         sx={{
           position: "relative",
-          height: 400,
-          overflow: "hidden",
-          width: "100%",
+          maxWidth: "70%",
+          display: "flex",
+          justifyContent: "center",
         }}
       >
         <Box
@@ -126,9 +144,9 @@ function TeamCard({ member }: TeamCardProps) {
           src={member[0]}
           sx={{
             width: "100%",
-            height: 400,
-            objectFit: "cover",
-            objectPosition: "center 0%",
+            height: "100%",
+            borderRadius: 4,
+            filter: "drop-shadow(0px 0px 9px #9e9e9e)",
           }}
         />
         <Corner />
@@ -140,7 +158,7 @@ function TeamCard({ member }: TeamCardProps) {
       </Typography>
 
       {/* Description */}
-      <Typography variant="subtitle2">{member[3]}</Typography>
+      <Typography variant="body2">{member[3]}</Typography>
     </Stack>
   );
 }

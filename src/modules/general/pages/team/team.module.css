@@ -1,0 +1,47 @@
+@keyframes grown {
+    from{
+        transform: translate(0%, 100%);
+    }
+    to{
+        transform: translate(0%, 0%);
+    }
+}
+
+@keyframes card {
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+
+.waveContainer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: -1;
+    overflow: hidden;
+    animation: grown 3s;
+    height: 85%;
+  }
+  
+  .waveContainer svg {
+    display: block;
+    margin: -2px;
+    padding: 0;
+    height: auto;
+  }
+  
+  .waveBottomFill {
+    height: 100%;
+
+  }
+
+  .card01 , .card02,  .card03{
+    opacity: 0;
+    animation: card 2s 1s forwards;
+
+  }
+  

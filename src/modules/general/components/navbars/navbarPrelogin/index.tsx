@@ -48,7 +48,7 @@ function NavbarPrelogin(): JSX.Element {
   const navigate = useNavigate();
 
   return (
-    <AppBar position="fixed">
+    <AppBar position="static">
       <Container maxWidth="xl" sx={{ paddingY: 1 }}>
         <Toolbar disableGutters>
           {/* Brand title (shown only on larger screens) */}
