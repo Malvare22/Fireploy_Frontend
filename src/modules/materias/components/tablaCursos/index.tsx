@@ -15,52 +15,62 @@ import { useCustomTableStyles } from "@modules/general/styles";
 import { useMutation } from "@tanstack/react-query";
 import { patchChangeStatusCurso } from "@modules/materias/services/patch.curso";
 import { useAuth } from "@modules/general/context/accountContext";
-import AlertDialogError from "@modules/general/components/alertDialogError";
-import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
+import { useModal } from "@modules/general/components/modal/hooks/useModal";
 
 type TablaCursosProps = {
-  cursos: CursoTabla[];
+  cursos: CursoTabla[]; // List of courses to be displayed in the table
 };
+
+/**
+ * @component TablaCursos
+ * @description This component displays a table with course data, allowing the user to view, edit, and change the status of courses.
+ * It uses `react-data-table-component` to render the data and provides action buttons for each row.
+ * @param {TablaCursosProps} props - Contains the list of courses to be displayed.
+ */
 const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
   const theme = useTheme();
-
   const [selectCurso, setSelectCurso] = useState<CursoTabla | undefined>(undefined);
 
+  /**
+   * @function handleSelect
+   * @description Handles selecting a course, opening the status change dialog for the selected course.
+   * @param {CursoTabla} materia - The selected course to change the status.
+   */
   const handleSelect = (materia: CursoTabla) => {
     setSelectCurso(materia);
-    setOpenHandleStatus(true);
+    handleOpenStatus();
   };
 
-  const {
-    handleOpen: handleOpenError,
-    handleClose: handleCloseError,
-    open: openError,
-  } = useAlertDialog();
-
-  const {
-    handleOpen: handleOpenSuccess,
-    handleClose: handleCloseSuccess,
-    open: openSuccess,
-  } = useAlertDialog();
+  const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
+  const { setError } = useErrorReader(showDialog);
 
   const token = useAuth().accountInformation.token;
 
   const {
     isPending: isPendingChangeStatus,
-    error: errorChangeStatus,
-    isSuccess: isSuccessChangeStatus,
     mutate: mutateChangeStatus,
   } = useMutation({
     mutationFn: () =>
       patchChangeStatusCurso(token, selectCurso?.id || "", selectCurso?.estado == "I" ? "A" : "I"),
-    mutationKey: ["change status curso"],
+    mutationKey: ["Change Status Curso", selectCurso?.id || "", selectCurso?.estado == "I" ? "A" : "I"],
     onSuccess: () => {
-      handleOpenSuccess();
-      handleCloseHandleStatus();
+      showDialog({
+        message: 'Estado del Curso Modificado Correctamente!',
+        title: 'Modificar Curso',
+        onAccept: () => {},
+        reload: true
+      })
     },
-    onError: handleOpenError,
+    onError: error => setError(error),
   });
 
+  /**
+   * @component ModalChangeStatus
+   * @description Modal content displayed for changing the status of a course (enable/disable).
+   * @param {CursoTabla["estado"]} status - Current status of the course (either "A" or "I").
+   * @returns {JSX.Element} The modal content asking the user to confirm the status change.
+   */
   function ModalChangeStatus(status: CursoTabla["estado"]) {
     const label = status == "I" ? "habilitar" : "deshabilitar";
 
@@ -75,12 +85,17 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
 
   const {
     open: openHandleStatus,
-    setOpen: setOpenHandleStatus,
+    handleOpen: handleOpenStatus,
     handleClose: handleCloseHandleStatus,
-  } = useAlertDialog();
+  } = useModal();
 
   const navigate = useNavigate();
 
+  /**
+   * @constant columns
+   * @description Defines the columns for the data table displaying course information.
+   * Includes columns for ID, group, semester, status, number of students, and actions (view, edit, change status).
+   */
   const columns: TableColumn<CursoTabla & { rowIndex: number }>[] = [
     {
       name: <Typography>{labelListarCursos.id}</Typography>,
@@ -156,26 +171,17 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
         open={openHandleStatus}
         handleAccept={mutateChangeStatus}
         isLoading={isPendingChangeStatus}
-        title="Cambiar Estado de Materia"
+        title="Modificar Curso"
         body={ModalChangeStatus(selectCurso?.estado!!)}
-        handleCancel={() => setOpenHandleStatus(false)}
+        handleCancel={handleCloseHandleStatus}
       />
-      {isSuccessChangeStatus && (
-        <AlertDialogSuccess
-          open={openSuccess}
-          handleClose={handleCloseSuccess}
-          title="Cambiar estado del Usuario"
-          message={"User updated successfully"}
-        />
-      )}
-      {errorChangeStatus && (
-        <AlertDialogError
-          error={errorChangeStatus}
-          handleClose={handleCloseError}
-          title="Error Updating User"
-          open={openError}
-        />
-      )}
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+      />
       <DataTable
         columns={columns}
         data={dataConIndice}

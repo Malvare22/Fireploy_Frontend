@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import AlertDialogError from "@modules/general/components/alertDialogError";
-import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
+import AlertDialog from "@modules/general/components/alertDialog";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { rutasGeneral } from "@modules/general/router/router";
 import { postSendEmail } from "@modules/general/services/post.send.email";
 import { CorreoSchema } from "@modules/usuarios/utils/form/usuario.schema";
@@ -11,6 +11,10 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { z } from "zod";
 
+/**
+ * Type for form data based on the Zod schema.
+ * @typedef {Object} FormData
+ */
 type FormData = z.infer<typeof CorreoSchema>;
 
 /**
@@ -21,6 +25,9 @@ type FormData = z.infer<typeof CorreoSchema>;
  * @component
  */
 function RecuperarContrasenia() {
+  /**
+   * React Hook Form setup using Zod schema for validation.
+   */
   const {
     handleSubmit,
     formState: { errors },
@@ -31,69 +38,63 @@ function RecuperarContrasenia() {
     defaultValues: { correo: "" },
   });
 
+  /** Dialog management hook for showing feedback messages */
+  const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
+
+  /** Hook to handle and parse backend errors */
+  const { setError } = useErrorReader(showDialog);
+
+  /** Theme instance from Material UI */
   const theme = useTheme();
+
+  /** Navigation instance to redirect user */
   const navigate = useNavigate();
 
-  // Error dialog management
-  const {
-    handleOpen: handleOpenError,
-    handleClose: handleCloseError,
-    open: openError,
-  } = useAlertDialog();
-
-  // Success dialog management
-  const {
-    handleOpen: handleOpenSuccess,
-    handleClose: handleCloseSuccess,
-    open: openSuccess,
-  } = useAlertDialog();
-
-  // Mutation to send email for password recovery
-  const { mutate, error, isPending } = useMutation({
+  /**
+   * Mutation to send email for password recovery.
+   * Displays success or error messages accordingly.
+   */
+  const { mutate, isPending } = useMutation({
     mutationFn: () => postSendEmail(getValues().correo),
-    mutationKey: ["Solicitar Email"],
-    onError: handleOpenError,
-    onSuccess: handleOpenSuccess,
+    mutationKey: ["Request Recovery Password to Email", getValues().correo],
+    onError: (error) => setError(error),
+    onSuccess: () =>
+      showDialog({
+        title: "Recuperar contraseña",
+        message: "Se ha enviado un correo de recuperación al correo electrónico ingresado",
+      }),
   });
 
   /**
    * Form submission handler.
    * Triggers email sending mutation on valid data.
    *
-   * @param data - Form values containing the email.
+   * @function
    */
-  const onSubmit = (data: FormData) => {
-    console.log("Datos enviados:", data);
+  const onSubmit = () => {
     mutate();
   };
 
   return (
     <>
-      {/* Success alert dialog */}
-      <AlertDialogSuccess
-        message="Se ha enviado la solicitud a tu correo"
-        title="Recuperar Contraseña"
-        handleClose={handleCloseSuccess}
-        open={openSuccess}
+      {/* Alert dialog for success/error messages */}
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
       />
-
-      {/* Error alert dialog */}
-      {error && (
-        <AlertDialogError
-          error={error}
-          title="Recuperar Contraseña"
-          handleClose={handleCloseError}
-          open={openError}
-        />
-      )}
 
       <Card sx={{ maxWidth: 700, display: "flex", alignItems: "center" }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={5} sx={{ paddingX: 4 }}>
+            {/* Title */}
             <Typography variant="h5" align="center" gutterBottom>
               ¿Has olvidado tu contraseña?
             </Typography>
 
+            {/* Instructional text */}
             <Typography variant="body1" align="center" sx={{ mb: 4 }}>
               Enviaremos un código de verificación a este email si coincide con una cuenta de
               Fireploy existente.
@@ -115,9 +116,7 @@ function RecuperarContrasenia() {
                 variant="contained"
                 color="primary"
                 loading={isPending}
-                sx={{
-                  width: 200,
-                }}
+                sx={{ width: 200 }}
               >
                 Siguiente
               </Button>

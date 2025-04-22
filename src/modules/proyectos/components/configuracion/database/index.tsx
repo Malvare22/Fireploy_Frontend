@@ -1,6 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import AlertDialogError from "@modules/general/components/alertDialogError";
-import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
 import GeneralButton from "@modules/general/components/button";
 import TextFieldPassword from "@modules/general/components/textFieldPassword";
 import { useAuth } from "@modules/general/context/accountContext";
@@ -18,6 +16,8 @@ import { useFormContext, Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import StorageIcon from "@mui/icons-material/Storage";
 import { getDatabaseTypesMap } from "@modules/proyectos/utils/getDatabaseTypes";
+import AlertDialog from "@modules/general/components/alertDialog";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
 
 type Props = {
   type: "edit" | "create";
@@ -25,13 +25,17 @@ type Props = {
 export const DataBase = ({ type }: Props) => {
   const { getValues: getValuesProject } = useFormContext<ProyectoSchema>();
 
+  const { showDialog, open, title, message, handleCancel, type: typeAlert, handleAccept, isLoading } = useAlertDialog();
+
+  const {setError} = useErrorReader(showDialog);
+
   const {
     reset,
     control,
     handleSubmit,
     setValue,
     getValues,
-    formState: { errors }, // ✅ EXTRAER errors
+    formState: { errors },
   } = useForm<BaseDeDatosRegisterSchema>({
     defaultValues: {
       contrasenia: "",
@@ -44,7 +48,6 @@ export const DataBase = ({ type }: Props) => {
 
   const token = useAuth().accountInformation.token;
   const navigate = useNavigate();
-  const { handleOpen, open } = useAlertDialog();
   // ✅ useEffect corregido
   useEffect(() => {
     const base = getValuesProject("baseDeDatos");
@@ -52,17 +55,22 @@ export const DataBase = ({ type }: Props) => {
     setValue("proyectoId", getValuesProject("id"));
   }, [getValuesProject, reset, setValue]);
 
-  const {
-    handleClose: handleCloseCreateDBError,
-    handleOpen: handleOpenCreateDBError,
-    open: openCreateDBError,
-  } = useAlertDialog();
-
-  const { mutate, error } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: () => postCreateDatabase(token, getValues()),
-    mutationKey: ["Create Database"],
-    onSuccess: handleOpen,
-    onError: handleOpenCreateDBError,
+    mutationKey: ["Create Database", getValues()],
+    onSuccess: () => {
+      if(type == 'edit')
+      showDialog({
+        title: 'Conexión Base de datos',
+        message: 'Se ha creado el proyecto correctamente',
+        type: 'success',
+        onAccept: handleFinish,
+        reload: true
+      })
+    },
+    onError: (err) => {
+      setError(err);
+    },
   });
 
   function onSubmit() {
@@ -79,21 +87,15 @@ export const DataBase = ({ type }: Props) => {
       <Divider />
       {type == "create" ? (
         <form onSubmit={handleSubmit(onSubmit)}>
-          <AlertDialogSuccess
-            handleClose={handleFinish}
-            message="Proyecto creado de manera correcta"
-            open={open}
-            title="Creación Proyecto"
-            reload={false}
-          />
-          {error && (
-            <AlertDialogError
-              error={error}
-              handleClose={handleCloseCreateDBError}
-              open={openCreateDBError}
-              title="Creación Base de Datos"
-            />
-          )}
+          <AlertDialog
+        handleAccept={handleAccept}
+        handleCancel={handleCancel}
+        open={open}
+        title={title}
+        textBody={message}
+        type={typeAlert}
+        isLoading={isLoading}
+      />
           <Stack spacing={3}>
             <Controller
               name="nombre"

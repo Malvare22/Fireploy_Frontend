@@ -40,13 +40,13 @@ function VistaPerfil() {
    */
   const { data, isLoading, error } = useQuery({
     queryFn: () => getUsuarioService(id, token),
-    queryKey: ["profile"],
+    queryKey: ["Profile", id],
   });
 
   /** Error dialog state and handlers */
-  const {handleAccept, message, open, showDialog, title, type} = useAlertDialog2();
+  const { handleAccept, message, open, showDialog, title, type } = useAlertDialog2();
 
-  const {setError} = useErrorReader(showDialog);
+  const { setError } = useErrorReader(showDialog);
 
   /**
    * When data is successfully fetched, adapt it and store it in state
@@ -62,14 +62,20 @@ function VistaPerfil() {
    */
   useEffect(() => {
     if (error) {
-     setError(error);
+      setError(error);
     }
   }, [error]);
 
   return (
     <>
       {/* Error dialog for failed fetch */}
-      <AlertDialog handleAccept={handleAccept} open={open} title={title} type={type} textBody={message}/>
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        type={type}
+        textBody={message}
+      />
 
       {/* Loader or profile display */}
       {isLoading ? (

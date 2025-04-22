@@ -90,6 +90,7 @@ function useOrderSelect<T extends object>() {
   return {
     orderDataFn,
     handleOrder,
+    order
   };
 }
 

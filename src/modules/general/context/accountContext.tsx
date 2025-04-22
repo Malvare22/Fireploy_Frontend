@@ -1,20 +1,21 @@
-import { TiposUsuario } from "@modules/usuarios/types/usuario";
+import { TiposUsuario, usuarios } from "@modules/usuarios/types/usuario";
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getUsuarioService } from "@modules/usuarios/services/get.usuario";
 import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
-import AlertDialogError from "../components/alertDialogError";
 import useAlertDialog from "../hooks/useAlertDialog";
+import useErrorReader from "../hooks/useErrorReader";
+import AlertDialog from "../components/alertDialog";
 
 /**
- * **Type representing user account information.**
- *
  * @typedef {Object} AccountInformation
- * @property {string} nombre - User's full name.
- * @property {string} token - Authentication token.
- * @property {TiposUsuario} tipo - User type (e.g., student, admin).
- * @property {string} foto - Profile picture URL.
- * @property {number} id - Unique user ID.
+ * @description Represents the user account information.
+ * @property {string} nombre - Full name of the user.
+ * @property {string} token - Authentication token for the user.
+ * @property {TiposUsuario} tipo - Type of the user (e.g., student, admin).
+ * @property {string} foto - URL of the user's profile picture.
+ * @property {number} id - Unique ID of the user.
+ * @property {string} correo - Email address of the user.
  */
 export type AccountInformation = {
   nombre: string;
@@ -26,11 +27,8 @@ export type AccountInformation = {
 };
 
 /**
- * **Default account information template.**
- *
- * Used when no user is logged in or data is unavailable.
- *
  * @constant {AccountInformation} accountInformationTemplate
+ * @description Default template used when there is no logged-in user or data is unavailable.
  */
 export const accountInformationTemplate: AccountInformation = {
   nombre: "Not Found",
@@ -41,11 +39,20 @@ export const accountInformationTemplate: AccountInformation = {
   correo: "",
 };
 
+/**
+ * @typedef {Object} AuthContext
+ * @description Context for managing user authentication and account information.
+ * @property {AccountInformation} accountInformation - The current user account information.
+ * @property {React.Dispatch<AccountInformation>} setAccountInformation - Function to update the user account information.
+ */
 export type AuthContext = {
   accountInformation: AccountInformation;
   setAccountInformation: React.Dispatch<AccountInformation>;
 };
 
+/**
+ * Context for authentication, providing user account information and update method.
+ */
 export const AuthContext = createContext<AuthContext>({
   accountInformation: accountInformationTemplate,
   setAccountInformation: () => {},
@@ -54,23 +61,34 @@ export const AuthContext = createContext<AuthContext>({
 type AuthProviderProps = {
   children: ReactNode;
 };
+
+/**
+ * @component AuthProvider
+ * @description Context provider component that supplies authentication state to the rest of the application.
+ * @param {ReactNode} children - Child components to be rendered within the provider.
+ */
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [localUser, setLocalUser] = useState<AccountInformation>(accountInformationTemplate);
 
-  const { data, error } = useQuery({
-    queryFn: () =>
-      getUsuarioService(
-        parseInt(localStorage.getItem("CURRENT_ID") ?? "-1"),
-        localStorage.getItem("TOKEN") ?? ""
-      ),
-    queryKey: ["session"],
-    refetchInterval: 60 * 1000,
-    retry: 1,
-  });
+  // const { data, error } = useQuery({
+  //   queryFn: () =>
+  //     getUsuarioService(
+  //       parseInt(localStorage.getItem("CURRENT_ID") ?? "-1"),
+  //       localStorage.getItem("TOKEN") ?? ""
+  //     ),
+  //   queryKey: ["session", localStorage.getItem("TOKEN") ?? ""],
+  //   refetchInterval: 60 * 1000, // Refetch data every minute.
+  //   retry: 1, // Retry the query once in case of failure.
+  // });
 
+  /**
+   * @effect
+   * @description Effect hook to update user information when data is fetched successfully.
+   * The user information is adapted and stored in the state.
+   */
   useEffect(() => {
-    if (data) {
-      const localData = adaptUser(data);
+    if (true) {
+      const localData = usuarios[0];
       setLocalUser({
         correo: localData.correo,
         foto: localData.fotoDePerfil,
@@ -80,37 +98,29 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         token: localStorage.getItem("TOKEN") ?? "",
       });
     }
-  }, [data]);
+  }, []);
 
-  const { handleClose, handleOpen, open } = useAlertDialog();
+  const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
+  const { setError } = useErrorReader(showDialog);
 
-  useEffect(() => {
-    if (error) {
-      handleOpen();
-    }
-  }, [error]);
-
-  // const [preload, setPreload] = useState(false);
   /**
-   * Efecto que escucha cambios en el almacenamiento local y actualiza la información del usuario en el estado.
-   * Se ejecuta al montar el componente y cada vez que cambia el almacenamiento local.
+   * @effect
+   * @description Effect hook to handle errors by passing them to the error reader.
+   * This effect is triggered whenever an error occurs during the query.
+   */
+  // useEffect(() => {
+  //   if (error) {
+  //     setError(error);
+  //   }
+  // }, [error]);
+
+  /**
+   * @effect
+   * @description Effect hook to listen for changes in local storage and update the user state accordingly.
+   * This effect is not being utilized currently, but it can be used to detect storage changes.
    */
   useEffect(() => {
-    // /**
-    //  * Función que obtiene los datos de la cuenta del usuario desde `localStorage`
-    //  * y actualiza el estado `localUser`.
-    //  */
-    // const handleStorageChange = () => {
-    //   if (localStorage.getItem("ACCOUNT")) {
-    //     const user = JSON.parse(localStorage.getItem("ACCOUNT") as string) as AccountInformation;
-    //     setLocalUser(user);
-    //   }
-    // };
-    // // Inicializa el estado con los datos actuales de `localStorage`
-    // handleStorageChange();
-    // // Agrega un listener para detectar cambios en `localStorage`
-    // window.addEventListener("storage", handleStorageChange);
-    // setPreload(true);
+    // Effect to listen for changes in local storage can be added here if needed.
   }, []);
 
   return (
@@ -120,17 +130,21 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setAccountInformation: setLocalUser,
       }}
     >
-      {error && (
-        <AlertDialogError
-          open={open}
-          title="Sesión de Usuario"
-          error={error}
-          handleClose={handleClose}
-        />
-      )}
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+      />
       {children}
     </AuthContext.Provider>
   );
 };
 
+/**
+ * @hook useAuth
+ * @description Custom hook to access the authentication context and retrieve user account information.
+ * @returns {AuthContext} - The current authentication context value, including account information and update function.
+ */
 export const useAuth = () => useContext(AuthContext);

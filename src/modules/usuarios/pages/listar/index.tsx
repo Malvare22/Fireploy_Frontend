@@ -31,8 +31,9 @@ import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import { useQuery } from "@tanstack/react-query";
-import AlertDialogError from "@modules/general/components/alertDialogError";
 import LoaderElement from "@modules/general/components/loaderElement";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
+import AlertDialog from "@modules/general/components/alertDialog";
 
 function ListarUsuarios() {
   // 🔐 Get authentication token from context
@@ -51,17 +52,15 @@ function ListarUsuarios() {
   /**
    * Fetch users from the API using React Query
    */
-  const { data, isLoading, isError, error, isSuccess } = useQuery({
+  const { data, isLoading, error, isSuccess } = useQuery({
     queryFn: () => getUsuariosByTypeService("todos", token),
-    queryKey: ["usuarios"],
+    queryKey: ["Usuarios", "todos"],
   });
 
-  // 🛑 Alert dialog for error handling
-  const {
-    handleClose: handleCloseFailFetch,
-    open: openFailFetch,
-    handleOpen: handleOpenFailFetch,
-  } = useAlertDialog();
+  const { showDialog, open, title, message, handleCancel, type, handleAccept } =
+    useAlertDialog();
+
+  const { setError } = useErrorReader(showDialog);
 
   /**
    * Effect to set adapted users when data is successfully fetched
@@ -76,10 +75,10 @@ function ListarUsuarios() {
    * Effect to open alert dialog on fetch error
    */
   useEffect(() => {
-    if (isError) {
-      handleOpenFailFetch();
+    if (error) {
+      setError(error);
     }
-  }, [isError]);
+  }, [error]);
 
   /**
    * Filters users based on search input
@@ -105,14 +104,16 @@ function ListarUsuarios() {
   return (
     <>
       {/* 🛑 Show error dialog if fetch failed */}
-      {error && (
-        <AlertDialogError
-          error={error}
-          handleClose={handleCloseFailFetch}
-          open={openFailFetch}
-          title="Consultar Portafolios"
-        />
-      )}
+
+      <AlertDialog
+        handleAccept={handleAccept}
+        handleCancel={handleCancel}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+        isLoading={isLoading}
+      />
 
       {/* ⏳ Show loading spinner or main content */}
       {isLoading ? (

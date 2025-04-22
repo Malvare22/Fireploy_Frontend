@@ -7,14 +7,14 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import TextFieldPassword from "@modules/general/components/textFieldPassword";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import { useMutation } from "@tanstack/react-query";
-import AlertDialogError from "@modules/general/components/alertDialogError";
-import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
 import { z } from "zod";
 import { labelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
 import { useParams } from "react-router";
 import { CambiarContrasenaSchema } from "@modules/usuarios/utils/form/cambiarContrasenia";
 import { postChangePasswordForget } from "@modules/general/services/post.change.password";
-
+import useErrorReader from "@modules/general/hooks/useErrorReader";
+import AlertDialog from "@modules/general/components/alertDialog";
+import { labelRestorePassword } from "@modules/general/enums/labelRestorePassword";
 /**
  * Password reset component used for users who forgot their current password.
  * It allows users to provide their email, current password, and a new password.
@@ -22,11 +22,19 @@ import { postChangePasswordForget } from "@modules/general/services/post.change.
  *
  * @component
  */
+
 function ReestablecerContrasenia() {
   const { token } = useParams();
 
+  /** 
+   * Type for form values based on Zod schema.
+   * @typedef {Object} FormType
+   */
   type FormType = z.infer<typeof CambiarContrasenaSchema>;
 
+  /**
+   * Form configuration using React Hook Form and Zod validation schema.
+   */
   const {
     register,
     handleSubmit,
@@ -41,28 +49,37 @@ function ReestablecerContrasenia() {
     },
   });
 
+  /** React Router navigation instance */
   const navigate = useNavigate();
 
-  // Error dialog control
-  const {
-    handleOpen: handleOpenError,
-    handleClose: handleCloseError,
-    open: openError,
-  } = useAlertDialog();
+  /** Custom hook for managing alert dialog state and actions */
+  const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
 
-  // Success dialog control
-  const { handleOpen: handleOpenSuccess, open: openSuccess } = useAlertDialog();
+  /** Custom hook for error handling and display */
+  const { setError } = useErrorReader(showDialog);
 
-  // Mutation to send password change request
-  const { error, mutate, isPending } = useMutation({
-    mutationKey: ["ReestablecerContrasenia usuario"],
+  /**
+   * Mutation for submitting password reset request.
+   * Handles success and error scenarios.
+   */
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["Restore Password User", getValues("correo")],
     mutationFn: () => postChangePasswordForget(getValues(), token ?? ""),
-    onSuccess: handleOpenSuccess,
-    onError: handleOpenError,
+    onSuccess: () =>
+      showDialog({
+        message: "Contraseña reestablecida Correctamente",
+        onAccept: () => navigate(rutasGeneral.login),
+        title: "Cambiar Contraseña",
+        type: "success",
+      }),
+    onError: (error) => {
+      setError(error);
+    },
   });
 
   /**
    * Submits the password reset form.
+   * @function
    */
   const onSubmit = async () => {
     await mutate();
@@ -70,23 +87,13 @@ function ReestablecerContrasenia() {
 
   return (
     <Card sx={{ maxWidth: 600, padding: 4 }}>
-      {/* Error alert dialog */}
-      {error && (
-        <AlertDialogError
-          error={error}
-          handleClose={handleCloseError}
-          open={openError}
-          title="Cambio de Contraseña"
-        />
-      )}
-
-      {/* Success alert dialog */}
-      <AlertDialogSuccess
-        message="Contraseña actualizada correctamente"
-        handleClose={() => navigate(rutasGeneral.login)}
-        open={openSuccess}
-        title="Cambio de Contraseña"
-        reload={false}
+      {/* Alert dialog for confirmation or error messages */}
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
       />
 
       <Stack spacing={3}>
@@ -134,10 +141,10 @@ function ReestablecerContrasenia() {
             {/* Form actions */}
             <Stack spacing={2} direction="row" justifyContent="center">
               <Button variant="outlined" onClick={() => navigate(rutasGeneral.login)}>
-                {labelGeneral.volver}
+                {labelRestorePassword.back}
               </Button>
               <Button type="submit" variant="contained" disabled={isPending}>
-                {labelUsuario.cambiarContrasenia}
+                {labelRestorePassword.restorePassword}
               </Button>
             </Stack>
           </Stack>

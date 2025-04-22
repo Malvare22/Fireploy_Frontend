@@ -27,8 +27,6 @@ import TablaGestionarSecciones from "@modules/materias/components/tablaSecciones
 import { useAuth } from "@modules/general/context/accountContext";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
-import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
-import AlertDialogError, { CustomError } from "@modules/general/components/alertDialogError";
 import LoaderElement from "@modules/general/components/loaderElement";
 import GestionarEstudiantesCurso from "@modules/materias/components/gestionarEstudiantesCurso";
 import { useSearchUsers, UsuarioCampoBusqueda } from "@modules/general/hooks/useSearchUsers";
@@ -40,19 +38,16 @@ import InfoIcon from "@mui/icons-material/Info";
 import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import AlertDialog from "@modules/general/components/alertDialog";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
+import { labelEditCourse } from "@modules/materias/enums/labelEditCourse";
 
-export enum labelEditarCurso {
-  titulo = "Editar Curso",
-  descripcion = "Descripción",
-  estado = "Estado",
-  secciones = "Secciones",
-  tituloModalEstudiante = "Agregar Estudiantes",
-  noHayEstudiantes = "Actualmente no hay estudiantes registrados",
-  noHaySecciones = "Actualmente no hay secciones registradas",
-  modificarSecciones = "Guardar Cambios Secciones",
-}
-
+/**
+ * Component for editing a course view.
+ * Handles course data fetching, form submission, and tab switching between course info and students.
+ */
 function VistaEditarCurso() {
+  // Custom hooks and React states
   const { idCurso } = useParams();
   const { accountInformation } = useAuth();
   const { token } = accountInformation;
@@ -60,61 +55,80 @@ function VistaEditarCurso() {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const page = searchParams.get("page") ?? "0";
-
   const [tabIndex, setTabIndex] = useState(page);
 
   useEffect(() => {
     setTabIndex(page);
   }, [page]);
 
+  /**
+   * Handles tab change and updates search params accordingly.
+   */
   function handleChangeTab(_event: React.SyntheticEvent, value: string) {
     setTabIndex(value);
     setSearchParams({ ["page"]: value });
   }
 
+  // Form setup
   const methods = useForm<Curso>({
     resolver: zodResolver(CursoSchema),
     defaultValues: {} as Curso,
   });
 
   const { getValues, control, formState, watch } = methods;
-
   const { errors, isDirty } = formState;
 
-  console.log(errors);
-
   const {
-    handleOpen: handleOpenError,
-    handleClose: handleCloseError,
-    open: openError,
+    showDialog,
+    open,
+    title,
+    message,
+    handleClose,
+    type,
+    handleAccept,
+    isLoading,
+    setIsLoading,
   } = useAlertDialog();
 
-  const {
-    handleOpen: handleOpenSuccess,
-    handleClose: handleCloseSuccess,
-    open: openSuccess,
-  } = useAlertDialog();
+  const { setError } = useErrorReader(showDialog);
 
+  /**
+   * Fetch course data by ID.
+   */
   const {
     data: dataFetchCurso,
     isLoading: isLoadingFetchCurso,
     error: errorFetchCurso,
   } = useQuery({
-    queryKey: ["fetchCurso"],
+    queryKey: ["Fetch Curso", idCurso ?? "-1"],
     queryFn: () => getCursoById(token, idCurso ?? "-1"),
   });
 
-  const {
-    mutate: mutatePatchCurso,
-    isPending: isPendingPatchCurso,
-    error: errorPatchCurso,
-    data: dataPatchCurso,
-  } = useMutation({
-    mutationFn: () => patchEditCurso(token, methods.getValues()),
-    mutationKey: ["patchCurso"],
-    onSuccess: handleOpenSuccess,
-    onError: handleOpenError,
+  /**
+   * Mutation for editing course.
+   */
+  const { mutate: mutatePatchCurso, isPending: isPendingPatchCurso } = useMutation({
+    mutationFn: async () => {
+      setIsLoading(true);
+      return await patchEditCurso(token, methods.getValues());
+    },
+    mutationKey: ["Patch Curso", methods.getValues()],
+    onSuccess: () =>
+      showDialog({
+        message: "Curso modificado correctamente",
+        title: "Modificar Curso",
+        type: "success",
+        onAccept: handleClose,
+        reload: true,
+      }),
+    onError: (err) => setError(err),
   });
+
+  useEffect(() => {
+    if (errorFetchCurso) {
+      setError(errorFetchCurso);
+    }
+  }, [errorFetchCurso]);
 
   useEffect(() => {
     if (dataFetchCurso) {
@@ -128,46 +142,40 @@ function VistaEditarCurso() {
     }
   }, [curso, methods.reset]);
 
+  /**
+   * Handles form submission for course update.
+   */
   const onSubmit = async () => {
     await mutatePatchCurso();
   };
 
-  useEffect(() => {
-    if (dataPatchCurso) {
-      handleOpenSuccess();
-    }
-  }, [dataPatchCurso]);
-
   return (
     <>
-      {(errorFetchCurso || errorPatchCurso) && (
-        <AlertDialogError
-          error={(errorFetchCurso || errorPatchCurso) as CustomError}
-          handleClose={handleCloseError}
-          open={openError}
-          title="Edición de Curso"
-        />
-      )}
-
-      <AlertDialogSuccess
-        handleClose={handleCloseSuccess}
-        message="Operación realizada exitosamente"
-        open={openSuccess}
-        title="Edición de Curso"
-        reload={false}
+      {/* Dialog for displaying feedback messages */}
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+        isLoading={isLoading}
       />
 
+      {/* Loader while fetching course */}
       {isLoadingFetchCurso ? (
         <LoaderElement />
       ) : (
         <FormProvider {...methods}>
           <Stack spacing={3} component={Paper} sx={{ padding: 2 }}>
+            {/* Page title */}
             <Stack direction="row" alignItems="center" spacing={1}>
               <EditIcon color="primary" />
               <Typography variant="h5" fontWeight="bold">
-                {labelEditarCurso.titulo}
+                {labelEditCourse.title}
               </Typography>
             </Stack>
+
+            {/* Tab Navigation */}
             <Tabs
               value={tabIndex}
               onChange={handleChangeTab}
@@ -193,13 +201,14 @@ function VistaEditarCurso() {
               />
             </Tabs>
 
+            {/* Course Info Tab */}
             {tabIndex == "0" && (
               <>
                 <form onSubmit={methods.handleSubmit(onSubmit)}>
                   <Stack spacing={3}>
                     <TeacherCard />
                     <TextField
-                      label={labelEditarCurso.descripcion}
+                      label={labelEditCourse.description}
                       {...methods.register("descripcion")}
                       error={!!methods.formState.errors.descripcion}
                       helperText={methods.formState.errors.descripcion?.message}
@@ -245,6 +254,8 @@ function VistaEditarCurso() {
                 </Stack>
               </>
             )}
+
+            {/* Students Tab */}
             {tabIndex == "1" && (
               <Box>
                 <GestionarEstudiantesCurso curso={getValues()} idCurso={idCurso || ""} />
@@ -257,14 +268,21 @@ function VistaEditarCurso() {
   );
 }
 
+/**
+ * Component to display or edit the assigned teacher of a course.
+ * Allows user to select, change, or remove a teacher.
+ */
 function TeacherCard() {
   const { setValue: setValuesCurso, watch: watchCurso } = useFormContext<Curso>();
   const [docentes, setDocentes] = useState<UsuarioCampoBusqueda[]>([]);
-
   const token = useAuth().accountInformation.token;
 
-  const { handleClose: handleCloseFetchDocentes, open: openFetchDocentes } = useAlertDialog();
+  const { showDialog, open, title, message, type, handleAccept, isLoading } = useAlertDialog();
+  const { setError } = useErrorReader(showDialog);
 
+  /**
+   * Fetch list of teachers for selection.
+   */
   const {
     data: dataFetchDocentes,
     isLoading: isLoadingFetchDocentes,
@@ -275,12 +293,17 @@ function TeacherCard() {
   });
 
   useEffect(() => {
+    if (errorFetchDocentes) {
+      setError(errorFetchDocentes);
+    }
+  }, [errorFetchDocentes]);
+
+  useEffect(() => {
     if (dataFetchDocentes)
       setDocentes(dataFetchDocentes.map((docente) => adaptUserServiceToCB(docente)));
   }, [dataFetchDocentes]);
 
   const { selectUser, setSelectUser } = useSearchUsers();
-
   const [edit, setEdit] = useState(false);
 
   useEffect(() => {
@@ -290,6 +313,9 @@ function TeacherCard() {
     }
   }, [selectUser]);
 
+  /**
+   * Renders teacher field (chip or user selector).
+   */
   function Field() {
     if (!edit) {
       if (watchCurso().docente == null)
@@ -332,6 +358,9 @@ function TeacherCard() {
     setValuesCurso("docente", null, { shouldDirty: true });
   }
 
+  /**
+   * Renders buttons for edit/save/cancel/delete.
+   */
   function ButtonMode() {
     return !edit ? (
       <>
@@ -348,14 +377,14 @@ function TeacherCard() {
 
   return (
     <>
-      {errorFetchDocentes && (
-        <AlertDialogError
-          open={openFetchDocentes}
-          error={errorFetchDocentes}
-          handleClose={handleCloseFetchDocentes}
-          title="Obtener docentes"
-        />
-      )}
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+        isLoading={isLoading}
+      />
       <Stack direction={"row"} alignItems={"center"} spacing={1} width={500}>
         <Field />
         <ButtonMode />
@@ -365,3 +394,4 @@ function TeacherCard() {
 }
 
 export default VistaEditarCurso;
+

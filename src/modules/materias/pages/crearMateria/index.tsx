@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import AlertDialogError, { CustomError } from "@modules/general/components/alertDialogError";
-import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
+import AlertDialog from "@modules/general/components/alertDialog";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
 import TablaGestionarCursos from "@modules/materias/components/tablaGestionarCursos";
 import { labelGestionarMateria } from "@modules/materias/enums/labelGestionarMateria";
 import { postCreateCursoService } from "@modules/materias/services/post.crear.grupo";
@@ -31,8 +31,6 @@ import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
-
-
 function VistaCrearMateria() {
   const [createGroups, setCreateGroups] = useState<boolean>(false);
 
@@ -46,6 +44,7 @@ function VistaCrearMateria() {
 
   const { accountInformation } = useAuth();
   const { token } = accountInformation;
+
   function getQueryToMake(type: "editar" | "crear") {
     const querys = {
       editar: () => postCreateMateriaService(token, getValues()),
@@ -55,30 +54,38 @@ function VistaCrearMateria() {
     return querys[type];
   }
 
+  const {
+    showDialog,
+    open,
+    title,
+    message,
+    handleCancel,
+    handleClose,
+    type,
+    handleAccept,
+    isLoading,
+  } = useAlertDialog();
+
+  const { setError } = useErrorReader(showDialog);
+
   const [idMateria, setIdMateria] = useState<null | number>(null);
 
-  const {
-    handleOpen: handleOpenError,
-    handleClose: handleCloseError,
-    open: openError,
-  } = useAlertDialog();
-
-  const {
-    handleOpen: handleOpenSuccess,
-    open: openSuccess,
-    handleClose: handleCloseSuccess,
-  } = useAlertDialog();
-
-  const { isPending, error, mutate } = useMutation({
+  const { isPending, mutate } = useMutation({
     mutationFn: getQueryToMake("crear"),
-    mutationKey: ["create materia"],
-    onError: () => {
-      handleOpenError();
+    mutationKey: ["Create Subject"],
+    onError: (err) => {
+      setError(err);
       setDisableCheck(false);
     },
     onSuccess: (data) => {
-      console.log(data)
-      if (data) setIdMateria(data.id);
+      showDialog({
+        title: "Creación de Materia Acádemica",
+        message: "La materia se ha creado correctamente",
+        onAccept: handleClose,
+        type: "success",
+        reload: true,
+      });
+      setIdMateria(data.id);
     },
   });
 
@@ -86,20 +93,26 @@ function VistaCrearMateria() {
     try {
       await Promise.all(groups.map((group) => postCreateCursoService(token, idMateria!!, group)));
     } catch (error) {
-      console.log(error)
+      console.log(error);
       throw error;
     }
   }
 
-  const {
-    isPending: isPendingPostGrupos,
-    mutate: mutatePostGrupos,
-    error: errorPostGrupos,
-  } = useMutation({
+  const { isPending: isPendingPostGrupos, mutate: mutatePostGrupos } = useMutation({
     mutationFn: () => createGroupsRequest(getValues("cursos") || []),
     mutationKey: ["edit grupos"],
-    onError: handleOpenError,
-    onSuccess: handleOpenSuccess,
+    onError: (err) => {
+      setError(err);
+    },
+    onSuccess: () => {
+      showDialog({
+        title: "Edición de Grupos",
+        message: "El grupo se ha editado correctamente",
+        onAccept: handleClose,
+        type: "success",
+        reload: true,
+      });
+    },
   });
 
   function handleCheck() {
@@ -122,19 +135,14 @@ function VistaCrearMateria() {
 
   return (
     <>
-      {(error || errorPostGrupos) && (
-        <AlertDialogError
-          handleClose={handleCloseError}
-          open={openError}
-          title="Crear Materia"
-          error={(error ?? errorPostGrupos) as CustomError}
-        />
-      )}
-      <AlertDialogSuccess
-        handleClose={handleCloseSuccess}
-        message="Operación exitosamente realizada"
-        open={openSuccess}
-        title="Creación de Materia"
+      <AlertDialog
+        handleAccept={handleAccept}
+        handleCancel={handleCancel}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+        isLoading={isLoading}
       />
       <Card sx={{ padding: 2 }}>
         <FormProvider {...methods}>
@@ -197,7 +205,11 @@ function VistaCrearMateria() {
                 </Grid2>
               </Grid2>
               <Box>
-                <Button type="submit" variant="contained" loading={isPending || isPendingPostGrupos}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  loading={isPending || isPendingPostGrupos}
+                >
                   {labelGestionarMateria.crearMateria}
                 </Button>
               </Box>

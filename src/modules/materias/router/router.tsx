@@ -23,35 +23,35 @@ export enum rutasMaterias {
 }
 
 export const routerMaterias: RouteObject[] = [
-  // {
-  //   path: rutasMaterias.explorar,
-  //   element: <ExplorarMaterias />,
-  // },
-  // {
-  //   path: rutasMaterias.listarMaterias,
-  //   element: <ListarMaterias/>
-  // },
-  // {
-  //   path: rutasMaterias.listarCursos,
-  //   element: <ListarCursos/>
-  // },
+  {
+    path: rutasMaterias.explorar,
+    element: <ExplorarMaterias />,
+  },
+  {
+    path: rutasMaterias.listarMaterias,
+    element: <ListarMaterias/>
+  },
+  {
+    path: rutasMaterias.listarCursos,
+    element: <ListarCursos/>
+  },
   {
     path: rutasMaterias.verCurso,
     element: <VerInformacionCurso />,
   },
-  // {
-  //   path: rutasMaterias.editarCurso,
-  //   element: <VistaEditarCurso />,
-  // },
-  // {
-  //   path: rutasMaterias.explorarCursos,
-  //   element: <VerCursosMateria />,
-  // },
+  {
+    path: rutasMaterias.editarCurso,
+    element: <VistaEditarCurso />,
+  },
+  {
+    path: rutasMaterias.explorarCursos,
+    element: <VerCursosMateria />,
+  },
 
-  // {
-  //   path: rutasMaterias.crearMateria,
-  //   element: <VistaCrearMateria />,
-  // },
+  {
+    path: rutasMaterias.crearMateria,
+    element: <VistaCrearMateria />,
+  },
   // {
   //   path: rutasMaterias.editarMateria,
   //   element: <VistaEditarMateria />,

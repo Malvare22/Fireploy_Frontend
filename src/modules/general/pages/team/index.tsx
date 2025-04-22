@@ -1,12 +1,12 @@
 import { getImage } from "@modules/general/utils/getImage";
-import { Box, Card, Grid2, IconButton, Stack, Typography } from "@mui/material";
+import { Box, Grid2, IconButton, Stack, Typography } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import { labelTeam } from "@modules/general/enums/labelTeam";
 
-export enum labelTeam {
-  title = "Conoce a nuestro equipo de trabajo",
-  content = "Fireploy se encuentra desarrollado por tres estudiantes de Ingeniería de Sistemas de la UFPS",
-}
-
+/**
+ * Array of team member data.
+ * Each item contains: [imagePath, name, LinkedIn URL, description]
+ */
 const labels: [string, string, string, string][] = [
   [
     getImage["team01"].ruta,
@@ -28,19 +28,33 @@ const labels: [string, string, string, string][] = [
   ],
 ];
 
+/**
+ * Displays the team section including individual cards for each member.
+ *
+ * @component
+ */
 function TeamView() {
   return (
     <Stack spacing={3}>
-      <Typography textAlign='center' variant="h4">{labelTeam.title}</Typography>
-      <Typography textAlign='center' variant="subtitle1">{labelTeam.content}</Typography>
+      {/* Section title */}
+      <Typography textAlign="center" variant="h4">
+        {labelTeam.title}
+      </Typography>
+
+      {/* Section subtitle */}
+      <Typography textAlign="center" variant="subtitle1">
+        {labelTeam.content}
+      </Typography>
+
+      {/* Team cards layout */}
       <Grid2 container padding={2} display={"flex"} justifyContent={"center"} spacing={6}>
-        <Grid2 size={{md: 3, xs: 12}}>
+        <Grid2 size={{ md: 3, xs: 12 }}>
           <TeamCard member={labels[0]} />
         </Grid2>
-        <Grid2 size={{md: 3, xs: 12}}>
+        <Grid2 size={{ md: 3, xs: 12 }}>
           <TeamCard member={labels[1]} />
         </Grid2>
-        <Grid2 size={{md: 3, xs: 12}}>
+        <Grid2 size={{ md: 3, xs: 12 }}>
           <TeamCard member={labels[2]} />
         </Grid2>
       </Grid2>
@@ -48,13 +62,29 @@ function TeamView() {
   );
 }
 
+/**
+ * Props type definition for TeamCard.
+ */
 type TeamCardProps = {
   member: [string, string, string, string];
 };
+
+/**
+ * Displays a card for a single team member, including image, name, and description.
+ *
+ * @component
+ * @param {TeamCardProps} props - Props containing team member data.
+ */
 function TeamCard({ member }: TeamCardProps) {
+  /**
+   * Renders the LinkedIn corner icon.
+   *
+   * @function
+   */
   const Corner = () => {
     return (
       <>
+        {/* White corner background */}
         <Box
           sx={{
             borderRadius: "100% 0% 0% 100% / 0% 100% 0% 100%",
@@ -65,8 +95,15 @@ function TeamCard({ member }: TeamCardProps) {
             right: 0,
             backgroundColor: "white",
           }}
-        ></Box>
-        <IconButton sx={{ position: "absolute", top: 0, right: 0 }}>
+        />
+        {/* LinkedIn icon button */}
+        <IconButton
+          sx={{ position: "absolute", top: 0, right: 0 }}
+          component="a"
+          href={member[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <LinkedInIcon sx={{ fontSize: 32 }} />
         </IconButton>
       </>
@@ -75,12 +112,13 @@ function TeamCard({ member }: TeamCardProps) {
 
   return (
     <Stack spacing={2}>
+      {/* Profile image */}
       <Box
         sx={{
           position: "relative",
           height: 400,
-          overflow: "hidden", // Asegura que el exceso de imagen se recorte
-          width: "100%", // Opcional: define un ancho si es necesario
+          overflow: "hidden",
+          width: "100%",
         }}
       >
         <Box
@@ -89,17 +127,22 @@ function TeamCard({ member }: TeamCardProps) {
           sx={{
             width: "100%",
             height: 400,
-            objectFit: "cover", // Cubre el área sin deformarse
+            objectFit: "cover",
             objectPosition: "center 0%",
           }}
         />
         <Corner />
       </Box>
-      <Typography textAlign={"center"} variant="h6">
+
+      {/* Name */}
+      <Typography textAlign="center" variant="h6">
         {member[1]}
       </Typography>
+
+      {/* Description */}
       <Typography variant="subtitle2">{member[3]}</Typography>
     </Stack>
   );
 }
+
 export default TeamView;

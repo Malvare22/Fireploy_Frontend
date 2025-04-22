@@ -19,8 +19,9 @@ import { adaptUser, adaptUserToPC } from "@modules/usuarios/utils/adapt.usuario"
 import { useAuth } from "@modules/general/context/accountContext";
 import { useQuery } from "@tanstack/react-query";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
-import AlertDialogError from "@modules/general/components/alertDialogError";
 import LoaderElement from "@modules/general/components/loaderElement";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
+import AlertDialog from "@modules/general/components/alertDialog";
 
 /**
  * Component for exploring all available user portfolios.
@@ -42,20 +43,17 @@ function ExplorarPortafolios() {
    * Query to fetch all users of type "todos" using the provided token.
    * Handles loading, error, and success states.
    */
-  const { data, isLoading, isError, error, isSuccess } = useQuery({
+  const { data, isLoading, error, isSuccess } = useQuery({
     queryFn: () => getUsuariosByTypeService("todos", token),
-    queryKey: ["portafolios"],
+    queryKey: ["Portafolios", "todos"],
   });
 
   // Local state to store adapted user portfolio data
   const [usuarios, setUsuarios] = useState<UsuarioPortafolioCard[]>([]);
 
-  // Alert dialog control for error handling
-  const {
-    handleClose: handleCloseFailFetch,
-    open: openFailFetch,
-    handleOpen: handleOpenFailFetch,
-  } = useAlertDialog();
+  const { showDialog, open, title, message, handleCancel, type, handleAccept } = useAlertDialog();
+
+  const {setError} = useErrorReader(showDialog);
 
   /**
    * Effect triggered when user data is successfully fetched.
@@ -72,13 +70,13 @@ function ExplorarPortafolios() {
    * Opens the alert dialog with the error message.
    */
   useEffect(() => {
-    if (isError) {
-      handleOpenFailFetch();
+    if (error) {
+      setError(error);
     }
-  }, [isError]);
+  }, [error]);
 
   // Hook to manage sorting logic for the portfolio list
-  const { handleRequestSort, setOrderBy } = useOrderSelect();
+  const { handleOrder } = useOrderSelect();
 
   // Local state for the search input
   const [search, setSearch] = useState<string>("");
@@ -86,14 +84,14 @@ function ExplorarPortafolios() {
   return (
     <>
       {/* Display alert dialog if an error occurred */}
-      {error && (
-        <AlertDialogError
-          error={error}
-          handleClose={handleCloseFailFetch}
-          open={openFailFetch}
-          title="Consultar Portafolios"
-        />
-      )}
+      <AlertDialog
+        handleAccept={handleAccept}
+        handleCancel={handleCancel}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+      />
 
       {/* Show loading spinner or main content based on loading state */}
       {isLoading ? (
@@ -129,12 +127,13 @@ function ExplorarPortafolios() {
             {/* Sort dropdown */}
             <Select
               onChange={(e) => {
-                const selectedValue = JSON.parse(e.target.value);
-                if (selectedValue.key == undefined || selectedValue.order == undefined)
-                  setOrderBy({});
-                else handleRequestSort(selectedValue.key, selectedValue.order);
+                const selectedValue = JSON.parse(e.target.value as any);
+                if(!selectedValue.key){
+                  handleOrder("nombre", undefined);
+                  handleOrder("semestre", undefined);
+                }
+                else handleOrder(selectedValue.key, selectedValue.order);
               }}
-              defaultValue={JSON.stringify({ key: undefined, order: undefined })}
             >
               <MenuItem value={JSON.stringify({ key: undefined, order: undefined })}>
                 {labelSelects.noAplicar}

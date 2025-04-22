@@ -1,6 +1,6 @@
-import DataTable, { ConditionalStyles } from "react-data-table-component";
-import { TableColumn, TableStyles } from "react-data-table-component";
-import { Alert, Box, Chip, MenuItem, Stack, TextField, Typography, useTheme } from "@mui/material";
+import DataTable from "react-data-table-component";
+import { TableColumn } from "react-data-table-component";
+import { Alert, Box, Chip, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import Status from "@modules/general/components/status";
 import InfoIcon from "@mui/icons-material/Info";
@@ -23,11 +23,11 @@ import { adaptUserServiceToCB } from "@modules/usuarios/utils/adapt.usuario";
 import { getUsuariosByTypeService } from "@modules/usuarios/services/get.usuarios.[tipo]";
 import { useQuery } from "@tanstack/react-query";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
-import AlertDialogError from "@modules/general/components/alertDialogError";
+import { useCustomTableStyles } from "@modules/general/styles";
+import AlertDialog from "@modules/general/components/alertDialog";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
 
 const TablaGestionarCursos = () => {
-  const theme = useTheme();
-
   /**
    * Definición de estado de editar por fila
    */
@@ -69,12 +69,30 @@ const TablaGestionarCursos = () => {
     queryKey: ["Docentes"],
   });
 
-  const {handleClose: handleCloseFetchDocentes, open: openFetchDocentes} = useAlertDialog();
+  const {
+    showDialog,
+    open,
+    title,
+    message,
+    handleCancel: handleCancelAlert,
+    type,
+    handleAccept,
+    isLoading,
+  } = useAlertDialog();
+
+  const { setError } = useErrorReader(showDialog);
+
+  useEffect(() => {
+    if (errorFetchDocentes) {
+      setError(errorFetchDocentes);
+    }
+  }, [errorFetchDocentes]);
 
   const [docentes, setDocentes] = useState<UsuarioCampoBusqueda[]>([]);
 
   useEffect(() => {
-    if(dataFetchDocentes) setDocentes(dataFetchDocentes.map((docente) => adaptUserServiceToCB(docente)));
+    if (dataFetchDocentes)
+      setDocentes(dataFetchDocentes.map((docente) => adaptUserServiceToCB(docente)));
   }, [dataFetchDocentes]);
 
   function handleSave() {
@@ -164,13 +182,13 @@ const TablaGestionarCursos = () => {
       name: <Typography>{labelListarCursos.docente}</Typography>,
       cell: (row) => {
         const { selectUser, setSelectUser } = useSearchUsers();
-  
+
         useEffect(() => {
           if (selectUser && selectUser?.nombreCompleto)
             setValuesCurso("docente.id", selectUser?.id);
           setValuesCurso("docente.nombre", selectUser?.nombreCompleto!!);
         }, [selectUser]);
-  
+
         if (currentEdit != row.rowIndex) {
           if (row.docente == null)
             return <Chip icon={<InfoIcon />} label={"Docente sin asignar"} />;
@@ -236,47 +254,8 @@ const TablaGestionarCursos = () => {
       maxWidth: "250px",
     },
   ];
-  
 
-  const customStyles: TableStyles = {
-    headCells: {
-      style: {
-        backgroundColor: theme.palette.background.paper, // override the row height
-        color: theme.palette.text.primary,
-        fontSize: theme.typography.h6.fontSize,
-        fontWeight: theme.typography.body1.fontWeight,
-        fontFamily: theme.typography.body1.fontFamily,
-      },
-    },
-    // table: {
-    //   style: {
-    //     border: "1px solid red",
-    //      borderRadius: '20px'
-    //   },
-    // },
-    rows: {
-      style: {
-        color: theme.palette.text.primary,
-        fontSize: theme.typography.body1.fontSize,
-        fontWeight: theme.typography.body1.fontWeight,
-        fontFamily: theme.typography.body1.fontFamily,
-        backgroundColor: theme.palette.background.default,
-      },
-    },
-  };
-
-  const conditionalRowStyles: ConditionalStyles<CursoTabla & { rowIndex: number }>[] = [
-    {
-      when: (row) => row.rowIndex % 2 !== 0, // Filas impares
-      style: {
-        color: theme.palette.text.primary,
-        fontSize: theme.typography.body1.fontSize,
-        fontWeight: theme.typography.body1.fontWeight,
-        fontFamily: theme.typography.body1.fontFamily,
-        backgroundColor: theme.palette.background.paper,
-      },
-    },
-  ];
+  const { conditionalRowStyles, customStyles } = useCustomTableStyles();
 
   const dataConIndice = useMemo(() => {
     const cursos = watch("cursos") ?? [];
@@ -288,14 +267,15 @@ const TablaGestionarCursos = () => {
 
   return (
     <>
-      {errorFetchDocentes && (
-        <AlertDialogError
-          open={openFetchDocentes}
-          error={errorFetchDocentes}
-          handleClose={handleCloseFetchDocentes}
-          title="Obtener docentes"
-        />
-      )}
+      <AlertDialog
+        handleAccept={handleAccept}
+        handleCancel={handleCancelAlert}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+        isLoading={isLoading}
+      />
       <form onSubmit={(e) => e.preventDefault()}>
         <DataTable
           columns={columns}

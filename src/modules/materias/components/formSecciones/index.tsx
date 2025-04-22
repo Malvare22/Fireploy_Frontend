@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
+import { labelFormSection } from "@modules/materias/enums/labelFormSection";
 import { Seccion } from "@modules/materias/types/seccion";
 import { SeccionesSchema, SeccionSchema } from "@modules/materias/utils/forms/form.schema";
 import { getMateriaStatesArray } from "@modules/materias/utils/materias";
@@ -13,6 +14,7 @@ type Props = {
   onAccept: () => void;
   index: number;
 };
+
 function SeccionesForm({ onAccept, onCancel, index }: Props) {
   const { getValues, setValue } = useFormContext<SeccionesSchema>();
   const {
@@ -46,7 +48,7 @@ function SeccionesForm({ onAccept, onCancel, index }: Props) {
   return (
     <Stack spacing={3} padding={3} component={"form"} onSubmit={handleSubmitForm(onSaveForm)}>
       <Typography variant="h5" textAlign={"center"}>
-        Editar Sección
+        {labelFormSection.editSection}
       </Typography>
 
       <TextField

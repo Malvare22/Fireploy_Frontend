@@ -11,7 +11,6 @@ import { buttonTypes } from "@modules/general/types/buttons";
 import { Seccion, seccionTemplate } from "@modules/materias/types/seccion";
 import { labelListarSecciones } from "@modules/materias/enums/labelListarSecciones";
 import { Curso } from "@modules/materias/types/curso";
-import { labelEditarCurso } from "@modules/materias/pages/editarCurso";
 import { useCustomTableStyles } from "@modules/general/styles";
 import CustomWidthTooltip from "@modules/general/components/customWidthTooltip";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
@@ -24,8 +23,9 @@ import { useMutation } from "@tanstack/react-query";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SeccionesSchema } from "@modules/materias/utils/forms/form.schema";
-import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
-import AlertDialogError from "@modules/general/components/alertDialogError";
+import AlertDialog from "@modules/general/components/alertDialog";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
+import { labelEditCourse } from "@modules/materias/enums/labelEditCourse";
 
 const TablaGestionarSecciones = () => {
   const { getValues: getValuesCurso } = useFormContext<Curso>();
@@ -35,8 +35,6 @@ const TablaGestionarSecciones = () => {
   });
 
   const { watch, getValues, setValue, reset } = methods;
-
-  console.log(getValues());
 
   useEffect(() => {
     reset({ secciones: getValuesCurso("secciones") || [] });
@@ -52,19 +50,22 @@ const TablaGestionarSecciones = () => {
     return JSON.stringify(getValues("secciones")) !== JSON.stringify(getValuesCurso("secciones"));
   };
 
-  const {
-    handleOpen: handleOpenError,
-    handleClose: handleCloseError,
-    open: openError,
-  } = useAlertDialog();
+  const [_successMessages, setSuccessMessages] = useState<string>("");
 
   const {
-    handleOpen: handleOpenSuccess,
-    handleClose: handleCloseSuccess,
-    open: openSuccess,
+    showDialog,
+    open,
+    title,
+    message,
+    handleCancel,
+    handleClose,
+    type,
+    handleAccept,
+    isLoading,
+    setIsLoading,
   } = useAlertDialog();
 
-  const [successMessages, setSuccessMessages] = useState<string>("");
+  const { setError } = useErrorReader(showDialog);
 
   async function getRequest(secciones: Seccion[]) {
     let mensajes = "";
@@ -83,11 +84,21 @@ const TablaGestionarSecciones = () => {
     return setSuccessMessages(mensajes);
   }
 
-  const { isSuccess, error, isPending, mutate } = useMutation({
-    mutationKey: ["modificar sección"],
-    mutationFn: () => getRequest(getValues("secciones") || []),
-    onSuccess: handleOpenSuccess,
-    onError: handleOpenError,
+  const { isPending, mutate } = useMutation({
+    mutationKey: ["Edit Section", getValues("secciones") || []],
+    mutationFn: async () => {
+      setIsLoading(true);
+      return await getRequest(getValues("secciones") || []);
+    },
+    onSuccess: () => {
+      showDialog({
+        title: "Editar Curso",
+        message: "Se ha editado el curso correctamente",
+        onAccept: () => handleClose,
+        reload: true,
+      });
+    },
+    onError: (err) => setError(err),
   });
 
   const {
@@ -219,32 +230,21 @@ const TablaGestionarSecciones = () => {
 
   return (
     <FormProvider {...methods}>
-      {isSuccess && (
-        <AlertDialogSuccess
-          open={openSuccess}
-          handleClose={handleCloseSuccess}
-          title="Edición de Secciones"
-          message={
-            successMessages != ""
-              ? successMessages
-              : "Actualización de Secciones realizada correctamente"
-          }
-        />
-      )}
-      {error && (
-        <AlertDialogError
-          error={error}
-          handleClose={handleCloseError}
-          title="Error Updating User"
-          open={openError}
-        />
-      )}
+      <AlertDialog
+        handleAccept={handleAccept}
+        handleCancel={handleCancel}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+        isLoading={isLoading}
+      />
       {
         <Modal handleClose={handleCloseEdit} open={openEdit}>
           <SeccionesForm index={currentEdit!!} onAccept={onCloseModal} onCancel={onCloseModal} />
         </Modal>
       }
-      <Typography variant="h6">{labelEditarCurso.secciones}</Typography>
+      <Typography variant="h6">{labelEditCourse.sections}</Typography>
       <Alert severity="info">{labelListarSecciones.informacion}</Alert>
       {watch("secciones")?.length != 0 ? (
         <>
@@ -258,7 +258,7 @@ const TablaGestionarSecciones = () => {
           ></DataTable>
         </>
       ) : (
-        <Alert severity="warning">{labelEditarCurso.noHaySecciones}</Alert>
+        <Alert severity="warning">{labelEditCourse.notHasSection}</Alert>
       )}
       <Stack alignItems={"end"} padding={3}>
         <Box>

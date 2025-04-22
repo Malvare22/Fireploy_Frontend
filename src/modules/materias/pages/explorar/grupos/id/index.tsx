@@ -1,7 +1,22 @@
-import AlertDialogError from "@modules/general/components/alertDialogError";
+/**
+ * Component to view detailed information about a specific course (Curso).
+ *
+ * This component fetches a course by ID using `getCursoById` and displays:
+ * - Subject name (Materia)
+ * - Course group
+ * - Course description
+ * - Associated sections (Secciones)
+ *
+ * It handles API loading, error states, and displays dialogs as needed.
+ *
+ * @component
+ */
+
+import AlertDialog from "@modules/general/components/alertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
 import CardSeccion from "@modules/materias/components/cardSeccion";
 import { LabelCurso } from "@modules/materias/enums/labelCurso";
 import { getCursoById } from "@modules/materias/services/get.curso";
@@ -14,60 +29,83 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 /**
- * Component to view detailed information about a specific course (Curso).
+ * VerInformacionCurso displays the details of a selected course (Curso),
+ * including sections and its corresponding subject.
  *
- * This component fetches the course by its ID using `getCursoById` and displays
- * information such as the course's group, description, related subject (Materia),
- * and its sections (Secciones). Errors and loading states are also handled.
- *
- * @component
+ * @returns {JSX.Element} The rendered component
  */
 function VerInformacionCurso() {
-  // Get course ID from route parameters
+  /** Get course ID from route parameters */
   const { idCurso } = useParams();
 
-  // Get auth token from context
+  /** Get auth token from context */
   const { accountInformation } = useAuth();
   const { token } = accountInformation;
 
-  // Query to fetch course data by ID
-  const { data, isLoading, error } = useQuery({
+  /** Dialog and loading management */
+  const {
+    showDialog,
+    open,
+    title,
+    message,
+    type,
+    handleAccept,
+    isLoading,
+  } = useAlertDialog();
+
+  /** Error handling with alert dialog */
+  const { setError } = useErrorReader(showDialog);
+
+  /**
+   * Fetch course data using the course ID
+   */
+  const {
+    data,
+    isLoading: isLoadingFetch,
+    error,
+  } = useQuery({
     queryFn: () => getCursoById(token, idCurso ?? "-1"),
-    queryKey: [],
+    queryKey: [], // No cache key provided (consider improving this)
   });
 
-  // Hook to manage error dialog state
-  const { handleClose: handleCloseFailFetch, open: openFailFetch } = useAlertDialog();
-
-  // Local state to store the adapted course data
+  /** State to store adapted course */
   const [curso, setCurso] = useState<Curso | undefined>(undefined);
 
-  // Adapt fetched course data and update state
+  /**
+   * Handle fetch error using error dialog
+   */
+  useEffect(() => {
+    if (error) setError(error);
+  }, [error]);
+
+  /**
+   * Adapt fetched course to internal format
+   */
   useEffect(() => {
     if (data) setCurso(adaptCursoService(data));
   }, [data]);
 
   return (
     <>
-      {/* Error dialog shown if fetching the course fails */}
-      {error && (
-        <AlertDialogError
-          error={error}
-          handleClose={handleCloseFailFetch}
-          open={openFailFetch}
-          title="Consultar Grupo"
-        />
-      )}
+      {/* Generic alert dialog for success/error */}
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+        isLoading={isLoading}
+      />
 
-      {/* Show loader while fetching data, else show main content */}
-      {isLoading ? (
+      {/* Loader during data fetching */}
+      {isLoadingFetch ? (
         <LoaderElement />
       ) : (
         <>
-          {/* Render course info only when curso is defined */}
+          {/* Render only if course is available */}
           {curso && (
             <Stack spacing={3} paddingX={{ lg: 5 }}>
-              {/* Display course name and group */}
+              {/* Subject name and course group */}
               <Stack direction={"row"} spacing={2}>
                 <Typography variant="h3">{curso.materia?.nombre}</Typography>
                 <Card>
@@ -77,13 +115,13 @@ function VerInformacionCurso() {
                 </Card>
               </Stack>
 
-              {/* Display course description */}
+              {/* Course description */}
               <Typography variant="h5">{curso.descripcion}</Typography>
 
               {/* Section title */}
               <Typography variant="h4">{LabelCurso.secciones}</Typography>
 
-              {/* Section and (optional) docente panel */}
+              {/* Sections layout */}
               <Grid2 container spacing={3} direction={{ xs: "column-reverse", xl: "row" }}>
                 {/* List of course sections */}
                 <Grid2 size={{ xs: 12 }}>
@@ -94,7 +132,7 @@ function VerInformacionCurso() {
                   </Stack>
                 </Grid2>
 
-                {/* Placeholder for docente info (currently commented) */}
+                {/* Placeholder for docente info */}
                 <Grid2 size={{ xl: 2, xs: 10, sm: 4 }}>
                   {/* <FrameDocente docente={docenteAdapt}/> */}
                 </Grid2>
@@ -109,9 +147,15 @@ function VerInformacionCurso() {
 
 export default VerInformacionCurso;
 
+/**
+ * Optional component to render teacher (docente) information.
+ * Uncomment and adapt if you need to display teacher cards in the future.
+ */
+
 // type FrameDocenteProps = {
 //   docente: UsuarioPortafolioCard;
 // };
+
 // const FrameDocente: React.FC<FrameDocenteProps> = ({ docente }) => {
 //   const theme = useTheme();
 

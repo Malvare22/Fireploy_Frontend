@@ -1,18 +1,18 @@
 import { Box, Grid2, Stack, Typography, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import AccordionUsage from "@modules/general/components/accordionUsage";
-import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
+import { ProyectoCard, proyectoEjemplo } from "@modules/proyectos/types/proyecto.card";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import { labelCardSeccion } from "@modules/materias/enums/labelCardSeccion";
 import { Seccion } from "@modules/materias/types/seccion";
 import ProjectCard from "@modules/general/components/projectCard";
-import RefinePanel, { SorterOption } from "@modules/general/components/refinePanel";
+import RefinePanel, { SorterOptions } from "@modules/general/components/refinePanel";
 
 type CardSeccionProps = {
   seccion: Seccion;
 };
 
-const sorters: SorterOption = [
+const sorters: SorterOptions = [
   {
     key: "titulo",
     label: [
@@ -32,7 +32,7 @@ const sorters: SorterOption = [
 ];
 
 const CardSeccion: React.FC<CardSeccionProps> = ({ seccion }) => {
-  const [proyectos, setProyectos] = useState<ProyectoCard[]>([proyecto1, proyecto1, proyecto1]);
+  const [proyectos, setProyectos] = useState<ProyectoCard[]>([proyectoEjemplo]);
 
   const theme = useTheme();
 

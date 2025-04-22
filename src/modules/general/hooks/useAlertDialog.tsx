@@ -38,7 +38,7 @@ export type ShowDialogParams = {
   /**
    * Callback function to be executed when the dialog is closed.
    */
-  onClose?: () => void;
+  onCancel?: () => void;
 
   /**
    * A flag to indicate whether the page should reload after accepting the dialog.
@@ -46,7 +46,6 @@ export type ShowDialogParams = {
    */
   reload?: boolean;
 
-  closeOnAccept?: boolean;
 };
 
 /**
@@ -55,7 +54,7 @@ export type ShowDialogParams = {
  * This hook provides functions to display the dialog (`showDialog`), handle the
  * acceptance and closing actions, and manage loading and other dialog states.
  */
-function useAlertDialog2() {
+function useAlertDialog() {
   // State variables to manage dialog properties
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -63,7 +62,9 @@ function useAlertDialog2() {
   const [type, setType] = useState<AlertDialogTypes>("default");
   const [isLoading, setIsLoading] = useState(false);
   const [handleAccept, setHandleAccept] = useState<() => void>(() => () => {});
-  const [handleClose, setHandleClose] = useState<undefined | (() => void)>(undefined);
+  const [handleCancel, setHandleCancel] = useState<undefined | (() => void)>(undefined);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   /**
    * Function to show the dialog with the provided options.
@@ -76,11 +77,9 @@ function useAlertDialog2() {
       type = "default",
       message,
       title = "Atención",
-      isLoading = false,
       onAccept,
-      onClose,
+      onCancel,
       reload = false,
-      closeOnAccept = false,
     } = options;
 
     // Update dialog state with provided options
@@ -91,29 +90,21 @@ function useAlertDialog2() {
 
     // Set the accept handler with the provided callback
     setHandleAccept(() => () => {
-      onAccept?.(); // ✅ Executes only if onAccept is defined
+      onAccept?.();
       if (reload) window.location.reload(); // Reloads the page if specified
-      if (closeOnAccept) setOpen(false);
     });
 
     // Set the close handler with the provided callback
-    setHandleClose(
-      onClose
+    setHandleCancel(
+      onCancel
         ? () => () => {
-            onClose(); // Executes if onClose is defined
+            onCancel(); // Executes if onClose is defined
             setOpen(false); // Close the dialog after closure
           }
         : undefined
     );
 
     setOpen(true); // Open the dialog
-  }
-
-  /**
-   * Function to mark the dialog as finished, typically used to stop showing the loading spinner.
-   */
-  function isFinish() {
-    setIsLoading(false);
   }
 
   return {
@@ -124,10 +115,12 @@ function useAlertDialog2() {
     isLoading,
     showDialog,
     handleAccept,
-    handleClose,
-    isFinish,
+    handleCancel,
     setOpen,
+    setIsLoading,
+    handleOpen,
+    handleClose,
   };
 }
 
-export default useAlertDialog2;
+export default useAlertDialog;

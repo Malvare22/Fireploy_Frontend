@@ -1,9 +1,19 @@
+/**
+ * Component to display all course groups (cursos) for a specific subject (materia).
+ *
+ * This component fetches a materia by its ID from the URL, renders its name, 
+ * and shows a list of available cursos (course groups). Users can also register
+ * to a course, and the component manages dialogs, loading states, and errors.
+ *
+ * @component
+ */
+
 import AlertDialog from "@modules/general/components/alertDialog";
-import AlertDialogError, { CustomError } from "@modules/general/components/alertDialogError";
-import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
 import LoaderElement from "@modules/general/components/loaderElement";
+import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
 import CardCurso from "@modules/materias/components/cardCurso";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
 import { getCursosByIdStudent } from "@modules/materias/services/get.curso";
@@ -16,143 +26,152 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-/**
- * Component to display all course groups (cursos) for a specific subject (materia).
- *
- * This component fetches a materia by its ID (from URL params), and renders
- * the materia's name and a list of its associated cursos. If no cursos are
- * present, it shows a warning alert. Errors and loading states are also handled.
- *
- * @component
- */
 function VerCursosMateria() {
-  // Get subject ID from the route parameters
+  /** Get subject ID from URL parameters */
   const { idMateria } = useParams();
 
+  /** Map of course IDs the user is registered in */
   const [myGroupsIds, setMyGroupsIds] = useState<Map<string, boolean> | undefined>(undefined);
 
-  // Get auth token from context
+  /** Alert dialog control hook */
+  const { showDialog, open, title, message, type, handleAccept, isLoading, setIsLoading } =
+    useAlertDialog();
+
+  /** Error handling hook */
+  const { setError } = useErrorReader(showDialog);
+
+  /** Authentication context */
   const { accountInformation } = useAuth();
   const { token, id } = accountInformation;
 
-  // React Query hook to fetch the materia by its ID
-  const { data, isLoading, error } = useQuery({
+  /**
+   * Query to get subject (materia) details by ID
+   */
+  const { data, error } = useQuery({
     queryFn: () => getMateriaById(token, parseInt(idMateria ?? "-1")),
-    queryKey: ["get groups explore"],
+    queryKey: ["Get Groups Explore", parseInt(idMateria ?? "-1")],
   });
 
+  /** Course ID to register */
   const [idCurso, setIdCurso] = useState<string | undefined>(undefined);
 
-  // Alert dialog control for error handling
-  const {
-    handleClose: handleCloseFailFetch,
-    open: openFailFetch,
-    handleOpen: handleOpenFailFetch,
-  } = useAlertDialog();
+  /** Handle API error for getting materia */
+  useEffect(() => {
+    if (error) setError(error);
+  }, [error]);
 
-  const {
-    handleOpen: handleOpenSuccessRegister,
-    handleClose: handleCloseSuccessRegister,
-    open: openSuccessRegister,
-  } = useAlertDialog();
-
-  const {
-    handleOpen: handleOpenConfirmationRegister,
-    handleClose: handleCloseConfirmationRegister,
-    open: openConfirmationRegister,
-  } = useAlertDialog();
-
+  /**
+   * Query to get the user's registered courses (cursos)
+   */
   const {
     data: dataMyGroups,
     isLoading: isLoadingMyGroups,
     error: errorMyGroups,
   } = useQuery({
     queryFn: () => getCursosByIdStudent(token, id),
-    queryKey: ["get my groups explore"],
+    queryKey: ["Get My Groups For Explore", id],
   });
 
+  /** Handle API error for user groups */
+  useEffect(() => {
+    if (errorMyGroups) setError(errorMyGroups);
+  }, [errorMyGroups]);
+
+  /** When user's courses are available, convert to map for lookup */
   useEffect(() => {
     if (dataMyGroups) setMyGroupsIds(new Map(dataMyGroups.map((data) => [data.id, true])));
   }, [dataMyGroups]);
 
-  const {
-    isPending: isPendingRegister,
-    error: errorRegister,
-    isSuccess: isSuccessRegister,
-    mutate: mutateRegister,
-  } = useMutation({
-    mutationFn: () => patchEstudiantesCurso(token, [id], "A", idCurso ?? ""),
-    mutationKey: ["register in group"],
-    onSuccess: () => {
-      handleOpenSuccessRegister();
-      handleCloseConfirmationRegister();
+  /**
+   * Mutation to register student to a course
+   */
+  const { isPending: isPendingRegister, mutate: mutateRegister } = useMutation({
+    mutationFn: async () => {
+      setIsLoading(true);
+      return await patchEstudiantesCurso(token, [id], "A", idCurso ?? "");
     },
-    onError: handleOpenFailFetch,
+    mutationKey: ["Register In Group", id, idCurso ?? ""],
+    onSuccess: () =>
+      showDialog({
+        title: "Registrar en Curso",
+        message: "Te haz matriculado en el curso de manera correcta",
+        reload: true,
+        type: "success",
+        onAccept: () => {},
+      }),
+    onError: (error) => setError(error),
   });
 
-  // State to hold the adapted materia object
+  /** Adapted materia object for rendering */
   const [materia, setMateria] = useState<Materia | undefined>(undefined);
 
-  // Update materia state when data is available
+  /** When API data is ready, adapt it for the UI */
   useEffect(() => {
     if (data) {
       setMateria(adaptMateriaServiceToMateria(data));
     }
   }, [data]);
 
+  /** Confirm registration when user accepts modal */
   function handleAcceptConfirmation() {
     mutateRegister();
   }
 
+  /** Modal dialog hook */
+  const {
+    handleClose: handleCloseModal,
+    handleOpen: handleOpenModal,
+    open: openModal,
+  } = useModal();
+
+  /**
+   * Sets course ID and opens modal to confirm registration
+   *
+   * @param {string | undefined} id - Course ID to register
+   */
   function handleIdGroup(id: string | undefined) {
     setIdCurso(id);
-    handleOpenConfirmationRegister();
+    handleOpenModal();
   }
 
   return (
     <>
+      {/* Confirmation dialog for course registration */}
       <AlertDialog
-        open={openConfirmationRegister}
+        open={openModal}
         handleAccept={handleAcceptConfirmation}
         title="Registrar en grupo académico"
         isLoading={isPendingRegister}
-        handleCancel={handleCloseConfirmationRegister}
+        handleCancel={handleCloseModal}
         textBody="¿Está seguro de que desea registrarse en el grupo seleccionado?"
       />
-      {isSuccessRegister && (
-        <AlertDialogSuccess
-          open={openSuccessRegister}
-          handleClose={handleCloseSuccessRegister}
-          title="Registrar en grupo acádemico"
-          message={"Ingreso reportado de manera correcta"}
-        />
-      )}
 
-      {/* Display an error dialog if there's a fetch error */}
-      {(error || errorRegister || errorMyGroups) && (
-        <AlertDialogError
-          error={(error || errorRegister || errorMyGroups) as CustomError}
-          handleClose={handleCloseFailFetch}
-          open={openFailFetch}
-          title="Consultar Grupos Materia"
-        />
-      )}
-      {/* Show loading indicator or main content */}
+      {/* Generic alert dialog for success/error */}
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+        isLoading={isLoading}
+      />
+
+      {/* Show loader while data is loading */}
       {isLoading || isLoadingMyGroups ? (
         <LoaderElement />
       ) : (
         <>
-          {/* Only render if materia exists */}
+          {/* Render content only if materia is available */}
           {materia && (
             <Stack spacing={3} paddingX={6}>
-              {/* Materia name in a card */}
+              {/* Subject name */}
               <Card>
                 <Stack spacing={3} margin={4}>
                   <Typography variant="h3">{materia.nombre}</Typography>
                 </Stack>
               </Card>
 
-              {/* List of cursos or warning message */}
+              {/* List of course groups or warning if none available */}
               {materia.cursos && materia.cursos.length > 0 ? (
                 <>
                   <Typography variant="h4">{labelListarCursos.grupos}</Typography>

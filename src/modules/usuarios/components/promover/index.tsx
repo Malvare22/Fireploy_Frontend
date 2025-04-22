@@ -5,10 +5,10 @@
  * Includes visual indicators and dialogs for confirmation, success, and error feedback.
  */
 
-import DataTable, { ConditionalStyles } from "react-data-table-component";
-import { TableColumn, TableStyles } from "react-data-table-component";
+import DataTable from "react-data-table-component";
+import { TableColumn } from "react-data-table-component";
 import { Chip, IconButton, Menu, MenuItem, Stack, Typography, useTheme } from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { SolicitudPromover } from "@modules/usuarios/types/solicitud.promover";
 import { labelSolicitudes } from "@modules/usuarios/enum/labelSolicitudes";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
@@ -20,7 +20,8 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { useAuth } from "@modules/general/context/accountContext";
 import { useMutation } from "@tanstack/react-query";
 import { patchSolicitudService } from "@modules/usuarios/services/patch.solicitud";
-import AlertDialogError from "@modules/general/components/alertDialogError";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
+import { useCustomTableStyles } from "@modules/general/styles";
 
 /**
  * @typedef Props
@@ -47,12 +48,27 @@ const TablaSolicitudes: React.FC<Props> = ({ solicitudes }) => {
 
   const [estadoSolicitud, setEstadoSolicitud] = useState<"A" | "R">("R");
 
+  const { showDialog, open, title, message, handleCancel, handleClose, type, handleAccept, isLoading } = useAlertDialog();
+
+  const {setError} = useErrorReader(showDialog);
+
+
   /**
    * Handles the mutation to update the status of a request (approve/reject).
    */
-  const { isSuccess, isError, isPending, error, mutate } = useMutation({
+  const {isPending, mutate } = useMutation({
     mutationFn: () => patchSolicitudService(selectSolicitud?.id ?? -1, estadoSolicitud, id, token),
     mutationKey: ["changeUser"],
+    onError: (error) => setError(error),
+    onSuccess: () => {
+      showDialog({
+        title: 'Modificación de Rol de Usuario',
+        message: 'Se ha establecido el estado correspondiente a la solicitud de modificación de rol usuario',
+        onAccept: () => {},
+        reload: true,
+        type: 'success'
+      })
+    }
   });
 
   /**
@@ -163,7 +179,7 @@ const TablaSolicitudes: React.FC<Props> = ({ solicitudes }) => {
         const handleBtn = (estado: "R" | "A") => {
           setEstadoSolicitud(estado);
           setSelectSolicitud(row);
-          handleOpenConfirmation();
+          showConfirmation();
           handleClose();
         };
 
@@ -192,41 +208,7 @@ const TablaSolicitudes: React.FC<Props> = ({ solicitudes }) => {
     },
   ];
 
-  /**
-   * Custom styling for the data table.
-   */
-  const customStyles: TableStyles = {
-    headCells: {
-      style: {
-        backgroundColor: theme.palette.background.paper,
-        color: theme.palette.text.primary,
-        fontSize: theme.typography.h6.fontSize,
-        fontWeight: theme.typography.body1.fontWeight,
-        fontFamily: theme.typography.body1.fontFamily,
-      },
-    },
-    rows: {
-      style: {
-        color: theme.palette.text.primary,
-        fontSize: theme.typography.body1.fontSize,
-        fontWeight: theme.typography.body1.fontWeight,
-        fontFamily: theme.typography.body1.fontFamily,
-        backgroundColor: theme.palette.background.default,
-      },
-    },
-  };
-
-  /**
-   * Styles for conditionally alternating row backgrounds.
-   */
-  const conditionalRowStyles: ConditionalStyles<SolicitudPromover & { rowIndex: number }>[] = [
-    {
-      when: (row) => row.rowIndex % 2 !== 0,
-      style: {
-        backgroundColor: theme.palette.background.paper,
-      },
-    },
-  ];
+  const {conditionalRowStyles, customStyles} = useCustomTableStyles();
 
   /**
    * Adds an index to each row for use in conditional styling.
@@ -247,60 +229,28 @@ const TablaSolicitudes: React.FC<Props> = ({ solicitudes }) => {
     mutate();
   }
 
-  // Alert dialog handlers
-  const {
-    handleClose: handleCloseConfirmation,
-    handleOpen: handleOpenConfirmation,
-    open: openConfirmation,
-  } = useAlertDialog();
-
-  const {
-    handleOpen: handleOpenError,
-    handleClose: handleCloseError,
-    open: openError,
-  } = useAlertDialog();
-
-  const {
-    handleOpen: handleOpenSuccess,
-    handleClose: handleCloseSuccess,
-    open: openSuccess,
-  } = useAlertDialog();
-
-  useEffect(() => {
-    if (!isPending) handleCloseConfirmation();
-  }, [isPending]);
-
-  useEffect(() => {
-    if (error && isError) handleOpenError();
-  }, [isError, error]);
-
-  useEffect(() => {
-    if (isSuccess) handleOpenSuccess();
-  }, [isSuccess]);
+  function showConfirmation(){
+      showDialog({
+        title: 'Modificación de Solicitudes',
+        message: `¿Está seguro de ${estadoSolicitud !== "A" ? "aprobadar" : "rechazadar"} esta solicitud?`,
+        isLoading: isPending,
+        onAccept: handlePatch,
+        onCancel: handleClose,
+        type: 'default'
+      })
+  }
 
   return (
     <>
-      <AlertDialog
-        title="Solicitud Modificada"
-        open={openConfirmation}
-        handleAccept={handlePatch}
-        handleCancel={handleCloseConfirmation}
-        textBody={`¿Está seguro de ${estadoSolicitud !== "A" ? "aprobadar" : "rechazadar"} esta solicitud?`}
+        <AlertDialog
+        handleAccept={handleAccept}
+        handleCancel={handleCancel}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+        isLoading={isLoading}
       />
-      <AlertDialog
-        title="Modificación de solicitudes"
-        open={openSuccess}
-        handleAccept={handleCloseSuccess}
-        textBody={`Solicitud ${estadoSolicitud === "A" ? "aprobada" : "rechazada"} correctamente`}
-      />
-      {error && (
-        <AlertDialogError
-          title="Modificación de solicitudes"
-          open={openError}
-          error={error}
-          handleClose={handleCloseError}
-        />
-      )}
       <DataTable
         columns={columns}
         data={dataConIndice}

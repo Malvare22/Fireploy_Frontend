@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { CustomError } from "../components/alertDialogError";
 import { rutasGeneral } from "../router/router";
 import { ShowDialogParams } from "./useAlertDialog";
 
@@ -21,7 +20,7 @@ type ShowDialogFn = (params: ShowDialogParams) => void;
  * @returns An object containing the `setError` function to trigger the error state.
  */
 function useErrorReader(showDialog: ShowDialogFn) {
-  const [error, setError] = useState<CustomError | null>(null);
+  const [error, setError] = useState<any | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {

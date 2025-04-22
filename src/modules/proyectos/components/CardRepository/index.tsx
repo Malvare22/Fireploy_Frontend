@@ -75,11 +75,11 @@ const RepositoryCard: React.FC<Props> = ({ repositorio }) => {
   const onSubmit = (data: ProyectoRepositoriesSchema) => {
     const _repository = data.integrado;
     showDialog({
-      message: `¿Está seguro de que desea actualizar este repositorio del proyecto: ${repositorio.proyectoId?.titulo ?? ""}`,
+      message: `¿Está seguro de que desea actualizar este repositorio del proyecto: ${repositorio.proyecto ?? ""}`,
       onAccept: () => {
         if (_repository) updateRepository(_repository);
       },
-      onClose: () => {},
+      onCancel: () => {},
       title: "Actualizar información de Repositorio",
       type: "default",
     });
@@ -110,7 +110,7 @@ const RepositoryCard: React.FC<Props> = ({ repositorio }) => {
                 justifyContent={"space-between"}
                 alignItems={"center"}
               >
-                <Typography variant="h5">{`Proyecto: ${repositorio.proyectoId?.titulo ?? ""}`}</Typography>
+                <Typography variant="h5">{`Proyecto: ${repositorio.proyecto ?? ""}`}</Typography>
                 {editMode ? (
                   <ActionButton
                     sx={{ color: "white" }}

@@ -9,6 +9,8 @@ import RecuperarContrasenia from "../pages/recuperar";
 import ReestablecerContrasenia from "../pages/reestablecerContrasenia";
 import { routerMaterias } from "@modules/materias/router/router";
 import TeamView from "../pages/team";
+import { routerUsuarios } from "@modules/usuarios/router/router";
+import { routerProyectos } from "@modules/proyectos/router";
 
 /** 
  * Base route path of the application
@@ -75,7 +77,7 @@ export const authenticatedRoutes: RouteObject = {
   element: <LayoutAuthenticated />, // Layout for private routes
   children: [
     ...(routerMaterias || []),
-    // ...(routerUsuarios || []),
-    // ...(routerProyectos || []),
+    ...(routerUsuarios || []),
+    ...(routerProyectos || []),
   ],
 };

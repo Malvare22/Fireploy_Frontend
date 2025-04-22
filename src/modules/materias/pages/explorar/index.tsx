@@ -2,14 +2,11 @@ import CardMateria from "@modules/materias/components/cardMateria";
 import { Materia } from "@modules/materias/types/materia";
 import {
   Grid2,
-  InputAdornment,
   MenuItem,
   Select,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
 import useOrderSelect from "@modules/general/hooks/useOrder";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import { useEffect, useMemo, useState } from "react";
@@ -20,8 +17,11 @@ import { getMateriasService } from "@modules/materias/services/get.materias.serv
 import { useAuth } from "@modules/general/context/accountContext";
 import { useQuery } from "@tanstack/react-query";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
-import AlertDialogError from "@modules/general/components/alertDialogError";
 import LoaderElement from "@modules/general/components/loaderElement";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
+import AlertDialog from "@modules/general/components/alertDialog";
+import useSearch from "@modules/general/hooks/useSearch";
+import TextFieldSearch from "@modules/general/components/textFieldSearch";
 
 /**
  * Component to explore and list available subjects (materias).
@@ -47,10 +47,12 @@ function ExplorarMaterias() {
   });
 
   // Dialog control for handling fetch errors
-  const { handleClose: handleCloseFailFetch, open: openFailFetch } = useAlertDialog();
+  const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
+
+  const {setError} = useErrorReader(showDialog);
 
   // Hook to manage sorting behavior
-  const { handleRequestSort, stableSort, setOrderBy } = useOrderSelect<Materia>();
+  const {handleOrder, orderDataFn,order } = useOrderSelect<Materia>();
 
   // Update materias state when data is fetched
   useEffect(() => {
@@ -59,33 +61,40 @@ function ExplorarMaterias() {
     }
   }, [data]);
 
-  // State for search input
-  const [search, setSearch] = useState<string>("");
+  useEffect(() => {
+    if (error) {
+      setError(error);
+    }
+  }, [error]);
+
+  const {filteredData, setSearchValue, searchValue} = useSearch();
 
   /**
    * Filters and sorts materias based on search input.
    * If a search string is present, it filters by name (case-insensitive),
    * otherwise it returns the sorted list.
    */
-  const filterSearchData = useMemo(() => {
-    if (search != "")
-      return stableSort(materias).filter((materia) =>
-        materia.nombre.toLowerCase().includes(search.toLowerCase())
+  const searchFn = (x: Materia[], s: string) => {
+    if (s != "")
+      return x.filter((materia) =>
+        materia.nombre.toLowerCase().includes(s.toLowerCase())
       );
-    return stableSort(materias);
-  }, [search, materias, stableSort]);
+    return x;
+  };
+
+  const dataToLoad =useMemo( () => {
+    return orderDataFn(filteredData(materias, searchFn))
+  }, [materias, searchValue, order])
 
   return (
     <>
-      {/* Error Dialog when fetch fails */}
-      {error && (
-        <AlertDialogError
-          handleClose={handleCloseFailFetch}
-          open={openFailFetch}
-          title="Obtener Materias"
-          error={error}
-        />
-      )}
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+      />
 
       {/* Loader or main content */}
       {isLoading ? (
@@ -103,29 +112,13 @@ function ExplorarMaterias() {
           {/* Search and sort controls */}
           <Stack direction={{ sm: "row", xs: "column" }} justifyContent={"center"} spacing={1}>
             {/* Search input */}
-            <TextField
-              label="Buscar Materia"
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                },
-              }}
-              sx={{ width: { md: 600, xs: "100%" } }}
-              onChange={(e) => setSearch(e.currentTarget.value as string)}
-              value={search}
-            />
+            <TextFieldSearch  setSearchValue={setSearchValue}/>
 
             {/* Sorting select */}
             <Select
               onChange={(e) => {
                 const selectedValue = JSON.parse(e.target.value);
-                if (selectedValue.key == undefined || selectedValue.order == undefined)
-                  setOrderBy({});
-                else handleRequestSort(selectedValue.key, selectedValue.order);
+                handleOrder(selectedValue.key, selectedValue.order);
               }}
               defaultValue={JSON.stringify({ key: undefined, order: undefined })}
             >
@@ -149,7 +142,7 @@ function ExplorarMaterias() {
 
           {/* List of filtered/sorted materias */}
           <Grid2 container spacing={5} paddingX={{ md: 10 }}>
-            {filterSearchData.map((materia, key) => (
+            {dataToLoad.map((materia, key) => (
               <Grid2 size={{ xl: 4, sm: 6, xs: 12 }} key={key}>
                 <CardMateria materia={materia} />
               </Grid2>

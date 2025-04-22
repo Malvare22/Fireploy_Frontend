@@ -27,10 +27,10 @@ function useSearch() {
    * @param filter - A filtering function that applies the filter logic.
    * @returns The filtered data array.
    */
-  const filteredData = <T,>(data: T[] | undefined, filter: (items: T[]) => T[]): T[] => {
+  const filteredData = <T,>(data: T[] | undefined, filter: (items: T[], s: string) => T[]): T[] => {
     if (!data) return []; // Return an empty array if data is undefined
     if (searchValue.trim() === "") return data; // If search value is empty, return all data
-    return filter(data); // Apply the filter function to the data
+    return filter(data, searchValue); // Apply the filter function to the data
   };
 
   /**

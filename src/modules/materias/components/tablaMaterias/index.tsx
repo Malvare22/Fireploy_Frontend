@@ -1,5 +1,5 @@
-import DataTable, { ConditionalStyles } from "react-data-table-component";
-import { TableColumn, TableStyles } from "react-data-table-component";
+import DataTable from "react-data-table-component";
+import { TableColumn } from "react-data-table-component";
 import { Chip, Stack, Typography, useTheme } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
@@ -15,12 +15,12 @@ import { patchChangeStatusMateria } from "@modules/materias/services/patch.chang
 import { rutasMaterias } from "@modules/materias/router/router";
 import { useAuth } from "@modules/general/context/accountContext";
 import { useMutation } from "@tanstack/react-query";
-import AlertDialogError from "@modules/general/components/alertDialogError";
-import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
 import LoaderElement from "@modules/general/components/loaderElement";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import EditarMateria from "@modules/materias/pages/editarMateria";
 import SpringModal from "@modules/general/components/springModal";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
+import { useCustomTableStyles } from "@modules/general/styles";
 
 type TablaMateriasProps = {
   materias: MateriaTabla[];
@@ -32,7 +32,7 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
 
   const handleSelect = (materia: MateriaTabla) => {
     setSelectMateria(materia);
-    setOpenHandleStatus(true);
+    handleOpenStatus();
   };
 
   const { handleClose: handleCloseEdit, handleOpen: handleOpenEdit, open: openEdit } = useModal();
@@ -54,19 +54,9 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
     );
   }
 
-  const {
-    handleOpen: handleOpenError,
-    handleClose: handleCloseError,
-    open: openError,
-  } = useAlertDialog();
+  const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
 
-  const {
-    handleOpen: handleOpenSuccess,
-    handleClose: handleCloseSuccess,
-    open: openSuccess,
-  } = useAlertDialog();
-
-  const { open: openHandleStatus, setOpen: setOpenHandleStatus } = useAlertDialog();
+  const { setError } = useErrorReader(showDialog);
 
   const navigate = useNavigate();
 
@@ -150,46 +140,6 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
     },
   ];
 
-  const customStyles: TableStyles = {
-    headCells: {
-      style: {
-        backgroundColor: theme.palette.background.paper, // override the row height
-        color: theme.palette.text.primary,
-        fontSize: theme.typography.h6.fontSize,
-        fontWeight: theme.typography.body1.fontWeight,
-        fontFamily: theme.typography.body1.fontFamily,
-      },
-    },
-    // table: {
-    //   style: {
-    //     border: "1px solid red",
-    //      borderRadius: '20px'
-    //   },
-    // },
-    rows: {
-      style: {
-        color: theme.palette.text.primary,
-        fontSize: theme.typography.body1.fontSize,
-        fontWeight: theme.typography.body1.fontWeight,
-        fontFamily: theme.typography.body1.fontFamily,
-        backgroundColor: theme.palette.background.default,
-      },
-    },
-  };
-
-  const conditionalRowStyles: ConditionalStyles<MateriaTabla & { rowIndex: number }>[] = [
-    {
-      when: (row) => row.rowIndex % 2 !== 0, // Filas impares
-      style: {
-        color: theme.palette.text.primary,
-        fontSize: theme.typography.body1.fontSize,
-        fontWeight: theme.typography.body1.fontWeight,
-        fontFamily: theme.typography.body1.fontFamily,
-        backgroundColor: theme.palette.background.paper,
-      },
-    },
-  ];
-
   const dataConIndice = useMemo(() => {
     return materias
       ? materias.map((materia, index) => ({
@@ -207,38 +157,46 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
     };
   }, [selectMateria]);
 
-  const { isPending, error, mutate } = useMutation({
+  const {
+    handleOpen: handleOpenStatus,
+    handleClose: handleCloseStatus,
+    open: openStatus,
+  } = useModal();
+
+  const { isPending, mutate } = useMutation({
     mutationFn: () => patchChangeStatusMateria(token, bodyQuery, selectMateria?.codigo ?? -1),
-    mutationKey: ["changeUser"],
-    onSuccess: handleOpenSuccess,
-    onError: handleOpenError,
+    mutationKey: ["Change Status Subject", selectMateria?.codigo],
+    onSuccess: () =>
+      showDialog({
+        message: "Materia Actualizada Correctamente",
+        onAccept: () => {},
+        reload: true,
+        type: "success",
+        title: "Actualización Materia",
+      }),
+    onError: (error) => {setError(error)},
   });
+
+  const {conditionalRowStyles, customStyles} = useCustomTableStyles();
 
   return (
     <>
       <AlertDialog
-        open={openHandleStatus}
-        handleAccept={() => {
-          mutate();
-          setOpenHandleStatus(false);
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+      />
+      <AlertDialog
+        open={openStatus}
+        handleAccept={async () => {
+          await mutate();
+          handleCloseStatus();
         }}
         title="Cambiar Estado de Materia"
         body={ModalChangeStatus(selectMateria?.estado!!)}
-        handleCancel={() => setOpenHandleStatus(false)}
-      />
-      {error && (
-        <AlertDialogError
-          handleClose={handleCloseError}
-          error={error}
-          open={openError}
-          title="Modificar Materia"
-        />
-      )}
-      <AlertDialogSuccess
-        handleClose={handleCloseSuccess}
-        message="Materia modificado exitosamente"
-        open={openSuccess}
-        title="Modificar Materia"
+        handleCancel={handleCloseStatus}
       />
       <SpringModal handleClose={handleCloseEdit} open={openEdit}>
         <EditarMateria id={selectMateria?.codigo ?? -1} handleCloseModal={handleCloseEdit} />

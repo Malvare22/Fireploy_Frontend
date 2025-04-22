@@ -20,8 +20,8 @@ import AlertDialog from "@modules/general/components/alertDialog";
 import { useAuth } from "@modules/general/context/accountContext";
 import { useMutation } from "@tanstack/react-query";
 import { postChangeUserStateService } from "@modules/usuarios/services/post.modificar.usuario";
-import AlertDialogError from "@modules/general/components/alertDialogError";
-import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
+import { useModal } from "@modules/general/components/modal/hooks/useModal";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
 
 type TablaUsuariosProps = {
   usuarios: Usuario[];
@@ -44,34 +44,43 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
   const { token } = accountInformation;
   const navigate = useNavigate();
 
+  const { showDialog, open, title, message, handleCancel, type, handleAccept, isLoading } =
+    useAlertDialog();
+
+  const { setError } = useErrorReader(showDialog);
+
   // Mutation to toggle user status (active/inactive)
-  const { isSuccess, isError, isPending, error, mutate, data } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: () =>
       postChangeUserStateService(
         token,
         selectUsuario?.id ?? -1,
         selectUsuario?.estado == "A" ? "I" : "A"
       ),
-    mutationKey: ["changeUser"],
+    mutationKey: ["Update User", selectUsuario?.id ?? -1, selectUsuario?.estado == "A" ? "I" : "A"],
+    onError: (err) => setError(err),
+    onSuccess: () => {
+      showDialog({
+        title: "Actualización de Usuario",
+        message: "Se ha cambiado el estado del usuario correctamente",
+        onAccept: () => {},
+        reload: true,
+        type: "success",
+      });
+    },
   });
 
   const {
     open: openHandleStatus,
     handleClose: handleCloseChangeStatus,
     handleOpen: handleOpenChangeStatus,
-  } = useAlertDialog();
+  } = useModal();
 
-  const {
-    handleOpen: handleOpenError,
-    handleClose: handleCloseError,
-    open: openError,
-  } = useAlertDialog();
-
-  const {
-    handleOpen: handleOpenSuccess,
-    handleClose: handleCloseSuccess,
-    open: openSuccess,
-  } = useAlertDialog();
+  useEffect(() => {
+    if (!isPending) {
+      handleCloseChangeStatus();
+    }
+  }, [isPending]);
 
   /**
    * Handles user selection and opens confirmation dialog.
@@ -103,25 +112,8 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
    * Triggers user status change mutation.
    */
   function handleChangeStatus() {
-    console.log(selectUsuario)
     mutate();
   }
-
-  // Close dialog after request ends
-  useEffect(() => {
-    if (!isPending) handleCloseChangeStatus();
-  }, [isPending]);
-
-  // Open error dialog if mutation fails
-  useEffect(() => {
-    if (error && isError) handleOpenError();
-  }, [isError, error]);
-
-  // Open success dialog if mutation succeeds
-  useEffect(() => {
-    console.log(data)
-    if (isSuccess) handleOpenSuccess();
-  }, [isSuccess]);
 
   /**
    * Table columns definition for DataTable
@@ -291,22 +283,15 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
         isLoading={isPending}
         handleCancel={handleCloseChangeStatus}
       />
-      {isSuccess && (
-        <AlertDialogSuccess
-          open={openSuccess}
-          handleClose={handleCloseSuccess}
-          title="Cambiar estado del Usuario"
-          message={"User updated successfully"}
-        />
-      )}
-      {error && (
-        <AlertDialogError
-          error={error}
-          handleClose={handleCloseError}
-          title="Error Updating User"
-          open={openError}
-        />
-      )}
+      <AlertDialog
+        handleAccept={handleAccept}
+        handleCancel={handleCancel}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+        isLoading={isLoading}
+      />
       <DataTable
         columns={columns}
         data={dataConIndice}

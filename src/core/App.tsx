@@ -29,18 +29,18 @@ function App(): JSX.Element {
     /**
      * QueryClientProvider provides React Query functionalities across the app.
      */
-    <QueryClientProvider client={queryClient}>
-      {/* GoogleOAuthProvider provides authentication using Google accounts. */}
-      <GoogleOAuthProvider clientId={import.meta.env.VITE_ID_GOOGLE_CLIENT}>
-        {/* ThemeProvider applies the custom MUI theme globally. */}
-        <ThemeProvider theme={getTheme}>
-          <ErrorBoundary fallback={<ErrorPage />}>
+    <ErrorBoundary fallback={<ErrorPage />}>
+      <QueryClientProvider client={queryClient}>
+        {/* GoogleOAuthProvider provides authentication using Google accounts. */}
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_ID_GOOGLE_CLIENT}>
+          {/* ThemeProvider applies the custom MUI theme globally. */}
+          <ThemeProvider theme={getTheme}>
             {/* RouterProvider enables client-side routing using React Router. */}
             <RouterProvider router={router} />
-          </ErrorBoundary>
-        </ThemeProvider>
-      </GoogleOAuthProvider>
-    </QueryClientProvider>
+          </ThemeProvider>
+        </GoogleOAuthProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 

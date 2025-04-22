@@ -1,11 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import AlertDialog from "@modules/general/components/alertDialog";
-import AlertDialogError, { CustomError } from "@modules/general/components/alertDialogError";
-import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
 import GeneralButton from "@modules/general/components/button";
 import LoaderElement from "@modules/general/components/loaderElement";
+import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { labelGestionarMateria } from "@modules/materias/enums/labelGestionarMateria";
 import { getMateriaById } from "@modules/materias/services/get.materia.services";
@@ -24,95 +24,119 @@ import { Controller, FormProvider, SubmitHandler, useForm } from "react-hook-for
 
 type Props = { id: number; handleCloseModal: () => void };
 
+/**
+ * EditarMateria allows editing of an existing subject (materia).
+ * It handles fetching, form validation, submission and dialog feedback.
+ *
+ * @param {number} id - ID of the materia to edit
+ * @param {Function} handleCloseModal - Function to close parent modal
+ * @returns {JSX.Element}
+ */
 function EditarMateria({ id, handleCloseModal }: Props) {
   const { accountInformation } = useAuth();
   const { token } = accountInformation;
 
-  const { data, error, isLoading } = useQuery({
+  /** Alert dialog controller */
+  const {
+    showDialog,
+    open,
+    title,
+    message,
+    type,
+    handleAccept,
+    isLoading,
+    setIsLoading,
+  } = useAlertDialog();
+
+  /** Error handler using dialog */
+  const { setError } = useErrorReader(showDialog);
+
+  /** Fetch current materia data */
+  const { data, error, isLoading: isLoadingFetch } = useQuery({
     queryFn: () => getMateriaById(token, id),
-    queryKey: ["get materia editar"],
+    queryKey: ["get materia editar", id],
   });
 
+  /** Form methods from react-hook-form with Zod validation */
   const methods = useForm<Materia>({
     resolver: zodResolver(MateriaSchema),
   });
 
   const { getValues, reset, watch } = methods;
 
+  /** Reset form with fetched data */
   useEffect(() => {
     if (data) {
       reset(adaptMateriaServiceToMateria(data));
     }
   }, [data]);
 
-  const {
-    handleOpen: handleOpenError,
-    handleClose: handleCloseError,
-    open: openError,
-  } = useAlertDialog();
+  /** Show error dialog if fetch fails */
+  useEffect(() => {
+    if (error) setError(error);
+  }, [error]);
 
-  const {
-    handleOpen: handleOpenSuccess,
-    open: openSuccess,
-    handleClose: handleCloseSuccess,
-  } = useAlertDialog();
-
-  const {
-    isPending: isPendingPost,
-    error: errorPost,
-    mutate: mutatePost,
-  } = useMutation({
-    mutationFn: () => postEditMateriaService(token, getValues()),
-    mutationKey: ["create materia"],
-    onError: handleOpenError,
-    onSuccess: handleOpenSuccess,
+  /** Mutation to edit materia */
+  const { mutate: mutatePost} = useMutation({
+    mutationFn: () => {
+      setIsLoading(true);
+      return postEditMateriaService(token, getValues());
+    },
+    mutationKey: ["Edit Materia", id],
+    onSuccess: () => {
+      showDialog({
+        title: "Editar Materia",
+        message: "Operación exitosamente realizada",
+        type: "success",
+        onAccept: () => handleCloseModal(),
+        reload: true
+      });
+    },
+    onError: (err) => setError(err),
   });
 
+  /** Submit handler that shows confirmation dialog */
   const onSubmit: SubmitHandler<Materia> = () => {
     handleOpenConfirmation();
   };
 
+  /** Confirmation dialog state for submit */
+  const {
+    handleClose: handleCloseConfirmation,
+    handleOpen: handleOpenConfirmation,
+    open: openConfirmation,
+  } = useModal();
+
+  /** Handle actual submission after confirmation */
   function handleConfirmation() {
     mutatePost();
     handleCloseConfirmation();
   }
 
-  const {
-    handleClose: handleCloseConfirmation,
-    handleOpen: handleOpenConfirmation,
-    open: openConfirmation,
-  } = useAlertDialog();
-
-  function customCloseSuccess() {
-    handleCloseSuccess();
-    handleCloseModal();
-  }
-
   return (
     <>
+      {/* Confirmation Dialog */}
       <AlertDialog
         open={openConfirmation}
         handleAccept={handleConfirmation}
         title="Editar Materia"
-        isLoading={isPendingPost}
+        isLoading={isLoading}
         handleCancel={handleCloseConfirmation}
-        textBody="¿Está seguro de aplicar los cambios sobre la materia??"
+        textBody="¿Está seguro de aplicar los cambios sobre la materia?"
       />
-      {(error || errorPost) && (
-        <AlertDialogError
-          handleClose={handleCloseError}
-          open={openError}
-          title="Editar Materia"
-          error={(error || errorPost) as CustomError}
-        />
-      )}
-      <AlertDialogSuccess
-        handleClose={customCloseSuccess}
-        message="Operación exitosamente realizada"
-        open={openSuccess}
-        title="Editar Materia"
+
+      {/* Success or error dialog */}
+      <AlertDialog
+        open={open}
+        handleAccept={handleAccept}
+        title={title}
+        textBody={message}
+        type={type}
+        isLoading={isLoading}
       />
-      {isLoading ? (
+
+      {/* Loader while fetching materia */}
+      {isLoadingFetch ? (
         <LoaderElement />
       ) : (
         <FormProvider {...methods}>
@@ -122,6 +146,8 @@ function EditarMateria({ id, handleCloseModal }: Props) {
                 <Typography variant="h4">{labelGestionarMateria.editarMateria}</Typography>
                 <Divider />
               </Stack>
+
+              {/* Form fields */}
               <Grid2 container spacing={3} padding={2}>
                 <TextField
                   fullWidth
@@ -154,6 +180,7 @@ function EditarMateria({ id, handleCloseModal }: Props) {
                     </TextField>
                   )}
                 />
+
                 <Controller
                   name="estado"
                   control={methods.control}
@@ -177,6 +204,8 @@ function EditarMateria({ id, handleCloseModal }: Props) {
                   )}
                 />
               </Grid2>
+
+              {/* Action buttons */}
               <Stack direction={"row"} spacing={2} justifyContent={"center"}>
                 <GeneralButton mode={buttonTypes.save} onClick={handleOpenConfirmation} />
                 <GeneralButton mode={buttonTypes.cancel} onClick={handleCloseModal} />

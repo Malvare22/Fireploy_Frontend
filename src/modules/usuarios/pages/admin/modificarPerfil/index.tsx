@@ -1,7 +1,8 @@
-import AlertDialogError from "@modules/general/components/alertDialogError";
+import AlertDialog from "@modules/general/components/alertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
 import Perfil from "@modules/usuarios/components/perfil";
 import { getUsuarioService } from "@modules/usuarios/services/get.usuario";
 import { Usuario } from "@modules/usuarios/types/usuario";
@@ -13,7 +14,7 @@ import { useParams } from "react-router";
 /**
  * Component responsible for managing and displaying a user's profile.
  * It fetches the user's data from the API, adapts it, and renders the
- * <Perfil /> component. Also handles loading and error states using 
+ * <Perfil /> component. Also handles loading and error states using
  * dialogs and a loader component.
  *
  * @component
@@ -39,13 +40,22 @@ function GestionarPerfil() {
    * @returns {object} error - The error object returned from the request
    * @returns {boolean} isSuccess - Indicates if the request was successful
    */
-  const { data, isLoading, isError, error, isSuccess } = useQuery({
+  const { data, isLoading, error, isSuccess } = useQuery({
     queryFn: () => getUsuarioService(parseInt(id ?? "-1"), token),
-    queryKey: ["profileInformation"],
+    queryKey: ["Profile Information", parseInt(id ?? "-1")],
   });
 
   // Custom hook to control the alert dialog state
-  const { handleClose, open, handleOpen } = useAlertDialog();
+  const {
+    showDialog,
+    open,
+    title,
+    message,
+    handleCancel,
+    type,
+    handleAccept,
+  } = useAlertDialog();
+  const { setError } = useErrorReader(showDialog);
 
   /**
    * Effect to update the user state with adapted data
@@ -61,22 +71,22 @@ function GestionarPerfil() {
    * Effect to open the error dialog if the request fails.
    */
   useEffect(() => {
-    if (isError) {
-      handleOpen();
+    if (error) {
+      setError(error);
     }
-  }, [isError]);
+  }, [error]);
 
   return (
     <>
       {/* Display error dialog if an error occurred */}
-      {error && (
-        <AlertDialogError
-          open={open}
-          error={error}
-          handleClose={handleClose}
-          title="User Information Fetch Error"
-        />
-      )}
+      <AlertDialog
+        handleAccept={handleAccept}
+        handleCancel={handleCancel}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+      />
 
       {/* Show loading indicator or user profile if data is available */}
       {isLoading ? <LoaderElement /> : <>{usuario && <Perfil usuario={usuario} />}</>}

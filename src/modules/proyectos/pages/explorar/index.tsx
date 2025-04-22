@@ -26,21 +26,16 @@ import { ProyectoService } from "@modules/proyectos/types/proyecto.service";
 import { labelExplorarProyectos } from "@modules/proyectos/enum/labelExplorarProyectos";
 import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyectoPortafolio";
 import { adaptProject, adaptProjectToCard } from "@modules/proyectos/utils/adapt.proyecto";
+import { useModal } from "@modules/general/components/modal/hooks/useModal";
 
 function ExplorarProyectos() {
   const [search, setSearch] = useState("");
   const [selectProyecto, setSelectProyecto] = useState<ProyectoCard>();
-  const { handleClose: closeModal, handleOpen: openModal, open: modalOpen } = useSpringModal();
+  const { handleClose: closeModal, handleOpen: openModal, open: modalOpen } = useModal();
 
   const {
-    handleRequestSort,
-    stableSort,
-    orderBy,
+    handleOrder, orderDataFn, order
   } = useOrderSelect<ProyectoCard>();
-
-  // Obtener key y order actual para el Select
-  const currentKey = Object.keys(orderBy)[0];
-  const currentOrder = orderBy[currentKey];
 
   const {
     data,
@@ -49,7 +44,7 @@ function ExplorarProyectos() {
     error,
     refetch,
   } = useQuery<ProyectoService[]>({
-    queryKey: ["proyectos-all"],
+    queryKey: ["Projects All"],
     queryFn: getProyectosAllService,
     refetchOnWindowFocus: false,
   });
@@ -61,10 +56,10 @@ function ExplorarProyectos() {
 
   const filteredProyectos = useMemo(() => {
     const searchLower = search.toLowerCase();
-    return stableSort(proyectos).filter((p) =>
+    return orderDataFn(proyectos).filter((p) =>
       p.titulo.toLowerCase().includes(searchLower)
     );
-  }, [search, proyectos, orderBy]);
+  }, [search, proyectos, order]);
 
   return (
     <>
@@ -112,10 +107,14 @@ function ExplorarProyectos() {
           <Select
             size="small"
             sx={{ width: 250 }}
-            value={JSON.stringify({ key: currentKey, order: currentOrder })}
             onChange={(e) => {
-              const val = JSON.parse(e.target.value);
-              handleRequestSort(val.key, val.order);
+              const val = JSON.parse(e.target.value as string);
+            if(val.key == undefined){
+              handleOrder("titulo", undefined);
+              handleOrder("semestre", undefined);
+              handleOrder("puntuacion", undefined);
+            }
+              else handleOrder(val.key, val.order);
             }}
           >
             <MenuItem value={JSON.stringify({ key: undefined, order: undefined })}>
@@ -156,7 +155,7 @@ function ExplorarProyectos() {
               marginTop={4}
               marginBottom={6}
             >
-              {filteredProyectos.map((proyecto) => (
+              {orderDataFn(proyectos).map((proyecto) => (
                 <Grid2
                   key={proyecto.titulo + proyecto.materia + proyecto.seccion}
                   size={{ xl: 4, sm: 6, xs: 12 }}

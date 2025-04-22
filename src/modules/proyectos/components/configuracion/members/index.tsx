@@ -111,7 +111,7 @@ export const Members = () => {
           return updated;
         });
       },
-      onClose: () => {},
+      onCancel: () => {},
       isLoading: false,
       reload: false,
       title: "Eliminar Usuario",
@@ -139,7 +139,7 @@ export const Members = () => {
           return updated;
         });
       },
-      onClose: () => {},
+      onCancel: () => {},
       isLoading: false,
       reload: false,
       title: "Agregar Usuario",

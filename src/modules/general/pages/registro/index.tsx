@@ -10,11 +10,12 @@ import TextFieldPassword from "@modules/general/components/textFieldPassword";
 import { Usuario, usuarioTemplate } from "@modules/usuarios/types/usuario";
 import { getGender } from "@modules/usuarios/utils/usuario.map";
 import { UsuarioSchema } from "@modules/usuarios/utils/form/usuario.schema";
-import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import { useMutation } from "@tanstack/react-query";
 import { postCreateUsuarioService } from "@modules/usuarios/services/post.crear.usuario";
-import AlertDialogError from "@modules/general/components/alertDialogError";
-import AlertDialogSuccess from "@modules/general/components/alertDialogSuccess";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
+import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import AlertDialog from "@modules/general/components/alertDialog";
+import { labelRegisterUser } from "@modules/general/enums/labelRegisterUser";
 
 /**
  * Registrar component renders the user registration form.
@@ -43,23 +44,24 @@ function Registrar() {
     navigate(rutasGeneral.login);
   };
 
-  const {
-    handleOpen: handleOpenError,
-    handleClose: handleCloseError,
-    open: openError,
-  } = useAlertDialog();
+  const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
 
-  const { handleOpen: handleOpenSuccess, open: openSuccess } = useAlertDialog();
+  const { setError } = useErrorReader(showDialog);
 
   /**
    * Handles the registration mutation.
    * Displays success or error dialog based on the result.
    */
-  const { error, mutate, isPending } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ["registrar estudiante"],
     mutationFn: () => postCreateUsuarioService("", getValues()),
-    onSuccess: handleOpenSuccess,
-    onError: handleOpenError,
+    onSuccess: () => showDialog({
+      message: 'Usuario Creado Correctamente',
+      type: 'success',
+      onAccept: () => successAction(),
+      title: 'Usuario Registrado',
+    }),
+    onError:(error)=> setError(error),
   });
 
   /**
@@ -71,20 +73,12 @@ function Registrar() {
 
   return (
     <Card sx={{ maxWidth: 600, padding: 4 }}>
-      {error && (
-        <AlertDialogError
-          error={error}
-          handleClose={handleCloseError}
-          open={openError}
-          title="Registrar Usuario"
-        />
-      )}
-      <AlertDialogSuccess
-        message="Usuario Registrado Correctamente"
-        handleClose={successAction}
-        open={openSuccess}
-        title="Registrar Usuario"
-        reload={false}
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
       />
       <Stack spacing={3}>
         <Stack spacing={1} direction={"row"} alignItems={"center"}>
@@ -187,12 +181,12 @@ function Registrar() {
             <Stack spacing={2} direction="row" justifyContent="center">
               <Box>
                 <Button variant="outlined" onClick={() => navigate(rutasGeneral.login)}>
-                  {labelGeneral.volver}
+                  {labelRegisterUser.register}
                 </Button>
               </Box>
               <Box>
                 <Button onClick={onSubmit} variant="contained" loading={isPending}>
-                  {labelGeneral.registrar}
+                  {labelRegisterUser.back}
                 </Button>
               </Box>
             </Stack>

@@ -1,13 +1,15 @@
+/**
+ * Component to list and manage subjects (materias) in the system.
+ * It handles data fetching, filtering, and displaying the table of subjects.
+ */
+
 import TablaMaterias from "@modules/materias/components/tablaMaterias";
 import { labelListarMaterias } from "@modules/materias/enums/labelListarMaterias";
 import { getMateriasService } from "@modules/materias/services/get.materias.services";
-import { MateriaTabla } from "@modules/materias/types/materia.tabla";
+import { exampleMaterias, MateriaTabla } from "@modules/materias/types/materia.tabla";
 import { adaptMateriaService } from "@modules/materias/utils/adapters/materia.service";
-import { Box, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import SearchIcon from "@mui/icons-material/Search";
-import useSearch from "@modules/general/hooks/useSearch";
-import { labelSelects } from "@modules/general/enums/labelSelects";
 import { getMateriasSemestresLabels } from "@modules/materias/utils/materias";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
@@ -16,149 +18,146 @@ import { rutasMaterias } from "@modules/materias/router/router";
 import { useAuth } from "@modules/general/context/accountContext";
 import { useQuery } from "@tanstack/react-query";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
-import AlertDialogError from "@modules/general/components/alertDialogError";
 import LoaderElement from "@modules/general/components/loaderElement";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
+import AlertDialog from "@modules/general/components/alertDialog";
+import RefinePanel, { FilterOptions } from "@modules/general/components/refinePanel";
 
+/**
+ * Filter options for the refine panel. Allows filtering by active groups, status, and semester.
+ */
+const filterOptions: FilterOptions = [
+  {
+    key: "cantidadGruposActivos",
+    options: [
+      ["Grupos Activos", (x) => x != 0],
+      ["Sin Grupos Activos", (x) => x == 0],
+      ["No aplicar", (_x) => true],
+    ],
+  },
+  {
+    key: "estado",
+    options: [
+      ["Activo", (x) => x == 'A'],
+      ["Inactivo", (x) => x == 'I'],
+      ["No aplicar", (_x) => true],
+    ],
+  },
+  {
+    key: "semestre",
+    options: getMateriasSemestresLabels().map(([value, text]) => (
+      [text, (x) => x == value]
+    )),
+  },
+];
+
+/**
+ * ListarMaterias component definition.
+ * Handles subject listing, search, filtering, error handling and navigation.
+ *
+ * @returns {JSX.Element} React component
+ */
 function ListarMaterias() {
-  const [materias, setMaterias] = useState<MateriaTabla[]>([]);
+  /** Buffer for refined/filtered subject list */
+  const [materiasBuffer, setMateriasBuffer] = useState<MateriaTabla[]>(exampleMaterias);
 
+  /** Placeholder for unfiltered subject list */
+  const materias = exampleMaterias;
+
+  /** Authentication context */
   const { accountInformation } = useAuth();
   const { token } = accountInformation;
 
-  const { data, isLoading, isError, error } = useQuery({
+  /**
+   * React Query hook to fetch subjects using the token.
+   */
+  const { data, isLoading, error } = useQuery({
     queryFn: () => getMateriasService(token),
     queryKey: ["get Materias"],
   });
 
-  const { filteredData, handleKeyDown, searchValue, setBuffer } = useSearch();
-
-  const sorter = (materia: MateriaTabla[]) => {
+  /**
+   * Search function used by the RefinePanel.
+   *
+   * @param {MateriaTabla[]} materia - Array of subject data
+   * @param {string} s - Search string
+   * @returns {MateriaTabla[]} Filtered subjects by name or code
+   */
+  const searchFn = (materia: MateriaTabla[], s: string) => {
     return materia.filter((mat) =>
-      (mat.codigo + mat.nombre).toLowerCase().includes(searchValue.toLowerCase())
+      (mat.codigo + mat.nombre).toLowerCase().includes(s.toLowerCase())
     );
   };
-  const {
-    handleClose: handleCloseFailFetch,
-    open: openFailFetch,
-    handleOpen: handleOpenFailFetch,
-  } = useAlertDialog();
 
+  /** Alert dialog control hook */
+  const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
+
+  /** Error handling hook */
+  const { setError } = useErrorReader(showDialog);
+
+  /**
+   * Effect that adapts data from API once it's available.
+   */
   useEffect(() => {
     if (data) {
-      setMaterias(data.map(materia => adaptMateriaService(materia)));
+      setMateriasBuffer(data.map((materia) => adaptMateriaService(materia)));
     }
   }, [data]);
 
+  /**
+   * Effect that handles error setting when fetching fails.
+   */
   useEffect(() => {
-    if (isError) {
-      handleOpenFailFetch();
+    if (error) {
+      setError(error);
     }
-  }, [isError]);
+  }, [error]);
 
-  const { filterData, toggleFilter } = useFiltersByConditions<MateriaTabla>();
-
-  const materiasToRender = () => {
-    if (materias) return filteredData(filterData(materias), sorter);
-    return [];
-  };
-
+  /** React Router navigation hook */
   const navigate = useNavigate();
 
   return (
     <>
-      {error && (
-        <AlertDialogError
-          error={error}
-          handleClose={handleCloseFailFetch}
-          open={openFailFetch}
-          title="Consultar Portafolios"
-        />
-      )}
-     {isLoading ? <LoaderElement/> : <Stack spacing={3}>
-        <Typography variant="h4">{labelListarMaterias.titulo}</Typography>
-        <TextField
-          placeholder={labelListarMaterias.buscarMateria}
-          slotProps={{ input: { endAdornment: <SearchIcon /> } }}
-          size="small"
-          onChange={(e) => setBuffer(e.currentTarget.value as string)}
-          onKeyDown={handleKeyDown}
-          sx={{
-            maxWidth: 500,
-          }}
-        />
-        <Grid2 container spacing={2}>
-          <Grid2 size={{ md: 4, xs: 12 }}>
-            <TextField
-              select
-              label={labelSelects.filtrarCursosActivos}
-              onChange={(e) => {
-                if (e.target.value == "0")
-                  toggleFilter("cantidadGruposActivos", (value: any) => value == 0);
-                if (e.target.value == "1")
-                  toggleFilter("cantidadGruposActivos", (value: any) => value != 0);
-                if (e.target.value == "-1")
-                  toggleFilter("cantidadGruposActivos", (_value: any) => true);
-              }}
-              defaultValue={-1}
-              fullWidth
-              variant="standard"
-            >
-              <MenuItem value={0}>{labelSelects.sinCursos}</MenuItem>
-              <MenuItem value={1}>{labelSelects.conCursos}</MenuItem>
-              <MenuItem value={-1}>{labelSelects.noAplicar}</MenuItem>
-            </TextField>
-          </Grid2>
-          <Grid2 size={{ md: 4, xs: 12 }}>
-            <TextField
-              select
-              label={labelSelects.filtrarEstado}
-              onChange={(e) => {
-                if (e.target.value == "0") toggleFilter("estado", (value: any) => value == "A");
-                if (e.target.value == "1") toggleFilter("estado", (value: any) => value == "I");
-                if (e.target.value == "-1") toggleFilter("estado", (_value: any) => true);
-              }}
-              defaultValue={-1}
-              fullWidth
-              variant="standard"
-            >
-              <MenuItem value={0}>{labelSelects.activado}</MenuItem>
-              <MenuItem value={1}>{labelSelects.desactivado}</MenuItem>
-              <MenuItem value={-1}>{labelSelects.noAplicar}</MenuItem>
-            </TextField>
-          </Grid2>
-          <Grid2 size={{ md: 4, xs: 12 }}>
-            <TextField
-              select
-              label={labelSelects.filtrarSemestre}
-              onChange={(e) => {
-                if (e.target.value == "-1") toggleFilter("semestre", (_value: any) => true);
-                else {
-                  toggleFilter("semestre", (value: any) => value == e.target.value);
-                }
-              }}
-              defaultValue={-1}
-              fullWidth
-              variant="standard"
-            >
-              {getMateriasSemestresLabels().map(([value, text], key) => (
-                <MenuItem value={value} key={key}>
-                  {text}
-                </MenuItem>
-              ))}
-              <MenuItem value={-1}>{labelSelects.noAplicar}</MenuItem>
-            </TextField>
-          </Grid2>
-        </Grid2>
-        {materias && <TablaMaterias materias={materiasToRender()} />}
-        <Stack direction={"row"} justifyContent={"end"}>
-          <Box>
-            <GeneralButton
-              onClick={() => navigate(rutasMaterias.crearMateria)}
-              mode={buttonTypes.add}
-            />
-          </Box>
+      {/* Alert Dialog for errors or confirmations */}
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+      />
+
+      {/* Show loader while fetching data */}
+      {!isLoading ? (
+        <LoaderElement />
+      ) : (
+        <Stack spacing={3}>
+          {/* Page title */}
+          <Typography variant="h4">{labelListarMaterias.titulo}</Typography>
+
+          {/* RefinePanel for search and filters */}
+          <RefinePanel<MateriaTabla>
+            searchFn={searchFn}
+            data={materias}
+            searchOptions={true}
+            filterOptions={filterOptions}
+            setRefineData={(setMateriasBuffer)}
+          >
+            {/* Render table only if data exists */}
+            {materias && <TablaMaterias materias={materiasBuffer} />}
+          </RefinePanel>
+
+          {/* Action button to navigate to create new subject */}
+          <Stack direction={"row"} justifyContent={"end"}>
+            <Box>
+              <GeneralButton
+                onClick={() => navigate(rutasMaterias.crearMateria)}
+                mode={buttonTypes.add}
+              />
+            </Box>
+          </Stack>
         </Stack>
-      </Stack>}
+      )}
     </>
   );
 }

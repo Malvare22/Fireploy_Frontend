@@ -26,13 +26,15 @@ import { useAuth } from "@modules/general/context/accountContext";
 import { useQuery } from "@tanstack/react-query";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
-import AlertDialogError from "@modules/general/components/alertDialogError";
 import { getSolicitudesService } from "@modules/usuarios/services/get.solicitud";
+import { useFilters } from "@modules/general/hooks/useFilters";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
+import AlertDialog from "@modules/general/components/alertDialog";
 
 function VistaSolicitudes() {
   // 🔍 Search and filter hooks
   const { searchValue, setSearchValue, filteredData: filterDataFunction } = useSearch();
-  const { filterData, toggleFilter, filters } = useFiltersByConditions();
+  const { filterDataFn, handleFilter, filters } = useFilters();
 
   // 🗂️ State for solicitudes
   const [solicitudes, setSolicitudes] = useState<SolicitudPromover[]>([]);
@@ -40,18 +42,14 @@ function VistaSolicitudes() {
   // 🔐 Auth context for token
   const { accountInformation } = useAuth();
   const { token } = accountInformation;
+  const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
 
-  // ⚠️ Alert dialog handling
-  const {
-    open: openFetchSolicitudes,
-    handleClose: handleCloseFetchSolicitudes,
-    handleOpen: handleOpenFetchSolicitudes,
-  } = useAlertDialog();
+  const { setError } = useErrorReader(showDialog);
 
   // 📦 React Query: fetch solicitudes
-  const { data, isError, isLoading, error, isSuccess } = useQuery({
+  const { data, isLoading, error, isSuccess } = useQuery({
     queryFn: () => getSolicitudesService(token),
-    queryKey: ["solicitudes"],
+    queryKey: ["Solicitudes"],
   });
 
   // 🛠️ Adapt and store fetched solicitudes
@@ -63,14 +61,14 @@ function VistaSolicitudes() {
 
   // 🛑 Handle fetch errors
   useEffect(() => {
-    if (isError && error) handleOpenFetchSolicitudes();
-  }, [isError, error]);
+    if (error) setError(error);
+  }, [error]);
 
   // 🔍 Filtered data with conditions and search
   const solicitudesToRender = useMemo(() => {
     const y = searchValue.toLowerCase();
     return filterDataFunction(
-      filterData(solicitudes) as SolicitudPromover[],
+      filterDataFn(solicitudes) as SolicitudPromover[],
       (items: SolicitudPromover[]) => {
         if (y === "") return items;
         return items.filter((solicitud) => {
@@ -92,8 +90,8 @@ function VistaSolicitudes() {
         fullWidth
         onChange={(e) => {
           const value = e.target.value || "";
-          if (value !== "") toggleFilter("usuario.fechaRecepcion", (x: any) => x === value);
-          else toggleFilter("usuario.fechaRecepcion", (_x: any) => true);
+          if (value !== "") handleFilter("usuario.fechaRecepcion", (x: any) => x === value);
+          else handleFilter("usuario.fechaRecepcion", (_x: any) => true);
         }}
         defaultValue={""}
       >
@@ -119,8 +117,8 @@ function VistaSolicitudes() {
         fullWidth
         onChange={(e) => {
           const value = e.target.value || "";
-          if (value !== "") toggleFilter("usuario.fechaAceptacion", (x: any) => x === value);
-          else toggleFilter("usuario.fechaAceptacion", (_x: any) => true);
+          if (value !== "") handleFilter("usuario.fechaAceptacion", (x: any) => x === value);
+          else handleFilter("usuario.fechaAceptacion", (_x: any) => true);
         }}
         defaultValue={""}
       >
@@ -137,15 +135,13 @@ function VistaSolicitudes() {
 
   return (
     <>
-      {/* 🧨 Error Dialog */}
-      {error && (
-        <AlertDialogError
-          handleClose={handleCloseFetchSolicitudes}
-          open={openFetchSolicitudes}
-          title="Consultar Solicitudes"
-          error={error}
-        />
-      )}
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+      />
 
       {/* 🔄 Loading */}
       {isLoading ? (
@@ -179,8 +175,8 @@ function VistaSolicitudes() {
                 fullWidth
                 onChange={(e) => {
                   const value = e.target.value || "";
-                  if (value !== "") toggleFilter("estado", (x: any) => x === value);
-                  else toggleFilter("estado", (_x: any) => true);
+                  if (value !== "") handleFilter("estado", (x: any) => x === value);
+                  else handleFilter("estado", (_x: any) => true);
                 }}
                 defaultValue={""}
               >

@@ -10,8 +10,9 @@ import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import { useQuery } from "@tanstack/react-query";
 import LoaderElement from "@modules/general/components/loaderElement";
-import AlertDialogError from "@modules/general/components/alertDialogError";
 import { adaptUserServiceToCB } from "@modules/usuarios/utils/adapt.usuario";
+import AlertDialog from "@modules/general/components/alertDialog";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
 
 type Props = {
   /**
@@ -41,19 +42,16 @@ type Props = {
 };
 
 /**
- * AddUsers component allows the selection of multiple users from a predefined list
- * based on user type. Users can be searched, selected, visualized in a chip list,
- * and either confirmed or canceled.
+ * `AddUsers` component allows users to be selected and added to a group or course.
  *
- * Features:
- * - Fetches users by type from backend
- * - Integrates live search and filtering
- * - Displays selected users as deletable chips
- * - Handles loading and error states gracefully
+ * - Users can be searched and filtered.
+ * - Selected users are shown as chips with avatars.
+ * - Users can be removed from selection.
+ * - Handles loading, API errors, and confirmation actions.
  *
  * @component
- * @param {Props} props - Props containing user type and selection handlers
- * @returns {JSX.Element} A user selection UI with confirmation actions
+ * @param {Props} props - Component props
+ * @returns {JSX.Element} The rendered component
  */
 const AddUsers: React.FC<Props> = ({
   typeUsers,
@@ -66,42 +64,59 @@ const AddUsers: React.FC<Props> = ({
   const { accountInformation } = useAuth();
   const { token } = accountInformation;
 
-  const { data, isLoading, isError, error, isSuccess } = useQuery({
+  // Fetch users of given type from backend
+  const { data, isLoading, error, isSuccess } = useQuery({
     queryFn: () => getUsuariosByTypeService(typeUsers, token),
-    queryKey: [],
+    queryKey: ["Load Users", typeUsers],
   });
 
+  // Handles alert dialog logic
   const {
-    handleClose: handleCloseFailFetch,
-    open: openFailFetch,
-    handleOpen: handleOpenFailFetch,
+    showDialog,
+    open,
+    title,
+    message,
+    type,
+    handleAccept: handleAcceptAlert,
   } = useAlertDialog();
 
+  // Hook for handling API errors
+  const { setError } = useErrorReader(showDialog);
+
+  // Local list of all fetched users
   const [users, setUsers] = useState<UsuarioCampoBusqueda[]>([]);
+
+  // Selected user from search input
   const { selectUser, setSelectUser } = useSearchUsers();
 
+  /**
+   * On successful fetch, adapt user data to search format.
+   */
   useEffect(() => {
     if (isSuccess && data) {
       setUsers(data.map((user) => adaptUserServiceToCB(user)));
     }
   }, [isSuccess, data]);
 
+  /**
+   * If an error occurs during data fetching, show alert.
+   */
   useEffect(() => {
-    if (isError) handleOpenFailFetch();
-  }, [isError]);
+    if (error) setError(error);
+  }, [error]);
 
+  /**
+   * Adds a user to the selection if not already added.
+   */
   useEffect(() => {
     if (selectUser) {
-      setSelectUsers([
-        ...selectUsers.filter((u) => u.id !== selectUser.id),
-        selectUser,
-      ]);
+      setSelectUsers([...selectUsers.filter((u) => u.id !== selectUser.id), selectUser]);
     }
   }, [selectUser]);
 
   /**
    * Removes a user from the selected list.
-   * 
+   *
    * @param {number} id - ID of the user to remove
    */
   function handleDelete(id: number) {
@@ -110,26 +125,33 @@ const AddUsers: React.FC<Props> = ({
 
   return (
     <>
-      {error && (
-        <AlertDialogError
-          error={error}
-          handleClose={handleCloseFailFetch}
-          open={openFailFetch}
-          title="Fetch Users"
-        />
-      )}
+      {/* Alert dialog for errors or confirmations */}
+      <AlertDialog
+        handleAccept={handleAcceptAlert}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+      />
+
+      {/* Show loading spinner while fetching users */}
       {isLoading ? (
         <LoaderElement />
       ) : (
         <>
-          <Stack spacing={3} sx={{width: '100%'}}>
+          <Stack spacing={3} sx={{ width: "100%" }}>
+            {/* Title */}
             <Typography variant="h4" sx={{ fontWeight: 500 }} textAlign="center">
               Añadir Estudiantes
             </Typography>
+
+            {/* Search bar to find users */}
             <SearchUsers selectUser={selectUser} setSelectUser={setSelectUser} users={users} />
+
+            {/* List of selected users displayed as chips */}
             <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
               <Grid2
-              spacing={2}
+                spacing={2}
                 container
                 sx={{
                   backgroundColor: theme.palette.action.hover,
@@ -150,6 +172,8 @@ const AddUsers: React.FC<Props> = ({
                 ))}
               </Grid2>
             </Box>
+
+            {/* Action buttons */}
             <Stack direction="row" spacing={2} justifyContent="center">
               <GeneralButton mode={buttonTypes.save} onClick={handleAccept} />
               <GeneralButton color="inherit" mode={buttonTypes.cancel} onClick={handleCancel} />

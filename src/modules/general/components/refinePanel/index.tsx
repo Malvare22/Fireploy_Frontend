@@ -5,39 +5,42 @@ import { FormControl, Grid2, InputLabel, MenuItem, Select, Stack } from "@mui/ma
 import { ReactNode, useEffect } from "react";
 import TextFieldSearch from "../textFieldSearch";
 
-export type SorterOption = { key: string; label: [[string, Order], [string, Order], [string, Order]] }[]
+export type SorterOptions = {
+  key: string;
+  label: [[string, Order], [string, Order], [string, Order]];
+}[];
 
-export type FilterOption = { key: string; options: [string, (x: any) => boolean][] }[]
+export type FilterOptions = { key: string; options: [string, (x: any) => boolean][] }[];
 
 type Props<T> = {
   data: T[];
-  sorterOptions?: SorterOption;
-  filterOptions?: FilterOption;
+  sorterOptions?: SorterOptions;
+  filterOptions?: FilterOptions;
   children: ReactNode;
   setRefineData: React.Dispatch<T[]>;
   searchOptions?: boolean;
-  searchFn?: (items: T[]) => T[];
+  searchFn?: (items: T[], s: string) => T[];
 };
 
 /**
- * RefinePanel is a generic React component that provides a unified interface 
- * for filtering, sorting, and searching through a dataset. It is designed to work 
+ * RefinePanel is a generic React component that provides a unified interface
+ * for filtering, sorting, and searching through a dataset. It is designed to work
  * with MUI components and leverages custom hooks to handle logic for search, filter, and order.
  *
  * @template T The type of the data items in the dataset.
  *
  * @param {T[]} data - The dataset to be refined through search, filters, and sorting.
- * 
+ *
  * @param {Object[]} [sorterOptions] - Optional list of sorting configuration options.
- * Each object must contain a `key` (string) and `label` (array of tuples) 
+ * Each object must contain a `key` (string) and `label` (array of tuples)
  * describing the sorting options. Each tuple contains a display label and an `Order` value.
- * Example: 
+ * Example:
  * ```ts
  * [{ key: 'Name', label: [['A-Z', 'asc'], ['Z-A', 'desc']] }]
  * ```
  *
  * @param {Object[]} [filterOptions] - Optional list of filter configuration options.
- * Each object must contain a `key` (string) and `options` (array of tuples). 
+ * Each object must contain a `key` (string) and `options` (array of tuples).
  * Each tuple consists of a display text and a function used to filter the data.
  * Example:
  * ```ts
@@ -86,7 +89,7 @@ export default function RefinePanel<T extends Object>({
 
   useEffect(() => {
     setRefineData(filterDataFn(orderDataFn(applySearch(data, searchFn))));
-  }, [data, filterDataFn, orderDataFn, searchValue]);
+  }, [data, filterDataFn, orderDataFn, searchValue, searchFn]);
 
   return (
     <Stack spacing={3}>

@@ -1,16 +1,7 @@
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { showSocialNetworks } from "@modules/usuarios/utils/showSocialNetworks";
-import {
-  Avatar,
-  Box,
-  Card,
-  Grid2,
-  MenuItem,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Card, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ProjectCard from "@modules/general/components/projectCard";
 import SpringModal from "@modules/general/components/springModal";
@@ -31,6 +22,7 @@ import { adaptProject, adaptProjectToCard } from "@modules/proyectos/utils/adapt
 import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
+import { useModal } from "@modules/general/components/modal/hooks/useModal";
 
 /**
  * Portfolio component responsible for rendering a user's public profile and projects.
@@ -77,8 +69,7 @@ const Portafolio = () => {
     handleClose: handleCloseModal,
     handleOpen: handleOpenModal,
     open: openModal,
-  } = useSpringModal();
-  const { filterData } = useFilters<ProyectoCard>();
+  } = useModal();
 
   /**
    * Handles the selection of a project and opens the modal to display its details.
@@ -90,7 +81,9 @@ const Portafolio = () => {
     handleOpenModal();
   };
 
-  const { handleRequestSort, orderBy, stableSort } = useOrderSelect<ProyectoCard>();
+  const { handleOrder, orderDataFn } = useOrderSelect<ProyectoCard>();
+
+  const { filterDataFn } = useFilters<ProyectoCard>();
 
   const logros = { titulo: "Repositorios en GitHub", valor: "50+" };
 
@@ -172,10 +165,7 @@ const Portafolio = () => {
                     <Grid2 size={{ md: 4, xs: 12 }}>
                       <TextField
                         select
-                        value={orderBy.puntuacion}
-                        onChange={(e) =>
-                          handleRequestSort("puntuacion", (e.target.value as Order) || undefined)
-                        }
+                        onChange={(e) => handleOrder("puntuacion", e.target.value as Order)}
                         InputLabelProps={{ shrink: true }}
                         variant="outlined"
                         label={labelPortafolio.puntuacion}
@@ -191,9 +181,8 @@ const Portafolio = () => {
 
                     <Grid2 size={{ md: 4, xs: 12 }}>
                       <TextField
-                        value={orderBy.semestre}
                         onChange={(e) =>
-                          handleRequestSort("semestre", (e.target.value as Order) || undefined)
+                          handleOrder("semestre", (e.target.value as Order) || undefined)
                         }
                         select
                         InputLabelProps={{ shrink: true }}
@@ -213,7 +202,7 @@ const Portafolio = () => {
 
                 <Box sx={{ flexGrow: 1 }}>
                   <Grid2 container spacing={1} rowSpacing={4} justifyContent={"space-between"}>
-                    {filterData(stableSort(projects)).map((proyecto) => (
+                    {filterDataFn(orderDataFn(projects)).map((proyecto) => (
                       <Grid2
                         size={{ xl: 4, sm: 6, xs: 12 }}
                         display={"flex"}
