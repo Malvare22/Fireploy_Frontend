@@ -1,4 +1,4 @@
-export enum LabelTablaUsuarios{
+export enum labelTablaUsuarios{
     codigo = "Código",
     nombreCompleto = "Nombre Completo",
     tipoUsuario = "Tipo de Usuario",
