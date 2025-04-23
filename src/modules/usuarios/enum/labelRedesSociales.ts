@@ -1,4 +1,4 @@
-export const LabelRedesSociales = {
+export const labelRedesSociales = {
   facebook: "Facebook",
   x: "X",
   linkedin: "Linkedin",
