@@ -12,7 +12,6 @@ import { Seccion, seccionTemplate } from "@modules/materias/types/seccion";
 import { labelListarSecciones } from "@modules/materias/enums/labelListarSecciones";
 import { Curso } from "@modules/materias/types/curso";
 import { useCustomTableStyles } from "@modules/general/styles";
-import CustomWidthTooltip from "@modules/general/components/customWidthTooltip";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import SeccionesForm from "../formSecciones";
 import Modal from "@modules/general/components/modal";
@@ -26,6 +25,7 @@ import { SeccionesSchema } from "@modules/materias/utils/forms/form.schema";
 import AlertDialog from "@modules/general/components/alertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { labelEditCourse } from "@modules/materias/enums/labelEditCourse";
+import CustomWidthTooltip from "@modules/general/components/customWidthTooltip";
 
 const TablaGestionarSecciones = () => {
   const { getValues: getValuesCurso } = useFormContext<Curso>();
