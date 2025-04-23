@@ -1,9 +1,7 @@
 import { RouteObject } from "react-router-dom";
-import ListarProyectos from "./pages/listar";
 import ExplorarProyectos from "./pages/explorar";
 import CrearProyecto from "./pages/crear";
 import VerProyecto from "./pages/ver";
-import VistaRepositorios from "./pages/repositorios";
 import VistaBasesDeDatos from "./pages/basesDeDatos";
 
 const rutaBase = "/app/proyectos";

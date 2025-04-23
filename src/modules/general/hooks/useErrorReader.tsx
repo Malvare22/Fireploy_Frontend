@@ -40,9 +40,9 @@ function useErrorReader(showDialog: ShowDialogFn) {
           navigate(rutasGeneral.login); // Navigate to the login page
         }
       },
-      onClose: undefined,
+      onCancel: undefined,
       reload: false,
-      closeOnAccept: true
+      _closeOnAccept: true
     });
   }, [error]);
 

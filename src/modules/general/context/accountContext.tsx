@@ -1,4 +1,4 @@
-import { TiposUsuario, usuarios } from "@modules/usuarios/types/usuario";
+import { TiposUsuario } from "@modules/usuarios/types/usuario";
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getUsuarioService } from "@modules/usuarios/services/get.usuario";
@@ -70,16 +70,16 @@ type AuthProviderProps = {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [localUser, setLocalUser] = useState<AccountInformation>(accountInformationTemplate);
 
-  // const { data, error } = useQuery({
-  //   queryFn: () =>
-  //     getUsuarioService(
-  //       parseInt(localStorage.getItem("CURRENT_ID") ?? "-1"),
-  //       localStorage.getItem("TOKEN") ?? ""
-  //     ),
-  //   queryKey: ["session", localStorage.getItem("TOKEN") ?? ""],
-  //   refetchInterval: 60 * 1000, // Refetch data every minute.
-  //   retry: 1, // Retry the query once in case of failure.
-  // });
+  const { data, error } = useQuery({
+    queryFn: () =>
+      getUsuarioService(
+        parseInt(localStorage.getItem("CURRENT_ID") ?? "-1"),
+        localStorage.getItem("TOKEN") ?? ""
+      ),
+    queryKey: ["session", localStorage.getItem("TOKEN") ?? ""],
+    refetchInterval: 60 * 1000, // Refetch data every minute.
+    retry: 1, // Retry the query once in case of failure.
+  });
 
   /**
    * @effect
@@ -87,8 +87,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
    * The user information is adapted and stored in the state.
    */
   useEffect(() => {
-    if (true) {
-      const localData = usuarios[0];
+    if (data) {
+      const localData = adaptUser(data);
       setLocalUser({
         correo: localData.correo,
         foto: localData.fotoDePerfil,
@@ -98,7 +98,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         token: localStorage.getItem("TOKEN") ?? "",
       });
     }
-  }, []);
+  }, [data]);
 
   const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
   const { setError } = useErrorReader(showDialog);
@@ -108,11 +108,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
    * @description Effect hook to handle errors by passing them to the error reader.
    * This effect is triggered whenever an error occurs during the query.
    */
-  // useEffect(() => {
-  //   if (error) {
-  //     setError(error);
-  //   }
-  // }, [error]);
+  useEffect(() => {
+    if (error) {
+      setError(error);
+    }
+  }, [error]);
 
   /**
    * @effect

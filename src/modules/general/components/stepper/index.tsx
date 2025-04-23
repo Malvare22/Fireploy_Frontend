@@ -4,7 +4,6 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { Box, StepConnector, stepConnectorClasses, styled, useMediaQuery, useTheme } from "@mui/material";
 import StepContent from "@mui/material/StepContent";
-import { ParamsContext } from "@modules/general/context/paramasContext";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {

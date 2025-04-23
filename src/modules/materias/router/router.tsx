@@ -6,7 +6,6 @@ import ListarMaterias from "../pages/listarMaterias";
 import ListarCursos from "../pages/listarCursos";
 import VistaCrearMateria from "../pages/crearMateria";
 import VistaEditarCurso from "../pages/editarCurso";
-import VistaEditarMateria from "../pages/editarMateria";
 
 export const rutaBase = "/app/materias";
 

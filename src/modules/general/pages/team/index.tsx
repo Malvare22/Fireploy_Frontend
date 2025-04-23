@@ -51,7 +51,7 @@ function TeamView() {
     </div>
   );
   return (
-    <Stack spacing={3} sx={{ position: "relative" }} paddingBottom={4} paddingX={4}>
+    <Stack spacing={3} sx={{ position: "relative" }} paddingY={-4} paddingBottom={4} paddingX={4}>
       <Wave />
       {/* Section title */}
       <Typography textAlign="center" variant="h4">

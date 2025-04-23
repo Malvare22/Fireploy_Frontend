@@ -1,11 +1,9 @@
-import { Box, Card, Chip, Stack, Typography, useTheme } from "@mui/material";
+import { Box, Card, Stack, Typography } from "@mui/material";
 import AnimatedCard from "../animatedCard";
 import Score from "../score";
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import React from "react";
-import { ProjectCardMembers } from "../projectCardAvatar";
 import Status from "../status";
-import { labelProjectCard } from "@modules/general/enums/labelProjectCard";
 
 type ProjectCardProps = {
   /**
@@ -28,7 +26,6 @@ type ProjectCardProps = {
  * @returns {JSX.Element} - Returns a styled project card component.
  */
 export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }) => {
-  const theme = useTheme();
 
   return (
     <AnimatedCard

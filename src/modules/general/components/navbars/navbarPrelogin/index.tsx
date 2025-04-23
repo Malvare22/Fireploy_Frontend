@@ -9,13 +9,8 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import React from "react";
-import GeneralButton from "../../button";
-import { buttonTypes } from "@modules/general/types/buttons";
 import { useNavigate } from "react-router-dom";
 import { rutasGeneral } from "@modules/general/router/router";
-
-/** List of navigation options available before logging in. */
-const pages = ["Inicio", "Iniciar Sesión", "Registrarse"];
 
 /**
  * **Pre-login Navigation Bar Component**
@@ -29,6 +24,14 @@ const pages = ["Inicio", "Iniciar Sesión", "Registrarse"];
  * @returns {JSX.Element} The pre-login navigation bar.
  */
 function NavbarPrelogin(): JSX.Element {
+  /** List of navigation options available before logging in. */
+  const pages = [
+    ["Inicio", rutasGeneral.home],
+    ["Iniciar Sesión", rutasGeneral.login],
+    ["Registrarse", rutasGeneral.registrar],
+    ["Equipo de Trabajo", rutasGeneral.developTeam],
+  ];
+
   // State to manage the mobile menu anchor
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 
@@ -62,7 +65,6 @@ function NavbarPrelogin(): JSX.Element {
               display: { xs: "none", md: "flex" },
               fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
             }}
@@ -94,9 +96,11 @@ function NavbarPrelogin(): JSX.Element {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: "block", md: "none" } }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: "center" }}>{page}</Typography>
+              {pages.map(([text, link]) => (
+                <MenuItem key={text} onClick={handleCloseNavMenu}>
+                  <Button variant="text" onClick={() => navigate(link)}>
+                    <Typography sx={{ textAlign: "center" }}>{text}</Typography>
+                  </Button>
                 </MenuItem>
               ))}
             </Menu>
@@ -124,13 +128,13 @@ function NavbarPrelogin(): JSX.Element {
 
           {/* Navigation buttons (visible on larger screens) */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {pages.map(([text, link]) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                variant="text"
+                onClick={() => navigate(link)}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                <Typography sx={{ textAlign: "center" }}>{text}</Typography>
               </Button>
             ))}
           </Box>

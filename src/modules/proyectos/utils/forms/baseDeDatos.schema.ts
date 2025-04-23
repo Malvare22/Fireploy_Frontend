@@ -4,10 +4,8 @@ import { contraseniaSchema } from "@modules/usuarios/utils/form/usuario.schema";
 import { UrlSchema } from "../../../materias/utils/forms/url.schema";
 import { StandardStringRequiredSchema } from "@modules/materias/utils/forms/string.schema";
 
-export const BaseDeDatosSchema: z.ZodType<BaseDeDatos> = z.object({
-  proyecto: z.string().optional(),
+export const BaseDeDatosSchema: z.ZodType<Omit<BaseDeDatos, "proyecto">> = z.object({
   id: z.number().optional(),
-  proyectoId: z.string().optional(),
   nombre: StandardStringRequiredSchema,
   contrasenia: contraseniaSchema,
   url: UrlSchema.min(1, "Campo Obligatorio"),

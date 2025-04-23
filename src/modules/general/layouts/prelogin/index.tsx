@@ -27,7 +27,8 @@ function LayoutPrelogin() {
           justifyContent: "center",
           "> div": { width: "100%" },
           minHeight: '70vh',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          paddingY: 4
         }}
       >
         <Outlet />

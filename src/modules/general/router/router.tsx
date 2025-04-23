@@ -26,7 +26,7 @@ export enum rutasGeneral {
   recuperar = rutaBase + "recuperar",
   registrar = rutaBase + "registrar",
   cambiarContrasenia = rutaBase + "reset-password/:token",
-  developTeam = rutaBase + '/developTeam'
+  developTeam = rutaBase + 'developTeam'
 }
 
 /**
@@ -38,7 +38,7 @@ export const routerGeneral: RouteObject = {
   element: <LayoutPrelogin />, // Use layout with navbar for pre-login pages
   children: [
     {
-      path: "/",
+      path: rutasGeneral.home,
       element: <Home />,
     },
     {

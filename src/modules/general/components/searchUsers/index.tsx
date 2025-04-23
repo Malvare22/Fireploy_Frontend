@@ -2,9 +2,8 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
 import { FC } from "react";
-import { Avatar, Box, InputAdornment, Typography } from "@mui/material";
+import { Avatar, Box, Typography } from "@mui/material";
 import { UsuarioCampoBusqueda } from "../../hooks/useSearchUsers";
-import SearchIcon from "@mui/icons-material/Search";
 
 /**
  * Example list of users for testing purposes.
