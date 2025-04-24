@@ -1,5 +1,5 @@
 import AlertDialog from "@modules/general/components/alertDialog";
-import RefinePanel, { FilterOptions } from "@modules/general/components/refinePanel";
+import { FilterOptions, SelectFilters } from "@modules/general/components/selects";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
@@ -54,6 +54,7 @@ function VistaBasesDeDatos() {
   const filters: FilterOptions = [
     {
       key: "tipo",
+      label: "Tipo",
       options: [
         ["Monolito", (x) => x.tipo == "I"],
         ["Backend", (x) => x.tipo == "F"],
@@ -62,13 +63,10 @@ function VistaBasesDeDatos() {
     },
     {
       key: "proyecto.titulo",
+      label: "Título del Proyecto",
       options: _arrayTitles.map((x) => [x as string, (y: any) => y.proyecto?.titulo == x]),
     },
   ];
-
-  function searchFn(x: BaseDeDatos[], s: string) {
-    return x.filter((y) => y.proyecto?.titulo.toLowerCase().includes(s));
-  }
 
   return (
     <>
@@ -84,19 +82,12 @@ function VistaBasesDeDatos() {
           <Typography variant="h4">{labelBaseDeDatos.basesDeDatos}</Typography>
           <Divider />
         </Stack>
-        <RefinePanel
-          data={dataBases}
-          setRefineData={setBuffer}
-          filterOptions={filters}
-          searchFn={searchFn}
-          searchOptions={true}
-        >
-          {dataBases.length == 0 ? (
-            <Alert severity="info">Actualmente no dispone de bases de datos</Alert>
-          ) : (
-            <TablaBasesDeDatos basesDeDatos={buffer} />
-          )}
-        </RefinePanel>{" "}
+        <SelectFilters data={dataBases} filterOptions={filters} setRefineData={setBuffer} />
+        {dataBases.length == 0 ? (
+          <Alert severity="info">Actualmente no dispone de bases de datos</Alert>
+        ) : (
+          <TablaBasesDeDatos basesDeDatos={buffer} />
+        )}
       </Stack>
     </>
   );

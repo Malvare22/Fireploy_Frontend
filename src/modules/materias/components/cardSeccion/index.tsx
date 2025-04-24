@@ -2,37 +2,36 @@ import { Box, Grid2, Stack, Typography, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import AccordionUsage from "@modules/general/components/accordionUsage";
 import { ProyectoCard, proyectoEjemplo } from "@modules/proyectos/types/proyecto.card";
-import { labelSelects } from "@modules/general/enums/labelSelects";
 import { labelCardSeccion } from "@modules/materias/enums/labelCardSeccion";
 import { Seccion } from "@modules/materias/types/seccion";
 import ProjectCard from "@modules/general/components/projectCard";
-import RefinePanel, { SorterOptions } from "@modules/general/components/refinePanel";
+// import RefinePanel, { SorterOptions } from "@modules/general/components/selects";
 
 type CardSeccionProps = {
   seccion: Seccion;
 };
 
-const sorters: SorterOptions = [
-  {
-    key: "titulo",
-    label: [
-      ["A-Z", "desc"],
-      ["A-Z", "asc"],
-      [labelSelects.noAplicar, undefined],
-    ],
-  },
-  {
-    key: "puntuacion",
-    label: [
-      ["Mayor", "desc"],
-      ["Menor", "asc"],
-      [labelSelects.noAplicar, undefined],
-    ],
-  },
-];
+// const sorters: SorterOptions = [
+//   {
+//     key: "titulo",
+//     label: [
+//       ["A-Z", "desc"],
+//       ["A-Z", "asc"],
+//       [labelSelects.noAplicar, undefined],
+//     ],
+//   },
+//   {
+//     key: "puntuacion",
+//     label: [
+//       ["Mayor", "desc"],
+//       ["Menor", "asc"],
+//       [labelSelects.noAplicar, undefined],
+//     ],
+//   },
+// ];
 
 const CardSeccion: React.FC<CardSeccionProps> = ({ seccion }) => {
-  const [proyectos, setProyectos] = useState<ProyectoCard[]>([proyectoEjemplo]);
+  const [proyectos, _setProyectos] = useState<ProyectoCard[]>([proyectoEjemplo]);
 
   const theme = useTheme();
 
@@ -58,11 +57,8 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion }) => {
 
   return (
     <AccordionUsage title={<Title />}>
-      <RefinePanel<ProyectoCard>
-        data={proyectos}
-        setRefineData={setProyectos}
-        sorterOptions={sorters}
-      >
+
+        {/* <SelectOrders data={} setRefineData={setBu} sorterOptions={sorters}/> */}
         <Stack spacing={3}>
           <Typography>{seccion.descripcion}</Typography>
           <Typography variant="h5">{labelCardSeccion.proyectos}</Typography>
@@ -74,7 +70,6 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion }) => {
             ))}
           </Grid2>
         </Stack>
-      </RefinePanel>
     </AccordionUsage>
   );
 };

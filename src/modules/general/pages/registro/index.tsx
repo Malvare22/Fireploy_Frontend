@@ -55,13 +55,14 @@ function Registrar() {
   const { mutate, isPending } = useMutation({
     mutationKey: ["registrar estudiante"],
     mutationFn: () => postCreateUsuarioService("", getValues()),
-    onSuccess: () => showDialog({
-      message: 'Usuario Creado Correctamente',
-      type: 'success',
-      onAccept: () => successAction(),
-      title: 'Usuario Registrado',
-    }),
-    onError:(error)=> setError(error),
+    onSuccess: () =>
+      showDialog({
+        message: "Usuario Creado Correctamente",
+        type: "success",
+        onAccept: () => successAction(),
+        title: "Usuario Registrado",
+      }),
+    onError: (error) => setError(error),
   });
 
   /**
@@ -180,12 +181,16 @@ function Registrar() {
             {/* Buttons */}
             <Stack spacing={2} direction="row" justifyContent="center">
               <Box>
-                <Button variant="outlined" onClick={() => navigate(rutasGeneral.login)}>
+                <Button variant="outlined" type="submit">
                   {labelRegisterUser.register}
                 </Button>
               </Box>
               <Box>
-                <Button onClick={onSubmit} variant="contained" loading={isPending}>
+                <Button
+                  onClick={() => navigate(rutasGeneral.login)}
+                  variant="contained"
+                  loading={isPending}
+                >
                   {labelRegisterUser.back}
                 </Button>
               </Box>

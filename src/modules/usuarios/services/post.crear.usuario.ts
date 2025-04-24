@@ -32,6 +32,8 @@ export const postCreateUsuarioService = async (token: string, user: Usuario) => 
     foto_perfil: getImage.defaultProfileImage.ruta,
   };
 
+  console.log(body)
+
   if (user.estFechaInicio) {
     body.est_fecha_inicio = user.estFechaInicio;
   }

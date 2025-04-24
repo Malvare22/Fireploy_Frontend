@@ -3,6 +3,7 @@ import ExplorarProyectos from "./pages/explorar";
 import CrearProyecto from "./pages/crear";
 import VerProyecto from "./pages/ver";
 import VistaBasesDeDatos from "./pages/basesDeDatos";
+import ListarProyectos from "./pages/listar";
 
 const rutaBase = "/app/proyectos";
 
@@ -21,10 +22,10 @@ export const routerProyectos: RouteObject[] = [
     path: rutasProyectos.ver,
     element: <VerProyecto />,
   },
-  // {
-  //   path: rutasProyectos.listar,
-  //   element: <ListarProyectos />,
-  // },
+  {
+    path: rutasProyectos.listar,
+    element: <ListarProyectos />,
+  },
   {
     path: rutasProyectos.crear,
     element: <CrearProyecto />,

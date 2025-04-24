@@ -13,17 +13,18 @@ import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
-import RefinePanel, { FilterOptions } from "@modules/general/components/refinePanel";
+// import RefinePanel, { FilterOptions } from "@modules/general/components/selects";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
+import { FilterOptions, SelectFilters } from "@modules/general/components/selects";
 
 const filterOptions: FilterOptions = [
   {
     key: "estado",
+    label: "Estado",
     options: [
-      ["Activo", (x) => x == "A"],
-      ["Inactivo", (x) => x == "I"],
-      ["No aplicar", (_x) => true],
+      ["Activo", (x: any) => x == "A"],
+      ["Inactivo", (x: any) => x == "I"],
     ],
   },
 ];
@@ -59,9 +60,9 @@ function ListarCursos() {
     if (data) setCursos(data.map((curso) => adaptCursoTabla(adaptCursoService(curso))));
   }, [data]);
 
-  const sorterFn = (curso: CursoTabla[], s: string) => {
-    return curso.filter((x) => (x.docente + x.estado).toLowerCase().includes(s.toLowerCase()));
-  };
+  // const sorterFn = (curso: CursoTabla[], s: string) => {
+  //   return curso.filter((x) => (x.docente + x.estado).toLowerCase().includes(s.toLowerCase()));
+  // };
 
   return (
     <>
@@ -79,15 +80,12 @@ function ListarCursos() {
       ) : (
         <Stack spacing={3}>
           <Typography variant="h4">{labelListarCursos.titulo}</Typography>
-          <RefinePanel
-            filterOptions={filterOptions}
+          <SelectFilters
             data={cursos}
-            searchOptions={true}
+            filterOptions={filterOptions}
             setRefineData={setCursosBuffer}
-            searchFn={sorterFn}
-          >
-            {<TablaCursos cursos={cursosBuffer} />}
-          </RefinePanel>
+          />
+          {<TablaCursos cursos={cursosBuffer} />}
           <GeneralButton mode={buttonTypes.add} />
         </Stack>
       )}

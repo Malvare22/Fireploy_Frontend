@@ -138,6 +138,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
       if (imgFile != undefined) {
         setId(data.id);
       } else {
+        handleOpenSuccess();
       }
     }
   }, [data, isSuccess]);

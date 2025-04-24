@@ -116,9 +116,9 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
           <Stack direction={"row"} justifyContent={"center"}>
             <ActionButton
               mode={actionButtonTypes.ver}
-              onClick={() =>
-                navigate(rutasMaterias.listarCursos.replace(":idMateria", row.codigo.toString()))
-              }
+              onClick={() => {
+                navigate(rutasMaterias.listarCursos.replace(":idMateria", row.codigo.toString()));
+              }}
             />
             <ActionButton mode={actionButtonTypes.editar} onClick={() => handleEditMateria(row)} />
             {row.estado == "A" ? (
@@ -174,10 +174,12 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
         type: "success",
         title: "Actualización Materia",
       }),
-    onError: (error) => {setError(error)},
+    onError: (error) => {
+      setError(error);
+    },
   });
 
-  const {conditionalRowStyles, customStyles} = useCustomTableStyles();
+  const { conditionalRowStyles, customStyles } = useCustomTableStyles();
 
   return (
     <>

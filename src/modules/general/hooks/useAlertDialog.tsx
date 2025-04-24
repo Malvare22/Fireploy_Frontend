@@ -47,7 +47,6 @@ export type ShowDialogParams = {
   reload?: boolean;
 
   _closeOnAccept?: boolean;
-
 };
 
 /**
@@ -82,7 +81,8 @@ function useAlertDialog() {
       onAccept,
       onCancel,
       reload = false,
-      _closeOnAccept = false
+      _closeOnAccept = false,
+      isLoading = false,
     } = options;
 
     // Update dialog state with provided options
@@ -94,7 +94,7 @@ function useAlertDialog() {
     // Set the accept handler with the provided callback
     setHandleAccept(() => () => {
       onAccept?.();
-      if(_closeOnAccept) handleClose();
+      if (_closeOnAccept) handleClose();
       if (reload) window.location.reload(); // Reloads the page if specified
     });
 
