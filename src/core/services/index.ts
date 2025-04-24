@@ -26,7 +26,7 @@ export interface ApiResponse<T> {
  */
 const apiClient: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_URL_BACKEND as string,
-  timeout: 1000,
+  timeout: 10000,
   headers: {
     "Content-Type": "application/json",
   },
