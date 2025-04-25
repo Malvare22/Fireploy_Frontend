@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { CursoTabla } from "@modules/materias/types/curso.tabla";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
 import TablaCursos from "@modules/materias/components/tablaCursos";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { getCursoByMateriaId } from "@modules/materias/services/get.curso";
 import { adaptCursoTabla } from "@modules/materias/utils/adapters/curso";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
@@ -17,6 +17,7 @@ import { buttonTypes } from "@modules/general/types/buttons";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { FilterOptions, SelectFilters } from "@modules/general/components/selects";
+import { rutasMaterias } from "@modules/materias/router/router";
 
 const filterOptions: FilterOptions = [
   {
@@ -38,6 +39,8 @@ function ListarCursos() {
 
   const { accountInformation } = useAuth();
   const { token } = accountInformation;
+
+  const navigate = useNavigate();
 
   const {
     data,
@@ -88,7 +91,16 @@ function ListarCursos() {
             setRefineData={setCursosBuffer}
           />
           {<TablaCursos cursos={cursosBuffer} />}
-          <Stack alignItems={'end'}><Box><GeneralButton mode={buttonTypes.add} /></Box></Stack>
+          <Stack alignItems={"end"}>
+            <Box>
+              <GeneralButton
+                mode={buttonTypes.add}
+                onClick={() =>
+                  navigate(rutasMaterias.crearCurso.replace(":idMateria", idMateria || "-1"))
+                }
+              />
+            </Box>
+          </Stack>
         </Stack>
       )}
     </>

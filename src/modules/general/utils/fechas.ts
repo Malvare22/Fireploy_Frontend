@@ -34,3 +34,8 @@ export const adaptDateBackend = (fecha: string) => {
   const _fecha = fecha.split("-");
   return `${_fecha[0]}-${_fecha[1]}-${_fecha[2].slice(0, 2)}`;
 };
+
+
+export function getSemestre(){
+  return '2025-1'
+}
