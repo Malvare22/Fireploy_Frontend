@@ -1,4 +1,4 @@
-import { Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { CursoTabla } from "@modules/materias/types/curso.tabla";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
@@ -57,12 +57,14 @@ function ListarCursos() {
   }, [errorQuery]);
 
   useEffect(() => {
-    if (data) setCursos(data.map((curso) => adaptCursoTabla(adaptCursoService(curso))));
+    if (data) {
+      setCursos(data.map((curso) => adaptCursoTabla(adaptCursoService(curso))));
+    }
   }, [data]);
 
-  // const sorterFn = (curso: CursoTabla[], s: string) => {
-  //   return curso.filter((x) => (x.docente + x.estado).toLowerCase().includes(s.toLowerCase()));
-  // };
+  useEffect(() => {
+    setCursosBuffer(cursos);
+  }, [cursos]);
 
   return (
     <>
@@ -86,7 +88,7 @@ function ListarCursos() {
             setRefineData={setCursosBuffer}
           />
           {<TablaCursos cursos={cursosBuffer} />}
-          <GeneralButton mode={buttonTypes.add} />
+          <Stack alignItems={'end'}><Box><GeneralButton mode={buttonTypes.add} /></Box></Stack>
         </Stack>
       )}
     </>

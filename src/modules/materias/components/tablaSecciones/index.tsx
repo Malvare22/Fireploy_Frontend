@@ -50,7 +50,7 @@ const TablaGestionarSecciones = () => {
     return JSON.stringify(getValues("secciones")) !== JSON.stringify(getValuesCurso("secciones"));
   };
 
-  const [_successMessages, setSuccessMessages] = useState<string>("");
+  // const [_successMessages, setSuccessMessages] = useState<string>("");
 
   const {
     showDialog,
@@ -68,20 +68,13 @@ const TablaGestionarSecciones = () => {
   const { setError } = useErrorReader(showDialog);
 
   async function getRequest(secciones: Seccion[]) {
-    let mensajes = "";
     for (const seccion of secciones) {
-      try {
-        if (seccion.id) {
-          await patchEditSeccion(token, seccion);
-          mensajes += `✅ Sección "${seccion.titulo}" actualizada.` + "\n";
-        }
-      } catch {
-        await postCreateSeccion(token, seccion);
-        mensajes += `✅ Sección "${seccion.titulo}" creada.` + "\n";
-      }
+      if (seccion.id) {
+        await patchEditSeccion(token, seccion);
+      } else await postCreateSeccion(token, seccion);
     }
 
-    return setSuccessMessages(mensajes);
+    //return setSuccessMessages(mensajes);
   }
 
   const { isPending, mutate } = useMutation({
@@ -96,6 +89,7 @@ const TablaGestionarSecciones = () => {
         message: "Se ha editado el curso correctamente",
         onAccept: () => handleClose,
         reload: true,
+        type: "success",
       });
     },
     onError: (err) => setError(err),
@@ -228,65 +222,89 @@ const TablaGestionarSecciones = () => {
     mutate();
   }
 
+  function showErrors() {
+    const nodes: string[] = [];
+
+    const secciones = methods.formState.errors?.secciones;
+
+    if (Array.isArray(secciones)) {
+      secciones.forEach((row) => {
+        const _temp = Object.entries(row)
+          .map(([field, error]) => {
+            return `${field}: ${(error as FieldError)?.message || "Error desconocido"}`;
+          })
+          .join("\n");
+        nodes.push(_temp);
+      });
+    }
+
+    if (nodes.length === 0) return null;
+
+    return (
+      <Stack spacing={1}>
+        <Alert severity="error">Se han encontrado los siguientes errores:</Alert>
+        <Alert severity="error">
+          <Typography variant="body2" component="pre">
+            {nodes[0]}
+          </Typography>
+        </Alert>
+      </Stack>
+    );
+  }
+
   return (
     <FormProvider {...methods}>
-      <AlertDialog
-        handleAccept={handleAccept}
-        handleCancel={handleCancel}
-        open={open}
-        title={title}
-        textBody={message}
-        type={type}
-        isLoading={isLoading}
-      />
       {
         <Modal handleClose={handleCloseEdit} open={openEdit}>
           <SeccionesForm index={currentEdit!!} onAccept={onCloseModal} onCancel={onCloseModal} />
         </Modal>
       }
-      <Typography variant="h6">{labelEditCourse.sections}</Typography>
-      <Alert severity="info">{labelListarSecciones.informacion}</Alert>
-      {watch("secciones")?.length != 0 ? (
-        <>
-          <Divider />
-          <DataTable
-            columns={columns}
-            data={dataConIndice}
-            customStyles={customStyles}
-            conditionalRowStyles={conditionalRowStyles}
-            responsive
-          ></DataTable>
-        </>
-      ) : (
-        <Alert severity="warning">{labelEditCourse.notHasSection}</Alert>
-      )}
-      <Stack alignItems={"end"} padding={3}>
-        <Box>
-          <GeneralButton onClick={handleAdd} mode={buttonTypes.add} size="small" />
-        </Box>
-      </Stack>
-      {methods.formState.errors?.secciones &&
-        Array.isArray(methods.formState.errors.secciones) &&
-        methods.formState.errors.secciones.map((seccionError, index) => (
-          <div key={index}>
-            {Object.entries(seccionError).map(([field, error]) => (
-              <Alert severity="error" key={`${index}-${field}`}>
-                {`${field}: ${(error as FieldError)?.message || "Error desconocido"}`}
-              </Alert>
-            ))}
-          </div>
-        ))}
-      <Box>
-        {conditionToShowButton() && (
-          <GeneralButton
-            mode={buttonTypes.save}
-            variant="contained"
-            loading={isPending}
-            color="primary"
-            onClick={handleUpdate}
+      <form onSubmit={methods.handleSubmit(handleUpdate)}>
+        <Stack spacing={2}>
+          <AlertDialog
+            handleAccept={handleAccept}
+            handleCancel={handleCancel}
+            open={open}
+            title={title}
+            textBody={message}
+            type={type}
+            isLoading={isLoading}
           />
-        )}
-      </Box>
+          <Typography variant="h6">{labelEditCourse.sections}</Typography>
+          <Alert severity="info">{labelListarSecciones.informacion}</Alert>
+          {watch("secciones")?.length != 0 ? (
+            <>
+              <Divider />
+              <DataTable
+                columns={columns}
+                data={dataConIndice}
+                customStyles={customStyles}
+                conditionalRowStyles={conditionalRowStyles}
+                responsive
+              ></DataTable>
+            </>
+          ) : (
+            <Alert severity="warning">{labelEditCourse.notHasSection}</Alert>
+          )}
+          <Stack alignItems={"end"} padding={3}>
+            <Box>
+              <GeneralButton onClick={handleAdd} mode={buttonTypes.add} size="small" />
+            </Box>
+          </Stack>
+          {conditionToShowButton() && showErrors()}
+          <Box>
+            {conditionToShowButton() && (
+              <GeneralButton
+                mode={buttonTypes.save}
+                variant="contained"
+                loading={isPending}
+                color="primary"
+                type="submit"
+              />
+            )}
+          </Box>
+        </Stack>
+      </form>
     </FormProvider>
   );
 };

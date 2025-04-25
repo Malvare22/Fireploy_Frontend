@@ -9,7 +9,6 @@ export const patchEditSeccion = async (token: string, seccion: Seccion) => {
     fecha_inicio: string;
     fecha_fin: string;
     estado: "A" | "I";
-    cursoId: string;
   };
 
   const body: Body = {
@@ -18,7 +17,6 @@ export const patchEditSeccion = async (token: string, seccion: Seccion) => {
     fecha_inicio: seccion.fechaDeInicio,
     fecha_fin: seccion.fechaDeCierre,
     estado: seccion.estado,
-    cursoId: seccion.cursoId ?? "", // Asegura que tenga un valor
   };
 
   const response = await patchData<SeccionesService>(`/seccion/${seccion.id}`, body, {

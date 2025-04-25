@@ -46,6 +46,9 @@ import { labelEditCourse } from "@modules/materias/enums/labelEditCourse";
  * Component for editing a course view.
  * Handles course data fetching, form submission, and tab switching between course info and students.
  */
+type VistaEditarCursoProps = {
+  type : 'create' | 'edit'
+}
 function VistaEditarCurso() {
   // Custom hooks and React states
   const { idCurso } = useParams();
@@ -249,9 +252,7 @@ function VistaEditarCurso() {
                     <Divider />
                   </Stack>
                 </form>
-                <Stack spacing={2}>
-                  <TablaGestionarSecciones />
-                </Stack>
+                <TablaGestionarSecciones />
               </>
             )}
 
@@ -358,9 +359,6 @@ function TeacherCard() {
     setValuesCurso("docente", null, { shouldDirty: true });
   }
 
-  /**
-   * Renders buttons for edit/save/cancel/delete.
-   */
   function ButtonMode() {
     return !edit ? (
       <>
@@ -394,4 +392,3 @@ function TeacherCard() {
 }
 
 export default VistaEditarCurso;
-
