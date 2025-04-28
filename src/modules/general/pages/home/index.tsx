@@ -13,6 +13,7 @@ import ProjectCard from "@modules/general/components/projectCard";
 import { proyectoEjemplo } from "@modules/proyectos/types/proyecto.card";
 import PortafolioCard from "@modules/general/components/portafolioCard";
 import { usuarioPrueba } from "@modules/usuarios/types/usuario.portafolio";
+import { rutasGeneral } from "@modules/general/router/router";
 
 export enum labelHome {
   princialContent = "Despliega tus aplicativos web con unos clicks y compártelos con los de los demás",
@@ -84,9 +85,10 @@ function SectionPortafolios() {
 }
 
 function Princial() {
+  const navigate = useNavigate();
   return (
     <>
-      <Stack spacing={3} marginTop={{ xs: -20, md: -6 }} alignItems={"center"} overflow={'hidden'}>
+      <Stack spacing={3} marginTop={{ xs: -20, md: -6 }} alignItems={"center"} overflow={"hidden"}>
         <PrincipalAnimation />
       </Stack>
       <Stack marginTop={{ xs: -16, md: 0 }} spacing={2} alignItems={"center"}>
@@ -94,7 +96,9 @@ function Princial() {
           {labelHome.princialContent}
         </Typography>
         <Box>
-          <Button variant="contained">{labelHome.princialButtonText}</Button>
+          <Button variant="contained" onClick={() => navigate(rutasGeneral.registrar)}>
+            {labelHome.princialButtonText}
+          </Button>
         </Box>
       </Stack>
     </>

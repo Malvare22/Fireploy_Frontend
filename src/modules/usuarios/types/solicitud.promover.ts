@@ -1,4 +1,4 @@
-export type SolicitudPromover = {
+export type Solicitud = {
   id: number;
   usuario: {
     nombres: string;
@@ -8,12 +8,10 @@ export type SolicitudPromover = {
   };
   estado: "A" | "P" | "R";
   aprobadoPor: string | null;
+  curso: string | null;
 };
 
-export function getDatesSolicitudes(
-  x: SolicitudPromover[],
-  key: keyof SolicitudPromover["usuario"]
-): string[] {
+export function getDatesSolicitudes(x: Solicitud[], key: keyof Solicitud["usuario"]): string[] {
   const set = new Set<string>();
   x.forEach((y) => {
     if (y.usuario[key]) set.add(y.usuario[key]);
@@ -22,7 +20,7 @@ export function getDatesSolicitudes(
   return Array.from(set);
 }
 
-export const exampleSolicitudes: SolicitudPromover[] = [
+export const exampleSolicitudes: Solicitud[] = [
   {
     id: 1,
     usuario: {
@@ -33,6 +31,7 @@ export const exampleSolicitudes: SolicitudPromover[] = [
     },
     estado: "P",
     aprobadoPor: null,
+    curso: null,
   },
   {
     id: 2,
@@ -44,6 +43,7 @@ export const exampleSolicitudes: SolicitudPromover[] = [
     },
     estado: "A",
     aprobadoPor: "Admin1 Jaime enrique Acevedo",
+    curso: null,
   },
   {
     id: 3,
@@ -55,6 +55,7 @@ export const exampleSolicitudes: SolicitudPromover[] = [
     },
     estado: "P",
     aprobadoPor: null,
+    curso: null,
   },
   {
     id: 4,
@@ -66,6 +67,7 @@ export const exampleSolicitudes: SolicitudPromover[] = [
     },
     estado: "A",
     aprobadoPor: "Admin2",
+    curso: null,
   },
   {
     id: 5,
@@ -77,5 +79,6 @@ export const exampleSolicitudes: SolicitudPromover[] = [
     },
     estado: "R",
     aprobadoPor: null,
+    curso: null,
   },
 ];

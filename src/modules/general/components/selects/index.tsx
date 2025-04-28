@@ -1,11 +1,12 @@
 import { useFilters } from "@modules/general/hooks/useFilters";
 import useOrderSelect, { Order } from "@modules/general/hooks/useOrder";
-import { FormControl, Grid2, InputLabel, MenuItem, Select } from "@mui/material";
-import { useEffect, useMemo } from "react";
+import { FormControl, Grid2, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import React, { useEffect, useMemo } from "react";
 
 export type SorterOptions = {
   key: string;
-  label: [[string, Order], [string, Order], [string, Order]];
+  label: string;
+  options: { asc: string; desc: string; defaultValue?: string };
 }[];
 
 export type FilterOptions = {
@@ -16,8 +17,10 @@ export type FilterOptions = {
 
 type SelectOrderProps<T> = {
   sorterOptions: SorterOptions;
-  setRefineData: React.Dispatch<React.SetStateAction<T[]>>; // Cambiado aquí
+  setRefineData: React.Dispatch<React.SetStateAction<T[]>>;
+  label?: string;
   data: T[];
+  type?: "multiple" | "single";
 };
 
 type SelectFiltersProps<T> = {
@@ -30,38 +33,75 @@ export function SelectOrders<T extends Object>({
   sorterOptions,
   data,
   setRefineData,
+  type = "multiple",
+  label,
 }: SelectOrderProps<T>) {
-  const { handleOrder, order, orderDataFn } = useOrderSelect<T>();
-
+  const { handleOrder, order, orderDataFn, resetOrder } = useOrderSelect<T>();
   useEffect(() => {
+    console.log("A");
     setRefineData(orderDataFn(data));
   }, [order]);
+  if (type == "multiple")
+    return (
+      <Grid2 container spacing={2}>
+        {sorterOptions?.map(({ key, options, label }) => (
+          <Grid2 size={{ md: 4, xs: 12 }}>
+            <FormControl size="small" key={key} fullWidth>
+              <InputLabel>{label}</InputLabel>
+              <Select
+                label={key}
+                onChange={(e) =>
+                  handleOrder(key, e.target.value == "" ? undefined : (e.target.value as Order))
+                }
+                size="small"
+              >
+                <MenuItem value={"asc"}>{options.asc}</MenuItem>
+                <MenuItem value={"desc"}>{options.desc}</MenuItem>
+                <MenuItem value={""}>{options.defaultValue || ""}</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid2>
+        ))}
+      </Grid2>
+    );
+  else {
+    return (
+      <TextField
+        select
+        label={label || "No Aplicar"}
+        defaultValue={"_none_"}
+        fullWidth
+        size="small"
+        onChange={(e) => {
+          const value = e.target.value;
+          resetOrder();
+          if (value === "_none_") {
+            return;
+          }
 
-  return (
-    <Grid2 container>
-      {sorterOptions?.map(({ key, label }) => (
-        <Grid2 size={{ md: 4, xs: 12 }}>
-          <FormControl key={key} fullWidth>
-            <InputLabel>{key}</InputLabel>
-            <Select
-              label={key}
-              onChange={(e) =>
-                handleOrder(key, e.target.value == "" ? undefined : (e.target.value as Order))
-              }
-            >
-              {label.map(([_label, value]) => (
-                <MenuItem key={_label} value={!value ? "" : value}>
-                  {_label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid2>
-      ))}
-    </Grid2>
-  );
+          const parsed: { key: string; value: Order } = JSON.parse(value as string);
+          handleOrder(parsed.key, parsed.value);
+        }}
+      >
+        {sorterOptions?.map(({ options, key }) => [
+          <MenuItem
+            key={`${key}-asc`} // Key única sin JSON.stringify
+            value={JSON.stringify({ key, value: "asc" })}
+          >
+            {options.asc}
+          </MenuItem>,
+          <MenuItem
+            key={`${key}-desc`} // Key única sin JSON.stringify
+            value={JSON.stringify({ key, value: "desc" })}
+          >
+            {options.desc}
+          </MenuItem>,
+        ])}
+        <MenuItem value="_none_">No Aplicar</MenuItem>
+      </TextField>
+    );
+  }
 }
-
 
 export function SelectFilters<T extends Object>({
   filterOptions,

@@ -11,6 +11,7 @@ export enum labelSolicitudes{
     fecha = 'Fecha de Solicitud',
     estado = 'Estado',
     pediente = 'Pendiente',
+    curso = 'Curso',
     pedianteDeAprobacion = 'Pendiente de Aprobación',
     rechazada = 'Rechazada',
     acciones = 'Acciones'

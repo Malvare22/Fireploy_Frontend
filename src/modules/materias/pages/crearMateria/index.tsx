@@ -78,13 +78,6 @@ function VistaCrearMateria() {
       setDisableCheck(false);
     },
     onSuccess: (data) => {
-      showDialog({
-        title: "Creación de Materia Acádemica",
-        message: "La materia se ha creado correctamente",
-        onAccept: handleClose,
-        type: "success",
-        reload: true,
-      });
       setIdMateria(data.id);
     },
   });
@@ -100,14 +93,14 @@ function VistaCrearMateria() {
 
   const { isPending: isPendingPostGrupos, mutate: mutatePostGrupos } = useMutation({
     mutationFn: () => createGroupsRequest(getValues("cursos") || []),
-    mutationKey: ["edit grupos"],
+    mutationKey: ["Edit Grupos", getValues("cursos") || []],
     onError: (err) => {
       setError(err);
     },
     onSuccess: () => {
       showDialog({
-        title: "Edición de Grupos",
-        message: "El grupo se ha editado correctamente",
+        title: "Creación de Materia Acádemica",
+        message: "La materia y los grupos se han creado correctamente",
         onAccept: handleClose,
         type: "success",
         reload: true,

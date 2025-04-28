@@ -3,28 +3,44 @@ import { Button, Card, Stack, Typography, useTheme } from "@mui/material";
 import React from "react";
 import { labelCardCurso } from "@modules/materias/enums/labelCardCurso";
 import InputIcon from "@mui/icons-material/Input";
-import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
+// import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import { Curso } from "@modules/materias/types/curso";
 import LoginIcon from "@mui/icons-material/Login";
 import { useNavigate } from "react-router";
 import { rutasMaterias } from "@modules/materias/router/router";
+import { useAuth } from "@modules/general/context/accountContext";
 
 type CardCursoProps = {
   curso: Curso;
   onClick: () => void;
   isRegister: boolean;
+  type: "student" | "teacher";
 };
 
-const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, isRegister }) => {
+const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, isRegister, type }) => {
   const theme = useTheme();
 
-  let docente: undefined | UsuarioPortafolioCard = undefined;
+  // let docente: undefined | UsuarioPortafolioCard = undefined;
 
   const navigate = useNavigate();
+
+  const {id} = useAuth().accountInformation;
 
   // if(curso.docente){
   //   docente =  adaptarUsuarioAUsuarioCardPortafolio(curso.docente);
   // }
+
+  const label = () => {
+    if (type == "teacher") {
+      if (curso.docente == null) {
+        return "Solicitar Curso";
+      }
+      else return 'Acceder'
+    }
+    return isRegister ? labelCardCurso.inscrito : labelCardCurso.inscribirme;
+  };
+
+  console.log(curso)
 
   return (
     <AnimatedCard>
@@ -34,7 +50,7 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, isRegister }) => 
         </Typography>
         <Stack direction={"row"} alignItems={"center"} spacing={2}>
           <Typography>
-            {docente ? labelCardCurso.docente : labelCardCurso.docenteSinAsignar}
+            {curso.docente != null ? curso.docente.nombre : labelCardCurso.docenteSinAsignar}
           </Typography>
           <Card
             sx={{
@@ -72,6 +88,7 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, isRegister }) => 
                 ? theme.palette.terciary.main
                 : theme.palette.primary.main,
             }}
+            disabled={type == "teacher" && curso.docente != null && curso.docente.id != id}
             endIcon={isRegister ? <LoginIcon /> : <InputIcon />}
             onClick={
               isRegister
@@ -79,7 +96,7 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, isRegister }) => 
                 : onClick
             }
           >
-            {isRegister ? labelCardCurso.inscrito : labelCardCurso.inscribirme}
+            {label()}
           </Button>
         </Stack>
       </Stack>

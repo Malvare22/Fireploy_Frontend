@@ -121,7 +121,7 @@ export const UsuarioSchema: z.ZodType<Usuario> = z
     nombres: nombresSchema,
     apellidos: apellidosSchema,
     fechaDeNacimiento: fechaSchema,
-    estFechaInicio: z.string().optional(),
+    estFechaInicio: fechaSchema.optional(),
     estado: estadoUsuarioSchema,
     sexo: sexoUsuarioSchema,
     tipo: tiposUsuarioSchema.optional(),
@@ -150,6 +150,10 @@ export const UsuarioSchema: z.ZodType<Usuario> = z
       return fechaSchema.safeParse(data.estFechaInicio).success;
     }
     return true;
+  },
+  {
+    message: "Requerida fecha de ingreso en la universidad",
+    path: ["estFechaInicio"],
   });
 
 export type UsuarioSchema = z.infer<typeof UsuarioSchema>

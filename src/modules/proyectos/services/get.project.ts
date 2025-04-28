@@ -26,3 +26,16 @@ export async function getProjectByUserId(token: string, id: number) {
   return response;
 }
 
+
+export async function getProjectByIdSection(token: string, id: number) {
+  const response = await getData<ProyectoService[]>(
+    `/proyecto/seccion/${id}`,
+    {},
+    {
+      sessiontoken: token,
+    }
+  );
+
+  return response;
+}
+

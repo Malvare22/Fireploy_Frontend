@@ -68,19 +68,22 @@ function ListarProyectos() {
   const sorterOptions: SorterOptions = [
     {
       key: "calificacion",
-      label: [
-        [labelSelects.mayor, "asc"],
-        [labelSelects.menor, "desc"],
-        [labelSelects.noAplicar, undefined],
-      ],
+      label: 'Calificación',
+      options: {
+        asc: labelSelects.mayor,
+        desc: labelSelects.menor,
+        defaultValue: labelSelects.noAplicar
+      }
+        
     },
     {
       key: "fechaUltimaModificacion",
-      label: [
-        [labelSelects.mayor, "asc"],
-        [labelSelects.menor, "desc"],
-        [labelSelects.noAplicar, undefined],
-      ],
+      label: 'Última Calificación',
+      options: {
+        asc: labelSelects.mayor,
+        desc: labelSelects.menor,
+        defaultValue: labelSelects.noAplicar
+      }
     },
   ];
 

@@ -117,7 +117,7 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
             icon: <MenuBookIcon />,
             children: [
               { segment: rutasMaterias.explorar as string, title: "Explorar Materias y Cursos", icon: <AutoStoriesIcon /> },
-              { title: "Mis Cursos", icon: <LibraryBooksIcon /> },
+              { title: "Mis Cursos", icon: <LibraryBooksIcon />, segment: rutasMaterias.listarMisCursos as string, },
             ],
           },
         ]

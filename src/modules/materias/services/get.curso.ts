@@ -42,3 +42,21 @@ export const getCursosByIdStudent = async (token: string, id: number) => {
   return response;
 };
 
+export type GetCursoParams = {
+  materia?: number,
+  estudiantes?: number,
+  docente?: number
+}
+
+export const getCursos = async (token: string, params: GetCursoParams) => {
+  const response = await getData<CursoService[]>(
+    `/curso`,
+    params,
+    {
+      sessiontoken: token,
+    }
+  );
+
+  return response;
+};
+

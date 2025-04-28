@@ -87,10 +87,15 @@ function useOrderSelect<T extends object>() {
     return array.slice().sort(comparator);
   };
 
+  const resetOrder = (): void => {
+    setOrder({});
+  };
+
   return {
     orderDataFn,
     handleOrder,
-    order
+    order,
+    resetOrder
   };
 }
 

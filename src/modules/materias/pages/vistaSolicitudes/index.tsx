@@ -12,11 +12,10 @@
  *
  * @component
  */
-
 import useSearch from "@modules/general/hooks/useSearch";
 import TablaSolicitudes from "@modules/usuarios/components/tablaSolicitudes";
 import { labelSolicitudes } from "@modules/usuarios/enum/labelSolicitudes";
-import { getDatesSolicitudes, SolicitudPromover } from "@modules/usuarios/types/solicitud.promover";
+import { getDatesSolicitudes, Solicitud } from "@modules/usuarios/types/solicitud.promover";
 import { Divider, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import { labelSelects } from "@modules/general/enums/labelSelects";
@@ -37,7 +36,7 @@ function VistaSolicitudes() {
   const { filterDataFn, handleFilter, filters } = useFilters();
 
   // 🗂️ State for solicitudes
-  const [solicitudes, setSolicitudes] = useState<SolicitudPromover[]>([]);
+  const [solicitudes, setSolicitudes] = useState<Solicitud[]>([]);
 
   // 🔐 Auth context for token
   const { accountInformation } = useAuth();
@@ -48,7 +47,7 @@ function VistaSolicitudes() {
 
   // 📦 React Query: fetch solicitudes
   const { data, isLoading, error, isSuccess } = useQuery({
-    queryFn: () => getSolicitudesService(token, {tipo: 1}),
+    queryFn: () => getSolicitudesService(token, { tipo: 2 }),
     queryKey: ["Solicitudes"],
   });
 
@@ -67,16 +66,13 @@ function VistaSolicitudes() {
   // 🔍 Filtered data with conditions and search
   const solicitudesToRender = useMemo(() => {
     const y = searchValue.toLowerCase();
-    return filterDataFunction(
-      filterDataFn(solicitudes) as SolicitudPromover[],
-      (items: SolicitudPromover[]) => {
-        if (y === "") return items;
-        return items.filter((solicitud) => {
-          const x = (solicitud.id + solicitud.usuario.id + solicitud.usuario.nombres).toLowerCase();
-          return x.includes(y);
-        });
-      }
-    );
+    return filterDataFunction(filterDataFn(solicitudes) as Solicitud[], (items: Solicitud[]) => {
+      if (y === "") return items;
+      return items.filter((solicitud) => {
+        const x = (solicitud.id + solicitud.usuario.id + solicitud.usuario.nombres).toLowerCase();
+        return x.includes(y);
+      });
+    });
   }, [searchValue, filters, solicitudes]);
 
   // 📅 Filter select by reception date
@@ -191,7 +187,7 @@ function VistaSolicitudes() {
           </Grid2>
 
           {/* 📄 Solicitudes Table */}
-          <TablaSolicitudes solicitudes={solicitudesToRender} />
+          <TablaSolicitudes solicitudes={solicitudesToRender} tipo={2} />
         </Stack>
       )}
     </>

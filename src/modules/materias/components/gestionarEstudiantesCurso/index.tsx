@@ -30,7 +30,8 @@ type Props = {
  */
 function GestionarEstudiantesCurso({ curso, idCurso }: Props) {
   // Handles alert dialogs for success, error, and confirmation messages
-  const { showDialog, open, title, message, handleClose, type, handleAccept } = useAlertDialog();
+  const { showDialog, open, title, message, handleCancel, type, handleAccept, setIsLoading, isLoading } =
+    useAlertDialog();
 
   // Hook to display errors in a readable format
   const { setError } = useErrorReader(showDialog);
@@ -50,36 +51,40 @@ function GestionarEstudiantesCurso({ curso, idCurso }: Props) {
   /**
    * Mutation for adding students to a course.
    */
-  const {
-    mutate: mutateAddStudents,
-  } = useMutation({
-    mutationFn: () => patchEstudiantesCurso(token, usersToAddCodes, "A", idCurso ?? "-1"),
+  const { mutate: mutateAddStudents } = useMutation({
+    mutationFn: async () => {
+      setIsLoading(true);
+      return await patchEstudiantesCurso(token, usersToAddCodes, "A", idCurso ?? "-1");
+    },
     mutationKey: ["Add Students", usersToAddCodes],
-    onSuccess: () => showDialog({
-      title: 'Añadir Estudiantes a un Curso',
-      message: 'Estudiantes registrados al curso de manera correcta!',
-      onAccept: () => {},
-      reload: true,
-      type: 'success'
-    }),
+    onSuccess: () =>
+      showDialog({
+        title: "Añadir Estudiantes a un Curso",
+        message: "Estudiantes registrados al curso de manera correcta!",
+        onAccept: () => {},
+        reload: true,
+        type: "success",
+      }),
     onError: (error) => setError(error),
   });
 
   /**
    * Mutation for removing students from a course.
    */
-  const {
-    mutate: mutateRemoveStudents,
-  } = useMutation({
-    mutationFn: () => patchEstudiantesCurso(token, selectStudentsToRemove, "D", idCurso ?? "-1"),
+  const { mutate: mutateRemoveStudents } = useMutation({
+    mutationFn: async () => {
+      setIsLoading(true);
+      return await patchEstudiantesCurso(token, selectStudentsToRemove, "D", idCurso ?? "-1");
+    },
     mutationKey: ["Remove Students"],
-    onSuccess: () => showDialog({
-      title: 'Eliminar Estudiantes de un Curso',
-      message: 'Estudiantes registrados al curso de manera correcta!',
-      onAccept: () => {},
-      reload: true,
-      type: 'success'
-    }),
+    onSuccess: () =>
+      showDialog({
+        title: "Eliminar Estudiantes de un Curso",
+        message: "Estudiantes registrados al curso de manera correcta!",
+        onAccept: () => {},
+        reload: true,
+        type: "success",
+      }),
     onError: (error) => setError(error),
   });
 
@@ -88,11 +93,11 @@ function GestionarEstudiantesCurso({ curso, idCurso }: Props) {
    */
   function confirmRemoveStudents() {
     showDialog({
-      title: 'Eliminar Estudiantes de un Curso',
+      title: "Eliminar Estudiantes de un Curso",
       message: "¿Está seguro de remover a los usuarios seleccionados?",
       onCancel: () => {},
-      onAccept: () => mutateAddStudents(),
-      type: 'default',
+      onAccept: () => mutateRemoveStudents(),
+      type: "default",
     });
   }
 
@@ -101,16 +106,20 @@ function GestionarEstudiantesCurso({ curso, idCurso }: Props) {
    */
   function confirmAddStudents() {
     showDialog({
-      title: 'Eliminar Estudiantes de un Curso',
-      message: "¿Está seguro de remover a los usuarios seleccionados?",
+      title: "Agregar Estudiantes de un Curso",
+      message: "¿Está seguro de Agregar a los usuarios seleccionados?",
       onCancel: () => {},
-      onAccept: () => mutateRemoveStudents(),
-      type: 'default',
+      onAccept: () => mutateAddStudents(),
+      type: "default",
     });
   }
 
   // Modal state and handlers for the Add Users modal
-  const { handleClose: handleCloseModal, handleOpen: handleOpenModal, open: openModal } = useModal();
+  const {
+    handleClose: handleCloseModal,
+    handleOpen: handleOpenModal,
+    open: openModal,
+  } = useModal();
 
   return (
     <>
@@ -121,7 +130,8 @@ function GestionarEstudiantesCurso({ curso, idCurso }: Props) {
         title={title}
         textBody={message}
         type={type}
-        handleCancel={handleClose}
+        handleCancel={handleCancel}
+        isLoading={isLoading}
       />
 
       {/* Modal for selecting and adding users */}
