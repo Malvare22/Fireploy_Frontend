@@ -8,6 +8,7 @@ import VistaCrearMateria from "../pages/crearMateria";
 import EditCourseView from "../pages/editarCurso";
 import CreateCourseView from "../pages/crearCurso";
 import ListarMisCursos from "../pages/misCursos";
+import VistaSolicitudes from "../pages/vistaSolicitudes";
 
 export const rutaBase = "/app/materias";
 
@@ -23,6 +24,7 @@ export enum rutasMaterias {
   crearMateria = rutaBase + '/crear',
   editarMateria = rutaBase + '/editar/:idMateria',
   explorarCursos = rutaBase + '/explorar/:idMateria/cursos',
+  solicitudes = rutaBase + '/solicitudes'
 }
 
 export const routerMaterias: RouteObject[] = [
@@ -58,10 +60,14 @@ export const routerMaterias: RouteObject[] = [
     path: rutasMaterias.explorarCursos,
     element: <VerCursosMateria />,
   },
-
   {
     path: rutasMaterias.crearMateria,
     element: <VistaCrearMateria />,
+  },
+  
+  {
+    path: rutasMaterias.solicitudes,
+    element: <VistaSolicitudes />,
   },
  
 

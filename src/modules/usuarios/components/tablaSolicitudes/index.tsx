@@ -9,7 +9,7 @@ import DataTable from "react-data-table-component";
 import { TableColumn } from "react-data-table-component";
 import { Chip, IconButton, Menu, MenuItem, Stack, Typography, useTheme } from "@mui/material";
 import React, { useMemo, useState } from "react";
-import { SolicitudPromover } from "@modules/usuarios/types/solicitud.promover";
+import { Solicitud } from "@modules/usuarios/types/solicitud.promover";
 import { labelSolicitudes } from "@modules/usuarios/enum/labelSolicitudes";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
@@ -25,10 +25,11 @@ import { useCustomTableStyles } from "@modules/general/styles";
 
 /**
  * @typedef Props
- * @property {SolicitudPromover[]} solicitudes - Array of promotion request objects.
+ * @property {Solicitud[]} solicitudes - Array of promotion request objects.
  */
 type Props = {
-  solicitudes: SolicitudPromover[];
+  solicitudes: Solicitud[];
+  tipo: 1 | 2;
 };
 
 /**
@@ -38,43 +39,53 @@ type Props = {
  * @param {Props} props - The component props.
  * @returns {JSX.Element} A table component with interactive approval and rejection features.
  */
-const TablaSolicitudes: React.FC<Props> = ({ solicitudes }) => {
+const TablaSolicitudes: React.FC<Props> = ({ solicitudes, tipo }) => {
   const theme = useTheme();
 
-  const [selectSolicitud, setSelectSolicitud] = useState<SolicitudPromover | undefined>(undefined);
+  const [selectSolicitud, setSelectSolicitud] = useState<Solicitud | undefined>(undefined);
 
   const { accountInformation } = useAuth();
   const { token, id } = accountInformation;
 
   const [estadoSolicitud, setEstadoSolicitud] = useState<"A" | "R">("R");
 
-  const { showDialog, open, title, message, handleCancel, handleClose, type, handleAccept, isLoading } = useAlertDialog();
+  const {
+    showDialog,
+    open,
+    title,
+    message,
+    handleCancel,
+    handleClose,
+    type,
+    handleAccept,
+    isLoading,
+  } = useAlertDialog();
 
-  const {setError} = useErrorReader(showDialog);
-
+  const { setError } = useErrorReader(showDialog);
 
   /**
    * Handles the mutation to update the status of a request (approve/reject).
    */
-  const {isPending, mutate } = useMutation({
+  const { isPending, mutate } = useMutation({
     mutationFn: () => patchSolicitudService(selectSolicitud?.id ?? -1, estadoSolicitud, id, token),
     mutationKey: ["changeUser"],
     onError: (error) => setError(error),
     onSuccess: () => {
       showDialog({
-        title: 'Modificación de Rol de Usuario',
-        message: 'Se ha establecido el estado correspondiente a la solicitud de modificación de rol usuario',
+        title: "Modificación de Rol de Usuario",
+        message:
+          "Se ha establecido el estado correspondiente a la solicitud de modificación de rol usuario",
         onAccept: () => {},
         reload: true,
-        type: 'success'
-      })
-    }
+        type: "success",
+      });
+    },
   });
 
   /**
    * Column definitions for the data table.
    */
-  const columns: TableColumn<SolicitudPromover & { rowIndex: number }>[] = [
+  const columns: TableColumn<Solicitud & { rowIndex: number }>[] = [
     // Each column defines a data field with label and optional formatting
     {
       name: <Typography>{labelSolicitudes.idSolicitud}</Typography>,
@@ -109,6 +120,15 @@ const TablaSolicitudes: React.FC<Props> = ({ solicitudes }) => {
         ),
       sortable: true,
     },
+    ...(tipo == 2
+      ? [
+          {
+            name: <Typography>{labelSolicitudes.curso}</Typography>,
+            cell: (row: any) => <Chip color="info" label={row.curso || ""} icon={<InfoIcon />} />,
+            sortable: true,
+          },
+        ]
+      : []),
     {
       name: <Typography>{labelSolicitudes.estado}</Typography>,
       center: true,
@@ -160,7 +180,7 @@ const TablaSolicitudes: React.FC<Props> = ({ solicitudes }) => {
       },
       sortable: true,
       sortFunction: (rowA, rowB) => {
-        const getDif = (x: SolicitudPromover["estado"]) => (x == "A" ? 1 : -1);
+        const getDif = (x: Solicitud["estado"]) => (x == "A" ? 1 : -1);
         return getDif(rowA.estado) - getDif(rowB.estado);
       },
     },
@@ -208,7 +228,7 @@ const TablaSolicitudes: React.FC<Props> = ({ solicitudes }) => {
     },
   ];
 
-  const {conditionalRowStyles, customStyles} = useCustomTableStyles();
+  const { conditionalRowStyles, customStyles } = useCustomTableStyles();
 
   /**
    * Adds an index to each row for use in conditional styling.
@@ -229,20 +249,20 @@ const TablaSolicitudes: React.FC<Props> = ({ solicitudes }) => {
     mutate();
   }
 
-  function showConfirmation(){
-      showDialog({
-        title: 'Modificación de Solicitudes',
-        message: `¿Está seguro de ${estadoSolicitud !== "A" ? "aprobadar" : "rechazadar"} esta solicitud?`,
-        isLoading: isPending,
-        onAccept: handlePatch,
-        onCancel: handleClose,
-        type: 'default'
-      })
+  function showConfirmation() {
+    showDialog({
+      title: "Modificación de Solicitudes",
+      message: `¿Está seguro de ${estadoSolicitud !== "A" ? "aprobadar" : "rechazadar"} esta solicitud?`,
+      isLoading: isPending,
+      onAccept: handlePatch,
+      onCancel: handleClose,
+      type: "default",
+    });
   }
 
   return (
     <>
-        <AlertDialog
+      <AlertDialog
         handleAccept={handleAccept}
         handleCancel={handleCancel}
         open={open}

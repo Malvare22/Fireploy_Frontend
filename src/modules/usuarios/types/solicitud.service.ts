@@ -16,4 +16,7 @@ export type SolicitudService = {
     id: number;
     nombre: string;
   };
+  curso: null | {
+    id: string
+  }
 };
