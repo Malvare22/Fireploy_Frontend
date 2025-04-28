@@ -16,7 +16,7 @@
 import useSearch from "@modules/general/hooks/useSearch";
 import TablaSolicitudes from "@modules/usuarios/components/tablaSolicitudes";
 import { labelSolicitudes } from "@modules/usuarios/enum/labelSolicitudes";
-import { getDatesSolicitudes, SolicitudPromover } from "@modules/usuarios/types/solicitud.promover";
+import { getDatesSolicitudes, Solicitud, } from "@modules/usuarios/types/solicitud.promover";
 import { Divider, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import { labelSelects } from "@modules/general/enums/labelSelects";
@@ -37,7 +37,7 @@ function VistaSolicitudes() {
   const { filterDataFn, handleFilter, filters } = useFilters();
 
   // 🗂️ State for solicitudes
-  const [solicitudes, setSolicitudes] = useState<SolicitudPromover[]>([]);
+  const [solicitudes, setSolicitudes] = useState<Solicitud[]>([]);
 
   // 🔐 Auth context for token
   const { accountInformation } = useAuth();
@@ -68,8 +68,8 @@ function VistaSolicitudes() {
   const solicitudesToRender = useMemo(() => {
     const y = searchValue.toLowerCase();
     return filterDataFunction(
-      filterDataFn(solicitudes) as SolicitudPromover[],
-      (items: SolicitudPromover[]) => {
+      filterDataFn(solicitudes) as Solicitud[],
+      (items: Solicitud[]) => {
         if (y === "") return items;
         return items.filter((solicitud) => {
           const x = (solicitud.id + solicitud.usuario.id + solicitud.usuario.nombres).toLowerCase();
@@ -191,7 +191,7 @@ function VistaSolicitudes() {
           </Grid2>
 
           {/* 📄 Solicitudes Table */}
-          <TablaSolicitudes solicitudes={solicitudesToRender} />
+          <TablaSolicitudes solicitudes={solicitudesToRender} tipo={1}/>
         </Stack>
       )}
     </>
