@@ -1,3 +1,5 @@
+import { CursoService } from "./curso.service";
+
 export type MateriaService = {
   estado: string;
   nombre: string;
@@ -9,5 +11,6 @@ export type MateriaService = {
     semestre: string;
     descripcion: string;
     estado: string;
+    docente: null | CursoService['docente'];
   }[];
 };

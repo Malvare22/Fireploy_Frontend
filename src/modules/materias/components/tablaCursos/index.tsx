@@ -1,10 +1,8 @@
 import DataTable from "react-data-table-component";
 import { TableColumn } from "react-data-table-component";
-import { Stack, Typography, useTheme } from "@mui/material";
-import React, { useMemo, useState } from "react";
+import { Chip, Stack, Typography } from "@mui/material";
+import React, { useMemo } from "react";
 import { useNavigate } from "react-router";
-import useAlertDialog from "@modules/general/hooks/useAlertDialog";
-import AlertDialog from "@modules/general/components/alertDialog";
 import Status from "@modules/general/components/status";
 import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
@@ -12,85 +10,20 @@ import { CursoTabla } from "@modules/materias/types/curso.tabla";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
 import { rutasMaterias } from "@modules/materias/router/router";
 import { useCustomTableStyles } from "@modules/general/styles";
-import { useMutation } from "@tanstack/react-query";
-import { patchChangeStatusCurso } from "@modules/materias/services/patch.curso";
-import { useAuth } from "@modules/general/context/accountContext";
-import useErrorReader from "@modules/general/hooks/useErrorReader";
-import { useModal } from "@modules/general/components/modal/hooks/useModal";
 
 type TablaCursosProps = {
-  cursos: CursoTabla[]; // List of courses to be displayed in the table
+  cursos: CursoTabla[];
+  type: "E" | "D";
 };
 
 /**
- * @component TablaCursos
+ * @component TablaCursosAdmin
  * @description This component displays a table with course data, allowing the user to view, edit, and change the status of courses.
  * It uses `react-data-table-component` to render the data and provides action buttons for each row.
  * @param {TablaCursosProps} props - Contains the list of courses to be displayed.
  */
-const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
-  const theme = useTheme();
-  const [selectCurso, setSelectCurso] = useState<CursoTabla | undefined>(undefined);
-
-  /**
-   * @function handleSelect
-   * @description Handles selecting a course, opening the status change dialog for the selected course.
-   * @param {CursoTabla} materia - The selected course to change the status.
-   */
-  const handleSelect = (materia: CursoTabla) => {
-    setSelectCurso(materia);
-    handleOpenStatus();
-  };
-
-  const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
-  const { setError } = useErrorReader(showDialog);
-
-  const token = useAuth().accountInformation.token;
-
-  const {
-    isPending: isPendingChangeStatus,
-    mutate: mutateChangeStatus,
-  } = useMutation({
-    mutationFn: () =>
-      patchChangeStatusCurso(token, selectCurso?.id || "", selectCurso?.estado == "I" ? "A" : "I"),
-    mutationKey: ["Change Status Curso", selectCurso?.id || "", selectCurso?.estado == "I" ? "A" : "I"],
-    onSuccess: () => {
-      showDialog({
-        message: 'Estado del Curso Modificado Correctamente!',
-        title: 'Modificar Curso',
-        onAccept: () => {},
-        reload: true
-      })
-    },
-    onError: error => setError(error),
-  });
-
-  /**
-   * @component ModalChangeStatus
-   * @description Modal content displayed for changing the status of a course (enable/disable).
-   * @param {CursoTabla["estado"]} status - Current status of the course (either "A" or "I").
-   * @returns {JSX.Element} The modal content asking the user to confirm the status change.
-   */
-  function ModalChangeStatus(status: CursoTabla["estado"]) {
-    const label = status == "I" ? "habilitar" : "deshabilitar";
-
-    return (
-      <Stack>
-        <Typography>
-          {`¿Está seguro de que desea ${label} el grupo: ${selectCurso?.grupo}?`}
-        </Typography>
-      </Stack>
-    );
-  }
-
-  const {
-    open: openHandleStatus,
-    handleOpen: handleOpenStatus,
-    handleClose: handleCloseHandleStatus,
-  } = useModal();
-
+const TablaCursos: React.FC<TablaCursosProps> = ({ cursos, type }) => {
   const navigate = useNavigate();
-
   /**
    * @constant columns
    * @description Defines the columns for the data table displaying course information.
@@ -98,18 +31,18 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
    */
   const columns: TableColumn<CursoTabla & { rowIndex: number }>[] = [
     {
-      name: <Typography>{labelListarCursos.id}</Typography>,
-      cell: (row) => <Typography>{row.id}</Typography>,
+      name: <Typography>{labelListarCursos.materia}</Typography>,
+      cell: (row) => <Typography>{row.materia.nombre}</Typography>,
       sortable: true,
     },
     {
       name: <Typography>{labelListarCursos.grupo}</Typography>,
-      cell: (row) => <Typography>{row.grupo}</Typography>,
+      cell: (row) => <Chip label={<Typography>{row.grupo}</Typography>} />,
       sortable: true,
     },
     {
       name: <Typography>{labelListarCursos.semestre}</Typography>,
-      cell: (row) => <Typography>{row.semestre}</Typography>,
+      cell: (row) => <Typography>{row.materia.semestre}</Typography>,
       sortable: true,
     },
     {
@@ -132,21 +65,10 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
             mode={actionButtonTypes.ver}
             onClick={() => navigate(rutasMaterias.verCurso.replace(":idCurso", row.id))}
           />
-          <ActionButton
-            mode={actionButtonTypes.editar}
-            onClick={() => navigate(rutasMaterias.editarCurso.replace(":idCurso", row.id))}
-          />
-          {row.estado === "A" ? (
+          {type == "D" && (
             <ActionButton
-              sx={{ color: theme.palette.error.main }}
-              mode={actionButtonTypes.deshabilitar}
-              onClick={() => handleSelect(row)}
-            />
-          ) : (
-            <ActionButton
-              sx={{ color: theme.palette.warning.main }}
-              mode={actionButtonTypes.habilitar}
-              onClick={() => handleSelect(row)}
+              mode={actionButtonTypes.editar}
+              onClick={() => navigate(rutasMaterias.editarCurso.replace(":idCurso", row.id))}
             />
           )}
         </Stack>
@@ -167,21 +89,6 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos }) => {
 
   return (
     <>
-      <AlertDialog
-        open={openHandleStatus}
-        handleAccept={mutateChangeStatus}
-        isLoading={isPendingChangeStatus}
-        title="Modificar Curso"
-        body={ModalChangeStatus(selectCurso?.estado!!)}
-        handleCancel={handleCloseHandleStatus}
-      />
-      <AlertDialog
-        handleAccept={handleAccept}
-        open={open}
-        title={title}
-        textBody={message}
-        type={type}
-      />
       <DataTable
         columns={columns}
         data={dataConIndice}

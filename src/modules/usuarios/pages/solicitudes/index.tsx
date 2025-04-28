@@ -26,7 +26,7 @@ import { useAuth } from "@modules/general/context/accountContext";
 import { useQuery } from "@tanstack/react-query";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
-import { getSolicitudesService } from "@modules/usuarios/services/get.solicitud";
+import { getSolicitudesService } from "@modules/general/services/get.solicitud";
 import { useFilters } from "@modules/general/hooks/useFilters";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
@@ -48,13 +48,14 @@ function VistaSolicitudes() {
 
   // 📦 React Query: fetch solicitudes
   const { data, isLoading, error, isSuccess } = useQuery({
-    queryFn: () => getSolicitudesService(token),
+    queryFn: () => getSolicitudesService(token, {tipo: 2}),
     queryKey: ["Solicitudes"],
   });
 
   // 🛠️ Adapt and store fetched solicitudes
   useEffect(() => {
     if (isSuccess && data) {
+      console.log(data)
       setSolicitudes(data.map((solicitud) => adaptSolicitudService(solicitud)));
     }
   }, [isSuccess, data]);

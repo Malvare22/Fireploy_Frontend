@@ -7,6 +7,7 @@ import ListarCursos from "../pages/listarCursos";
 import VistaCrearMateria from "../pages/crearMateria";
 import EditCourseView from "../pages/editarCurso";
 import CreateCourseView from "../pages/crearCurso";
+import ListarMisCursos from "../pages/misCursos";
 
 export const rutaBase = "/app/materias";
 
@@ -15,6 +16,7 @@ export enum rutasMaterias {
   //verInformacionCursos = rutaBase + "/:id",
   listarMaterias = rutaBase + "/listar",
   listarCursos = rutaBase + '/:idMateria/cursos/listar',
+  listarMisCursos = rutaBase + '/misCursos',
   verCurso = rutaBase + "/cursos/:idCurso",
   crearCurso = rutaBase + "/cursos/crear/:idMateria",
   editarCurso = rutaBase + "/cursos/editar/:idCurso",
@@ -37,6 +39,10 @@ export const routerMaterias: RouteObject[] = [
     element: <ListarCursos/>
   },
   {
+    path: rutasMaterias.listarMisCursos,
+    element: <ListarMisCursos/>
+  },
+  {
     path: rutasMaterias.verCurso,
     element: <VerInformacionCurso />,
   },
@@ -57,9 +63,6 @@ export const routerMaterias: RouteObject[] = [
     path: rutasMaterias.crearMateria,
     element: <VistaCrearMateria />,
   },
-  // {
-  //   path: rutasMaterias.editarMateria,
-  //   element: <VistaEditarMateria />,
-  // },
+ 
 
 ];

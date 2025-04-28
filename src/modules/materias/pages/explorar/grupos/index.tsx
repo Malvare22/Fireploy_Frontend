@@ -1,7 +1,7 @@
 /**
  * Component to display all course groups (cursos) for a specific subject (materia).
  *
- * This component fetches a materia by its ID from the URL, renders its name, 
+ * This component fetches a materia by its ID from the URL, renders its name,
  * and shows a list of available cursos (course groups). Users can also register
  * to a course, and the component manages dialogs, loading states, and errors.
  *
@@ -16,9 +16,10 @@ import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import CardCurso from "@modules/materias/components/cardCurso";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
-import { getCursosByIdStudent } from "@modules/materias/services/get.curso";
+import { getCursoById, getCursos } from "@modules/materias/services/get.curso";
 import { getMateriaById } from "@modules/materias/services/get.materia.services";
 import { patchEstudiantesCurso } from "@modules/materias/services/patch.curso.estudiantes";
+import { postCreateSolicitudCurso } from "@modules/materias/services/post.solicitud.curso";
 import { Materia } from "@modules/materias/types/materia";
 import { adaptMateriaServiceToMateria } from "@modules/materias/utils/adapters/materia.service";
 import { Alert, Card, Grid2, Stack, Typography } from "@mui/material";
@@ -42,13 +43,29 @@ function VerCursosMateria() {
 
   /** Authentication context */
   const { accountInformation } = useAuth();
-  const { token, id } = accountInformation;
+  const { token, id, tipo } = accountInformation;
+
+  const IS_STUDENT = tipo == "E";
 
   /**
    * Query to get subject (materia) details by ID
    */
   const { data, error } = useQuery({
-    queryFn: () => getMateriaById(token, parseInt(idMateria ?? "-1")),
+    queryFn: async () => {
+      let response = await getMateriaById(token, parseInt(idMateria ?? "-1"));
+  
+      if (response.cursos) {
+        const updatedCursos = await Promise.all(
+          response.cursos.map(async (curso) => {
+            const { docente } = await getCursoById(token, curso.id);
+            return { ...curso, docente };
+          })
+        );
+        response.cursos = updatedCursos;
+      }
+  
+      return response;
+    },
     queryKey: ["Get Groups Explore", parseInt(idMateria ?? "-1")],
   });
 
@@ -68,7 +85,11 @@ function VerCursosMateria() {
     isLoading: isLoadingMyGroups,
     error: errorMyGroups,
   } = useQuery({
-    queryFn: () => getCursosByIdStudent(token, id),
+    queryFn: async () => {
+      return IS_STUDENT
+        ? await getCursos(token, { estudiantes: id })
+        : await getCursos(token, { docente: id });
+    },
     queryKey: ["Get My Groups For Explore", id],
   });
 
@@ -88,17 +109,22 @@ function VerCursosMateria() {
   const { isPending: isPendingRegister, mutate: mutateRegister } = useMutation({
     mutationFn: async () => {
       setIsLoading(true);
-      return await patchEstudiantesCurso(token, [id], "A", idCurso ?? "");
+      if (IS_STUDENT) return await patchEstudiantesCurso(token, [id], "A", idCurso ?? "");
+      else return await postCreateSolicitudCurso(token, id, idCurso ?? "");
     },
     mutationKey: ["Register In Group", id, idCurso ?? ""],
-    onSuccess: () =>
+    onSuccess: () => {
+      const isStudentNow = IS_STUDENT; // leer el valor actualizado aquí
       showDialog({
-        title: "Registrar en Curso",
-        message: "Te haz matriculado en el curso de manera correcta",
+        title: isStudentNow ? "Registrar en Curso" : "Solicitar Curso",
+        message: isStudentNow
+          ? "Te has matriculado en el curso correctamente"
+          : "Se ha enviado la solicitud de administración de curso",
         reload: true,
         type: "success",
         onAccept: () => {},
-      }),
+      });
+    },
     onError: (error) => setError(error),
   });
 
@@ -140,10 +166,14 @@ function VerCursosMateria() {
       <AlertDialog
         open={openModal}
         handleAccept={handleAcceptConfirmation}
-        title="Registrar en grupo académico"
+        title={IS_STUDENT ? "Registrar en grupo académico" : "Solicitar Curso"}
         isLoading={isPendingRegister}
         handleCancel={handleCloseModal}
-        textBody="¿Está seguro de que desea registrarse en el grupo seleccionado?"
+        textBody={
+          IS_STUDENT
+            ? "¿Está seguro de que desea registrarse en el grupo seleccionado?"
+            : "¿Está seguro de que desea solicitar el curso seleccionado?"
+        }
       />
 
       {/* Generic alert dialog for success/error */}
@@ -182,6 +212,7 @@ function VerCursosMateria() {
                           isRegister={myGroupsIds?.get(curso.id ?? "-1") ?? false}
                           onClick={() => handleIdGroup(curso.id)}
                           curso={curso}
+                          type={IS_STUDENT ? "student" : "teacher"}
                         />
                       </Grid2>
                     ))}

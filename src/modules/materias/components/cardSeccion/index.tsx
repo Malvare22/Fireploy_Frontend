@@ -7,7 +7,7 @@ import { Seccion } from "@modules/materias/types/seccion";
 import ProjectCard from "@modules/general/components/projectCard";
 import { SelectOrders, SorterOptions } from "@modules/general/components/selects";
 import { useQuery } from "@tanstack/react-query";
-import { getProjectById, getProjectByIdSection } from "@modules/proyectos/services/get.project";
+import { getProjectByIdSection } from "@modules/proyectos/services/get.project";
 import { useAuth } from "@modules/general/context/accountContext";
 import { adaptProject, adaptProjectToCard } from "@modules/proyectos/utils/adapt.proyecto";
 import LoaderElement from "@modules/general/components/loaderElement";

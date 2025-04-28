@@ -25,6 +25,7 @@ export function adaptMateriaServiceToMateria(materia: MateriaService): Materia {
       id: curso.id,
       grupo: curso.grupo,
       estado: curso.estado as Materia['estado'],
+      docente: curso.docente
     })),
     estado: materia.estado as Materia['estado'],
   };

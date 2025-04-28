@@ -1,6 +1,7 @@
 export enum labelListarCursos {
   titulo = 'Grupos',
   grupos = "Grupos",
+  materia = 'Materia',
   noHayGrupos = "Actualmente no se encuentran grupos registrados para esta materia",
 
   id = "Id",

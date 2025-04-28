@@ -21,10 +21,9 @@ import CardSeccion from "@modules/materias/components/cardSeccion";
 import { LabelCurso } from "@modules/materias/enums/labelCurso";
 import { getCursoById } from "@modules/materias/services/get.curso";
 import { Curso } from "@modules/materias/types/curso";
-import { exampleSecciones } from "@modules/materias/types/seccion";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
 import { Card, Grid2, Stack, Typography } from "@mui/material";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
