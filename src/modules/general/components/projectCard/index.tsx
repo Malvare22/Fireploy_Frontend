@@ -25,6 +25,8 @@ type ProjectCardProps = {
  * @param {ProjectCardProps} props - Props containing the project info and event handler.
  * @returns {JSX.Element} - Returns a styled project card component.
  */
+
+
 export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }) => {
 
   return (

@@ -24,7 +24,7 @@ import { Curso } from "@modules/materias/types/curso";
 import { exampleSecciones } from "@modules/materias/types/seccion";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
 import { Card, Grid2, Stack, Typography } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
@@ -82,8 +82,10 @@ function VerInformacionCurso() {
    * Adapt fetched course to internal format
    */
   useEffect(() => {
-    if (data) setCurso(adaptCursoService(data));
+    if (data){ setCurso(adaptCursoService(data))};
   }, [data]);
+
+  console.log(curso)
 
   return (
     <>
@@ -126,7 +128,7 @@ function VerInformacionCurso() {
                 {/* List of course sections */}
                 <Grid2 size={{ xs: 12 }}>
                   <Stack spacing={2}>
-                    {exampleSecciones.map((seccion, key) => (
+                    {curso.secciones?.map((seccion, key) => (
                       <CardSeccion seccion={seccion} key={key} />
                     ))}
                   </Stack>

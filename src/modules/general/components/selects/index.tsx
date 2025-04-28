@@ -43,16 +43,17 @@ export function SelectOrders<T extends Object>({
   }, [order]);
   if (type == "multiple")
     return (
-      <Grid2 container>
+      <Grid2 container spacing={2}>
         {sorterOptions?.map(({ key, options, label }) => (
           <Grid2 size={{ md: 4, xs: 12 }}>
-            <FormControl key={key} fullWidth>
+            <FormControl size="small" key={key} fullWidth>
               <InputLabel>{label}</InputLabel>
               <Select
                 label={key}
                 onChange={(e) =>
                   handleOrder(key, e.target.value == "" ? undefined : (e.target.value as Order))
                 }
+                size="small"
               >
                 <MenuItem value={"asc"}>{options.asc}</MenuItem>
                 <MenuItem value={"desc"}>{options.desc}</MenuItem>
