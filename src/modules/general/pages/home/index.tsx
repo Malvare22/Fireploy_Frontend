@@ -88,7 +88,7 @@ function Princial() {
   const navigate = useNavigate();
   return (
     <>
-      <Stack spacing={3} marginTop={{ xs: -20, md: -6 }} alignItems={"center"} overflow={"hidden"}>
+      <Stack spacing={3} marginTop={{ xs: -20, md: -10 }} alignItems={"center"} overflow={"hidden"}>
         <PrincipalAnimation />
       </Stack>
       <Stack marginTop={{ xs: -16, md: 0 }} spacing={2} alignItems={"center"}>
@@ -137,7 +137,7 @@ function PrincipalAnimation() {
   });
 
   return (
-    <Box sx={{ transform: { xs: "scale(0.4)", sm: "scale(0.7)", md: "scale(1)" } }}>
+    <Box sx={{ transform: { xs: "scale(0.4)", sm: "scale(0.6)", md: "scale(1)" } }}>
       <Box className={styles.container}>
         <Box className={styles.containerRaysWrapper}>
           <Box className={styles.containerRays}>{rays}</Box>

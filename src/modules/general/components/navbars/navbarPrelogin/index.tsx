@@ -136,7 +136,7 @@ function NavbarPrelogin(): JSX.Element {
 
           <Title />
 
-          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3, marginLeft: 13   }}>
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3, marginLeft: { lg: 13 } }}>
             {pages.map(([text, link]) => (
               <Button
                 onClick={() => navigate(link)}
