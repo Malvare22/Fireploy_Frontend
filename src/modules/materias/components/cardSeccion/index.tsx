@@ -5,11 +5,17 @@ import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import { labelCardSeccion } from "@modules/materias/enums/labelCardSeccion";
 import { Seccion } from "@modules/materias/types/seccion";
 import ProjectCard from "@modules/general/components/projectCard";
-import { SelectOrders, SorterOptions } from "@modules/general/components/selects";
+import {
+  SelectOrders,
+  SorterOptions,
+} from "@modules/general/components/selects";
 import { useQuery } from "@tanstack/react-query";
 import { getProjectByIdSection } from "@modules/proyectos/services/get.project";
 import { useAuth } from "@modules/general/context/accountContext";
-import { adaptProject, adaptProjectToCard } from "@modules/proyectos/utils/adapt.proyecto";
+import {
+  adaptProject,
+  adaptProjectToCard,
+} from "@modules/proyectos/utils/adapt.proyecto";
 import LoaderElement from "@modules/general/components/loaderElement";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
@@ -17,14 +23,16 @@ import AlertDialog from "@modules/general/components/alertDialog";
 
 type CardSeccionProps = {
   seccion: Seccion;
+  handleCard: (project: ProyectoCard) => void;
 };
 
-const CardSeccion: React.FC<CardSeccionProps> = ({ seccion }) => {
+const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard }) => {
   const [proyectos, setProyectos] = useState<ProyectoCard[]>([]);
 
   const [buffer, setBuffer] = useState<ProyectoCard[]>([]);
 
-  const { handleAccept, open, message, type, showDialog, title } = useAlertDialog();
+  const { handleAccept, open, message, type, showDialog, title } =
+    useAlertDialog();
 
   const { setError } = useErrorReader(showDialog);
 
@@ -104,13 +112,24 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion }) => {
           <Typography>{seccion.descripcion}</Typography>
           <Typography variant="h5">{labelCardSeccion.proyectos}</Typography>
           <Box>
-              <SelectOrders data={proyectos} setRefineData={setBuffer} sorterOptions={sorters} />
-            </Box>
+            <SelectOrders
+              data={proyectos}
+              setRefineData={setBuffer}
+              sorterOptions={sorters}
+            />
+          </Box>
           <Grid2 container rowSpacing={2}>
-            
             {buffer.map((proyecto, key) => (
-              <Grid2 size={{ lg: 4, md: 6, xs: 12 }} display={"flex"} justifyContent={"center"}>
-                <ProjectCard handleOpen={() => {}} proyecto={proyecto} key={key} />
+              <Grid2
+                size={{ lg: 4, md: 6, xs: 12 }}
+                display={"flex"}
+                justifyContent={"center"}
+              >
+                <ProjectCard
+                  handleOpen={() => handleCard(proyecto)}
+                  proyecto={proyecto}
+                  key={key}
+                />
               </Grid2>
             ))}
           </Grid2>
