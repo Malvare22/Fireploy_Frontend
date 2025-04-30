@@ -45,7 +45,7 @@ function VerCursosMateria() {
   const { accountInformation } = useAuth();
   const { token, id, tipo } = accountInformation;
 
-  const IS_STUDENT = tipo == "E";
+  const IS_TEACHER = tipo == "D";
 
   /**
    * Query to get subject (materia) details by ID
@@ -53,7 +53,7 @@ function VerCursosMateria() {
   const { data, error } = useQuery({
     queryFn: async () => {
       let response = await getMateriaById(token, parseInt(idMateria ?? "-1"));
-  
+
       if (response.cursos) {
         const updatedCursos = await Promise.all(
           response.cursos.map(async (curso) => {
@@ -63,7 +63,7 @@ function VerCursosMateria() {
         );
         response.cursos = updatedCursos;
       }
-  
+
       return response;
     },
     queryKey: ["Get Groups Explore", parseInt(idMateria ?? "-1")],
@@ -86,9 +86,9 @@ function VerCursosMateria() {
     error: errorMyGroups,
   } = useQuery({
     queryFn: async () => {
-      return IS_STUDENT
-        ? await getCursos(token, { estudiantes: id })
-        : await getCursos(token, { docente: id });
+      if (tipo == "E") return await getCursos(token, { estudiantes: id });
+      if (IS_TEACHER) return await getCursos(token, { docente: id });
+      return [];
     },
     queryKey: ["Get My Groups For Explore", id],
   });
@@ -109,12 +109,12 @@ function VerCursosMateria() {
   const { isPending: isPendingRegister, mutate: mutateRegister } = useMutation({
     mutationFn: async () => {
       setIsLoading(true);
-      if (IS_STUDENT) return await patchEstudiantesCurso(token, [id], "A", idCurso ?? "");
+      if (!IS_TEACHER) return await patchEstudiantesCurso(token, [id], "A", idCurso ?? "");
       else return await postCreateSolicitudCurso(token, id, idCurso ?? "");
     },
     mutationKey: ["Register In Group", id, idCurso ?? ""],
     onSuccess: () => {
-      const isStudentNow = IS_STUDENT; // leer el valor actualizado aquí
+      const isStudentNow = IS_TEACHER; // leer el valor actualizado aquí
       showDialog({
         title: isStudentNow ? "Registrar en Curso" : "Solicitar Curso",
         message: isStudentNow
@@ -166,11 +166,11 @@ function VerCursosMateria() {
       <AlertDialog
         open={openModal}
         handleAccept={handleAcceptConfirmation}
-        title={IS_STUDENT ? "Registrar en grupo académico" : "Solicitar Curso"}
+        title={!IS_TEACHER ? "Registrar en grupo académico" : "Solicitar Curso"}
         isLoading={isPendingRegister}
         handleCancel={handleCloseModal}
         textBody={
-          IS_STUDENT
+          !IS_TEACHER
             ? "¿Está seguro de que desea registrarse en el grupo seleccionado?"
             : "¿Está seguro de que desea solicitar el curso seleccionado?"
         }
@@ -212,7 +212,7 @@ function VerCursosMateria() {
                           isRegister={myGroupsIds?.get(curso.id ?? "-1") ?? false}
                           onClick={() => handleIdGroup(curso.id)}
                           curso={curso}
-                          type={IS_STUDENT ? "student" : "teacher"}
+                          isTeacher={IS_TEACHER}
                         />
                       </Grid2>
                     ))}
