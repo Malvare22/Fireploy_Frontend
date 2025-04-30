@@ -108,6 +108,11 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
           title: "Explorar Proyectos",
           icon: <PlagiarismIcon />,
         },
+        {
+          segment: rutasProyectos.misProyectos as string,
+          title: "Mis Proyectos",
+          icon: <PlagiarismIcon />,
+        },
       ],
     },
     ...(userInformation.tipo !== "A"

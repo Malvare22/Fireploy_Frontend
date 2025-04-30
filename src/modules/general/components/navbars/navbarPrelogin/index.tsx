@@ -27,9 +27,9 @@ function NavbarPrelogin(): JSX.Element {
   /** List of navigation options available before logging in. */
   const pages = [
     ["Inicio", rutasGeneral.home],
+    ["Equipo de Trabajo", rutasGeneral.developTeam],
     ["Iniciar Sesión", rutasGeneral.login],
     ["Registrarse", rutasGeneral.registrar],
-    ["Equipo de Trabajo", rutasGeneral.developTeam],
   ];
 
   // State to manage the mobile menu anchor
@@ -94,7 +94,7 @@ function NavbarPrelogin(): JSX.Element {
               transformOrigin={{ vertical: "top", horizontal: "left" }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: "block", md: "none" } }}
+              sx={{ display: { xs: "block", md: "none" , border: '1px solid black'} }}
             >
               {pages.map(([text, link]) => (
                 <MenuItem key={text} onClick={handleCloseNavMenu}>
@@ -127,7 +127,7 @@ function NavbarPrelogin(): JSX.Element {
           </Typography>
 
           {/* Navigation buttons (visible on larger screens) */}
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, border: '1px solid black' }}>
             {pages.map(([text, link]) => (
               <Button
                 variant="text"
