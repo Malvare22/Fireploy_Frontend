@@ -11,6 +11,15 @@ import MenuItem from "@mui/material/MenuItem";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { rutasGeneral } from "@modules/general/router/router";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import { Stack } from "@mui/material";
+
+export enum labelsNavbarPrelogin {
+  home = "Inicio",
+  team = "Equipo de Desarrollo",
+  signUp = "Iniciar Sesión",
+  register = "Registrarse",
+}
 
 /**
  * **Pre-login Navigation Bar Component**
@@ -26,10 +35,8 @@ import { rutasGeneral } from "@modules/general/router/router";
 function NavbarPrelogin(): JSX.Element {
   /** List of navigation options available before logging in. */
   const pages = [
-    ["Inicio", rutasGeneral.home],
-    ["Equipo de Trabajo", rutasGeneral.developTeam],
-    ["Iniciar Sesión", rutasGeneral.login],
-    ["Registrarse", rutasGeneral.registrar],
+    [labelsNavbarPrelogin.home, rutasGeneral.home],
+    [labelsNavbarPrelogin.team, rutasGeneral.developTeam],
   ];
 
   // State to manage the mobile menu anchor
@@ -50,30 +57,37 @@ function NavbarPrelogin(): JSX.Element {
 
   const navigate = useNavigate();
 
+  function Title() {
+    return (
+      <Stack direction={"row"} alignItems={"center"} spacing={1}>
+        <Typography
+          variant="h4"
+          noWrap
+          component="a"
+          href="#app-bar-with-responsive-menu"
+          sx={{
+            mr: 2,
+            fontFamily: "monospace",
+            fontWeight: 700,
+            color: "inherit",
+            textDecoration: "none",
+          }}
+        >
+          FIREPLOY
+        </Typography>
+        <RocketLaunchIcon sx={{ fontSize: 48 }} />
+      </Stack>
+    );
+  }
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl" sx={{ paddingY: 1 }}>
-        <Toolbar disableGutters>
+        <Toolbar disableGutters sx={{ justifyContent: { md: "space-between", xs: "center" } }}>
           {/* Brand title (shown only on larger screens) */}
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            FIREPLOY
-          </Typography>
 
           {/* Mobile menu button */}
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <Box sx={{ display: { xs: "flex", md: "none" }, position: "absolute", left: 0 }}>
             <IconButton
               size="large"
               aria-label="toggle navigation menu"
@@ -94,7 +108,7 @@ function NavbarPrelogin(): JSX.Element {
               transformOrigin={{ vertical: "top", horizontal: "left" }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: "block", md: "none" , border: '1px solid black'} }}
+              sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map(([text, link]) => (
                 <MenuItem key={text} onClick={handleCloseNavMenu}>
@@ -103,40 +117,70 @@ function NavbarPrelogin(): JSX.Element {
                   </Button>
                 </MenuItem>
               ))}
+              <MenuItem onClick={handleCloseNavMenu}>
+                <Button variant="text" onClick={() => navigate(rutasGeneral.registrar)}>
+                  <Typography sx={{ textAlign: "center" }}>
+                    {labelsNavbarPrelogin.register}
+                  </Typography>
+                </Button>
+              </MenuItem>
+              <MenuItem onClick={handleCloseNavMenu}>
+                <Button variant="text" onClick={() => navigate(rutasGeneral.login)}>
+                  <Typography sx={{ textAlign: "center" }}>
+                    {labelsNavbarPrelogin.signUp}
+                  </Typography>
+                </Button>
+              </MenuItem>
             </Menu>
           </Box>
 
-          {/* Brand title (shown only on smaller screens) */}
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            FIREPLOY
-          </Typography>
+          <Title />
 
-          {/* Navigation buttons (visible on larger screens) */}
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, border: '1px solid black' }}>
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3, marginLeft: 13   }}>
             {pages.map(([text, link]) => (
               <Button
-                variant="text"
                 onClick={() => navigate(link)}
-                sx={{ my: 2, color: "white", display: "block" }}
+                variant="text"
+                color="info"
+                sx={{
+                  my: 2,
+                  color: "white",
+                  display: "block",
+                  minWidth: 100,
+                  border: "1px solid white",
+                }}
+                size="large"
               >
-                <Typography sx={{ textAlign: "center" }}>{text}</Typography>
+                <Typography sx={{ textAlign: "center" }} variant="subtitle1">
+                  {text}
+                </Typography>
               </Button>
             ))}
+          </Box>
+
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3, color: "white" }}>
+            <Button
+              variant="contained"
+              sx={{ textTransform: "none", boxShadow: "none" }}
+              color="warning"
+              size="large"
+              onClick={() => navigate(rutasGeneral.login)}
+            >
+              <Typography variant="body1" sx={{ color: "white" }}>
+                {labelsNavbarPrelogin.signUp}
+              </Typography>
+            </Button>
+            <Button
+              variant="contained"
+              sx={{ textTransform: "none", boxShadow: "none" }}
+              color="error"
+              size="large"
+              onClick={() => navigate(rutasGeneral.registrar)}
+            >
+              <Typography variant="body1" sx={{ color: "white" }}>
+                {labelsNavbarPrelogin.register}
+              </Typography>
+            </Button>
           </Box>
 
           {/* Login button aligned to the right */}
