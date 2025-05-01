@@ -10,6 +10,7 @@ import { CursoTabla } from "@modules/materias/types/curso.tabla";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
 import { rutasMaterias } from "@modules/materias/router/router";
 import { useCustomTableStyles } from "@modules/general/styles";
+import { paginationComponentOptions } from "@modules/general/utils/pagination";
 
 type TablaCursosProps = {
   cursos: CursoTabla[];
@@ -94,6 +95,10 @@ const TablaCursos: React.FC<TablaCursosProps> = ({ cursos, type }) => {
         data={dataConIndice}
         customStyles={customStyles}
         conditionalRowStyles={conditionalRowStyles}
+        pagination
+        paginationPerPage={10}
+        paginationRowsPerPageOptions={[10, 15, 20]}
+        paginationComponentOptions={paginationComponentOptions}
       ></DataTable>
     </>
   );

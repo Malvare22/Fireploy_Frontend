@@ -21,6 +21,7 @@ import EditarMateria from "@modules/materias/pages/editarMateria";
 import SpringModal from "@modules/general/components/springModal";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { useCustomTableStyles } from "@modules/general/styles";
+import { paginationComponentOptions } from "@modules/general/utils/pagination";
 
 type TablaMateriasProps = {
   materias: MateriaTabla[];
@@ -211,6 +212,10 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
           data={dataConIndice}
           customStyles={customStyles}
           conditionalRowStyles={conditionalRowStyles}
+          pagination
+          paginationPerPage={20}
+          paginationRowsPerPageOptions={[20, 50, 100]}
+          paginationComponentOptions={paginationComponentOptions}
         ></DataTable>
       )}
     </>
