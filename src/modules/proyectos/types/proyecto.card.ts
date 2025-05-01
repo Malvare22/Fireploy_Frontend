@@ -9,7 +9,7 @@ export type ProyectoCard = {
   frontend: string;
   backend: string;
   dataBase: string;
-  puntuacion: number;
+  puntuacion: number | null;
   calificador: UsuarioPortafolioCard;
   materia: string;
   grupo: string;
@@ -27,7 +27,7 @@ export const proyectoEjemplo: ProyectoCard = {
   frontend: "React, TypeScript, Tailwind CSS",
   backend: "Node.js, Express",
   dataBase: "PostgreSQL",
-  puntuacion: 4.8,
+  puntuacion: null,
   calificador: usuarioPrueba,
   materia: "Ingeniería de Software",
   grupo: "Grupo 3",

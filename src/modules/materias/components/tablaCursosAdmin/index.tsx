@@ -17,6 +17,7 @@ import { patchChangeStatusCurso } from "@modules/materias/services/patch.curso";
 import { useAuth } from "@modules/general/context/accountContext";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
+import { paginationComponentOptions } from "@modules/general/utils/pagination";
 
 type TablaCursosAdminProps = {
   cursos: CursoTabla[]; // List of courses to be displayed in the table
@@ -47,22 +48,23 @@ const TablaCursosAdmin: React.FC<TablaCursosAdminProps> = ({ cursos }) => {
 
   const token = useAuth().accountInformation.token;
 
-  const {
-    isPending: isPendingChangeStatus,
-    mutate: mutateChangeStatus,
-  } = useMutation({
+  const { isPending: isPendingChangeStatus, mutate: mutateChangeStatus } = useMutation({
     mutationFn: () =>
       patchChangeStatusCurso(token, selectCurso?.id || "", selectCurso?.estado == "I" ? "A" : "I"),
-    mutationKey: ["Change Status Curso", selectCurso?.id || "", selectCurso?.estado == "I" ? "A" : "I"],
+    mutationKey: [
+      "Change Status Curso",
+      selectCurso?.id || "",
+      selectCurso?.estado == "I" ? "A" : "I",
+    ],
     onSuccess: () => {
       showDialog({
-        message: 'Estado del Curso Modificado Correctamente!',
-        title: 'Modificar Curso',
+        message: "Estado del Curso Modificado Correctamente!",
+        title: "Modificar Curso",
         onAccept: () => {},
-        reload: true
-      })
+        reload: true,
+      });
     },
-    onError: error => setError(error),
+    onError: (error) => setError(error),
   });
 
   /**
@@ -187,6 +189,10 @@ const TablaCursosAdmin: React.FC<TablaCursosAdminProps> = ({ cursos }) => {
         data={dataConIndice}
         customStyles={customStyles}
         conditionalRowStyles={conditionalRowStyles}
+        pagination
+        paginationPerPage={10}
+        paginationRowsPerPageOptions={[10, 15, 20]}
+        paginationComponentOptions={paginationComponentOptions}
       ></DataTable>
     </>
   );

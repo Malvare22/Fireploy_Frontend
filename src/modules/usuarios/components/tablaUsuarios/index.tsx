@@ -22,6 +22,7 @@ import { useMutation } from "@tanstack/react-query";
 import { postChangeUserStateService } from "@modules/usuarios/services/post.modificar.usuario";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
+import { paginationComponentOptions } from "@modules/general/utils/pagination";
 
 type TablaUsuariosProps = {
   usuarios: Usuario[];
@@ -297,6 +298,10 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
         data={dataConIndice}
         customStyles={customStyles}
         conditionalRowStyles={conditionalRowStyles}
+        pagination
+        paginationPerPage={10}
+        paginationRowsPerPageOptions={[10, 20, 50, 100]}
+        paginationComponentOptions={paginationComponentOptions}
       />
     </>
   );

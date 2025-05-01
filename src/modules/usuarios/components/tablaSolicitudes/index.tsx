@@ -22,6 +22,7 @@ import { useMutation } from "@tanstack/react-query";
 import { patchSolicitudService } from "@modules/usuarios/services/patch.solicitud";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { useCustomTableStyles } from "@modules/general/styles";
+import { paginationComponentOptions } from "@modules/general/utils/pagination";
 
 /**
  * @typedef Props
@@ -276,6 +277,10 @@ const TablaSolicitudes: React.FC<Props> = ({ solicitudes, tipo }) => {
         data={dataConIndice}
         customStyles={customStyles}
         conditionalRowStyles={conditionalRowStyles}
+        pagination
+        paginationPerPage={20}
+        paginationRowsPerPageOptions={[20, 50, 100]}
+        paginationComponentOptions={paginationComponentOptions}
       />
     </>
   );

@@ -14,10 +14,10 @@ type CardCursoProps = {
   curso: Curso;
   onClick: () => void;
   isRegister: boolean;
-  type: "student" | "teacher";
+  isTeacher: boolean
 };
 
-const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, isRegister, type }) => {
+const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, isRegister, isTeacher }) => {
   const theme = useTheme();
 
   // let docente: undefined | UsuarioPortafolioCard = undefined;
@@ -31,7 +31,7 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, isRegister, type 
   // }
 
   const label = () => {
-    if (type == "teacher") {
+    if (isTeacher) {
       if (curso.docente == null) {
         return "Solicitar Curso";
       }
@@ -39,8 +39,6 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, isRegister, type 
     }
     return isRegister ? labelCardCurso.inscrito : labelCardCurso.inscribirme;
   };
-
-  console.log(curso)
 
   return (
     <AnimatedCard>
@@ -88,7 +86,7 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, isRegister, type 
                 ? theme.palette.terciary.main
                 : theme.palette.primary.main,
             }}
-            disabled={type == "teacher" && curso.docente != null && curso.docente.id != id}
+            disabled={isTeacher && curso.docente != null && curso.docente.id != id}
             endIcon={isRegister ? <LoginIcon /> : <InputIcon />}
             onClick={
               isRegister

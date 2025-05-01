@@ -108,6 +108,11 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
           title: "Explorar Proyectos",
           icon: <PlagiarismIcon />,
         },
+        {
+          segment: rutasProyectos.misProyectos as string,
+          title: "Mis Proyectos",
+          icon: <PlagiarismIcon />,
+        },
       ],
     },
     ...(userInformation.tipo !== "A"
@@ -129,6 +134,8 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
               { segment: rutasMaterias.explorar as string, title: "Explorar Materias y Cursos", icon: <AutoStoriesIcon /> },
               { segment: rutasMaterias.listarMaterias as string, title: "Listar Materias", icon: <CollectionsBookmarkIcon /> },
               { segment: rutasMaterias.crearMateria as string, title: "Crear Materia", icon: <BookmarkAddIcon /> },
+              { segment: rutasMaterias.listarMisCursos as string, title: "Mis Cursos", icon: <BookmarkAddIcon /> },
+              { segment: rutasMaterias.solicitudes as string, title: "Solicitudes", icon: <BookmarkAddIcon /> },
             ],
           },
         ]),
