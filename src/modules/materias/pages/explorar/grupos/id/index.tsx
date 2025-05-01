@@ -14,6 +14,9 @@
 
 import AlertDialog from "@modules/general/components/alertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
+import Modal from "@modules/general/components/modal";
+import { useModal } from "@modules/general/components/modal/hooks/useModal";
+import SpringModal from "@modules/general/components/springModal";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
@@ -22,6 +25,8 @@ import { LabelCurso } from "@modules/materias/enums/labelCurso";
 import { getCursoById } from "@modules/materias/services/get.curso";
 import { Curso } from "@modules/materias/types/curso";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
+import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyectoPortafolio";
+import { ProyectoCard, proyectoEjemplo } from "@modules/proyectos/types/proyecto.card";
 import { Card, Grid2, Stack, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -42,15 +47,8 @@ function VerInformacionCurso() {
   const { token } = accountInformation;
 
   /** Dialog and loading management */
-  const {
-    showDialog,
-    open,
-    title,
-    message,
-    type,
-    handleAccept,
-    isLoading,
-  } = useAlertDialog();
+  const { showDialog, open, title, message, type, handleAccept, isLoading } =
+    useAlertDialog();
 
   /** Error handling with alert dialog */
   const { setError } = useErrorReader(showDialog);
@@ -81,10 +79,35 @@ function VerInformacionCurso() {
    * Adapt fetched course to internal format
    */
   useEffect(() => {
-    if (data){ setCurso(adaptCursoService(data))};
+    if (data) {
+      setCurso(adaptCursoService(data));
+    }
   }, [data]);
 
-  console.log(curso)
+  const [projectSelect, setProjectSelect] = useState<ProyectoCard | null>(proyectoEjemplo);
+
+  function handleCard(project: ProyectoCard) {
+    setProjectSelect(project);
+  }
+
+  const {
+    handleClose: handleCloseModal,
+    handleOpen: handleOpenModal,
+    open: openModal,
+  } = useModal();
+
+  // useEffect(() => {
+  //   if(!openModal){
+  //     setProjectSelect(null);
+  //   }
+  // }, [openModal])
+
+
+
+  useEffect(() => {
+    console.log(projectSelect)
+    if(projectSelect) handleOpenModal();
+  }, [projectSelect])
 
   return (
     <>
@@ -97,6 +120,10 @@ function VerInformacionCurso() {
         type={type}
         isLoading={isLoading}
       />
+
+      <SpringModal handleClose={handleCloseModal} open={openModal}>
+        <>{projectSelect && <ModalProyectoPortafolio proyecto={projectSelect} />}</>
+      </SpringModal>
 
       {/* Loader during data fetching */}
       {isLoadingFetch ? (
@@ -123,12 +150,20 @@ function VerInformacionCurso() {
               <Typography variant="h4">{LabelCurso.secciones}</Typography>
 
               {/* Sections layout */}
-              <Grid2 container spacing={3} direction={{ xs: "column-reverse", xl: "row" }}>
+              <Grid2
+                container
+                spacing={3}
+                direction={{ xs: "column-reverse", xl: "row" }}
+              >
                 {/* List of course sections */}
                 <Grid2 size={{ xs: 12 }}>
                   <Stack spacing={2}>
                     {curso.secciones?.map((seccion, key) => (
-                      <CardSeccion seccion={seccion} key={key} />
+                      <CardSeccion
+                        seccion={seccion}
+                        handleCard={handleCard}
+                        key={key}
+                      />
                     ))}
                   </Stack>
                 </Grid2>

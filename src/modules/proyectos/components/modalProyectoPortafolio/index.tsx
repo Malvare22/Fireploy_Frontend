@@ -4,16 +4,37 @@ import Score from "@modules/general/components/score";
 import { labelModalProyectoPortafolio } from "@modules/proyectos/enum/labelModalProyectoPortafolio";
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
-import { Box, Button, Card, Chip, Grid2, Stack, Typography, useTheme } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  Chip,
+  Grid2,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React from "react";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CloudOffIcon from "@mui/icons-material/CloudOff";
 
+export enum labelModalProject {
+  noQualify = "Actualmente este proyecto no se encuentra calificado",
+  qualify = 'Calificar'
+}
+
 type Props = {
   proyecto: ProyectoCard;
+  qualifier?: boolean;
 };
-const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto }) => {
 
+function FormQualifier(){
+
+  return <></>
+}
+
+const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto, qualifier }) => {
   const theme = useTheme();
 
   return (
@@ -34,27 +55,50 @@ const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto }) => {
           {proyecto.titulo}
         </Typography>
       </Box>
-      <Stack direction={{ xl: "row" }} alignItems={"center"} spacing={6}>
-        <Box component={"img"} sx={{ width: { md: 550, xs: "100%" } }} src={proyecto.imagen} />
-        <Stack spacing={2} marginTop={2} width={"100%"}>
-          <Typography variant="h5" fontWeight={"bold"}>
-            {labelModalProyectoPortafolio.calificador}
-          </Typography>
-          <CardCalificador
+      <Stack direction={{ xl: "row" }} spacing={6}>
+        <Box
+          component={"img"}
+          sx={{ width: { md: 550, xs: "100%" } }}
+          src={proyecto.imagen}
+        />
+        <Stack
+          spacing={4}
+          width={"100%"}
+          height={"100%"}
+          border={"1px solid black"}
+        >
+          <Stack spacing={2}>
+            <Typography variant="h5" fontWeight={"bold"}>
+              {labelModalProyectoPortafolio.calificador}
+            </Typography>
+            {/* <CardCalificador
             calificador={proyecto.calificador}
             grupo={proyecto.grupo}
             materia={proyecto.materia}
             puntuacion={proyecto.puntuacion}
             seccion={proyecto.seccion}
             semestre={proyecto.semestre}
-          />
-          <Typography variant="h5" fontWeight={"bold"}>
-            {labelModalProyectoPortafolio.tecnologias}
-          </Typography>
-          <Stack direction={"row"} spacing={2}>
-            <Chip color="error" label={proyecto.backend} />
-            <Chip sx={{ backgroundColor: theme.palette.terciary.main }} label={proyecto.dataBase} />
-            <Chip color="primary" label={proyecto.frontend} />
+          /> */}
+            {proyecto.puntuacion == null && (
+              <Alert severity="warning">
+                <Stack direction={'row'}><Typography variant="subtitle1">
+                  {labelModalProject.noQualify}
+                </Typography></Stack>
+              </Alert>
+            )}
+          </Stack>
+          <Stack spacing={2}>
+            <Typography variant="h5" fontWeight={"bold"}>
+              {labelModalProyectoPortafolio.tecnologias}
+            </Typography>
+            <Stack direction={"row"} spacing={2}>
+              <Chip color="error" label={proyecto.backend} />
+              <Chip
+                sx={{ backgroundColor: theme.palette.terciary.main }}
+                label={proyecto.dataBase}
+              />
+              <Chip color="primary" label={proyecto.frontend} />
+            </Stack>
           </Stack>
         </Stack>
       </Stack>
@@ -99,7 +143,10 @@ const CardCalificador: React.FC<CardCalificadorProps> = ({
   return (
     <Card sx={{ padding: 2 }}>
       <Stack direction={"row"} alignItems={"center"} spacing={2}>
-        <ProjectCardAvatar usuario={calificador} sx={{ width: 48, height: 48 }} />
+        <ProjectCardAvatar
+          usuario={calificador}
+          sx={{ width: 48, height: 48 }}
+        />
         <Stack>
           <Stack direction={{ md: "row" }} spacing={2}>
             <Typography variant="h6">{calificador.nombres}</Typography>
@@ -121,12 +168,18 @@ const CardEstado: React.FC<CardEstadoProps> = ({ estado }) => {
   const theme = useTheme();
 
   function getColor() {
-    return estado == "E" ? theme.palette.success.light : theme.palette.warning.light;
+    return estado == "E"
+      ? theme.palette.success.light
+      : theme.palette.warning.light;
   }
 
   function getLabel() {
     return (
-      <Stack direction={{ md: "row", xs: "column" }} alignItems={"center"} spacing={1}>
+      <Stack
+        direction={{ md: "row", xs: "column" }}
+        alignItems={"center"}
+        spacing={1}
+      >
         {estado == "E" ? (
           <>
             <Typography fontWeight="bold" textAlign={"center"}>
