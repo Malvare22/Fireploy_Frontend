@@ -1,7 +1,7 @@
 import ProjectForList from "@modules/proyectos/components/projectForList";
 import { labelProjectForList } from "@modules/proyectos/enum/labelProjectForList";
 import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
-import { getExecutionStateArray } from "@modules/proyectos/utils/getExecutionState";
+// import { getExecutionStateArray } from "@modules/proyectos/utils/getExecutionState";
 import {  Box, Stack, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -12,13 +12,13 @@ import { useAuth } from "@modules/general/context/accountContext";
 import { adaptProject } from "@modules/proyectos/utils/adapt.proyecto";
 import AlertDialog from "@modules/general/components/alertDialog";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
-import { labelSelects } from "@modules/general/enums/labelSelects";
-import {
-  FilterOptions,
-  SelectFilters,
-  SelectOrders,
-  SorterOptions,
-} from "@modules/general/components/selects";
+// import { labelSelects } from "@modules/general/enums/labelSelects";
+// import {
+//   FilterOptions,
+//   SelectFilters,
+//   SelectOrders,
+//   SorterOptions,
+// } from "@modules/general/components/selects";
 
 function MisProyectos() {
     

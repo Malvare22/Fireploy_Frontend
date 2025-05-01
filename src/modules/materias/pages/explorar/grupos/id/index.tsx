@@ -14,7 +14,6 @@
 
 import AlertDialog from "@modules/general/components/alertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
-import Modal from "@modules/general/components/modal";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import SpringModal from "@modules/general/components/springModal";
 import { useAuth } from "@modules/general/context/accountContext";

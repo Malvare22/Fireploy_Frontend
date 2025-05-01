@@ -1,9 +1,9 @@
-import { ProjectCardAvatar } from "@modules/general/components/projectCardAvatar";
+// import { ProjectCardAvatar } from "@modules/general/components/projectCardAvatar";
 import PortafolioCard from "@modules/general/components/portafolioCard";
-import Score from "@modules/general/components/score";
+// import Score from "@modules/general/components/score";
 import { labelModalProyectoPortafolio } from "@modules/proyectos/enum/labelModalProyectoPortafolio";
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
-import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
+// import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import {
   Alert,
   Box,
@@ -29,12 +29,12 @@ type Props = {
   qualifier?: boolean;
 };
 
-function FormQualifier(){
+// function FormQualifier(){
 
-  return <></>
-}
+//   return <></>
+// }
 
-const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto, qualifier }) => {
+const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto }) => {
   const theme = useTheme();
 
   return (
@@ -125,41 +125,42 @@ const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto, qualifier }) => {
   );
 };
 
-type CardCalificadorProps = {
-  calificador: UsuarioPortafolioCard;
-  puntuacion: ProyectoCard["puntuacion"];
-  materia: ProyectoCard["materia"];
-  grupo: ProyectoCard["grupo"];
-  seccion: ProyectoCard["seccion"];
-  semestre: ProyectoCard["semestre"];
-};
-const CardCalificador: React.FC<CardCalificadorProps> = ({
-  calificador,
-  grupo,
-  materia,
-  puntuacion,
-  seccion,
-}) => {
-  return (
-    <Card sx={{ padding: 2 }}>
-      <Stack direction={"row"} alignItems={"center"} spacing={2}>
-        <ProjectCardAvatar
-          usuario={calificador}
-          sx={{ width: 48, height: 48 }}
-        />
-        <Stack>
-          <Stack direction={{ md: "row" }} spacing={2}>
-            <Typography variant="h6">{calificador.nombres}</Typography>
-            <Score value={puntuacion} />
-          </Stack>
-          <Box>
-            <Typography>{`${materia} / ${grupo} / ${seccion}`}</Typography>
-          </Box>
-        </Stack>
-      </Stack>
-    </Card>
-  );
-};
+// type CardCalificadorProps = {
+//   calificador: UsuarioPortafolioCard;
+//   puntuacion: ProyectoCard["puntuacion"];
+//   materia: ProyectoCard["materia"];
+//   grupo: ProyectoCard["grupo"];
+//   seccion: ProyectoCard["seccion"];
+//   semestre: ProyectoCard["semestre"];
+// };
+
+// const CardCalificador: React.FC<CardCalificadorProps> = ({
+//   calificador,
+//   grupo,
+//   materia,
+//   puntuacion,
+//   seccion,
+// }) => {
+//   return (
+//     <Card sx={{ padding: 2 }}>
+//       <Stack direction={"row"} alignItems={"center"} spacing={2}>
+//         <ProjectCardAvatar
+//           usuario={calificador}
+//           sx={{ width: 48, height: 48 }}
+//         />
+//         <Stack>
+//           <Stack direction={{ md: "row" }} spacing={2}>
+//             <Typography variant="h6">{calificador.nombres}</Typography>
+//             <Score value={puntuacion} />
+//           </Stack>
+//           <Box>
+//             <Typography>{`${materia} / ${grupo} / ${seccion}`}</Typography>
+//           </Box>
+//         </Stack>
+//       </Stack>
+//     </Card>
+//   );
+// };
 
 type CardEstadoProps = {
   estado: ProyectoCard["estado"];
