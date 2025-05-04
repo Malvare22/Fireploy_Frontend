@@ -28,7 +28,7 @@ type Props = {
 export const Information = ({ type }: Props) => {
   const { getValues: getValuesPrincipal } = useFormContext<ProyectoSchema>();
   const { updateSearchParams, searchParams } = useContext(ParamsContext);
-  const { token } = useAuth().accountInformation;
+  const { token, tipo, id } = useAuth().accountInformation;
   const { handleNext } = useContext(StepperContext);
 
   const {
@@ -37,10 +37,19 @@ export const Information = ({ type }: Props) => {
     watch,
     handleSubmit,
     getValues,
+    setValue
   } = useForm<ProyectoInformationSchema>({
     defaultValues: getValuesPrincipal(),
     resolver: zodResolver(ProyectoInformationSchema),
   });
+
+  useEffect(()=> {
+    if(searchParams.get('materia') && searchParams.get('curso') && searchParams.get('seccion')){
+      setValue('materiaInformacion.materiaId', parseInt(searchParams.get('materia') ?? '0'));
+      setValue('materiaInformacion.cursoId', (searchParams.get('curso') ?? '0'));
+      setValue('materiaInformacion.seccionId', parseInt(searchParams.get('seccion') ?? '0'));
+    }
+  }, [searchParams])
 
   const {
     handleAccept,
@@ -61,7 +70,7 @@ export const Information = ({ type }: Props) => {
     isLoading: isLoadingMaterias,
     error: errorDataMaterias,
   } = useQuery({
-    queryFn: () => getAllAcademicInformation(token),
+    queryFn: () => getAllAcademicInformation(token, tipo, id),
     queryKey: ["Get All Academic Information"],
   });
 

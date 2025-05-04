@@ -23,19 +23,12 @@ import CardSeccion from "@modules/materias/components/cardSeccion";
 import { LabelCurso } from "@modules/materias/enums/labelCurso";
 import { getCursoById } from "@modules/materias/services/get.curso";
 import { Curso } from "@modules/materias/types/curso";
+import { CursoService } from "@modules/materias/types/curso.service";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
 import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyectoPortafolio";
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
-import {
-  Avatar,
-  Button,
-  Card,
-  Grid2,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Avatar, Button, Card, Grid2, Stack, Typography, useTheme } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { createContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
@@ -73,7 +66,10 @@ function VerInformacionCurso() {
     isLoading: isLoadingFetch,
     error,
   } = useQuery({
-    queryFn: () => getCursoById(token, idCurso ?? "-1"),
+    queryFn: async () => {
+      const response = await getCursoById(token, idCurso ?? "-1");
+      return { ...response, id: idCurso } as CursoService;
+    },
     queryKey: ["Get Curso By Id", idCurso ?? "-1"],
   });
 
@@ -152,7 +148,13 @@ function VerInformacionCurso() {
                 <Grid2 size={{ xs: 12, lg: 8 }}>
                   <Stack spacing={2}>
                     {curso.secciones?.map((seccion, key) => (
-                      <CardSeccion seccion={seccion} idMateria={curso.materia?.id ?? 0} handleCard={handleCard} key={key} />
+                      <CardSeccion
+                        seccion={seccion}
+                        idMateria={curso.materia?.id ?? 0}
+                        idCurso={curso.id}
+                        handleCard={handleCard}
+                        key={key}
+                      />
                     ))}
                   </Stack>
                 </Grid2>
@@ -203,7 +205,11 @@ const FrameDocente: React.FC<FrameDocenteProps> = ({ docente }) => {
         <Button onClick={nav}>
           <Avatar src={docente.imagen} sx={{ width: 64, height: 64 }} />
         </Button>
-        <Button sx={{ textTransform: "none", color: 'white', textAlign: 'left' }} onClick={nav} variant="text">
+        <Button
+          sx={{ textTransform: "none", color: "white", textAlign: "left" }}
+          onClick={nav}
+          variant="text"
+        >
           <Typography variant="h6">{docente.nombre}</Typography>
         </Button>
       </Stack>

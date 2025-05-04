@@ -20,8 +20,8 @@ export function adaptProjectToCard(proyecto: Proyecto): ProyectoCard {
 
     integrantes: [...proyecto.integrantes, proyecto.propietario].map(adaptUsuarioToPortafolioCard),
 
-    frontend: proyecto.frontend?.dockerText || "No especificado",
-    backend: proyecto.backend?.dockerText || "No especificado",
+    frontend: proyecto.frontend?.tecnologyToShow || "No especificado",
+    backend: proyecto.backend?.tecnologyToShow || "No especificado",
     dataBase: proyecto.baseDeDatos?.nombre || "",
 
     fav_usuarios: proyecto.fav_usuarios ?? [],
@@ -51,7 +51,7 @@ export function adaptProject(project: Partial<ProyectoService>): Proyecto {
   return {
     baseDeDatos: adaptDataBase({ ...project.base_de_datos, proyecto: null }),
     descripcion: project.descripcion ?? "",
-    integrantes: project.estudiantes ?? [],
+    integrantes: (project.estudiantes) ?? [],
     fav_usuarios: project.fav_usuarios?.map((x) => x.id) ?? [],
     materiaInformacion: {
       cursoId: project.seccion?.curso?.id ?? "1",
@@ -71,11 +71,11 @@ export function adaptProject(project: Partial<ProyectoService>): Proyecto {
 
 export function adaptRepository(repository: RepositorioService): Repositorio {
   return {
-    dockerText: (repository.tecnologia ?? "") + ":" + (repository.version ?? ""),
+    tecnologyToShow: (repository.tecnologia ?? "") + ":" + (repository.version ?? ""),
     variables: !repository.variables_de_entorno ? "" : repository.variables_de_entorno,
     url: repository.url ?? "",
     tipo: (repository.tipo as Repositorio["tipo"]) ?? "I",
-    docker: { tag: repository.version ?? "", tecnologia: repository.tecnologia ?? "" },
+    docker: { version: repository.version ?? "", tecnologia: repository.tecnologia ?? "", framework : repository.framework ?? ''},
     id: repository.id ?? -1,
   };
 }

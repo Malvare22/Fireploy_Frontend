@@ -4,8 +4,8 @@ export type Repositorio = {
   url: string;
   tipo: "B" | "F" | "I";
   variables: string;
-  docker?: { tecnologia: string | null; tag: string | null };
-  dockerText: string | null;
+  docker?: { tecnologia: string; version: string; framework: string };
+  tecnologyToShow?: string | null ;
 };
 
 export type VariableDeEntorno = {

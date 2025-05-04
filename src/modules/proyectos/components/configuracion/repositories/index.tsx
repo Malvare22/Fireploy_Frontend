@@ -33,7 +33,6 @@ export function Repositories({ type }: Props) {
   const methods = useForm<ProyectoRepositoriesSchema>({
     defaultValues: getValuesProject(),
     resolver: zodResolver(ProyectoRepositoriesSchema),
-    shouldFocusError: true,
   });
 
   const { getValues, control, watch, reset } = methods;

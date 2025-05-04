@@ -19,14 +19,16 @@ import { buttonTypes } from "@modules/general/types/buttons";
 import { useNavigate, useSearchParams } from "react-router";
 import { Materia } from "@modules/materias/types/materia";
 import { rutasProyectos } from "@modules/proyectos/router";
+import { Curso } from "@modules/materias/types/curso";
 
 type CardSeccionProps = {
   seccion: Seccion;
   idMateria: Materia["id"];
+  idCurso: Curso['id'];
   handleCard: (project: ProyectoCard) => void;
 };
 
-const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard, idMateria }) => {
+const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard, idMateria, idCurso }) => {
   const [proyectos, setProyectos] = useState<ProyectoCard[]>([]);
 
   const [buffer, setBuffer] = useState<ProyectoCard[]>([]);
@@ -35,9 +37,11 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard, idMateri
 
   const paramsToCreateProject = {
     materia: (idMateria ?? 0)?.toString(),
-    curso: (seccion.cursoId ?? 0).toString(),
+    curso: (idCurso ?? 0).toString(),
     seccion: (seccion.id ?? 0).toString(),
   };
+
+  console.log(seccion)
 
   function nav() {
     const queryString = new URLSearchParams(paramsToCreateProject).toString();

@@ -29,17 +29,10 @@ export const UsuarioCursoSchema: z.ZodType<UsuarioCurso> = z.object({
   id: z.number().min(1, "El ID es requerido"),
   nombre: z.string().min(1, "El nombre es requerido"),
   correo: z.string().email("El correo debe ser válido").optional(),
-});
-
-export const EstudianteCursoSchema = z.object({
-  nombre: z.string(),
-  id: z.number(),
-  correo: z.string(),
-  foto: z.string(),
+  imagen: z.string(),
   estado: z.enum(["A", "I"]),
-});
 
-export type EstudianteCurso = z.infer<typeof EstudianteCursoSchema>;
+});
 
 export const MateriaSchema: z.ZodType<Materia> = z.object({
   estado: z.enum(["A", "I"]),
@@ -59,7 +52,7 @@ export const CursoSchema: z.ZodType<Curso> = z.object({
     .lazy(() => UsuarioCursoSchema)
     .nullable()
     .optional(),
-  estudiantes: z.array(z.lazy(() => EstudianteCursoSchema)).optional(),
+  estudiantes: z.array(z.lazy(() => UsuarioCursoSchema)).optional(),
   secciones: z.array(z.lazy(() => SeccionSchema)).optional(),
   materia: z
     .object({

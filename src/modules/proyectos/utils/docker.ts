@@ -1,28 +1,34 @@
-export type DockerElement = { repository: string; tag: string[]; label: string };
-
-export type DockerSet = {
-  node: DockerElement;
-  springBoot: DockerElement;
-  expressJs: DockerElement;
-  php: DockerElement;
-  laravel: DockerElement;
-  react: DockerElement;
-  angular: DockerElement;
-  nextJs: DockerElement;
-};
-export const dockerImages: DockerSet = {
-  angular: { repository: "node", tag: ["23-alpine3.20", "TARRO"], label: "Angular" },
-  expressJs: { repository: "node", tag: ["23-alpine3.20"], label: "ExpressJS" },
-  laravel: { repository: "bitnami/laravel", tag: ["laravel:12.0.7"], label: "Laravel" },
-  nextJs: { repository: "node", tag: ["23-alpine3.20"], label: "NextJS" },
-  node: { repository: "node", tag: ["23-alpine3.20"], label: "NodeJS" },
-  php: { repository: "php", tag: ["8.3.20-apache"], label: "PHP" },
-  react: { repository: "node", tag: ["23-alpine3.20"], label: "ReactJS" },
-  springBoot: { repository: "jelastic/springboot", tag: ["temurinjdk-24.0.1-almalinux-9"], label: "SpringBoot" },
+type SelectTenology = {
+  versions: string[];
+  frameworks: string[];
 };
 
-export const dockerImagesMap: Map<keyof DockerSet, DockerElement> = new Map(
-  Object.entries(dockerImages) as [keyof DockerSet, DockerElement][]
-);
+export enum TECNOLOGIES {
+  NodeJS = "NodeJS",
+  Angular = "Angular",
+  ReactJS = "React",
+  NextJS = "NextJs",
+  PHP = "Php",
+  Laravel = "Laravel",
+  Java = "Java",
+  SpringBoot = "SpringBoot",
+}
 
-export const dockerImagesArray = Array.from(dockerImagesMap, ([_key, value]) => value);
+export const keysOfTecnologies = ["NodeJS", "Java", "PHP"] as const;
+
+export const inputSelectTecnology: Record<(typeof keysOfTecnologies)[number], SelectTenology> = {
+  Java: {
+    versions: ["1.0"],
+    frameworks: ["SpringBoot"],
+  },
+
+  PHP: {
+    frameworks: ["Laravel"],
+    versions: ["8.3.20-apache"],
+  },
+
+  NodeJS: {
+    frameworks: ["Angular", "React", "NextJS"],
+    versions: ["23-alpine3.20"],
+  },
+};
