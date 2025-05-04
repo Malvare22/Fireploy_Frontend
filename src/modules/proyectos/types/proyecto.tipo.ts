@@ -33,8 +33,8 @@ export type RepositorioProyecto = {
 export type Proyecto = {
   id?: number;
   titulo: string;
-  descripcion: string;
-  calificacion?: number;
+  descripcion?: string | null | undefined;
+  fav_usuarios: number[];
   imagen?: string;
   url: string;
   estadoDeEjecucion?: EstadoEjecucionProyecto;

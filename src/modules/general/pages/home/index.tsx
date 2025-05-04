@@ -1,5 +1,15 @@
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
-import { Box, Button, Card, Grid2, Stack, SxProps, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  Grid2,
+  Stack,
+  SxProps,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import styles from "./home.module.css";
 import {
   BracesAsteriskIcon,
@@ -30,8 +40,8 @@ export enum labelHome {
 export default function Home() {
   return (
     <Box>
-      <Princial />
-      <Stack marginTop={4}>
+      <Principal />
+      <Stack marginTop={4} alignItems={"center"} paddingX={{ md: 10, xs: 2 }} spacing={4}>
         <SectionProjects />
         <SectionPortafolios />
       </Stack>
@@ -47,7 +57,12 @@ function SectionProjects() {
     </Button>
   );
   const panel = (
-    <Stack direction={{ md: "row", xs: "column" }} spacing={2}>
+    <Stack
+      direction={{ md: "row", xs: "column" }}
+      justifyContent={{ md: "center" }}
+      alignItems={{ xs: "center", md: "start" }}
+      spacing={4}
+    >
       <ProjectCard proyecto={proyectoEjemplo} handleOpen={() => {}} />
       <ProjectCard proyecto={proyectoEjemplo} handleOpen={() => {}} />
     </Stack>
@@ -64,15 +79,30 @@ function SectionProjects() {
 
 function SectionPortafolios() {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down("md"));
   const button = (
     <Button onClick={() => navigate(0)} variant="contained">
       {labelHome.sectionPortafoliosButton}
     </Button>
   );
   const panel = (
-    <Stack spacing={2}>
-      <PortafolioCard usuario={usuarioPrueba} />
-    </Stack>
+    <Grid2 container spacing={2} paddingX={4} alignItems={"center"}>
+      <Grid2 size={{ md: 4, xs: 12 }}>
+        <PortafolioCard usuario={usuarioPrueba} />
+      </Grid2>
+      {!matches && (
+        <>
+          {" "}
+          <Grid2 size={{ md: 4, xs: 12 }}>
+            <PortafolioCard usuario={usuarioPrueba} />
+          </Grid2>
+          <Grid2 size={{ md: 4, xs: 12 }}>
+            <PortafolioCard usuario={usuarioPrueba} />
+          </Grid2>
+        </>
+      )}
+    </Grid2>
   );
   return (
     <SectionHome
@@ -84,22 +114,38 @@ function SectionPortafolios() {
   );
 }
 
-function Princial() {
+function Principal() {
+  const theme = useTheme();
   const navigate = useNavigate();
   return (
     <>
       <Stack spacing={3} marginTop={{ xs: -20, md: -10 }} alignItems={"center"} overflow={"hidden"}>
         <PrincipalAnimation />
       </Stack>
-      <Stack marginTop={{ xs: -16, md: 0 }} spacing={2} alignItems={"center"}>
-        <Typography variant="h4" textAlign={"center"}>
-          {labelHome.princialContent}
-        </Typography>
-        <Box>
-          <Button variant="contained" onClick={() => navigate(rutasGeneral.registrar)}>
-            {labelHome.princialButtonText}
-          </Button>
-        </Box>
+      <Stack direction={"row"} justifyContent={"center"} paddingX={4}>
+        <Card
+          sx={{
+            backgroundColor: theme.palette.terciary.main,
+            marginTop: { xs: -16, md: 0 },
+            width: 800,
+            paddingX: { md: 3 },
+            paddingY: 2,
+          }}
+        >
+          <Stack spacing={2} alignItems={"center"}>
+            <Typography
+              sx={{ fontWeight: 600, color: "white", fontSize: { md: 30, xs: 26 } }}
+              textAlign={"center"}
+            >
+              {labelHome.princialContent}
+            </Typography>
+            <Box>
+              <Button variant="contained" onClick={() => navigate(rutasGeneral.registrar)}>
+                {labelHome.princialButtonText}
+              </Button>
+            </Box>
+          </Stack>
+        </Card>
       </Stack>
     </>
   );
@@ -186,27 +232,21 @@ type PropsSectionHome = {
 function SectionHome({ col1, col2, title, button }: PropsSectionHome) {
   const theme = useTheme();
   return (
-    <Box paddingX={2}>
-      <Card>
-        <Stack spacing={2}>
-          <Box sx={{ backgroundColor: theme.palette.primary.light }}>
-            <Typography variant="h4" color="white" padding={1}>
-              {title}
-            </Typography>
-          </Box>
-          <Grid2 container padding={2} columnSpacing={3} rowSpacing={3}>
-            <Grid2 size={{ xs: 12, md: 4 }}>{col1}</Grid2>
-            <Grid2 size={{ xs: 12, md: 8 }}>
-              <Stack justifyContent={"space-between"} spacing={2} height={"100%"}>
-                <Typography variant="h6">{col2}</Typography>
-                <Stack alignItems={"end"}>
-                  <Box>{button}</Box>
-                </Stack>
-              </Stack>
-            </Grid2>
-          </Grid2>
+    <Card>
+      <Stack spacing={4}>
+        <Box sx={{ backgroundColor: theme.palette.primary.light }}>
+          <Typography variant="h4" color="white" padding={1} textAlign={"center"}>
+            {title}
+          </Typography>
+        </Box>
+        {col1}
+        <Stack justifyContent={"space-between"} padding={2} spacing={2}>
+          <Typography variant="h6">{col2}</Typography>
+          <Stack alignItems={"end"}>
+            <Box>{button}</Box>
+          </Stack>
         </Stack>
-      </Card>
-    </Box>
+      </Stack>
+    </Card>
   );
 }

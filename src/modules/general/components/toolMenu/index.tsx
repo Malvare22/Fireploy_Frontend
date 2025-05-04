@@ -1,20 +1,7 @@
 import * as React from "react";
-import {
-  AppProvider,
-  Navigation,
-  Router,
-} from "@toolpad/core/AppProvider";
-import {
-  DashboardLayout,
-  SidebarFooterProps,
-} from "@toolpad/core/DashboardLayout";
-import {
-  Box,
-  Button,
-  Divider,
-  Stack,
-  useTheme,
-} from "@mui/material";
+import { AppProvider, Navigation, Router } from "@toolpad/core/AppProvider";
+import { DashboardLayout, SidebarFooterProps } from "@toolpad/core/DashboardLayout";
+import { Box, Button, Divider, Stack, Typography, useTheme } from "@mui/material";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
@@ -27,28 +14,16 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { rutasMaterias } from "@modules/materias/router/router";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { rutasProyectos } from "@modules/proyectos/router";
-import {
-  AccountInformation,
-  useAuth,
-} from "@modules/general/context/accountContext";
+import { AccountInformation, useAuth } from "@modules/general/context/accountContext";
 import CastForEducationIcon from "@mui/icons-material/CastForEducation";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import StorageIcon from "@mui/icons-material/Storage";
 import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
-import {
-  BoxesIcon,
-  PersonLinesFillIcon,
-} from "../customIcons";
+import { BoxesIcon, PersonLinesFillIcon } from "../customIcons";
 import PlagiarismIcon from "@mui/icons-material/Plagiarism";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import {
-  Account,
-  AccountPreview,
-  AccountPreviewProps,
-} from "@toolpad/core/Account";
+import { Account, AccountPreview, AccountPreviewProps } from "@toolpad/core/Account";
 import type { Session } from "@toolpad/core/AppProvider";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoaderElement from "../loaderElement";
@@ -83,9 +58,21 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
             title: "Usuarios",
             icon: <SupervisedUserCircleIcon />,
             children: [
-              { segment: rutasUsuarios.listarUsuarios as string, title: "Listar Usuarios", icon: <PeopleIcon /> },
-              { segment: rutasUsuarios.agregarUsuario as string, title: "Agregar Usuarios", icon: <GroupAddIcon /> },
-              { segment: rutasUsuarios.solicitudes as string, title: "Solicitudes de promover rol", icon: <CastForEducationIcon /> },
+              {
+                segment: rutasUsuarios.listarUsuarios as string,
+                title: "Listar Usuarios",
+                icon: <PeopleIcon />,
+              },
+              {
+                segment: rutasUsuarios.agregarUsuario as string,
+                title: "Agregar Usuarios",
+                icon: <GroupAddIcon />,
+              },
+              {
+                segment: rutasUsuarios.solicitudes as string,
+                title: "Solicitudes de promover rol",
+                icon: <CastForEducationIcon />,
+              },
             ],
           },
         ]
@@ -98,19 +85,11 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
         {
           title: "Mis Proyectos",
           icon: <BoxesIcon />,
-          children: [
-            { segment: rutasProyectos.repositorios as string, title: "Repositorios", icon: <GitHubIcon /> },
-            { segment: rutasProyectos.basesDeDatos as string, title: "Bases de Datos", icon: <StorageIcon /> },
-          ],
+          segment: rutasProyectos.misProyectos as string,
         },
         {
           segment: rutasProyectos.listar as string,
           title: "Explorar Proyectos",
-          icon: <PlagiarismIcon />,
-        },
-        {
-          segment: rutasProyectos.misProyectos as string,
-          title: "Mis Proyectos",
           icon: <PlagiarismIcon />,
         },
       ],
@@ -121,8 +100,16 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
             title: "Cursos",
             icon: <MenuBookIcon />,
             children: [
-              { segment: rutasMaterias.explorar as string, title: "Explorar Materias y Cursos", icon: <AutoStoriesIcon /> },
-              { title: "Mis Cursos", icon: <LibraryBooksIcon />, segment: rutasMaterias.listarMisCursos as string, },
+              {
+                segment: rutasMaterias.explorar as string,
+                title: "Explorar Materias y Cursos",
+                icon: <AutoStoriesIcon />,
+              },
+              {
+                title: "Mis Cursos",
+                icon: <LibraryBooksIcon />,
+                segment: rutasMaterias.listarMisCursos as string,
+              },
             ],
           },
         ]
@@ -131,11 +118,31 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
             title: "Materias",
             icon: <MenuBookIcon />,
             children: [
-              { segment: rutasMaterias.explorar as string, title: "Explorar Materias y Cursos", icon: <AutoStoriesIcon /> },
-              { segment: rutasMaterias.listarMaterias as string, title: "Listar Materias", icon: <CollectionsBookmarkIcon /> },
-              { segment: rutasMaterias.crearMateria as string, title: "Crear Materia", icon: <BookmarkAddIcon /> },
-              { segment: rutasMaterias.listarMisCursos as string, title: "Mis Cursos", icon: <BookmarkAddIcon /> },
-              { segment: rutasMaterias.solicitudes as string, title: "Solicitudes", icon: <BookmarkAddIcon /> },
+              {
+                segment: rutasMaterias.explorar as string,
+                title: "Explorar Materias y Cursos",
+                icon: <AutoStoriesIcon />,
+              },
+              {
+                segment: rutasMaterias.listarMaterias as string,
+                title: "Listar Materias",
+                icon: <CollectionsBookmarkIcon />,
+              },
+              {
+                segment: rutasMaterias.crearMateria as string,
+                title: "Crear Materia",
+                icon: <BookmarkAddIcon />,
+              },
+              {
+                segment: rutasMaterias.listarMisCursos as string,
+                title: "Mis Cursos",
+                icon: <BookmarkAddIcon />,
+              },
+              {
+                segment: rutasMaterias.solicitudes as string,
+                title: "Solicitudes",
+                icon: <BookmarkAddIcon />,
+              },
             ],
           },
         ]),
@@ -178,7 +185,11 @@ function AccountSidebarPreview(props: AccountPreviewProps & { mini: boolean }) {
   return (
     <Stack direction="column" p={0}>
       <Divider />
-      <AccountPreview variant={mini ? "condensed" : "expanded"} handleClick={handleClick} open={open} />
+      <AccountPreview
+        variant={mini ? "condensed" : "expanded"}
+        handleClick={handleClick}
+        open={open}
+      />
     </Stack>
   );
 }
@@ -193,10 +204,18 @@ function SidebarFooterAccountPopover() {
 
   return (
     <Stack direction="column" spacing={1} sx={{ padding: 2 }}>
-      <Button variant="outlined" startIcon={<ManageAccountsIcon />} onClick={() => navigate(rutasUsuarios.perfil)}>
+      <Button
+        variant="outlined"
+        startIcon={<ManageAccountsIcon />}
+        onClick={() => navigate(rutasUsuarios.perfil)}
+      >
         Configurar Cuenta
       </Button>
-      <Button variant="outlined" startIcon={<LogoutIcon />} onClick={() => navigate(rutasUsuarios.logout)}>
+      <Button
+        variant="outlined"
+        startIcon={<LogoutIcon />}
+        onClick={() => navigate(rutasUsuarios.logout)}
+      >
         Cerrar Sesión
       </Button>
     </Stack>
@@ -286,10 +305,13 @@ export default function DashboardLayoutBasic(props: any) {
     },
   };
 
-  const authentication = React.useMemo(() => ({
-    signIn: () => {},
-    signOut: () => {},
-  }), []);
+  const authentication = React.useMemo(
+    () => ({
+      signIn: () => {},
+      signOut: () => {},
+    }),
+    []
+  );
 
   return (
     <>
@@ -301,13 +323,24 @@ export default function DashboardLayoutBasic(props: any) {
           authentication={authentication}
           session={currentSession}
           branding={{
+            homeUrl: rutasProyectos.listar,
             logo: (
-              <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  height: "100%",
+                  gap: 1,
+                  color: theme.palette.primary.main,
+                }}
+              >
+                <Typography variant="h5" fontWeight={600}>
+                  FIREPLOY
+                </Typography>
                 <RocketLaunchIcon sx={{ fontSize: 32 }} />
               </Box>
             ),
-            title: "FIREPLOY",
-            homeUrl: "/toolpad/core/introduction",
+            title: "",
           }}
         >
           <DashboardLayout

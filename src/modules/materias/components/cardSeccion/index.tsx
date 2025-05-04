@@ -66,13 +66,8 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard }) => {
   const sorters: SorterOptions = [
     {
       key: "titulo",
-      options: { asc: "A-Z", desc: "A-Z", defaultValue: "No Aplicar" },
+      options: { asc: "A-Z", desc: "Z-A", defaultValue: "No Aplicar" },
       label: "Título",
-    },
-    {
-      key: "calificacion",
-      options: { asc: "A-Z", desc: "A-Z", defaultValue: "No Aplicar" },
-      label: "Calificación",
     },
   ];
 
@@ -121,7 +116,7 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard }) => {
           <Grid2 container rowSpacing={2}>
             {buffer.map((proyecto, key) => (
               <Grid2
-                size={{ lg: 4, md: 6, xs: 12 }}
+                size={{ lg: 6, md: 6, xs: 12 }}
                 display={"flex"}
                 justifyContent={"center"}
               >

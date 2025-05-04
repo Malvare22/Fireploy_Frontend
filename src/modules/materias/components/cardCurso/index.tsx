@@ -1,5 +1,5 @@
 import AnimatedCard from "@modules/general/components/animatedCard";
-import { Button, Card, Stack, Typography, useTheme } from "@mui/material";
+import { Alert, Button, Stack, Tooltip, Typography, useTheme } from "@mui/material";
 import React from "react";
 import { labelCardCurso } from "@modules/materias/enums/labelCardCurso";
 import InputIcon from "@mui/icons-material/Input";
@@ -8,75 +8,56 @@ import { Curso } from "@modules/materias/types/curso";
 import LoginIcon from "@mui/icons-material/Login";
 import { useNavigate } from "react-router";
 import { rutasMaterias } from "@modules/materias/router/router";
-import { useAuth } from "@modules/general/context/accountContext";
+import { AccountInformation, useAuth } from "@modules/general/context/accountContext";
+import CastForEducationIcon from "@mui/icons-material/CastForEducation";
 
 type CardCursoProps = {
   curso: Curso;
   onClick: () => void;
-  isRegister: boolean;
-  isTeacher: boolean
+  userType: AccountInformation["tipo"];
+  isRegister?: boolean;
 };
 
-const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, isRegister, isTeacher }) => {
+const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, userType, isRegister }) => {
   const theme = useTheme();
-
-  // let docente: undefined | UsuarioPortafolioCard = undefined;
 
   const navigate = useNavigate();
 
-  const {id} = useAuth().accountInformation;
+  const { id } = useAuth().accountInformation;
 
-  // if(curso.docente){
-  //   docente =  adaptarUsuarioAUsuarioCardPortafolio(curso.docente);
-  // }
+  const labelText = () => {
+    if (userType == "E") isRegister ? labelCardCurso.inscrito : labelCardCurso.inscribirme;
 
-  const label = () => {
-    if (isTeacher) {
-      if (curso.docente == null) {
-        return "Solicitar Curso";
-      }
-      else return 'Acceder'
+    if (userType == "D" && curso.docente == null) {
+      return "Solicitar Curso";
     }
-    return isRegister ? labelCardCurso.inscrito : labelCardCurso.inscribirme;
+
+    return "Acceder";
+  };
+
+  /**
+   * Un docente no puede solicitar un curso ya ocupado por otro docente
+   */
+  const buttonDisable = () => {
+    return userType == "D" && curso.docente != null && curso.docente.id != id;
   };
 
   return (
-    <AnimatedCard>
-      <Stack justifyContent={"space-between"} sx={{ padding: 3 }} spacing={3}>
+    <AnimatedCard sx={{height: '100%'}}>
+      <Stack justifyContent={"space-between"} sx={{ padding: 3, height: '100%' }} spacing={3}>
         <Typography variant="h4" fontWeight={"500"} sx={{}}>
           {`${labelCardCurso.grupo}: ${curso.grupo}`}
         </Typography>
-        <Stack direction={"row"} alignItems={"center"} spacing={2}>
+        <Alert
+          iconMapping={{
+            info: <Tooltip title='Docente del grupo'><CastForEducationIcon fontSize="medium" /></Tooltip>,
+          }}
+          severity="info"
+        >
           <Typography>
             {curso.docente != null ? curso.docente.nombre : labelCardCurso.docenteSinAsignar}
           </Typography>
-          <Card
-            sx={{
-              paddingX: 1,
-              backgroundColor: theme.palette.terciary.main,
-              color: "white",
-              fontWeight: 500,
-            }}
-          >
-            {/* {docente && <Stack direction={"row"} alignItems={"center"} spacing={1}>
-              <ProjectCardAvatar
-                usuario={docente}
-                sx={{ width: 32, height: 32 }}
-              />
-              <Typography variant="body2">{docente.nombres}</Typography>
-            </Stack>} */}
-          </Card>
-        </Stack>
-        {/* <Card sx={{ padding: 2 }}>
-          <Stack direction={"row"} alignItems={"center"} spacing={2}>
-            <Typography>{`${labelCardCurso.secciones}: ${curso.secciones.length}`}</Typography>
-            <Divider
-              orientation="vertical"
-              sx={{ backgroundColor: "black", height: 40 }}
-            />
-            <Typography>{`${labelCardCurso.estudiantes}: ${curso.estudiantes.length}`}</Typography>
-          </Stack>
-        </Card> */}
+        </Alert>
         <Stack alignItems={"end"}>
           <Button
             variant="contained"
@@ -86,15 +67,15 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, isRegister, isTea
                 ? theme.palette.terciary.main
                 : theme.palette.primary.main,
             }}
-            disabled={isTeacher && curso.docente != null && curso.docente.id != id}
+            disabled={buttonDisable()}
             endIcon={isRegister ? <LoginIcon /> : <InputIcon />}
             onClick={
-              isRegister
+              isRegister || userType == "A"
                 ? () => navigate(rutasMaterias.verCurso.replace(":idCurso", curso.id ?? "-1"))
                 : onClick
             }
           >
-            {label()}
+            {labelText()}
           </Button>
         </Stack>
       </Stack>

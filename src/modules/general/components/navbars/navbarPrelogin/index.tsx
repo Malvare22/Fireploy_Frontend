@@ -12,7 +12,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { rutasGeneral } from "@modules/general/router/router";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
-import { Stack } from "@mui/material";
+import { Stack, useMediaQuery, useTheme } from "@mui/material";
 
 export enum labelsNavbarPrelogin {
   home = "Inicio",
@@ -57,11 +57,15 @@ function NavbarPrelogin(): JSX.Element {
 
   const navigate = useNavigate();
 
+  const theme = useTheme();
+
+  const matches = useMediaQuery(theme.breakpoints.down("md"));
+
   function Title() {
     return (
       <Stack direction={"row"} alignItems={"center"} spacing={1}>
         <Typography
-          variant="h4"
+          variant="h5"
           noWrap
           component="a"
           href="#app-bar-with-responsive-menu"
@@ -75,7 +79,7 @@ function NavbarPrelogin(): JSX.Element {
         >
           FIREPLOY
         </Typography>
-        <RocketLaunchIcon sx={{ fontSize: 48 }} />
+        <RocketLaunchIcon sx={{ fontSize: 32 }} />
       </Stack>
     );
   }
@@ -134,36 +138,36 @@ function NavbarPrelogin(): JSX.Element {
             </Menu>
           </Box>
 
-          <Title />
-
-          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3, marginLeft: { lg: 13 } }}>
-            {pages.map(([text, link]) => (
-              <Button
-                onClick={() => navigate(link)}
-                variant="text"
-                color="info"
-                sx={{
-                  my: 2,
-                  color: "white",
-                  display: "block",
-                  minWidth: 100,
-                  border: "1px solid white",
-                }}
-                size="large"
-              >
-                <Typography sx={{ textAlign: "center" }} variant="subtitle1">
-                  {text}
-                </Typography>
-              </Button>
-            ))}
-          </Box>
+          <Stack direction={"row"} spacing={3}>
+            <Title />
+            <>
+              {!matches &&
+                pages.map(([text, link]) => (
+                  <Button
+                    onClick={() => navigate(link)}
+                    variant="text"
+                    color="info"
+                    sx={{
+                      my: 2,
+                      color: "white",
+                      display: "block",
+                      minWidth: 100,
+                    }}
+                    size="small"
+                  >
+                    <Typography sx={{ textAlign: "center" }} variant="subtitle1">
+                      {text}
+                    </Typography>
+                  </Button>
+                ))}
+            </>
+          </Stack>
 
           <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3, color: "white" }}>
             <Button
               variant="contained"
-              sx={{ textTransform: "none", boxShadow: "none" }}
-              color="warning"
-              size="large"
+              sx={{ textTransform: "none", boxShadow: "none", backgroundColor: "#6B8F71 " }}
+              size="medium"
               onClick={() => navigate(rutasGeneral.login)}
             >
               <Typography variant="body1" sx={{ color: "white" }}>
@@ -172,9 +176,8 @@ function NavbarPrelogin(): JSX.Element {
             </Button>
             <Button
               variant="contained"
-              sx={{ textTransform: "none", boxShadow: "none" }}
-              color="error"
-              size="large"
+              sx={{ textTransform: "none", boxShadow: "none", backgroundColor: "#54428E" }}
+              size="medium"
               onClick={() => navigate(rutasGeneral.registrar)}
             >
               <Typography variant="body1" sx={{ color: "white" }}>

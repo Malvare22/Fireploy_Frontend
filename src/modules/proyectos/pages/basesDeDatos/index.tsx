@@ -1,9 +1,7 @@
 import AlertDialog from "@modules/general/components/alertDialog";
-import { FilterOptions, SelectFilters } from "@modules/general/components/selects";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
-import { getNoRepeatValues } from "@modules/general/utils/getNoRepeatValues";
 import TablaBasesDeDatos from "@modules/proyectos/components/tablaBasesDeDatos";
 import { labelBaseDeDatos } from "@modules/proyectos/enum/labelBaseDeDatos";
 import { getDataBaseById } from "@modules/proyectos/services/get.database";
@@ -12,7 +10,7 @@ import { BaseDeDatos } from "@modules/proyectos/types/baseDeDatos";
 import { adaptDataBase } from "@modules/proyectos/utils/adaptDataBase";
 import { Alert, Divider, Stack, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 function VistaBasesDeDatos() {
   const { showDialog, open, title, message, type, handleAccept } = useAlertDialog2();
@@ -46,27 +44,6 @@ function VistaBasesDeDatos() {
     if (error) setError(error);
   }, [error]);
 
-  const _arrayTitles = Array.from(
-    getNoRepeatValues(dataBases, (x: BaseDeDatos) => x.proyecto?.titulo)
-  );
-  const [buffer, setBuffer] = useState(dataBases);
-
-  const filters: FilterOptions = [
-    {
-      key: "tipo",
-      label: "Tipo",
-      options: [
-        ["Monolito", (x) => x.tipo == "I"],
-        ["Backend", (x) => x.tipo == "F"],
-        ["Frontend", (x) => x.tipo == "B"],
-      ],
-    },
-    {
-      key: "proyecto.titulo",
-      label: "Título del Proyecto",
-      options: _arrayTitles.map((x) => [x as string, (y: any) => y.proyecto?.titulo == x]),
-    },
-  ];
 
   return (
     <>
@@ -82,11 +59,10 @@ function VistaBasesDeDatos() {
           <Typography variant="h4">{labelBaseDeDatos.basesDeDatos}</Typography>
           <Divider />
         </Stack>
-        <SelectFilters data={dataBases} filterOptions={filters} setRefineData={setBuffer} />
         {dataBases.length == 0 ? (
           <Alert severity="info">Actualmente no dispone de bases de datos</Alert>
         ) : (
-          <TablaBasesDeDatos basesDeDatos={buffer} />
+          <TablaBasesDeDatos basesDeDatos={dataBases} />
         )}
       </Stack>
     </>

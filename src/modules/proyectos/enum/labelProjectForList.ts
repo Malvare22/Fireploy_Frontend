@@ -8,5 +8,8 @@ export enum labelProjectForList{
     frontend = 'Frontend',
     database = 'Base de Datos',
     puntuacion = 'Puntuación',
-    fecha = 'Última modificación'    
+    fecha = 'Última modificación',
+    notificationHeader = '¿Sueles ser el encargado de las bases de datos de los proyectos?',
+    notificationBody = 'Te recomendamos esta vista',
+    listarBD = 'Lista Bases de Datos'
 }

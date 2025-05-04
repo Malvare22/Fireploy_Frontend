@@ -6,8 +6,12 @@ import { DataBaseService } from "./dabase.service";
 export type ProyectoService = {
   id: number;
   titulo: string;
-  descripcion: string;
-  calificacion: number;
+  descripcion: string | null;
+  fav_usuarios: {
+    estado: "A" | "I";
+    id: number;
+    nombre: string;
+  }[];
   url: string;
   imagen: string | null;
   estado_proyecto: string;

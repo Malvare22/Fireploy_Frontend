@@ -1,4 +1,4 @@
-import { Box, Button, Card, Stack, Tooltip, Typography } from "@mui/material";
+import { Box, Card, Stack, Tooltip, Typography } from "@mui/material";
 import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
 import CardTecnologia from "../cardTecnologia";
 import { labelProjectForList } from "@modules/proyectos/enum/labelProjectForList";
@@ -8,6 +8,8 @@ import {
 } from "@modules/proyectos/utils/getExecutionState";
 import { useNavigate } from "react-router";
 import { rutasProyectos } from "@modules/proyectos/router";
+import ActionButton from "@modules/general/components/actionButton";
+import { actionButtonTypes } from "@modules/general/types/actionButtons";
 
 interface Props {
   proyecto: Proyecto;
@@ -23,13 +25,16 @@ const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
   }
 
   return (
-    <Card sx={{ padding: 4 }}>
+    <Card sx={{ padding: 4, position: "relative" }}>
+      <ActionButton
+        sx={{ position: "absolute", right: 4, top: 4, fontSize: 32 }}
+        mode={actionButtonTypes.editar}
+        onClick={() => onClick(proyecto.id || -1)}
+      />
       <Stack spacing={2}>
-        <Button variant="text" onClick={() => onClick(proyecto.id ?? -1)}>
-          <Typography variant="h5" textAlign={{ xs: "center", sm: "start" }} color="info">
-            {proyecto.titulo}
-          </Typography>
-        </Button>
+        <Typography variant="h4" textAlign={{ xs: "center", sm: "start" }} color="info">
+          {proyecto.titulo}
+        </Typography>
         <Stack direction={{ lg: "row", xs: "column" }} alignItems={"center"} spacing={3}>
           <Box
             component={"img"}

@@ -3,7 +3,7 @@ import { z } from "zod";
 import { RepositorioSchema } from "./repositorio.schema";
 import { BaseDeDatosSchema } from "./baseDeDatos.schema";
 import { EstudianteCursoSchema } from "@modules/materias/utils/forms/form.schema";
-import { StandardStringRequiredSchema } from "@modules/materias/utils/forms/string.schema";
+import { DescriptionStringSchema, StandardStringRequiredSchema } from "@modules/materias/utils/forms/string.schema";
 import { UrlSchema } from "@modules/materias/utils/forms/url.schema";
 
 export const MateriaInformacionSchema: z.ZodType<MateriaInformacion> = z.object({
@@ -14,7 +14,7 @@ export const MateriaInformacionSchema: z.ZodType<MateriaInformacion> = z.object(
 
 export const ProyectoSchema: z.ZodType<Proyecto> = z.object({
   titulo: StandardStringRequiredSchema,
-  descripcion: StandardStringRequiredSchema,
+  descripcion: DescriptionStringSchema.optional(),
   url: UrlSchema,
   baseDeDatos: BaseDeDatosSchema,
   backend: RepositorioSchema.optional(),
@@ -30,7 +30,7 @@ export const ProyectoInformationSchema: z.ZodType<
 > = z.object({
   id: z.number().optional(),
   titulo: StandardStringRequiredSchema,
-  descripcion: StandardStringRequiredSchema,
+  descripcion: DescriptionStringSchema.optional(),
   materiaInformacion: MateriaInformacionSchema,
   tipo: z.enum(["M", "S"]),
 });

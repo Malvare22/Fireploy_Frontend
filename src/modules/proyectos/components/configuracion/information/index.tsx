@@ -51,6 +51,7 @@ export const Information = ({ type }: Props) => {
     title,
     type: dialogType,
     showDialog,
+    setIsLoading,
   } = useAlertDialog2();
 
   const { setError } = useErrorReader(showDialog);
@@ -82,7 +83,10 @@ export const Information = ({ type }: Props) => {
   });
 
   const { mutate: mutateEdit, isPending: isPendingEdit } = useMutation({
-    mutationFn: () => patchEditProject(token, getValues()),
+    mutationFn: async () => {
+      setIsLoading(true);
+      return patchEditProject(token, getValues());
+    },
     mutationKey: ["Edit Project"],
     onError: setError,
     onSuccess: () => {
@@ -90,7 +94,8 @@ export const Information = ({ type }: Props) => {
         message: "Información actualizada correctamente",
         type: "success",
         title: "Edición Exitosa",
-        onAccept: () => handleNext(),
+        onAccept: () => handleClose(),
+        reload: true,
       });
     },
   });
@@ -190,8 +195,8 @@ export const Information = ({ type }: Props) => {
                           {...field}
                           select
                           label="Materia"
-                          error={!!errors.descripcion}
-                          helperText={errors.descripcion?.message?.toString()}
+                          error={!!errors.materiaInformacion?.materiaId}
+                          helperText={errors.materiaInformacion?.materiaId?.message?.toString()}
                         >
                           {Array.from(selectMaterias.entries()).map(([value, label]) => (
                             <MenuItem value={value} key={value}>
@@ -215,8 +220,8 @@ export const Information = ({ type }: Props) => {
                             {...field}
                             select
                             label="Curso"
-                            error={!!errors.descripcion}
-                            helperText={errors.descripcion?.message?.toString()}
+                            error={!!errors.materiaInformacion?.cursoId}
+                            helperText={errors.materiaInformacion?.cursoId?.message?.toString()}
                           >
                             {Array.from(
                               getCursosByMateria.get(watch("materiaInformacion.materiaId") ?? 0) ||
@@ -244,8 +249,8 @@ export const Information = ({ type }: Props) => {
                             {...field}
                             select
                             label="Sección"
-                            error={!!errors.descripcion}
-                            helperText={errors.descripcion?.message?.toString()}
+                            error={!!errors.materiaInformacion?.seccionId}
+                            helperText={errors.materiaInformacion?.seccionId?.message?.toString()}
                           >
                             {Array.from(
                               getSeccionByCurso.get(watch("materiaInformacion.cursoId") ?? "") || []
@@ -275,8 +280,8 @@ export const Information = ({ type }: Props) => {
                       {...field}
                       select
                       label="Tipo de proyecto"
-                      error={!!errors.descripcion}
-                      helperText={errors.descripcion?.message?.toString()}
+                      error={!!errors.tipo}
+                      helperText={errors.tipo?.message?.toString()}
                     >
                       {Array.from(getProjectTypesMap.entries()).map(([key, label]) => (
                         <MenuItem value={key} key={key}>

@@ -11,6 +11,7 @@ export function adaptCursoService(curso: CursoService): Curso {
             id: curso.docente.id,
             nombre: curso.docente.nombre + ' ' + curso.docente.apellido,
             correo: curso.docente.correo,
+            imagen: curso.docente.foto_perfil ? curso.docente.foto_perfil : ''
           }
         : null,
     estado: curso.estado,
