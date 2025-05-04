@@ -32,7 +32,6 @@ import {
   Button,
   Card,
   Grid2,
-  IconButton,
   Stack,
   Typography,
   useTheme,
@@ -153,7 +152,7 @@ function VerInformacionCurso() {
                 <Grid2 size={{ xs: 12, lg: 8 }}>
                   <Stack spacing={2}>
                     {curso.secciones?.map((seccion, key) => (
-                      <CardSeccion seccion={seccion} handleCard={handleCard} key={key} />
+                      <CardSeccion seccion={seccion} idMateria={curso.materia?.id ?? 0} handleCard={handleCard} key={key} />
                     ))}
                   </Stack>
                 </Grid2>
