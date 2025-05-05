@@ -12,6 +12,8 @@ export enum TECNOLOGIES {
   Laravel = "Laravel",
   Java = "Java",
   SpringBoot = "SpringBoot",
+  ExpressJs = 'ExpressJS',
+  Symphony = 'Symphony',
 }
 
 export const keysOfTecnologies = ["NodeJS", "Java", "PHP"] as const;

@@ -4,12 +4,6 @@ import facebookLogo from "@modules/general/assets/redesSociales/facebookLogo.png
 import instagramLogo from "@modules/general/assets/redesSociales/instagramLogo.png";
 import linkedinLogo from "@modules/general/assets/redesSociales/linkedinLogo.png";
 import xLogo from "@modules/general/assets/redesSociales/xLogo.png";
-import mongodb from "@modules/general/assets/tecnologias/mongoDB.png";
-import mysql from "@modules/general/assets/tecnologias/mySQL.png";
-import nodejs from "@modules/general/assets/tecnologias/nodeJS.png";
-import react from "@modules/general/assets/tecnologias/react.png";
-import springboot from "@modules/general/assets/tecnologias/springBoot.png";
-import angular from "@modules/general/assets/tecnologias/angular.png";
 import ingSistemasLogo from "@modules/general/assets/ufps/ingSistemasLogo.png";
 import ufpsLogo from "@modules/general/assets/ufps/UFPSLogo.png";
 import ufpsLogoCompleto from "@modules/general/assets/ufps/UFPSLogoCompleto.png";
@@ -18,6 +12,26 @@ import defaultProjectImage from "@modules/general/assets/project/defaultImage.jp
 import team01 from "@modules/general/assets/team/reyes.jpg";
 import team02 from "@modules/general/assets/team/quiroz.jpg";
 import team03 from "@modules/general/assets/team/malaver.jpg";
+
+// Banners
+import angular_banner from "@modules/general/assets/bannerLogos/angular.png";
+import expressjs_banner from "@modules/general/assets/bannerLogos/expressjs.png";
+import laravel_banner from "@modules/general/assets/bannerLogos/laravel.png";
+import nextjs_banner from "@modules/general/assets/bannerLogos/nextjs.png";
+import nodejs_banner from "@modules/general/assets/bannerLogos/nodejs.png";
+import php_banner from "@modules/general/assets/bannerLogos/php.png";
+import react from "@modules/general/assets/bannerLogos/react.png";
+import springboot_banner from "@modules/general/assets/bannerLogos/springboot.png";
+import symphony_banner from "@modules/general/assets/bannerLogos/symphony.png";
+
+// Logos
+import angular from "@modules/general/assets/tecnologiesLogos/angular.png";
+import laravel from "@modules/general/assets/tecnologiesLogos/laravel.png";
+import nextjs from "@modules/general/assets/tecnologiesLogos/nextjs.png";
+
+//BD
+import mongodb from "@modules/general/assets/tecnologias/mongoDB.png";
+import mysql from "@modules/general/assets/tecnologias/mySQL.png";
 
 /**
  * **Collection of imported images.**
@@ -38,14 +52,6 @@ export const assetImages = {
   linkedin_logo: linkedinLogo,
   x_logo: xLogo,
 
-  // Technologies Logos
-  mongodb: mongodb,
-  mysql: mysql,
-  nodejs: nodejs,
-  react: react,
-  springboot: springboot,
-  angular: angular,
-
   // UFPS Logos
   ing_sistemas_logo: ingSistemasLogo,
   ufps_logo: ufpsLogo,
@@ -58,6 +64,24 @@ export const assetImages = {
   team01: team01,
   team02: team02,
   team03: team03,
+
+  angular_banner,
+  expressjs_banner,
+  laravel_banner,
+  nextjs_banner,
+  nodejs_banner,
+  php_banner,
+  react,
+  springboot_banner,
+  symphony_banner,
+
+  // Technology Logos
+  angular,
+  laravel,
+  nextjs,
+
+  mongodb,
+  mysql
 } as const;
 
 /**
