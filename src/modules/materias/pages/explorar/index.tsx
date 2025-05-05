@@ -112,7 +112,7 @@ function ExplorarMaterias() {
           {/* Search and sort controls */}
           <Stack direction={{ sm: "row", xs: "column" }} justifyContent={"center"} spacing={1}>
             {/* Search input */}
-            <TextFieldSearch  setSearchValue={setSearchValue}/>
+            <TextFieldSearch setSearchValue={setSearchValue}/>
 
             {/* Sorting select */}
             <Select
@@ -120,6 +120,7 @@ function ExplorarMaterias() {
                 const selectedValue = JSON.parse(e.target.value);
                 handleOrder(selectedValue.key, selectedValue.order);
               }}
+              size="small"
               defaultValue={JSON.stringify({ key: undefined, order: undefined })}
             >
               <MenuItem value={JSON.stringify({ key: undefined, order: undefined })}>

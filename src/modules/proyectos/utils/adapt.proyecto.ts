@@ -20,8 +20,9 @@ export function adaptProjectToCard(proyecto: Proyecto): ProyectoCard {
 
     integrantes: [...proyecto.integrantes, proyecto.propietario].map(adaptUsuarioToPortafolioCard),
 
-    frontend: proyecto.frontend?.tecnologyToShow || "No especificado",
-    backend: proyecto.backend?.tecnologyToShow || "No especificado",
+    frontend: !proyecto.frontend ? null : proyecto.frontend?.docker?.framework || "No especificado",
+    backend: !proyecto.backend ? null : proyecto.frontend?.docker?.framework || "No especificado",
+    integrado: !proyecto.integrado ? null : proyecto.frontend?.docker?.framework || "No especificado",
     dataBase: proyecto.baseDeDatos?.nombre || "",
 
     fav_usuarios: proyecto.fav_usuarios ?? [],

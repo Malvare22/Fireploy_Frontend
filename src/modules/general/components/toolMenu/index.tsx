@@ -17,9 +17,8 @@ import { rutasProyectos } from "@modules/proyectos/router";
 import { AccountInformation, useAuth } from "@modules/general/context/accountContext";
 import CastForEducationIcon from "@mui/icons-material/CastForEducation";
 import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
-import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
-import { BoxesIcon, PersonLinesFillIcon } from "../customIcons";
+import { BoxesIcon, JournalPlus, PersonLinesFillIcon } from "../customIcons";
 import PlagiarismIcon from "@mui/icons-material/Plagiarism";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
@@ -27,6 +26,7 @@ import { Account, AccountPreview, AccountPreviewProps } from "@toolpad/core/Acco
 import type { Session } from "@toolpad/core/AppProvider";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoaderElement from "../loaderElement";
+import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 
 /**
  * Constructs the sidebar navigation elements based on the user's role.
@@ -131,17 +131,12 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
               {
                 segment: rutasMaterias.crearMateria as string,
                 title: "Crear Materia",
-                icon: <BookmarkAddIcon />,
-              },
-              {
-                segment: rutasMaterias.listarMisCursos as string,
-                title: "Mis Cursos",
-                icon: <BookmarkAddIcon />,
+                icon: <JournalPlus />,
               },
               {
                 segment: rutasMaterias.solicitudes as string,
                 title: "Solicitudes",
-                icon: <BookmarkAddIcon />,
+                icon: <HistoryEduIcon/>,
               },
             ],
           },

@@ -1,6 +1,5 @@
-import { Box, Card, Stack, Tooltip, Typography } from "@mui/material";
+import { Alert, Box, Card, Chip, Stack, Tooltip, Typography } from "@mui/material";
 import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
-import CardTecnologia from "../cardTecnologia";
 import { labelProjectForList } from "@modules/proyectos/enum/labelProjectForList";
 import {
   getColorExecutionState,
@@ -62,29 +61,21 @@ const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
                   />
                 </Tooltip>
               </Box>
-
-              {/* Ultima Modificación */}
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <Box>
-                  <Typography variant="body1">{labelProjectForList.ultimaModificacion}</Typography>
-                </Box>
-                <Box>
-                  <Typography variant="body1">{proyecto.fechaUltimaModificacion}</Typography>
-                </Box>
-              </Box>
-              <Stack
-                direction={{ sm: "row", xs: "column" }}
-                sx={{
-                  "> div": {
-                    width: { xs: "70%" },
-                  },
-                }}
-                alignItems={"center"}
-                spacing={3}
-              >
-                <CardTecnologia tecnologia="angular" />
-                <CardTecnologia tecnologia="springboot" />
-                <CardTecnologia tecnologia="mongodb" />
+              <Stack direction={{ sm: "row", xs: "column" }} alignItems={"center"} spacing={3}>
+                {proyecto.backend?.docker?.framework && (
+                  <Chip label={proyecto.backend?.docker?.framework} color="error" />
+                )}
+                {proyecto.frontend?.docker?.framework && (
+                  <Chip label={proyecto.frontend?.docker?.framework} color="primary" />
+                )}
+                {proyecto.integrado?.docker?.framework && (
+                  <Chip label={proyecto.integrado?.docker?.framework} color="info" />
+                )}
+                {!proyecto.integrado?.docker?.framework && !proyecto.frontend?.docker?.framework && !proyecto.backend?.docker?.framework && (
+                  <Alert severity="warning">
+                    Este proyecto actualmente no tiene tecnologías vinculadas
+                  </Alert>
+                )}
               </Stack>
             </Stack>
           </Box>

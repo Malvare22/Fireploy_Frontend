@@ -4,12 +4,12 @@ import { Avatar, Typography } from "@mui/material";
 import React, { useMemo } from "react";
 
 import Status from "@modules/general/components/status";
-import { EstudianteCurso } from "@modules/materias/utils/forms/form.schema";
 import { labelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
 import { useCustomTableStyles } from "@modules/general/styles";
+import { UsuarioCurso } from "@modules/materias/types/curso";
 
 type TablaEstudiantesEditarCursoProps = {
-  estudiante: EstudianteCurso[];
+  estudiante: UsuarioCurso[];
   setSelectUsers: React.Dispatch<number[]>;
 };
 const TablaEstudiantesEditarCurso: React.FC<TablaEstudiantesEditarCursoProps> = ({
@@ -18,7 +18,7 @@ const TablaEstudiantesEditarCurso: React.FC<TablaEstudiantesEditarCursoProps> = 
 }) => {
   const { conditionalRowStyles, customStyles } = useCustomTableStyles();
 
-  const columns: TableColumn<EstudianteCurso & { rowIndex: number }>[] = [
+  const columns: TableColumn<UsuarioCurso & { rowIndex: number }>[] = [
     {
       name: <Typography>{labelUsuario.id}</Typography>,
       cell: (row) => <Typography>{row.id}</Typography>,
@@ -27,7 +27,7 @@ const TablaEstudiantesEditarCurso: React.FC<TablaEstudiantesEditarCursoProps> = 
     },
     {
       name: <Typography>{labelUsuario.fotoPerfil}</Typography>,
-      cell: (row) => <Avatar sx={{marginY: 2}} src={row.foto} />,
+      cell: (row) => <Avatar sx={{marginY: 2}} src={row.imagen} />,
       width: '150px'
     },
     {

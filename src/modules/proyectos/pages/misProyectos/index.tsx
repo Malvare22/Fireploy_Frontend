@@ -137,13 +137,11 @@ function MisProyectos() {
             sorterOptions={sorterOptions}
             setRefineData={setBufferSort}
           /> */}
-          <Stack alignItems={"center"} width={"100%"}>
-            <Stack spacing={2}>
+            <Stack spacing={2} paddingX={{xl:20, lg: 14, md: 6, xs: 2}}>
               {projects.map((proyecto, key) => (
                 <ProjectForList proyecto={proyecto} key={key} />
               ))}
             </Stack>
-          </Stack>
         </Stack>
       )}
     </>

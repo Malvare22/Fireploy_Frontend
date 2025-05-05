@@ -6,8 +6,9 @@ export type ProyectoCard = {
   descripcion: string;
   imagen: string;
   integrantes: UsuarioPortafolioCard[];
-  frontend: string;
-  backend: string;
+  frontend?: string | null;
+  backend?: string | null;
+  integrado?: string | null;
   dataBase: string;
   fav_usuarios: number[];
   materia: string;
@@ -33,5 +34,5 @@ export const proyectoEjemplo: ProyectoCard = {
   grupo: "Grupo 3",
   seccion: "A",
   semestre: "2024-1",
-  estado: "E", // asumí que 'estadoDeEjecucion' es algo como 'En desarrollo', 'Finalizado', etc.
+  estado: "E",
 };

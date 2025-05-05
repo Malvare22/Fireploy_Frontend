@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Alert, Box, Chip, Stack, Typography } from "@mui/material";
 import AnimatedCard from "../animatedCard";
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import React, { useContext, useEffect, useState } from "react";
@@ -71,7 +71,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }
   });
 
   return (
-    <Box sx={{ position: "relative" }}>
+    <Box sx={{ position: "relative", height: "100%" }}>
       <Box sx={{ position: "absolute", top: 4, right: 4, zIndex: 100 }}>
         <StarButton
           isLoading={isPending}
@@ -85,10 +85,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }
           width: 300,
           paddingBottom: 2,
           cursor: "pointer",
+          height: "100%",
         }}
         onClick={handleOpen}
       >
-        <Stack direction={"column"} spacing={2}>
+        <Stack direction={"column"} justifyContent={"space-around"} height={"100%"}>
           {/* Project Image with Status Badge */}
           {proyecto.imagen ? (
             <Box
@@ -117,6 +118,17 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }
             {/* Technologies Section */}
             <Stack spacing={1} alignItems={"center"}>
               <Typography variant="body1">{labelProjectCard.tecnologias}</Typography>
+              <Stack spacing={3} direction={"row"} justifyContent={"center"}>
+                {proyecto.backend && <Chip label={proyecto.backend} color="error" />}
+                {proyecto.frontend && <Chip label={proyecto.frontend} color="primary" />}
+                {proyecto.integrado && <Chip label={proyecto.integrado} color="info" />}
+                {proyecto.dataBase && <Chip label={proyecto.dataBase} color="warning" />}
+                {!proyecto.integrado && !proyecto.frontend && !proyecto.backend && (
+                  <Alert severity="warning">
+                    Este proyecto actualmente no tiene tecnologías vinculadas
+                  </Alert>
+                )}
+              </Stack>
             </Stack>
           </Stack>
         </Stack>
