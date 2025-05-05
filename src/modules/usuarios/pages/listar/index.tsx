@@ -16,7 +16,7 @@
  */
 
 import { useState, useEffect, useMemo } from "react";
-import { Divider, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Divider, Stack, TextField, Typography } from "@mui/material";
 import useSearch from "@modules/general/hooks/useSearch";
 import TablaUsuarios from "@modules/usuarios/components/tablaUsuarios";
 import { labelListarUsuarios } from "@modules/usuarios/enum/labelListarUsuarios";
@@ -30,10 +30,13 @@ import { useNavigate } from "react-router";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import LoaderElement from "@modules/general/components/loaderElement";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import HiddenButton from "@modules/materias/components/hiddenInput";
+import { postCargaMasivaUsuarios } from "@modules/usuarios/services/post.cargar.usuarios";
 
 function ListarUsuarios() {
   // 🔐 Get authentication token from context
@@ -57,10 +60,52 @@ function ListarUsuarios() {
     queryKey: ["Usuarios", "todos"],
   });
 
-  const { showDialog, open, title, message, handleCancel, type, handleAccept } =
-    useAlertDialog();
+  const {
+    showDialog,
+    open,
+    title,
+    message,
+    handleCancel,
+    type,
+    handleAccept,
+    handleClose,
+    setIsLoading,
+    handleOpen,
+  } = useAlertDialog();
 
   const { setError } = useErrorReader(showDialog);
+
+  const { mutate: updateFile } = useMutation({
+    mutationFn: async (file: File) => {
+      setIsLoading(true);
+      await postCargaMasivaUsuarios(token, file);
+    },
+    onSuccess: () => {
+      showDialog({
+        message: "Se han cargado los estudiantes correctamente",
+        title: "Gestión de estudiantes",
+        onAccept: handleAccept,
+        type: "success",
+        reload: true,
+      });
+    },
+    onError: (err) => setError(err),
+  });
+
+  function setFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files ? e.target.files[0] : null;
+
+    if (file)
+      showDialog({
+        message: "¿Estás seguro de cargar este documento para la carga masiva de estudiantes?",
+        title: "Gestión de estudiantes",
+        onCancel: handleClose,
+        onAccept: () => updateFile(file),
+        type: "default",
+      });
+
+    handleOpen();
+  }
 
   /**
    * Effect to set adapted users when data is successfully fetched
@@ -127,7 +172,7 @@ function ListarUsuarios() {
           </Stack>
 
           {/* 🔍 Search bar and Add User button */}
-          <Stack direction={"row"} justifyContent={"space-between"}>
+          <Stack direction={"row"}>
             <TextField
               size="small"
               value={inputValue}
@@ -141,14 +186,31 @@ function ListarUsuarios() {
                 },
               }}
             />
-            <GeneralButton
-              mode={buttonTypes.add}
-              onClick={() => navigate(rutasUsuarios.agregarUsuario)}
-            />
           </Stack>
 
           {/* 📊 User table */}
           {filteredData && <TablaUsuarios usuarios={filteredData} />}
+
+          <Stack justifyContent={"end"} direction={"row"} spacing={2}>
+            <Box>
+              <Button
+                component="label"
+                role={undefined}
+                variant="contained"
+                tabIndex={-1}
+                startIcon={<CloudUploadIcon />}
+              >
+                Carga Masiva
+                <HiddenButton type="file" onChange={setFile} multiple accept=".xls, .xsls" />
+              </Button>
+            </Box>
+            <Box>
+              <GeneralButton
+                mode={buttonTypes.add}
+                onClick={() => navigate(rutasUsuarios.agregarUsuario)}
+              />
+            </Box>
+          </Stack>
         </Stack>
       )}
     </>
