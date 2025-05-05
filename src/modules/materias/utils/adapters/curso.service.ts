@@ -17,7 +17,7 @@ export function adaptCursoService(curso: CursoService): Curso {
     estado: curso.estado,
     estudiantes: curso.estudiantes
       ? curso.estudiantes.map((user) => ({
-          foto: user.foto_perfil || "",
+          imagen: user.foto_perfil || "",
           nombre: `${user.nombre} ${user.apellido}`,
           correo: user.correo,
           estado: user.estado as "A" | "I", // Explicit type assertion

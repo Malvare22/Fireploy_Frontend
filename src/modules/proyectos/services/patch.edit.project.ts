@@ -10,7 +10,7 @@ interface BodyEditProject {
 export async function patchEditProject(token: string, project: ProyectoInformationSchema) {
   const body: BodyEditProject = {
     titulo: project.titulo,
-    descripcion: project.descripcion,
+    descripcion: project.descripcion || '',
     seccionId: project.materiaInformacion.seccionId ?? -1,
   };
   const response = await patchData<unknown>(`/proyecto/${project.id}`, body, {
