@@ -3,7 +3,7 @@ import React from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import { ProyectoRepositoriesSchema } from "@modules/proyectos/utils/forms/proyecto.schema";
 import { KeysOfRepository } from "@modules/proyectos/types/keysOfRepository";
-import { dockerImagesMap, DockerSet } from "@modules/proyectos/utils/docker";
+import { inputSelectTecnology, keysOfTecnologies } from "@modules/proyectos/utils/docker";
 
 type DockerInputsProps = {
   fieldName?: KeysOfRepository;
@@ -16,17 +16,15 @@ export const DockerInputs: React.FC<DockerInputsProps> = ({ fieldName = "backend
     formState: { errors },
   } = useFormContext<ProyectoRepositoriesSchema>();
 
-  const docker = watch(`${fieldName}.docker`);
+  const tecnologiaSeleccionada = watch(`${fieldName}.docker.tecnologia`) as keyof typeof inputSelectTecnology;
 
-  // useEffect(() => {
-  //   if (selectTag && selectTecnology) {
-  //     setValue(`${fieldName}.docker`, { tecnologia: selectTecnology, tag: tagselectTag });
-  //   }
-  // }, [selec]);
+  const selectedTecnologia = tecnologiaSeleccionada && inputSelectTecnology[tecnologiaSeleccionada];
+  
+  let versiones: string[] | undefined = selectedTecnologia?.versions;
+  let frameworks: string[] | undefined = selectedTecnologia?.frameworks;
 
   return (
     <>
-      {/* Repositorio */}
       <Controller
         control={control}
         name={`${fieldName}.docker.tecnologia`}
@@ -34,7 +32,7 @@ export const DockerInputs: React.FC<DockerInputsProps> = ({ fieldName = "backend
           <TextField
             size="small"
             select
-            label="Repositorio"
+            label="Versión de Node"
             placeholder="Escribe para buscar..."
             fullWidth
             inputRef={field.ref}
@@ -43,42 +41,71 @@ export const DockerInputs: React.FC<DockerInputsProps> = ({ fieldName = "backend
             error={!!errors?.[fieldName]?.docker?.tecnologia}
             helperText={errors?.[fieldName]?.docker?.tecnologia?.message?.toString() || ""}
           >
-            {Array.from(dockerImagesMap.entries()).map(([key, { label }]) => (
-              <MenuItem key={key} value={key}>
-                {label}
-              </MenuItem>
-            ))}
+            {keysOfTecnologies.map((key) => {
+              return (
+                <MenuItem value={key} key={key}>
+                  {key}
+                </MenuItem>
+              );
+            })}
           </TextField>
         )}
       />
 
-      {/* Tag */}
-      <Controller
+      {versiones && (
+        <Controller
+          control={control}
+          name={`${fieldName}.docker.version`}
+          render={({ field }) => (
+            <TextField
+              size="small"
+              select
+              label="Tag"
+              placeholder="Escribe para buscar..."
+              fullWidth
+              inputRef={field.ref}
+              value={field.value}
+              onChange={field.onChange}
+              error={!!errors?.[fieldName]?.docker?.version}
+              helperText={errors?.[fieldName]?.docker?.version?.message?.toString() || ""}
+            >
+              {versiones.map((ver) => {
+                return (
+                  <MenuItem key={ver} value={ver}>
+                    {ver}
+                  </MenuItem>
+                );
+              })}
+            </TextField>
+          )}
+        />
+      )}
+
+      {/* Repositorio */}
+      {frameworks && <Controller
         control={control}
-        name={`${fieldName}.docker.tag`}
+        name={`${fieldName}.docker.framework`}
         render={({ field }) => (
           <TextField
             size="small"
             select
-            label="Tag"
+            label="Framework"
             placeholder="Escribe para buscar..."
             fullWidth
             inputRef={field.ref}
             value={field.value}
             onChange={field.onChange}
-            error={!!errors?.[fieldName]?.docker?.tag}
-            helperText={errors?.[fieldName]?.docker?.tag?.message?.toString() || ""}
+            error={!!errors?.[fieldName]?.docker?.framework}
+            helperText={errors?.[fieldName]?.docker?.framework?.message?.toString() || ""}
           >
-            {docker?.tecnologia &&
-              dockerImagesMap.get(docker?.tecnologia as keyof DockerSet) &&
-              dockerImagesMap.get(docker?.tecnologia as keyof DockerSet)?.tag!!.map((label) => (
-                <MenuItem key={label} value={label}>
-                  {label}
-                </MenuItem>
-              ))}
+            {frameworks.map((framework) => (
+              <MenuItem key={framework} value={framework}>
+                {framework}
+              </MenuItem>
+            ))}
           </TextField>
         )}
-      />
+      />}
     </>
   );
 };

@@ -1,5 +1,5 @@
 import { getImage } from "@modules/general/utils/getImage";
-import { Box, Grid2, IconButton, Stack, Typography, useTheme } from "@mui/material";
+import { Box, Grid2, IconButton, keyframes, Stack, Typography, useTheme } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { labelTeam } from "@modules/general/enums/labelTeam";
 import styles from "./team.module.css";
@@ -34,6 +34,14 @@ const labels: [string, string, string, string][] = [
  * @component
  */
 function TeamView() {
+  const init = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }`;
+
   const theme = useTheme();
   const Wave = () => (
     <div className={styles.waveContainer}>
@@ -51,31 +59,40 @@ function TeamView() {
     </div>
   );
   return (
-    <Stack spacing={3} sx={{ position: "relative" }} paddingY={-4} paddingBottom={4} paddingX={4}>
-      <Wave />
-      {/* Section title */}
-      <Typography textAlign="center" variant="h4">
-        {labelTeam.title}
-      </Typography>
+    <Box sx={{ marginBottom: -4 }}>
+      <Stack spacing={5} sx={{ position: "relative", animation: `${init} 2s` }} paddingX={4}>
+        {/* Section title */}
+        <Typography textAlign="center" variant="h3">
+          {labelTeam.title}
+        </Typography>
 
-      {/* Section subtitle */}
-      <Typography textAlign="center" variant="subtitle1">
-        {labelTeam.content}
-      </Typography>
+        {/* Section subtitle */}
+        <Typography textAlign="center" variant="h6">
+          {labelTeam.content}
+        </Typography>
 
-      {/* Team cards layout */}
-      <Grid2 container display={"flex"} justifyContent={"center"} padding={2} spacing={6}>
-        <Grid2 className={styles.card01} size={{ md: 4, xs: 12 }}>
-          <TeamCard member={labels[0]} />
+        {/* Team cards layout */}
+        <Grid2
+          container
+          display={"flex"}
+          justifyContent={"center"}
+          padding={2}
+          paddingBottom={6}
+          spacing={6}
+        >
+          <Grid2 className={styles.card01} size={{ md: 4, xs: 12 }}>
+            <TeamCard member={labels[0]} />
+          </Grid2>
+          <Grid2 className={styles.card02} size={{ md: 4, xs: 12 }}>
+            <TeamCard member={labels[1]} />
+          </Grid2>
+          <Grid2 className={styles.card03} size={{ md: 4, xs: 12 }}>
+            <TeamCard member={labels[2]} />
+          </Grid2>
         </Grid2>
-        <Grid2 className={styles.card02} size={{ md: 4, xs: 12 }}>
-          <TeamCard member={labels[1]} />
-        </Grid2>
-        <Grid2 className={styles.card03} size={{ md: 4, xs: 12 }}>
-          <TeamCard member={labels[2]} />
-        </Grid2>
-      </Grid2>
-    </Stack>
+        <Wave />
+      </Stack>
+    </Box>
   );
 }
 

@@ -1,6 +1,8 @@
 import { getData } from "@core/services";
 import { MateriaService } from "../types/materia.service";
-import { getCursoByMateriaId } from "./get.curso";
+import { getCursos } from "./get.curso";
+import { AccountInformation } from "@modules/general/context/accountContext";
+import { CursoService } from "../types/curso.service";
 
 export const getMateriasService = async (token: string) => {
   const response = await getData<MateriaService[]>(
@@ -13,8 +15,27 @@ export const getMateriasService = async (token: string) => {
 
   return response;
 };
-export const getAllAcademicInformation = async (token: string) => {
-  const materias = await getMateriasService(token);
+
+export const getAllAcademicInformation = async (
+  token: string,
+  userType: AccountInformation["tipo"],
+  id: AccountInformation["id"]
+) => {
+  let cursos: CursoService[] = [];
+  switch (userType) {
+    case "A":
+      cursos = await getCursos(token, {});
+      break;
+
+    case "D":
+      cursos = await getCursos(token, { docente: id });
+
+      break;
+
+    case "E":
+      cursos = await getCursos(token, { estudiantes: id });
+      break;
+  }
 
   //string, string
   const selectMaterias = new Map<number, string>();
@@ -23,23 +44,26 @@ export const getAllAcademicInformation = async (token: string) => {
   const getSeccionByCurso = new Map<string, number[]>();
   const selectSeccion = new Map<number, string>();
 
-  for (const materia of materias) {
-    const cursos = await getCursoByMateriaId(token, materia.id.toString());
-    getCursosByMateria.set(
-      materia.id,
-      cursos.map((curso) => curso.id)
+  for (const curso of cursos) {
+    let currentCursos = getCursosByMateria.get(curso.materia.id) ?? [];
+
+    if (!getCursosByMateria.has(curso.materia.id)) {
+      selectMaterias.set(curso.materia.id, curso.materia.nombre);
+    }
+
+    getCursosByMateria.set(curso.materia.id, [...currentCursos, curso.id]);
+
+    selectCurso.set(curso.id, curso.grupo);
+
+    getSeccionByCurso.set(
+      curso.id,
+      curso.secciones.map((seccion) => seccion.id)
     );
-    selectMaterias.set(materia.id, materia.nombre);
-    cursos.forEach((curso) => {
-      selectCurso.set(curso.id, curso.grupo);
-      getSeccionByCurso.set(
-        curso.id,
-        curso.secciones.map((seccion) => seccion.id)
-      );
-      curso.secciones.forEach((seccion) => {
-        selectSeccion.set(seccion.id, seccion.titulo);
-      });
+
+    curso.secciones.forEach((seccion) => {
+      selectSeccion.set(seccion.id, seccion.titulo);
     });
+    
   }
 
   return {
@@ -47,6 +71,6 @@ export const getAllAcademicInformation = async (token: string) => {
     selectCurso,
     selectSeccion,
     getSeccionByCurso,
-    getCursosByMateria
+    getCursosByMateria,
   };
 };

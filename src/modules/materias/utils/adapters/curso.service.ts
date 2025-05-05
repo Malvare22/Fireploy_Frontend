@@ -11,12 +11,13 @@ export function adaptCursoService(curso: CursoService): Curso {
             id: curso.docente.id,
             nombre: curso.docente.nombre + ' ' + curso.docente.apellido,
             correo: curso.docente.correo,
+            imagen: curso.docente.foto_perfil ? curso.docente.foto_perfil : ''
           }
         : null,
     estado: curso.estado,
     estudiantes: curso.estudiantes
       ? curso.estudiantes.map((user) => ({
-          foto: user.foto_perfil || "",
+          imagen: user.foto_perfil || "",
           nombre: `${user.nombre} ${user.apellido}`,
           correo: user.correo,
           estado: user.estado as "A" | "I", // Explicit type assertion

@@ -7,6 +7,7 @@ export type Seccion = {
   estado: "A" | "I";
   cursoId?: string;
   proyectos?: number[];
+  materiaId?: number;
 };
 
 export const seccionTemplate: Seccion = {

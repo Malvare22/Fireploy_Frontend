@@ -2,9 +2,9 @@ import { MateriaInformacion, Proyecto } from "@modules/proyectos/types/proyecto.
 import { z } from "zod";
 import { RepositorioSchema } from "./repositorio.schema";
 import { BaseDeDatosSchema } from "./baseDeDatos.schema";
-import { EstudianteCursoSchema } from "@modules/materias/utils/forms/form.schema";
-import { StandardStringRequiredSchema } from "@modules/materias/utils/forms/string.schema";
+import { DescriptionStringSchema, StandardStringRequiredSchema } from "@modules/materias/utils/forms/string.schema";
 import { UrlSchema } from "@modules/materias/utils/forms/url.schema";
+import { UsuarioCursoSchema } from "@modules/materias/utils/forms/form.schema";
 
 export const MateriaInformacionSchema: z.ZodType<MateriaInformacion> = z.object({
   seccionId: z.number(),
@@ -12,9 +12,9 @@ export const MateriaInformacionSchema: z.ZodType<MateriaInformacion> = z.object(
   cursoId: z.string(),
 });
 
-export const ProyectoSchema: z.ZodType<Proyecto> = z.object({
+export const ProyectoSchema: z.ZodType<Omit<Proyecto, 'fav_usuarios'>> = z.object({
   titulo: StandardStringRequiredSchema,
-  descripcion: StandardStringRequiredSchema,
+  descripcion: DescriptionStringSchema.optional(),
   url: UrlSchema,
   baseDeDatos: BaseDeDatosSchema,
   backend: RepositorioSchema.optional(),
@@ -22,7 +22,7 @@ export const ProyectoSchema: z.ZodType<Proyecto> = z.object({
   integrado: RepositorioSchema.optional(),
   tipo: z.enum(["M", "S"]),
   materiaInformacion: MateriaInformacionSchema,
-  integrantes: z.array(z.lazy(() => EstudianteCursoSchema)),
+  integrantes: z.array(z.lazy(() => UsuarioCursoSchema)),
 });
 
 export const ProyectoInformationSchema: z.ZodType<
@@ -30,7 +30,7 @@ export const ProyectoInformationSchema: z.ZodType<
 > = z.object({
   id: z.number().optional(),
   titulo: StandardStringRequiredSchema,
-  descripcion: StandardStringRequiredSchema,
+  descripcion: DescriptionStringSchema.optional(),
   materiaInformacion: MateriaInformacionSchema,
   tipo: z.enum(["M", "S"]),
 });

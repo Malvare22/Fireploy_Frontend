@@ -5,7 +5,6 @@ import { labelModalProyectoPortafolio } from "@modules/proyectos/enum/labelModal
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 // import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import {
-  Alert,
   Box,
   Button,
   Card,
@@ -15,113 +14,141 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CloudOffIcon from "@mui/icons-material/CloudOff";
+import { useMutation } from "@tanstack/react-query";
+import { useAuth } from "@modules/general/context/accountContext";
+import { postStarProject, postUnStarProject } from "@modules/proyectos/services/post.calificar";
+import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
+import AlertDialog from "@modules/general/components/alertDialog";
+import { VARIABLES_LOCAL_STORAGE } from "@modules/general/enums/variablesLocalStorage";
+import StarButton from "../starButton";
 
 export enum labelModalProject {
   noQualify = "Actualmente este proyecto no se encuentra calificado",
-  qualify = 'Calificar'
+  qualify = "Calificar",
 }
 
 type Props = {
   proyecto: ProyectoCard;
-  qualifier?: boolean;
 };
-
-// function FormQualifier(){
-
-//   return <></>
-// }
 
 const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto }) => {
   const theme = useTheme();
 
+  const { id, token } = useAuth().accountInformation;
+
+  const [localValue, setLocalValue] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!localStorage.getItem(VARIABLES_LOCAL_STORAGE.SCORES))
+      localStorage.setItem(VARIABLES_LOCAL_STORAGE.SCORES, JSON.stringify([]));
+    else {
+      const LIKES = JSON.parse(
+        localStorage.getItem(VARIABLES_LOCAL_STORAGE.SCORES) ?? "[]"
+      ) as number[];
+      setLocalValue(LIKES.includes(proyecto.id) || proyecto.fav_usuarios.includes(id));
+    }
+  }, []);
+
+  const { handleAccept, showDialog, open, title, type, message } = useAlertDialog();
+
+  const { setError } = useErrorReader(showDialog);
+  const { mutate, isPending } = useMutation({
+    mutationFn: async () => {
+      if (localValue) {
+        return await postUnStarProject(proyecto.id, token);
+      } else {
+        return await postStarProject(proyecto.id, token);
+      }
+    },
+    onSuccess: () => {
+      const LIKES = JSON.parse(
+        localStorage.getItem(VARIABLES_LOCAL_STORAGE.SCORES) ?? "[]"
+      ) as number[];
+      const nValue = localValue
+        ? LIKES.filter((_proyectoId) => _proyectoId != proyecto.id)
+        : [...LIKES, proyecto.id];
+      localStorage.setItem(VARIABLES_LOCAL_STORAGE.SCORES, JSON.stringify(nValue));
+      setLocalValue(!localValue);
+    },
+    onError: (err) => setError(err),
+  });
+
   return (
-    <Stack
-      sx={{
-        overflowY: "scroll",
-        width: { md: "80vw", xs: "70vw" },
-        maxHeight: "85vh",
-        backgroundColor: "none",
-      }}
-      spacing={3}
-    >
-      <Box>
-        <CardEstado estado={proyecto.estado} />
-      </Box>
-      <Box>
-        <Typography variant="h4" fontWeight={"bold"}>
-          {proyecto.titulo}
-        </Typography>
-      </Box>
-      <Stack direction={{ xl: "row" }} spacing={6}>
-        <Box
-          component={"img"}
-          sx={{ width: { md: 550, xs: "100%" } }}
-          src={proyecto.imagen}
-        />
-        <Stack
-          spacing={4}
-          width={"100%"}
-          height={"100%"}
-          border={"1px solid black"}
-        >
-          <Stack spacing={2}>
-            <Typography variant="h5" fontWeight={"bold"}>
-              {labelModalProyectoPortafolio.calificador}
-            </Typography>
-            {/* <CardCalificador
-            calificador={proyecto.calificador}
-            grupo={proyecto.grupo}
-            materia={proyecto.materia}
-            puntuacion={proyecto.puntuacion}
-            seccion={proyecto.seccion}
-            semestre={proyecto.semestre}
-          /> */}
-            {proyecto.puntuacion == null && (
-              <Alert severity="warning">
-                <Stack direction={'row'}><Typography variant="subtitle1">
-                  {labelModalProject.noQualify}
-                </Typography></Stack>
-              </Alert>
-            )}
-          </Stack>
-          <Stack spacing={2}>
-            <Typography variant="h5" fontWeight={"bold"}>
-              {labelModalProyectoPortafolio.tecnologias}
-            </Typography>
-            <Stack direction={"row"} spacing={2}>
-              <Chip color="error" label={proyecto.backend} />
-              <Chip
-                sx={{ backgroundColor: theme.palette.terciary.main }}
-                label={proyecto.dataBase}
-              />
-              <Chip color="primary" label={proyecto.frontend} />
+    <>
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        textBody={message}
+        type={type}
+      />
+      <Stack
+        sx={{
+          overflowY: "scroll",
+          width: { md: "80vw", xs: "70vw" },
+          maxHeight: "85vh",
+          backgroundColor: "none",
+        }}
+        spacing={3}
+      >
+        <Box>
+          <CardEstado estado={proyecto.estado} />
+        </Box>
+        <Stack direction={"row"} spacing={1} alignItems={"center"}>
+          <Typography variant="h4" fontWeight={"bold"}>
+            {proyecto.titulo}
+          </Typography>
+          <StarButton isLoading={isPending} mutate={mutate} value={localValue ? 1 : 0} modal={true}/>
+        </Stack>
+        <Stack direction={{ xl: "row" }} spacing={6}>
+          <Box
+            component={"img"}
+            sx={{ width: { md: 650, xs: "100%", border: "1px solid black" } }}
+            src={proyecto.imagen}
+          />
+          <Stack spacing={4} width={"100%"} height={"100%"} border={"1px solid black"}>
+            <Stack spacing={2}>
+              <Typography variant="h5" fontWeight={"bold"}>
+                {labelModalProyectoPortafolio.tecnologias}
+              </Typography>
+              <Stack direction={"row"} spacing={2}>
+                <Chip color="error" label={proyecto.backend} />
+                <Chip
+                  sx={{ backgroundColor: theme.palette.terciary.main }}
+                  label={proyecto.dataBase}
+                />
+                <Chip color="primary" label={proyecto.frontend} />
+              </Stack>
             </Stack>
           </Stack>
         </Stack>
-      </Stack>
 
-      <Stack spacing={1}>
-        <Typography variant="h5" fontWeight={"bold"}>
-          {labelModalProyectoPortafolio.descripcion}
-        </Typography>
-        <Typography>{proyecto.descripcion}</Typography>
+        {proyecto.descripcion.trim() && (
+          <Stack spacing={1}>
+            <Typography variant="h5" fontWeight={"bold"}>
+              {labelModalProyectoPortafolio.descripcion}
+            </Typography>
+            {<Typography>{proyecto.descripcion}</Typography>}
+          </Stack>
+        )}
+        <Stack spacing={1}>
+          <Typography variant="h5" fontWeight={"bold"}>
+            {labelModalProyectoPortafolio.integrantes}
+          </Typography>
+          <Grid2 container spacing={2} paddingY={2}>
+            {proyecto.integrantes.map((integrante) => (
+              <Grid2 size={{ md: 4, sm: 6, xs: 12 }}>
+                <PortafolioCard usuario={integrante} key={integrante.id} />
+              </Grid2>
+            ))}
+          </Grid2>
+        </Stack>
       </Stack>
-      <Stack spacing={1}>
-        <Typography variant="h5" fontWeight={"bold"}>
-          {labelModalProyectoPortafolio.integrantes}
-        </Typography>
-        <Grid2 container spacing={2} paddingY={2}>
-          {proyecto.integrantes.map((integrante) => (
-            <Grid2 size={{ md: 4, sm: 6, xs: 12 }}>
-              <PortafolioCard usuario={integrante} key={integrante.id} />
-            </Grid2>
-          ))}
-        </Grid2>
-      </Stack>
-    </Stack>
+    </>
   );
 };
 
@@ -169,18 +196,12 @@ const CardEstado: React.FC<CardEstadoProps> = ({ estado }) => {
   const theme = useTheme();
 
   function getColor() {
-    return estado == "E"
-      ? theme.palette.success.light
-      : theme.palette.warning.light;
+    return estado == "E" ? theme.palette.success.light : theme.palette.warning.light;
   }
 
   function getLabel() {
     return (
-      <Stack
-        direction={{ md: "row", xs: "column" }}
-        alignItems={"center"}
-        spacing={1}
-      >
+      <Stack direction={{ md: "row", xs: "column" }} alignItems={"center"} spacing={1}>
         {estado == "E" ? (
           <>
             <Typography fontWeight="bold" textAlign={"center"}>

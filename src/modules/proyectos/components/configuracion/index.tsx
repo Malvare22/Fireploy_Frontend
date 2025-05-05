@@ -11,7 +11,6 @@ import {
   IconButton,
 } from "@mui/material";
 import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
-import LogsFiles from "../logsFiles";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Information } from "./information";
@@ -25,7 +24,6 @@ import InfoIcon from "@mui/icons-material/Info";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import StorageIcon from "@mui/icons-material/Storage";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import ArticleIcon from "@mui/icons-material/Article";
 import { useMutation } from "@tanstack/react-query";
 import { postLoadProject } from "@modules/proyectos/services/post.load.project";
 import { useAuth } from "@modules/general/context/accountContext";
@@ -108,7 +106,6 @@ export default function ProjectSettings({ project }: Props) {
               <Tab label="Repositorios" icon={<GitHubIcon />} iconPosition="start" />
               <Tab label="Bases de Datos" icon={<StorageIcon />} iconPosition="start" />
               <Tab label="Colaboradores" icon={<PeopleAltIcon />} iconPosition="start" />
-              <Tab label="Archivos Logs" icon={<ArticleIcon />} iconPosition="start" />
             </Tabs>
 
             <Stack spacing={3} padding={2}>
@@ -118,11 +115,6 @@ export default function ProjectSettings({ project }: Props) {
               {tabIndex == 3 && (
                 <>
                   <Members />
-                </>
-              )}
-              {tabIndex == 4 && (
-                <>
-                  <LogsFiles />
                 </>
               )}
             </Stack>

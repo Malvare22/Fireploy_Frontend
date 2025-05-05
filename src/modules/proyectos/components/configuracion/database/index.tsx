@@ -53,19 +53,17 @@ export const DataBase = ({ type }: Props) => {
     const base = getValuesProject("baseDeDatos");
     if (base) reset(base);
     setValue("proyectoId", getValuesProject("id"));
-  }, [getValuesProject, reset, setValue]);
+  }, [getValuesProject("id"), reset, setValue]);
 
   const { mutate } = useMutation({
     mutationFn: () => postCreateDatabase(token, getValues()),
     mutationKey: ["Create Database", getValues()],
     onSuccess: () => {
-      if(type == 'edit')
       showDialog({
         title: 'Conexión Base de datos',
-        message: 'Se ha creado el proyecto correctamente',
+        message: 'Se ha terminado de configurar el proyecto 😎',
         type: 'success',
         onAccept: handleFinish,
-        reload: true
       })
     },
     onError: (err) => {
@@ -78,11 +76,11 @@ export const DataBase = ({ type }: Props) => {
   }
 
   function handleFinish() {
-    navigate(rutasProyectos.explorar);
+    navigate(rutasProyectos.misProyectos);
   }
 
   return (
-    <>
+    <Stack spacing={2}>
       <Typography variant="h5">Base de Datos</Typography>
       <Divider />
       {type == "create" ? (
@@ -168,6 +166,6 @@ export const DataBase = ({ type }: Props) => {
           </Box>
         </Stack>
       )}
-    </>
+    </Stack>
   );
 };

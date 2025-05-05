@@ -15,17 +15,17 @@ export function adaptProjectToCard(proyecto: Proyecto): ProyectoCard {
   return {
     id: proyecto.id || 0,
     titulo: proyecto.titulo,
-    descripcion: proyecto.descripcion,
+    descripcion: proyecto.descripcion ?? "",
     imagen: proyecto.imagen || "",
 
-    integrantes: ([...proyecto.integrantes, proyecto.propietario]).map(adaptUsuarioToPortafolioCard),
+    integrantes: [...proyecto.integrantes, proyecto.propietario].map(adaptUsuarioToPortafolioCard),
 
-    frontend: proyecto.frontend?.dockerText || "No especificado",
-    backend: proyecto.backend?.dockerText || "No especificado",
+    frontend: !proyecto.frontend ? null : proyecto.frontend?.docker?.framework || "No especificado",
+    backend: !proyecto.backend ? null : proyecto.frontend?.docker?.framework || "No especificado",
+    integrado: !proyecto.integrado ? null : proyecto.frontend?.docker?.framework || "No especificado",
     dataBase: proyecto.baseDeDatos?.nombre || "",
 
-    puntuacion: proyecto.calificacion ?? 0,
-    calificador: adaptUsuarioToPortafolioCard(proyecto.propietario || {}),
+    fav_usuarios: proyecto.fav_usuarios ?? [],
 
     materia: proyecto.materiaInformacion?.materiaId?.toString() || "N/A",
     grupo: proyecto.materiaInformacion?.cursoId?.toString() || "N/A",
@@ -50,33 +50,33 @@ export function adaptProject(project: Partial<ProyectoService>): Proyecto {
         };
 
   return {
-    baseDeDatos: adaptDataBase({...project.base_de_datos, proyecto: null}),
-    descripcion: project.descripcion ?? '',
-    integrantes: project.estudiantes ?? [],
+    baseDeDatos: adaptDataBase({ ...project.base_de_datos, proyecto: null }),
+    descripcion: project.descripcion ?? "",
+    integrantes: (project.estudiantes) ?? [],
+    fav_usuarios: project.fav_usuarios?.map((x) => x.id) ?? [],
     materiaInformacion: {
       cursoId: project.seccion?.curso?.id ?? "1",
       materiaId: project.seccion?.curso?.materia?.id ?? 1,
       seccionId: project.seccion?.id ?? 1,
     },
-    titulo: project.titulo ?? '',
+    titulo: project.titulo ?? "",
     tipo: project.tipo_proyecto === "M" ? "M" : "S",
-    url: project.url ?? '',
+    url: project.url ?? "",
     id: project.id,
     estadoDeEjecucion: (project.estado_ejecucion as Proyecto["estadoDeEjecucion"]) ?? "E",
     estadoDeProyecto: (project.estado_proyecto as Proyecto["estadoDeProyecto"]) ?? "A",
     propietario: project.creador,
-    ...repositoriosAsignados, 
+    ...repositoriosAsignados,
   };
 }
 
-
 export function adaptRepository(repository: RepositorioService): Repositorio {
   return {
-    dockerText: (repository.tecnologia ?? "") + ":" + (repository.version ?? ""),
-    variables: !repository.variables_de_entorno ? '': repository.variables_de_entorno,
+    tecnologyToShow: (repository.tecnologia ?? "") + ":" + (repository.version ?? ""),
+    variables: !repository.variables_de_entorno ? "" : repository.variables_de_entorno,
     url: repository.url ?? "",
     tipo: (repository.tipo as Repositorio["tipo"]) ?? "I",
-    docker: { tag: repository.version ?? "", tecnologia: repository.tecnologia ?? "" },
+    docker: { version: repository.version ?? "", tecnologia: repository.tecnologia ?? "", framework : repository.framework ?? ''},
     id: repository.id ?? -1,
   };
 }

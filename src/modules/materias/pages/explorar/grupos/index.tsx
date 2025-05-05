@@ -114,7 +114,7 @@ function VerCursosMateria() {
     },
     mutationKey: ["Register In Group", id, idCurso ?? ""],
     onSuccess: () => {
-      const isStudentNow = IS_TEACHER; // leer el valor actualizado aquí
+      const isStudentNow = !IS_TEACHER;
       showDialog({
         title: isStudentNow ? "Registrar en Curso" : "Solicitar Curso",
         message: isStudentNow
@@ -206,13 +206,13 @@ function VerCursosMateria() {
                 <>
                   <Typography variant="h4">{labelListarCursos.grupos}</Typography>
                   <Grid2 container spacing={4}>
-                    {materia.cursos?.map((curso, key) => (
-                      <Grid2 size={{ md: 3, sm: 6, xs: 12 }} key={key}>
+                    {materia?.cursos?.map((curso, key) => (
+                      <Grid2 size={{ xl: 4, md: 6, xs: 12 }} key={key}>
                         <CardCurso
                           isRegister={myGroupsIds?.get(curso.id ?? "-1") ?? false}
                           onClick={() => handleIdGroup(curso.id)}
                           curso={curso}
-                          isTeacher={IS_TEACHER}
+                          userType={tipo}
                         />
                       </Grid2>
                     ))}

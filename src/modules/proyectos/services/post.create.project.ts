@@ -12,7 +12,7 @@ interface Body {
 export async function postCreateProject(token: string, project: ProyectoInformationSchema) {
   const body: Body = {
     titulo: project.titulo,
-    descripcion: project.descripcion,
+    descripcion: project.descripcion || '',
     seccionId: project.materiaInformacion.seccionId?.toString() ?? "-1",
     tipo_proyecto: project.tipo,
   };

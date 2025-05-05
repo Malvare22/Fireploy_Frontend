@@ -14,7 +14,8 @@ export const RepositorioSchema: z.ZodType<Repositorio> = z.object({
   }, "Ingrese variables de entorno con una sintaxis válida (consulta manual de usuario)"),
   docker: z.object({
     tecnologia: z.string(),
-    tag: z.string(),
+    version: z.string(),
+    framework: z.string()
   }),
-  dockerText: z.string(),
+  tecnologyToShow: z.string(),
 });

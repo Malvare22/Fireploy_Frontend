@@ -1,11 +1,11 @@
 import { Seccion } from "./seccion";
-import { EstudianteCurso } from "../utils/forms/form.schema";
 
 export type UsuarioCurso = {
   id: number;
   nombre: string;
   correo?: string | undefined;
-  imagen?: string | undefined;
+  imagen: string;
+  estado: 'A' | 'I'
 };
 
 export type Curso = {
@@ -14,8 +14,8 @@ export type Curso = {
   semestre: string;
   descripcion: string;
   estado: "A" | "I";
-  docente?: UsuarioCurso | null;
-  estudiantes?: EstudianteCurso[];
+  docente?: Omit<UsuarioCurso, 'estado'> | null;
+  estudiantes?: UsuarioCurso[];
   secciones?: Seccion[] | null;
   materia?: {
     id: number | null;
@@ -42,8 +42,9 @@ export const exampleCursos: Curso[] = [
     estado: "A",
     docente: {
       id: 10,
-      nombre: "Juan Pérez",
+      nombre: "Jorge Ivan Gelvez Quintero",
       correo: "juan.perez@example.com",
+      imagen: ''
     },
     estudiantes: [],
     secciones: [],
@@ -62,8 +63,9 @@ export const exampleCursos: Curso[] = [
     estado: "A",
     docente: {
       id: 102,
-      nombre: "Ana López",
+      nombre: "Margarita Rosa de Francisco Toro",
       correo: "ana.lopez@example.com",
+      imagen: ''
     },
     estudiantes: [],
     secciones: [],

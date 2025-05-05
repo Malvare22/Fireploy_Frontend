@@ -7,6 +7,7 @@ type Body = {
   url: string;
   tecnologia: string | null;
   version: string | null;
+  framework: string |null;
   variables_de_entorno: VariablesDeEntorno[] | null;
 };
 
@@ -15,7 +16,8 @@ async function query(repository: Repositorio, token: string) {
   const body: Body = {
     tecnologia: repository.docker?.tecnologia ?? null,
     url: repository.url,
-    version: repository.docker?.tag ?? null,
+    version: repository.docker?.version ?? null,
+    framework: repository.docker?.framework ?? null,
     variables_de_entorno: t == undefined || repository.variables == "" ? null : t,
   };
 

@@ -157,7 +157,7 @@ function ExplorarProyectos() {
             >
               {orderDataFn(proyectos).map((proyecto) => (
                 <Grid2
-                  key={proyecto.titulo + proyecto.materia + proyecto.seccion}
+                  key={proyecto.id}
                   size={{ xl: 4, sm: 6, xs: 12 }}
                   sx={{ display: "flex", justifyContent: "center" }}
                 >
