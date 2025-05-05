@@ -19,6 +19,7 @@ export enum labelsNavbarPrelogin {
   team = "Equipo de Desarrollo",
   signUp = "Iniciar Sesión",
   register = "Registrarse",
+  technologies = 'Tecnologías'
 }
 
 /**
@@ -37,6 +38,7 @@ function NavbarPrelogin(): JSX.Element {
   const pages = [
     [labelsNavbarPrelogin.home, rutasGeneral.home],
     [labelsNavbarPrelogin.team, rutasGeneral.developTeam],
+    [labelsNavbarPrelogin.technologies, rutasGeneral.tecnologias],
   ];
 
   // State to manage the mobile menu anchor

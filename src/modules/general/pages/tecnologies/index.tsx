@@ -19,6 +19,14 @@ export enum labelTecnologiesView {
 
 function TecnologiesView() {
 
+  const init = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }`
+
   type FilteredKeys = Exclude<
     keyof typeof TECNOLOGIES,
     "Java" | "PHP" | "ExpressJs" | "NodeJS" | "SpringBoot" | "Symphony"
@@ -46,7 +54,7 @@ function TecnologiesView() {
   }, [searchValue])
 
   return (
-    <Stack spacing={5}>
+    <Stack spacing={5} sx={{animation: `${init} 2s`}}>
       <Box>
         <Stack spacing={3} >
           <Typography textAlign={'center'} variant="h3">{labelTecnologiesView.title}</Typography>
