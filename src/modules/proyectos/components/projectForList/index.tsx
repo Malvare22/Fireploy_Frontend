@@ -14,6 +14,23 @@ interface Props {
   proyecto: Proyecto;
 }
 
+/**
+ * ProjectForList component – This component displays the summary information of a project in a card format for a project list.
+ * It includes the project's title, status, image, associated technologies, and a button to view more details.
+ * The component also visually indicates the execution state of the project using color-coded statuses and provides a warning if there are no technologies associated with the project.
+ * 
+ * @component
+ * 
+ * @param {Object} props - The component props.
+ * @param {Proyecto} props.proyecto - The project data to display in the list.
+ * 
+ * @returns {JSX.Element} A card displaying a project's summary with status, image, technologies, and an action button to view more details.
+ * 
+ * @example
+ * ```tsx
+ * <ProjectForList proyecto={projectData} />
+ * ```
+ */
 const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
   const colorState = getColorExecutionState(proyecto.estadoDeEjecucion ?? "E") as string;
 

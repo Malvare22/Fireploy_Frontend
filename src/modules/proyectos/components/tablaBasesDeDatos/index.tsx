@@ -13,6 +13,24 @@ import { openInNewTab } from "@modules/general/utils/openTab";
 type TablaBasesDeDatosProps = {
   basesDeDatos: BaseDeDatos[];
 };
+
+/**
+ * TablaBasesDeDatos – A table component that displays a list of databases with various properties such as ID, project, type, and management options.
+ * This table allows sorting, and the "Tipo" column displays colored chips for different database types. 
+ * The "Gestionar" column includes a button to manage the database by opening the URL in a new tab if available.
+ * 
+ * @component
+ * 
+ * @param {Object} props - The component props.
+ * @param {BaseDeDatos[]} props.basesDeDatos - An array of database objects to be displayed in the table.
+ * 
+ * @returns {JSX.Element} A DataTable component displaying a list of databases with sortable columns and management options.
+ * 
+ * @example
+ * ```tsx
+ * <TablaBasesDeDatos basesDeDatos={databaseList} />
+ * ```
+ */
 const TablaBasesDeDatos: React.FC<TablaBasesDeDatosProps> = ({ basesDeDatos }) => {
   const columns: TableColumn<BaseDeDatos & { rowIndex: number }>[] = [
     {

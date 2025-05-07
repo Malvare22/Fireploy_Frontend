@@ -6,6 +6,22 @@ import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import { useNavigate } from "react-router-dom";
 import { rutasProyectos } from "@modules/proyectos/router";
 
+/**
+ * ListarProyectos component – A page that lists and navigates users to different sections related to projects.
+ * 
+ * This component provides an interface with navigation buttons to create a new project, explore existing projects,
+ * or view the user's own projects. Each button is represented as a card element, with an icon and description.
+ * The component also displays an informational alert at the top, guiding the user on project-related actions.
+ * 
+ * @component
+ * 
+ * @returns {JSX.Element} A navigation interface with buttons to create, explore, and view projects.
+ * 
+ * @example
+ * ```tsx
+ * <ListarProyectos />
+ * ```
+ */
 function ListarProyectos() {
   const navigate = useNavigate();
 

@@ -35,6 +35,23 @@ type Props = {
   proyecto: ProyectoCard;
 };
 
+/**
+ * ModalProyectoPortafolio component – This component displays detailed information about a project in a modal format. 
+ * It includes the project's title, technologies, description, team members, and the project's current status. 
+ * Additionally, users can favorite or unfavorite the project and view the project's image.
+ * 
+ * @component
+ * 
+ * @param {Object} props - The component props.
+ * @param {ProyectoCard} props.proyecto - The project data to display in the modal.
+ * 
+ * @returns {JSX.Element} The modal displaying project details with a favorite button and status indicator.
+ * 
+ * @example
+ * ```tsx
+ * <ModalProyectoPortafolio proyecto={projectData} />
+ * ```
+ */
 const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto }) => {
   const theme = useTheme();
 
@@ -152,46 +169,21 @@ const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto }) => {
   );
 };
 
-// type CardCalificadorProps = {
-//   calificador: UsuarioPortafolioCard;
-//   puntuacion: ProyectoCard["puntuacion"];
-//   materia: ProyectoCard["materia"];
-//   grupo: ProyectoCard["grupo"];
-//   seccion: ProyectoCard["seccion"];
-//   semestre: ProyectoCard["semestre"];
-// };
-
-// const CardCalificador: React.FC<CardCalificadorProps> = ({
-//   calificador,
-//   grupo,
-//   materia,
-//   puntuacion,
-//   seccion,
-// }) => {
-//   return (
-//     <Card sx={{ padding: 2 }}>
-//       <Stack direction={"row"} alignItems={"center"} spacing={2}>
-//         <ProjectCardAvatar
-//           usuario={calificador}
-//           sx={{ width: 48, height: 48 }}
-//         />
-//         <Stack>
-//           <Stack direction={{ md: "row" }} spacing={2}>
-//             <Typography variant="h6">{calificador.nombres}</Typography>
-//             <Score value={puntuacion} />
-//           </Stack>
-//           <Box>
-//             <Typography>{`${materia} / ${grupo} / ${seccion}`}</Typography>
-//           </Box>
-//         </Stack>
-//       </Stack>
-//     </Card>
-//   );
-// };
-
 type CardEstadoProps = {
   estado: ProyectoCard["estado"];
 };
+
+/**
+ * CardEstado component – This component displays the project's current status in a card, indicating whether the 
+ * project is online or offline. It also provides a button to visit the project if it's online.
+ * 
+ * @component
+ * 
+ * @param {Object} props - The component props.
+ * @param {string} props.estado - The current status of the project (online or offline).
+ * 
+ * @returns {JSX.Element} The card displaying the project's status and a button to visit the project if it's online.
+ */
 const CardEstado: React.FC<CardEstadoProps> = ({ estado }) => {
   const theme = useTheme();
 

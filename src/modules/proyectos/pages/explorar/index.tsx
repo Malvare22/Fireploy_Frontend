@@ -28,6 +28,26 @@ import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyecto
 import { adaptProject, adaptProjectToCard } from "@modules/proyectos/utils/adapt.proyecto";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
 
+/**
+ * ExplorarProyectos component – A project exploration interface that allows users to search and filter through 
+ * available projects, displaying them in a list or grid format with sorting options.
+ * 
+ * This component fetches a list of all available projects and allows users to filter them by search keywords. 
+ * The user can also sort projects alphabetically, by semester, or by rating. Clicking on a project card opens a 
+ * modal with more details about the selected project.
+ * 
+ * The component also handles error states by showing an alert dialog when there's an issue fetching project data.
+ * 
+ * @component
+ * 
+ * @returns {JSX.Element} A project exploration interface with search, filter, and sorting options, 
+ * as well as the ability to view project details in a modal.
+ * 
+ * @example
+ * ```tsx
+ * <ExplorarProyectos />
+ * ```
+ */
 function ExplorarProyectos() {
   const [search, setSearch] = useState("");
   const [selectProyecto, setSelectProyecto] = useState<ProyectoCard>();
