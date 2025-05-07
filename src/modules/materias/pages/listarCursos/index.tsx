@@ -33,6 +33,39 @@ const filterOptions: FilterOptions = [
   },
 ];
 
+/**
+ * ListarCursos component – Displays a list of courses for a specific subject (Materia).
+ * 
+ * This component fetches and displays courses associated with a subject, allowing for:
+ * - Viewing courses with state filters (active/inactive).
+ * - Uploading courses in bulk via file upload (Excel format).
+ * - Navigating to the course creation page.
+ * 
+ * It uses dialogs for file upload confirmations and shows alerts if there are no courses available.
+ * 
+ * @component
+ * 
+ * @example
+ * ```tsx
+ * <ListarCursos />
+ * ```
+ * 
+ * @returns {JSX.Element} The rendered component displaying the list of courses.
+ * 
+ * @notes
+ * - Displays courses associated with a subject, showing them in a table.
+ * - Provides an option to upload courses in bulk.
+ * - Provides filters to refine the list of courses based on status (active/inactive).
+ * - Handles loading and error states, displaying appropriate feedback messages.
+ * 
+ * @methods
+ * - `setFile(e: React.ChangeEvent<HTMLInputElement>)`: Handles file selection and triggers bulk upload confirmation dialog.
+ * - `updateFile(file: File)`: Handles the bulk file upload via mutation.
+ * - `setError(err)`: Handles errors related to data fetching or upload process.
+ * 
+ * @props
+ * - `idMateria` (from route params): The ID of the subject to fetch and display courses for.
+ */
 function ListarCursos() {
   const { idMateria } = useParams();
 

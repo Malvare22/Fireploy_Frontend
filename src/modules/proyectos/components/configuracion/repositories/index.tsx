@@ -25,6 +25,29 @@ type Props = {
   type: "edit" | "create";
 };
 
+/**
+ * Repositories component – This component is responsible for managing the repository information 
+ * for a project. It allows users to create or edit repository details, such as the frontend, backend, 
+ * and integrated repositories, including their URLs and environment variables.
+ * 
+ * The component uses React Hook Form for form management, React Query for API interaction, and 
+ * Material-UI for UI components. It also includes an alert dialog to confirm repository updates and 
+ * handles form submission to update repositories.
+ * 
+ * @component
+ * 
+ * @param {Object} props - Component props.
+ * @param {"edit" | "create"} props.type - Specifies whether the user is editing an existing repository 
+ * or creating a new one.
+ * 
+ * @returns {JSX.Element} A form allowing the user to input repository information (frontend, backend, integrated).
+ * It provides options to submit the data or cancel changes, and handles success/error dialogs.
+ * 
+ * @example
+ * ```tsx
+ * <Repositories type="create" />
+ * ```
+ */
 export function Repositories({ type }: Props) {
   const { getValues: getValuesProject } = useFormContext<ProyectoSchema>();
   const { token } = useAuth().accountInformation;

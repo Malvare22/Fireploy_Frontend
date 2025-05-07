@@ -11,6 +11,21 @@ type Props = {
   type: KeysOfRepository; // "frontend" | "backend" | "integrado"
 };
 
+/**
+ * EnviromentVariablesEditor Component – A component that renders a Monaco code editor for editing environment variables in a `.env` file format.
+ *
+ * This component uses Monaco editor to provide a rich text editor for the environment variables associated with a specific repository type (`frontend`, `backend`, or `integrado`). The editor's content is tied to a specific field in a form, and it supports error handling if the field validation fails.
+ * 
+ * @param {Props} props - The props for the EnviromentVariablesEditor component.
+ * @param {KeysOfRepository} props.type - The type of repository (either "frontend", "backend", or "integrado") that determines which environment variable field is rendered.
+ *
+ * @returns {JSX.Element} The rendered environment variables editor with Monaco, including form field integration and error handling.
+ *
+ * @example
+ * <EnviromentVariablesEditor type="frontend" />
+ * <EnviromentVariablesEditor type="backend" />
+ * <EnviromentVariablesEditor type="integrado" />
+ */
 export default function EnviromentVariablesEditor({ type }: Props) {
   const monacoInstance = useMonaco();
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);

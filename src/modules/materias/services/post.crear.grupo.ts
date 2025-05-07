@@ -2,6 +2,19 @@ import { postData } from "@core/services";
 import { Curso } from "../types/curso";
 import { CursoService } from "../types/curso.service";
 
+/**
+ * Creates a new course (curso) associated with a specific subject (materia).
+ *
+ * Sends a POST request to the `/curso` endpoint with the provided course data.
+ * The course will be linked to the specified subject by its `idMateria`.
+ *
+ * @param {string} token - The session token used for authentication.
+ * @param {number} idMateria - The ID of the subject to which the course belongs.
+ * @param {Curso} data - An object containing the course information to be created.
+ *
+ * @returns {Promise<CursoService>} A promise that resolves with the created course data
+ * as returned by the server.
+ */
 export const postCreateCursoService = async (
   token: string,
   idMateria: number,

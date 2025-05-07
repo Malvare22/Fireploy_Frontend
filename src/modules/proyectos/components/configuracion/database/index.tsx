@@ -22,6 +22,23 @@ import useErrorReader from "@modules/general/hooks/useErrorReader";
 type Props = {
   type: "edit" | "create";
 };
+
+/**
+ * DataBase Component – A component to manage the creation or editing of a database for a project.
+ * 
+ * This component allows users to either create a new database by entering details like name, password, and type, 
+ * or to edit an existing database associated with a project. It uses React Hook Form with validation via Zod 
+ * and handles submission through React Query.
+ * 
+ * @param {Props} props - The props for the DataBase component.
+ * @param {"create" | "edit"} props.type - The type of action (either creating or editing a database).
+ * 
+ * @returns {JSX.Element} The rendered DataBase form or information for editing an existing database.
+ * 
+ * @example
+ * <DataBase type="create" />
+ * <DataBase type="edit" />
+ */
 export const DataBase = ({ type }: Props) => {
   const { getValues: getValuesProject } = useFormContext<ProyectoSchema>();
 

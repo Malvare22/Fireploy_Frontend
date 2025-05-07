@@ -1,17 +1,3 @@
-/**
- * Component to view detailed information about a specific course (Curso).
- *
- * This component fetches a course by ID using `getCursoById` and displays:
- * - Subject name (Materia)
- * - Course group
- * - Course description
- * - Associated sections (Secciones)
- *
- * It handles API loading, error states, and displays dialogs as needed.
- *
- * @component
- */
-
 import AlertDialog from "@modules/general/components/alertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
@@ -39,10 +25,29 @@ export const DialogContext = createContext({
 });
 
 /**
- * VerInformacionCurso displays the details of a selected course (Curso),
- * including sections and its corresponding subject.
+ * VerInformacionCurso component – Displays detailed information about a specific course (Curso).
+ * 
+ * This component fetches the course details using `getCursoById` API call and displays:
+ * - The subject (Materia) name
+ * - The course group name
+ * - The course description
+ * - Sections associated with the course
+ * 
+ * It manages loading and error states, displaying loading spinners and dialogs for feedback.
+ * 
+ * @component
+ * 
+ * @example
+ * ```tsx
+ * <VerInformacionCurso />
+ * ```
+ * 
+ * @returns {JSX.Element} The rendered component displaying the detailed course information.
  *
- * @returns {JSX.Element} The rendered component
+ * @notes
+ * - Displays information about the selected course, its sections, and related subject.
+ * - Shows a loading spinner while fetching data and error messages if something goes wrong.
+ * - Allows interaction with course sections, opening modals with project details if available.
  */
 function VerInformacionCurso() {
   /** Get course ID from route parameters */

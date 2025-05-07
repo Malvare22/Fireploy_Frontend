@@ -18,10 +18,26 @@ type TablaCursosProps = {
 };
 
 /**
- * @component TablaCursosAdmin
- * @description This component displays a table with course data, allowing the user to view, edit, and change the status of courses.
- * It uses `react-data-table-component` to render the data and provides action buttons for each row.
- * @param {TablaCursosProps} props - Contains the list of courses to be displayed.
+ * TablaCursos Component – Displays a table of courses with options to view, edit, and change the status of each course.
+ * 
+ * This component utilizes `react-data-table-component` to render a list of courses, including information about each course
+ * such as its name, group, semester, status, number of students, and actions (view, edit).
+ * It allows the user to view course details, edit them, or change their status based on the type of user.
+ * 
+ * @component
+ * 
+ * @param {TablaCursosProps} props - The properties for the component.
+ * @param {CursoTabla[]} props.cursos - List of courses to be displayed in the table.
+ * @param {"E" | "D"} props.type - Defines the type of user:
+ *        - "E" for view-only users (i.e., they cannot edit courses),
+ *        - "D" for users with editing privileges (i.e., they can edit courses).
+ * 
+ * @returns A `DataTable` component displaying the list of courses with their details and actions.
+ * 
+ * @example
+ * ```tsx
+ * <TablaCursos cursos={courseList} type="E" />
+ * ```
  */
 const TablaCursos: React.FC<TablaCursosProps> = ({ cursos, type }) => {
   const navigate = useNavigate();

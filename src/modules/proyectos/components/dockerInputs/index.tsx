@@ -9,6 +9,33 @@ type DockerInputsProps = {
   fieldName?: KeysOfRepository;
 };
 
+/**
+ * DockerInputs component – This component provides input fields for configuring Docker-related settings for a project repository.
+ * It allows the user to select a technology, version (tag), and framework for the selected technology. These fields are rendered 
+ * dynamically based on the selected technology, using the `inputSelectTecnology` object to pull available versions and frameworks 
+ * for each technology.
+ * 
+ * The component uses `react-hook-form` to manage form state and validation. It provides a `Controller` to connect each input 
+ * field with the form context, and displays error messages if validation fails.
+ * 
+ * The available input fields are:
+ * - **Tecnología**: A dropdown to select the Docker technology (e.g., Node).
+ * - **Version**: A dropdown to select the version of the chosen technology.
+ * - **Framework**: A dropdown to select the framework, available for certain technologies.
+ * 
+ * @component
+ * 
+ * @param {Object} props - Component props.
+ * @param {KeysOfRepository} props.fieldName - Optional field name for determining which repository's Docker configuration 
+ * to display (defaults to "backend").
+ * 
+ * @returns {JSX.Element} A set of form inputs for selecting Docker technology, version, and framework for a project repository.
+ * 
+ * @example
+ * ```tsx
+ * <DockerInputs fieldName="backend" />
+ * ```
+ */
 export const DockerInputs: React.FC<DockerInputsProps> = ({ fieldName = "backend" }) => {
   const {
     control,

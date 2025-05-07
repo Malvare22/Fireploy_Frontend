@@ -27,6 +27,16 @@ import HiddenButton from "@modules/materias/components/hiddenInput";
 import { postCargaMasivaMaterias } from "@modules/materias/services/post.cargar.materias";
 
 /**
+ * ListarMaterias component – A component that handles listing, searching, filtering, and displaying subjects (materias).
+ * It also includes functionality for error handling, subject data fetching, and navigation for adding new subjects.
+ * The component supports mass upload of subjects via file.
+ *
+ * @component
+ *
+ * @returns {JSX.Element} A React component that lists subjects, includes filtering options, and handles file uploads.
+ */
+
+/**
  * Filter options for the refine panel. Allows filtering by active groups, status, and semester.
  */
 const filterOptions: FilterOptions = [
@@ -54,8 +64,8 @@ const filterOptions: FilterOptions = [
 ];
 
 /**
- * ListarMaterias component definition.
- * Handles subject listing, search, filtering, error handling and navigation.
+ * Handles subject listing, search, filtering, error handling, and navigation.
+ * It fetches subjects using a token and supports file upload functionality.
  *
  * @returns {JSX.Element} React component
  */
@@ -66,24 +76,14 @@ function ListarMaterias() {
 
   /**
    * React Query hook to fetch subjects using the token.
+   * Fetches the list of subjects from the server.
+   *
+   * @returns {Object} Response containing subject data, loading status, and error information.
    */
   const { data, isLoading, error } = useQuery({
     queryFn: () => getMateriasService(token),
     queryKey: ["get Materias"],
   });
-
-  // /**
-  //  * Search function used by the RefinePanel.
-  //  *
-  //  * @param {MateriaTabla[]} materia - Array of subject data
-  //  * @param {string} s - Search string
-  //  * @returns {MateriaTabla[]} Filtered subjects by name or code
-  //  */
-  // const searchFn = (materia: MateriaTabla[], s: string) => {
-  //   return materia.filter((mat) =>
-  //     (mat.codigo + mat.nombre).toLowerCase().includes(s.toLowerCase())
-  //   );
-  // };
 
   /** Alert dialog control hook */
   const {
@@ -103,8 +103,15 @@ function ListarMaterias() {
   /** Error handling hook */
   const { setError } = useErrorReader(showDialog);
 
+  /** Transformed subject data for display */
   const materias = data ? data.map(adaptMateriaService) : [];
 
+  /**
+   * Mutation function to upload a file for bulk import of subjects.
+   * Sends the file to the server for processing.
+   *
+   * @param {File} file - The file to be uploaded.
+   */
   const { mutate: updateFile } = useMutation({
     mutationFn: async (file: File) => {
       setIsLoading(true);
@@ -122,8 +129,15 @@ function ListarMaterias() {
     onError: (err) => setError(err),
   });
 
+  /** Local state for the buffer of filtered subjects */
   const [buffer, setBuffer] = useState<MateriaTabla[]>(materias);
 
+  /**
+   * Handles the file selection for bulk upload of subjects.
+   * Displays a confirmation dialog before uploading the file.
+   *
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The file input change event.
+   */
   function setFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files ? e.target.files[0] : null;
 
@@ -141,6 +155,7 @@ function ListarMaterias() {
 
   /**
    * Effect that handles error setting when fetching fails.
+   * Sets the error state in case of an error during the fetch process.
    */
   useEffect(() => {
     if (error) {
@@ -203,3 +218,4 @@ function ListarMaterias() {
 }
 
 export default ListarMaterias;
+

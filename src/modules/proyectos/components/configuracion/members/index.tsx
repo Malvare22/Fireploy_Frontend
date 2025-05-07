@@ -34,6 +34,25 @@ import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import useSearch from "@modules/general/hooks/useSearch";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
 
+/**
+ * Members component – This component displays the list of members (collaborators) for a project 
+ * and allows the user to manage these members by adding or removing them. The component fetches 
+ * the project data, shows the members, and provides the UI for user interaction, such as 
+ * adding new users or removing existing ones.
+ * 
+ * This component is built using MUI components, hooks from React Query, and custom hooks 
+ * for fetching and updating project data.
+ * 
+ * @component
+ * 
+ * @returns {JSX.Element} A component that displays the project members and allows management 
+ * of these members (adding or removing users).
+ * 
+ * @example
+ * ```tsx
+ * <Members />
+ * ```
+ */
 export const Members = () => {
   const theme = useTheme();
 

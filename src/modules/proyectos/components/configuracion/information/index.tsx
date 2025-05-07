@@ -25,6 +25,30 @@ type Props = {
   type: "edit" | "create";
 };
 
+/**
+ * Information component – a form used to create or edit project information, including 
+ * project title, description, and related academic data (e.g., materia, curso, seccion).
+ * 
+ * This component handles form submissions for both creating and editing a project. It also 
+ * integrates with external services to fetch academic information and manage project 
+ * data creation or editing. The component is designed to display a form with different 
+ * fields depending on the operation type (`create` or `edit`), including project details 
+ * and academic information selection.
+ * 
+ * @component
+ * 
+ * @param {("edit" | "create")} type - The type of operation to perform, either "edit" 
+ * or "create". This determines the form's behavior (editing an existing project or 
+ * creating a new one).
+ * 
+ * @returns {JSX.Element} A form component for creating or editing project information.
+ * 
+ * @example
+ * ```tsx
+ * <Information type="create" />
+ * <Information type="edit" />
+ * ```
+ */
 export const Information = ({ type }: Props) => {
   const { getValues: getValuesPrincipal } = useFormContext<ProyectoSchema>();
   const { updateSearchParams, searchParams } = useContext(ParamsContext);

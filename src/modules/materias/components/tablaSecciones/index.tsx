@@ -27,6 +27,25 @@ import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { labelEditCourse } from "@modules/materias/enums/labelEditCourse";
 import CustomWidthTooltip from "@modules/general/components/customWidthTooltip";
 
+/**
+ * TablaGestionarSecciones component – a table for managing and editing sections (secciones) of a course.
+ * This component allows users to view, add, edit, and delete sections, including actions such as updating section details.
+ * It integrates form handling using `react-hook-form` and displays errors if any validation fails.
+ * 
+ * The table displays key information about each section, such as the section ID, title, start and end dates, 
+ * number of projects, description, and current state. The component includes modals for adding and editing sections,
+ * as well as alerts for error handling or successful updates.
+ * 
+ * @component
+ * 
+ * @returns A JSX element that renders the section management table with modals for editing and adding sections,
+ *          and buttons for saving and canceling changes.
+ * 
+ * @example
+ * ```tsx
+ * <TablaGestionarSecciones />
+ * ```
+ */
 const TablaGestionarSecciones = () => {
   const { getValues: getValuesCurso } = useFormContext<Curso>();
   const methods = useForm<Zod.TypeOf<typeof SeccionesSchema>>({

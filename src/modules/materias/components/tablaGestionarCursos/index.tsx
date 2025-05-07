@@ -27,6 +27,22 @@ import { useCustomTableStyles } from "@modules/general/styles";
 import AlertDialog from "@modules/general/components/alertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 
+/**
+ * TablaGestionarCursos Component – Displays a table for managing courses, including features such as editing course information, 
+ * assigning instructors, and handling course actions (e.g., add, delete, save).
+ * 
+ * The table includes features like row editing, selecting instructors from a search list, and managing course states (active, inactive, etc.).
+ * It also integrates form handling with `react-hook-form` to manage the course data.
+ * 
+ * @component
+ * 
+ * @returns A `DataTable` component for managing courses, along with actions for adding, editing, saving, and deleting courses.
+ * 
+ * @example
+ * ```tsx
+ * <TablaGestionarCursos />
+ * ```
+ */
 const TablaGestionarCursos = () => {
   /**
    * Definición de estado de editar por fila

@@ -26,6 +26,25 @@ import { paginationComponentOptions } from "@modules/general/utils/pagination";
 type TablaMateriasProps = {
   materias: MateriaTabla[];
 };
+
+/**
+ * TablaMaterias component – a table to display and manage a list of subjects (materias) with various features.
+ * This component renders a table with subject details, including its code, name, semester, state, and number of active groups.
+ * 
+ * It supports various actions such as viewing courses, editing subjects, and enabling or disabling subjects based on their current state.
+ * The component also includes modals for confirmation of changes, and error handling when updating the status of a subject.
+ * 
+ * @component
+ * 
+ * @param materias - An array of MateriaTabla objects that represent the list of subjects to be displayed in the table.
+ * 
+ * @returns A JSX element that renders the subject table with actions, modals, and pagination.
+ * 
+ * @example
+ * ```tsx
+ * <TablaMaterias materias={materiasList} />
+ * ```
+ */
 const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
   const theme = useTheme();
 
