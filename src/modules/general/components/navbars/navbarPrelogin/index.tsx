@@ -23,15 +23,22 @@ export enum labelsNavbarPrelogin {
 }
 
 /**
- * **Pre-login Navigation Bar Component**
- *
- * Displays a responsive navbar with:
- * - A **brand title ("FIREPLOY")**.
- * - A **hamburger menu** (for small screens).
- * - Navigation buttons for login and registration.
+ * NavbarPrelogin Component
+ * 
+ * A responsive navigation bar component that is displayed before user login.
+ * It contains menu items for navigating between pages such as "Home", "Team", 
+ * and "Technologies", and provides login and registration buttons. 
+ * The navigation bar adapts to screen sizes, displaying a menu on smaller screens 
+ * and direct buttons on larger screens.
  *
  * @component
- * @returns {JSX.Element} The pre-login navigation bar.
+ * 
+ * @returns {JSX.Element} A responsive navigation bar with menu and navigation options.
+ * 
+ * @example
+ * ```tsx
+ * <NavbarPrelogin />
+ * ```
  */
 function NavbarPrelogin(): JSX.Element {
   /** List of navigation options available before logging in. */

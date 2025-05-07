@@ -5,31 +5,37 @@ import { useSpring, animated } from "@react-spring/web";
 import { Card, SxProps, useTheme } from "@mui/material";
 
 /**
- * Props for the `Fade` animation component.
- *
- * @interface FadeProps
- * @property {React.ReactElement} children - The component to animate.
- * @property {boolean} [in] - Controls the fade-in and fade-out state.
- * @property {() => void} [onClick] - Optional click handler.
- * @property {(node: HTMLElement | null, isAppearing: boolean) => void} [onEnter] - Called when animation starts.
- * @property {(node: HTMLElement | null, isAppearing: boolean) => void} [onExited] - Called when animation ends.
- * @property {Record<string, any>} [ownerState] - Optional owner state object.
+ * Props for the Fade component.
  */
 interface FadeProps {
+  /** The child element that will be wrapped with the transition. */
   children: React.ReactElement;
+
+  /** Whether the modal is open (true) or closed (false). */
   in?: boolean;
+
+  /** Optional click handler on the child. */
   onClick?: () => void;
+
+  /** Callback fired when the transition starts (enter). */
   onEnter?: (node: HTMLElement | null, isAppearing: boolean) => void;
+
+  /** Callback fired when the transition ends (exit). */
   onExited?: (node: HTMLElement | null, isAppearing: boolean) => void;
+
+  /** Additional props for animation state or configuration. */
   ownerState?: Record<string, any>;
 }
 
 /**
- * Custom `Fade` animation using react-spring for modal transitions.
+ * Fade Component
+ *
+ * A custom transition component using `react-spring` to animate opacity.
+ * Used for smooth fade-in/out effects when opening or closing the modal.
  *
  * @component
- * @param {FadeProps} props - Animation configuration and children.
- * @returns {JSX.Element} - Returns an animated div wrapping the child component.
+ * @param {FadeProps} props - Fade transition properties.
+ * @returns {JSX.Element} Animated wrapper around children.
  */
 const Fade = React.forwardRef<HTMLDivElement, FadeProps>(function Fade(
   { children, in: open, onClick, onEnter, onExited, ownerState = {}, ...other },
@@ -50,27 +56,38 @@ const Fade = React.forwardRef<HTMLDivElement, FadeProps>(function Fade(
 });
 
 /**
- * Props for the `SpringModal` component.
- *
- * @interface SpringModalProps
- * @property {React.ReactNode} children - Content inside the modal.
- * @property {boolean} open - Controls whether the modal is visible.
- * @property {() => void} handleClose - Function to handle modal close event.
- * @property {SxProps} [sx] - Optional styles to override default card styles.
+ * Props for the SpringModal component.
  */
 interface SpringModalProps {
+  /** The content to render inside the modal. */
   children: React.ReactNode;
+
+  /** Whether the modal is open or not. */
   open: boolean;
+
+  /** Function to close the modal. */
   handleClose: () => void;
+
+  /** Optional additional styles to apply to the modal content. */
   sx?: SxProps;
 }
 
 /**
- * `SpringModal` is a reusable modal component that uses a spring-based fade transition.
+ * SpringModal Component
+ *
+ * A reusable modal component that wraps its content with a Material UI `Modal` and applies a spring animation on open/close.
+ * Uses `@react-spring/web` for animated transitions and `@mui/material` for layout and theming.
  *
  * @component
- * @param {SpringModalProps} props - Modal control and content.
- * @returns {JSX.Element} - A modal window with animated appearance and custom styling.
+ * @param {SpringModalProps} props - Component properties.
+ * @returns {JSX.Element} A centered modal with smooth transitions.
+ *
+ * @example
+ * ```tsx
+ * <SpringModal open={isOpen} handleClose={() => setIsOpen(false)}>
+ *   <YourComponent />
+ * </SpringModal>
+ * ```
  */
 const SpringModal: React.FC<SpringModalProps> = ({ children, open, handleClose, sx = {} }) => {
   const theme = useTheme();

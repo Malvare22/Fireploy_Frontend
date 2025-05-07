@@ -28,12 +28,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LoaderElement from "../loaderElement";
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 
-/**
- * Constructs the sidebar navigation elements based on the user's role.
- *
- * @param {AccountInformation} userInformation - User information to determine access.
- * @returns {Navigation} Navigation structure for Toolpad.
- */
+
 function getNavigationElements(userInformation: AccountInformation): Navigation {
   return [
     {
@@ -144,11 +139,7 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
   ];
 }
 
-/**
- * Custom hook to manage Toolpad routing behavior.
- *
- * @returns {Router} Custom Router object with navigation and pathname.
- */
+
 function useDemoRouter(): Router {
   const navigate = useNavigate();
   const location = useLocation();
@@ -169,12 +160,7 @@ function useDemoRouter(): Router {
   };
 }
 
-/**
- * Sidebar Account Preview wrapped in a divider.
- *
- * @component
- * @param {AccountPreviewProps & { mini: boolean }} props - Props to control preview variant.
- */
+
 function AccountSidebarPreview(props: AccountPreviewProps & { mini: boolean }) {
   const { handleClick, open, mini } = props;
   return (
@@ -189,11 +175,7 @@ function AccountSidebarPreview(props: AccountPreviewProps & { mini: boolean }) {
   );
 }
 
-/**
- * Sidebar popover with account options.
- *
- * @returns {JSX.Element} Sidebar buttons for "Configurar Cuenta" and "Cerrar Sesión".
- */
+
 function SidebarFooterAccountPopover() {
   const navigate = useNavigate();
 
@@ -217,24 +199,14 @@ function SidebarFooterAccountPopover() {
   );
 }
 
-/**
- * Higher-order component to create preview variants.
- *
- * @param {boolean} mini - Whether the preview is condensed.
- * @returns {React.FC<AccountPreviewProps>} PreviewComponent
- */
+
 const createPreviewComponent = (mini: boolean) => {
   return function PreviewComponent(props: AccountPreviewProps) {
     return <AccountSidebarPreview {...props} mini={mini} />;
   };
 };
 
-/**
- * Footer component for the sidebar account section.
- *
- * @component
- * @param {SidebarFooterProps} props - Props containing `mini` to control layout.
- */
+
 function SidebarFooterAccount({ mini }: SidebarFooterProps) {
   const PreviewComponent = React.useMemo(() => createPreviewComponent(mini), [mini]);
   return (
@@ -277,14 +249,24 @@ function SidebarFooterAccount({ mini }: SidebarFooterProps) {
 }
 
 /**
- * **Dashboard Layout Component**
+ * `DashboardLayoutBasic` wraps the entire application with `AppProvider` from Toolpad,
+ * dynamically configuring navigation, theming, and authentication based on the current user (`accountInformation`).
  *
- * Provides the main structure and configuration for the authenticated dashboard environment.
- * Includes navigation, routing, theming, and account context integration.
+ * It acts as the top-level layout for authenticated app sections, rendering the sidebar, toolbar,
+ * and dynamic routes depending on the user's role and current location.
+ *
+ * If the user has not yet been authenticated (`id === -1`), a full-page loader is shown.
  *
  * @component
- * @param {any} props - React props, typically includes children components.
- * @returns {JSX.Element} Rendered dashboard layout or loading screen.
+ * @example
+ * ```tsx
+ * <DashboardLayoutBasic>
+ *   <YourPageComponent />
+ * </DashboardLayoutBasic>
+ * ```
+ *
+ * @param {any} props - React children to be rendered within the layout body.
+ * @returns {JSX.Element} A fully responsive and role-aware dashboard layout.
  */
 export default function DashboardLayoutBasic(props: any) {
   const router = useDemoRouter();

@@ -11,8 +11,12 @@ import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import CancelIcon from '@mui/icons-material/Cancel';
 import SaveIcon from '@mui/icons-material/Save';
 
+
 /**
  * Map of icons associated with each action type.
+ * The icons represent various actions such as view, edit, delete, etc.
+ *
+ * @type {Record<actionButtonTypes, ReactNode>}
  */
 const iconMap = {
   [actionButtonTypes.ver]: <VisibilityIcon />,
@@ -26,8 +30,12 @@ const iconMap = {
   [actionButtonTypes.guardar]: <SaveIcon />,
 };
 
+
 /**
  * Map of labels associated with each action type.
+ * These labels describe the action when hovered over in a tooltip.
+ *
+ * @type {Record<actionButtonTypes, string>}
  */
 const labelMap = {
   [actionButtonTypes.ver]: "ver",
@@ -45,7 +53,8 @@ const labelMap = {
  * @interface ActionButtonProps
  * @extends {IconButtonProps}
  * @property {actionButtonTypes} mode - Type of action represented by the button.
- * @property {ReactNode} [icon] - Optional custom icon for the button.
+ * Defines what action this button will perform (e.g., view, edit, delete, etc.).
+ * @property {ReactNode} [icon] - Optional custom icon for the button. If provided, it overrides the default icon based on the mode.
  */
 interface ActionButtonProps extends IconButtonProps {
   mode: actionButtonTypes;
@@ -54,12 +63,20 @@ interface ActionButtonProps extends IconButtonProps {
 
 /**
  * Action button component that displays an icon and a descriptive tooltip.
- *
+ * This component renders a button with an icon and a tooltip that explains the action.
+ * 
+ * The icon and label are automatically determined by the `mode` prop.
+ * 
  * @component
- * @param {ActionButtonProps} props - Action button properties.
- * @param {actionButtonTypes} props.mode - Defines the type of action represented by the button.
- * @param {ReactNode} [props.icon] - Optional custom icon for the button.
- * @returns {JSX.Element} An interactive button with an icon and a descriptive tooltip.
+ * @param {ActionButtonProps} props - The properties for this action button.
+ * @param {actionButtonTypes} props.mode - The action this button represents (view, edit, delete, etc.).
+ * @param {ReactNode} [props.icon] - A custom icon for the button (optional).
+ * @returns {JSX.Element} An interactive button with an icon and a tooltip.
+ * 
+ * @example
+ * ```tsx
+ * <ActionButton mode={actionButtonTypes.ver} />
+ * ```
  */
 const ActionButton: React.FC<ActionButtonProps> = ({ mode, icon, ...props }) => {
   return (

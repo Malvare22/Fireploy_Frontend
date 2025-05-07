@@ -13,13 +13,23 @@ type Props = {
 };
 
 /**
- * PortafolioCard component that displays user profile information,
- * including name, role, and achievements.
- *
- * @param {Props} props - Component props.
- * @param {UsuarioPortafolioCard} props.usuario - User portfolio data.
- *
- * @returns {JSX.Element} A styled user portfolio card.
+ * PortafolioCard Component
+ * 
+ * A card component that displays a user's profile in the portfolio section. 
+ * This component includes the user's avatar, name, and role. When clicked, 
+ * it navigates to the user's portfolio page.
+ * 
+ * @component
+ * 
+ * @param {Props} props - Component properties.
+ * @param {UsuarioPortafolioCard} props.usuario - The user data to display in the card.
+ * 
+ * @returns {JSX.Element} A styled card showing the user's avatar, name, and role.
+ * 
+ * @example
+ * ```tsx
+ * <PortafolioCard usuario={userData} />
+ * ```
  */
 const PortafolioCard: React.FC<Props> = ({ usuario }) => {
 

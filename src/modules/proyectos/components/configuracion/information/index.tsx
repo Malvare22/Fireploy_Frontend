@@ -3,7 +3,7 @@ import AlertDialog from "@modules/general/components/alertDialog";
 import GeneralButton from "@modules/general/components/button";
 import LoaderElement from "@modules/general/components/loaderElement";
 import { useAuth } from "@modules/general/context/accountContext";
-import { ParamsContext } from "@modules/general/context/paramasContext";
+import { ParamsContext } from "@modules/general/context/paramsContext";
 import { StepperContext } from "@modules/general/context/stepper.Contex";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { getAllAcademicInformation } from "@modules/materias/services/get.materias.services";
@@ -154,7 +154,7 @@ export const Information = ({ type }: Props) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={2}>
             <Typography variant="h5">Información</Typography>
-            <Grid2 container rowSpacing={4} spacing={2}>
+            <Grid2 container rowSpacing={2} spacing={2}>
               <Grid2 size={{ xs: 12, md: 6 }}>
                 <Controller
                   name="titulo"
@@ -171,7 +171,6 @@ export const Information = ({ type }: Props) => {
                   )}
                 />
               </Grid2>
-
               <Grid2 size={12}>
                 <Controller
                   name="descripcion"

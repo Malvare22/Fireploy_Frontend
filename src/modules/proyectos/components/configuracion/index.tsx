@@ -55,16 +55,16 @@ export default function ProjectSettings({ project }: Props) {
 
   const { token } = useAuth().accountInformation;
 
-  const {mutate: mutateProject} = useMutation({
+  const { mutate: mutateProject } = useMutation({
     mutationFn: async (id: number) => {
       return await postLoadProject(id, token);
     },
     mutationKey: ["load project", getValues("id")],
-    onError: (error) => setError(error)
+    onError: (error) => setError(error),
   });
 
-  function handleLoadProject(){
-    mutateProject(getValues('id') ?? 0);
+  function handleLoadProject() {
+    mutateProject(getValues("id") ?? 0);
   }
 
   return (
@@ -80,7 +80,9 @@ export default function ProjectSettings({ project }: Props) {
         <Grid2 size={12} marginBottom={2}>
           <Stack direction={"row"} spacing={1}>
             <Typography variant="h4">{project.titulo}</Typography>
-            <Button endIcon={<RocketLaunchIcon />} onClick={handleLoadProject}>Desplegar</Button>
+            <Button endIcon={<RocketLaunchIcon />} onClick={handleLoadProject}>
+              Desplegar
+            </Button>
             {url != "" && (
               <IconButton onClick={() => handleUrl(url)}>
                 <OpenInNewIcon />
@@ -101,6 +103,8 @@ export default function ProjectSettings({ project }: Props) {
               value={tabIndex}
               onChange={(_e, newIndex) => setTabIndex(newIndex)}
               sx={{ borderBottom: 1, borderColor: "divider" }}
+                variant="scrollable"
+  scrollButtons="auto"
             >
               <Tab label="Información" icon={<InfoIcon />} iconPosition="start" />
               <Tab label="Repositorios" icon={<GitHubIcon />} iconPosition="start" />

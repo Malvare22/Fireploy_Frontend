@@ -8,44 +8,44 @@ import {
 import useSearch from "@modules/general/hooks/useSearch";
 import SearchIcon from "@mui/icons-material/Search";
 
-/**
- * Props for the `TextFieldSearch` component.
- * Extends MUI's `TextFieldProps` to allow all standard TextField properties.
- */
 type Props = {
   /**
-   * Function to update the search value when the user presses Enter or clicks the search button.
+   * Sets the final value used for search execution, e.g., after clicking the button or pressing Enter.
    */
   setSearchValue: React.Dispatch<React.SetStateAction<string>>;
 } & TextFieldProps;
 
 /**
- * A search input field with an integrated search button.
- * Allows users to type a search query and trigger a search by pressing Enter or clicking the search icon.
+ * `TextFieldSearch` is a text input with a search button and buffered input logic.
+ *
+ * It captures user input and only commits it (via `setSearchValue`) when the search icon is clicked
+ * or the Enter key is pressed. Internally uses `useSearch()` for debounce or buffer support.
+ *
+ * Accepts all standard `TextFieldProps`.
  *
  * @component
- * @param {Props} props - The component props, including `setSearchValue` and all standard `TextField` props.
- * @param {React.Ref<HTMLInputElement>} ref - Reference to the input element.
- * @returns {JSX.Element} A search input field with a search button.
+ * @example
+ * ```tsx
+ * const [search, setSearch] = useState("");
+ * return <TextFieldSearch label="Buscar..." setSearchValue={setSearch} />;
+ * ```
+ *
+ * @param {Props} props - Includes MUI `TextFieldProps` and `setSearchValue` callback.
+ * @param {React.Ref<HTMLInputElement>} ref - Ref to the internal input element.
+ * @returns {JSX.Element} Search input field with search trigger.
  */
 const TextFieldSearch = forwardRef<HTMLInputElement, Props>(
   ({ setSearchValue, ...props }, ref) => {
     const { buffer, setBuffer } = useSearch();
 
-    /**
-     * Handles the Enter key press event to trigger the search.
-     *
-     * @param {React.KeyboardEvent<HTMLInputElement>} e - The keyboard event.
-     */
+    /** Trigger search on Enter key press */
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter") {
         setSearchValue(buffer);
       }
     };
 
-    /**
-     * Handles the click event of the search button to trigger the search.
-     */
+    /** Trigger search on icon button click */
     const handleClick = () => {
       setSearchValue(buffer);
     };
@@ -53,9 +53,10 @@ const TextFieldSearch = forwardRef<HTMLInputElement, Props>(
     return (
       <TextField
         size="small"
-        {...props} // Pass all TextField props
-        inputRef={ref} // Assign ref to the internal input
+        {...props}
+        inputRef={ref}
         InputProps={{
+          ...props.InputProps,
           endAdornment: (
             <InputAdornment position="end">
               <IconButton onClick={handleClick}>
@@ -64,7 +65,7 @@ const TextFieldSearch = forwardRef<HTMLInputElement, Props>(
             </InputAdornment>
           ),
         }}
-        onChange={(e) => setBuffer(e.currentTarget.value as string)}
+        onChange={(e) => setBuffer(e.currentTarget.value)}
         value={buffer}
         onKeyDown={handleKeyDown}
       />

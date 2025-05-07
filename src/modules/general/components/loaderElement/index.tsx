@@ -1,6 +1,25 @@
 import { Box, GlobalStyles, useTheme } from "@mui/material";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 
+/**
+ * LoaderElement component – a custom animated loader built with Material-UI components and a rocket icon.
+ * 
+ * This loader displays a central rocket icon with orbiting animated dots, creating a dynamic visual effect. 
+ * It uses custom CSS keyframe animations for orbiting and blinking, applied globally using MUI's `GlobalStyles`.
+ * 
+ * This component does not accept props and is intended to fill its container (`100%` width and height).
+ * 
+ * @component
+ * 
+ * @returns {JSX.Element} An animated loader element with orbiting particles and a blinking rocket icon.
+ * 
+ * @example
+ * ```tsx
+ * <Box sx={{ width: 300, height: 300 }}>
+ *   <LoaderElement />
+ * </Box>
+ * ```
+ */
 function LoaderElement() {
   const theme = useTheme();
 

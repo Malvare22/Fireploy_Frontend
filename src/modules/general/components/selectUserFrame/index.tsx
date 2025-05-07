@@ -4,12 +4,22 @@ import ActionButton from "../actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
 
 /**
- * Component that displays the selected user's information along with an action button.
+ * SelectUserFrame Component
+ *
+ * A card-style UI component used to display a selected user with their profile picture and name.
+ * It also includes an action button to perform an operation such as removal or disabling.
+ *
+ * @component
+ * @param {SelectUserFrameProps} props - Component props.
+ * @param {UsuarioCampoBusqueda} props.user - The user data to be displayed.
+ * @param {Function} props.onClick - The callback function triggered when the action button is clicked.
  * 
- * @param {Object} props - Component properties.
- * @param {UsuarioCampoBusqueda} props.user - Selected user data.
- * @param {() => void} props.onClick - Function executed when the action button is clicked.
- * @returns {JSX.Element} The `SelectUserFrame` component.
+ * @returns {JSX.Element} A styled card showing the user's photo and name with an action button.
+ *
+ * @example
+ * ```tsx
+ * <SelectUserFrame user={usuario} onClick={() => handleRemove(usuario.id)} />
+ * ```
  */
 const SelectUserFrame: React.FC<{ user: UsuarioCampoBusqueda; onClick: () => void }> = ({ user, onClick }) => {
   return (

@@ -9,13 +9,26 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 /**
- * A password input field with a toggle button to show or hide the password.
- * It extends the default MUI `TextField` component.
+ * TextFieldPassword Component
+ *
+ * A reusable password input field based on MUI's `TextField`.
+ * Includes a toggle button to show or hide the password.
+ *
+ * Accepts all standard `TextFieldProps`.
  *
  * @component
- * @param {TextFieldProps} props - Props passed to the MUI `TextField` component.
- * @param {React.Ref<HTMLInputElement>} ref - Reference to the input element.
- * @returns {JSX.Element} The password input field with a visibility toggle button.
+ * @example
+ * ```tsx
+ * <TextFieldPassword
+ *   label="Password"
+ *   variant="outlined"
+ *   fullWidth
+ * />
+ * ```
+ *
+ * @param {TextFieldProps} props - Props to pass down to the MUI TextField.
+ * @param {React.Ref<HTMLInputElement>} ref - Optional ref to the input element.
+ * @returns {JSX.Element} The password input component with visibility toggle.
  */
 const TextFieldPassword = forwardRef<HTMLInputElement, TextFieldProps>(
   (props, ref) => {

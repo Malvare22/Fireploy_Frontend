@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { adaptProject } from "@modules/proyectos/utils/adapt.proyecto";
 import { getProjectById } from "@modules/proyectos/services/get.project";
 import { useAuth } from "@modules/general/context/accountContext";
-import { ParamsContext } from "@modules/general/context/paramasContext";
+import { ParamsContext } from "@modules/general/context/paramsContext";
 import { useParamsCustom } from "@modules/general/hooks/useParamsContext";
 
 export default function CrearProyecto() {

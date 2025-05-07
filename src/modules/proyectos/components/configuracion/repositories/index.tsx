@@ -50,11 +50,11 @@ export function Repositories({ type }: Props) {
     title,
     message,
     type: dialogType,
-    setOpen
+    setOpen,
   } = useAlertDialog2();
 
   const { setError } = useErrorReader(showDialog);
-  
+
   const { mutate, isPending } = useMutation({
     mutationFn: () => patchEditRepository(token, getValues()),
     onSuccess: () => {
@@ -65,7 +65,9 @@ export function Repositories({ type }: Props) {
           message: "Repositorios actualizados correctamente",
           type: "success",
           title: "Éxito",
-          onAccept: () => {setOpen(false)},
+          onAccept: () => {
+            setOpen(false);
+          },
           reload: true,
         });
       }
@@ -83,7 +85,9 @@ export function Repositories({ type }: Props) {
             message: "Repositorios actualizados correctamente",
             type: "success",
             title: "Éxito",
-            onAccept: () => {setOpen(false)},
+            onAccept: () => {
+              setOpen(false);
+            },
             reload: true,
           });
         } else {
@@ -123,7 +127,7 @@ export function Repositories({ type }: Props) {
 
       {/* ✅ FormProvider para compartir el contexto */}
       <FormProvider {...methods}>
-        <AutoFocusOnError<ProyectoRepositoriesSchema>/>
+        <AutoFocusOnError<ProyectoRepositoriesSchema> />
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Stack spacing={3}>
             <Stack>
@@ -147,7 +151,6 @@ export function Repositories({ type }: Props) {
                         label={labelConfiguracion.urlFrontend}
                         error={!!fieldState.error}
                         helperText={fieldState.error?.message}
-                        sx={{ width: "50%" }}
                         inputRef={field.ref}
                       />
                     )}

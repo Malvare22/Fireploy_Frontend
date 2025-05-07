@@ -37,6 +37,15 @@ export enum labelHome {
   sectionPortafoliosBody = "Tus proyectos desplegados con Fireploy se anexan a un portafolio publico, puedes vincularle diferentes redes sociales, y puedes ver los portafolios de los demás. Puede que tu próximo compañero de desarrollo esté a solo unas búsquedas 🤑",
   sectionPortafoliosButton = "Explora portafolios",
 }
+
+/**
+ * Home component serves as the landing page of the application.
+ * It contains multiple sections such as the principal content, project showcase,
+ * and portfolio preview. It provides navigation for users to explore various features.
+ *
+ * @component
+ * @returns {JSX.Element} The home page layout with sections showcasing content and actions.
+ */
 export default function Home() {
   return (
     <Box>

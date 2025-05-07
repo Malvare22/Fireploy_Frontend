@@ -1,25 +1,37 @@
 import { Box, Stack, useTheme } from "@mui/material";
 
 /**
- * Properties for the `Status` component.
- * @typedef {Object} StatusProps
- * @property {"A" | "I"} status - The status of the element, "A" for Active and "I" for Inactive.
+ * Props for the Status component.
  */
 export type StatusProps = {
+  /**
+   * The status value indicating whether the user is active ("A") or inactive ("I").
+   */
   status: "A" | "I";
 };
 
 /**
- * Component that displays a status indicator with a colored circle and text.
- * @param {StatusProps} props - Component properties.
- * @param {"A" | "I"} props.status - The current status, where "A" is Active (green) and "I" is Inactive (red).
- * @returns {JSX.Element} JSX element with the status indicator.
+ * Status Component
+ *
+ * Displays a colored circle and label representing a user's status.
+ * A green circle with "Active" indicates status "A", and a red circle with "Inactive" indicates status "I".
+ * Includes a blinking animation to draw subtle attention to the status.
+ *
+ * @component
+ * @param {StatusProps} props - Component props.
+ * @returns {JSX.Element} Status display with icon and text.
+ *
+ * @example
+ * ```tsx
+ * <Status status="A" />  // Shows green dot and "Active"
+ * <Status status="I" />  // Shows red dot and "Inactive"
+ * ```
  */
 const Status: React.FC<StatusProps> = ({ status }) => {
   const theme = useTheme();
 
   return (
-    <Stack direction={"row"} alignItems={"center"} spacing={1}>
+    <Stack direction="row" alignItems="center" spacing={1}>
       <Box
         sx={{
           width: 16,
@@ -43,9 +55,10 @@ const Status: React.FC<StatusProps> = ({ status }) => {
 };
 
 /**
- * Returns the text representation of the status.
- * @param {"A" | "I"} status - The status code.
- * @returns {string} The corresponding status text.
+ * Converts a status code into human-readable text.
+ *
+ * @param {StatusProps["status"]} status - The status code ("A" or "I").
+ * @returns {string} The corresponding label ("Active" or "Inactive").
  */
 function getStatusText(status: StatusProps["status"]): string {
   return status === "A" ? "Active" : "Inactive";

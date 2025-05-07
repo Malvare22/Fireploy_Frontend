@@ -15,6 +15,7 @@ import { postChangePasswordForget } from "@modules/general/services/post.change.
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { labelRestorePassword } from "@modules/general/enums/labelRestorePassword";
+
 /**
  * Password reset component used for users who forgot their current password.
  * It allows users to provide their email, current password, and a new password.
@@ -22,7 +23,6 @@ import { labelRestorePassword } from "@modules/general/enums/labelRestorePasswor
  *
  * @component
  */
-
 function ReestablecerContrasenia() {
   const { token } = useParams();
 

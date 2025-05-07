@@ -17,15 +17,19 @@ export type UsuarioCampoBusqueda = {
 /**
  * Custom hook for handling user selection in a search component.
  * 
- * @returns {Object} Hook return values.
- * @returns {UsuarioCampoBusqueda | null} selectUser - The currently selected user.
- * @returns {React.Dispatch<React.SetStateAction<UsuarioCampoBusqueda | null>>} setSelectUser - Function to update the selected user.
+ * This hook manages the selected user in a search interface. It provides the state
+ * of the currently selected user and a function to update the selected user.
+ *
+ * @returns {{
+ *   selectUser: UsuarioCampoBusqueda | null, // The currently selected user, or null if no user is selected.
+ *   setSelectUser: React.Dispatch<React.SetStateAction<UsuarioCampoBusqueda | null>> // Function to update the selected user.
+ * }}
  */
 export const useSearchUsers = () => {
   const [selectUser, setSelectUser] = useState<UsuarioCampoBusqueda | null>(null);
 
   return {
-    selectUser,
-    setSelectUser,
+    selectUser, // The currently selected user, or null if no user is selected.
+    setSelectUser, // Function to update the selected user.
   };
 };
