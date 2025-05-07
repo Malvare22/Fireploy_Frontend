@@ -6,7 +6,7 @@ import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { rutasProyectos } from "@modules/proyectos/router";
 import { postCreateDatabase } from "@modules/proyectos/services/post.base.datos";
-import { getDataBaseTypesArray } from "@modules/proyectos/utils/database";
+import { getDataBaseTypesArray, getDataBaseTypesMap } from "@modules/proyectos/utils/database";
 import { BaseDeDatosRegisterSchema } from "@modules/proyectos/utils/forms/baseDeDatos.schema";
 import { ProyectoSchema } from "@modules/proyectos/utils/forms/proyecto.schema";
 import { Box, Button, Chip, Divider, MenuItem, Stack, TextField, Typography } from "@mui/material";
@@ -15,7 +15,6 @@ import { useEffect } from "react";
 import { useFormContext, Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import StorageIcon from "@mui/icons-material/Storage";
-import { getDatabaseTypesMap } from "@modules/proyectos/utils/getDatabaseTypes";
 import AlertDialog from "@modules/general/components/alertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 
@@ -174,7 +173,7 @@ export const DataBase = ({ type }: Props) => {
         <Stack spacing={3}>
           <Stack direction={"row"} alignItems={"center"} spacing={2}>
             <Typography>Seleccionada: </Typography>
-            <Chip color="info" label={getDatabaseTypesMap.get(getValues("tipo"))} />
+            <Chip color="info" label={getDataBaseTypesMap.get(getValues("tipo"))} />
           </Stack>
           <Box>
             <Button variant="contained" endIcon={<StorageIcon />}>
