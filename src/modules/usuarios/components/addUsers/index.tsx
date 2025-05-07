@@ -42,15 +42,20 @@ type Props = {
 };
 
 /**
- * `AddUsers` component allows users to be selected and added to a group or course.
+ * `AddUsers` component allows users to be searched, selected, and added to a group or course.
  *
- * - Users can be searched and filtered.
- * - Selected users are shown as chips with avatars.
- * - Users can be removed from selection.
- * - Handles loading, API errors, and confirmation actions.
+ * - Users can be searched and filtered using a search bar.
+ * - Selected users are displayed as chips with avatars, and they can be removed from selection.
+ * - Handles loading state, API errors, and confirmation actions through alert dialogs.
+ * - Includes action buttons for saving the selection or cancelling the operation.
  *
  * @component
  * @param {Props} props - Component props
+ * @param {UserTypeFullString} props.typeUsers - The type of users to fetch (e.g., "student", "teacher").
+ * @param {UsuarioCampoBusqueda[]} props.selectUsers - A list of users currently selected.
+ * @param {React.Dispatch<UsuarioCampoBusqueda[]>} props.setSelectUsers - Function to update the selected users list.
+ * @param {() => void} props.handleAccept - Function to handle the "Accept" action.
+ * @param {() => void} props.handleCancel - Function to handle the "Cancel" action.
  * @returns {JSX.Element} The rendered component
  */
 const AddUsers: React.FC<Props> = ({

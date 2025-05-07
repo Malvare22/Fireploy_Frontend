@@ -25,14 +25,22 @@ import AlertDialog from "@modules/general/components/alertDialog";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
 
 /**
- * Portfolio component responsible for rendering a user's public profile and projects.
+ * Portfolio component – responsible for rendering a user's public profile and projects.
+ * 
+ * This component fetches and displays user information, a list of their projects, social media links,
+ * and achievements. It allows sorting and filtering of the project list and opens a modal
+ * for viewing project details.
  *
- * Fetches and displays user information, a list of their projects, social media links,
- * and achievements. Allows sorting and filtering of the project list and opens a modal
- * for detailed project view.
+ * It uses Material-UI components for layout and styling, with the option to customize project
+ * filtering, sorting by score and semester, and viewing detailed information in modals.
  *
  * @component
- * @returns {JSX.Element} A full portfolio page for a specific user
+ * @returns {JSX.Element} A full portfolio page showcasing a user's profile and projects.
+ * 
+ * @example
+ * ```tsx
+ * <Portafolio />
+ * ```
  */
 const Portafolio = () => {
   const { id } = useParams();

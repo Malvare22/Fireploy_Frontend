@@ -1,11 +1,3 @@
-// import { RouteObject } from "react-router-dom";
-// import ListarUsuarios from "../pages/listar";
-// import Perfil from "../pages/perfil";
-// import PerfilPorId from "../pages/id";
-// import VerPortafolioPorId from "../pages/portafolio";
-// import LayoutStandard from "@modules/general/layouts/standard";
-// import BuscarPortafolio from "../pages/buscarPortafolio";
-
 import { RouteObject } from "react-router-dom";
 import VistaPerfil from "../pages/perfil";
 import ListarPortafolios from "../pages/explorarPortafolios";
@@ -31,6 +23,20 @@ export enum rutasUsuarios {
   newEntries = rutaBase + '/newEntries'
 }
 
+/**
+ * Router configuration for the Usuarios (Users) module.
+ * 
+ * This configuration defines the available routes for user-related pages, including profile management, 
+ * portfolio exploration, user list, request management, and admin pages. Each route is associated with 
+ * a corresponding component that will be rendered when the user navigates to the respective URL.
+ * 
+ * @constant {RouteObject[]} routerUsuarios - An array of route objects that define paths and associated components.
+ * 
+ * @example
+ * ```tsx
+ * const routes = routerUsuarios; // Use this array for routing in a React application
+ * ```
+ */
 export const routerUsuarios: RouteObject[] = [
   {
     path: rutasUsuarios.perfil,

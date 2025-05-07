@@ -1,8 +1,40 @@
 import { adaptUser } from "../utils/adapt.usuario";
 import { UsuarioService } from "./services.usuario";
+
+/**
+ * Type representing the possible user types.
+ * 
+ * @type {string}
+ * @values "A" | "D" | "E"
+ */
 export type TiposUsuario = "A" | "D" | "E";
+
+/**
+ * Type representing the possible gender values of a user.
+ * 
+ * @type {string}
+ * @values "F" | "M" | "O"
+ */
 export type SexoUsuario = "F" | "M" | "O";
+
+/**
+ * Type representing the possible user states.
+ * 
+ * @type {string}
+ * @values "A" | "I"
+ */
 export type EstadoUsuario = "A" | "I";
+
+/**
+ * Type representing the social media links of a user.
+ * 
+ * @type {Object}
+ * @property {string} [facebook] - Facebook URL or an empty string if not available.
+ * @property {string} [instagram] - Instagram URL or an empty string if not available.
+ * @property {string} [linkedin] - LinkedIn URL or an empty string if not available.
+ * @property {string} [x] - X (formerly Twitter) URL or an empty string if not available.
+ * @property {string} [github] - GitHub URL or an empty string if not available.
+ */
 export type RedSocialUsuario = {
   facebook?: "" | null | string;
   instagram?: "" | null | string;
@@ -11,6 +43,25 @@ export type RedSocialUsuario = {
   github?: "" | null | string;
 };
 
+/**
+ * Type representing a user with various properties.
+ * 
+ * @type {Object}
+ * @property {number} [id] - Optional unique identifier for the user.
+ * @property {string} correo - User's email address.
+ * @property {string} nombres - User's first name.
+ * @property {string} apellidos - User's last name.
+ * @property {string} fotoDePerfil - URL to the user's profile picture.
+ * @property {string} fechaDeNacimiento - User's birth date in ISO format (YYYY-MM-DD).
+ * @property {SexoUsuario} sexo - User's gender ("F", "M", "O").
+ * @property {TiposUsuario} [tipo] - Optional type of user ("A", "D", "E").
+ * @property {string} [estFechaInicio] - Optional start date in ISO format (YYYY-MM-DD).
+ * @property {EstadoUsuario} estado - User's state ("A" - Active, "I" - Inactive).
+ * @property {RedSocialUsuario} redSocial - Social media links of the user.
+ * @property {string} descripcion - A brief description of the user.
+ * @property {string} [contrasenia] - Optional user's password.
+ * @property {string} [confirmarContrasenia] - Optional confirmation of the user's password.
+ */
 export type Usuario = {
   id?: number | undefined;
   correo: string;
@@ -31,6 +82,28 @@ export type Usuario = {
   confirmarContrasenia?: string | undefined;
 };
 
+/**
+ * Example user array with sample user data.
+ * 
+ * @type {Usuario[]}
+ * @example
+ * [
+ *   {
+ *     id: 1,
+ *     correo: "juan.perez@example.com",
+ *     nombres: "Juan",
+ *     apellidos: "Pérez",
+ *     fotoDePerfil: "https://example.com/juan.jpg",
+ *     fechaDeNacimiento: "1990-05-15",
+ *     sexo: "M",
+ *     tipo: "A",
+ *     estFechaInicio: "2023-01-01",
+ *     estado: "A",
+ *     redSocial: { facebook: "https://facebook.com/juanperez", ... },
+ *     descripcion: "Desarrollador Full Stack con 5 años de experiencia."
+ *   }
+ * ]
+ */
 export const usuarios: Usuario[] = [
   {
     id: 1,
@@ -115,6 +188,24 @@ export const usuarios: Usuario[] = [
   },
 ];
 
+/**
+ * Example of a user service object, which is adapted into a `Usuario` type.
+ * 
+ * @type {UsuarioService}
+ * @example
+ * {
+ *   estado: "A",
+ *   id: 6,
+ *   nombre: "YA",
+ *   apellido: "YA",
+ *   fecha_nacimiento: "2002-04-22T00:00:00.000Z",
+ *   sexo: "M",
+ *   descripcion: "Soy un ingeniero civil altamente motivado...",
+ *   correo: "rodrigo.admiSn@gmail.com",
+ *   foto_perfil: "https://storage.googleapis.com/fireploy-57702.firebasestorage.app/uploads/User_Image_6.png",
+ *   tipo: "Docente",
+ * }
+ */
 const usuarioServiceEjemplo: UsuarioService = {
   estado: "A",
   id: 6,
@@ -132,8 +223,44 @@ const usuarioServiceEjemplo: UsuarioService = {
     "https://storage.googleapis.com/fireploy-57702.firebasestorage.app/uploads/User_Image_6.png",
   tipo: "Docente",
 };
+
+/**
+ * Example of an adapted user object in `Usuario` format.
+ * 
+ * @type {Usuario}
+ * @example
+ * {
+ *   correo: "rodrigo.admiSn@gmail.com",
+ *   nombres: "YA",
+ *   apellidos: "YA",
+ *   fotoDePerfil: "https://...",
+ *   fechaDeNacimiento: "2002-04-22",
+ *   sexo: "M",
+ *   estado: "A",
+ *   redSocial: { facebook: "aaaa", ... },
+ *   descripcion: "Soy un ingeniero civil...",
+ * }
+ */
 export const usuarioEjemplo: Usuario = adaptUser(usuarioServiceEjemplo);
 
+/**
+ * Template for creating a new user, with empty or default values.
+ * 
+ * @type {Usuario}
+ * @example
+ * {
+ *   correo: "",
+ *   nombres: "",
+ *   apellidos: "",
+ *   fotoDePerfil: "",
+ *   fechaDeNacimiento: "",
+ *   sexo: "F",
+ *   tipo: "E",
+ *   estado: "A",
+ *   redSocial: { facebook: "", instagram: "", ... },
+ *   descripcion: "",
+ * }
+ */
 export const usuarioTemplate: Usuario =  {
   id: 0,
   correo: "",

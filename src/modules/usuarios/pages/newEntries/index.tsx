@@ -20,6 +20,21 @@ import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 // import { useNavigate } from "react-router";
 
+/**
+ * NewEntriesView Component
+ *
+ * Allows users to complete their profile information after registering with Google.
+ * It provides a form to input missing details such as the institution's start date, gender,
+ * and password, with validation and submission handling.
+ *
+ * Features:
+ * - Displays a dialog informing users of missing profile information.
+ * - Provides a form to complete profile information, including start date, gender, and password.
+ * - Handles password confirmation and validation.
+ * - Submits the updated user information to the backend.
+ *
+ * @component
+ */
 function NewEntriesView() {
 //   const navigate = useNavigate();
 

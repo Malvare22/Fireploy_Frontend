@@ -1,3 +1,16 @@
+import AlertDialog from "@modules/general/components/alertDialog";
+import LoaderElement from "@modules/general/components/loaderElement";
+import { useAuth } from "@modules/general/context/accountContext";
+import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
+import VerPerfil from "@modules/usuarios/components/perfil";
+import { getUsuarioService } from "@modules/usuarios/services/get.usuario";
+import { Usuario } from "@modules/usuarios/types/usuario";
+import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
+import { Box } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+
 /**
  * VistaPerfil Component
  *
@@ -13,20 +26,6 @@
  *
  * @component
  */
-
-import AlertDialog from "@modules/general/components/alertDialog";
-import LoaderElement from "@modules/general/components/loaderElement";
-import { useAuth } from "@modules/general/context/accountContext";
-import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
-import useErrorReader from "@modules/general/hooks/useErrorReader";
-import VerPerfil from "@modules/usuarios/components/perfil";
-import { getUsuarioService } from "@modules/usuarios/services/get.usuario";
-import { Usuario } from "@modules/usuarios/types/usuario";
-import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
-import { Box } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-
 function VistaPerfil() {
   /** Holds the adapted user data */
   const [usuario, setUsuario] = useState<Usuario | undefined>(undefined);

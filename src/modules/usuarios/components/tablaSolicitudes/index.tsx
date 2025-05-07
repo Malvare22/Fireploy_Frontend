@@ -34,11 +34,22 @@ type Props = {
 };
 
 /**
- * @component TablaSolicitudes
- * @description Renders a table of user promotion requests with actions to approve or reject them.
+ * TablaSolicitudes component – displays a table of user promotion requests with actions to approve or reject them.
+ * 
+ * This component allows administrators to view promotion requests, approve or reject them,
+ * and displays status indicators and contextual information. It uses the `react-data-table-component`
+ * to render a table with interactive actions and status chips.
  *
+ * @component
  * @param {Props} props - The component props.
- * @returns {JSX.Element} A table component with interactive approval and rejection features.
+ * @param {Solicitud[]} props.solicitudes - Array of promotion requests to display in the table.
+ * @param {1 | 2} props.tipo - Type of request that affects the columns shown (e.g., course information).
+ * @returns {JSX.Element} A data table component with rows for each request, actions to approve/reject, and status updates.
+ *
+ * @example
+ * ```tsx
+ * <TablaSolicitudes solicitudes={requests} tipo={1} />
+ * ```
  */
 const TablaSolicitudes: React.FC<Props> = ({ solicitudes, tipo }) => {
   const theme = useTheme();

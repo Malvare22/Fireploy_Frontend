@@ -2,6 +2,52 @@ import { patchData } from "@core/services";
 import { UsuarioService } from "../types/services.usuario";
 import { Usuario } from "../types/usuario";
 
+/**
+ * Updates the user data by sending a PATCH request to the server with the updated user information.
+ * 
+ * This function sends a PATCH request to the server to update the details of an existing user.
+ * It accepts the user ID, session token, and user data as parameters, and updates the user's personal 
+ * details including name, birth date, gender, description, social media links, start date, and profile photo.
+ * 
+ * @param {number} id - The ID of the user whose data is being updated.
+ * @param {string} token - The session token used for authenticating the API request.
+ * @param {Usuario} user - The updated user object containing the new data.
+ * 
+ * @returns {Promise<UsuarioService>} The response from the server containing the updated user's details.
+ * 
+ * @example
+ * ```tsx
+ * const user = { 
+ *   nombres: "John", 
+ *   apellidos: "Doe", 
+ *   fechaDeNacimiento: "1990-01-01", 
+ *   sexo: "M", 
+ *   descripcion: "Updated user", 
+ *   redSocial: { facebook: "john.doe" }, 
+ *   fotoDePerfil: "new-profile-photo.jpg",
+ *   estFechaInicio: "2025-01-01"
+ * };
+ * const response = await postChangeUsuarioService(1, "your-session-token", user);
+ * ```
+ */
+
+/**
+ * Changes the user's state (Active/Inactive) by sending a PATCH request to the server.
+ * 
+ * This function sends a PATCH request to the server to update the user's state (either "A" for Active
+ * or "I" for Inactive). It requires the user ID, session token, and the new state to be set.
+ * 
+ * @param {string} token - The session token used for authenticating the API request.
+ * @param {number} id - The ID of the user whose state is being updated.
+ * @param {"A" | "I"} estado - The new state for the user, either "A" (Active) or "I" (Inactive).
+ * 
+ * @returns {Promise<UsuarioService>} The response from the server indicating the result of the state change.
+ * 
+ * @example
+ * ```tsx
+ * const response = await postChangeUserStateService("your-session-token", 1, "A");
+ * ```
+ */
 export const postChangeUsuarioService = async (id: number, token: string, user: Usuario) => {
   type Body = {
     nombre: string;

@@ -12,12 +12,20 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 /**
- * Component responsible for managing and displaying a user's profile.
- * It fetches the user's data from the API, adapts it, and renders the
- * <Perfil /> component. Also handles loading and error states using
- * dialogs and a loader component.
- *
+ * GestionarPerfil component – A component responsible for managing and displaying a user's profile.
+ * 
+ * This component fetches the user's data from the API, adapts the data for use, and renders the `Perfil` 
+ * component to display the profile. It also handles loading and error states using dialogs and a loader 
+ * component. It makes use of React Query for data fetching, custom hooks for dialog management, and error handling.
+ * 
  * @component
+ * 
+ * @returns {JSX.Element} A profile management interface that displays user data, or a loading/error state.
+ * 
+ * @example
+ * ```tsx
+ * <GestionarPerfil />
+ * ```
  */
 function GestionarPerfil() {
   // Get the user ID from the route parameters
@@ -45,7 +53,6 @@ function GestionarPerfil() {
     queryKey: ["Profile Information", parseInt(id ?? "-1")],
   });
 
-  // Custom hook to control the alert dialog state
   const {
     showDialog,
     open,
@@ -55,6 +62,8 @@ function GestionarPerfil() {
     type,
     handleAccept,
   } = useAlertDialog();
+
+  // Custom hook to control the alert dialog state
   const { setError } = useErrorReader(showDialog);
 
   /**

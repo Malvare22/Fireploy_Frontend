@@ -22,6 +22,7 @@ export type TecnologiaRepositorio = {
   logo: keyof typeof assetImages;
 };
 
+
 export type RepositorioProyecto = {
   id?: number;
   url: string;
@@ -44,7 +45,6 @@ export type Proyecto = {
   backend?: Repositorio;
   frontend?: Repositorio;
   integrado?: Repositorio;
-  archivosLogs?: ArchivoLog[];
   materiaInformacion: MateriaInformacion;
   fechaUltimaModificacion?: string;
   integrantes: UsuarioCurso[];

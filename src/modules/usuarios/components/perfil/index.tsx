@@ -47,6 +47,25 @@ interface PerfilProps {
   type?: "crear" | "editar";
 }
 
+/**
+ * Perfil component – A profile management component that allows users to view and edit their profile details.
+ * It provides fields to modify account information, personal details, social media accounts, and profile photo.
+ * This component supports both creating new users and editing existing ones.
+ * 
+ * It interacts with various services to handle user creation, update, and photo upload.
+ * 
+ * @component
+ * 
+ * @param {Usuario} usuario - The user object containing the current profile details.
+ * @param {string} [type="editar"] - The mode in which the component is used, either 'crear' (create) or 'editar' (edit).
+ * 
+ * @returns {JSX.Element} A form with editable fields and a photo uploader for user profile management.
+ * 
+ * @example
+ * ```tsx
+ * <Perfil usuario={currentUser} type="editar" />
+ * ```
+ */
 const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
   const { accountInformation } = useAuth();
   const { token, tipo } = accountInformation;
@@ -456,6 +475,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
   );
 };
 
+
 const HiddenInput = styled("input")({
   display: "none",
 });
@@ -468,6 +488,25 @@ type ProfilePhotoUploaderProps = {
   onChange: () => void;
 };
 
+/**
+ * ProfilePhotoUploader component – A component for uploading and displaying the user's profile photo.
+ * It allows users to upload, preview, and remove their profile image.
+ * 
+ * @component
+ * 
+ * @param {string | null} photo - The current photo URL or null if no photo is set.
+ * @param {function} setPhoto - A function to update the photo state.
+ * @param {function} setFile - A function to set the file (Blob) state for the photo.
+ * @param {string} inital - The initial photo URL to compare against for resetting.
+ * @param {function} onChange - A function that will be called when the photo changes.
+ * 
+ * @returns {JSX.Element} A section to display, change, and remove the user's profile photo.
+ * 
+ * @example
+ * ```tsx
+ * <ProfilePhotoUploader photo={photo} setPhoto={setPhoto} setFile={setFile} inital={initalPhoto} onChange={handleChange} />
+ * ```
+ */
 export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
   photo,
   setFile,
@@ -528,6 +567,19 @@ export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
   );
 };
 
+/**
+ * ButtonUpdaterRol component – A button that allows the user to request promotion to a teacher role.
+ * It triggers a confirmation dialog and calls the service to create a teacher role request.
+ * 
+ * @component
+ * 
+ * @returns {JSX.Element} A button to trigger a role update request.
+ * 
+ * @example
+ * ```tsx
+ * <ButtonUpdaterRol />
+ * ```
+ */
 const ButtonUpdaterRol = () => {
   const { accountInformation } = useAuth();
   const { token, id } = accountInformation;

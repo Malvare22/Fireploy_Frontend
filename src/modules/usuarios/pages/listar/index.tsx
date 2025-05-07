@@ -38,6 +38,22 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import HiddenButton from "@modules/materias/components/hiddenInput";
 import { postCargaMasivaUsuarios } from "@modules/usuarios/services/post.cargar.usuarios";
 
+/**
+ * ListarUsuarios Component
+ *
+ * Displays a list of all users in a table with search functionality.
+ * Fetches user data from the backend, allows filtering by name using a search input,
+ * and displays a loading indicator and error dialog when appropriate.
+ *
+ * Features:
+ * - Fetches users of type "todos"
+ * - Shows search bar that filters users by name (pressing Enter triggers filtering)
+ * - Displays a table of users
+ * - Handles loading and error states
+ * - Allows navigation to a "create user" form
+ *
+ * @component
+ */
 function ListarUsuarios() {
   // 🔐 Get authentication token from context
   const { accountInformation } = useAuth();
