@@ -1,6 +1,7 @@
 import Footer from "@modules/general/components/footer";
 import DashboardLayoutBasic from "@modules/general/components/toolMenu";
 import { AuthProvider } from "@modules/general/context/accountContext";
+import { getImage } from "@modules/general/utils/getImage";
 import { Box, Stack, useTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
@@ -44,6 +45,11 @@ function LayoutAuthenticated() {
               "> div": { width: "100%" },
               minHeight: "110vh",
               paddingX: 2,
+              // backgroundImage: `url(${getImage["wallpaper_home"].ruta})`,
+              //           backgroundSize: "cover",
+              //           backgroundPosition: "center",
+              //           backgroundRepeat: "no-repeat",
+              //           backgroundAttachment: "fixed",
             }}
           >
             <Stack spacing={3}>

@@ -33,6 +33,10 @@ import nextjs from "@modules/general/assets/tecnologiesLogos/nextjs.png";
 import mongodb from "@modules/general/assets/tecnologias/mongoDB.png";
 import mysql from "@modules/general/assets/tecnologias/mySQL.png";
 
+//Home
+import wallpaper_home from "@modules/general/assets/home/wallpaperHome.jpg";
+
+
 /**
  * **Collection of imported images.**
  *
@@ -81,7 +85,9 @@ export const assetImages = {
   nextjs,
 
   mongodb,
-  mysql
+  mysql,
+
+  wallpaper_home
 } as const;
 
 /**

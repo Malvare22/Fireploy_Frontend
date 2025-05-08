@@ -36,26 +36,26 @@ type Props = {
 };
 
 /**
- * ProjectSettings component – This component is responsible for displaying and managing the settings 
- * of a specific project. It provides an interface for viewing and editing various project-related details, 
- * such as project information, repositories, databases, and collaborators. It also includes functionality 
+ * ProjectSettings component – This component is responsible for displaying and managing the settings
+ * of a specific project. It provides an interface for viewing and editing various project-related details,
+ * such as project information, repositories, databases, and collaborators. It also includes functionality
  * for deploying the project and opening project URLs in a new tab.
- * 
+ *
  * This component includes:
  * - Tabs for navigating between different sections of project settings.
  * - A button to deploy the project, and an icon to open the project URL.
  * - A form context (via `react-hook-form`) to manage form state and handle submission.
  * - Integration with the `AlertDialog` component for showing success or error messages.
  * - A mutation hook (`react-query`) for handling the deployment of the project.
- * 
+ *
  * @component
- * 
+ *
  * @param {Object} props - Component props.
  * @param {ProyectoSchema} props.project - The project data to be displayed and managed.
- * 
+ *
  * @returns {JSX.Element} A form that allows users to view and edit the project settings in various tabs.
  * The component includes options to deploy the project and open its URL in a new tab.
- * 
+ *
  * @example
  * ```tsx
  * <ProjectSettings project={projectData} />
@@ -130,8 +130,8 @@ export default function ProjectSettings({ project }: Props) {
               value={tabIndex}
               onChange={(_e, newIndex) => setTabIndex(newIndex)}
               sx={{ borderBottom: 1, borderColor: "divider" }}
-                variant="scrollable"
-  scrollButtons="auto"
+              variant="scrollable"
+              scrollButtons="auto"
             >
               <Tab label="Información" icon={<InfoIcon />} iconPosition="start" />
               <Tab label="Repositorios" icon={<GitHubIcon />} iconPosition="start" />

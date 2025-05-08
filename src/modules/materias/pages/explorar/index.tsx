@@ -108,7 +108,7 @@ function ExplorarMaterias() {
         <Stack spacing={5}>
           {/* Title and icon */}
           <Stack direction={"row"} alignItems={"center"} justifyContent={"center"} spacing={2}>
-            <Typography variant="h3" textAlign={"center"} textTransform={"uppercase"}>
+            <Typography variant="h3" textAlign={"center"}>
               {labelListarMaterias.titulo}
             </Typography>
             <MenuBookIcon sx={{ fontSize: 48 }} />

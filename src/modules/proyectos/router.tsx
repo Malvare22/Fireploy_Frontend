@@ -16,7 +16,7 @@ const rutaBase = "/app/proyectos";
  * Object containing all the routes for the project pages.
  * 
  * Each property in this object is a route path that corresponds to a specific page or feature of the projects section.
- * - listar: Path for listing projects.
+ * - menu: Path for listing projects.
  * - misProyectos: Path for viewing the user's own projects.
  * - ver: Path for viewing a specific project by its ID.
  * - crear: Path for creating a new project.
@@ -25,7 +25,7 @@ const rutaBase = "/app/proyectos";
  * - basesDeDatos: Path for viewing databases associated with projects.
  */
 export const rutasProyectos = {
-  listar: rutaBase + "/listar",
+  menu: rutaBase + "/menu",
   misProyectos: rutaBase + '/misProyectos',
   ver: rutaBase + "/ver/:id",
   crear: rutaBase + "/crear",
@@ -56,7 +56,7 @@ export const routerProyectos: RouteObject[] = [
     element: <VerProyecto />,
   },
   {
-    path: rutasProyectos.listar,
+    path: rutasProyectos.menu,
     element: <ListarProyectos />,
   },
   {

@@ -26,24 +26,24 @@ import { Account, AccountPreview, AccountPreviewProps } from "@toolpad/core/Acco
 import type { Session } from "@toolpad/core/AppProvider";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoaderElement from "../loaderElement";
-import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
-
+import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
 
 function getNavigationElements(userInformation: AccountInformation): Navigation {
   return [
     {
       title: "Portfolios",
-      icon: <ContactMailIcon />,
+      icon: <ContactMailIcon sx={{ fill: "white" }} />,
       children: [
         {
           segment: rutasUsuarios.portafolio.replace(":id", userInformation.id.toString()) as string,
           title: "Mi Portafolio",
-          icon: <PersonLinesFillIcon sx={{ color: "black" }} />,
+          icon: <PersonLinesFillIcon sx={{ fill: "white" }} />,
         },
         {
           segment: rutasUsuarios.explorarPortafolios as string,
           title: "Explorar Portafolios",
-          icon: <PersonSearchIcon />,
+          icon: <PersonSearchIcon sx={{ fill: "white" }} />,
         },
       ],
     },
@@ -51,22 +51,22 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
       ? [
           {
             title: "Usuarios",
-            icon: <SupervisedUserCircleIcon />,
+            icon: <SupervisedUserCircleIcon sx={{ fill: "white" }} />,
             children: [
               {
                 segment: rutasUsuarios.listarUsuarios as string,
                 title: "Listar Usuarios",
-                icon: <PeopleIcon />,
+                icon: <PeopleIcon sx={{ fill: "white" }} />,
               },
               {
                 segment: rutasUsuarios.agregarUsuario as string,
                 title: "Agregar Usuarios",
-                icon: <GroupAddIcon />,
+                icon: <GroupAddIcon sx={{ fill: "white" }} />,
               },
               {
                 segment: rutasUsuarios.solicitudes as string,
                 title: "Solicitudes de promover rol",
-                icon: <CastForEducationIcon />,
+                icon: <CastForEducationIcon sx={{ fill: "white" }} />,
               },
             ],
           },
@@ -75,17 +75,22 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
     { kind: "divider" },
     {
       title: "Proyectos",
-      icon: <AccountTreeIcon />,
+      icon: <AccountTreeIcon sx={{ fill: "white" }} />,
       children: [
         {
           title: "Mis Proyectos",
-          icon: <BoxesIcon />,
+          icon: <BoxesIcon sx={{ fill: "white" }} />,
           segment: rutasProyectos.misProyectos as string,
         },
         {
-          segment: rutasProyectos.listar as string,
+          segment: rutasProyectos.explorar as string,
           title: "Explorar Proyectos",
-          icon: <PlagiarismIcon />,
+          icon: <PlagiarismIcon sx={{ fill: "white" }} />,
+        },
+        {
+          segment: rutasProyectos.crear as string,
+          title: "Crear Proyectos",
+          icon: <NoteAddIcon sx={{ fill: "white" }} />,
         },
       ],
     },
@@ -93,16 +98,16 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
       ? [
           {
             title: "Cursos",
-            icon: <MenuBookIcon />,
+            icon: <MenuBookIcon sx={{ fill: "white" }} />,
             children: [
               {
                 segment: rutasMaterias.explorar as string,
                 title: "Explorar Materias y Cursos",
-                icon: <AutoStoriesIcon />,
+                icon: <AutoStoriesIcon sx={{ fill: "white" }} />,
               },
               {
                 title: "Mis Cursos",
-                icon: <LibraryBooksIcon />,
+                icon: <LibraryBooksIcon sx={{ fill: "white" }} />,
                 segment: rutasMaterias.listarMisCursos as string,
               },
             ],
@@ -111,34 +116,33 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
       : [
           {
             title: "Materias",
-            icon: <MenuBookIcon />,
+            icon: <MenuBookIcon sx={{ fill: "white" }} />,
             children: [
               {
                 segment: rutasMaterias.explorar as string,
                 title: "Explorar Materias y Cursos",
-                icon: <AutoStoriesIcon />,
+                icon: <AutoStoriesIcon sx={{ fill: "white" }} />,
               },
               {
                 segment: rutasMaterias.listarMaterias as string,
                 title: "Listar Materias",
-                icon: <CollectionsBookmarkIcon />,
+                icon: <CollectionsBookmarkIcon sx={{ fill: "white" }} />,
               },
               {
                 segment: rutasMaterias.crearMateria as string,
                 title: "Crear Materia",
-                icon: <JournalPlus />,
+                icon: <JournalPlus sx={{ fill: "white" }} />,
               },
               {
                 segment: rutasMaterias.solicitudes as string,
                 title: "Solicitudes",
-                icon: <HistoryEduIcon/>,
+                icon: <HistoryEduIcon sx={{ fill: "white" }} />,
               },
             ],
           },
         ]),
   ];
 }
-
 
 function useDemoRouter(): Router {
   const navigate = useNavigate();
@@ -160,7 +164,6 @@ function useDemoRouter(): Router {
   };
 }
 
-
 function AccountSidebarPreview(props: AccountPreviewProps & { mini: boolean }) {
   const { handleClick, open, mini } = props;
   return (
@@ -174,7 +177,6 @@ function AccountSidebarPreview(props: AccountPreviewProps & { mini: boolean }) {
     </Stack>
   );
 }
-
 
 function SidebarFooterAccountPopover() {
   const navigate = useNavigate();
@@ -199,13 +201,11 @@ function SidebarFooterAccountPopover() {
   );
 }
 
-
 const createPreviewComponent = (mini: boolean) => {
   return function PreviewComponent(props: AccountPreviewProps) {
     return <AccountSidebarPreview {...props} mini={mini} />;
   };
 };
-
 
 function SidebarFooterAccount({ mini }: SidebarFooterProps) {
   const PreviewComponent = React.useMemo(() => createPreviewComponent(mini), [mini]);
@@ -300,7 +300,7 @@ export default function DashboardLayoutBasic(props: any) {
           authentication={authentication}
           session={currentSession}
           branding={{
-            homeUrl: rutasProyectos.listar,
+            homeUrl: rutasProyectos.menu,
             logo: (
               <Box
                 sx={{
@@ -308,7 +308,7 @@ export default function DashboardLayoutBasic(props: any) {
                   alignItems: "center",
                   height: "100%",
                   gap: 1,
-                  color: theme.palette.primary.main,
+                  color: "white",
                 }}
               >
                 <Typography variant="h5" fontWeight={600}>
@@ -321,7 +321,42 @@ export default function DashboardLayoutBasic(props: any) {
           }}
         >
           <DashboardLayout
-            sx={{ "& .MuiListSubheader-root": { fontSize: "4rem" } }}
+            sx={{
+              "& .MuiListSubheader-root": {
+                fontSize: "4rem",
+                color: 'white',
+              },
+              "& .MuiDrawer-paper": {
+                backgroundColor: "#1e1e2f",
+                fill: "white", // Texto blanco
+                "& .MuiSvgIcon-root": { // Iconos blancos
+                  fill: "white",
+                },
+                "& .MuiListItemButton-root": { // Flechas y elementos interactivos
+                  fill: "white",
+                  "& .MuiSvgIcon-root": {
+                    fill: "white",
+                  },
+                },
+                "& .MuiTypography-root": {
+                  color: 'white'
+                }
+              },
+              "& .MuiDrawer-root": {
+                fill: "white",
+              },
+              "& .MuiAppBar-root": {
+                backgroundColor: "#1e1e2f",
+                fill: "white",
+                "& .MuiSvgIcon-root": { // Iconos en la AppBar
+                  fill: "white",
+                },
+                "& .MuiTypography-root": {
+                  color: 'white'
+                }
+              },
+             
+            }}
             slots={{ toolbarAccount: () => null, sidebarFooter: SidebarFooterAccount }}
           >
             <Box marginTop={-10}>{props.children}</Box>

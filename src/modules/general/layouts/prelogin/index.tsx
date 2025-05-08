@@ -1,5 +1,6 @@
 import Footer from "@modules/general/components/footer";
 import NavbarPrelogin from "@modules/general/components/navbars/navbarPrelogin";
+import { getImage } from "@modules/general/utils/getImage";
 import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
@@ -13,7 +14,7 @@ import { Outlet } from "react-router-dom";
  * for a uniform user experience across the public sections of the application.
  *
  * @component
- * @returns {JSX.Element} A layout container for pre-login pages, including a 
+ * @returns {JSX.Element} A layout container for pre-login pages, including a
  * navigation bar and footer, with a central area for rendering nested routes.
  *
  * Structure:
@@ -23,11 +24,10 @@ import { Outlet } from "react-router-dom";
  *
  * Usage:
  * The `LayoutPrelogin` component should be used as a wrapper for routes
- * that are accessible to users before they log in (e.g., sign-up, login, 
+ * that are accessible to users before they log in (e.g., sign-up, login,
  * password recovery). It provides a consistent UI for unauthenticated users.
  */
 function LayoutPrelogin() {
-
   return (
     <Box>
       <NavbarPrelogin />
@@ -36,9 +36,14 @@ function LayoutPrelogin() {
           display: "flex",
           justifyContent: "center",
           "> div": { width: "100%" },
-          minHeight: '70vh',
-          overflow: 'hidden',
-          paddingY: 4
+          minHeight: "70vh",
+          overflow: "hidden",
+          paddingY: 6,
+          backgroundImage: `url(${getImage["wallpaper_home"].ruta})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundAttachment: "fixed",
         }}
       >
         <Outlet />

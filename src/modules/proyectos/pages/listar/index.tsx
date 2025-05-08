@@ -58,7 +58,7 @@ function ListarProyectos() {
   return (
     <Stack spacing={4} paddingBottom={4}>
       <Stack spacing={4} height={"100vh"}>
-        <Typography variant="h3" textTransform={"uppercase"} textAlign={"center"}>
+        <Typography variant="h3"textAlign={"center"}>
           {labelListarProyecto.proyectos}
         </Typography>
         <Stack alignItems={"center"}>

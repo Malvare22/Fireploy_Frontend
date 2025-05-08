@@ -104,7 +104,6 @@ function Footer(): JSX.Element {
       <Box
         sx={{
           borderRadius: 4,
-          backgroundColor: "backgroundX.primary",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -127,7 +126,6 @@ function Footer(): JSX.Element {
       <Box
         sx={{
           borderRadius: 4,
-          backgroundColor: "backgroundX.primary",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

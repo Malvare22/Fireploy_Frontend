@@ -94,8 +94,8 @@ function NavbarPrelogin(): JSX.Element {
   }
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl" sx={{ paddingY: 1 }}>
+    <AppBar position="fixed" color={'transparent'} sx={{boxShadow: 'none', borderBottom: '1px solid rgba(0, 0, 0, 0.1)'}}>
+      <Container maxWidth="xl" sx={{color: 'white'}}>
         <Toolbar disableGutters sx={{ justifyContent: { md: "space-between", xs: "center" } }}>
           {/* Brand title (shown only on larger screens) */}
 
@@ -139,7 +139,7 @@ function NavbarPrelogin(): JSX.Element {
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
                 <Button variant="text" onClick={() => navigate(rutasGeneral.login)}>
-                  <Typography sx={{ textAlign: "center" }}>
+                  <Typography sx={{ textAlign: "center"}}>
                     {labelsNavbarPrelogin.signUp}
                   </Typography>
                 </Button>
@@ -158,7 +158,6 @@ function NavbarPrelogin(): JSX.Element {
                     color="info"
                     sx={{
                       my: 2,
-                      color: "white",
                       display: "block",
                       minWidth: 100,
                     }}
@@ -172,24 +171,22 @@ function NavbarPrelogin(): JSX.Element {
             </>
           </Stack>
 
-          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3, color: "white" }}>
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3 }}>
             <Button
-              variant="contained"
-              sx={{ textTransform: "none", boxShadow: "none", backgroundColor: "#6B8F71 " }}
+              variant="outlined"
               size="medium"
               onClick={() => navigate(rutasGeneral.login)}
             >
-              <Typography variant="body1" sx={{ color: "white" }}>
+              <Typography variant="body1">
                 {labelsNavbarPrelogin.signUp}
               </Typography>
             </Button>
             <Button
-              variant="contained"
-              sx={{ textTransform: "none", boxShadow: "none", backgroundColor: "#54428E" }}
+              variant="outlined"
               size="medium"
               onClick={() => navigate(rutasGeneral.registrar)}
             >
-              <Typography variant="body1" sx={{ color: "white" }}>
+              <Typography variant="body1">
                 {labelsNavbarPrelogin.register}
               </Typography>
             </Button>

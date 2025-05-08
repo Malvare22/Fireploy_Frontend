@@ -98,7 +98,7 @@ const TablaBasesDeDatos: React.FC<TablaBasesDeDatosProps> = ({ basesDeDatos }) =
               {labelBaseDeDatos.gestionar}
             </Button>
           ) : (
-            <Chip color="info" sx={{color: 'white'}} icon={<InfoIcon/>} label={<Typography variant="caption">No disponible</Typography>}/>
+            <Chip color="info" icon={<InfoIcon/>} label={<Typography variant="caption">No disponible</Typography>}/>
           )}
         </>
       ),
