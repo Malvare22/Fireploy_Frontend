@@ -1,7 +1,7 @@
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import { getImage } from "@modules/general/utils/getImage";
 import { TECNOLOGIES } from "@modules/proyectos/utils/docker";
-import { Grid2, IconButton, Typography } from "@mui/material";
+import { Grid2, IconButton, Paper, Typography } from "@mui/material";
 import { Box, Stack, useMediaQuery, useTheme } from "@mui/system";
 import { keyframes } from "@emotion/react";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
@@ -204,7 +204,8 @@ type PropsCardTecnology = {
  */
 function CardTecnology({ img, subtitle, title, url }: PropsCardTecnology) {
   return (
-    <Grid2 container sx={{ overflow: "hidden", height: 200, borderRadius: 1, boxShadow: '0px 0px 2px 0px rgba(0,0,0,0.15)'}} spacing={3} padding={0}>
+    <Paper variant="glass">
+      <Grid2 container sx={{ overflow: "hidden", height: 200}} spacing={3} padding={0}>
       <Grid2 size={4}>
         <Box
           sx={{
@@ -248,5 +249,6 @@ function CardTecnology({ img, subtitle, title, url }: PropsCardTecnology) {
         </Stack>
       </Grid2>
     </Grid2>
+    </Paper>
   );
 }

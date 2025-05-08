@@ -36,14 +36,17 @@ function LayoutPrelogin() {
           display: "flex",
           justifyContent: "center",
           "> div": { width: "100%" },
-          minHeight: "70vh",
+          minHeight: "80vh",
           overflow: "hidden",
-          paddingY: 6,
+          paddingY: 14,
           backgroundImage: `url(${getImage["wallpaper_home"].ruta})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           backgroundAttachment: "fixed",
+          "& .MuiTypography-root": {
+            color: 'white'
+          }
         }}
       >
         <Outlet />

@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Paper, Typography, useTheme } from "@mui/material";
 import { LabelFooter } from "@modules/general/enums/labelFooter";
 import { getImage } from "../../utils/getImage";
 
@@ -14,7 +14,7 @@ function Footer(): JSX.Element {
   const theme = useTheme();
 
   return (
-    <Box
+    <Paper variant="dark"
       sx={{
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
@@ -143,7 +143,7 @@ function Footer(): JSX.Element {
           width={"50%"}
         />
       </Box>
-    </Box>
+    </Paper>
   );
 }
 

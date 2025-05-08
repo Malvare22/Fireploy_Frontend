@@ -555,7 +555,7 @@ export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
             onChange={handlePhotoChange}
             ref={ref}
           />
-          <Button variant="outlined" component="span">
+          <Button variant="outlined" color="secondary">
             Cambiar foto
           </Button>
         </label>

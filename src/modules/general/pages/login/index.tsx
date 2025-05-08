@@ -101,11 +101,11 @@ const SignIn: React.FC = () => {
     if (data.googleRegister) {
       localStorage.setItem(VARIABLES_LOCAL_STORAGE.NEW_GOOGLE_REGISTER, "TRUE");
     } 
-    navigate(rutasProyectos.listar);
+    navigate(rutasProyectos.menu);
   };
 
   return (
-    <Card sx={{ padding: 2, maxWidth: 600 }}>
+    <Card sx={{ padding: 2, maxWidth: 600, }}>
       <CssBaseline />
       <AlertDialog
         handleAccept={handleAccept}

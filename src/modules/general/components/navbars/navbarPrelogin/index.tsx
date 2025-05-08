@@ -12,29 +12,29 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { rutasGeneral } from "@modules/general/router/router";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
-import { Stack, useMediaQuery, useTheme } from "@mui/material";
+import { Paper, Stack, useMediaQuery, useTheme } from "@mui/material";
 
 export enum labelsNavbarPrelogin {
   home = "Inicio",
   team = "Equipo de Desarrollo",
   signUp = "Iniciar Sesión",
   register = "Registrarse",
-  technologies = 'Tecnologías'
+  technologies = "Tecnologías",
 }
 
 /**
  * NavbarPrelogin Component
- * 
+ *
  * A responsive navigation bar component that is displayed before user login.
- * It contains menu items for navigating between pages such as "Home", "Team", 
- * and "Technologies", and provides login and registration buttons. 
- * The navigation bar adapts to screen sizes, displaying a menu on smaller screens 
+ * It contains menu items for navigating between pages such as "Home", "Team",
+ * and "Technologies", and provides login and registration buttons.
+ * The navigation bar adapts to screen sizes, displaying a menu on smaller screens
  * and direct buttons on larger screens.
  *
  * @component
- * 
+ *
  * @returns {JSX.Element} A responsive navigation bar with menu and navigation options.
- * 
+ *
  * @example
  * ```tsx
  * <NavbarPrelogin />
@@ -94,8 +94,13 @@ function NavbarPrelogin(): JSX.Element {
   }
 
   return (
-    <AppBar position="fixed" color={'transparent'} sx={{boxShadow: 'none', borderBottom: '1px solid rgba(0, 0, 0, 0.1)'}}>
-      <Container maxWidth="xl" sx={{color: 'white'}}>
+    <AppBar
+      position="fixed"
+      component={Paper}
+      variant="dark"
+      sx={{ boxShadow: "none", borderBottom: "1px solid rgba(0, 0, 0, 0.1)",backgroundColor: theme.palette.secondary.main}}
+    >
+      <Container maxWidth="xl" sx={{ color: "white" }}>
         <Toolbar disableGutters sx={{ justifyContent: { md: "space-between", xs: "center" } }}>
           {/* Brand title (shown only on larger screens) */}
 
@@ -139,7 +144,7 @@ function NavbarPrelogin(): JSX.Element {
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
                 <Button variant="text" onClick={() => navigate(rutasGeneral.login)}>
-                  <Typography sx={{ textAlign: "center"}}>
+                  <Typography sx={{ textAlign: "center", color: "white" }}>
                     {labelsNavbarPrelogin.signUp}
                   </Typography>
                 </Button>
@@ -155,15 +160,15 @@ function NavbarPrelogin(): JSX.Element {
                   <Button
                     onClick={() => navigate(link)}
                     variant="text"
-                    color="info"
                     sx={{
                       my: 2,
                       display: "block",
                       minWidth: 100,
+                      
                     }}
                     size="small"
                   >
-                    <Typography sx={{ textAlign: "center" }} variant="subtitle1">
+                    <Typography sx={{ textAlign: "center", color: "white" }} variant="subtitle1">
                       {text}
                     </Typography>
                   </Button>
@@ -172,12 +177,8 @@ function NavbarPrelogin(): JSX.Element {
           </Stack>
 
           <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3 }}>
-            <Button
-              variant="outlined"
-              size="medium"
-              onClick={() => navigate(rutasGeneral.login)}
-            >
-              <Typography variant="body1">
+            <Button variant="outlined" size="medium" onClick={() => navigate(rutasGeneral.login)}>
+              <Typography variant="body1" sx={{ color: "white" }}>
                 {labelsNavbarPrelogin.signUp}
               </Typography>
             </Button>
@@ -186,7 +187,7 @@ function NavbarPrelogin(): JSX.Element {
               size="medium"
               onClick={() => navigate(rutasGeneral.registrar)}
             >
-              <Typography variant="body1">
+              <Typography variant="body1" sx={{ color: "white" }}>
                 {labelsNavbarPrelogin.register}
               </Typography>
             </Button>

@@ -5,6 +5,7 @@ import {
   Card,
   Divider,
   Grid2,
+  Paper,
   Stack,
   SxProps,
   Typography,
@@ -57,11 +58,14 @@ export enum labelHome {
  * @returns {JSX.Element} The home page layout with sections showcasing content and actions.
  */
 export default function Home() {
+  const theme = useTheme();
   return (
-    <Box sx={{padding: 10, marginTop: 10}}>
+    <Box sx={{ padding: 10 }}>
       <Principal />
-      <Secondary />
-      <Deploy />
+      <Box sx={{ padding: -10, backgroundColor: theme.palette.background.default }}>
+        <Secondary />
+        <Deploy />
+      </Box>
     </Box>
   );
 }
@@ -71,7 +75,7 @@ function Principal() {
   const navigate = useNavigate();
   return (
     <>
-      <Grid2 container>
+      <Grid2 container sx={{ minHeight: "80vh" }}>
         <Grid2 size={5}>
           <Stack sx={{ height: "100%" }} spacing={4}>
             <Typography variant="h2" sx={{ fontWeight: "440", color: "white" }} color="secondary">
@@ -234,14 +238,12 @@ function Secondary() {
   }
 
   return (
-    <Box
+    <Paper
       sx={{
         marginY: 10,
         marginX: 20,
-        border: "1px solid rgb(0,0,0,0.1)",
-        paddingY: 2,
-        borderRadius: 1,
       }}
+      variant="light"
     >
       <Stack spacing={3}>
         <Typography textAlign={"center"} variant="h4">
@@ -268,7 +270,7 @@ function Secondary() {
           })}
         </Grid2>
       </Stack>
-    </Box>
+    </Paper>
   );
 }
 

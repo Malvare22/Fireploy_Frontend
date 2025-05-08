@@ -1,8 +1,7 @@
 import Footer from "@modules/general/components/footer";
 import DashboardLayoutBasic from "@modules/general/components/toolMenu";
 import { AuthProvider } from "@modules/general/context/accountContext";
-import { getImage } from "@modules/general/utils/getImage";
-import { Box, Stack, useTheme } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
 /**
@@ -10,8 +9,8 @@ import { Outlet } from "react-router-dom";
  * It provides context for authentication, a consistent dashboard layout,
  * and global styling such as spacing and background color.
  *
- * This layout ensures that the authenticated user experience is consistent 
- * across different routes, encapsulating shared components like the sidebar, 
+ * This layout ensures that the authenticated user experience is consistent
+ * across different routes, encapsulating shared components like the sidebar,
  * content area, and footer.
  *
  * @component
@@ -24,8 +23,8 @@ import { Outlet } from "react-router-dom";
  * - Displays a consistent footer at the bottom of the layout.
  *
  * Usage:
- * The `LayoutAuthenticated` component should be used as a wrapper for routes 
- * that require authentication. It ensures that the appropriate layout 
+ * The `LayoutAuthenticated` component should be used as a wrapper for routes
+ * that require authentication. It ensures that the appropriate layout
  * and context are available to child components.
  */
 function LayoutAuthenticated() {
@@ -45,17 +44,9 @@ function LayoutAuthenticated() {
               "> div": { width: "100%" },
               minHeight: "110vh",
               paddingX: 2,
-              // backgroundImage: `url(${getImage["wallpaper_home"].ruta})`,
-              //           backgroundSize: "cover",
-              //           backgroundPosition: "center",
-              //           backgroundRepeat: "no-repeat",
-              //           backgroundAttachment: "fixed",
             }}
           >
-            <Stack spacing={3}>
-              {/* <RouterBreadcrumbs /> */}
-              <Outlet />
-            </Stack>
+            <Outlet />
           </Box>
         </DashboardLayoutBasic>
         <Footer />
