@@ -131,7 +131,7 @@ function NewEntriesView() {
       <Modal handleClose={handleCloseModal} open={openModal} sx={{ padding: 2, width: 600 }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={3}>
-            <Typography variant="h4" textAlign={"center"}>
+            <Typography variant="h6" textAlign={"center"}>
               Registro de Información Restante
             </Typography>
             <TextField

@@ -38,7 +38,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        Fireploy
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -120,7 +120,7 @@ const SignIn: React.FC = () => {
           }}
         >
           <Avatar sx={{ backgroundColor: theme.palette.secondary.main }}>
-            <LockOpenIcon />
+            <LockOpenIcon sx={{ fill: "white" }} />
           </Avatar>
           <Typography component="h1" variant="h5">
             {labelLogin.iniciarSesion}
@@ -149,17 +149,19 @@ const SignIn: React.FC = () => {
           autoComplete="current-password"
           onChange={(e) => handleInput("password", e.target.value)}
         />
-        <GoogleLogin
-          onSuccess={(credentialResponse) => {
-            if (credentialResponse.credential) mutateGoogle(credentialResponse.credential);
-          }}
-        />
+        <Stack sx={{ alignItems: "center", marginY: 1 }}>
+          <GoogleLogin
+            onSuccess={(credentialResponse) => {
+              if (credentialResponse.credential) mutateGoogle(credentialResponse.credential);
+            }}
+          />
+        </Stack>
         <Button
           type="submit"
           fullWidth
           variant="contained"
           color="primary"
-          sx={{ marginY: 3 }}
+          sx={{ marginY: 2 }}
           onClick={() => mutate()}
           loading={isPending}
         >

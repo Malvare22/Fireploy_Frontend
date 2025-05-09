@@ -37,7 +37,7 @@ function LayoutAuthenticated() {
           <Box
             sx={{
               backgroundColor: theme.palette.background.default,
-              paddingY: 2,
+              paddingY: 6,
               marginTop: 10,
               display: "flex",
               justifyContent: "center",
