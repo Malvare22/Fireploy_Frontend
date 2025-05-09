@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AppProvider, Navigation, Router } from "@toolpad/core/AppProvider";
+import { AppProvider, type Navigation, Router } from "@toolpad/core/AppProvider";
 import { DashboardLayout, SidebarFooterProps } from "@toolpad/core/DashboardLayout";
 import { Box, Button, Divider, Stack, Typography, useTheme } from "@mui/material";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
@@ -27,7 +27,7 @@ import type { Session } from "@toolpad/core/AppProvider";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoaderElement from "../loaderElement";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
-import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import NoteAddIcon from "@mui/icons-material/NoteAdd";
 
 function getNavigationElements(userInformation: AccountInformation): Navigation {
   return [
@@ -38,12 +38,12 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
         {
           segment: rutasUsuarios.portafolio.replace(":id", userInformation.id.toString()) as string,
           title: "Mi Portafolio",
-          icon: <PersonLinesFillIcon sx={{ fill: "white" }} />,
+          icon: <PersonLinesFillIcon sx={{ color: "black" }} />,
         },
         {
           segment: rutasUsuarios.explorarPortafolios as string,
           title: "Explorar Portafolios",
-          icon: <PersonSearchIcon sx={{ fill: "white" }} />,
+          icon: <PersonSearchIcon />,
         },
       ],
     },
@@ -72,7 +72,6 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
           },
         ]
       : []),
-    { kind: "divider" },
     {
       title: "Proyectos",
       icon: <AccountTreeIcon sx={{ fill: "white" }} />,
@@ -324,38 +323,50 @@ export default function DashboardLayoutBasic(props: any) {
             sx={{
               "& .MuiListSubheader-root": {
                 fontSize: "4rem",
-                color: 'white',
+                color: "white",
               },
               "& .MuiDrawer-paper": {
                 backgroundColor: "#1e1e2f",
                 fill: "white", // Texto blanco
-                "& .MuiSvgIcon-root": { // Iconos blancos
+                "& .MuiSvgIcon-root": {
+                  // Iconos blancos
                   fill: "white",
                 },
-                "& .MuiListItemButton-root": { // Flechas y elementos interactivos
+                "& .MuiListItemButton-root": {
+                  // Flechas y elementos interactivos
                   fill: "white",
                   "& .MuiSvgIcon-root": {
                     fill: "white",
                   },
                 },
                 "& .MuiTypography-root": {
-                  color: 'white'
-                }
+                  color: "white",
+                },
               },
               "& .MuiDrawer-root": {
                 fill: "white",
+                  "& .MuiPaper-root": {
+                                      backgroundColor: "#2a2a3c", // Fondo del menú desplegable
+
+                },
               },
               "& .MuiAppBar-root": {
                 backgroundColor: "#1e1e2f",
                 fill: "white",
-                "& .MuiSvgIcon-root": { // Iconos en la AppBar
+                "& .MuiSvgIcon-root": {
+                  // Iconos en la AppBar
                   fill: "white",
                 },
                 "& .MuiTypography-root": {
-                  color: 'white'
-                }
+                  color: "white",
+                },
+                "& .MuiPaper-root": {
+                  backgroundColor: "#2a2a3c", // Fondo del menú desplegable
+                  color: "white", // Color del texto
+                },
+               
+  
               },
-             
             }}
             slots={{ toolbarAccount: () => null, sidebarFooter: SidebarFooterAccount }}
           >
