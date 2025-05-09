@@ -6,6 +6,8 @@ import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
 import useAlertDialog from "../hooks/useAlertDialog";
 import useErrorReader from "../hooks/useErrorReader";
 import AlertDialog from "../components/alertDialog";
+import { useNavigate } from "react-router";
+import { rutasUsuarios } from "@modules/usuarios/router/router";
 
 /**
  * Represents the account information structure for authenticated users.
@@ -87,6 +89,12 @@ type AuthProviderProps = {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [localUser, setLocalUser] = useState<AccountInformation>(accountInformationTemplate);
 
+  const navigate = useNavigate();
+
+  function handleCompleteData(){
+    navigate(rutasUsuarios.newEntries);
+  }
+
   const { data, error } = useQuery({
     queryFn: () =>
       getUsuarioService(
@@ -104,7 +112,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
    */
   useEffect(() => {
     if (data) {
+
       const localData = adaptUser(data);
+      
       setLocalUser({
         correo: localData.correo,
         foto: localData.fotoDePerfil,
@@ -113,6 +123,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         tipo: localData.tipo ?? "E",
         token: localStorage.getItem("TOKEN") ?? "",
       });
+
+      if(data.apellido == '' || data.sexo == ''){
+        handleCompleteData();
+      }
+
     }
   }, [data]);
 

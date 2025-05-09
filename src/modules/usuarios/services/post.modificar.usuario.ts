@@ -84,8 +84,6 @@ export const postChangeUsuarioService = async (id: number, token: string, user: 
 
 export const postChangeUserStateService = async (token: string, id: number, estado: "A" | "I") => {
 
-  console.log(id, estado)
-
   const response = await patchData<UsuarioService>(
     `/usuario/${id}`,
     { estado: estado },

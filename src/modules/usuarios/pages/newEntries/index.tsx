@@ -5,19 +5,21 @@ import Modal from "@modules/general/components/modal";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import TextFieldPassword from "@modules/general/components/textFieldPassword";
 import { useAuth } from "@modules/general/context/accountContext";
-import { VARIABLES_LOCAL_STORAGE } from "@modules/general/enums/variablesLocalStorage";
-import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
+import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
-import { postChangePassword } from "@modules/general/services/post.change.password";
 import { buttonTypes } from "@modules/general/types/buttons";
+import { rutasProyectos } from "@modules/proyectos/router";
+import { getUsuarioService } from "@modules/usuarios/services/get.usuario";
 import { postChangeUsuarioService } from "@modules/usuarios/services/post.modificar.usuario";
+import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
 import { RegistroGoogleSchema } from "@modules/usuarios/utils/form/register.google";
 import { UsuarioSchema } from "@modules/usuarios/utils/form/usuario.schema";
 import { getGenderArray } from "@modules/usuarios/utils/usuario.map";
 import { Box, MenuItem, Stack, TextField, Typography } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 // import { useNavigate } from "react-router";
 
 /**
@@ -25,22 +27,22 @@ import { Controller, useForm } from "react-hook-form";
  *
  * Allows users to complete their profile information after registering with Google.
  * It provides a form to input missing details such as the institution's start date, gender,
- * and password, with validation and submission handling.
+ * with validation and submission handling.
  *
  * Features:
  * - Displays a dialog informing users of missing profile information.
- * - Provides a form to complete profile information, including start date, gender, and password.
+ * - Provides a form to complete profile information, including start date and gender.
  * - Handles password confirmation and validation.
  * - Submits the updated user information to the backend.
  *
  * @component
  */
 function NewEntriesView() {
-//   const navigate = useNavigate();
+  //   const navigate = useNavigate();
 
-//   const example = { confirmarContrasenia: "", contrasenia: "", estFechaInicio: "", sexo: "M" };
+  //   const example = { confirmarContrasenia: "", contrasenia: "", estFechaInicio: "", sexo: "M" };
 
-  const { control, register, handleSubmit, formState } = useForm<UsuarioSchema>({
+  const { control, register, handleSubmit, formState, reset } = useForm<UsuarioSchema>({
     defaultValues: {
       confirmarContrasenia: "",
       contrasenia: "",
@@ -52,39 +54,63 @@ function NewEntriesView() {
 
   const { token, id } = useAuth().accountInformation;
 
-  const { handleAccept, message, open, showDialog, title, type } = useAlertDialog2();
+  const { handleAccept, message, open, showDialog, title, type, handleClose } = useAlertDialog();
+
+  const navigate = useNavigate();
 
   const { setError } = useErrorReader(showDialog);
 
   const { errors } = formState;
 
+  const { error: errorQuery, data: userData } = useQuery({
+    queryFn: () => getUsuarioService(id, token),
+    queryKey: ["Get User", token],
+  });
+
   useEffect(() => {
-    if (localStorage.getItem(VARIABLES_LOCAL_STORAGE.NEW_GOOGLE_REGISTER) == "TRUE" || true)
-      showDialog({
-        onAccept: () => {
-          handleOpenModal();
-        },
-        message:
-          "Se ha realizado tu registro con una cuenta de Google, requerimos que completes de tu información de perfil faltante para que todo esté correcto 😄",
-        type: "success",
-        reload: false,
-        title: "Registro Con Google",
-      });
+    if (userData) {
+      reset(adaptUser(userData));
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    if (errorQuery) {
+      setError(errorQuery);
+    }
+  }, [errorQuery]);
+
+  useEffect(() => {
+    showDialog({
+      onAccept: () => {
+        handleOpenModal();
+        handleClose();
+      },
+      message:
+        "Se ha realizado tu registro con una cuenta de Google, requerimos que completes de tu información de perfil faltante para que todo esté correcto 😄",
+      type: "success",
+      title: "Registro Con Google",
+    });
   }, []);
 
   const { mutate: mutateChangeInformation } = useMutation({
     mutationFn: async (user: UsuarioSchema) => {
       await postChangeUsuarioService(id, token, user);
-      await postChangePassword(
-        {
-          contrasenia: user.contrasenia ?? "",
-          nuevaContrasenia: user.confirmarContrasenia ?? "",
-          correo: user.correo,
-        },
-        token
-      );
+      console.log(user);
     },
-    onError: (error) => setError(error),
+    onError: (error) => {
+      setError(error);
+    },
+    onSuccess: () => {
+      showDialog({
+        message: "¡Se ha agregado la información correctamente!",
+        type: "success",
+        title: "Actualización Información",
+        onAccept: () => {
+          handleClose();
+          navigate(rutasProyectos.menu);
+        },
+      });
+    },
   });
 
   function onSubmit(user: UsuarioSchema) {
@@ -96,6 +122,7 @@ function NewEntriesView() {
     handleOpen: handleOpenModal,
     open: openModal,
   } = useModal();
+
   return (
     <>
       <AlertDialog
@@ -105,7 +132,7 @@ function NewEntriesView() {
         textBody={message}
         type={type}
       />
-      <Modal handleClose={handleCloseModal} open={openModal} sx={{ padding: 2 }}>
+      <Modal handleClose={handleCloseModal} open={openModal} sx={{ padding: 2, width: 600 }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={3}>
             <Typography variant="h4" textAlign={"center"}>
@@ -118,8 +145,8 @@ function NewEntriesView() {
               helperText={errors.estFechaInicio?.message}
               label="Fecha de Ingreso a la institución"
               InputLabelProps={{ shrink: true }}
+              size="small"
             />
-
             <Controller
               name="sexo"
               control={control}
@@ -131,6 +158,7 @@ function NewEntriesView() {
                   error={!!errors.sexo}
                   helperText={errors.sexo?.message}
                   label="Género"
+                  size="small"
                 >
                   {getGenderArray.map(([value, key]) => (
                     <MenuItem key={key} value={value}>
@@ -148,6 +176,7 @@ function NewEntriesView() {
               {...register("contrasenia")}
               helperText={errors.contrasenia?.message}
               label="Contraseña"
+              size="small"
             />
 
             <TextFieldPassword
@@ -157,6 +186,7 @@ function NewEntriesView() {
               error={!!errors.confirmarContrasenia}
               helperText={errors.confirmarContrasenia?.message}
               label="Confirmar Contraseña"
+              size="small"
             />
 
             <Stack direction={"row"} justifyContent={"center"}>

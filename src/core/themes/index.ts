@@ -48,6 +48,9 @@ const palette: PaletteOptions = {
   warning: {
     main: "rgb(255, 209, 103)", // #FFD180
   },
+  background: {
+    default: "#fff",
+  },
   // success: {
   //   main: "rgb(67, 106, 68)",        // #81C784
   // },

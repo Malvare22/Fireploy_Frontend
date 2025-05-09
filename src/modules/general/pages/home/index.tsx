@@ -60,12 +60,14 @@ export enum labelHome {
 export default function Home() {
   const theme = useTheme();
   return (
-    <Box sx={{ padding: 10 }}>
-      <Principal />
-      <Box sx={{ padding: -10, backgroundColor: theme.palette.background.default }}>
+    <Box>
+      <Box sx={{ padding: 10 }}>
+        <Principal />
+      </Box>
+      <Stack spacing={20} sx={{ backgroundColor: theme.palette.background.default, marginTop: -10 }}>
         <Secondary />
         <Deploy />
-      </Box>
+      </Stack>
     </Box>
   );
 }
@@ -191,35 +193,6 @@ function PrincipalAnimation() {
   );
 }
 
-type PropsSectionHome = {
-  col1: ReactNode;
-  col2: ReactNode;
-  title: string;
-  button: JSX.Element;
-};
-
-function SectionHome({ col1, col2, title, button }: PropsSectionHome) {
-  const theme = useTheme();
-  return (
-    <Card>
-      <Stack spacing={4}>
-        <Box sx={{ backgroundColor: theme.palette.primary.light }}>
-          <Typography variant="h4" color="white" padding={1} textAlign={"center"}>
-            {title}
-          </Typography>
-        </Box>
-        {col1}
-        <Stack justifyContent={"space-between"} padding={2} spacing={2}>
-          <Typography variant="h6">{col2}</Typography>
-          <Stack alignItems={"end"}>
-            <Box>{button}</Box>
-          </Stack>
-        </Stack>
-      </Stack>
-    </Card>
-  );
-}
-
 function Secondary() {
   const theme = useTheme();
   const content: [ReactNode, string][] = [
@@ -238,14 +211,8 @@ function Secondary() {
   }
 
   return (
-    <Paper
-      sx={{
-        marginY: 10,
-        marginX: 20,
-      }}
-      variant="light"
-    >
-      <Stack spacing={3}>
+
+      <Stack spacing={3} justifyContent={'center'} sx={{border: '1px solid red'}} component={Paper}>
         <Typography textAlign={"center"} variant="h4">
           Ofrecemos
         </Typography>
@@ -270,7 +237,6 @@ function Secondary() {
           })}
         </Grid2>
       </Stack>
-    </Paper>
   );
 }
 

@@ -6,7 +6,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Alert, Box, Button, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
 
-export type AlertDialogTypes = "error" | "success" | "default"
+export type AlertDialogTypes = "error" | "success" | "default";
 
 interface Props {
   title: string;
@@ -23,12 +23,12 @@ interface Props {
 /**
  * AlertDialog component - a customizable modal dialog that displays a title, body content,
  * and action buttons, with optional styling based on a type ("error", "success", "default").
- * 
- * This component supports both static text and fully custom body content. It also handles 
+ *
+ * This component supports both static text and fully custom body content. It also handles
  * optional reloading behavior and button loading state.
- * 
+ *
  * @component
- * 
+ *
  * @param {string} title - The title displayed at the top of the dialog.
  * @param {React.ReactNode} [body] - Optional custom content to render in the dialog body. Overrides `textBody` if provided.
  * @param {string} [textBody] - Fallback plain text content shown in the dialog body if `body` is not provided.
@@ -38,9 +38,9 @@ interface Props {
  * @param {boolean} [isLoading=false] - If `true`, shows a loading state in the "Accept" button.
  * @param {"error" | "success" | "default"} [type="default"] - Determines the visual styling of the dialog content.
  * @param {boolean} [reload=false] - If `true`, triggers a full page reload when the "Accept" button is clicked.
- * 
+ *
  * @returns {JSX.Element} A Material UI Dialog component with optional alert styling and customizable content.
- * 
+ *
  * @example
  * ```tsx
  * <AlertDialog
