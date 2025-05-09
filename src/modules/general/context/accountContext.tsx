@@ -11,7 +11,7 @@ import { rutasUsuarios } from "@modules/usuarios/router/router";
 
 /**
  * Represents the account information structure for authenticated users.
- * 
+ *
  * @typedef {Object} AccountInformation
  * @property {string} nombre - Full name of the user.
  * @property {string} token - Authentication token.
@@ -31,7 +31,7 @@ export type AccountInformation = {
 
 /**
  * Default account information template used as an initial or fallback state.
- * 
+ *
  * @constant
  * @type {AccountInformation}
  */
@@ -46,7 +46,7 @@ export const accountInformationTemplate: AccountInformation = {
 
 /**
  * Context value structure for authentication state.
- * 
+ *
  * @typedef {Object} AuthContext
  * @property {AccountInformation} accountInformation - Current user's account info.
  * @property {Function} setAccountInformation - Function to update account info.
@@ -58,7 +58,7 @@ export type AuthContext = {
 
 /**
  * Authentication context used to access user information throughout the app.
- * 
+ *
  * @constant
  * @type {React.Context<AuthContext>}
  */
@@ -74,11 +74,11 @@ type AuthProviderProps = {
 /**
  * @component AuthProvider
  * @description Context provider component that supplies authentication state and user data to child components.
- * 
+ *
  * @param {ReactNode} children - Components that consume the authentication context.
- * 
+ *
  * @returns {JSX.Element} A provider with user authentication information and alert dialog.
- * 
+ *
  * @example
  * ```tsx
  * <AuthProvider>
@@ -91,7 +91,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const navigate = useNavigate();
 
-  function handleCompleteData(){
+  function handleCompleteData() {
     navigate(rutasUsuarios.newEntries);
   }
 
@@ -101,7 +101,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         parseInt(localStorage.getItem("CURRENT_ID") ?? "-1"),
         localStorage.getItem("TOKEN") ?? ""
       ),
-    queryKey: ["session", localStorage.getItem("TOKEN") ?? ""],
+    queryKey: [
+      "Profile",
+      localStorage.getItem("CURRENT_ID") ?? "-1",
+      localStorage.getItem("TOKEN") ?? "",
+    ],
     refetchInterval: 60 * 1000,
     retry: 1,
   });
@@ -112,9 +116,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
    */
   useEffect(() => {
     if (data) {
-
       const localData = adaptUser(data);
-      
+
       setLocalUser({
         correo: localData.correo,
         foto: localData.fotoDePerfil,
@@ -124,10 +127,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         token: localStorage.getItem("TOKEN") ?? "",
       });
 
-      if(data.apellido == '' || data.sexo == ''){
+      if (data.sexo == "") {
         handleCompleteData();
       }
-
     }
   }, [data]);
 
@@ -173,9 +175,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
 /**
  * Custom hook to access the authentication context.
- * 
+ *
  * @returns {AuthContext} The authentication state and updater function.
- * 
+ *
  * @example
  * ```tsx
  * const { accountInformation } = useAuth();

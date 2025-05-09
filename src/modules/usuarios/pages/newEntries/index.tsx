@@ -3,7 +3,6 @@ import AlertDialog from "@modules/general/components/alertDialog";
 import GeneralButton from "@modules/general/components/button";
 import Modal from "@modules/general/components/modal";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
-import TextFieldPassword from "@modules/general/components/textFieldPassword";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
@@ -44,8 +43,6 @@ function NewEntriesView() {
 
   const { control, register, handleSubmit, formState, reset } = useForm<UsuarioSchema>({
     defaultValues: {
-      confirmarContrasenia: "",
-      contrasenia: "",
       estFechaInicio: "",
       sexo: "M",
     },
@@ -64,7 +61,7 @@ function NewEntriesView() {
 
   const { error: errorQuery, data: userData } = useQuery({
     queryFn: () => getUsuarioService(id, token),
-    queryKey: ["Get User", token],
+    queryKey: ["Profile", id, token],
   });
 
   useEffect(() => {
@@ -95,7 +92,6 @@ function NewEntriesView() {
   const { mutate: mutateChangeInformation } = useMutation({
     mutationFn: async (user: UsuarioSchema) => {
       await postChangeUsuarioService(id, token, user);
-      console.log(user);
     },
     onError: (error) => {
       setError(error);
@@ -167,26 +163,6 @@ function NewEntriesView() {
                   ))}
                 </TextField>
               )}
-            />
-
-            <TextFieldPassword
-              type="password"
-              placeholder="Contraseña"
-              error={!!errors.contrasenia}
-              {...register("contrasenia")}
-              helperText={errors.contrasenia?.message}
-              label="Contraseña"
-              size="small"
-            />
-
-            <TextFieldPassword
-              type="password"
-              {...register("confirmarContrasenia")}
-              placeholder="Confirmar Contraseña"
-              error={!!errors.confirmarContrasenia}
-              helperText={errors.confirmarContrasenia?.message}
-              label="Confirmar Contraseña"
-              size="small"
             />
 
             <Stack direction={"row"} justifyContent={"center"}>

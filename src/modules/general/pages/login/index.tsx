@@ -76,14 +76,14 @@ const SignIn: React.FC = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: () => postSignUp(singUp.email, singUp.password),
-    mutationKey: ["iniciar sesion"],
+    mutationKey: ["Iniciar Sesion", singUp.email, singUp.password],
     onSuccess: (data) => onSuccess(data),
     onError: (error) => setError(error),
   });
 
   const { mutate: mutateGoogle } = useMutation({
     mutationFn: (googleToken: string) => postSignUpWithGoogle(googleToken),
-    mutationKey: ["login with Google"],
+    mutationKey: ["Login with Google"],
     onSuccess: (data) => onSuccess(data),
     onError: (error) => setError(error),
   });
@@ -97,15 +97,11 @@ const SignIn: React.FC = () => {
   const onSuccess = (data: SignUpResponse) => {
     localStorage.setItem(VARIABLES_LOCAL_STORAGE.TOKEN, data.access_token);
     localStorage.setItem(VARIABLES_LOCAL_STORAGE.CURRENT_ID, data.id.toString());
-
-    if (data.googleRegister) {
-      localStorage.setItem(VARIABLES_LOCAL_STORAGE.NEW_GOOGLE_REGISTER, "TRUE");
-    } 
     navigate(rutasProyectos.menu);
   };
 
   return (
-    <Card sx={{ padding: 2, maxWidth: 600, }}>
+    <Card sx={{ padding: 2, maxWidth: 600 }}>
       <CssBaseline />
       <AlertDialog
         handleAccept={handleAccept}
