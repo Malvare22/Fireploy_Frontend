@@ -8,8 +8,8 @@ import { labelListarMaterias } from "@modules/materias/enums/labelListarMaterias
 import { getMateriasService } from "@modules/materias/services/get.materias.services";
 import { MateriaTabla } from "@modules/materias/types/materia.tabla";
 import { adaptMateriaService } from "@modules/materias/utils/adapters/materia.service";
-import { Box, Button, Stack, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, Button, Grid2, Stack, Typography } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
 import { getMateriasSemestresLabels } from "@modules/materias/utils/materias";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
@@ -25,6 +25,8 @@ import { FilterOptions, SelectFilters } from "@modules/general/components/select
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import HiddenButton from "@modules/materias/components/hiddenInput";
 import { postCargaMasivaMaterias } from "@modules/materias/services/post.cargar.materias";
+import useSearch from "@modules/general/hooks/useSearch";
+import TextFieldSearch from "@modules/general/components/textFieldSearch";
 
 /**
  * ListarMaterias component – A component that handles listing, searching, filtering, and displaying subjects (materias).
@@ -106,6 +108,10 @@ function ListarMaterias() {
   /** Transformed subject data for display */
   const materias = data ? data.map(adaptMateriaService) : [];
 
+  function handleSearchFn(x: MateriaTabla[], s: string) {
+    return x.filter((y) => `${y.codigo}${y.nombre}`.toLowerCase().includes(s.toLowerCase()));
+  }
+
   /**
    * Mutation function to upload a file for bulk import of subjects.
    * Sends the file to the server for processing.
@@ -123,7 +129,7 @@ function ListarMaterias() {
         title: "Gestión de materias",
         onAccept: handleAccept,
         type: "success",
-        reload: true
+        reload: true,
       });
     },
     onError: (err) => setError(err),
@@ -131,6 +137,12 @@ function ListarMaterias() {
 
   /** Local state for the buffer of filtered subjects */
   const [buffer, setBuffer] = useState<MateriaTabla[]>(materias);
+
+  const { filteredData, searchValue, setSearchValue } = useSearch();
+
+  const dataToShow = useMemo(() => {
+    return filteredData(buffer, handleSearchFn);
+  }, [searchValue, filterOptions, buffer]);
 
   /**
    * Handles the file selection for bulk upload of subjects.
@@ -187,9 +199,15 @@ function ListarMaterias() {
           {/* Page title */}
           <Typography variant="h4">{labelListarMaterias.titulo}</Typography>
 
+          <Grid2 container>
+            <Grid2 size={{ md: 4, xs: 12 }}>
+              <TextFieldSearch fullWidth setSearchValue={setSearchValue} />
+            </Grid2>
+          </Grid2>
+
           <SelectFilters data={materias} setRefineData={setBuffer} filterOptions={filterOptions} />
 
-          {materias && <TablaMaterias materias={buffer} />}
+          {materias && <TablaMaterias materias={dataToShow} />}
           {/* Action button to navigate to create new subject */}
           <Stack direction={"row"} justifyContent={"end"} spacing={2}>
             <Box>
@@ -207,7 +225,7 @@ function ListarMaterias() {
                 startIcon={<CloudUploadIcon />}
               >
                 Carga Masiva
-                <HiddenButton type="file" onChange={setFile} multiple accept=".xls, .xsls" />
+                <HiddenButton type="file" onChange={setFile} multiple accept=".xlsx" />
               </Button>
             </Box>
           </Stack>
@@ -218,4 +236,3 @@ function ListarMaterias() {
 }
 
 export default ListarMaterias;
-

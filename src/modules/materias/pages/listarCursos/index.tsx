@@ -194,7 +194,7 @@ function ListarCursos() {
                 startIcon={<CloudUploadIcon />}
               >
                 Carga Masiva
-                <HiddenButton type="file" onChange={setFile} multiple accept=".xls, .xsls" />
+                <HiddenButton type="file" onChange={setFile} multiple accept=".xlsx" />
               </Button>
             </Box>
           </Stack>

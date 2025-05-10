@@ -77,7 +77,7 @@ function GestionarEstudiantesCurso({ curso, idCurso }: Props) {
     onSuccess: () =>
       showDialog({
         title: "Añadir Estudiantes a un Curso",
-        message: "Estudiantes registrados al curso de manera correcta!",
+        message: "¡Estudiantes registrados al curso de manera correcta!",
         onAccept: () => {},
         reload: true,
         type: "success",
@@ -97,7 +97,7 @@ function GestionarEstudiantesCurso({ curso, idCurso }: Props) {
     onSuccess: () =>
       showDialog({
         title: "Eliminar Estudiantes de un Curso",
-        message: "Estudiantes registrados al curso de manera correcta!",
+        message: "¡Estudiantes eliminados del curso de manera correcta!",
         onAccept: () => {},
         reload: true,
         type: "success",
@@ -124,7 +124,7 @@ function GestionarEstudiantesCurso({ curso, idCurso }: Props) {
   function confirmAddStudents() {
     showDialog({
       title: "Agregar Estudiantes de un Curso",
-      message: "¿Está seguro de Agregar a los usuarios seleccionados?",
+      message: "¿Está seguro de agregar a los usuarios seleccionados?",
       onCancel: () => {},
       onAccept: () => mutateAddStudents(),
       type: "default",

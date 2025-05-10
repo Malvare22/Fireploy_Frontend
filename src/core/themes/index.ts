@@ -106,21 +106,10 @@ export const getTheme = responsiveFontSizes(
             style: {
               borderRadius: 4,
               padding: 4,
-              color: "black",
               boxShadow: "0px 0px 1px 0px rgba(0,0,0,0.75)",
-              "& .MuiTypography-root": {
-                color: "inherit",
-              },
             },
           },
         ],
-      },
-      MuiSvgIcon: {
-        styleOverrides: {
-          root: {
-            fill: "rgb(21,21,21)",
-          },
-        },
       },
       MuiChip: {
         styleOverrides: {
@@ -143,13 +132,6 @@ export const getTheme = responsiveFontSizes(
             "& .MuiTypography-root": {
               fill: "black",
             },
-          },
-        },
-      },
-      MuiTypography: {
-        styleOverrides: {
-          root: {
-            color: "black",
           },
         },
       },

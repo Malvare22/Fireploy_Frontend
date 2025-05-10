@@ -73,6 +73,8 @@ const TablaGestionarCursos = () => {
     ]);
   }
 
+  console.log(errors)
+
   const { accountInformation } = useAuth();
   const { token } = accountInformation;
 
