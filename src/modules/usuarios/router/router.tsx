@@ -8,6 +8,7 @@ import CrearUsuario from "../pages/admin/crearUsuario";
 import Logout from "@modules/general/pages/logout";
 import VistaSolicitudes from "../pages/solicitudes";
 import NewEntriesView from "../pages/newEntries";
+import NotificacionesView from "../pages/notificaciones";
 
 const rutaBase = "/app/usuarios";
 
@@ -20,7 +21,8 @@ export enum rutasUsuarios {
   agregarUsuario = rutaBase + '/agregar',
   logout = rutaBase + '/logout',
   solicitudes = rutaBase + '/solicitudes',
-  newEntries = rutaBase + '/newEntries'
+  newEntries = rutaBase + '/newEntries',
+  notificaciones = rutaBase + '/notificaciones'
 }
 
 /**
@@ -73,5 +75,9 @@ export const routerUsuarios: RouteObject[] = [
   {
     path: rutasUsuarios.newEntries,
     element: <NewEntriesView />,
+  },
+  {
+    path: rutasUsuarios.notificaciones,
+    element: <NotificacionesView />,
   },
 ];

@@ -37,6 +37,8 @@
     "react-router": "^7.4.0",
     "react-router-dom": "^7.4.0",
     "serve": "^14.2.4",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "tesis_frontend": "file:",
     "zod": "^3.23.8"
   },

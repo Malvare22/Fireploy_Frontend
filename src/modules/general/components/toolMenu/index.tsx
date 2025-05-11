@@ -1,7 +1,18 @@
 import * as React from "react";
 import { AppProvider, type Navigation, Router } from "@toolpad/core/AppProvider";
 import { DashboardLayout, SidebarFooterProps } from "@toolpad/core/DashboardLayout";
-import { Box, Button, Divider, Stack, Typography, useTheme } from "@mui/material";
+import {
+  Alert,
+  Badge,
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  Menu,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
@@ -28,6 +39,13 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LoaderElement from "../loaderElement";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { io } from "socket.io-client";
+import { getNotificaciones } from "@modules/usuarios/services/get.notificaciones";
+import useAlertDialog from "@modules/general/hooks/useAlertDialog";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
+import AlertDialog from "../alertDialog";
+import { NotificationMessage } from "@modules/usuarios/types/notification";
 
 function getNavigationElements(userInformation: AccountInformation): Navigation {
   return [
@@ -143,6 +161,77 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
   ];
 }
 
+function ToolbarActions({
+  count,
+  notificaciones,
+}: {
+  count: string;
+  notificaciones: NotificationMessage[];
+}) {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const router = useNavigate();
+
+  function handleNav() {
+    router(rutasUsuarios.notificaciones);
+  }
+
+  return (
+    <Box sx={{ paddingRight: "14px" }}>
+      <IconButton onClick={handleClick}>
+        <Badge
+          badgeContent={count}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          color="primary"
+        >
+          <NotificationsIcon sx={{ fontSize: 32 }} />
+        </Badge>
+      </IconButton>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        sx={{ maxWidth: { xs: "300px", md: "100%" } }}
+      >
+        <Stack spacing={1}>
+          <Stack>
+            {notificaciones.length > 0 ? (
+              notificaciones.map((notificacion) => <Typography>{notificacion.mensaje}</Typography>)
+            ) : (
+              <Alert severity="info">No se encontraron notificaciones nuevas</Alert>
+            )}
+          </Stack>
+          <Stack alignItems={"center"}>
+            <Box>
+              <Button size="small" onClick={handleNav}>
+                Ver Más
+              </Button>
+            </Box>
+          </Stack>
+        </Stack>
+      </Menu>
+    </Box>
+  );
+}
+
 function useDemoRouter(): Router {
   const navigate = useNavigate();
   const location = useLocation();
@@ -209,41 +298,43 @@ const createPreviewComponent = (mini: boolean) => {
 function SidebarFooterAccount({ mini }: SidebarFooterProps) {
   const PreviewComponent = React.useMemo(() => createPreviewComponent(mini), [mini]);
   return (
-    <Account
-      slots={{ preview: PreviewComponent, popoverContent: SidebarFooterAccountPopover }}
-      slotProps={{
-        popover: {
-          transformOrigin: { horizontal: "left", vertical: "bottom" },
-          anchorOrigin: { horizontal: "right", vertical: "bottom" },
-          disableAutoFocus: true,
-          slotProps: {
-            paper: {
-              elevation: 0,
-              sx: {
-                overflow: "visible",
-                filter: (theme) =>
-                  `drop-shadow(0px 2px 8px ${
-                    theme.palette.mode === "dark" ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.32)"
-                  })`,
-                mt: 1,
-                "&::before": {
-                  content: '""',
-                  display: "block",
-                  position: "absolute",
-                  bottom: 10,
-                  left: 0,
-                  width: 10,
-                  height: 10,
-                  bgcolor: "background.paper",
-                  transform: "translate(-50%, -50%) rotate(45deg)",
-                  zIndex: 0,
+    <Stack>
+      <Account
+        slots={{ preview: PreviewComponent, popoverContent: SidebarFooterAccountPopover }}
+        slotProps={{
+          popover: {
+            transformOrigin: { horizontal: "left", vertical: "bottom" },
+            anchorOrigin: { horizontal: "right", vertical: "bottom" },
+            disableAutoFocus: true,
+            slotProps: {
+              paper: {
+                elevation: 0,
+                sx: {
+                  overflow: "visible",
+                  filter: (theme) =>
+                    `drop-shadow(0px 2px 8px ${
+                      theme.palette.mode === "dark" ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.32)"
+                    })`,
+                  mt: 1,
+                  "&::before": {
+                    content: '""',
+                    display: "block",
+                    position: "absolute",
+                    bottom: 10,
+                    left: 0,
+                    width: 10,
+                    height: 10,
+                    bgcolor: "background.paper",
+                    transform: "translate(-50%, -50%) rotate(45deg)",
+                    zIndex: 0,
+                  },
                 },
               },
             },
           },
-        },
-      }}
-    />
+        }}
+      />
+    </Stack>
   );
 }
 
@@ -289,8 +380,60 @@ export default function DashboardLayoutBasic(props: any) {
     []
   );
 
+  const [notifications, setNotifications] = React.useState<null | NotificationMessage[]>(null);
+
+  const { showDialog, handleAccept, message, open, title, type } = useAlertDialog();
+
+  const { setError } = useErrorReader(showDialog);
+
+  React.useEffect(() => {
+    if (accountInformation.token == "Not Found") return;
+    const fQuery = async () => {
+      try {
+        const tmp = await getNotificaciones(accountInformation.id, accountInformation.token);
+        setNotifications(tmp.filter((x) => !x.visto));
+        console.log(tmp);
+      } catch (e) {
+        setError(e);
+      }
+    };
+    fQuery();
+  }, [accountInformation.token]);
+
+  React.useEffect(() => {
+    if (!notifications) return;
+    const socket = io(import.meta.env.VITE_URL_BACKEND, {
+      reconnectionDelayMax: 10000,
+      query: {
+        userId: accountInformation.id,
+      },
+    });
+
+    socket.on("connect", () => {
+      console.log("Connected to socket server");
+    });
+
+    socket.on("data", (notification: NotificationMessage) => {
+      console.log("Received data:", notification);
+      setNotifications(() => {
+        return [...notifications, notification];
+      });
+    });
+  }, [notifications]);
+
+  const getNotificationsLabel = (n: number) => {
+    return n > 99 ? "+99" : n.toString();
+  };
+
   return (
     <>
+      <AlertDialog
+        handleAccept={handleAccept}
+        open={open}
+        title={title}
+        type={type}
+        textBody={message}
+      />
       {accountInformation.id !== -1 ? (
         <AppProvider
           navigation={getNavigationElements(accountInformation)}
@@ -345,9 +488,8 @@ export default function DashboardLayoutBasic(props: any) {
               },
               "& .MuiDrawer-root": {
                 fill: "white",
-                  "& .MuiPaper-root": {
-                                      backgroundColor: "#2a2a3c", // Fondo del menú desplegable
-
+                "& .MuiPaper-root": {
+                  backgroundColor: "#2a2a3c", // Fondo del menú desplegable
                 },
               },
               "& .MuiAppBar-root": {
@@ -364,11 +506,18 @@ export default function DashboardLayoutBasic(props: any) {
                   backgroundColor: "#2a2a3c", // Fondo del menú desplegable
                   color: "white", // Color del texto
                 },
-               
-  
               },
             }}
-            slots={{ toolbarAccount: () => null, sidebarFooter: SidebarFooterAccount }}
+            slots={{
+              toolbarAccount: () => null,
+              sidebarFooter: SidebarFooterAccount,
+              toolbarActions: () => (
+                <ToolbarActions
+                  count={getNotificationsLabel(notifications ? notifications.length : 0)}
+                  notificaciones={notifications ?? []}
+                />
+              ),
+            }}
           >
             <Box marginTop={-10}>{props.children}</Box>
           </DashboardLayout>

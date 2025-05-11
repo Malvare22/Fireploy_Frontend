@@ -26,6 +26,7 @@ export const getUsuarioService = async (id: number, token: string) => {
       sessiontoken: token,
     }
   );
+  
 
   return response;
 };
