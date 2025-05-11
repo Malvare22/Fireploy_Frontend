@@ -1,7 +1,18 @@
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { showSocialNetworks } from "@modules/usuarios/utils/showSocialNetworks";
-import { Avatar, Box, Card, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Card,
+  Grid2,
+  IconButton,
+  MenuItem,
+  Stack,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import ProjectCard from "@modules/general/components/projectCard";
 import SpringModal from "@modules/general/components/springModal";
@@ -12,7 +23,7 @@ import { labelSelects } from "@modules/general/enums/labelSelects";
 import { ShowGoal } from "@modules/general/components/portafolioCard";
 import { useParams } from "react-router";
 import { useAuth } from "@modules/general/context/accountContext";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getUsuarioService } from "@modules/usuarios/services/get.usuario";
 import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
 import { labelPortafolio } from "@modules/usuarios/enum/labelPortafolio";
@@ -23,10 +34,24 @@ import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { UsuarioSchema } from "@modules/usuarios/utils/form/usuario.schema";
+import GeneralButton from "@modules/general/components/button";
+import { buttonTypes } from "@modules/general/types/buttons";
+import { postChangeUsuarioService } from "@modules/usuarios/services/post.modificar.usuario";
+import { labelPerfil } from "@modules/usuarios/enum/labelPerfil";
+import { InputAdornment } from "@mui/material";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import EditIcon from "@mui/icons-material/Edit";
 
 /**
  * Portfolio component – responsible for rendering a user's public profile and projects.
- * 
+ *
  * This component fetches and displays user information, a list of their projects, social media links,
  * and achievements. It allows sorting and filtering of the project list and opens a modal
  * for viewing project details.
@@ -36,7 +61,7 @@ import { useModal } from "@modules/general/components/modal/hooks/useModal";
  *
  * @component
  * @returns {JSX.Element} A full portfolio page showcasing a user's profile and projects.
- * 
+ *
  * @example
  * ```tsx
  * <Portafolio />
@@ -95,6 +120,164 @@ const Portafolio = () => {
 
   const logros = { titulo: "Repositorios en GitHub", valor: "50+" };
 
+  const ModalEdit = ({ user }: { user: Usuario }) => {
+    const {
+      register,
+      formState: { errors },
+      handleSubmit,
+    } = useForm<UsuarioSchema>({
+      resolver: zodResolver(UsuarioSchema),
+      defaultValues: user,
+    });
+
+    const token = useAuth().accountInformation.token;
+
+    const { mutate: updatePortafolioInformation, isPending } = useMutation({
+      mutationFn: (user: Usuario) => postChangeUsuarioService(user.id ?? 0, token, user),
+      onError: (err) => setError(err),
+      onSuccess: () => {
+        showDialog({
+          message: "Se ha modificado exitosamente la información de portafolio del usuario",
+          title: "Actualización Portafolio",
+          type: "success",
+          onAccept: () => handleAccept(),
+          reload: true,
+        });
+      },
+    });
+
+    async function onSubmit(user: Usuario) {
+      await updatePortafolioInformation(user);
+    }
+
+    return (
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Stack spacing={2}>
+          <Typography variant="h4" textAlign={"center"}>
+            Editar Información de Portafolio
+          </Typography>
+          {/* Redes Sociales */}
+          <Typography variant="h6">{labelPerfil.redesSociales}</Typography>
+          <Grid2 container spacing={2}>
+            <Grid2 size={{ md: 6, xs: 12 }}>
+              <TextField
+                fullWidth
+                label={labelPerfil.facebook}
+                {...register("redSocial.facebook")}
+                error={!!errors.redSocial?.facebook}
+                helperText={errors.redSocial?.facebook?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton>
+                        <FacebookIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid2>
+            <Grid2 size={{ md: 6, xs: 12 }}>
+              <TextField
+                fullWidth
+                label={labelPerfil.instagram}
+                {...register("redSocial.instagram")}
+                error={!!errors.redSocial?.instagram}
+                helperText={errors.redSocial?.instagram?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton>
+                        <InstagramIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid2>
+            <Grid2 size={{ md: 6, xs: 12 }}>
+              <TextField
+                fullWidth
+                label={labelPerfil.linkedin}
+                {...register("redSocial.linkedin")}
+                error={!!errors.redSocial?.linkedin}
+                helperText={errors.redSocial?.linkedin?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton>
+                        <LinkedInIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid2>
+            <Grid2 size={{ md: 6, xs: 12 }}>
+              <TextField
+                fullWidth
+                label={labelPerfil.x}
+                {...register("redSocial.x")}
+                error={!!errors.redSocial?.x}
+                helperText={errors.redSocial?.x?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton>
+                        <TwitterIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid2>
+            <Grid2 size={{ md: 6, xs: 12 }}>
+              <TextField
+                fullWidth
+                label={labelPerfil.gitHub}
+                {...register("redSocial.github")}
+                error={!!errors.redSocial?.github}
+                helperText={errors.redSocial?.github?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton>
+                        <GitHubIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid2>
+          </Grid2>
+          <Typography variant="h6">Descripción</Typography>
+          <TextField
+            multiline
+            minRows={4}
+            {...register("descripcion")}
+            error={!!errors.descripcion}
+            helperText={errors.descripcion?.message}
+            fullWidth
+          />
+          <Stack alignItems={"center"} justifyContent={"center"} direction={"row"} spacing={2}>
+            <Box>
+              <GeneralButton mode={buttonTypes.save} loading={isPending} type="submit" />
+            </Box>
+            <Box>
+              <GeneralButton mode={buttonTypes.cancel} disabled={isPending} />
+            </Box>
+          </Stack>
+        </Stack>
+      </form>
+    );
+  };
+
+  const {
+    handleClose: handleCloseModalEdit,
+    handleOpen: handleOpenModalEdit,
+    open: openModalEdit,
+  } = useModal();
+
   return (
     <>
       <AlertDialog
@@ -104,6 +287,11 @@ const Portafolio = () => {
         type={type}
         textBody={message}
       />
+      {usuario && (
+        <SpringModal handleClose={handleCloseModalEdit} open={openModalEdit}>
+          <ModalEdit user={usuario} />
+        </SpringModal>
+      )}
       {isLoading ? (
         <LoaderElement />
       ) : (
@@ -118,24 +306,34 @@ const Portafolio = () => {
               <Card
                 sx={{
                   padding: 6,
+                  position: "relative",
                 }}
               >
+                <Box sx={{ position: "absolute", right: 10, top: 10 }}>
+                  <Tooltip title="Editar">
+                    <IconButton onClick={handleOpenModalEdit}>
+                      <EditIcon sx={{ fontSize: 32 }} />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
                 <Stack spacing={3}>
                   <Stack spacing={3} alignItems={"center"}>
                     <Avatar src={usuario.fotoDePerfil} sx={{ width: 96, height: 96 }} />
                     <Typography variant="h4" textAlign={"center"}>
                       {`${usuario.nombres} ${usuario.apellidos}`}
                     </Typography>
-                    <Stack alignItems={"center"} marginTop={3} spacing={4}>
-                      <Stack spacing={2}>
-                        <Typography variant="h6" textAlign={"center"}>
-                          {labelPortafolio.acercaDe}
-                        </Typography>
-                        <Typography variant="body1" textAlign={"center"} maxWidth={850}>
-                          {usuario.descripcion}
-                        </Typography>
+                    {usuario.descripcion.trim().length > 0 && (
+                      <Stack alignItems={"center"} marginTop={3} spacing={4}>
+                        <Stack spacing={2}>
+                          <Typography variant="h6" textAlign={"center"}>
+                            {labelPortafolio.acercaDe}
+                          </Typography>
+                          <Typography variant="body1" textAlign={"center"} maxWidth={850}>
+                            {usuario.descripcion}
+                          </Typography>
+                        </Stack>
                       </Stack>
-                    </Stack>
+                    )}
                   </Stack>
                   <Stack alignItems={"center"} spacing={3}>
                     <Stack direction="row" spacing={2}>
@@ -156,9 +354,7 @@ const Portafolio = () => {
                   <Grid2
                     container
                     spacing={2}
-                    direction={"row"}
-                    alignItems={"center"}
-                    sx={{ margin: 2, marginBottom: 4 }}
+                    sx={{ margin: 2, marginBottom: 4, display: "flex", alignItems: "center" }}
                   >
                     <Grid2
                       size={{ md: 2, xs: 12 }}
@@ -166,7 +362,7 @@ const Portafolio = () => {
                       display={"flex"}
                       alignItems={"center"}
                     >
-                      <Typography variant="body1" fontWeight="bold" marginTop={2}>
+                      <Typography variant="body1" fontWeight="bold">
                         {labelPortafolio.ordenarPor}
                       </Typography>
                     </Grid2>
@@ -177,6 +373,7 @@ const Portafolio = () => {
                         InputLabelProps={{ shrink: true }}
                         variant="outlined"
                         label={labelPortafolio.puntuacion}
+                        size="small"
                         fullWidth
                       >
                         <MenuItem value="No Aplicar">
@@ -196,6 +393,7 @@ const Portafolio = () => {
                         InputLabelProps={{ shrink: true }}
                         variant="outlined"
                         label={labelPortafolio.semestre}
+                        size="small"
                         fullWidth
                       >
                         <MenuItem value="No Aplicar">

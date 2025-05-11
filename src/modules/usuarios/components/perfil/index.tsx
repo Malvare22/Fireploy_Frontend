@@ -22,12 +22,6 @@ import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { InputAdornment } from "@mui/material";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import GitHubIcon from "@mui/icons-material/GitHub";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { urlToBlob } from "@modules/general/utils/urlToBlod";
@@ -362,111 +356,6 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
           </Grid2>
         </Grid2>
 
-        {/* Redes Sociales */}
-        <Typography variant="h6">{labelPerfil.redesSociales}</Typography>
-        <Grid2 container spacing={2}>
-          <Grid2 size={{ md: 6, xs: 12 }}>
-            <TextField
-              fullWidth
-              label={labelPerfil.facebook}
-              {...register("redSocial.facebook")}
-              error={!!errors.redSocial?.facebook}
-              helperText={errors.redSocial?.facebook?.message}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton>
-                      <FacebookIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid2>
-          <Grid2 size={{ md: 6, xs: 12 }}>
-            <TextField
-              fullWidth
-              label={labelPerfil.instagram}
-              {...register("redSocial.instagram")}
-              error={!!errors.redSocial?.instagram}
-              helperText={errors.redSocial?.instagram?.message}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton>
-                      <InstagramIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid2>
-          <Grid2 size={{ md: 6, xs: 12 }}>
-            <TextField
-              fullWidth
-              label={labelPerfil.linkedin}
-              {...register("redSocial.linkedin")}
-              error={!!errors.redSocial?.linkedin}
-              helperText={errors.redSocial?.linkedin?.message}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton>
-                      <LinkedInIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid2>
-          <Grid2 size={{ md: 6, xs: 12 }}>
-            <TextField
-              fullWidth
-              label={labelPerfil.x}
-              {...register("redSocial.x")}
-              error={!!errors.redSocial?.x}
-              helperText={errors.redSocial?.x?.message}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton>
-                      <TwitterIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid2>
-          <Grid2 size={{ md: 6, xs: 12 }}>
-            <TextField
-              fullWidth
-              label={labelPerfil.gitHub}
-              {...register("redSocial.github")}
-              error={!!errors.redSocial?.github}
-              helperText={errors.redSocial?.github?.message}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton>
-                      <GitHubIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid2>
-        </Grid2>
-
-        {/* Descripción */}
-        <Typography variant="h6">{labelPerfil.descripcion}</Typography>
-        <TextField
-          fullWidth
-          multiline
-          rows={4}
-          {...register("descripcion")}
-          error={!!errors.descripcion}
-          helperText={errors.descripcion?.message}
-        />
         {showButton && (
           <Stack direction={"row"} spacing={1} justifyContent={"end"}>
             <GeneralButton mode={buttonTypes.save} type="submit" />

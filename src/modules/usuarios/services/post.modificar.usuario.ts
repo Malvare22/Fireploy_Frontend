@@ -30,24 +30,6 @@ import { Usuario } from "../types/usuario";
  * const response = await postChangeUsuarioService(1, "your-session-token", user);
  * ```
  */
-
-/**
- * Changes the user's state (Active/Inactive) by sending a PATCH request to the server.
- * 
- * This function sends a PATCH request to the server to update the user's state (either "A" for Active
- * or "I" for Inactive). It requires the user ID, session token, and the new state to be set.
- * 
- * @param {string} token - The session token used for authenticating the API request.
- * @param {number} id - The ID of the user whose state is being updated.
- * @param {"A" | "I"} estado - The new state for the user, either "A" (Active) or "I" (Inactive).
- * 
- * @returns {Promise<UsuarioService>} The response from the server indicating the result of the state change.
- * 
- * @example
- * ```tsx
- * const response = await postChangeUserStateService("your-session-token", 1, "A");
- * ```
- */
 export const postChangeUsuarioService = async (id: number, token: string, user: Usuario) => {
   type Body = {
     nombre: string;
@@ -82,6 +64,23 @@ export const postChangeUsuarioService = async (id: number, token: string, user: 
   return response;
 };
 
+/**
+ * Changes the user's state (Active/Inactive) by sending a PATCH request to the server.
+ * 
+ * This function sends a PATCH request to the server to update the user's state (either "A" for Active
+ * or "I" for Inactive). It requires the user ID, session token, and the new state to be set.
+ * 
+ * @param {string} token - The session token used for authenticating the API request.
+ * @param {number} id - The ID of the user whose state is being updated.
+ * @param {"A" | "I"} estado - The new state for the user, either "A" (Active) or "I" (Inactive).
+ * 
+ * @returns {Promise<UsuarioService>} The response from the server indicating the result of the state change.
+ * 
+ * @example
+ * ```tsx
+ * const response = await postChangeUserStateService("your-session-token", 1, "A");
+ * ```
+ */
 export const postChangeUserStateService = async (token: string, id: number, estado: "A" | "I") => {
 
   const response = await patchData<UsuarioService>(
