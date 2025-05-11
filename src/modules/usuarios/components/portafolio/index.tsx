@@ -264,7 +264,7 @@ const Portafolio = () => {
               <GeneralButton mode={buttonTypes.save} loading={isPending} type="submit" />
             </Box>
             <Box>
-              <GeneralButton mode={buttonTypes.cancel} disabled={isPending} />
+              <GeneralButton mode={buttonTypes.cancel} onClick={handleCloseModalEdit} disabled={isPending} />
             </Box>
           </Stack>
         </Stack>
