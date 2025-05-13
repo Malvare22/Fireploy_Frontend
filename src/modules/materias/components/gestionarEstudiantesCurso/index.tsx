@@ -22,11 +22,28 @@ type Props = {
 };
 
 /**
- * Component to manage the students assigned to a specific course.
- * Allows adding and removing students from a course using modal dialogs and alerts.
- *
- * @param {Curso} curso - The course data including enrolled students.
- * @param {string} idCurso - The unique identifier for the course.
+ * GestionarEstudiantesCurso component – manages student enrollment for a given course.
+ * 
+ * Provides functionality to add and remove students from a course using modals and confirmation dialogs.
+ * Uses React Query for async mutations and displays success or error messages accordingly.
+ * 
+ * @component
+ * 
+ * @param {Curso} curso - The course data including its current list of enrolled students.
+ * @param {string} idCurso - The unique identifier of the course being managed.
+ * 
+ * @returns A UI that allows administrators or instructors to edit student enrollment for a course.
+ * 
+ * Features:
+ * - Displays a table of enrolled students.
+ * - Allows removal of selected students.
+ * - Opens a modal to add new students via user search.
+ * - Uses dialogs for confirming critical actions.
+ * 
+ * @example
+ * ```tsx
+ * <GestionarEstudiantesCurso curso={cursoData} idCurso="CURSO123" />
+ * ```
  */
 function GestionarEstudiantesCurso({ curso, idCurso }: Props) {
   // Handles alert dialogs for success, error, and confirmation messages
@@ -60,7 +77,7 @@ function GestionarEstudiantesCurso({ curso, idCurso }: Props) {
     onSuccess: () =>
       showDialog({
         title: "Añadir Estudiantes a un Curso",
-        message: "Estudiantes registrados al curso de manera correcta!",
+        message: "¡Estudiantes registrados al curso de manera correcta!",
         onAccept: () => {},
         reload: true,
         type: "success",
@@ -80,7 +97,7 @@ function GestionarEstudiantesCurso({ curso, idCurso }: Props) {
     onSuccess: () =>
       showDialog({
         title: "Eliminar Estudiantes de un Curso",
-        message: "Estudiantes registrados al curso de manera correcta!",
+        message: "¡Estudiantes eliminados del curso de manera correcta!",
         onAccept: () => {},
         reload: true,
         type: "success",
@@ -107,7 +124,7 @@ function GestionarEstudiantesCurso({ curso, idCurso }: Props) {
   function confirmAddStudents() {
     showDialog({
       title: "Agregar Estudiantes de un Curso",
-      message: "¿Está seguro de Agregar a los usuarios seleccionados?",
+      message: "¿Está seguro de agregar a los usuarios seleccionados?",
       onCancel: () => {},
       onAccept: () => mutateAddStudents(),
       type: "default",

@@ -29,12 +29,24 @@ type TablaUsuariosProps = {
 };
 
 /**
- * TablaUsuarios component displays a user table with data, status control, and actions.
- *
+ * TablaUsuarios component – Displays a table of user data with their status and various actions.
+ * 
+ * This component renders a list of users, displaying their ID, names, role, status, and social network links. 
+ * It includes action buttons for viewing, editing, enabling, or disabling users. Additionally, users' statuses 
+ * can be toggled between active and inactive through a modal confirmation dialog. The table allows sorting and 
+ * pagination.
+ * 
  * @component
- * @param {Usuario[]} usuarios - Array of user objects to display in the table.
- *
- * @returns {React.ReactElement}
+ * 
+ * @param {Array} usuarios - An array of user objects. Each object contains information about a user, such as 
+ *                            ID, name, role, status, and social networks.
+ * 
+ * @returns {JSX.Element} A Material UI DataTable displaying users' details with interactive actions.
+ * 
+ * @example
+ * ```tsx
+ * <TablaUsuarios usuarios={userList} />
+ * ```
  */
 const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
   const theme = useTheme();
@@ -159,7 +171,7 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
         if (redesSociales.length == 0)
           return (
             <Chip
-              label="Not Available"
+              label="No Disponibles"
               icon={<ErrorOutlineIcon />}
               color="info"
               sx={{ padding: 1, color: "white" }}
@@ -198,6 +210,8 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
       style: { display: "flex", justifyContent: "center" },
     },
   ];
+
+  console.log(usuarios)
 
   /**
    * Renders responsive Chip with tooltip icon for role.

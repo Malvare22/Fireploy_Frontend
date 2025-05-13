@@ -27,6 +27,27 @@ const filterOptions: FilterOptions = [
   },
 ];
 
+/**
+ * ListarMisCursos component – displays a list of courses for students or professors,
+ * with the ability to filter by status, search by course name, and view course details.
+ * 
+ * This component fetches data on the courses for the currently authenticated user,
+ * either a student or a professor. It supports filtering, searching, and displays 
+ * course data in a table format.
+ * 
+ * The component uses Material-UI for layout and components, and React Query to manage
+ * data fetching and state. It also integrates an alert dialog to show error messages or
+ * confirmation dialogs.
+ * 
+ * @component
+ * 
+ * @returns {JSX.Element} A list of courses with filtering and searching capabilities.
+ * 
+ * @example
+ * ```tsx
+ * <ListarMisCursos />
+ * ```
+ */
 function ListarMisCursos() {
   const [cursos, setCursos] = useState<CursoTabla[]>([]);
 

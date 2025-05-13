@@ -14,14 +14,24 @@ import AlertDialog from "@modules/general/components/alertDialog";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import { useNavigate } from "react-router";
 import { rutasProyectos } from "@modules/proyectos/router";
-// import { labelSelects } from "@modules/general/enums/labelSelects";
-// import {
-//   FilterOptions,
-//   SelectFilters,
-//   SelectOrders,
-//   SorterOptions,
-// } from "@modules/general/components/selects";
 
+/**
+ * MisProyectos component – A page that lists the projects belonging to the authenticated user.
+ * 
+ * This component displays the user's projects in a list, along with a notification section
+ * that provides information and a button to navigate to the databases section. The component
+ * handles loading states, errors, and displays an alert dialog for error handling.
+ * It also allows users to navigate between different sections of the app (such as databases).
+ * 
+ * @component
+ * 
+ * @returns {JSX.Element} A page that shows a list of the user's projects with a notification section.
+ * 
+ * @example
+ * ```tsx
+ * <MisProyectos />
+ * ```
+ */
 function MisProyectos() {
   const proyectosSectionRef = useRef<HTMLDivElement>(null);
 

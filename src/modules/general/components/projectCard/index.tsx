@@ -24,14 +24,25 @@ type ProjectCardProps = {
 };
 
 /**
- * Renders a card component displaying project details including image, score,
- * members, and technologies used.
- *
+ * ProjectCard Component
+ * 
+ * A card that displays the details of a project. It includes the project image, 
+ * title, members, technologies used, and a star button for liking/disliking the project.
+ * The component also handles the click events to open a modal or navigate to another page.
+ * 
  * @component
- * @param {ProjectCardProps} props - Props containing the project info and event handler.
- * @returns {JSX.Element} - Returns a styled project card component.
+ * 
+ * @param {ProjectCardProps} props - Component properties.
+ * @param {ProyectoCard} props.proyecto - The project data to be displayed in the card.
+ * @param {Function} props.handleOpen - The callback function to handle the card click event.
+ * 
+ * @returns {JSX.Element} A styled project card.
+ * 
+ * @example
+ * ```tsx
+ * <ProjectCard proyecto={projectData} handleOpen={handleCardClick} />
+ * ```
  */
-
 export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }) => {
   const [localValue, setLocalValue] = useState<boolean>(false);
   const { token, id } = useAuth().accountInformation;

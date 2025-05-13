@@ -5,16 +5,20 @@ import { useSearchParams } from "react-router";
  * Custom hook to manage stepper logic with support for skipped steps
  * and synchronization with the URL search parameter `stage`.
  *
+ * This hook is used to handle step-based navigation, where each step is
+ * represented by an index. It allows for skipping steps, keeps track of
+ * the current step, and syncs the step state with the URL query parameter `stage`.
+ *
  * @param {number} [initialStep=0] - The starting step index (0-based).
  * @returns {{
- *   activeStep: number,
- *   setActiveStep: React.Dispatch<React.SetStateAction<number>>,
- *   skipped: Set<number>,
- *   isStepSkipped: (step: number) => boolean,
- *   skipStep: (step: number) => void,
- *   handleNext: () => void
+ *   activeStep: number, // The current active step index (0-based).
+ *   setActiveStep: React.Dispatch<React.SetStateAction<number>>, // Function to set the active step.
+ *   skipped: Set<number>, // A set of skipped steps' indices.
+ *   isStepSkipped: (step: number) => boolean, // Function to check if a specific step was skipped.
+ *   skipStep: (step: number) => void, // Function to mark a step as skipped.
+ *   handleNext: () => void // Function to move to the next step and update the URL.
  * }}
- * Object containing stepper state and control functions.
+ * An object containing stepper state and control functions.
  */
 export const useStepper = (initialStep: number = 0) => {
   const [activeStep, setActiveStep] = useState(initialStep);
@@ -22,8 +26,9 @@ export const useStepper = (initialStep: number = 0) => {
 
   /**
    * Checks if a specific step has been skipped.
+   *
    * @param {number} step - The step index to check.
-   * @returns {boolean} True if the step was skipped, otherwise false.
+   * @returns {boolean} - Returns `true` if the step was skipped, otherwise `false`.
    */
   const isStepSkipped = (step: number) => skipped.has(step);
 
@@ -31,6 +36,7 @@ export const useStepper = (initialStep: number = 0) => {
 
   /**
    * Marks a step as skipped.
+   *
    * @param {number} step - The step index to skip.
    */
   const skipStep = (step: number) => {
@@ -38,7 +44,8 @@ export const useStepper = (initialStep: number = 0) => {
   };
 
   /**
-   * Syncs `activeStep` with the `stage` parameter from the URL on mount and whenever it changes.
+   * Syncs `activeStep` with the `stage` parameter from the URL on mount
+   * and whenever it changes.
    */
   useEffect(() => {
     let nStage = 1;
@@ -75,11 +82,11 @@ export const useStepper = (initialStep: number = 0) => {
   };
 
   return {
-    activeStep,
-    setActiveStep,
-    skipped,
-    isStepSkipped,
-    skipStep,
-    handleNext,
+    activeStep, // The current active step index (0-based).
+    setActiveStep, // Function to set the active step.
+    skipped, // A set of skipped steps' indices.
+    isStepSkipped, // Function to check if a specific step was skipped.
+    skipStep, // Function to mark a step as skipped.
+    handleNext, // Function to move to the next step and update the URL.
   };
 };

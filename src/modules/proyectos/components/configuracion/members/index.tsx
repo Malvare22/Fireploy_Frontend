@@ -1,15 +1,14 @@
 import { ProjectCardAvatar } from "@modules/general/components/projectCardAvatar";
 import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
 import {
-  Box,
   Button,
   Chip,
   Divider,
+  Grid2,
   IconButton,
   Menu,
   MenuItem,
   Stack,
-  TextField,
   Tooltip,
   Typography,
   useTheme,
@@ -32,17 +31,55 @@ import { getCursoById } from "@modules/materias/services/get.curso";
 import { UsuarioCurso } from "@modules/materias/types/curso";
 import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
+import useSearch from "@modules/general/hooks/useSearch";
+import TextFieldSearch from "@modules/general/components/textFieldSearch";
 
+/**
+ * Members component – This component displays the list of members (collaborators) for a project 
+ * and allows the user to manage these members by adding or removing them. The component fetches 
+ * the project data, shows the members, and provides the UI for user interaction, such as 
+ * adding new users or removing existing ones.
+ * 
+ * This component is built using MUI components, hooks from React Query, and custom hooks 
+ * for fetching and updating project data.
+ * 
+ * @component
+ * 
+ * @returns {JSX.Element} A component that displays the project members and allows management 
+ * of these members (adding or removing users).
+ * 
+ * @example
+ * ```tsx
+ * <Members />
+ * ```
+ */
 export const Members = () => {
   const theme = useTheme();
 
-  const { getValues: getValuesProject } = useFormContext<ProyectoSchema>();
+  const { getValues: getValuesProject, watch } = useFormContext<ProyectoSchema>();
 
   const groupId = getValuesProject("materiaInformacion.cursoId");
 
   const { selectUser, setSelectUser } = useSearchUsers();
 
   const { token, id } = useAuth().accountInformation;
+
+  const { filteredData, searchValue, setSearchValue } = useSearch();
+
+  function searchFn(users: UsuarioCurso[], s: string) {
+    return users.filter((x) => x.nombre.toLowerCase().includes(s.toLowerCase()));
+  }
+
+  const ID_PROPIETARY = getValuesProject("propietario")?.id ?? -1;
+
+  const membersToShow = useMemo(() => {
+    if (watch("integrantes") && getValuesProject("propietario")) {
+      const data = [...watch("integrantes"), watch("propietario")];
+      return filteredData(data as UsuarioCurso[], searchFn);
+    } else {
+      return [];
+    }
+  }, [watch("integrantes"), searchValue]);
 
   const {
     data: groupInformation,
@@ -210,25 +247,36 @@ export const Members = () => {
         <Divider />
       </Stack>
       <Divider />
-      <Box sx={{ padding: 2, backgroundColor: theme.palette.action.hover }}>
-        <TextField size="small" placeholder={labelConfiguracion.filtrarColaboradores} />
-      </Box>
+      <Grid2
+        container
+        sx={{
+          padding: 2,
+          backgroundColor: theme.palette.action.hover,
+          width: "100%",
+        }}
+      >
+        <Grid2 size={{ md: 6, xs: 12 }}>
+          <TextFieldSearch
+            setSearchValue={setSearchValue}
+            fullWidth
+            size="small"
+            placeholder={labelConfiguracion.filtrarColaboradores}
+          />
+        </Grid2>
+      </Grid2>
       <Divider />
       <Typography padding={2}>{labelConfiguracion.cuenta}</Typography>
       <Divider />
-      {getValuesProject("propietario") && (
-        <CardMember member={getValuesProject("propietario")!!} isOwner={true} editable={false} />
-      )}
-      <Divider />
-      {getValuesProject("integrantes").map((user, key) => {
+      {membersToShow.map((user) => {
         return (
           <>
             <CardMember
               member={user}
-              key={key}
+              key={user.id}
+              isOwner={user.id == ID_PROPIETARY}
               isMe={user.id == id}
               onClickRemove={() => showConfirmRemoveUser(user.id)}
-              editable={true}
+              editable={user.id != ID_PROPIETARY}
             />
             <Divider />
           </>
@@ -269,12 +317,18 @@ const CardMember: React.FC<CardMemberProps> = ({
       justifyContent={"space-between"}
       padding={2}
     >
-      <Stack direction={"row"} spacing={1} alignItems={"center"}>
-        <ProjectCardAvatar
-          usuario={{ foto: member.imagen || "", id: member.id.toString(), nombres: member.nombre }}
-          sx={{ width: 48, height: 48 }}
-        />
-        <Typography variant="h6">{member.nombre}</Typography>
+      <Stack direction={{ md: "row", xs: "column" }} spacing={1} alignItems={"center"}>
+        <Stack direction={"row"} alignItems={"center"}>
+          <ProjectCardAvatar
+            usuario={{
+              foto: member.imagen || "",
+              id: member.id.toString(),
+              nombres: member.nombre,
+            }}
+            sx={{ width: 48, height: 48 }}
+          />
+          <Typography variant="h6">{member.nombre}</Typography>
+        </Stack>
         {isMe && <Chip color="primary" label={labelConfiguracion.eresTu} />}
         {isOwner && <Chip color="secondary" label={labelConfiguracion.propietario} />}
       </Stack>

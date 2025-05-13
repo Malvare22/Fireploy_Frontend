@@ -31,6 +31,9 @@ const labels: [string, string, string, string][] = [
 /**
  * Displays the team section including individual cards for each member.
  *
+ * This component renders a section that introduces the team, with each member's card containing
+ * their profile picture, name, description, and a link to their LinkedIn profile.
+ * 
  * @component
  */
 function TeamView() {

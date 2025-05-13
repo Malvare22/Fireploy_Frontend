@@ -31,10 +31,31 @@ type Props = {
 };
 
 /**
- * Reusable accordion component based on Material-UI.
+ * AccordionUsage component – a reusable and customizable accordion based on Material-UI,
+ * used to display collapsible sections with a title and body content.
  * 
- * @param {Props} props - Component properties.
- * @returns {JSX.Element} An interactive accordion component.
+ * This component supports default expanded state, disabled mode, gutter removal,
+ * square styling, and optional custom CSS classes. It renders custom content through children
+ * and provides flexibility for layout and interaction.
+ * 
+ * @component
+ * 
+ * @param {React.ReactNode} title - The title displayed in the accordion header.
+ * @param {React.ReactNode} children - The content rendered inside the accordion body.
+ * @param {boolean} [defaultExpanded=false] - If `true`, the accordion is expanded by default.
+ * @param {boolean} [disabled=false] - If `true`, disables the accordion interaction.
+ * @param {boolean} [disableGutters=false] - If `true`, removes the default padding.
+ * @param {boolean} [square=false] - If `true`, uses square corners instead of rounded.
+ * @param {string} [className] - Optional CSS class to style the accordion container.
+ * 
+ * @returns {JSX.Element} A Material UI Accordion component with customizable content and behavior.
+ * 
+ * @example
+ * ```tsx
+ * <AccordionUsage title="Details" defaultExpanded>
+ *   <p>This is the accordion content.</p>
+ * </AccordionUsage>
+ * ```
  */
 const AccordionUsage: React.FC<Props> = ({
   children,

@@ -31,6 +31,38 @@ import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
+/**
+ * VistaCrearMateria component – a view for creating a new subject (Materia).
+ * This component renders a form to input the details of a new subject and optionally create associated groups (Cursos) for the subject.
+ * The form validates the input and sends a request to create the subject. If successful, it can trigger the creation of related groups.
+ * 
+ * It utilizes hooks for form management, validation, and API calls. The component also includes dynamic content, such as rendering a table for managing groups when needed.
+ * 
+ * @component
+ * 
+ * @returns A JSX element that renders a form for creating a new subject and optionally creates groups for it.
+ * 
+ * @example
+ * ```tsx
+ * <VistaCrearMateria />
+ * ```
+ * 
+ * @hookform
+ * This component uses `react-hook-form` for form handling, including validation via Zod schema (`MateriaSchema`).
+ * 
+ * @mutations
+ * It uses `react-query`'s `useMutation` to handle API requests for creating the subject (`postCreateMateriaService`) and its associated groups (`postCreateCursoService`).
+ * 
+ * @state
+ * - `createGroups`: Tracks whether to create associated groups for the subject.
+ * - `disableCheck`: Disables the checkbox for creating groups after submission.
+ * - `idMateria`: Stores the ID of the created subject.
+ * 
+ * @example
+ * ```tsx
+ * <VistaCrearMateria />
+ * ```
+ */
 function VistaCrearMateria() {
   const [createGroups, setCreateGroups] = useState<boolean>(false);
 

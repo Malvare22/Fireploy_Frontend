@@ -10,15 +10,35 @@ import { Repositories } from "@modules/proyectos/components/configuracion/reposi
 import { DataBase } from "@modules/proyectos/components/configuracion/database";
 import StepperStandard from "@modules/general/components/stepper";
 import { useStepper } from "@modules/general/hooks/useStepper";
-import { StepperContext } from "@modules/general/context/stepper.Contex";
+import { StepperContext } from "@modules/general/context/stepperContex";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { adaptProject } from "@modules/proyectos/utils/adapt.proyecto";
 import { getProjectById } from "@modules/proyectos/services/get.project";
 import { useAuth } from "@modules/general/context/accountContext";
-import { ParamsContext } from "@modules/general/context/paramasContext";
+import { ParamsContext } from "@modules/general/context/paramsContext";
 import { useParamsCustom } from "@modules/general/hooks/useParamsContext";
 
+/**
+ * CrearProyecto component – A form for creating a project, utilizing a stepper to guide the user through various stages.
+ * 
+ * This component manages the creation of a project through a multi-step form. It uses the `react-hook-form` library 
+ * with `zod` for validation and handles the project data using queries and context providers. The form includes steps 
+ * to define basic information, register repositories, and define database settings for the project.
+ * 
+ * The component fetches an existing project (if an `id` is provided in the query params) and uses that data to populate 
+ * the form with pre-existing values for editing.
+ * 
+ * @component
+ * 
+ * @returns {JSX.Element} A form with a stepper for creating or editing a project, including fields for project information, 
+ * repositories, and database configuration.
+ * 
+ * @example
+ * ```tsx
+ * <CrearProyecto />
+ * ```
+ */
 export default function CrearProyecto() {
   const [projectId, setProjectId] = useState<number | null>(null);
 

@@ -2,13 +2,17 @@ import { useSearchParams } from "react-router-dom";
 
 /**
  * Custom hook to manage URL search parameters.
+ * 
  * This hook provides a way to access and modify the search parameters
  * of the current URL using the `useSearchParams` hook from `react-router-dom`.
+ * It allows for reading the current search parameters and updating them
+ * with specific values, providing an easier interface for working with URL parameters.
  *
- * @returns An object containing:
- * - `searchParams`: The current search parameters from the URL.
- * - `setSearchParams`: A function to update the search parameters.
- * - `updateSearchParams`: A function to update a specific search parameter by key.
+ * @returns {{
+ *   searchParams: URLSearchParams,     // The current search parameters from the URL.
+ *   setSearchParams: (params: URLSearchParams) => void, // Function to set new search parameters.
+ *   updateSearchParams: (key: string, value: string) => void // Function to update a specific search parameter.
+ * }}
  */
 export const useParamsCustom = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -18,8 +22,8 @@ export const useParamsCustom = () => {
    * This function creates a new `URLSearchParams` object, updates the parameter,
    * and then sets the new search parameters.
    *
-   * @param key - The key (parameter name) to update.
-   * @param value - The new value to set for the parameter.
+   * @param {string} key - The key (parameter name) to update.
+   * @param {string} value - The new value to set for the parameter.
    */
   const updateSearchParams = (key: string, value: string) => {
     const newParams = new URLSearchParams(searchParams);
@@ -28,8 +32,8 @@ export const useParamsCustom = () => {
   };
 
   return {
-    searchParams, // The current URL search parameters.
-    setSearchParams, // Function to set new search parameters.
+    searchParams,    // The current URL search parameters.
+    setSearchParams,  // Function to set new search parameters.
     updateSearchParams, // Function to update a specific search parameter.
   };
 };

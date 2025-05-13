@@ -22,12 +22,6 @@ import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { InputAdornment } from "@mui/material";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import GitHubIcon from "@mui/icons-material/GitHub";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { urlToBlob } from "@modules/general/utils/urlToBlod";
@@ -47,6 +41,25 @@ interface PerfilProps {
   type?: "crear" | "editar";
 }
 
+/**
+ * Perfil component – A profile management component that allows users to view and edit their profile details.
+ * It provides fields to modify account information, personal details, social media accounts, and profile photo.
+ * This component supports both creating new users and editing existing ones.
+ *
+ * It interacts with various services to handle user creation, update, and photo upload.
+ *
+ * @component
+ *
+ * @param {Usuario} usuario - The user object containing the current profile details.
+ * @param {string} [type="editar"] - The mode in which the component is used, either 'crear' (create) or 'editar' (edit).
+ *
+ * @returns {JSX.Element} A form with editable fields and a photo uploader for user profile management.
+ *
+ * @example
+ * ```tsx
+ * <Perfil usuario={currentUser} type="editar" />
+ * ```
+ */
 const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
   const { accountInformation } = useAuth();
   const { token, tipo } = accountInformation;
@@ -125,8 +138,11 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
   };
 
   const { isSuccess, isPending, mutate, data } = useMutation({
-    mutationFn: () => handleGetQuery(),
-    mutationKey: ["changeUser"],
+    mutationFn: async () => {
+      setIsLoading(true);
+      return await handleGetQuery();
+    },
+    mutationKey: ["Change User"],
   });
 
   const handleUpdateUser = async () => {
@@ -340,111 +356,6 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
           </Grid2>
         </Grid2>
 
-        {/* Redes Sociales */}
-        <Typography variant="h6">{labelPerfil.redesSociales}</Typography>
-        <Grid2 container spacing={2}>
-          <Grid2 size={{ md: 6, xs: 12 }}>
-            <TextField
-              fullWidth
-              label={labelPerfil.facebook}
-              {...register("redSocial.facebook")}
-              error={!!errors.redSocial?.facebook}
-              helperText={errors.redSocial?.facebook?.message}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton>
-                      <FacebookIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid2>
-          <Grid2 size={{ md: 6, xs: 12 }}>
-            <TextField
-              fullWidth
-              label={labelPerfil.instagram}
-              {...register("redSocial.instagram")}
-              error={!!errors.redSocial?.instagram}
-              helperText={errors.redSocial?.instagram?.message}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton>
-                      <InstagramIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid2>
-          <Grid2 size={{ md: 6, xs: 12 }}>
-            <TextField
-              fullWidth
-              label={labelPerfil.linkedin}
-              {...register("redSocial.linkedin")}
-              error={!!errors.redSocial?.linkedin}
-              helperText={errors.redSocial?.linkedin?.message}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton>
-                      <LinkedInIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid2>
-          <Grid2 size={{ md: 6, xs: 12 }}>
-            <TextField
-              fullWidth
-              label={labelPerfil.x}
-              {...register("redSocial.x")}
-              error={!!errors.redSocial?.x}
-              helperText={errors.redSocial?.x?.message}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton>
-                      <TwitterIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid2>
-          <Grid2 size={{ md: 6, xs: 12 }}>
-            <TextField
-              fullWidth
-              label={labelPerfil.gitHub}
-              {...register("redSocial.github")}
-              error={!!errors.redSocial?.github}
-              helperText={errors.redSocial?.github?.message}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton>
-                      <GitHubIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid2>
-        </Grid2>
-
-        {/* Descripción */}
-        <Typography variant="h6">{labelPerfil.descripcion}</Typography>
-        <TextField
-          fullWidth
-          multiline
-          rows={4}
-          {...register("descripcion")}
-          error={!!errors.descripcion}
-          helperText={errors.descripcion?.message}
-        />
         {showButton && (
           <Stack direction={"row"} spacing={1} justifyContent={"end"}>
             <GeneralButton mode={buttonTypes.save} type="submit" />
@@ -468,6 +379,25 @@ type ProfilePhotoUploaderProps = {
   onChange: () => void;
 };
 
+/**
+ * ProfilePhotoUploader component – A component for uploading and displaying the user's profile photo.
+ * It allows users to upload, preview, and remove their profile image.
+ *
+ * @component
+ *
+ * @param {string | null} photo - The current photo URL or null if no photo is set.
+ * @param {function} setPhoto - A function to update the photo state.
+ * @param {function} setFile - A function to set the file (Blob) state for the photo.
+ * @param {string} inital - The initial photo URL to compare against for resetting.
+ * @param {function} onChange - A function that will be called when the photo changes.
+ *
+ * @returns {JSX.Element} A section to display, change, and remove the user's profile photo.
+ *
+ * @example
+ * ```tsx
+ * <ProfilePhotoUploader photo={photo} setPhoto={setPhoto} setFile={setFile} inital={initalPhoto} onChange={handleChange} />
+ * ```
+ */
 export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
   photo,
   setFile,
@@ -497,6 +427,10 @@ export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
 
   const ref = useRef<HTMLInputElement>(null);
 
+  function handleReference() {
+    if (ref) ref.current?.click();
+  }
+
   const handleRemovePhoto = () => {
     setPhoto(null);
     if (ref.current) {
@@ -516,7 +450,7 @@ export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
             onChange={handlePhotoChange}
             ref={ref}
           />
-          <Button variant="outlined" component="span">
+          <Button variant="outlined" color="secondary" onClick={handleReference}>
             Cambiar foto
           </Button>
         </label>
@@ -528,6 +462,19 @@ export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
   );
 };
 
+/**
+ * ButtonUpdaterRol component – A button that allows the user to request promotion to a teacher role.
+ * It triggers a confirmation dialog and calls the service to create a teacher role request.
+ *
+ * @component
+ *
+ * @returns {JSX.Element} A button to trigger a role update request.
+ *
+ * @example
+ * ```tsx
+ * <ButtonUpdaterRol />
+ * ```
+ */
 const ButtonUpdaterRol = () => {
   const { accountInformation } = useAuth();
   const { token, id } = accountInformation;

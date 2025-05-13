@@ -25,12 +25,26 @@ import { Controller, FormProvider, SubmitHandler, useForm } from "react-hook-for
 type Props = { id: number; handleCloseModal: () => void };
 
 /**
- * EditarMateria allows editing of an existing subject (materia).
- * It handles fetching, form validation, submission and dialog feedback.
- *
- * @param {number} id - ID of the materia to edit
- * @param {Function} handleCloseModal - Function to close parent modal
- * @returns {JSX.Element}
+ * EditarMateria component – allows the editing of an existing subject (materia).
+ * It fetches the current data of the materia, displays it in a form, and allows the user to make changes.
+ * Once the form is submitted, it confirms the changes and sends the updated data to the server.
+ * 
+ * This component includes:
+ * - Fetching data of the materia to be edited.
+ * - Form for editing the materia with validation using Zod and React Hook Form.
+ * - Confirmation and alert dialogs for handling submission success or failure.
+ * 
+ * @component
+ * 
+ * @param {number} id - The ID of the materia to be edited.
+ * @param {Function} handleCloseModal - Function to close the modal that contains this component.
+ * 
+ * @returns {JSX.Element} A form that allows editing a materia with appropriate success/error handling.
+ * 
+ * @example
+ * ```tsx
+ * <EditarMateria id={1} handleCloseModal={closeModalFunction} />
+ * ```
  */
 function EditarMateria({ id, handleCloseModal }: Props) {
   const { accountInformation } = useAuth();

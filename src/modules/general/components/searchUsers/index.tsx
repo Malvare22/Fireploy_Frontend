@@ -43,6 +43,33 @@ interface Props {
   loading?: boolean;
 }
 
+/**
+ * SearchUsers component – a searchable autocomplete input for selecting a user from a list.
+ * 
+ * This component integrates Material-UI's Autocomplete with a custom user list. It allows the user to 
+ * search through available users and select one. The selected user is stored in the `selectUser` state,
+ * and the `setSelectUser` function is used to update the selected user. The component supports a loading state
+ * to display a loading indicator while users are being fetched.
+ * 
+ * @component
+ * 
+ * @param {UsuarioCampoBusqueda[]} users - The list of users to display in the autocomplete options.
+ * @param {React.Dispatch<UsuarioCampoBusqueda | null>} setSelectUser - Function to update the selected user state.
+ * @param {UsuarioCampoBusqueda | null} selectUser - The currently selected user.
+ * @param {boolean} [loading=false] - Optional prop to indicate if the user data is loading.
+ * 
+ * @returns {JSX.Element} A searchable autocomplete input with user options and selection.
+ * 
+ * @example
+ * ```tsx
+ * <SearchUsers
+ *   users={users}
+ *   setSelectUser={setSelectUser}
+ *   selectUser={selectUser}
+ *   loading={isLoading}
+ * />
+ * ```
+ */
 const SearchUsers: FC<Props> = ({ users, setSelectUser, selectUser, loading }) => {
   return (
     <Stack spacing={2} sx={{ width: "100%" }}>
@@ -71,23 +98,27 @@ const SearchUsers: FC<Props> = ({ users, setSelectUser, selectUser, loading }) =
   );
 };
 
-/**
- * Properties for the `UserFrame` component.
- *
- * @typedef {Object} UserFrameProps
- * @property {UsuarioCampoBusqueda} user - The user data to display.
- */
+
 type UserFrameProps = {
   user: UsuarioCampoBusqueda;
 };
 
 /**
- * `UserFrame` component: Displays a user's avatar and name in the search results.
- *
+ * UserFrame component – displays a user's avatar and full name in a horizontal layout.
+ * 
+ * This component is typically used to present user information in a compact UI element,
+ * such as a list or search result. It shows the user's photo alongside their full name.
+ * 
  * @component
- * @param {UserFrameProps} props - Component properties.
- * @param {UsuarioCampoBusqueda} props.user - User data to display.
- * @returns {JSX.Element} A box displaying the user's avatar and name.
+ * 
+ * @param {UsuarioCampoBusqueda} user - The user object containing `foto` and `nombreCompleto`.
+ * 
+ * @returns {JSX.Element} A horizontal layout with the user's avatar and name.
+ * 
+ * @example
+ * ```tsx
+ * <UserFrame user={usuario} />
+ * ```
  */
 const UserFrame: FC<UserFrameProps> = ({ user }) => {
   return (

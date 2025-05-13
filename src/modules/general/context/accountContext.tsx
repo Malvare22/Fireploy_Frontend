@@ -6,15 +6,18 @@ import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
 import useAlertDialog from "../hooks/useAlertDialog";
 import useErrorReader from "../hooks/useErrorReader";
 import AlertDialog from "../components/alertDialog";
+import { useNavigate } from "react-router";
+import { rutasUsuarios } from "@modules/usuarios/router/router";
 
 /**
+ * Represents the account information structure for authenticated users.
+ *
  * @typedef {Object} AccountInformation
- * @description Represents the user account information.
  * @property {string} nombre - Full name of the user.
- * @property {string} token - Authentication token for the user.
- * @property {TiposUsuario} tipo - Type of the user (e.g., student, admin).
- * @property {string} foto - URL of the user's profile picture.
- * @property {number} id - Unique ID of the user.
+ * @property {string} token - Authentication token.
+ * @property {TiposUsuario} tipo - Type of user (e.g., "E" for student).
+ * @property {string} foto - Profile photo URL.
+ * @property {number} id - Unique identifier for the user.
  * @property {string} correo - Email address of the user.
  */
 export type AccountInformation = {
@@ -27,23 +30,26 @@ export type AccountInformation = {
 };
 
 /**
- * @constant {AccountInformation} accountInformationTemplate
- * @description Default template used when there is no logged-in user or data is unavailable.
+ * Default account information template used as an initial or fallback state.
+ *
+ * @constant
+ * @type {AccountInformation}
  */
 export const accountInformationTemplate: AccountInformation = {
   nombre: "Not Found",
   token: "Not Found",
-  tipo: "E", // Default user type (e.g., "E" for Student)
+  tipo: "E",
   foto: "Not Found",
   id: -1,
   correo: "",
 };
 
 /**
+ * Context value structure for authentication state.
+ *
  * @typedef {Object} AuthContext
- * @description Context for managing user authentication and account information.
- * @property {AccountInformation} accountInformation - The current user account information.
- * @property {React.Dispatch<AccountInformation>} setAccountInformation - Function to update the user account information.
+ * @property {AccountInformation} accountInformation - Current user's account info.
+ * @property {Function} setAccountInformation - Function to update account info.
  */
 export type AuthContext = {
   accountInformation: AccountInformation;
@@ -51,7 +57,10 @@ export type AuthContext = {
 };
 
 /**
- * Context for authentication, providing user account information and update method.
+ * Authentication context used to access user information throughout the app.
+ *
+ * @constant
+ * @type {React.Context<AuthContext>}
  */
 export const AuthContext = createContext<AuthContext>({
   accountInformation: accountInformationTemplate,
@@ -64,11 +73,27 @@ type AuthProviderProps = {
 
 /**
  * @component AuthProvider
- * @description Context provider component that supplies authentication state to the rest of the application.
- * @param {ReactNode} children - Child components to be rendered within the provider.
+ * @description Context provider component that supplies authentication state and user data to child components.
+ *
+ * @param {ReactNode} children - Components that consume the authentication context.
+ *
+ * @returns {JSX.Element} A provider with user authentication information and alert dialog.
+ *
+ * @example
+ * ```tsx
+ * <AuthProvider>
+ *   <App />
+ * </AuthProvider>
+ * ```
  */
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [localUser, setLocalUser] = useState<AccountInformation>(accountInformationTemplate);
+
+  const navigate = useNavigate();
+
+  function handleCompleteData() {
+    navigate(rutasUsuarios.newEntries);
+  }
 
   const { data, error } = useQuery({
     queryFn: () =>
@@ -76,19 +101,23 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         parseInt(localStorage.getItem("CURRENT_ID") ?? "-1"),
         localStorage.getItem("TOKEN") ?? ""
       ),
-    queryKey: ["session", localStorage.getItem("TOKEN") ?? ""],
-    refetchInterval: 60 * 1000, // Refetch data every minute.
-    retry: 1, // Retry the query once in case of failure.
+    queryKey: [
+      "Profile",
+      localStorage.getItem("CURRENT_ID") ?? "-1",
+      localStorage.getItem("TOKEN") ?? "",
+    ],
+    refetchInterval: 60 * 1000,
+    retry: 1,
   });
 
   /**
    * @effect
-   * @description Effect hook to update user information when data is fetched successfully.
-   * The user information is adapted and stored in the state.
+   * Updates the local user state when new data is fetched and adapted.
    */
   useEffect(() => {
     if (data) {
       const localData = adaptUser(data);
+
       setLocalUser({
         correo: localData.correo,
         foto: localData.fotoDePerfil,
@@ -97,6 +126,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         tipo: localData.tipo ?? "E",
         token: localStorage.getItem("TOKEN") ?? "",
       });
+
+      if (data.sexo == "") {
+        handleCompleteData();
+      }
     }
   }, [data]);
 
@@ -105,8 +138,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   /**
    * @effect
-   * @description Effect hook to handle errors by passing them to the error reader.
-   * This effect is triggered whenever an error occurs during the query.
+   * Triggers the error handler when an error occurs in the query.
    */
   useEffect(() => {
     if (error) {
@@ -116,8 +148,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   /**
    * @effect
-   * @description Effect hook to listen for changes in local storage and update the user state accordingly.
-   * This effect is not being utilized currently, but it can be used to detect storage changes.
+   * Placeholder effect to listen for local storage changes (not implemented).
    */
   useEffect(() => {
     // Effect to listen for changes in local storage can be added here if needed.
@@ -143,8 +174,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 };
 
 /**
- * @hook useAuth
- * @description Custom hook to access the authentication context and retrieve user account information.
- * @returns {AuthContext} - The current authentication context value, including account information and update function.
+ * Custom hook to access the authentication context.
+ *
+ * @returns {AuthContext} The authentication state and updater function.
+ *
+ * @example
+ * ```tsx
+ * const { accountInformation } = useAuth();
+ * ```
  */
 export const useAuth = () => useContext(AuthContext);

@@ -15,6 +15,30 @@ type Props = {
   index: number;
 };
 
+/**
+ * SeccionesForm component – allows editing a specific section (sección) of a course.
+ * 
+ * This form is embedded in a larger form context and provides a temporary buffer form for editing
+ * individual section data. It syncs with the parent form using `useFormContext`, validates inputs with Zod, 
+ * and handles save or cancel actions for the specified section index.
+ * 
+ * @component
+ * 
+ * @param onAccept Callback function invoked after a successful save.
+ * @param onCancel Callback function invoked when cancelling the form.
+ * @param index Index of the section in the array being edited.
+ * 
+ * @returns A form UI for editing section details like title, dates, description, and status.
+ * 
+ * @example
+ * ```tsx
+ * <SeccionesForm
+ *   onAccept={() => handleAccept()}
+ *   onCancel={() => handleCancel()}
+ *   index={2}
+ * />
+ * ```
+ */
 function SeccionesForm({ onAccept, onCancel, index }: Props) {
   const { getValues, setValue } = useFormContext<SeccionesSchema>();
   const {

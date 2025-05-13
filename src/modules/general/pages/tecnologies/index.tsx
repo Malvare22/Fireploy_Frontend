@@ -1,7 +1,7 @@
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import { getImage } from "@modules/general/utils/getImage";
 import { TECNOLOGIES } from "@modules/proyectos/utils/docker";
-import { Grid2, IconButton, Typography } from "@mui/material";
+import { Grid2, IconButton, Paper, Typography } from "@mui/material";
 import { Box, Stack, useMediaQuery, useTheme } from "@mui/system";
 import { keyframes } from "@emotion/react";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
@@ -17,6 +17,22 @@ export enum labelTecnologiesView {
   bodySecondary = "Consisten en plantillas adaptadas al funcionamiento de despliegue automático de Fireploy, ideal que los uses al arrancar tu proyecto 😉",
 }
 
+/**
+ * TecnologiesView component – A section that displays available technologies for deployment,
+ * including a list of technology cards with detailed descriptions and a search feature.
+ * 
+ * This component allows filtering of technology cards by search input, rendering a list 
+ * of technologies with titles, images, descriptions, and links.
+ * 
+ * @component
+ * 
+ * @returns {JSX.Element} The TecnologiesView section that includes technology cards and search functionality.
+ * 
+ * @example
+ * ```tsx
+ * <TecnologiesView />
+ * ```
+ */
 function TecnologiesView() {
 
   const init = keyframes`
@@ -88,6 +104,21 @@ function TecnologiesView() {
 
 export default TecnologiesView;
 
+/**
+ * Carousel component – Displays a scrolling carousel of technology banners.
+ * The carousel continuously scrolls banners horizontally to showcase various technologies.
+ * 
+ * This component is responsive and adjusts the animation speed based on the screen size.
+ * 
+ * @component
+ * 
+ * @returns {JSX.Element} A horizontally scrolling carousel of technology banners.
+ * 
+ * @example
+ * ```tsx
+ * <Carousel />
+ * ```
+ */
 function Carousel() {
   type FilteredKeys = Exclude<keyof typeof TECNOLOGIES, "Java">;
   const tecs: [FilteredKeys, string][] = [
@@ -152,9 +183,29 @@ type PropsCardTecnology = {
   subtitle: string;
   url: string;
 };
+
+/**
+ * CardTecnology component – Displays a card for a single technology with an image, title, description, and external link.
+ * The card includes the technology's image, a short description, and a link to more details about the technology.
+ * 
+ * @component
+ * 
+ * @param {string} img - The image source URL for the technology.
+ * @param {string} title - The title of the technology.
+ * @param {string} subtitle - A brief description of the technology.
+ * @param {string} url - The URL for the technology's details.
+ * 
+ * @returns {JSX.Element} A card with technology information and a link to more details.
+ * 
+ * @example
+ * ```tsx
+ * <CardTecnology img="react.png" title="ReactJS" subtitle="A JavaScript library for building UIs" url="https://reactjs.org" />
+ * ```
+ */
 function CardTecnology({ img, subtitle, title, url }: PropsCardTecnology) {
   return (
-    <Grid2 container sx={{ overflow: "hidden", height: 200, borderRadius: 1, boxShadow: '0px 0px 2px 0px rgba(0,0,0,0.15)'}} spacing={3} padding={0}>
+    <Paper variant="glass">
+      <Grid2 container sx={{ overflow: "hidden", height: 200}} spacing={3} padding={0}>
       <Grid2 size={4}>
         <Box
           sx={{
@@ -198,5 +249,6 @@ function CardTecnology({ img, subtitle, title, url }: PropsCardTecnology) {
         </Stack>
       </Grid2>
     </Grid2>
+    </Paper>
   );
 }

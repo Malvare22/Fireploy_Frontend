@@ -1,18 +1,3 @@
-/**
- * VistaSolicitudes Component
- *
- * This component displays a list of promotion requests ("solicitudes").
- * It includes:
- * - A search bar to filter requests by user ID or name
- * - Dynamic filters by status, request date, and response date
- * - Error handling and loading states via React Query
- *
- * Data is fetched from the backend using an authentication token
- * obtained from the global auth context.
- *
- * @component
- */
-
 import useSearch from "@modules/general/hooks/useSearch";
 import TablaSolicitudes from "@modules/usuarios/components/tablaSolicitudes";
 import { labelSolicitudes } from "@modules/usuarios/enum/labelSolicitudes";
@@ -31,6 +16,25 @@ import { useFilters } from "@modules/general/hooks/useFilters";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 
+/**
+ * VistaSolicitudes component – Displays a list of solicitudes (requests) with search, filtering, and loading features.
+ * 
+ * This component fetches solicitudes data, renders a loading state while data is being fetched, and 
+ * allows filtering based on various conditions such as state, reception date, and answer date. It also 
+ * supports searching for specific solicitudes by user ID or name. If an error occurs during data fetching, 
+ * an error dialog is shown.
+ * 
+ * @component
+ * 
+ * @param {undefined} - No parameters are passed to the component.
+ * 
+ * @returns {JSX.Element} A list of solicitudes with search, filter options, and a table displaying the filtered results.
+ * 
+ * @example
+ * ```tsx
+ * <VistaSolicitudes />
+ * ```
+ */
 function VistaSolicitudes() {
   // 🔍 Search and filter hooks
   const { searchValue, setSearchValue, filteredData: filterDataFunction } = useSearch();

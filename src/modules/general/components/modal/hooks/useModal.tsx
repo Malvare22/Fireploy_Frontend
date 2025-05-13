@@ -1,12 +1,30 @@
 import { useState } from "react";
 
 /**
- * Hook personalizado para gestionar el estado de un modal.
+ * useModal – custom React hook for managing modal open/close state.
  * 
- * @returns {object} Un objeto con el estado del modal y funciones para abrir y cerrar.
- * @property {boolean} open - Indica si el modal está abierto o cerrado.
- * @property {() => void} handleOpen - Función para abrir el modal.
- * @property {() => void} handleClose - Función para cerrar el modal.
+ * This hook encapsulates the logic for controlling the visibility of a modal component.
+ * It provides a boolean state `open`, along with handler functions `handleOpen` and `handleClose`
+ * to update that state accordingly.
+ * 
+ * @hook
+ * 
+ * @returns {{ open: boolean, handleOpen: () => void, handleClose: () => void }} 
+ * An object containing the modal's open state and control functions.
+ * 
+ * @example
+ * ```tsx
+ * const { open, handleOpen, handleClose } = useModal();
+ * 
+ * return (
+ *   <>
+ *     <Button onClick={handleOpen}>Open Modal</Button>
+ *     <Modal open={open} handleClose={handleClose}>
+ *       <p>Modal content here</p>
+ *     </Modal>
+ *   </>
+ * );
+ * ```
  */
 export const useModal = () => {
   const [open, setOpen] = useState(false);

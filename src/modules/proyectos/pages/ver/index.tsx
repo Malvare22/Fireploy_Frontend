@@ -10,6 +10,22 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useParams } from "react-router";
 
+/**
+ * VerProyecto component – A page that allows the user to view and edit a project.
+ * 
+ * This component fetches the project details based on the project ID from the URL and displays
+ * the project details in an editable form. It also handles loading and error states, and shows 
+ * an alert dialog in case of errors.
+ * 
+ * @component
+ * 
+ * @returns {JSX.Element} A page displaying the project details and allowing the user to edit it.
+ * 
+ * @example
+ * ```tsx
+ * <VerProyecto />
+ * ```
+ */
 function VerProyecto() {
   const token = useAuth().accountInformation.token;
 

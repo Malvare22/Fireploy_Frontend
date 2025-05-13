@@ -6,12 +6,18 @@ import { DescriptionStringSchema, StandardStringRequiredSchema } from "@modules/
 import { UrlSchema } from "@modules/materias/utils/forms/url.schema";
 import { UsuarioCursoSchema } from "@modules/materias/utils/forms/form.schema";
 
+/**
+ * MateriaInformacionSchema – Zod schema to validate academic context information for a project, including section ID, subject ID, and course ID as numeric and string fields.
+ */
 export const MateriaInformacionSchema: z.ZodType<MateriaInformacion> = z.object({
   seccionId: z.number(),
   materiaId: z.number(),
   cursoId: z.string(),
 });
 
+/**
+ * ProyectoSchema – Zod schema that validates a complete project structure (excluding favorite users), including title, optional description, URL, database info, optional repositories (backend, frontend, integrated), type ("M" = Modular, "S" = Simple), academic info, and list of participants.
+ */
 export const ProyectoSchema: z.ZodType<Omit<Proyecto, 'fav_usuarios'>> = z.object({
   titulo: StandardStringRequiredSchema,
   descripcion: DescriptionStringSchema.optional(),
@@ -23,8 +29,12 @@ export const ProyectoSchema: z.ZodType<Omit<Proyecto, 'fav_usuarios'>> = z.objec
   tipo: z.enum(["M", "S"]),
   materiaInformacion: MateriaInformacionSchema,
   integrantes: z.array(z.lazy(() => UsuarioCursoSchema)),
+  imagen: z.string().nullable().optional()
 });
 
+/**
+ * ProyectoInformationSchema – Zod schema that validates project metadata: optional ID, title, optional description, academic info, and type ("M" = Modular, "S" = Simple).
+ */
 export const ProyectoInformationSchema: z.ZodType<
   Pick<Proyecto, "titulo" | "descripcion" | "materiaInformacion" | "tipo" | "id">
 > = z.object({
@@ -35,6 +45,9 @@ export const ProyectoInformationSchema: z.ZodType<
   tipo: z.enum(["M", "S"]),
 });
 
+/**
+ * ProyectoRepositoriesSchema – Zod schema that validates the repository section of a project, allowing optional backend, frontend, and integrated repository data.
+ */
 export const ProyectoRepositoriesSchema: z.ZodType<
   Pick<Proyecto, "backend" | "frontend" | "integrado">
 > = z.object({
@@ -43,8 +56,17 @@ export const ProyectoRepositoriesSchema: z.ZodType<
   integrado: RepositorioSchema.optional(),
 });
 
+/**
+ * ProyectoSchema – Inferred type from ProyectoSchema, representing a validated full project object without favorite users.
+ */
 export type ProyectoSchema = z.infer<typeof ProyectoSchema>;
 
+/**
+ * ProyectoInformationSchema – Inferred type from ProyectoInformationSchema, representing validated project metadata for updates or display.
+ */
 export type ProyectoInformationSchema = z.infer<typeof ProyectoInformationSchema>;
 
+/**
+ * ProyectoRepositoriesSchema – Inferred type from ProyectoRepositoriesSchema, representing the repository-related part of a project.
+ */
 export type ProyectoRepositoriesSchema = z.infer<typeof ProyectoRepositoriesSchema>;

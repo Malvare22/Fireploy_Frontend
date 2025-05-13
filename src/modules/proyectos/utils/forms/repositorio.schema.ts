@@ -3,6 +3,9 @@ import { z } from "zod";
 import { UrlSchema } from "../../../materias/utils/forms/url.schema";
 import { transformStringToKV } from "@modules/general/utils/string";
 
+/**
+ * RepositorioSchema – Zod schema that validates a repository object, including its ID, URL, type ("B" = Backend, "F" = Frontend, "I" = Integrated), environment variables string (must be convertible to key-value pairs or empty), Docker metadata (technology, version, framework), and a display name for the technology.
+ */
 export const RepositorioSchema: z.ZodType<Repositorio> = z.object({
   id: z.number(),
   url: UrlSchema,

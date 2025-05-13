@@ -17,15 +17,24 @@ import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import { usePagination } from "@modules/general/hooks/usePagination";
 
 /**
- * Component for exploring all available user portfolios.
- *
+ * ExplorarPortafolios component – A component for exploring all available user portfolios.
+ * 
  * This component:
- * - Fetches a list of users of type "todos"
- * - Adapts and displays them in portfolio cards
- * - Supports search filtering and sorting
- * - Handles loading and error states
- *
+ * - Fetches a list of users of type "todos" from the API.
+ * - Adapts and displays the user data in portfolio cards.
+ * - Supports search filtering by user name and portfolio ID.
+ * - Handles loading and error states with a loader and alert dialogs.
+ * 
+ * It also provides sorting functionality for portfolio listings and pagination.
+ * 
  * @component
+ * 
+ * @returns {JSX.Element} A UI to explore user portfolios, including search, sort, and pagination.
+ * 
+ * @example
+ * ```tsx
+ * <ExplorarPortafolios />
+ * ```
  */
 function ExplorarPortafolios() {
   // Retrieve user token from authentication context

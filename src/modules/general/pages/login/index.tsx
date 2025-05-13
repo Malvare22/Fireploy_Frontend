@@ -38,7 +38,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        Fireploy
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -76,14 +76,14 @@ const SignIn: React.FC = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: () => postSignUp(singUp.email, singUp.password),
-    mutationKey: ["iniciar sesion"],
+    mutationKey: ["Iniciar Sesion", singUp.email, singUp.password],
     onSuccess: (data) => onSuccess(data),
     onError: (error) => setError(error),
   });
 
   const { mutate: mutateGoogle } = useMutation({
     mutationFn: (googleToken: string) => postSignUpWithGoogle(googleToken),
-    mutationKey: ["login with Google"],
+    mutationKey: ["Login with Google"],
     onSuccess: (data) => onSuccess(data),
     onError: (error) => setError(error),
   });
@@ -97,11 +97,7 @@ const SignIn: React.FC = () => {
   const onSuccess = (data: SignUpResponse) => {
     localStorage.setItem(VARIABLES_LOCAL_STORAGE.TOKEN, data.access_token);
     localStorage.setItem(VARIABLES_LOCAL_STORAGE.CURRENT_ID, data.id.toString());
-
-    if (data.googleRegister) {
-      localStorage.setItem(VARIABLES_LOCAL_STORAGE.NEW_GOOGLE_REGISTER, "TRUE");
-    } 
-    navigate(rutasProyectos.listar);
+    navigate(rutasProyectos.menu);
   };
 
   return (
@@ -124,7 +120,7 @@ const SignIn: React.FC = () => {
           }}
         >
           <Avatar sx={{ backgroundColor: theme.palette.secondary.main }}>
-            <LockOpenIcon />
+            <LockOpenIcon sx={{ fill: "white" }} />
           </Avatar>
           <Typography component="h1" variant="h5">
             {labelLogin.iniciarSesion}
@@ -153,27 +149,29 @@ const SignIn: React.FC = () => {
           autoComplete="current-password"
           onChange={(e) => handleInput("password", e.target.value)}
         />
-        <GoogleLogin
-          onSuccess={(credentialResponse) => {
-            if (credentialResponse.credential) mutateGoogle(credentialResponse.credential);
-          }}
-        />
+        <Stack sx={{ alignItems: "center", marginY: 1 }}>
+          <GoogleLogin
+            onSuccess={(credentialResponse) => {
+              if (credentialResponse.credential) mutateGoogle(credentialResponse.credential);
+            }}
+          />
+        </Stack>
         <Button
           type="submit"
           fullWidth
           variant="contained"
           color="primary"
-          sx={{ marginY: 3 }}
+          sx={{ marginY: 2 }}
           onClick={() => mutate()}
           loading={isPending}
         >
           {labelLogin.ingresar}
         </Button>
         <Stack spacing={2} direction={"row"} alignItems={"center"} justifyContent={"center"}>
-          <Link href={rutasGeneral.recuperar} variant="body2">
+          <Link href={rutasGeneral.recuperar} sx={{color: 'black'}} variant="body2">
             {labelLogin.olvide}
           </Link>
-          <Link href={rutasGeneral.registrar} variant="body2">
+          <Link href={rutasGeneral.registrar} sx={{color: 'black'}} variant="body2">
             {labelLogin.registrarse}
           </Link>
         </Stack>

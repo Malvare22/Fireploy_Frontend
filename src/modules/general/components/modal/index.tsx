@@ -4,16 +4,27 @@ import { default as ModalBase, ModalProps } from "@mui/material/Modal";
 import { SxProps } from "@mui/material";
 
 /**
- * Reusable Modal component based on Material UI.
- *
- * @param {ModalProps} props - Modal properties.
- * @param {React.ReactNode} props.children - Content to be rendered inside the modal.
- * @param {boolean} props.open - Controls whether the modal is open or closed.
- * @param {() => void} props.handleClose - Function that closes the modal.
- * @param {string} [props.titulo] - Optional title for the modal.
- * @param {React.ReactNode} [props.iconoTitulo] - Optional icon for the modal title.
- *
- * @returns {JSX.Element} Custom modal component.
+ * Modal component – a reusable and customizable modal dialog based on Material-UI's Modal.
+ * 
+ * This component wraps the default MUI Modal and adds predefined styling for positioning, responsiveness,
+ * and appearance. It supports custom children, dynamic styling via `sx`, and a close handler.
+ * 
+ * @component
+ * 
+ * @param {React.ReactNode} children - The content to render inside the modal.
+ * @param {boolean} open - Controls whether the modal is open or closed.
+ * @param {() => void} handleClose - Function called when the modal is requested to be closed.
+ * @param {...ModalProps} props - Standard props supported by Material-UI's Modal component.
+ * 
+ * @returns {JSX.Element} A styled modal component rendered at the center of the screen.
+ * 
+ * @example
+ * ```tsx
+ * <Modal open={isOpen} handleClose={() => setOpen(false)}>
+ *   <Typography id="modal-modal-title">Example Modal</Typography>
+ *   <Typography id="modal-modal-description">This is some modal content.</Typography>
+ * </Modal>
+ * ```
  */
 const Modal: React.FC<
   ModalProps & {

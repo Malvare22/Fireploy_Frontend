@@ -18,6 +18,33 @@ type CardCursoProps = {
   isRegister?: boolean;
 };
 
+/**
+ * CardCurso component – displays a course card with key details and an action button
+ * tailored to the user's role (student, teacher, or administrator).
+ * 
+ * This component shows the course group and assigned teacher, and includes an action button
+ * that adapts its label and behavior based on the user type. It also handles logic for when
+ * a teacher can or cannot request a course.
+ * 
+ * @component
+ * 
+ * @param {Object} curso - The course object that includes group, teacher, and identifier data.
+ * @param {Function} onClick - A callback function executed when the action button is clicked (if allowed).
+ * @param {string} userType - The type of the user (e.g., "E" for student, "D" for teacher, "A" for admin).
+ * @param {boolean} [isRegister] - Indicates whether the component is being used in a registration context.
+ * 
+ * @returns {JSX.Element} A styled course card component with group and teacher details, and a conditional action button.
+ * 
+ * @example
+ * ```tsx
+ * <CardCurso 
+ *   curso={cursoObject} 
+ *   onClick={handleCourseAccess} 
+ *   userType="E" 
+ *   isRegister={true} 
+ * />
+ * ```
+ */
 const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, userType, isRegister }) => {
   const theme = useTheme();
 

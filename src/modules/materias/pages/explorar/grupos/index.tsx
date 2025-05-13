@@ -27,6 +27,26 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+/**
+ * VerCursosMateria component – Displays all available course groups (cursos) for a specific subject (materia).
+ * 
+ * This component fetches the details of a subject (materia) from the API, and then displays the list of available course groups (cursos).
+ * It also allows users (students or teachers) to register for a course or submit a course request, depending on their role.
+ * The component handles loading, success, and error states with modal dialogs and feedback messages.
+ *
+ * @component
+ *
+ * @example
+ * ```tsx
+ * <VerCursosMateria />
+ * ```
+ * 
+ * @returns {JSX.Element} The rendered component displaying the course groups for a subject, with registration functionality.
+ * 
+ * @notes
+ * - Students can register for available courses directly.
+ * - Teachers can submit a course request for approval.
+ */
 function VerCursosMateria() {
   /** Get subject ID from URL parameters */
   const { idMateria } = useParams();

@@ -16,25 +16,45 @@
  */
 
 import { useState, useEffect, useMemo } from "react";
-import { Divider, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, Divider, Grid2, Stack, Typography } from "@mui/material";
 import useSearch from "@modules/general/hooks/useSearch";
 import TablaUsuarios from "@modules/usuarios/components/tablaUsuarios";
 import { labelListarUsuarios } from "@modules/usuarios/enum/labelListarUsuarios";
 import { getUsuariosByTypeService } from "@modules/usuarios/services/get.usuarios.[tipo]";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
-import SearchIcon from "@mui/icons-material/Search";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { useNavigate } from "react-router";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import LoaderElement from "@modules/general/components/loaderElement";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import HiddenButton from "@modules/materias/components/hiddenInput";
+import { postCargaMasivaUsuarios } from "@modules/usuarios/services/post.cargar.usuarios";
+import { FilterOptions, SelectFilters } from "@modules/general/components/selects";
+import TextFieldSearch from "@modules/general/components/textFieldSearch";
 
+/**
+ * ListarUsuarios Component
+ *
+ * Displays a list of all users in a table with search functionality.
+ * Fetches user data from the backend, allows filtering by name using a search input,
+ * and displays a loading indicator and error dialog when appropriate.
+ *
+ * Features:
+ * - Fetches users of type "todos"
+ * - Shows search bar that filters users by name (pressing Enter triggers filtering)
+ * - Displays a table of users
+ * - Handles loading and error states
+ * - Allows navigation to a "create user" form
+ *
+ * @component
+ */
 function ListarUsuarios() {
   // 🔐 Get authentication token from context
   const { accountInformation } = useAuth();
@@ -44,8 +64,7 @@ function ListarUsuarios() {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
 
   // 🔎 States for handling search input
-  const [inputValue, setInputValue] = useState("");
-  const { searchValue, setSearchValue } = useSearch();
+  const { searchValue, setSearchValue, filteredData } = useSearch();
 
   const navigate = useNavigate();
 
@@ -57,10 +76,52 @@ function ListarUsuarios() {
     queryKey: ["Usuarios", "todos"],
   });
 
-  const { showDialog, open, title, message, handleCancel, type, handleAccept } =
-    useAlertDialog();
+  const {
+    showDialog,
+    open,
+    title,
+    message,
+    handleCancel,
+    type,
+    handleAccept,
+    handleClose,
+    setIsLoading,
+    handleOpen,
+  } = useAlertDialog();
 
   const { setError } = useErrorReader(showDialog);
+
+  const { mutate: updateFile } = useMutation({
+    mutationFn: async (file: File) => {
+      setIsLoading(true);
+      await postCargaMasivaUsuarios(token, file);
+    },
+    onSuccess: () => {
+      showDialog({
+        message: "Se han cargado los estudiantes correctamente",
+        title: "Gestión de estudiantes",
+        onAccept: handleAccept,
+        type: "success",
+        reload: true,
+      });
+    },
+    onError: (err) => setError(err),
+  });
+
+  function setFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files ? e.target.files[0] : null;
+
+    if (file)
+      showDialog({
+        message: "¿Estás seguro de cargar este documento para la carga masiva de estudiantes?",
+        title: "Gestión de estudiantes",
+        onCancel: handleClose,
+        onAccept: () => updateFile(file),
+        type: "default",
+      });
+
+    handleOpen();
+  }
 
   /**
    * Effect to set adapted users when data is successfully fetched
@@ -80,31 +141,45 @@ function ListarUsuarios() {
     }
   }, [error]);
 
-  /**
-   * Filters users based on search input
-   */
-  const filteredData = useMemo(() => {
-    if (!usuarios || searchValue.trim() === "") return usuarios;
+  const [buffer, setBuffer] = useState<Usuario[]>([]);
 
-    return usuarios.filter((usuario) =>
-      `${usuario.apellidos} ${usuario.nombres}`.toLowerCase().includes(searchValue.toLowerCase())
+  useEffect(() => {
+    if (usuarios) setBuffer(usuarios);
+  }, [usuarios]);
+
+  function handleSearchFn(users: Usuario[], s: string) {
+    const search = s.toLowerCase();
+    return users.filter((u) =>
+      (u.apellidos + u.nombres + (u.id ?? "")).toLowerCase().includes(search)
     );
-  }, [searchValue, usuarios]);
+  }
+  const dataToShow = useMemo(() => {
+    return filteredData(buffer, handleSearchFn);
+  }, [searchValue, buffer]);
 
-  /**
-   * Handles Enter key press to trigger search
-   * @param e React.KeyboardEvent<HTMLInputElement>
-   */
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      setSearchValue(inputValue);
-    }
-  };
+  const filterOptions: FilterOptions = [
+    {
+      key: "estado",
+      label: "Estado",
+      options: [
+        ["Activo", (x) => x == "A"],
+        ["Deshabilitado", (x) => x == "I"],
+      ],
+    },
+    {
+      key: "tipo",
+      label: "Tipo",
+      options: [
+        ["Estudiante", (x) => x == "E"],
+        ["Docente", (x) => x == "D"],
+        ["Administrador", (x) => x == "A"],
+      ],
+    },
+  ];
 
   return (
     <>
       {/* 🛑 Show error dialog if fetch failed */}
-
       <AlertDialog
         handleAccept={handleAccept}
         handleCancel={handleCancel}
@@ -126,29 +201,41 @@ function ListarUsuarios() {
             <Divider />
           </Stack>
 
-          {/* 🔍 Search bar and Add User button */}
-          <Stack direction={"row"} justifyContent={"space-between"}>
-            <TextField
-              size="small"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={handleKeyDown}
-              label="Buscar Usuario"
-              sx={{ maxWidth: 400 }}
-              slotProps={{
-                input: {
-                  endAdornment: <SearchIcon />,
-                },
-              }}
-            />
-            <GeneralButton
-              mode={buttonTypes.add}
-              onClick={() => navigate(rutasUsuarios.agregarUsuario)}
-            />
-          </Stack>
+          <Grid2 container>
+            <Grid2 size={{ xs: 12, md: 6 }}>
+              <TextFieldSearch setSearchValue={setSearchValue} fullWidth />
+            </Grid2>
+          </Grid2>
+
+          <SelectFilters data={usuarios} filterOptions={filterOptions} setRefineData={setBuffer} />
 
           {/* 📊 User table */}
-          {filteredData && <TablaUsuarios usuarios={filteredData} />}
+          {dataToShow.length > 0 ? (
+            <TablaUsuarios usuarios={dataToShow} />
+          ) : (
+            <Alert severity="info">No se han encontrado usuarios (verifica los filtros)</Alert>
+          )}
+
+          <Stack justifyContent={"end"} direction={"row"} spacing={2}>
+            <Box>
+              <Button
+                component="label"
+                role={undefined}
+                variant="contained"
+                tabIndex={-1}
+                startIcon={<CloudUploadIcon />}
+              >
+                Carga Masiva
+                <HiddenButton type="file" onChange={setFile} multiple accept=".xls, .xsls" />
+              </Button>
+            </Box>
+            <Box>
+              <GeneralButton
+                mode={buttonTypes.add}
+                onClick={() => navigate(rutasUsuarios.agregarUsuario)}
+              />
+            </Box>
+          </Stack>
         </Stack>
       )}
     </>

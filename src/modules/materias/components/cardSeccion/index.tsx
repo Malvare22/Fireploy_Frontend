@@ -1,4 +1,4 @@
-import { Box, Grid2, Stack, Typography, useTheme } from "@mui/material";
+import { Alert, Box, Grid2, Stack, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AccordionUsage from "@modules/general/components/accordionUsage";
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
@@ -16,18 +16,47 @@ import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
-import { useNavigate, useSearchParams } from "react-router";
+import { useNavigate } from "react-router";
 import { Materia } from "@modules/materias/types/materia";
 import { rutasProyectos } from "@modules/proyectos/router";
 import { Curso } from "@modules/materias/types/curso";
+import { evaluateDate, getCurrentDate } from "@modules/general/utils/fechas";
 
 type CardSeccionProps = {
   seccion: Seccion;
   idMateria: Materia["id"];
-  idCurso: Curso['id'];
+  idCurso: Curso["id"];
   handleCard: (project: ProyectoCard) => void;
 };
 
+/**
+ * CardSeccion component – displays an expandable section (accordion) containing projects
+ * related to a specific section of a course. It includes a sortable list of projects,
+ * description, and an action to create new projects.
+ *
+ * This component fetches project data from the server using the section ID, transforms it
+ * into a card format, and displays each project inside a responsive grid. It also provides
+ * sorting capabilities and shows the section's metadata (title and dates).
+ *
+ * @component
+ *
+ * @param {Object} seccion - The section object containing its metadata and identifier.
+ * @param {number|string} idMateria - The unique identifier of the subject associated with the section.
+ * @param {number|string} idCurso - The unique identifier of the course associated with the section.
+ * @param {Function} handleCard - Callback function triggered when a project card is clicked; receives the selected project.
+ *
+ * @returns {JSX.Element} A collapsible UI element showing a section's details and associated projects with interactive actions.
+ *
+ * @example
+ * ```tsx
+ * <CardSeccion
+ *   seccion={seccionObject}
+ *   idMateria={1}
+ *   idCurso={2}
+ *   handleCard={(project) => console.log(project)}
+ * />
+ * ```
+ */
 const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard, idMateria, idCurso }) => {
   const [proyectos, setProyectos] = useState<ProyectoCard[]>([]);
 
@@ -41,14 +70,10 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard, idMateri
     seccion: (seccion.id ?? 0).toString(),
   };
 
-  console.log(seccion)
-
   function nav() {
     const queryString = new URLSearchParams(paramsToCreateProject).toString();
     navigate(`${rutasProyectos.crear}?${queryString}`);
   }
-
-  const [] = useSearchParams();
 
   const { handleAccept, open, message, type, showDialog, title } = useAlertDialog();
 
@@ -100,7 +125,8 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard, idMateri
               backgroundColor: theme.palette.terciary.main,
               color: "white",
               fontWeight: "500",
-              padding: 0.5,
+              padding: 1,
+              borderRadius: 1,
             }}
             variant="body2"
           >{`${seccion.fechaDeInicio} - ${seccion.fechaDeCierre}`}</Typography>
@@ -108,6 +134,12 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard, idMateri
       </Stack>
     );
   };
+
+  const disabledButton = !evaluateDate(
+    seccion.fechaDeInicio,
+    seccion.fechaDeCierre,
+    getCurrentDate()
+  );
 
   return (
     <AccordionUsage title={<Title />}>
@@ -123,22 +155,28 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard, idMateri
       ) : (
         <Stack spacing={3}>
           <Typography>{seccion.descripcion}</Typography>
-          <Stack direction={"row"} justifyContent={"space-between"} alignItems={'center'}>
+          <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
             <Typography variant="h5">{labelCardSeccion.proyectos}</Typography>
-            <GeneralButton mode={buttonTypes.add} onClick={nav} size="small" />
+            <GeneralButton mode={buttonTypes.add} onClick={nav} disabled={disabledButton} size="small" />
           </Stack>
-          <SelectOrders data={proyectos} setRefineData={setBuffer} sorterOptions={sorters} />
-          <Grid2 container rowSpacing={2}>
-            {buffer.map((proyecto, key) => (
-              <Grid2 size={{ lg: 6, md: 6, xs: 12 }} display={"flex"} justifyContent={"center"}>
-                <ProjectCard
-                  handleOpen={() => handleCard(proyecto)}
-                  proyecto={proyecto}
-                  key={key}
-                />
+          {buffer.length > 0 ? (
+            <>
+              <SelectOrders data={proyectos} setRefineData={setBuffer} sorterOptions={sorters} />
+              <Grid2 container rowSpacing={2}>
+                {buffer.map((proyecto, key) => (
+                  <Grid2 size={{ lg: 6, md: 6, xs: 12 }} display={"flex"} justifyContent={"center"}>
+                    <ProjectCard
+                      handleOpen={() => handleCard(proyecto)}
+                      proyecto={proyecto}
+                      key={key}
+                    />
+                  </Grid2>
+                ))}
               </Grid2>
-            ))}
-          </Grid2>
+            </>
+          ) : (
+            <Alert severity="info">Actualmente no hay cursos vinculados a esta sección</Alert>
+          )}
         </Stack>
       )}
     </AccordionUsage>

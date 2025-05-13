@@ -30,6 +30,27 @@ import { useFilters } from "@modules/general/hooks/useFilters";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 
+/**
+ * VistaSolicitudes Component
+ *
+ * This component displays a list of promotion requests ("solicitudes") and provides the ability to filter and search through the requests.
+ * It includes the following features:
+ * - A search bar to filter requests by user ID or name.
+ * - Dynamic filters to refine requests by status, reception date, and response date.
+ * - Error handling and loading states using React Query.
+ * 
+ * Data is fetched from the backend using an authentication token obtained from the global auth context.
+ * The component provides an alert dialog to handle errors and displays the results in a table.
+ *
+ * @component
+ * 
+ * @returns {JSX.Element} A list of promotion requests with search and filter functionality, including error handling and loading states.
+ * 
+ * @example
+ * ```tsx
+ * <VistaSolicitudes />
+ * ```
+ */
 function VistaSolicitudes() {
   // 🔍 Search and filter hooks
   const { searchValue, setSearchValue, filteredData: filterDataFunction } = useSearch();

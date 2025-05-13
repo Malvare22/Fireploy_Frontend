@@ -1,6 +1,6 @@
 import DataTable from "react-data-table-component";
 import { TableColumn } from "react-data-table-component";
-import { Chip, Stack, Typography, useTheme } from "@mui/material";
+import { Alert, Chip, Stack, Typography, useTheme } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
@@ -26,6 +26,25 @@ import { paginationComponentOptions } from "@modules/general/utils/pagination";
 type TablaMateriasProps = {
   materias: MateriaTabla[];
 };
+
+/**
+ * TablaMaterias component – a table to display and manage a list of subjects (materias) with various features.
+ * This component renders a table with subject details, including its code, name, semester, state, and number of active groups.
+ *
+ * It supports various actions such as viewing courses, editing subjects, and enabling or disabling subjects based on their current state.
+ * The component also includes modals for confirmation of changes, and error handling when updating the status of a subject.
+ *
+ * @component
+ *
+ * @param materias - An array of MateriaTabla objects that represent the list of subjects to be displayed in the table.
+ *
+ * @returns A JSX element that renders the subject table with actions, modals, and pagination.
+ *
+ * @example
+ * ```tsx
+ * <TablaMaterias materias={materiasList} />
+ * ```
+ */
 const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
   const theme = useTheme();
 
@@ -130,7 +149,7 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
               />
             ) : (
               <ActionButton
-                sx={{ color: theme.palette.warning.main }}
+                sx={{ color: theme.palette.success.main }}
                 mode={actionButtonTypes.habilitar}
                 onClick={() => handleSelect(row)}
               />
@@ -204,10 +223,8 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
       <SpringModal handleClose={handleCloseEdit} open={openEdit}>
         <EditarMateria id={selectMateria?.codigo ?? -1} handleCloseModal={handleCloseEdit} />
       </SpringModal>
-      {isPending ? (
-        <LoaderElement />
-      ) : (
-        <DataTable
+      {isPending && <LoaderElement />}
+      {!isPending && (dataConIndice.length > 0 ? <DataTable
           columns={columns}
           data={dataConIndice}
           customStyles={customStyles}
@@ -216,8 +233,7 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
           paginationPerPage={20}
           paginationRowsPerPageOptions={[20, 50, 100]}
           paginationComponentOptions={paginationComponentOptions}
-        ></DataTable>
-      )}
+        ></DataTable> : <Alert severity="warning">No se han encontrado materias disponibles (revisa que tus datos coincidan con los filtros)</Alert>)}
     </>
   );
 };

@@ -181,17 +181,13 @@ function Registrar() {
             {/* Buttons */}
             <Stack spacing={2} direction="row" justifyContent="center">
               <Box>
-                <Button variant="outlined" type="submit">
-                  {labelRegisterUser.register}
+                <Button variant="outlined" onClick={() => navigate(rutasGeneral.login)}>
+                  {labelRegisterUser.back}
                 </Button>
               </Box>
               <Box>
-                <Button
-                  onClick={() => navigate(rutasGeneral.login)}
-                  variant="contained"
-                  loading={isPending}
-                >
-                  {labelRegisterUser.back}
+                <Button variant="contained" loading={isPending} type="submit">
+                  {labelRegisterUser.register}
                 </Button>
               </Box>
             </Stack>

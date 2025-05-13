@@ -1,9 +1,117 @@
 .container {
-  width: 1000px;
-  height: 500px;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  position: relative;
+  margin: 0 auto;
+}
+
+.sun {
+  width: 30%;
+  aspect-ratio: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at center, #FFD700, #FFA500, #FF8C00);
+  z-index: 200;
+  animation: grown 3s ease forwards;
+  transform-origin: center;
+}
+
+.iconContainer {
+  width: 15%;
+  aspect-ratio: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, #FF6A00, #FF8C00);
+  box-shadow: 0 0 4vw 2vw rgba(255, 140, 0, 0.4);
+  z-index: 200;
+}
+
+.icon {
+  font-size: 6vw;
+  color: white;
+}
+
+.containerRaysWrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 300;
+  width: 1%;
+  height: 1%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.containerRays {
+  width: 0;
+  height: 0;
+  animation: spin 10s linear infinite;
   position: relative;
 }
 
+.ray {
+  min-width: 3vw;
+  min-height: 3vw;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: absolute;
+  background-color: transparent;
+}
+
+.iconElement {
+  position: absolute;
+  width: 10%;
+  aspect-ratio: 1;
+  opacity: 0;
+  animation: appear 2s 3s forwards;
+  z-index: 200;
+}
+
+.iconElement:nth-child(1) {
+  top: 12%;
+  left: 8%;
+}
+.iconElement:nth-child(2) {
+  bottom: 12%;
+  left: 8%;
+}
+.iconElement:nth-child(3) {
+  top: 12%;
+  right: 8%;
+}
+.iconElement:nth-child(4) {
+  bottom: 12%;
+  right: 8%;
+}
+
+.containerLines {
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+}
+.containerLines line {
+  stroke-width: 2px;
+  stroke-dasharray: 5, 5;
+  opacity: 0;
+  stroke-dashoffset: 100;
+  animation: 
+    fadeIn 0.5s ease forwards 4s,
+    dashFlow 3s linear infinite 4s;
+}
 
 @keyframes grown {
   0% {
@@ -21,77 +129,12 @@
     transform: rotate(0deg);
   }
   to {
-    transform:  rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
-.sun {
-  width: 300px;
-  height: 300px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  border-radius: 50%;
-  background: radial-gradient(circle at center, #FFD700, #FFA500, #FF8C00);
-  z-index: 200;
-  animation: grown 3s ease forwards;
-  transform-origin: center;
-}
-
-.iconContainer {
-  width: 140px;
-  height: 140px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  background: radial-gradient(circle at center, #FF6A00, #FF8C00);
-  box-shadow: 0 0 40px 20px rgba(255, 140, 0, 0.4);
-  z-index: 200;
-}
-
-.icon {
-  font-size: 100px;
-  color: white;
-}
-
-.containerRaysWrapper {
-  position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  z-index: 300;
-  width: 10px;
-  height: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  align-content: center;
-}
-
-.containerRays {
-  width: 0;
-  height: 0;
-  animation: spin 10s linear infinite;
-  position: relative;
-}
-
-
-.ray {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  position: absolute;
-  background-color: white;
-}
-
 @keyframes appear {
-  from{
+  from {
     transform: translate(0px, 20px);
     opacity: 0;
   }
@@ -99,34 +142,6 @@
     transform: translate(0, 0);
     opacity: 1;
   }
-}
-
-.iconElement {
-  transform: translate(0px, 20px);
-  animation: appear 2s 3s forwards;
-  opacity: 0;
-  position: absolute;
-  z-index: 200;
-}
-
-.iconElement:nth-child(1){
-  top: 100px;
-  left: 120px;   
-}
-
-.iconElement:nth-child(2){
-  top: 340px;
-  left: 120px;   
-}
-
-.iconElement:nth-child(3){
-  top: 100px;
-  left: 800px; 
-}
-
-.iconElement:nth-child(4){
-  top: 340px;
-  left: 800px; 
 }
 
 @keyframes fadeIn {
@@ -140,21 +155,3 @@
     stroke-dashoffset: 0;
   }
 }
-
-.containerLines {
-  position: absolute;
-  z-index: 100;
-  line {
-    stroke-width: 2px;
-    stroke-dasharray: 5, 5;
-    opacity: 0;
-    stroke-dashoffset: 100;
-    animation: 
-      fadeIn 0.5s ease forwards 4s,
-      dashFlow 3s linear infinite 4s; 
-  
-  }
-}
-
-
-

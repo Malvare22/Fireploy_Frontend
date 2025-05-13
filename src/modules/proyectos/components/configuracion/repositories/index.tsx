@@ -10,7 +10,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "@modules/general/context/accountContext";
 import { useContext, useEffect } from "react";
-import { StepperContext } from "@modules/general/context/stepper.Contex";
+import { StepperContext } from "@modules/general/context/stepperContex";
 import { patchEditRepository } from "@modules/proyectos/services/patch.edit.repositories";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
@@ -25,6 +25,29 @@ type Props = {
   type: "edit" | "create";
 };
 
+/**
+ * Repositories component – This component is responsible for managing the repository information 
+ * for a project. It allows users to create or edit repository details, such as the frontend, backend, 
+ * and integrated repositories, including their URLs and environment variables.
+ * 
+ * The component uses React Hook Form for form management, React Query for API interaction, and 
+ * Material-UI for UI components. It also includes an alert dialog to confirm repository updates and 
+ * handles form submission to update repositories.
+ * 
+ * @component
+ * 
+ * @param {Object} props - Component props.
+ * @param {"edit" | "create"} props.type - Specifies whether the user is editing an existing repository 
+ * or creating a new one.
+ * 
+ * @returns {JSX.Element} A form allowing the user to input repository information (frontend, backend, integrated).
+ * It provides options to submit the data or cancel changes, and handles success/error dialogs.
+ * 
+ * @example
+ * ```tsx
+ * <Repositories type="create" />
+ * ```
+ */
 export function Repositories({ type }: Props) {
   const { getValues: getValuesProject } = useFormContext<ProyectoSchema>();
   const { token } = useAuth().accountInformation;
@@ -50,11 +73,11 @@ export function Repositories({ type }: Props) {
     title,
     message,
     type: dialogType,
-    setOpen
+    setOpen,
   } = useAlertDialog2();
 
   const { setError } = useErrorReader(showDialog);
-  
+
   const { mutate, isPending } = useMutation({
     mutationFn: () => patchEditRepository(token, getValues()),
     onSuccess: () => {
@@ -65,7 +88,9 @@ export function Repositories({ type }: Props) {
           message: "Repositorios actualizados correctamente",
           type: "success",
           title: "Éxito",
-          onAccept: () => {setOpen(false)},
+          onAccept: () => {
+            setOpen(false);
+          },
           reload: true,
         });
       }
@@ -83,7 +108,9 @@ export function Repositories({ type }: Props) {
             message: "Repositorios actualizados correctamente",
             type: "success",
             title: "Éxito",
-            onAccept: () => {setOpen(false)},
+            onAccept: () => {
+              setOpen(false);
+            },
             reload: true,
           });
         } else {
@@ -123,7 +150,7 @@ export function Repositories({ type }: Props) {
 
       {/* ✅ FormProvider para compartir el contexto */}
       <FormProvider {...methods}>
-        <AutoFocusOnError<ProyectoRepositoriesSchema>/>
+        <AutoFocusOnError<ProyectoRepositoriesSchema> />
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Stack spacing={3}>
             <Stack>
@@ -147,7 +174,6 @@ export function Repositories({ type }: Props) {
                         label={labelConfiguracion.urlFrontend}
                         error={!!fieldState.error}
                         helperText={fieldState.error?.message}
-                        sx={{ width: "50%" }}
                         inputRef={field.ref}
                       />
                     )}

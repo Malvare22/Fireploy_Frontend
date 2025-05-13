@@ -4,6 +4,9 @@ import { contraseniaSchema } from "@modules/usuarios/utils/form/usuario.schema";
 import { UrlSchema } from "../../../materias/utils/forms/url.schema";
 import { StandardStringRequiredSchema } from "@modules/materias/utils/forms/string.schema";
 
+/**
+ * BaseDeDatosSchema – Zod schema used to validate a database object (excluding its relation to a project), including optional ID, name, password, URL, and type ("S" = SQL, "N" = NoSQL, "E" = Embedded).
+ */
 export const BaseDeDatosSchema: z.ZodType<Omit<BaseDeDatos, "proyecto">> = z.object({
   id: z.number().optional(),
   nombre: StandardStringRequiredSchema,
@@ -14,8 +17,14 @@ export const BaseDeDatosSchema: z.ZodType<Omit<BaseDeDatos, "proyecto">> = z.obj
   }),
 });
 
+/**
+ * BaseDeDatosSchema – Type inferred from BaseDeDatosSchema Zod validation, representing a validated database model without project reference.
+ */
 export type BaseDeDatosSchema = z.infer<typeof BaseDeDatosSchema>;
 
+/**
+ * BaseDeDatosRegisterSchema – Zod schema used for registering a database, validating name, password, type, and optionally the related project ID. Type values: "S" = SQL, "N" = NoSQL, "E" = Embedded.
+ */
 export const BaseDeDatosRegisterSchema: z.ZodType<
   Pick<BaseDeDatos, "contrasenia" | "nombre" | "tipo" | "proyectoId">
 > = z.object({
@@ -27,4 +36,7 @@ export const BaseDeDatosRegisterSchema: z.ZodType<
   }),
 });
 
+/**
+ * BaseDeDatosRegisterSchema – Type inferred from BaseDeDatosRegisterSchema, representing validated fields for registering a new database instance.
+ */
 export type BaseDeDatosRegisterSchema = z.infer<typeof BaseDeDatosRegisterSchema>;

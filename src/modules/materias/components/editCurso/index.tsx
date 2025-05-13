@@ -51,6 +51,25 @@ import { getSemestre } from "@modules/general/utils/fechas";
 type EditarCursoProps = {
   type: "create" | "edit";
 };
+
+/**
+ * EditarCurso component – handles the creation or edition of a course.
+ * 
+ * It manages the form to update or register a course, handles tab switching between 
+ * course details and student management, and communicates with backend services 
+ * to persist changes. It also provides feedback via dialog messages.
+ * 
+ * @component
+ * 
+ * @param type Indicates whether the component is used to "create" a new course or "edit" an existing one.
+ * 
+ * @returns Returns a React component with a form to manage a course's information and enrolled students.
+ * 
+ * @example
+ * ```tsx
+ * <EditarCurso type="edit" />
+ * ```
+ */
 function EditarCurso({ type }: EditarCursoProps) {
   // Custom hooks and React states
   const { idCurso } = useParams();
@@ -311,8 +330,17 @@ function EditarCurso({ type }: EditarCursoProps) {
 }
 
 /**
- * Component to display or edit the assigned teacher of a course.
- * Allows user to select, change, or remove a teacher.
+ * TeacherCard component – allows displaying and editing the assigned teacher of a course.
+ * 
+ * It fetches available teachers, displays the current assignment using a chip,
+ * and provides controls to select or remove a teacher.
+ * 
+ * @returns Returns a UI element that either shows the current teacher or allows the user to choose one from a list.
+ * 
+ * @example
+ * ```tsx
+ * <TeacherCard />
+ * ```
  */
 function TeacherCard() {
   const { setValue: setValuesCurso, watch: watchCurso } = useFormContext<Curso>();

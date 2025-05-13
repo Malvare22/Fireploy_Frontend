@@ -24,13 +24,18 @@ import useSearch from "@modules/general/hooks/useSearch";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
 
 /**
- * Component to explore and list available subjects (materias).
+ * ExplorarMaterias component – Displays a list of available subjects (materias) with search and sorting capabilities.
+ * It fetches the list of materias from an API, allows filtering them by name through a search bar,
+ * and sorting them by different criteria (e.g., alphabetically or by semester).
  *
- * This component fetches all available materias from the API,
- * allows the user to filter them by name through a search bar,
- * and sort them using a select input.
- *
+ * The component displays a list of materias in cards and provides user feedback with loading spinners and error dialogs.
+ * 
  * @component
+ * 
+ * @example
+ * ```tsx
+ * <ExplorarMaterias />
+ * ```
  */
 function ExplorarMaterias() {
   // State to hold all materias fetched from the API
@@ -103,7 +108,7 @@ function ExplorarMaterias() {
         <Stack spacing={5}>
           {/* Title and icon */}
           <Stack direction={"row"} alignItems={"center"} justifyContent={"center"} spacing={2}>
-            <Typography variant="h3" textAlign={"center"} textTransform={"uppercase"}>
+            <Typography variant="h3" textAlign={"center"}>
               {labelListarMaterias.titulo}
             </Typography>
             <MenuBookIcon sx={{ fontSize: 48 }} />

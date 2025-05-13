@@ -4,8 +4,9 @@ import { Facebook, Instagram, LinkedIn, GitHub, Twitter } from "@mui/icons-mater
 type SocialNetworkProps = {
   redSocial: keyof RedSocialUsuario;
 };
+
 /**
- * Renders the corresponding icon for a user's social media based on the provided key.
+ * SocialNetworkIcon component – renders the corresponding icon for a user's social media based on the provided key.
  * 
  * This component maps a given social network key (e.g., "facebook", "github") to its
  * appropriate Material UI icon. It is primarily used to display social media icons
@@ -15,6 +16,11 @@ type SocialNetworkProps = {
  * @param {SocialNetworkProps} props - Component props
  * @param {keyof RedSocialUsuario} props.redSocial - The social network key to display the icon for
  * @returns {JSX.Element | null} The corresponding social media icon or null if no match is found
+ * 
+ * @example
+ * ```tsx
+ * <SocialNetworkIcon redSocial="facebook" />
+ * ```
  */
 const SocialNetworkIcon: React.FC<SocialNetworkProps> = ({ redSocial }) => {
   /**

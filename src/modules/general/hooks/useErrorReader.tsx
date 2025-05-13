@@ -7,6 +7,9 @@ import { ShowDialogParams } from "./useAlertDialog";
  * Type definition for the function that shows a dialog.
  * The `showDialog` function accepts a `ShowDialogParams` object to configure
  * the dialog's appearance and behavior.
+ * 
+ * @typedef {Function} ShowDialogFn
+ * @param {ShowDialogParams} params - The parameters to configure the dialog.
  */
 type ShowDialogFn = (params: ShowDialogParams) => void;
 
@@ -14,10 +17,16 @@ type ShowDialogFn = (params: ShowDialogParams) => void;
  * Custom hook to handle centralized error handling and display error dialogs.
  * This hook listens for error changes and shows a dialog with the error message
  * when an error occurs. It also handles specific logic such as navigating on 401 errors.
- *
- * @param showDialog - A function used to show the dialog with the error details.
- *
- * @returns An object containing the `setError` function to trigger the error state.
+ * 
+ * @component
+ * @param {ShowDialogFn} showDialog - A function used to show the dialog with the error details.
+ * 
+ * @returns {Object} - An object containing the `setError` function to trigger the error state.
+ * @returns {Function} setError - Function to trigger the error state, causing the error dialog to be displayed.
+ * 
+ * @example
+ * const { setError } = useErrorReader(showDialog);
+ * setError(new Error("Something went wrong!"));
  */
 function useErrorReader(showDialog: ShowDialogFn) {
   const [error, setError] = useState<any | null>(null);

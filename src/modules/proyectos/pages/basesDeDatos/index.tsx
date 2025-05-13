@@ -12,6 +12,23 @@ import { Alert, Divider, Stack, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
+/**
+ * VistaBasesDeDatos component – Displays a list of databases associated with the user's projects.
+ * 
+ * This component fetches project data for the user, checks if each project has a database associated with it,
+ * and retrieves the corresponding database details. It displays the data in a table format using `TablaBasesDeDatos` 
+ * and shows an alert message when no databases are found. The component also handles error states by showing 
+ * appropriate dialogs through the `AlertDialog` component.
+ * 
+ * @component
+ * 
+ * @returns {JSX.Element} A React component rendering the user's databases in a table or a message when no databases exist.
+ * 
+ * @example
+ * ```tsx
+ * <VistaBasesDeDatos />
+ * ```
+ */
 function VistaBasesDeDatos() {
   const { showDialog, open, title, message, type, handleAccept } = useAlertDialog2();
 

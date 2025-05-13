@@ -1,7 +1,18 @@
 import * as React from "react";
-import { AppProvider, Navigation, Router } from "@toolpad/core/AppProvider";
+import { AppProvider, type Navigation, Router } from "@toolpad/core/AppProvider";
 import { DashboardLayout, SidebarFooterProps } from "@toolpad/core/DashboardLayout";
-import { Box, Button, Divider, Stack, Typography, useTheme } from "@mui/material";
+import {
+  Alert,
+  Badge,
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  Menu,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
@@ -26,19 +37,17 @@ import { Account, AccountPreview, AccountPreviewProps } from "@toolpad/core/Acco
 import type { Session } from "@toolpad/core/AppProvider";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoaderElement from "../loaderElement";
-import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
+import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
+import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { NotificationMessage } from "@modules/usuarios/types/notification";
+import { useNotificationContext } from "@modules/general/context/notificationContext";
 
-/**
- * Constructs the sidebar navigation elements based on the user's role.
- *
- * @param {AccountInformation} userInformation - User information to determine access.
- * @returns {Navigation} Navigation structure for Toolpad.
- */
 function getNavigationElements(userInformation: AccountInformation): Navigation {
   return [
     {
       title: "Portfolios",
-      icon: <ContactMailIcon />,
+      icon: <ContactMailIcon sx={{ fill: "white" }} />,
       children: [
         {
           segment: rutasUsuarios.portafolio.replace(":id", userInformation.id.toString()) as string,
@@ -56,41 +65,45 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
       ? [
           {
             title: "Usuarios",
-            icon: <SupervisedUserCircleIcon />,
+            icon: <SupervisedUserCircleIcon sx={{ fill: "white" }} />,
             children: [
               {
                 segment: rutasUsuarios.listarUsuarios as string,
                 title: "Listar Usuarios",
-                icon: <PeopleIcon />,
+                icon: <PeopleIcon sx={{ fill: "white" }} />,
               },
               {
                 segment: rutasUsuarios.agregarUsuario as string,
                 title: "Agregar Usuarios",
-                icon: <GroupAddIcon />,
+                icon: <GroupAddIcon sx={{ fill: "white" }} />,
               },
               {
                 segment: rutasUsuarios.solicitudes as string,
                 title: "Solicitudes de promover rol",
-                icon: <CastForEducationIcon />,
+                icon: <CastForEducationIcon sx={{ fill: "white" }} />,
               },
             ],
           },
         ]
       : []),
-    { kind: "divider" },
     {
       title: "Proyectos",
-      icon: <AccountTreeIcon />,
+      icon: <AccountTreeIcon sx={{ fill: "white" }} />,
       children: [
         {
           title: "Mis Proyectos",
-          icon: <BoxesIcon />,
+          icon: <BoxesIcon sx={{ fill: "white" }} />,
           segment: rutasProyectos.misProyectos as string,
         },
         {
-          segment: rutasProyectos.listar as string,
+          segment: rutasProyectos.explorar as string,
           title: "Explorar Proyectos",
-          icon: <PlagiarismIcon />,
+          icon: <PlagiarismIcon sx={{ fill: "white" }} />,
+        },
+        {
+          segment: rutasProyectos.crear as string,
+          title: "Crear Proyectos",
+          icon: <NoteAddIcon sx={{ fill: "white" }} />,
         },
       ],
     },
@@ -98,16 +111,16 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
       ? [
           {
             title: "Cursos",
-            icon: <MenuBookIcon />,
+            icon: <MenuBookIcon sx={{ fill: "white" }} />,
             children: [
               {
                 segment: rutasMaterias.explorar as string,
                 title: "Explorar Materias y Cursos",
-                icon: <AutoStoriesIcon />,
+                icon: <AutoStoriesIcon sx={{ fill: "white" }} />,
               },
               {
                 title: "Mis Cursos",
-                icon: <LibraryBooksIcon />,
+                icon: <LibraryBooksIcon sx={{ fill: "white" }} />,
                 segment: rutasMaterias.listarMisCursos as string,
               },
             ],
@@ -116,27 +129,27 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
       : [
           {
             title: "Materias",
-            icon: <MenuBookIcon />,
+            icon: <MenuBookIcon sx={{ fill: "white" }} />,
             children: [
               {
                 segment: rutasMaterias.explorar as string,
                 title: "Explorar Materias y Cursos",
-                icon: <AutoStoriesIcon />,
+                icon: <AutoStoriesIcon sx={{ fill: "white" }} />,
               },
               {
                 segment: rutasMaterias.listarMaterias as string,
                 title: "Listar Materias",
-                icon: <CollectionsBookmarkIcon />,
+                icon: <CollectionsBookmarkIcon sx={{ fill: "white" }} />,
               },
               {
                 segment: rutasMaterias.crearMateria as string,
                 title: "Crear Materia",
-                icon: <JournalPlus />,
+                icon: <JournalPlus sx={{ fill: "white" }} />,
               },
               {
                 segment: rutasMaterias.solicitudes as string,
                 title: "Solicitudes",
-                icon: <HistoryEduIcon/>,
+                icon: <HistoryEduIcon sx={{ fill: "white" }} />,
               },
             ],
           },
@@ -144,11 +157,77 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
   ];
 }
 
-/**
- * Custom hook to manage Toolpad routing behavior.
- *
- * @returns {Router} Custom Router object with navigation and pathname.
- */
+function ToolbarActions({
+  count,
+  notificaciones,
+}: {
+  count: string;
+  notificaciones: NotificationMessage[];
+}) {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const router = useNavigate();
+
+  function handleNav() {
+    router(rutasUsuarios.notificaciones);
+  }
+
+  return (
+    <Box sx={{ paddingRight: "14px" }}>
+      <IconButton onClick={handleClick}>
+        <Badge
+          badgeContent={count}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          color="primary"
+        >
+          <NotificationsIcon sx={{ fontSize: 32 }} />
+        </Badge>
+      </IconButton>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        <Stack spacing={1} sx={{ maxWidth: { xs: "300px", md: "400px" } }}>
+          <Stack spacing={1}>
+            {notificaciones.length > 0 ? (
+              notificaciones.slice(0, 5).map((notificacion) => (
+                <Box>
+                  <Typography>{notificacion.mensaje}</Typography>
+                  <Divider />
+                </Box>
+              ))
+            ) : (
+              <Alert severity="info">No se encontraron notificaciones nuevas</Alert>
+            )}
+          </Stack>
+          <Stack alignItems={"center"}>
+            <Box>
+              <Button size="small" onClick={handleNav}>
+                Ver Más
+              </Button>
+            </Box>
+          </Stack>
+        </Stack>
+      </Menu>
+    </Box>
+  );
+}
+
 function useDemoRouter(): Router {
   const navigate = useNavigate();
   const location = useLocation();
@@ -169,12 +248,6 @@ function useDemoRouter(): Router {
   };
 }
 
-/**
- * Sidebar Account Preview wrapped in a divider.
- *
- * @component
- * @param {AccountPreviewProps & { mini: boolean }} props - Props to control preview variant.
- */
 function AccountSidebarPreview(props: AccountPreviewProps & { mini: boolean }) {
   const { handleClick, open, mini } = props;
   return (
@@ -185,15 +258,15 @@ function AccountSidebarPreview(props: AccountPreviewProps & { mini: boolean }) {
         handleClick={handleClick}
         open={open}
       />
+      <AccountPreview
+        variant={mini ? "condensed" : "expanded"}
+        handleClick={handleClick}
+        open={open}
+      />
     </Stack>
   );
 }
 
-/**
- * Sidebar popover with account options.
- *
- * @returns {JSX.Element} Sidebar buttons for "Configurar Cuenta" and "Cerrar Sesión".
- */
 function SidebarFooterAccountPopover() {
   const navigate = useNavigate();
 
@@ -217,74 +290,74 @@ function SidebarFooterAccountPopover() {
   );
 }
 
-/**
- * Higher-order component to create preview variants.
- *
- * @param {boolean} mini - Whether the preview is condensed.
- * @returns {React.FC<AccountPreviewProps>} PreviewComponent
- */
 const createPreviewComponent = (mini: boolean) => {
   return function PreviewComponent(props: AccountPreviewProps) {
     return <AccountSidebarPreview {...props} mini={mini} />;
   };
 };
 
-/**
- * Footer component for the sidebar account section.
- *
- * @component
- * @param {SidebarFooterProps} props - Props containing `mini` to control layout.
- */
 function SidebarFooterAccount({ mini }: SidebarFooterProps) {
   const PreviewComponent = React.useMemo(() => createPreviewComponent(mini), [mini]);
   return (
-    <Account
-      slots={{ preview: PreviewComponent, popoverContent: SidebarFooterAccountPopover }}
-      slotProps={{
-        popover: {
-          transformOrigin: { horizontal: "left", vertical: "bottom" },
-          anchorOrigin: { horizontal: "right", vertical: "bottom" },
-          disableAutoFocus: true,
-          slotProps: {
-            paper: {
-              elevation: 0,
-              sx: {
-                overflow: "visible",
-                filter: (theme) =>
-                  `drop-shadow(0px 2px 8px ${
-                    theme.palette.mode === "dark" ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.32)"
-                  })`,
-                mt: 1,
-                "&::before": {
-                  content: '""',
-                  display: "block",
-                  position: "absolute",
-                  bottom: 10,
-                  left: 0,
-                  width: 10,
-                  height: 10,
-                  bgcolor: "background.paper",
-                  transform: "translate(-50%, -50%) rotate(45deg)",
-                  zIndex: 0,
+    <Stack>
+      <Account
+        slots={{ preview: PreviewComponent, popoverContent: SidebarFooterAccountPopover }}
+        slotProps={{
+          popover: {
+            transformOrigin: { horizontal: "left", vertical: "bottom" },
+            anchorOrigin: { horizontal: "right", vertical: "bottom" },
+            disableAutoFocus: true,
+            slotProps: {
+              paper: {
+                elevation: 0,
+                sx: {
+                  overflow: "visible",
+                  filter: (theme) =>
+                    `drop-shadow(0px 2px 8px ${
+                      theme.palette.mode === "dark" ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.32)"
+                    })`,
+                  mt: 1,
+                  "&::before": {
+                    content: '""',
+                    display: "block",
+                    position: "absolute",
+                    bottom: 10,
+                    left: 0,
+                    width: 10,
+                    height: 10,
+                    bgcolor: "background.paper",
+                    transform: "translate(-50%, -50%) rotate(45deg)",
+                    zIndex: 0,
+                  },
                 },
               },
             },
           },
-        },
-      }}
-    />
+        }}
+      />
+    </Stack>
   );
 }
 
 /**
- * **Dashboard Layout Component**
+ * `DashboardLayoutBasic` wraps the entire application with `AppProvider` from Toolpad,
+ * dynamically configuring navigation, theming, and authentication based on the current user (`accountInformation`).
  *
- * Provides the main structure and configuration for the authenticated dashboard environment.
- * Includes navigation, routing, theming, and account context integration.
+ * It acts as the top-level layout for authenticated app sections, rendering the sidebar, toolbar,
+ * and dynamic routes depending on the user's role and current location.
+ *
+ * If the user has not yet been authenticated (`id === -1`), a full-page loader is shown.
  *
  * @component
- * @param {any} props - React props, typically includes children components.
- * @returns {JSX.Element} Rendered dashboard layout or loading screen.
+ * @example
+ * ```tsx
+ * <DashboardLayoutBasic>
+ *   <YourPageComponent />
+ * </DashboardLayoutBasic>
+ * ```
+ *
+ * @param {any} props - React children to be rendered within the layout body.
+ * @returns {JSX.Element} A fully responsive and role-aware dashboard layout.
  */
 export default function DashboardLayoutBasic(props: any) {
   const router = useDemoRouter();
@@ -308,6 +381,13 @@ export default function DashboardLayoutBasic(props: any) {
     []
   );
 
+  const notifications =
+    useNotificationContext().notificaciones?.filter((notification) => !notification.visto) ?? [];
+
+  const getNotificationsLabel = (n: number) => {
+    return n > 99 ? "+99" : n.toString();
+  };
+
   return (
     <>
       {accountInformation.id !== -1 ? (
@@ -318,7 +398,7 @@ export default function DashboardLayoutBasic(props: any) {
           authentication={authentication}
           session={currentSession}
           branding={{
-            homeUrl: rutasProyectos.listar,
+            homeUrl: rutasProyectos.menu,
             logo: (
               <Box
                 sx={{
@@ -326,7 +406,7 @@ export default function DashboardLayoutBasic(props: any) {
                   alignItems: "center",
                   height: "100%",
                   gap: 1,
-                  color: theme.palette.primary.main,
+                  color: "white",
                 }}
               >
                 <Typography variant="h5" fontWeight={600}>
@@ -339,8 +419,61 @@ export default function DashboardLayoutBasic(props: any) {
           }}
         >
           <DashboardLayout
-            sx={{ "& .MuiListSubheader-root": { fontSize: "4rem" } }}
-            slots={{ toolbarAccount: () => null, sidebarFooter: SidebarFooterAccount }}
+            sx={{
+              "& .MuiListSubheader-root": {
+                fontSize: "4rem",
+                color: "white",
+              },
+              "& .MuiDrawer-paper": {
+                backgroundColor: "#1e1e2f",
+                fill: "white", // Texto blanco
+                "& .MuiSvgIcon-root": {
+                  // Iconos blancos
+                  fill: "white",
+                },
+                "& .MuiListItemButton-root": {
+                  // Flechas y elementos interactivos
+                  fill: "white",
+                  "& .MuiSvgIcon-root": {
+                    fill: "white",
+                  },
+                },
+                "& .MuiTypography-root": {
+                  color: "white",
+                },
+              },
+              "& .MuiDrawer-root": {
+                fill: "white",
+                "& .MuiPaper-root": {
+                  backgroundColor: "#2a2a3c", // Fondo del menú desplegable
+                },
+              },
+              "& .MuiAppBar-root": {
+                backgroundColor: "#1e1e2f",
+                fill: "white",
+                "& .MuiSvgIcon-root": {
+                  // Iconos en la AppBar
+                  fill: "white",
+                },
+                "& .MuiTypography-root": {
+                  color: "white",
+                },
+                "& .MuiPaper-root": {
+                  backgroundColor: "#2a2a3c", // Fondo del menú desplegable
+                  color: "white", // Color del texto
+                },
+              },
+            }}
+            slots={{
+              toolbarAccount: () => null,
+              sidebarFooter: SidebarFooterAccount,
+              toolbarActions: () => (
+                <ToolbarActions
+                  count={getNotificationsLabel(notifications ? notifications.length : 0)}
+                  notificaciones={notifications ?? []}
+                />
+              ),
+            }}
           >
             <Box marginTop={-10}>{props.children}</Box>
           </DashboardLayout>

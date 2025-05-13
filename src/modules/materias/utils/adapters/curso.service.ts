@@ -2,6 +2,22 @@ import { Curso } from "@modules/materias/types/curso";
 import { CursoService } from "@modules/materias/types/curso.service";
 import { adaptSeccionService } from "./seccion.service";
 
+/**
+ * adaptCursoService function – transforms a `CursoService` object into a `Curso` object,
+ * adapting its properties to fit the expected format for use in the application.
+ * It converts the course data, including the instructor, students, sections, and subject,
+ * into a structured format with specific field mappings.
+ * 
+ * @function
+ * 
+ * @param {CursoService} curso - The `CursoService` object to be adapted.
+ * 
+ * @returns {Curso} A new `Curso` object with the adapted properties.
+ * 
+ * @example
+ * const cursoService: CursoService = { ... }; // Example input
+ * const curso: Curso = adaptCursoService(cursoService); // Example output
+ */
 export function adaptCursoService(curso: CursoService): Curso {
   return {
     descripcion: curso.descripcion,

@@ -11,6 +11,10 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 /**
  * Map of icons associated with each button type.
+ * This map links each button type to its corresponding Material-UI icon.
+ * 
+ * @constant
+ * @type {Record<string, ReactNode>}
  */
 const iconMap = {
   [buttonTypes.save]: <SaveAsIcon />,
@@ -24,6 +28,10 @@ const iconMap = {
 
 /**
  * Map of labels associated with each button type.
+ * This map provides the label (text) for each button type in the appropriate language.
+ * 
+ * @constant
+ * @type {Record<string, string>}
  */
 const labelMap = {
   [buttonTypes.save]: "guardar",
@@ -39,9 +47,9 @@ const labelMap = {
  * @interface GeneralButtonProps
  * @description Properties for the GeneralButton component.
  * @extends {ButtonProps}
- * @property {buttonTypes} mode - The type of button to render.
- * @property {boolean} [withIcon=true] - Determines whether the button should display an icon.
- * @property {ReactNode} [icon] - Custom icon to display instead of the default one.
+ * @property {buttonTypes} mode - The type of button to render, determining the icon and label.
+ * @property {boolean} [withIcon=true] - If `true`, displays the icon associated with the button type.
+ * @property {ReactNode} [icon] - Custom icon to use instead of the default one.
  */
 interface GeneralButtonProps extends ButtonProps {
   mode: buttonTypes;
@@ -52,14 +60,21 @@ interface GeneralButtonProps extends ButtonProps {
 /**
  * GeneralButton Component
  *
- * Renders a styled button with an icon and label based on the selected button type.
+ * Renders a Material-UI button with an icon and label based on the selected button type.
+ * The button type determines the icon and label that will be displayed. Custom icons 
+ * can be provided to replace the default ones.
  *
  * @component
  * @param {GeneralButtonProps} props - Component properties.
- * @param {buttonTypes} props.mode - Defines the type of button.
- * @param {boolean} [props.withIcon=true] - Determines whether an icon should be displayed.
- * @param {ReactNode} [props.icon] - Custom icon to use instead of the predefined one.
- * @returns {JSX.Element} A button component.
+ * @param {buttonTypes} props.mode - Defines the button type, which determines the icon and label.
+ * @param {boolean} [props.withIcon=true] - If `true`, the button displays an icon.
+ * @param {ReactNode} [props.icon] - Custom icon to replace the default one.
+ * @returns {JSX.Element} A Material-UI button component.
+ *
+ * @example
+ * ```tsx
+ * <GeneralButton mode={buttonTypes.save} />
+ * ```
  */
 const GeneralButton: React.FC<GeneralButtonProps> = ({
   mode,
@@ -81,7 +96,7 @@ const GeneralButton: React.FC<GeneralButtonProps> = ({
 /**
  * @interface ButtonContainerProps
  * @description Properties for the ButtonContainer component.
- * @property {React.ReactNode} children - Buttons to be displayed inside the container.
+ * @property {React.ReactNode} children - The buttons to be displayed inside the container.
  */
 interface ButtonContainerProps {
   children: React.ReactNode;
@@ -90,12 +105,21 @@ interface ButtonContainerProps {
 /**
  * ButtonContainer Component
  *
- * A flexible container for grouping buttons with defined spacing.
+ * A flexible container component that groups buttons together and defines their layout.
+ * It renders the children (buttons) passed to it in a row with flexbox styling.
  *
  * @component
  * @param {ButtonContainerProps} props - Component properties.
- * @param {React.ReactNode} props.children - Buttons to be displayed inside the container.
- * @returns {JSX.Element} A button container.
+ * @param {React.ReactNode} props.children - Buttons to be rendered inside the container.
+ * @returns {JSX.Element} A box containing the grouped buttons.
+ *
+ * @example
+ * ```tsx
+ * <ButtonContainer>
+ *   <GeneralButton mode={buttonTypes.add} />
+ *   <GeneralButton mode={buttonTypes.cancel} />
+ * </ButtonContainer>
+ * ```
  */
 export const ButtonContainer: React.FC<ButtonContainerProps> = ({
   children,

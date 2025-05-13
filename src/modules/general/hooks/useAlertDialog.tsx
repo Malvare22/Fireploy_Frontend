@@ -7,45 +7,25 @@ import { AlertDialogTypes } from "../components/alertDialog";
  * This type specifies the options that can be used to configure the dialog's
  * appearance and behavior, such as the dialog type, message, title, loading state,
  * and callback functions for when the user accepts or closes the dialog.
+ * 
+ * @typedef {Object} ShowDialogParams
+ * @property {AlertDialogTypes} [type="default"] - The type of the dialog (e.g., "default", "error", etc.).
+ * @property {string} message - The message to display in the dialog. This field is required.
+ * @property {string} [title="Atención"] - The title of the dialog.
+ * @property {boolean} [isLoading=false] - Flag to indicate whether the dialog shows a loading spinner.
+ * @property {Function} [onAccept] - Callback function executed when the user accepts the dialog.
+ * @property {Function} [onCancel] - Callback function executed when the user closes the dialog.
+ * @property {boolean} [reload=false] - Flag to indicate whether the page should reload after accepting the dialog.
+ * @property {boolean} [_closeOnAccept=false] - Flag to close the dialog after acceptance.
  */
 export type ShowDialogParams = {
-  /**
-   * The type of the dialog. Defaults to "default" if not provided.
-   */
   type?: AlertDialogTypes;
-
-  /**
-   * The message to display in the dialog. This field is required.
-   */
   message: string;
-
-  /**
-   * The title of the dialog. Defaults to "Atención" if not provided.
-   */
   title?: string;
-
-  /**
-   * A flag to indicate whether the dialog should show a loading spinner.
-   * Defaults to false if not provided.
-   */
   isLoading?: boolean;
-
-  /**
-   * Callback function to be executed when the user accepts the dialog.
-   */
   onAccept?: () => void;
-
-  /**
-   * Callback function to be executed when the dialog is closed.
-   */
   onCancel?: () => void;
-
-  /**
-   * A flag to indicate whether the page should reload after accepting the dialog.
-   * Defaults to false if not provided.
-   */
   reload?: boolean;
-
   _closeOnAccept?: boolean;
 };
 
@@ -54,6 +34,20 @@ export type ShowDialogParams = {
  *
  * This hook provides functions to display the dialog (`showDialog`), handle the
  * acceptance and closing actions, and manage loading and other dialog states.
+ * 
+ * @returns {Object} The state and actions for managing the alert dialog.
+ * @returns {boolean} open - Whether the dialog is currently open.
+ * @returns {AlertDialogTypes} type - The current type of the dialog (e.g., "default", "error").
+ * @returns {string} title - The title of the dialog.
+ * @returns {string} message - The message to display in the dialog.
+ * @returns {boolean} isLoading - Whether the dialog is in a loading state.
+ * @returns {Function} showDialog - Function to open the dialog with custom configuration.
+ * @returns {Function} handleAccept - Function to handle the acceptance action.
+ * @returns {Function} handleCancel - Function to handle the cancellation action.
+ * @returns {Function} setOpen - Function to explicitly set the dialog's open state.
+ * @returns {Function} setIsLoading - Function to set the loading state of the dialog.
+ * @returns {Function} handleOpen - Function to open the dialog.
+ * @returns {Function} handleClose - Function to close the dialog.
  */
 function useAlertDialog() {
   // State variables to manage dialog properties
@@ -70,7 +64,7 @@ function useAlertDialog() {
   /**
    * Function to show the dialog with the provided options.
    *
-   * @param options - The configuration options for the dialog, including type, message,
+   * @param {ShowDialogParams} options - The configuration options for the dialog, including type, message,
    *                  title, loading state, and callback functions.
    */
   function showDialog(options: ShowDialogParams) {

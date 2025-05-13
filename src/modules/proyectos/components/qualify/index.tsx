@@ -7,6 +7,24 @@ type Props = {
   setValue: (n: number) => void;
 };
 
+/**
+ * Qualify component – A UI component allowing users to select a rating value from a predefined set of scores.
+ * It displays a dropdown (using `TextField` and `MenuItem`) with a `Rating` component for each score.
+ * The rating value is adjustable using the dropdown, and the current selected rating value is managed using state.
+ * 
+ * @component
+ * 
+ * @param {Object} props - The component props.
+ * @param {number} props.value - The current rating value selected by the user.
+ * @param {Function} props.setValue - A function to update the rating value state when the user selects a new rating.
+ * 
+ * @returns {JSX.Element} A dropdown list of scores with associated `Rating` components for each option.
+ * 
+ * @example
+ * ```tsx
+ * <Qualify value={ratingValue} setValue={setRatingValue} />
+ * ```
+ */
 function Qualify({ setValue, value }: Props) {
   return (
     <Stack>
