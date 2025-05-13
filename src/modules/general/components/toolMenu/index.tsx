@@ -258,11 +258,6 @@ function AccountSidebarPreview(props: AccountPreviewProps & { mini: boolean }) {
         handleClick={handleClick}
         open={open}
       />
-      <AccountPreview
-        variant={mini ? "condensed" : "expanded"}
-        handleClick={handleClick}
-        open={open}
-      />
     </Stack>
   );
 }
