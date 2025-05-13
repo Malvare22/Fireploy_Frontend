@@ -23,7 +23,8 @@ function Footer(): JSX.Element {
         padding: 5,
         backgroundColor: theme.palette.secondary.main,
         color: "white",
-        fontWeight: '550'
+        fontWeight: '550',
+        borderRadius: 0
       }}
     >
       {/* Fireploy Column */}

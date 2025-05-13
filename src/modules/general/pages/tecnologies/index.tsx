@@ -70,7 +70,7 @@ function TecnologiesView() {
   }, [searchValue])
 
   return (
-    <Stack spacing={5} sx={{animation: `${init} 2s`}}>
+    <Stack spacing={5} sx={{animation: `${init} 2s`,  color: "white"}}>
       <Box>
         <Stack spacing={3} >
           <Typography textAlign={'center'} variant="h3">{labelTecnologiesView.title}</Typography>

@@ -44,6 +44,7 @@ function LayoutPrelogin() {
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           backgroundAttachment: "fixed",
+          paddingBottom: 10
         }}
       >
         <Outlet />

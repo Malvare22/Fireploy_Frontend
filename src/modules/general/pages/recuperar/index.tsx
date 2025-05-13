@@ -5,7 +5,7 @@ import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { rutasGeneral } from "@modules/general/router/router";
 import { postSendEmail } from "@modules/general/services/post.send.email";
 import { CorreoSchema } from "@modules/usuarios/utils/form/usuario.schema";
-import { Button, Typography, TextField, useTheme, Stack, Card } from "@mui/material";
+import { Button, Typography, TextField, Stack, Card, Box } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
@@ -43,9 +43,6 @@ function RecuperarContrasenia() {
 
   /** Hook to handle and parse backend errors */
   const { setError } = useErrorReader(showDialog);
-
-  /** Theme instance from Material UI */
-  const theme = useTheme();
 
   /** Navigation instance to redirect user */
   const navigate = useNavigate();
@@ -109,28 +106,32 @@ function RecuperarContrasenia() {
               fullWidth
             />
 
-            <Stack alignItems={"center"} spacing={2}>
+            <Stack alignItems={"center"} direction="row" justifyContent={'center'} spacing={2}>
               {/* Submit button */}
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                loading={isPending}
-                sx={{ width: 200 }}
-              >
-                Siguiente
-              </Button>
+              <Box>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  loading={isPending}
+                  sx={{ width: 200 }}
+                >
+                  Siguiente
+                </Button>
+              </Box>
 
               {/* Back to login button */}
-              <Button
-                onClick={() => navigate(rutasGeneral.login)}
-                sx={{
-                  backgroundColor: theme.palette.secondary.main,
-                  width: 200,
-                }}
-              >
-                Volver
-              </Button>
+              <Box>
+                <Button
+                  variant="outlined"
+                  onClick={() => navigate(rutasGeneral.login)}
+                  sx={{
+                    width: 200,
+                  }}
+                >
+                  Volver
+                </Button>
+              </Box>
             </Stack>
           </Stack>
         </form>

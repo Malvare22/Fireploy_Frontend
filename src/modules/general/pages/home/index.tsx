@@ -55,8 +55,8 @@ export enum labelHome {
   deployHTTPSTitle = "Seguridad",
   deployDBTitle = "Base de datos",
   deployLayersTitle = "Arquitectura dos capas",
-  deployShareBody = "Compartir proyectos es importante porque permite colaborar con otros, recibir retroalimentación, generar oportunidades, demostrar tus habilidades y, además, puede inspirar a quienes te rodean. Es una forma efectiva de crecer personal y profesionalmente, al mismo tiempo que aportas valor a tu comunidad o equipo.",
-  deployHTTPSBody = "Protege la información que se transmite entre tu navegador y un sitio web mediante cifrado. Esto evita que terceros puedan interceptar o modificar datos sensibles, como contraseñas, tarjetas de crédito o información personal. Además, da confianza al usuario, ya que indica que el sitio es legítimo y seguro.",
+  deployShareBody = "Compartir proyectos es importante porque permite colaborar con otros, recibir retroalimentación, generar oportunidades, demostrar tus habilidades y, además, puede inspirar a quienes te rodean.",
+  deployHTTPSBody = "Protege la información que se transmite entre tu navegador y un sitio web mediante cifrado. Esto evita que terceros puedan interceptar o modificar datos sensibles, como contraseñas, tarjetas de crédito o información personal",
   deployDBBody = "Crear, administrar y consultar bases de datos desde cualquier lugar con conexión a internet, sin necesidad de instalar software localmente.",
   deployLayersBody = "Esta arquitectura facilita el desarrollo, la implementación y el mantenimiento del sistema, ya que separa claramente las responsabilidades.",
 
@@ -97,7 +97,7 @@ export default function Home() {
       <Stack sx={{ backgroundColor: "none" }}>
         <PortafolioSection />
       </Stack>
-      <Stack sx={{ backgroundColor: theme.palette.background.default }}>
+      <Stack sx={{ backgroundColor: theme.palette.background.default, marginBottom: -10 }}>
         <AcademicSection />
       </Stack>
     </Box>
