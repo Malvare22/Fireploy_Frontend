@@ -98,7 +98,7 @@ export const redSocialUsuarioSchema = z
  */
 export const nombresSchema = z.string().min(1, { message: "El nombre no puede estar vacío" });
 
-export const apellidosSchema = z.string().min(1, { message: "El apellido no puede estar vacío" });
+export const apellidosSchema = z.string().min(0, { message: "El apellido no puede estar vacío" });
 
 export const fotoDePerfilSchema = z
   .string()
@@ -119,7 +119,7 @@ export const UsuarioSchema: z.ZodType<Usuario> = z
     id: z.number().optional(),
     correo: correoSchema,
     nombres: nombresSchema,
-    apellidos: apellidosSchema,
+    apellidos: apellidosSchema.optional(),
     fechaDeNacimiento: fechaSchema,
     estFechaInicio: fechaSchema.optional(),
     estado: estadoUsuarioSchema,

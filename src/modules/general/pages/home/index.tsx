@@ -2,8 +2,6 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import {
   Box,
   Button,
-  Card,
-  Divider,
   Grid2,
   Paper,
   Stack,
@@ -20,7 +18,7 @@ import {
   PersonLinesFillIcon,
 } from "@modules/general/components/customIcons";
 import React, { ReactNode, useState } from "react";
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
 import CloudSyncIcon from "@mui/icons-material/CloudSync";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import SchoolIcon from "@mui/icons-material/School";
@@ -30,7 +28,6 @@ import { getImage } from "@modules/general/utils/getImage";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export enum labelHome {
   princialContent = "Despliega tus aplicativos web de manera automática",
@@ -97,7 +94,7 @@ export default function Home() {
         {/* <Secondary /> */}
         <Deploy />
       </Stack>
-      <Stack sx={{ backgroundColor: 'none' }}>
+      <Stack sx={{ backgroundColor: "none" }}>
         <PortafolioSection />
       </Stack>
       <Stack sx={{ backgroundColor: theme.palette.background.default }}>
@@ -109,12 +106,12 @@ export default function Home() {
 
 function Principal() {
   const theme = useTheme();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
 
   return (
     <>
-      <Grid2 container sx={{ border: "1px solid green", display: "flex", alignItems: "center" }}>
+      <Grid2 container sx={{ display: "flex", alignItems: "center" }}>
         <Grid2 size={{ md: 5, xs: 12 }}>
           <Stack sx={{ height: "100%" }} spacing={8}>
             <Typography variant="h2" sx={{ fontWeight: "440", color: "white" }} color="secondary">
@@ -238,13 +235,15 @@ function PrincipalAnimation() {
 }
 
 function Deploy() {
-  const theme = useTheme();
-
   const content: [ReactNode, string, string][] = [
     [<CloudSyncIcon sx={{ fontSize: 56 }} />, labelHome.deployDBTitle, labelHome.deployDBBody],
-    [<ContactPageIcon sx={{ fontSize: 56 }} />, labelHome.deployDBTitle, labelHome.deployDBBody],
-    [<SchoolIcon sx={{ fontSize: 56 }} />, labelHome.deployDBTitle, labelHome.deployDBBody],
-    [<SchoolIcon sx={{ fontSize: 56 }} />, labelHome.deployDBTitle, labelHome.deployDBBody],
+    [
+      <ContactPageIcon sx={{ fontSize: 56 }} />,
+      labelHome.deployHTTPSTitle,
+      labelHome.deployHTTPSBody,
+    ],
+    [<SchoolIcon sx={{ fontSize: 56 }} />, labelHome.deployLayersTitle, labelHome.deployLayersBody],
+    [<SchoolIcon sx={{ fontSize: 56 }} />, labelHome.deployShareTitle, labelHome.deployShareBody],
   ];
 
   return (
@@ -292,6 +291,13 @@ function Deploy() {
             );
           })}
         </Grid2>
+        <Stack alignItems={"center"}>
+          <Box>
+            <Button variant="contained" color="primary">
+              Explora Proyectos
+            </Button>
+          </Box>
+        </Stack>
       </Stack>
     </Box>
   );
@@ -301,13 +307,23 @@ function PortafolioSection() {
   return (
     <Grid2 container sx={{ color: "white", marginX: 20, padding: 4 }} spacing={4}>
       <Grid2 size={5}>
-        <Box sx={{ backgroundColor: "white", opacity: 0.5, width: "100%", height: "500px" }} />
+        <Box
+          component={"img"}
+          src={getImage["portafolio_home"].ruta ?? ""}
+          sx={{ width: "100%", height: "300px", objectFit: "contain" }}
+        />
       </Grid2>
       <Grid2 size={7}>
         <Stack spacing={3}>
           <Typography variant="h3">{labelHome.portafolioTitle}</Typography>
           <Typography variant="body1">{labelHome.portafolioBody}</Typography>
-          <Button>{labelHome.portafolioButton}</Button>
+          <Stack alignItems={"start"}>
+            <Box>
+              <Button variant="contained" color="secondary">
+                {labelHome.portafolioButton}
+              </Button>
+            </Box>
+          </Stack>
         </Stack>
       </Grid2>
     </Grid2>
@@ -322,36 +338,44 @@ function ControlledAccordions() {
   };
 
   return (
-    <Stack>
-      <CustomAccordion
-        body={labelHome.educacionalBody1}
-        title={labelHome.educacionalTitle1}
-        expanded={expanded}
-        handleChange={handleChange}
-        value={"1"}
-      />
-      <CustomAccordion
-        body={labelHome.educacionalBody2}
-        title={labelHome.educacionalTitle2}
-        expanded={expanded}
-        handleChange={handleChange}
-        value={"2"}
-      />
-      <CustomAccordion
-        body={labelHome.educacionalBody3}
-        title={labelHome.educacionalTitle3}
-        expanded={expanded}
-        handleChange={handleChange}
-        value={"3"}
-      />
-      <CustomAccordion
-        body={labelHome.educacionalBody4}
-        title={labelHome.educacionalTitle4}
-        expanded={expanded}
-        handleChange={handleChange}
-        value={"4"}
-      />
-    </Stack>
+    <Grid2 container spacing={4}>
+      <Grid2 size={{ md: 6, xs: 12 }}>
+        <CustomAccordion
+          body={labelHome.educacionalBody1}
+          title={labelHome.educacionalTitle1}
+          expanded={expanded}
+          handleChange={handleChange}
+          value={"1"}
+        />
+      </Grid2>
+      <Grid2 size={{ md: 6, xs: 12 }}>
+        <CustomAccordion
+          body={labelHome.educacionalBody2}
+          title={labelHome.educacionalTitle2}
+          expanded={expanded}
+          handleChange={handleChange}
+          value={"2"}
+        />
+      </Grid2>
+      <Grid2 size={{ md: 6, xs: 12 }}>
+        <CustomAccordion
+          body={labelHome.educacionalBody3}
+          title={labelHome.educacionalTitle3}
+          expanded={expanded}
+          handleChange={handleChange}
+          value={"3"}
+        />
+      </Grid2>
+      <Grid2 size={{ md: 6, xs: 12 }}>
+        <CustomAccordion
+          body={labelHome.educacionalBody4}
+          title={labelHome.educacionalTitle4}
+          expanded={expanded}
+          handleChange={handleChange}
+          value={"4"}
+        />
+      </Grid2>
+    </Grid2>
   );
 }
 
@@ -376,13 +400,11 @@ function CustomAccordion({ body, expanded, handleChange, title, value }: PropsCu
                 expanded == value ? theme.palette.success.main : theme.palette.action.hover,
             }}
           />
-          <Typography sx={{fontWeight: 500}}>{title}</Typography>
+          <Typography sx={{ fontWeight: 500 }}>{title}</Typography>
         </Stack>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography sx={{marginLeft: '18px'}}>
-          {body}
-        </Typography>
+        <Typography sx={{ marginLeft: "18px" }}>{body}</Typography>
       </AccordionDetails>
     </Accordion>
   );
@@ -390,11 +412,11 @@ function CustomAccordion({ body, expanded, handleChange, title, value }: PropsCu
 
 function AcademicSection() {
   return (
-    <Stack spacing={3} alignItems={'center'} paddingY={4}>
+    <Stack spacing={3} alignItems={"center"} paddingY={4}>
       <Typography variant="h3">{labelHome.educacional}</Typography>
-      <SchoolIcon sx={{fontSize: 56}}/>
+      <SchoolIcon sx={{ fontSize: 56 }} />
       <Grid2 container>
-        <Grid2 size={7}>
+        <Grid2 size={12} sx={{marginX: 20}}>
           <ControlledAccordions />
         </Grid2>
       </Grid2>

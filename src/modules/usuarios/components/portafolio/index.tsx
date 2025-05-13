@@ -130,6 +130,8 @@ const Portafolio = () => {
       defaultValues: user,
     });
 
+    console.log(errors)
+
     const token = useAuth().accountInformation.token;
 
     const { mutate: updatePortafolioInformation, isPending } = useMutation({

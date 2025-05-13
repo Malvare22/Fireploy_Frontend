@@ -50,7 +50,7 @@ export const postCreateUsuarioService = async (token: string, user: Usuario) => 
 
   const body: Body = {
     nombre: user.nombres,
-    apellido: user.apellidos,
+    apellido: user.apellidos ?? '',
     fecha_nacimiento: user.fechaDeNacimiento, // Formato ISO (YYYY-MM-DD)
     sexo: user.sexo, // Si hay más opciones, puedes usar string
     descripcion: user.descripcion,

@@ -42,7 +42,6 @@
 
 .containerRaysWrapper {
   position: absolute;
-  border: 1px solid black;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -82,20 +81,20 @@
 }
 
 .iconElement:nth-child(1) {
-  top: 15%;
-  left: 10%;
+  top: 12%;
+  left: 8%;
 }
 .iconElement:nth-child(2) {
-  bottom: 15%;
-  left: 10%;
+  bottom: 12%;
+  left: 8%;
 }
 .iconElement:nth-child(3) {
-  top: 15%;
-  right: 10%;
+  top: 12%;
+  right: 8%;
 }
 .iconElement:nth-child(4) {
-  bottom: 15%;
-  right: 10%;
+  bottom: 12%;
+  right: 8%;
 }
 
 .containerLines {

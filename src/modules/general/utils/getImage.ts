@@ -35,7 +35,7 @@ import mysql from "@modules/general/assets/tecnologias/mySQL.png";
 
 //Home
 import wallpaper_home from "@modules/general/assets/home/wallpaperHome.jpg";
-
+import portafolio_home from "@modules/general/assets/home/portafolioHome.png";
 
 /**
  * **Collection of imported images.**
@@ -87,7 +87,8 @@ export const assetImages = {
   mongodb,
   mysql,
 
-  wallpaper_home
+  wallpaper_home,
+  portafolio_home
 } as const;
 
 /**

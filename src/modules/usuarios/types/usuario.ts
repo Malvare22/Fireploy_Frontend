@@ -66,7 +66,7 @@ export type Usuario = {
   id?: number | undefined;
   correo: string;
   nombres: string;
-  apellidos: string;
+  apellidos?: string | undefined;
   fotoDePerfil: string;
   fechaDeNacimiento: string;
   sexo: SexoUsuario;
