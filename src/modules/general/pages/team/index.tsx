@@ -33,7 +33,7 @@ const labels: [string, string, string, string][] = [
  *
  * This component renders a section that introduces the team, with each member's card containing
  * their profile picture, name, description, and a link to their LinkedIn profile.
- * 
+ *
  * @component
  */
 function TeamView() {
@@ -62,8 +62,8 @@ function TeamView() {
     </div>
   );
   return (
-    <Box sx={{ marginBottom: -4 }}>
-      <Stack spacing={5} sx={{ position: "relative", animation: `${init} 2s` }} paddingX={4}>
+    <Box sx={{ marginBottom: -10, color: "white" }}>
+      <Stack spacing={5} sx={{ position: "relative", animation: `${init} 2s forwards` }} paddingX={4}>
         {/* Section title */}
         <Typography textAlign="center" variant="h3">
           {labelTeam.title}
