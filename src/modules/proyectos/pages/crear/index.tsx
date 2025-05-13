@@ -10,7 +10,7 @@ import { Repositories } from "@modules/proyectos/components/configuracion/reposi
 import { DataBase } from "@modules/proyectos/components/configuracion/database";
 import StepperStandard from "@modules/general/components/stepper";
 import { useStepper } from "@modules/general/hooks/useStepper";
-import { StepperContext } from "@modules/general/context/stepper.Contex";
+import { StepperContext } from "@modules/general/context/stepperContex";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { adaptProject } from "@modules/proyectos/utils/adapt.proyecto";

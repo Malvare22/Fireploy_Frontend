@@ -8,7 +8,7 @@
 import DataTable, { ConditionalStyles } from "react-data-table-component";
 import { TableColumn } from "react-data-table-component";
 import { Button, Typography, useTheme } from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -23,16 +23,11 @@ import { labelNotificaciones } from "@modules/usuarios/enum/labelNotificaciones"
 import { adaptDateBackend } from "@modules/general/utils/fechas";
 
 type Props = {
-  notificacionesBase: NotificationMessage[];
+  notificaciones: NotificationMessage[];
+  refetch: Function;
 };
 
-const TablaNotificaciones: React.FC<Props> = ({ notificacionesBase }) => {
-  const [notificaciones, setNotificaciones] = useState(notificacionesBase);
-
-  useEffect(() => {
-    setNotificaciones(notificacionesBase);
-  }, [notificacionesBase]);
-
+const TablaNotificaciones: React.FC<Props> = ({ notificaciones, refetch }) => {
   const { accountInformation } = useAuth();
 
   const { token } = accountInformation;
@@ -53,15 +48,8 @@ const TablaNotificaciones: React.FC<Props> = ({ notificacionesBase }) => {
     mutationFn: (idNotification: number) => patchNotificationCheck(idNotification, token),
     mutationKey: ["changeUser"],
     onError: (error) => setError(error),
-    onSuccess: (data) => {
-      setNotificaciones(() => {
-        return notificaciones.map((x) => {
-          if (data.id == x.id) {
-            return data;
-          }
-          return x;
-        });
-      });
+    onSuccess: () => {
+      refetch();
     },
   });
 

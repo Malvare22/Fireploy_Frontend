@@ -10,7 +10,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "@modules/general/context/accountContext";
 import { useContext, useEffect } from "react";
-import { StepperContext } from "@modules/general/context/stepper.Contex";
+import { StepperContext } from "@modules/general/context/stepperContex";
 import { patchEditRepository } from "@modules/proyectos/services/patch.edit.repositories";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";

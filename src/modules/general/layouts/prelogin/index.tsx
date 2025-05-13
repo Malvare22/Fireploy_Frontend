@@ -37,16 +37,13 @@ function LayoutPrelogin() {
           justifyContent: "center",
           "> div": { width: "100%" },
           minHeight: "80vh",
+          paddingTop: '20vh',
           overflow: "hidden",
-          paddingY: 14,
           backgroundImage: `url(${getImage["wallpaper_home"].ruta})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           backgroundAttachment: "fixed",
-          "& .MuiTypography-root": {
-            color: 'white'
-          }
         }}
       >
         <Outlet />

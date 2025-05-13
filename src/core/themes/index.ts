@@ -85,21 +85,19 @@ export const getTheme = responsiveFontSizes(
           },
           {
             props: { variant: "dark" },
-            style: {
-              backgroundColor: palette.secondary as string,
+            style: ({ theme }) => ({
+              backgroundColor: theme.palette.secondary.main,
               color: "white",
 
-              // Hace que todos los hijos hereden el color blanco
               "*": {
                 color: "inherit",
               },
 
-              // Para componentes MUI que usan color por defecto (ej: Typography, Icon)
               "& .MuiTypography-root, & .MuiSvgIcon-root, & .MuiIconButton-root, & .MuiButtonBase-root":
                 {
                   color: "inherit",
                 },
-            },
+            }),
           },
           {
             props: { variant: "light" },

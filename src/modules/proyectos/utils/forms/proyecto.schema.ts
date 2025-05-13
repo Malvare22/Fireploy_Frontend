@@ -29,6 +29,7 @@ export const ProyectoSchema: z.ZodType<Omit<Proyecto, 'fav_usuarios'>> = z.objec
   tipo: z.enum(["M", "S"]),
   materiaInformacion: MateriaInformacionSchema,
   integrantes: z.array(z.lazy(() => UsuarioCursoSchema)),
+  imagen: z.string().nullable().optional()
 });
 
 /**

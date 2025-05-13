@@ -40,12 +40,8 @@ import LoaderElement from "../loaderElement";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { io } from "socket.io-client";
-import { getNotificaciones } from "@modules/usuarios/services/get.notificaciones";
-import useAlertDialog from "@modules/general/hooks/useAlertDialog";
-import useErrorReader from "@modules/general/hooks/useErrorReader";
-import AlertDialog from "../alertDialog";
 import { NotificationMessage } from "@modules/usuarios/types/notification";
+import { useNotificationContext } from "@modules/general/context/notificationContext";
 
 function getNavigationElements(userInformation: AccountInformation): Navigation {
   return [
@@ -205,16 +201,16 @@ function ToolbarActions({
         MenuListProps={{
           "aria-labelledby": "basic-button",
         }}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        sx={{ maxWidth: { xs: "300px", md: "100%" } }}
       >
-        <Stack spacing={1}>
-          <Stack>
+        <Stack spacing={1} sx={{ maxWidth: { xs: "300px", md: "400px" } }}>
+          <Stack spacing={1}>
             {notificaciones.length > 0 ? (
-              notificaciones.map((notificacion) => <Typography>{notificacion.mensaje}</Typography>)
+              notificaciones.slice(0, 5).map((notificacion) => (
+                <Box>
+                  <Typography>{notificacion.mensaje}</Typography>
+                  <Divider />
+                </Box>
+              ))
             ) : (
               <Alert severity="info">No se encontraron notificaciones nuevas</Alert>
             )}
@@ -380,46 +376,8 @@ export default function DashboardLayoutBasic(props: any) {
     []
   );
 
-  const [notifications, setNotifications] = React.useState<null | NotificationMessage[]>(null);
-
-  const { showDialog, handleAccept, message, open, title, type } = useAlertDialog();
-
-  const { setError } = useErrorReader(showDialog);
-
-  React.useEffect(() => {
-    if (accountInformation.token == "Not Found") return;
-    const fQuery = async () => {
-      try {
-        const tmp = await getNotificaciones(accountInformation.id, accountInformation.token);
-        setNotifications(tmp.filter((x) => !x.visto));
-        console.log(tmp);
-      } catch (e) {
-        setError(e);
-      }
-    };
-    fQuery();
-  }, [accountInformation.token]);
-
-  React.useEffect(() => {
-    if (!notifications) return;
-    const socket = io(import.meta.env.VITE_URL_BACKEND, {
-      reconnectionDelayMax: 10000,
-      query: {
-        userId: accountInformation.id,
-      },
-    });
-
-    socket.on("connect", () => {
-      console.log("Connected to socket server");
-    });
-
-    socket.on("data", (notification: NotificationMessage) => {
-      console.log("Received data:", notification);
-      setNotifications(() => {
-        return [...notifications, notification];
-      });
-    });
-  }, [notifications]);
+  const notifications =
+    useNotificationContext().notificaciones?.filter((notification) => !notification.visto) ?? [];
 
   const getNotificationsLabel = (n: number) => {
     return n > 99 ? "+99" : n.toString();
@@ -427,13 +385,6 @@ export default function DashboardLayoutBasic(props: any) {
 
   return (
     <>
-      <AlertDialog
-        handleAccept={handleAccept}
-        open={open}
-        title={title}
-        type={type}
-        textBody={message}
-      />
       {accountInformation.id !== -1 ? (
         <AppProvider
           navigation={getNavigationElements(accountInformation)}

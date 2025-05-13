@@ -168,10 +168,10 @@ const SignIn: React.FC = () => {
           {labelLogin.ingresar}
         </Button>
         <Stack spacing={2} direction={"row"} alignItems={"center"} justifyContent={"center"}>
-          <Link href={rutasGeneral.recuperar} variant="body2">
+          <Link href={rutasGeneral.recuperar} sx={{color: 'black'}} variant="body2">
             {labelLogin.olvide}
           </Link>
-          <Link href={rutasGeneral.registrar} variant="body2">
+          <Link href={rutasGeneral.registrar} sx={{color: 'black'}} variant="body2">
             {labelLogin.registrarse}
           </Link>
         </Stack>

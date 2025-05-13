@@ -98,7 +98,7 @@ function NavbarPrelogin(): JSX.Element {
       position="fixed"
       component={Paper}
       variant="dark"
-      sx={{ boxShadow: "none", borderBottom: "1px solid rgba(0, 0, 0, 0.1)",backgroundColor: theme.palette.secondary.main}}
+      sx={{ boxShadow: "none", borderBottom: "1px solid rgba(0, 0, 0, 0.1)",backgroundColor: theme.palette.secondary.main, height: '10vh'}}
     >
       <Container maxWidth="xl" sx={{ color: "white" }}>
         <Toolbar disableGutters sx={{ justifyContent: { md: "space-between", xs: "center" } }}>
@@ -144,7 +144,7 @@ function NavbarPrelogin(): JSX.Element {
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
                 <Button variant="text" onClick={() => navigate(rutasGeneral.login)}>
-                  <Typography sx={{ textAlign: "center", color: "white" }}>
+                  <Typography sx={{ textAlign: "center" }}>
                     {labelsNavbarPrelogin.signUp}
                   </Typography>
                 </Button>

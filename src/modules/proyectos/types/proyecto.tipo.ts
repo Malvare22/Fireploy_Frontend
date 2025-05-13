@@ -36,7 +36,7 @@ export type Proyecto = {
   titulo: string;
   descripcion?: string | null | undefined;
   fav_usuarios: number[];
-  imagen?: string;
+  imagen?: string | undefined | null;
   url: string;
   estadoDeEjecucion?: EstadoEjecucionProyecto;
   estadoDeProyecto?: EstadoProyecto;

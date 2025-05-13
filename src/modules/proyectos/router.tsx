@@ -3,7 +3,7 @@ import ExplorarProyectos from "./pages/explorar";
 import CrearProyecto from "./pages/crear";
 import VerProyecto from "./pages/ver";
 import VistaBasesDeDatos from "./pages/basesDeDatos";
-import ListarProyectos from "./pages/listar";
+import ListarProyectos from "./pages/menuProyectos";
 import MisProyectos from "./pages/misProyectos";
 
 /**

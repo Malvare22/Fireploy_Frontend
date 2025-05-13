@@ -171,7 +171,7 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
         if (redesSociales.length == 0)
           return (
             <Chip
-              label="Not Available"
+              label="No Disponibles"
               icon={<ErrorOutlineIcon />}
               color="info"
               sx={{ padding: 1, color: "white" }}
@@ -210,6 +210,8 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
       style: { display: "flex", justifyContent: "center" },
     },
   ];
+
+  console.log(usuarios)
 
   /**
    * Renders responsive Chip with tooltip icon for role.

@@ -67,3 +67,14 @@ export async function patchEditProjectMembers(token: string, projectId: number, 
 
   return response;
 }
+
+export async function patchEditImgProject(token: string, projectId: number, img: Blob) {
+  const formData = new FormData();
+  formData.append("image", img, `${projectId}.png`);
+  const response = await patchData<unknown>(`/proyecto/image/${projectId}`, formData, {
+    sessiontoken: token,
+  });
+
+  return response;
+}
+
