@@ -95,7 +95,8 @@ export default function ProjectSettings({ project }: Props) {
             onChange={(_e, newIndex) => setTabIndex(newIndex)}
             sx={{ borderBottom: 1, borderColor: "divider" }}
             variant="scrollable"
-            scrollButtons="auto"
+            scrollButtons
+            allowScrollButtonsMobile
           >
             <Tab label="Información" icon={<InfoIcon />} iconPosition="start" />
             <Tab label="Repositorios" icon={<GitHubIcon />} iconPosition="start" />
@@ -107,11 +108,7 @@ export default function ProjectSettings({ project }: Props) {
             {tabIndex == 0 && <Information type="edit" />}
             {tabIndex == 1 && <Repositories type="edit" />}
             {tabIndex == 2 && <DataBase type="edit" />}
-            {tabIndex == 3 && (
-              <>
-                <Members />
-              </>
-            )}
+            {tabIndex == 3 && <Members />}
           </Stack>
         </Container>
       </FormProvider>
