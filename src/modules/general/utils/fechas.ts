@@ -67,3 +67,7 @@ export function evaluateDate(a: string, b: string, c: string) {
 
   return valueA <= valueC && valueC <= valueB;
 }
+
+export function sortDates(a: string, b: string) {
+  return new Date(a).getTime() - new Date(b).getTime();
+}

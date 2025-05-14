@@ -11,6 +11,9 @@ declare module "@mui/material/styles" {
     terciary: {
       main: string;
     };
+    email: {
+      main: string;
+    };
   }
 
   /**
@@ -18,6 +21,9 @@ declare module "@mui/material/styles" {
    */
   interface PaletteOptions {
     terciary?: {
+      main: string;
+    };
+    email?: {
       main: string;
     };
   }
@@ -51,6 +57,9 @@ const palette: PaletteOptions = {
   background: {
     default: "#fff",
   },
+  email: {
+    main: '#fffcf4'
+  }
   // success: {
   //   main: "rgb(67, 106, 68)",        // #81C784
   // },

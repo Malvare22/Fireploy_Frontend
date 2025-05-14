@@ -13,9 +13,8 @@ import InfoIcon from "@mui/icons-material/Info";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import StorageIcon from "@mui/icons-material/Storage";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import { ChangeStatus, ExecutionState } from "../executioState";
+import { ChangeStatus, ExecutionState, ShowDeployLoad } from "../executionState";
 import { QueueEntry } from "@modules/proyectos/types/queueEntry";
-import { AlertDialogProvider } from "@modules/general/context/alertDialogContext";
 import { useSocketContext } from "@modules/general/context/socketContext";
 
 type Props = {
@@ -33,8 +32,6 @@ export default function ProjectSettings({ project }: Props) {
 
   const [currentPosition, setCurrentPosition] = useState<null | number>(null);
 
-  const url = getValues("url");
-
   function handleUrl(url: string) {
     if (url) openInNewTab(url);
   }
@@ -49,12 +46,15 @@ export default function ProjectSettings({ project }: Props) {
       }
     };
     socket.on("deploy_position", f);
-    socket.onAny((x) => console.log(x));
 
     return () => {
       socket.off("deploy_position", f);
     };
   }, [socket]);
+
+  console.log(project, currentPosition);
+
+  const definedStatus = currentPosition ? "L" : (project.estadoDeEjecucion ?? "E");
 
   return (
     <Stack spacing={3}>
@@ -62,26 +62,28 @@ export default function ProjectSettings({ project }: Props) {
         <Stack spacing={1}>
           <Stack direction={"row"} alignItems={"center"}>
             <Typography variant="h4">{project.titulo}</Typography>
-            <ExecutionState
-              position={currentPosition}
-              projectStatus={getValues("estadoDeEjecucion") ?? "E"}
-            />
+            <ExecutionState projectStatus={definedStatus} />
             <Tooltip title="Abrir URL">
-              <IconButton disabled={url.trim() === ""} onClick={() => handleUrl(url)}>
+              <IconButton
+                disabled={project.url.trim() === ""}
+                onClick={() => handleUrl(project.url)}
+              >
                 <OpenInNewIcon />
               </IconButton>
             </Tooltip>
           </Stack>
           <Stack direction={"row"} alignItems={"center"} spacing={1}>
-            <AlertDialogProvider>
-              <ChangeStatus
-                id={getValues("id") ?? 0}
-                projectStatus={getValues("estadoDeEjecucion") ?? "E"}
-                position={currentPosition}
-              />
-            </AlertDialogProvider>
+            <ChangeStatus
+              id={project.id ?? 0}
+              projectStatus={definedStatus}
+              position={currentPosition}
+              hasUrl={(project.url.trim() ?? "") != ""}
+            />
           </Stack>
         </Stack>
+        {definedStatus == "L" && (
+          <ShowDeployLoad projectStatus={definedStatus} queuePosition={currentPosition} />
+        )}
         <Container component={Paper} sx={{ p: 4 }}>
           <Typography variant="h4" sx={{ mb: 2 }}>
             {labelConfiguracion.configuracion}

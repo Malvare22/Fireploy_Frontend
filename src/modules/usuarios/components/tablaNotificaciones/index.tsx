@@ -7,7 +7,7 @@
 
 import DataTable, { ConditionalStyles } from "react-data-table-component";
 import { TableColumn } from "react-data-table-component";
-import { Button, Typography, useTheme } from "@mui/material";
+import { Button, Stack, Typography, useTheme } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
@@ -20,7 +20,7 @@ import { paginationComponentOptions } from "@modules/general/utils/pagination";
 import { NotificationMessage } from "@modules/usuarios/types/notification";
 import { patchNotificationCheck } from "@modules/usuarios/services/patch.notificaciones";
 import { labelNotificaciones } from "@modules/usuarios/enum/labelNotificaciones";
-import { adaptDateBackend } from "@modules/general/utils/fechas";
+import { adaptDateBackend, sortDates } from "@modules/general/utils/fechas";
 
 type Props = {
   notificaciones: NotificationMessage[];
@@ -59,44 +59,62 @@ const TablaNotificaciones: React.FC<Props> = ({ notificaciones, refetch }) => {
   const columns: TableColumn<NotificationMessage & { rowIndex: number }>[] = [
     {
       name: <Typography>{labelNotificaciones.titulo}</Typography>,
-      cell: (row) => <Typography>{row.titulo}</Typography>,
+      cell: (row) => <Typography sx={{ fontWeight: 450 }}>{row.titulo}</Typography>,
       sortable: true,
+      sortFunction: (a, b) => {
+        return a.titulo.localeCompare(b.titulo);
+      },
     },
     {
       name: <Typography>{labelNotificaciones.fecha}</Typography>,
       cell: (row) => <Typography>{adaptDateBackend(row.fecha_creacion)}</Typography>,
       sortable: true,
+      sortFunction: (a, b) => sortDates(a.fecha_creacion, b.fecha_creacion),
       width: "150px",
     },
     {
       name: <Typography>{labelNotificaciones.mensaje}</Typography>,
-      cell: (row) => <Typography paddingY={2}>{row.mensaje}</Typography>,
-      sortable: true,
+      cell: (row) => (
+        <Typography paddingY={2} variant="body2">
+          {row.mensaje}
+        </Typography>
+      ),
       width: "400px",
     },
     {
-      name: <Typography>{labelNotificaciones.leido}</Typography>,
+      name: (
+        <Typography sx={{ width: "100%", textAlign: "center" }}>
+          {labelNotificaciones.leido}
+        </Typography>
+      ),
       cell: (row) => {
         if (row.visto) {
           return (
-            <Typography>
-              <CheckCircleIcon />
+            <Typography sx={{ width: "100%", textAlign: "center" }}>
+              <CheckCircleIcon color="info" fontSize="large" />
             </Typography>
           );
         } else {
           return (
-            <Typography>
+            <Stack sx={{ alignItems: "center", width: "100%" }}>
               <Button
                 onClick={() => handleCheck(row.id)}
                 loading={isPending && currentId === row.id}
               >
                 {labelNotificaciones.marcarLeido}
               </Button>
-            </Typography>
+            </Stack>
           );
         }
       },
       sortable: true,
+      sortFunction: (a, b) => {
+        const f = (x: NotificationMessage & { rowIndex: number }) => {
+          return x.visto ? 1 : 0;
+        };
+
+        return f(a) - f(b);
+      },
       wrap: true,
     },
   ];
