@@ -7,7 +7,10 @@ import { ParamsContext } from "@modules/general/context/paramsContext";
 import { StepperContext } from "@modules/general/context/stepperContex";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { getAllAcademicInformation } from "@modules/materias/services/get.materias.services";
-import { patchEditProject } from "@modules/proyectos/services/patch.edit.project";
+import {
+  patchEditImgProject,
+  patchEditProject,
+} from "@modules/proyectos/services/patch.edit.project";
 import { postCreateProject } from "@modules/proyectos/services/post.create.project";
 import {
   ProyectoSchema,
@@ -18,7 +21,6 @@ import {
   Box,
   Button,
   Grid2,
-  IconButton,
   MenuItem,
   Stack,
   TextField,
@@ -31,7 +33,6 @@ import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { urlToBlob } from "@modules/general/utils/urlToBlod";
 import HiddenButton from "@modules/materias/components/hiddenInput";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 type Props = {
   type: "edit" | "create";
@@ -69,7 +70,13 @@ export const Information = ({ type }: Props) => {
 
   const [img, setImg] = useState<null | string | undefined>(getValuesPrincipal("imagen"));
 
-  const [_fileImg, setFileImg] = useState<null | undefined | Blob>(undefined);
+  useEffect(() => {
+    if (getValuesPrincipal("imagen")) setImg(getValuesPrincipal("imagen"));
+  }, []);
+
+  const [fileImg, setFileImg] = useState<null | undefined | Blob>(undefined);
+
+  console.log(fileImg);
 
   const {
     control,
@@ -135,9 +142,9 @@ export const Information = ({ type }: Props) => {
     mutationFn: async () => {
       setIsLoading(true);
       await patchEditProject(token, getValues());
-      // if(fileImg != undefined){
-      //   await 
-      // }
+      if (fileImg != undefined) {
+        await patchEditImgProject(token, getValues("id") ?? 0, fileImg);
+      }
     },
     mutationKey: ["Edit Project"],
     onError: setError,
@@ -231,13 +238,14 @@ export const Information = ({ type }: Props) => {
                   )}
                 />
               </Grid2>
-              <ImagContainer
-                currentImg={img}
-                initialImg=""
-                setCurrentImg={setImg}
-                setFile={setFileImg}
-              />
-
+              {type == "edit" && (
+                <ImagContainer
+                  currentImg={img}
+                  initialImg=""
+                  setCurrentImg={setImg}
+                  setFile={setFileImg}
+                />
+              )}
               {type == "create" && (
                 <>
                   <Grid2 size={4}>
@@ -362,11 +370,7 @@ export const Information = ({ type }: Props) => {
                 </Box>
               ) : (
                 <Box>
-                  <GeneralButton
-                    loading={isPendingCreate}
-                    type="submit"
-                    mode={buttonTypes.save}
-                  />
+                  <GeneralButton loading={isPendingCreate} type="submit" mode={buttonTypes.save} />
                 </Box>
               )}
             </Stack>
@@ -417,17 +421,13 @@ const ImagContainer: React.FC<PropsImageContainer> = ({
     if (ref) ref.current?.click();
   }
 
-  const handleRemovePhoto = () => {
-    setCurrentImg(null);
-  };
-
   return (
     <Box>
       {currentImg && (
         <Box
           component={"img"}
           src={currentImg ?? ""}
-          sx={{ width: "300px", height: "170px", objectFit: "contain" }}
+          sx={{ width: "300px", height: "170px", objectFit: "contain", border: '1px solid rgb(0,0,0,0.2)' }}
         />
       )}
       {/* <Alert severity="info">La resolución de la imagen debe ser de mínimo 300x170px</Alert> */}
@@ -445,9 +445,6 @@ const ImagContainer: React.FC<PropsImageContainer> = ({
               Cambiar imagen
             </Button>
           </label>
-          <IconButton onClick={handleRemovePhoto} disabled={!currentImg}>
-            <DeleteIcon sx={{ fontSize: 32 }} />
-          </IconButton>
         </Stack>
       </Box>
     </Box>
