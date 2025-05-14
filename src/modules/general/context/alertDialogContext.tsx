@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from "react";
 import useAlertDialog, { ShowDialogParams } from "../hooks/useAlertDialog";
-import AlertDialog, { AlertDialogTypes } from "../components/alertDialog";
+import { AlertDialogTypes } from "../components/alertDialog";
 
 type AlertDialogContextType = {
   open: boolean;
@@ -28,22 +28,5 @@ export const useAlertDialogContext = (): AlertDialogContextType => {
 export const AlertDialogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const dialog = useAlertDialog();
 
-  const { handleAccept, handleCancel, isLoading, open, title, type, message } = dialog;
-
-  return (
-    <AlertDialogContext.Provider value={dialog}>
-      {children}
-      {open && (
-        <AlertDialog
-          handleAccept={handleAccept}
-          open={open}
-          title={title}
-          isLoading={isLoading}
-          type={type}
-          textBody={message}
-          handleCancel={handleCancel}
-        />
-      )}
-    </AlertDialogContext.Provider>
-  );
+  return <AlertDialogContext.Provider value={dialog}>{children}</AlertDialogContext.Provider>;
 };

@@ -10,6 +10,7 @@ import {
 import { UsuarioCampoBusqueda } from "@modules/general/hooks/useSearchUsers";
 import { UsuarioPortafolioCard } from "../types/usuario.portafolio";
 import { getUserLetterTypes, UserTypeFullString } from "./usuario.map";
+import { removeImageBuffer } from "@modules/general/utils/removeImageBuffer";
 
 /**
  * Adapts a `UsuarioService` object to a standardized `Usuario` object.
@@ -57,7 +58,7 @@ export const adaptUser = (usuario: UsuarioService): Usuario => {
     fotoDePerfil:
       usuario.foto_perfil == "" || !usuario.foto_perfil
         ? ""
-        : `${usuario.foto_perfil.replace(/\?t=.*/, "")}?t=${Date.now()}}`,
+        : removeImageBuffer(usuario.foto_perfil),
     redSocial: adaptRedSocial(usuario.red_social),
     descripcion: usuario.descripcion ?? "",
   };

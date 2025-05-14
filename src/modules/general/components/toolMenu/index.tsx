@@ -179,6 +179,8 @@ function ToolbarActions({
     router(rutasUsuarios.notificaciones);
   }
 
+  const theme = useTheme();
+
   return (
     <Box sx={{ paddingRight: "14px" }}>
       <IconButton onClick={handleClick}>
@@ -201,23 +203,56 @@ function ToolbarActions({
         MenuListProps={{
           "aria-labelledby": "basic-button",
         }}
+        // anchorOrigin={{
+        //   vertical: "bottom",
+        //   horizontal: "left",
+        // }}
+        // transformOrigin={{
+        //   vertical: "top",
+        //   horizontal: "center",
+        // }}
+        sx={{
+          "& .MuiPaper-root, .MuiList-root": {
+            padding: 0,
+            maxWidth: '100vw',
+             width: "100vw",
+          },
+        }}
       >
-        <Stack spacing={1} sx={{ maxWidth: { xs: "300px", md: "400px" } }}>
+        <Stack
+          spacing={1}
+          sx={{
+            backgroundColor: theme.palette.email.main,
+            width: {
+              xs: "100%",
+              md: "400px",
+            },
+          }}
+        >
           <Stack spacing={1}>
+            <Typography variant="h5" paddingTop={1} textAlign={"center"}>
+              Notificación
+            </Typography>
+            <Divider />
             {notificaciones.length > 0 ? (
               notificaciones.slice(0, 5).map((notificacion) => (
-                <Box>
-                  <Typography>{notificacion.mensaje}</Typography>
+                <>
+                  <Box  paddingY={1}>
+                    <Typography sx={{ fontWeight: 700 }} variant="subtitle2">
+                      {notificacion.titulo}
+                    </Typography>
+                    <Typography variant="subtitle2">{notificacion.mensaje}</Typography>
+                  </Box>
                   <Divider />
-                </Box>
+                </>
               ))
             ) : (
               <Alert severity="info">No se encontraron notificaciones nuevas</Alert>
             )}
           </Stack>
-          <Stack alignItems={"center"}>
+          <Stack alignItems={"center"} paddingY={1}>
             <Box>
-              <Button size="small" onClick={handleNav}>
+              <Button size="small" variant="outlined" color="info" onClick={handleNav}>
                 Ver Más
               </Button>
             </Box>
