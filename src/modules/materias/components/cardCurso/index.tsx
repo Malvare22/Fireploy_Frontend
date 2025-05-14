@@ -53,7 +53,7 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, userType, isRegis
   const { id } = useAuth().accountInformation;
 
   const labelText = () => {
-    if (userType == "E") isRegister ? labelCardCurso.inscrito : labelCardCurso.inscribirme;
+    if (userType == "E") return isRegister ? 'Acceder' : labelCardCurso.inscribirme;
 
     if (userType == "D" && curso.docente == null) {
       return "Solicitar Curso";

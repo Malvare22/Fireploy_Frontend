@@ -1,106 +1,129 @@
-import { Alert, Box, Card, Chip, Stack, Tooltip, Typography } from "@mui/material";
-import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
-import { labelProjectForList } from "@modules/proyectos/enum/labelProjectForList";
 import {
-  getColorExecutionState,
-  getExecutionState,
-} from "@modules/proyectos/utils/getExecutionState";
+  Alert,
+  Box,
+  Button,
+  Chip,
+  Divider,
+  keyframes,
+  Paper,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
 import { useNavigate } from "react-router";
 import { rutasProyectos } from "@modules/proyectos/router";
-import ActionButton from "@modules/general/components/actionButton";
-import { actionButtonTypes } from "@modules/general/types/actionButtons";
-
+import SettingsIcon from "@mui/icons-material/Settings";
+import { ExecutionState } from "../executionState";
+import { getImage } from "@modules/general/utils/getImage";
 interface Props {
   proyecto: Proyecto;
 }
 
-/**
- * ProjectForList component – This component displays the summary information of a project in a card format for a project list.
- * It includes the project's title, status, image, associated technologies, and a button to view more details.
- * The component also visually indicates the execution state of the project using color-coded statuses and provides a warning if there are no technologies associated with the project.
- *
- * @component
- *
- * @param {Object} props - The component props.
- * @param {Proyecto} props.proyecto - The project data to display in the list.
- *
- * @returns {JSX.Element} A card displaying a project's summary with status, image, technologies, and an action button to view more details.
- *
- * @example
- * ```tsx
- * <ProjectForList proyecto={projectData} />
- * ```
- */
 const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
-  const colorState = getColorExecutionState(proyecto.estadoDeEjecucion ?? "E") as string;
+  const myEffect = keyframes`
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 0.8;
+  }
+
+`;
+
+  function TechnologyTags() {
+    return (
+      <Stack direction="row" alignItems="center" spacing={1} useFlexGap flexWrap="wrap">
+        {proyecto.backend?.docker?.framework && (
+          <Chip label={proyecto.backend?.docker?.framework} color="error" />
+        )}
+        {proyecto.frontend?.docker?.framework && (
+          <Chip label={proyecto.frontend?.docker?.framework} color="primary" />
+        )}
+        {proyecto.integrado?.docker?.framework && (
+          <Chip label={proyecto.integrado?.docker?.framework} color="info" />
+        )}
+        {!proyecto.integrado?.docker?.framework &&
+          !proyecto.frontend?.docker?.framework &&
+          !proyecto.backend?.docker?.framework && (
+            <Alert severity="warning">
+              Este proyecto actualmente no cuenta con tecnologías vinculadas
+            </Alert>
+          )}
+      </Stack>
+    );
+  }
 
   const navigate = useNavigate();
 
-  function onClick(id: number) {
-    navigate(rutasProyectos.ver.replace(":id", id.toString()));
+  function handleEdit() {
+    navigate(rutasProyectos.ver.replace(":id", (proyecto.id ?? "-1").toString()));
   }
 
+  const theme = useTheme();
+
   return (
-    <Card sx={{ padding: 4, position: "relative" }}>
-      <ActionButton
-        sx={{ position: "absolute", right: 4, top: 4, fontSize: 32 }}
-        mode={actionButtonTypes.editar}
-        onClick={() => onClick(proyecto.id || -1)}
+    <Paper
+      variant="elevation"
+      sx={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: 'space-around',
+        gap: 2,
+        padding: 2,
+        position: "relative",
+      }}
+    >
+      <Box
+        component={"img"}
+        src={proyecto.imagen ?? getImage["not_found"].ruta}
+        sx={{
+          border: "rgb(0,0,0,0.2) 1px solid",
+          width: "100%",
+          height: "250px", // 🔧 Altura fija
+          objectFit: "cover", // 🔧 Mejor apariencia con recorte
+        }}
       />
-      <Stack spacing={2}>
-        <Typography variant="h4" textAlign={{ xs: "center", sm: "start" }} color="info">
-          {proyecto.titulo}
-        </Typography>
-        <Stack direction={{ lg: "row", xs: "column" }} alignItems={"center"} spacing={3}>
-          <Box
-            component={"img"}
-            src={proyecto.imagen ?? ""}
-            sx={{
-              width: 256,
-              height: 164,
-            }}
-          ></Box>
-          <Box>
-            <Stack spacing={2}>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <Typography variant="body1">{labelProjectForList.estado}</Typography>
-                <Tooltip
-                  title={getExecutionState[proyecto.estadoDeEjecucion ?? "E"]}
-                  placement="top"
-                >
-                  <Box
-                    sx={{
-                      width: 24,
-                      height: 24,
-                      backgroundColor: colorState,
-                      borderRadius: 1,
-                    }}
-                  />
-                </Tooltip>
-              </Box>
-              <Stack direction={{ sm: "row", xs: "column" }} alignItems={"center"} spacing={3}>
-                {proyecto.backend?.docker?.framework && (
-                  <Chip label={proyecto.backend?.docker?.framework} color="error" />
-                )}
-                {proyecto.frontend?.docker?.framework && (
-                  <Chip label={proyecto.frontend?.docker?.framework} color="primary" />
-                )}
-                {proyecto.integrado?.docker?.framework && (
-                  <Chip label={proyecto.integrado?.docker?.framework} color="info" />
-                )}
-                {!proyecto.integrado?.docker?.framework &&
-                  !proyecto.frontend?.docker?.framework &&
-                  !proyecto.backend?.docker?.framework && (
-                    <Alert severity="warning">
-                      Este proyecto actualmente no tiene tecnologías vinculadas
-                    </Alert>
-                  )}
-              </Stack>
-            </Stack>
-          </Box>
-        </Stack>
+
+      <Box
+        sx={{
+          position: "absolute",
+          left: 25,
+          top: 25,
+          display: "flex",
+          justifyContent: "center",
+          borderRadius: 3,
+          padding: 0.5,
+          backgroundColor: theme.palette.background.paper,
+          animation: `${myEffect} 1s infinite alternate`,
+        }}
+      >
+        <ExecutionState projectStatus={proyecto.estadoDeEjecucion ?? "E"} />
+      </Box>
+
+      <Stack alignItems={'center'} spacing={3} >
+        <Typography variant="h4">{proyecto.titulo} asdasd</Typography>
+        <TechnologyTags />
       </Stack>
-    </Card>
+
+      <Stack spacing={2} sx={{ width: "100%" }}>
+        <Divider sx={{ color: "black" }} />
+        <Box sx={{ display: "flex", width: "100%", justifyContent: "end" }}>
+          <Button
+            variant="contained"
+            color="secondary"
+            size="small"
+            endIcon={<SettingsIcon />}
+            onClick={handleEdit}
+          >
+            Configurar
+          </Button>
+        </Box>
+      </Stack>
+    </Paper>
   );
 };
 

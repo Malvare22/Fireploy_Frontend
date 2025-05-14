@@ -127,12 +127,12 @@ function VerCursosMateria() {
    * Mutation to register student to a course
    */
   const { isPending: isPendingRegister, mutate: mutateRegister } = useMutation({
-    mutationFn: async () => {
+    mutationFn: async ({cursoId, studentId}:{cursoId: string, studentId: number}) => {
       setIsLoading(true);
-      if (!IS_TEACHER) return await patchEstudiantesCurso(token, [id], "A", idCurso ?? "");
-      else return await postCreateSolicitudCurso(token, id, idCurso ?? "");
+      if (!IS_TEACHER) return await patchEstudiantesCurso(token, [studentId], "A", cursoId);
+      else return await postCreateSolicitudCurso(token, id, cursoId ?? "");
     },
-    mutationKey: ["Register In Group", id, idCurso ?? ""],
+    mutationKey: ["Register In Group"],
     onSuccess: () => {
       const isStudentNow = !IS_TEACHER;
       showDialog({
@@ -160,7 +160,7 @@ function VerCursosMateria() {
 
   /** Confirm registration when user accepts modal */
   function handleAcceptConfirmation() {
-    mutateRegister();
+    mutateRegister({cursoId: idCurso ?? '', studentId: id});
   }
 
   /** Modal dialog hook */
@@ -232,7 +232,7 @@ function VerCursosMateria() {
                           isRegister={myGroupsIds?.get(curso.id ?? "-1") ?? false}
                           onClick={() => handleIdGroup(curso.id)}
                           curso={curso}
-                          userType={tipo}
+                          userType={'E'}
                         />
                       </Grid2>
                     ))}

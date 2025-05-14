@@ -2,7 +2,7 @@ import ProjectForList from "@modules/proyectos/components/projectForList";
 import { labelProjectForList } from "@modules/proyectos/enum/labelProjectForList";
 import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
 // import { getExecutionStateArray } from "@modules/proyectos/utils/getExecutionState";
-import { Alert, Box, Button, Stack, Typography } from "@mui/material";
+import { Alert, Box, Button, Grid2, Stack, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getProjectByUserId } from "@modules/proyectos/services/get.project";
@@ -17,16 +17,16 @@ import { rutasProyectos } from "@modules/proyectos/router";
 
 /**
  * MisProyectos component – A page that lists the projects belonging to the authenticated user.
- * 
+ *
  * This component displays the user's projects in a list, along with a notification section
  * that provides information and a button to navigate to the databases section. The component
  * handles loading states, errors, and displays an alert dialog for error handling.
  * It also allows users to navigate between different sections of the app (such as databases).
- * 
+ *
  * @component
- * 
+ *
  * @returns {JSX.Element} A page that shows a list of the user's projects with a notification section.
- * 
+ *
  * @example
  * ```tsx
  * <MisProyectos />
@@ -147,11 +147,13 @@ function MisProyectos() {
             sorterOptions={sorterOptions}
             setRefineData={setBufferSort}
           /> */}
-            <Stack spacing={2} paddingX={{xl:20, lg: 14, md: 6, xs: 2}}>
-              {projects.map((proyecto, key) => (
+          <Grid2 container spacing={2} paddingX={{  md: 6, xs: 2 }}>
+            {projects.map((proyecto, key) => (
+              <Grid2 size={{ md: 6, xs: 12 }}>
                 <ProjectForList proyecto={proyecto} key={key} />
-              ))}
-            </Stack>
+              </Grid2>
+            ))}
+          </Grid2>
         </Stack>
       )}
     </>

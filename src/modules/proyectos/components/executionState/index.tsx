@@ -33,6 +33,7 @@ type Props = {
   projectStatus: EstadoEjecucionProyecto;
 };
 export function ExecutionState({ projectStatus }: Props) {
+
   const ShowState = useMemo(() => {
     switch (projectStatus) {
       case "E":
@@ -63,7 +64,7 @@ export function ExecutionState({ projectStatus }: Props) {
     return <></>;
   }, [projectStatus]);
 
-  return <Box sx={{ marginLeft: 1, display: "flex", alignItems: "center" }}>{ShowState}</Box>;
+  return <Box sx={{ display: "flex", alignItems: "center"}}>{ShowState}</Box>;
 }
 
 type ShowDeployLoadProps = {
@@ -71,8 +72,8 @@ type ShowDeployLoadProps = {
   projectStatus: EstadoEjecucionProyecto;
 };
 export function ShowDeployLoad({ queuePosition, projectStatus }: ShowDeployLoadProps) {
+
   const theme = useTheme();
-  console.log(projectStatus, queuePosition)
   return (
     <>
       {projectStatus == "L" && (

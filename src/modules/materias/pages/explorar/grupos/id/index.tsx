@@ -4,61 +4,67 @@ import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import SpringModal from "@modules/general/components/springModal";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog, { ShowDialogParams } from "@modules/general/hooks/useAlertDialog";
-import useErrorReader from "@modules/general/hooks/useErrorReader";
+import useErrorReader, { SpecialError } from "@modules/general/hooks/useErrorReader";
 import CardSeccion from "@modules/materias/components/cardSeccion";
 import { LabelCurso } from "@modules/materias/enums/labelCurso";
-import { getCursoById } from "@modules/materias/services/get.curso";
+import { getCursoById, getCursos } from "@modules/materias/services/get.curso";
 import { Curso } from "@modules/materias/types/curso";
 import { CursoService } from "@modules/materias/types/curso.service";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
 import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyectoPortafolio";
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
-import { Avatar, Button, Card, Grid2, Stack, Typography, useTheme } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import {
+  Alert,
+  Avatar,
+  Box,
+  Button,
+  Card,
+  Grid2,
+  IconButton,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+  MenuList,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { createContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import { patchEstudiantesCurso } from "@modules/materias/services/patch.curso.estudiantes";
+import { rutasProyectos } from "@modules/proyectos/router";
 
 export const DialogContext = createContext({
   showDialog: (_x: ShowDialogParams) => {},
   setError: (_x: any) => {},
 });
 
-/**
- * VerInformacionCurso component – Displays detailed information about a specific course (Curso).
- * 
- * This component fetches the course details using `getCursoById` API call and displays:
- * - The subject (Materia) name
- * - The course group name
- * - The course description
- * - Sections associated with the course
- * 
- * It manages loading and error states, displaying loading spinners and dialogs for feedback.
- * 
- * @component
- * 
- * @example
- * ```tsx
- * <VerInformacionCurso />
- * ```
- * 
- * @returns {JSX.Element} The rendered component displaying the detailed course information.
- *
- * @notes
- * - Displays information about the selected course, its sections, and related subject.
- * - Shows a loading spinner while fetching data and error messages if something goes wrong.
- * - Allows interaction with course sections, opening modals with project details if available.
- */
 function VerInformacionCurso() {
   /** Get course ID from route parameters */
   const { idCurso } = useParams();
 
+  const navigate = useNavigate();
+
   /** Get auth token from context */
   const { accountInformation } = useAuth();
-  const { token } = accountInformation;
+  const { token, id: idUser, tipo } = accountInformation;
 
   /** Dialog and loading management */
-  const { showDialog, open, title, message, type, handleAccept, isLoading } = useAlertDialog();
+  const {
+    showDialog,
+    open,
+    title,
+    message,
+    type,
+    handleAccept,
+    isLoading,
+    setIsLoading,
+    handleCancel,
+  } = useAlertDialog();
 
   /** Error handling with alert dialog */
   const { setError } = useErrorReader(showDialog);
@@ -73,7 +79,19 @@ function VerInformacionCurso() {
   } = useQuery({
     queryFn: async () => {
       const response = await getCursoById(token, idCurso ?? "-1");
-      return { ...response, id: idCurso } as CursoService;
+      let myGroups: CursoService[] = [];
+      if (tipo == "E") myGroups = await getCursos(token, { estudiantes: idUser });
+      if (tipo == "D") myGroups = await getCursos(token, { docente: idUser });
+
+      let flag = false;
+      myGroups.forEach((course) => {
+        if (course.id === idCurso) {
+          flag = true;
+          return;
+        }
+      });
+      if (flag) return { ...response, id: idCurso } as CursoService;
+      throw new SpecialError("No te encuentras registrado en este curso", "FRONTEND_ERROR");
     },
     queryKey: ["Get Curso By Id", idCurso ?? "-1"],
   });
@@ -110,18 +128,99 @@ function VerInformacionCurso() {
     open: openModal,
   } = useModal();
 
+  function MenuCurso() {
+    /**
+     * Mutation to remove student to a course
+     */
+    const { mutate: logoutCourse } = useMutation({
+      mutationFn: async ({ cursoId, studentId }: { cursoId: string; studentId: number }) => {
+        setIsLoading(true);
+        return await patchEstudiantesCurso(token, [studentId], "D", cursoId);
+      },
+      mutationKey: ["Register In Group"],
+      onSuccess: () => {
+        showDialog({
+          title: "Retirarse del curso",
+          message: "Te has desvinculado en el curso correctamente",
+          type: "success",
+          onAccept: () => {
+            navigate(rutasProyectos.menu);
+          },
+        });
+      },
+      onError: (error) => setError(error),
+    });
+
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+
+    function handleLeaveCourse() {
+      showDialog({
+        message: `¿Está seguro de que desea desvincularse del curso ${curso?.materia?.nombre ?? ""}:${curso?.grupo ?? ""}?`,
+        title: "Desvinculación de curso",
+        onAccept: () => {
+          logoutCourse({ cursoId: idCurso ?? "", studentId: idUser });
+        },
+        onCancel: () => handleClose(),
+        type: "default",
+      });
+    }
+
+    return (
+      <div>
+        <IconButton onClick={handleClick} size="large">
+          <MoreVertIcon />
+        </IconButton>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            "aria-labelledby": "basic-button",
+          }}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+        >
+          <MenuList>
+            <MenuItem onClick={handleLeaveCourse}>
+              <ListItemIcon>
+                <ExitToAppIcon fontSize="medium" color="error" />
+              </ListItemIcon>
+              <Typography variant="body2" color="error">
+                Desvincularse del curso
+              </Typography>
+            </MenuItem>
+          </MenuList>
+        </Menu>
+      </div>
+    );
+  }
+
   return (
     <DialogContext.Provider value={{ showDialog: showDialog, setError: setError }}>
       {/* Generic alert dialog for success/error */}
       <AlertDialog
         handleAccept={handleAccept}
+        handleCancel={handleCancel}
         open={open}
         title={title}
         textBody={message}
         type={type}
         isLoading={isLoading}
       />
-
       <SpringModal handleClose={handleCloseModal} open={openModal}>
         <>{projectSelect && <ModalProyectoPortafolio proyecto={projectSelect} />}</>
       </SpringModal>
@@ -135,9 +234,16 @@ function VerInformacionCurso() {
           {curso && (
             <Stack spacing={3} paddingX={{ lg: 5 }}>
               {/* Subject name and course group */}
-              <Typography variant="h3">
-                {curso.materia?.nombre} - {curso.grupo}
-              </Typography>
+              <Stack direction={"row"} justifyContent={"space-between"}>
+                <Typography variant="h3">
+                  {curso.materia?.nombre} - {curso.grupo}
+                </Typography>
+                {tipo == "E" && (
+                  <Box>
+                    <MenuCurso />
+                  </Box>
+                )}
+              </Stack>
 
               {/* Course description */}
               <Typography variant="h6" sx={{ maxWidth: 600 }}>
@@ -152,15 +258,21 @@ function VerInformacionCurso() {
                 {/* List of course sections */}
                 <Grid2 size={{ xs: 12, lg: 8 }}>
                   <Stack spacing={2}>
-                    {curso.secciones?.map((seccion, key) => (
-                      <CardSeccion
-                        seccion={seccion}
-                        idMateria={curso.materia?.id ?? 0}
-                        idCurso={curso.id}
-                        handleCard={handleCard}
-                        key={key}
-                      />
-                    ))}
+                    {curso.secciones && curso.secciones.length > 0 ? (
+                      curso.secciones?.map((seccion, key) => (
+                        <CardSeccion
+                          seccion={seccion}
+                          idMateria={curso.materia?.id ?? 0}
+                          idCurso={curso.id}
+                          handleCard={handleCard}
+                          key={key}
+                        />
+                      ))
+                    ) : (
+                      <Alert severity="info">
+                        Este curso actualmente no tiene secciones agregadas
+                      </Alert>
+                    )}
                   </Stack>
                 </Grid2>
 
