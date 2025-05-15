@@ -45,21 +45,21 @@ import { removeImageBuffer } from "@modules/general/utils/removeImageBuffer";
  * const usuarioAdaptado = adaptUser(usuarioService);
  * console.log(usuarioAdaptado);
  */
-export const adaptUser = (usuario: UsuarioService): Usuario => {
+export const adaptUser = (usuario: Partial<UsuarioService>): Usuario => {
   const _usuario: Usuario = {
-    correo: usuario.correo,
+    correo: usuario.correo ?? '',
     id: usuario.id,
-    fechaDeNacimiento: adaptDateBackend(usuario.fecha_nacimiento),
+    fechaDeNacimiento:  usuario.fecha_nacimiento ? adaptDateBackend(usuario.fecha_nacimiento) : '',
     estado: usuario.estado as EstadoUsuario,
     tipo: getUserLetterTypes.get(usuario.tipo as UserTypeFullString) as TiposUsuario,
-    nombres: usuario.nombre,
+    nombres: usuario.nombre ?? '',
     apellidos: usuario.apellido,
     sexo: usuario.sexo as SexoUsuario,
     fotoDePerfil:
       usuario.foto_perfil == "" || !usuario.foto_perfil
         ? ""
         : removeImageBuffer(usuario.foto_perfil),
-    redSocial: adaptRedSocial(usuario.red_social),
+    redSocial: usuario.red_social ? adaptRedSocial(usuario.red_social) : '',
     descripcion: usuario.descripcion ?? "",
   };
 

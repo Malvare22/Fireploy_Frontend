@@ -1,6 +1,7 @@
 import { ProjectCardAvatar } from "@modules/general/components/projectCardAvatar";
 import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
 import {
+  Box,
   Button,
   Chip,
   Divider,
@@ -235,11 +236,11 @@ export const Members = () => {
         textBody={message}
       />
       <Stack>
-        <Stack marginBottom={2} direction={"row"} justifyContent={"space-between"}>
+        <Stack marginBottom={2} direction={{md:"row"}} spacing={{md: 0, xs: 1}} justifyContent={{md: "space-between"}}>
           <Typography variant="h5">{labelConfiguracion.colaboradores}</Typography>
-          <Button variant="contained" size="small" onClick={handleOpenModalAddUsers}>
+         <Box> <Button variant="contained" size="small" onClick={handleOpenModalAddUsers}>
             {labelConfiguracion.invitarIntegrantes}
-          </Button>
+          </Button></Box>
         </Stack>
         <Typography variant="body1" marginBottom={3}>
           {labelConfiguracion.colaboradoresParrafo}
@@ -317,7 +318,7 @@ const CardMember: React.FC<CardMemberProps> = ({
       justifyContent={"space-between"}
       padding={2}
     >
-      <Stack direction={{ md: "row", xs: "column" }} spacing={1} alignItems={"center"}>
+      <Stack direction={{ md: "row", xs: "column" }} spacing={1} alignItems={{md: "center"}}>
         <Stack direction={"row"} alignItems={"center"}>
           <ProjectCardAvatar
             usuario={{
@@ -329,8 +330,8 @@ const CardMember: React.FC<CardMemberProps> = ({
           />
           <Typography variant="h6">{member.nombre}</Typography>
         </Stack>
-        {isMe && <Chip color="primary" label={labelConfiguracion.eresTu} />}
-        {isOwner && <Chip color="secondary" label={labelConfiguracion.propietario} />}
+        {isMe && <Box><Chip color="primary" label={labelConfiguracion.eresTu} /></Box>}
+        {isOwner && <Box><Chip color="secondary" label={labelConfiguracion.propietario} /></Box>}
       </Stack>
       {editable && (
         <Stack>

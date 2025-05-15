@@ -97,7 +97,6 @@ export const routerMaterias: RouteObject[] = [
     path: rutasMaterias.crearMateria,
     element: <VistaCrearMateria />,
   },
-  
   {
     path: rutasMaterias.solicitudes,
     element: <VistaSolicitudes />,

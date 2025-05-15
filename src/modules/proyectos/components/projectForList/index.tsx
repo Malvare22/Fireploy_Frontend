@@ -76,8 +76,8 @@ const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
       <Stack alignItems={"center"} spacing={3}>
         <Typography variant="h4">{proyecto.titulo} asdasd</Typography>
         <TechnologyTags
-          backend={proyecto.backend?.docker?.framework ?? undefined}
-          frontend={proyecto.frontend?.docker?.framework ?? undefined}
+          backend={proyecto.backend?.informacion?.framework ?? undefined}
+          frontend={proyecto.frontend?.informacion?.framework ?? undefined}
           dataBase={getDataBaseTypesMap.get(proyecto.baseDeDatos?.tipo ?? "E")}
         />
       </Stack>

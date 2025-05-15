@@ -2,6 +2,7 @@ import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { showSocialNetworks } from "@modules/usuarios/utils/showSocialNetworks";
 import {
+  Alert,
   Avatar,
   Box,
   Card,
@@ -71,7 +72,7 @@ const Portafolio = () => {
   const { id } = useParams();
 
   const { accountInformation } = useAuth();
-  const { token } = accountInformation;
+  const { token, id: idAccount } = accountInformation;
   const [usuario, setUsuario] = useState<Usuario | undefined>(undefined);
   const [projects, setProjects] = useState<ProyectoCard[]>([]);
 
@@ -129,8 +130,6 @@ const Portafolio = () => {
       resolver: zodResolver(UsuarioSchema),
       defaultValues: user,
     });
-
-    console.log(errors)
 
     const token = useAuth().accountInformation.token;
 
@@ -266,7 +265,11 @@ const Portafolio = () => {
               <GeneralButton mode={buttonTypes.save} loading={isPending} type="submit" />
             </Box>
             <Box>
-              <GeneralButton mode={buttonTypes.cancel} onClick={handleCloseModalEdit} disabled={isPending} />
+              <GeneralButton
+                mode={buttonTypes.cancel}
+                onClick={handleCloseModalEdit}
+                disabled={isPending}
+              />
             </Box>
           </Stack>
         </Stack>
@@ -311,13 +314,15 @@ const Portafolio = () => {
                   position: "relative",
                 }}
               >
-                <Box sx={{ position: "absolute", right: 10, top: 10 }}>
-                  <Tooltip title="Editar">
-                    <IconButton onClick={handleOpenModalEdit}>
-                      <EditIcon sx={{ fontSize: 32 }} />
-                    </IconButton>
-                  </Tooltip>
-                </Box>
+                {idAccount === parseInt(id ?? "-1") && (
+                  <Box sx={{ position: "absolute", right: 10, top: 10 }}>
+                    <Tooltip title="Editar">
+                      <IconButton onClick={handleOpenModalEdit}>
+                        <EditIcon sx={{ fontSize: 32 }} />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
+                )}
                 <Stack spacing={3}>
                   <Stack spacing={3} alignItems={"center"}>
                     <Avatar src={usuario.fotoDePerfil} sx={{ width: 96, height: 96 }} />
@@ -339,7 +344,7 @@ const Portafolio = () => {
                   </Stack>
                   <Stack alignItems={"center"} spacing={3}>
                     <Stack direction="row" spacing={2}>
-                      {showSocialNetworks(usuario.redSocial)}
+                      {showSocialNetworks(usuario.redSocial, { sx: { fontSize: 32 } })}
                     </Stack>
                     <Grid2 container spacing={2} display={"flex"} justifyContent={"center"}>
                       {[0, 1, 2].map(() => (
@@ -409,17 +414,26 @@ const Portafolio = () => {
                 </Card>
 
                 <Box sx={{ flexGrow: 1 }}>
-                  <Grid2 container spacing={1} rowSpacing={4} justifyContent={"space-between"}>
-                    {filterDataFn(orderDataFn(projects)).map((proyecto) => (
-                      <Grid2
-                        size={{ xl: 4, sm: 6, xs: 12 }}
-                        display={"flex"}
-                        justifyContent={"center"}
-                      >
-                        <ProjectCard handleOpen={() => handleCard(proyecto)} proyecto={proyecto} />
-                      </Grid2>
-                    ))}
-                  </Grid2>
+                  {projects.length > 0 ? (
+                    <Grid2 container spacing={1} rowSpacing={4}>
+                      {filterDataFn(orderDataFn(projects)).map((proyecto) => (
+                        <Grid2
+                          size={{ xl: 4, sm: 6, xs: 12 }}
+                          display={"flex"}
+                          justifyContent={"center"}
+                        >
+                          <ProjectCard
+                            handleOpen={() => handleCard(proyecto)}
+                            proyecto={proyecto}
+                          />
+                        </Grid2>
+                      ))}
+                    </Grid2>
+                  ) : (
+                    <Alert severity={"info"} sx={{ width: "100&" }}>
+                      No se han encontrado proyectos
+                    </Alert>
+                  )}
                 </Box>
               </Stack>
             </Box>

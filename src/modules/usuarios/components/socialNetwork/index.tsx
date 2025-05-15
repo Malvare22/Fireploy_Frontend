@@ -1,9 +1,11 @@
 import { RedSocialUsuario } from "@modules/usuarios/types/usuario";
 import { Facebook, Instagram, LinkedIn, GitHub, Twitter } from "@mui/icons-material";
+import ErrorIcon from '@mui/icons-material/Error';
+import { SvgIconProps } from "@mui/material";
 
 type SocialNetworkProps = {
   redSocial: keyof RedSocialUsuario;
-};
+} & SvgIconProps;
 
 /**
  * SocialNetworkIcon component – renders the corresponding icon for a user's social media based on the provided key.
@@ -22,7 +24,7 @@ type SocialNetworkProps = {
  * <SocialNetworkIcon redSocial="facebook" />
  * ```
  */
-const SocialNetworkIcon: React.FC<SocialNetworkProps> = ({ redSocial }) => {
+const SocialNetworkIcon: React.FC<SocialNetworkProps> = ({ redSocial, ...props }) => {
   /**
    * Returns the appropriate Material UI icon component based on the provided social network key.
    *
@@ -31,17 +33,17 @@ const SocialNetworkIcon: React.FC<SocialNetworkProps> = ({ redSocial }) => {
   const getSocialIcon = () => {
     switch (redSocial) {
       case "facebook":
-        return <Facebook />;
+        return <Facebook {...props}/>;
       case "instagram":
-        return <Instagram />;
+        return <Instagram {...props}/>;
       case "linkedin":
-        return <LinkedIn />;
+        return <LinkedIn {...props}/>;
       case "x":
-        return <Twitter />;
+        return <Twitter {...props}/>;
       case "github":
-        return <GitHub />;
+        return <GitHub {...props}/>;
       default:
-        return null;
+        return <ErrorIcon></ErrorIcon>;
     }
   };
 

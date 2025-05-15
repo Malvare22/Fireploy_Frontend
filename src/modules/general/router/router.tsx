@@ -12,6 +12,8 @@ import TeamView from "../pages/team";
 import { routerUsuarios } from "@modules/usuarios/router/router";
 import { routerProyectos } from "@modules/proyectos/router";
 import TecnologiesView from "../pages/tecnologies";
+import Portafolio from "@modules/usuarios/components/portafolio";
+import ExplorarPortafolios from "@modules/usuarios/pages/explorarPortafolios";
 
 /**
  * Base route path of the application.
@@ -39,6 +41,8 @@ export enum rutasGeneral {
   developTeam = rutaBase + "developTeam",
   tecnologias = rutaBase + "tecnologias",
   detectAnomaly = rutaBase + "detectAnomaly",
+  portafolios = rutaBase + "portafolios",
+  portafolioByUser = rutaBase + "portafolios/:id",
 }
 
 /**
@@ -90,6 +94,14 @@ export const routerGeneral: RouteObject = {
     {
       path: rutasGeneral.detectAnomaly,
       element: <ErrorPage />,
+    },
+    {
+      path: rutasGeneral.portafolioByUser,
+      element: <Portafolio />,
+    },
+    {
+      path: rutasGeneral.portafolios,
+      element: <ExplorarPortafolios />,
     },
     {
       path: "*",
