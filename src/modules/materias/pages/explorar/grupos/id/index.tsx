@@ -90,7 +90,7 @@ function VerInformacionCurso() {
           return;
         }
       });
-      if (flag) return { ...response, id: idCurso } as CursoService;
+      if (tipo == 'A' || flag) return { ...response, id: idCurso } as CursoService;
       throw new SpecialError("No te encuentras registrado en este curso", "FRONTEND_ERROR");
     },
     queryKey: ["Get Curso By Id", idCurso ?? "-1"],
