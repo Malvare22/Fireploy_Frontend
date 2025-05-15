@@ -203,19 +203,17 @@ function ToolbarActions({
         MenuListProps={{
           "aria-labelledby": "basic-button",
         }}
-        // anchorOrigin={{
-        //   vertical: "bottom",
-        //   horizontal: "left",
-        // }}
-        // transformOrigin={{
-        //   vertical: "top",
-        //   horizontal: "center",
-        // }}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
         sx={{
           "& .MuiPaper-root, .MuiList-root": {
             padding: 0,
-            maxWidth: '100vw',
-             width: "100vw",
           },
         }}
       >
@@ -225,8 +223,9 @@ function ToolbarActions({
             backgroundColor: theme.palette.email.main,
             width: {
               xs: "100%",
-              md: "400px",
+              sm: 400
             },
+            padding: 2,
           }}
         >
           <Stack spacing={1}>
@@ -237,11 +236,21 @@ function ToolbarActions({
             {notificaciones.length > 0 ? (
               notificaciones.slice(0, 5).map((notificacion) => (
                 <>
-                  <Box  paddingY={1}>
+                  <Box paddingY={1}>
                     <Typography sx={{ fontWeight: 700 }} variant="subtitle2">
                       {notificacion.titulo}
                     </Typography>
-                    <Typography variant="subtitle2">{notificacion.mensaje}</Typography>
+                    <Typography
+                      variant="subtitle2"
+                      sx={{
+                        display: "-webkit-box",
+                        overflow: "hidden",
+                        WebkitBoxOrient: "vertical",
+                        WebkitLineClamp: 3,
+                      }}
+                    >
+                      {notificacion.mensaje}
+                    </Typography>
                   </Box>
                   <Divider />
                 </>

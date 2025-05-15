@@ -3,6 +3,18 @@ import { useNavigate } from "react-router";
 import { rutasGeneral } from "../router/router";
 import { ShowDialogParams } from "./useAlertDialog";
 
+type SpecialErrorTypes = 'FRONTEND_ERROR'
+export class SpecialError extends Error {
+  type: SpecialErrorTypes;
+
+  constructor(message: string, type: SpecialErrorTypes) {
+    super(message);
+    this.name = "SpecialError";
+    this.type = type;
+  }
+}
+
+export const specialError = {type: 'FRONTEND_ERROR'};
 /**
  * Type definition for the function that shows a dialog.
  * The `showDialog` function accepts a `ShowDialogParams` object to configure
@@ -47,6 +59,10 @@ function useErrorReader(showDialog: ShowDialogFn) {
         if (error.statusCode === 401) {
           localStorage.clear(); // Clear the local storage on 401 error
           navigate(rutasGeneral.login); // Navigate to the login page
+        }
+        if (error instanceof SpecialError && error.type === 'FRONTEND_ERROR') {
+          navigate(rutasGeneral.detectAnomaly);
+          console.log('EPA')
         }
       },
       onCancel: undefined,

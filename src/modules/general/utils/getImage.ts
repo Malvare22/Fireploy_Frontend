@@ -37,6 +37,8 @@ import mysql from "@modules/general/assets/tecnologias/mySQL.png";
 import wallpaper_home from "@modules/general/assets/home/wallpaperHome.jpg";
 import portafolio_home from "@modules/general/assets/home/portafolioHome.png";
 
+import not_found from "@modules/general/assets/generic/image-not-found.png";
+
 /**
  * **Collection of imported images.**
  *
@@ -88,7 +90,9 @@ export const assetImages = {
   mysql,
 
   wallpaper_home,
-  portafolio_home
+  portafolio_home,
+
+  not_found,
 } as const;
 
 /**
