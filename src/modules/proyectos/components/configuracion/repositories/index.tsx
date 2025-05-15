@@ -2,7 +2,7 @@ import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
 import { Box, Divider, Stack, TextField, Typography } from "@mui/material";
 import { Controller, useForm, useFormContext } from "react-hook-form";
 import EnviromentVariablesEditor from "../enviroment";
-import DockerInputs from "../../dockerInputs";
+import { TechnologyInputs } from "../../technologyInputs";
 import {
   ProyectoRepositoriesSchema,
   ProyectoSchema,
@@ -63,14 +63,11 @@ export function Repositories({ type }: Props) {
     control,
     watch,
     reset,
-    formState: { errors },
   } = methods;
 
   useEffect(() => {
     reset(getValuesProject());
   }, [getValuesProject("backend"), getValuesProject("frontend"), getValuesProject("integrado")]);
-
-  console.log("FIJARE", errors);
 
   const {
     showDialog,
@@ -186,7 +183,7 @@ export function Repositories({ type }: Props) {
                       />
                     )}
                   />
-                  <DockerInputs fieldName="frontend" />
+                  <TechnologyInputs fieldName="frontend" />
                   <EnviromentVariablesEditor type="frontend" />
                 </>
               )}
@@ -209,7 +206,7 @@ export function Repositories({ type }: Props) {
                       />
                     )}
                   />
-                  <DockerInputs fieldName="backend" />
+                  <TechnologyInputs fieldName="backend" />
                   <EnviromentVariablesEditor type="backend" />
                 </>
               )}
@@ -232,7 +229,7 @@ export function Repositories({ type }: Props) {
                       />
                     )}
                   />
-                  <DockerInputs fieldName="integrado" />
+                  <TechnologyInputs fieldName="integrado" />
                   <EnviromentVariablesEditor type="integrado" />
                 </>
               )}

@@ -15,9 +15,15 @@ export const RepositorioSchema: z.ZodType<Repositorio> = z.object({
   variables: z.string().refine((variable) => {
     return transformStringToKV(variable) || variable.length == 0;
   }, "Ingrese variables de entorno con una sintaxis válida (consulta manual de usuario)"),
-  docker: z.object({
-    tecnologia: z.string(),
-    version: z.string(),
-    framework: z.string()
+  informacion: z.object({
+    tecnologia: z.string().nullable(),
+    version: z.string().nullable(),
+    framework: z.string().nullable()
   }),
-});
+}).refine((repo) => repo.informacion.framework ? repo.informacion.tecnologia && repo.informacion.version: true, {
+      message: 'Es obligatorio seleccionar una tecnología y su respectiva versión',
+      path: ["informacion.tecnologia"],
+    }).refine((repo) => repo.informacion.framework ? repo.informacion.tecnologia && repo.informacion.version: true, {
+      message: 'Se requiere seleccionar una versión',
+      path: ["informacion.version"],
+    });

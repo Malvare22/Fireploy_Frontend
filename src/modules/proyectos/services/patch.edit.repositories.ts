@@ -26,9 +26,9 @@ type Body = {
 async function query(repository: Repositorio, token: string) {
   const t = transformStringToKV(repository.variables ?? "");
 
-  const tecnologia = repository.docker?.tecnologia ?? null;
-  const version = repository.docker?.version ?? null;
-  const framework = repository.docker?.framework ?? null;
+  const tecnologia = repository.informacion?.tecnologia ?? null;
+  const version = repository.informacion?.version ?? null;
+  const framework = repository.informacion?.framework ?? null;
 
   const findMe = (s: string | null) => {
     return Object.keys(TECNOLOGIES)[Object.values(TECNOLOGIES).indexOf(s as TECNOLOGIES)];
