@@ -42,7 +42,7 @@ type ProjectCardProps = {
  * <ProjectCard proyecto={projectData} handleOpen={handleCardClick} />
  * ```
  */
-export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }) => {
+export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto }) => {
   const [localValue, setLocalValue] = useState<boolean>(false);
   const { token, id } = useAuth().accountInformation;
 
