@@ -66,7 +66,7 @@ export const DockerInputs: React.FC<DockerInputsProps> = ({ fieldName = "backend
           <TextField
             size="small"
             select
-            label="Versión de Node"
+            label="Framework"
             placeholder="Escribe para buscar..."
             fullWidth
             inputRef={field.ref}
@@ -94,7 +94,7 @@ export const DockerInputs: React.FC<DockerInputsProps> = ({ fieldName = "backend
             <TextField
               size="small"
               select
-              label="Tag"
+              label="Tecnología"
               placeholder="Escribe para buscar..."
               fullWidth
               inputRef={field.ref}
@@ -124,7 +124,7 @@ export const DockerInputs: React.FC<DockerInputsProps> = ({ fieldName = "backend
             <TextField
               size="small"
               select
-              label="Framework"
+              label="Versión"
               placeholder="Escribe para buscar..."
               fullWidth
               inputRef={field.ref}

@@ -20,5 +20,4 @@ export const RepositorioSchema: z.ZodType<Repositorio> = z.object({
     version: z.string(),
     framework: z.string()
   }),
-  tecnologyToShow: z.string(),
 });

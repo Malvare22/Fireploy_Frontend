@@ -26,23 +26,23 @@ type Props = {
 };
 
 /**
- * Repositories component – This component is responsible for managing the repository information 
- * for a project. It allows users to create or edit repository details, such as the frontend, backend, 
+ * Repositories component – This component is responsible for managing the repository information
+ * for a project. It allows users to create or edit repository details, such as the frontend, backend,
  * and integrated repositories, including their URLs and environment variables.
- * 
- * The component uses React Hook Form for form management, React Query for API interaction, and 
- * Material-UI for UI components. It also includes an alert dialog to confirm repository updates and 
+ *
+ * The component uses React Hook Form for form management, React Query for API interaction, and
+ * Material-UI for UI components. It also includes an alert dialog to confirm repository updates and
  * handles form submission to update repositories.
- * 
+ *
  * @component
- * 
+ *
  * @param {Object} props - Component props.
- * @param {"edit" | "create"} props.type - Specifies whether the user is editing an existing repository 
+ * @param {"edit" | "create"} props.type - Specifies whether the user is editing an existing repository
  * or creating a new one.
- * 
+ *
  * @returns {JSX.Element} A form allowing the user to input repository information (frontend, backend, integrated).
  * It provides options to submit the data or cancel changes, and handles success/error dialogs.
- * 
+ *
  * @example
  * ```tsx
  * <Repositories type="create" />
@@ -58,11 +58,19 @@ export function Repositories({ type }: Props) {
     resolver: zodResolver(ProyectoRepositoriesSchema),
   });
 
-  const { getValues, control, watch, reset } = methods;
+  const {
+    getValues,
+    control,
+    watch,
+    reset,
+    formState: { errors },
+  } = methods;
 
   useEffect(() => {
     reset(getValuesProject());
   }, [getValuesProject("backend"), getValuesProject("frontend"), getValuesProject("integrado")]);
+
+  console.log("FIJARE", errors);
 
   const {
     showDialog,
@@ -197,7 +205,6 @@ export function Repositories({ type }: Props) {
                         label={labelConfiguracion.urlBackend}
                         error={!!fieldState.error}
                         helperText={fieldState.error?.message}
-                        sx={{ width: "50%" }}
                         inputRef={field.ref}
                       />
                     )}
@@ -221,7 +228,6 @@ export function Repositories({ type }: Props) {
                         label="URL del Monolito"
                         error={!!fieldState.error}
                         helperText={fieldState.error?.message}
-                        sx={{ width: "50%" }}
                         inputRef={field.ref}
                       />
                     )}

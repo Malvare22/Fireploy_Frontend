@@ -233,31 +233,33 @@ function ToolbarActions({
               Notificación
             </Typography>
             <Divider />
-            {notificaciones.length > 0 ? (
-              notificaciones.slice(0, 5).map((notificacion) => (
-                <>
-                  <Box paddingY={1}>
-                    <Typography sx={{ fontWeight: 700 }} variant="subtitle2">
-                      {notificacion.titulo}
-                    </Typography>
-                    <Typography
-                      variant="subtitle2"
-                      sx={{
-                        display: "-webkit-box",
-                        overflow: "hidden",
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: 3,
-                      }}
-                    >
-                      {notificacion.mensaje}
-                    </Typography>
-                  </Box>
-                  <Divider />
-                </>
-              ))
-            ) : (
-              <Alert severity="info">No se encontraron notificaciones nuevas</Alert>
-            )}
+            <Box sx={{ overflowY: "scroll", width: '100%', height: 400 }}>
+              {notificaciones.length > 0 ? (
+                notificaciones.slice(0, 5).map((notificacion) => (
+                  <>
+                    <Box sx={{ paddingY: 1 }}>
+                      <Typography sx={{ fontWeight: 700 }} variant="subtitle2">
+                        {notificacion.titulo}
+                      </Typography>
+                      <Typography
+                        variant="subtitle2"
+                        sx={{
+                          display: "-webkit-box",
+                          overflow: "hidden",
+                          WebkitBoxOrient: "vertical",
+                          WebkitLineClamp: 3,
+                        }}
+                      >
+                        {notificacion.mensaje}
+                      </Typography>
+                    </Box>
+                    <Divider />
+                  </>
+                ))
+              ) : (
+                <Alert severity="info">No se encontraron notificaciones nuevas</Alert>
+              )}
+            </Box>
           </Stack>
           <Stack alignItems={"center"} paddingY={1}>
             <Box>

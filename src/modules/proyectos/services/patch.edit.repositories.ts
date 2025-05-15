@@ -2,7 +2,7 @@ import { patchData } from "@core/services";
 import { ProyectoRepositoriesSchema } from "../utils/forms/proyecto.schema";
 import { transformStringToKV, VariablesDeEntorno } from "@modules/general/utils/string";
 import { Repositorio } from "../types/repositorio";
-import { isTechnologyKey, TECNOLOGIES } from "../utils/docker";
+import { TECNOLOGIES } from "../utils/docker";
 
 type Body = {
   url: string;
@@ -30,13 +30,18 @@ async function query(repository: Repositorio, token: string) {
   const version = repository.docker?.version ?? null;
   const framework = repository.docker?.framework ?? null;
 
+  const findMe = (s: string | null) => {
+    return Object.keys(TECNOLOGIES)[Object.values(TECNOLOGIES).indexOf(s as TECNOLOGIES)];
+  };
+
+    console.log(findMe(tecnologia), findMe(framework));
+
+
   const body: Body = {
-    tecnologia: isTechnologyKey(tecnologia)
-      ? TECNOLOGIES[tecnologia as keyof typeof TECNOLOGIES]
-      : null,
+    tecnologia: findMe(tecnologia),
     url: repository.url,
     version: version,
-    framework: framework ? TECNOLOGIES[framework as keyof typeof TECNOLOGIES] : null,
+    framework: findMe(framework),
     variables_de_entorno: t == undefined || repository.variables == "" ? null : t,
   };
 

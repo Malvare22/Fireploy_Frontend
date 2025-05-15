@@ -7,7 +7,7 @@
 
 import DataTable, { ConditionalStyles } from "react-data-table-component";
 import { TableColumn } from "react-data-table-component";
-import { Button, Stack, Typography, useTheme } from "@mui/material";
+import { Box, Button, Stack, Typography, useTheme } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
@@ -37,21 +37,30 @@ const TablaNotificaciones: React.FC<Props> = ({ notificaciones, refetch }) => {
 
   const { setError } = useErrorReader(showDialog);
 
-  const [currentId, setCurrentId] = useState<null | number>(null);
-
-  function handleCheck(id: number) {
-    setCurrentId(id);
-    mutateCheck(id);
+  function handleCheck(notification: NotificationMessage) {
+    mutateCheck([notification]);
   }
 
   const { mutate: mutateCheck, isPending } = useMutation({
-    mutationFn: (idNotification: number) => patchNotificationCheck(idNotification, token),
+    mutationFn: async (notifications: NotificationMessage[]) => {
+      const updates = notifications
+        .filter((n) => !n.visto)
+        .map((n) => patchNotificationCheck(n.id, token));
+
+      await Promise.all(updates);
+    },
     mutationKey: ["changeUser"],
     onError: (error) => setError(error),
     onSuccess: () => {
       refetch();
     },
   });
+
+  const [selectedData, setSelectedData] = useState<NotificationMessage[]>([]);
+
+  function handleButtonCheckSelects() {
+    mutateCheck(selectedData);
+  }
 
   /**
    * Column definitions for the data table.
@@ -98,8 +107,8 @@ const TablaNotificaciones: React.FC<Props> = ({ notificaciones, refetch }) => {
           return (
             <Stack sx={{ alignItems: "center", width: "100%" }}>
               <Button
-                onClick={() => handleCheck(row.id)}
-                loading={isPending && currentId === row.id}
+                onClick={() => handleCheck(row)}
+                loading={isPending && selectedData.includes(row)}
               >
                 {labelNotificaciones.marcarLeido}
               </Button>
@@ -141,6 +150,14 @@ const TablaNotificaciones: React.FC<Props> = ({ notificaciones, refetch }) => {
     },
   ];
 
+  const handleSelect = (selected: {
+    allSelected: boolean;
+    selectedCount: number;
+    selectedRows: NotificationMessage[];
+  }) => {
+    setSelectedData(selected.selectedRows);
+  };
+
   return (
     <>
       <AlertDialog
@@ -152,15 +169,31 @@ const TablaNotificaciones: React.FC<Props> = ({ notificaciones, refetch }) => {
         type={type}
         isLoading={isLoading}
       />
+      <Stack alignItems={"end"}>
+        <Box>
+          <Button
+            variant="contained"
+            size="small"
+            onClick={handleButtonCheckSelects}
+            disabled={selectedData.length == 0}
+            loading={isPending}
+          >
+            Marcar como vistas
+          </Button>
+        </Box>
+      </Stack>
+
       <DataTable
         columns={columns}
         data={dataConIndice}
         customStyles={customStyles}
         conditionalRowStyles={conditionalRowStyles}
         pagination
-        paginationPerPage={20}
-        paginationRowsPerPageOptions={[20, 50, 100]}
+        selectableRows
+        paginationPerPage={10}
+        paginationRowsPerPageOptions={[10, 20, 50]}
         paginationComponentOptions={paginationComponentOptions}
+        onSelectedRowsChange={handleSelect}
       />
     </>
   );
