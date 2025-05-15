@@ -27,6 +27,6 @@ dist-ssr
 
 docs
 
-.tsconfig.node.tsbuildinfo
+tsconfig.app.tsbuildinfo
 
 .tsconfig.node.json

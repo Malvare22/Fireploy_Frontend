@@ -1,15 +1,10 @@
-// import { ProjectCardAvatar } from "@modules/general/components/projectCardAvatar";
-import PortafolioCard from "@modules/general/components/portafolioCard";
-// import Score from "@modules/general/components/score";
 import { labelModalProyectoPortafolio } from "@modules/proyectos/enum/labelModalProyectoPortafolio";
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
-// import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import {
   Box,
   Button,
   Card,
   Chip,
-  Grid2,
   Stack,
   Typography,
   useTheme,
@@ -25,6 +20,7 @@ import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { VARIABLES_LOCAL_STORAGE } from "@modules/general/enums/variablesLocalStorage";
 import StarButton from "../starButton";
+import { getImage } from "@modules/general/utils/getImage";
 
 export enum labelModalProject {
   noQualify = "Actualmente este proyecto no se encuentra calificado",
@@ -119,13 +115,13 @@ const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto }) => {
           <Typography variant="h4" fontWeight={"bold"}>
             {proyecto.titulo}
           </Typography>
-          <StarButton isLoading={isPending} mutate={mutate} value={localValue ? 1 : 0} modal={true}/>
+          <StarButton isLoading={isPending} mutate={mutate} value={localValue} modal={true}/>
         </Stack>
         <Stack direction={{ xl: "row" }} spacing={6}>
           <Box
             component={"img"}
             sx={{ width: { md: 650, xs: "100%", border: "1px solid black" } }}
-            src={proyecto.imagen}
+            src={proyecto.imagen ?? getImage['not_found'].ruta}
           />
           <Stack spacing={4} width={"100%"} height={"100%"} border={"1px solid black"}>
             <Stack spacing={2}>
@@ -156,13 +152,13 @@ const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto }) => {
           <Typography variant="h5" fontWeight={"bold"}>
             {labelModalProyectoPortafolio.integrantes}
           </Typography>
-          <Grid2 container spacing={2} paddingY={2}>
+          {/* <Grid2 container spacing={2} paddingY={2}>
             {proyecto.integrantes.map((integrante) => (
               <Grid2 size={{ md: 4, sm: 6, xs: 12 }}>
                 <PortafolioCard usuario={integrante} key={integrante.id} />
               </Grid2>
             ))}
-          </Grid2>
+          </Grid2> */}
         </Stack>
       </Stack>
     </>

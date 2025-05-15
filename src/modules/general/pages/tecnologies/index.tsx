@@ -50,12 +50,12 @@ function TecnologiesView() {
   const tecnologies: [FilteredKeys, string, string, string][] = [
     ["Angular", getImage["angular"].ruta, "Es un framework open source desarrollado en Typescript, enfocado en la creación de aplicaciones web de una sola página", ""],
     [
-      "ReactJS",
+      "Reactjs",
       getImage["react"].ruta,
       "Es una librería de JavaScript, el cual permite agrupar componentes para la creación de interfaces de usuario dinámicas",
       "",
     ],
-    ["NextJS", getImage["nextjs"].ruta, "Es un marco web de desarrollo de React, el cual permite funcionalidades desde el lado del servidor, como el renderizado de sitios en este", ""],
+    ["Nextjs", getImage["nextjs"].ruta, "Es un marco web de desarrollo de React, el cual permite funcionalidades desde el lado del servidor, como el renderizado de sitios en este", ""],
     ["Laravel", getImage["laravel"].ruta, "Es un framework para el desarrollo de sitios web con PHP, que busca la sintaxis expresiva y elegante", ""],
   ];
 
@@ -123,14 +123,14 @@ function Carousel() {
   type FilteredKeys = Exclude<keyof typeof TECNOLOGIES, "Java">;
   const tecs: [FilteredKeys, string][] = [
     ["Angular", getImage["angular_banner"].ruta],
-    ["ReactJS", getImage["react"].ruta],
-    ["NextJS", getImage["nextjs_banner"].ruta],
+    ["Reactjs", getImage["react"].ruta],
+    ["Nextjs", getImage["nextjs_banner"].ruta],
     ["Laravel", getImage["laravel_banner"].ruta],
-    ["SpringBoot", getImage["springboot_banner"].ruta],
-    ["ExpressJs", getImage["expressjs_banner"].ruta],
+    ["Springboot", getImage["springboot_banner"].ruta],
+    ["Expressjs", getImage["expressjs_banner"].ruta],
     ["Symphony", getImage["symphony_banner"].ruta],
-    ["PHP", getImage["php_banner"].ruta],
-    ["NodeJS", getImage["nodejs_banner"].ruta],
+    ["Php", getImage["php_banner"].ruta],
+    ["Nodejs", getImage["nodejs_banner"].ruta],
   ];
 
   const scrollRightToLeft = keyframes`
