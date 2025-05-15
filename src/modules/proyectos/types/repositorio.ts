@@ -7,8 +7,7 @@ export type Repositorio = {
   url: string;
   tipo: "B" | "F" | "I";
   variables: string;
-  docker?: { tecnologia: string; version: string; framework: string };
-  tecnologyToShow?: string | null ;
+  docker?: { tecnologia: string | null; version: string | null; framework: string | null };
 };
 
 /**

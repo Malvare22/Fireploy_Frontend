@@ -1,22 +1,24 @@
-import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import { ProyectoCard } from "../types/proyecto.card";
 import { ProyectoService, RepositorioService } from "../types/proyecto.service";
 import { Proyecto } from "../types/proyecto.tipo";
 import { Repositorio } from "../types/repositorio";
 import { adaptDataBase } from "./adaptDataBase";
 import { removeImageBuffer } from "@modules/general/utils/removeImageBuffer";
+import { UsuarioCurso } from "@modules/materias/types/curso";
+import { EstadoUsuario } from "@modules/usuarios/types/usuario";
+import { isTechnologyKey, TECNOLOGIES } from "./docker";
 
-/**
- * adaptUsuarioToPortafolioCard – Transforms a user object into a format compatible with a portfolio card, extracting ID, name, and photo.
- *
- * @param {any} usuario - The user object to transform.
- * @returns {UsuarioPortafolioCard} The user data formatted as a portfolio card.
- */
-const adaptUsuarioToPortafolioCard = (usuario: any): UsuarioPortafolioCard => ({
-  id: usuario.id,
-  nombres: usuario.nombre || usuario.nombres || "Usuario",
-  foto: usuario.imagen || "",
-});
+// /**
+//  * adaptUsuarioToPortafolioCard – Transforms a user object into a format compatible with a portfolio card, extracting ID, name, and photo.
+//  *
+//  * @param {any} usuario - The user object to transform.
+//  * @returns {UsuarioPortafolioCard} The user data formatted as a portfolio card.
+//  */
+// const adaptUsuarioToPortafolioCard = (usuario: any): UsuarioPortafolioCard => ({
+//   id: usuario.id,
+//   nombres: usuario.nombre || usuario.nombres || "Usuario",
+//   foto: usuario.imagen || "",
+// });
 
 /**
  * adaptProjectToCard – Transforms a project object into a format compatible with a project card, extracting essential data like title, description, image, and participant information. Also extracts frontend, backend, integrated repository frameworks, and database name.
@@ -25,14 +27,14 @@ const adaptUsuarioToPortafolioCard = (usuario: any): UsuarioPortafolioCard => ({
  * @returns {ProyectoCard} The project data formatted as a project card.
  */
 export function adaptProjectToCard(proyecto: Proyecto): ProyectoCard {
+  const integrantes = [...(proyecto.integrantes ?? [])];
+  if (proyecto.propietario) integrantes.push(proyecto.propietario);
   return {
     id: proyecto.id || 0,
     titulo: proyecto.titulo,
     descripcion: proyecto.descripcion ?? "",
-    imagen: proyecto.imagen || "",
-
-    integrantes: [...proyecto.integrantes, proyecto.propietario].map(adaptUsuarioToPortafolioCard),
-
+    imagen: proyecto.imagen ? proyecto.imagen : null,
+    integrantes: integrantes,
     frontend: !proyecto.frontend ? null : proyecto.frontend?.docker?.framework || "No especificado",
     backend: !proyecto.backend ? null : proyecto.frontend?.docker?.framework || "No especificado",
     integrado: !proyecto.integrado
@@ -70,10 +72,19 @@ export function adaptProject(project: Partial<ProyectoService>): Proyecto {
           ...(repos[1] ? { backend: adaptRepository(repos[1]) } : {}),
         };
 
+  const integrantes: UsuarioCurso[] = (project.estudiantes ?? []).map((x) => {
+    return {
+      id: x.id,
+      nombre: `${x.nombre} ${x.apellido}`,
+      imagen: x.foto_perfil ?? "",
+      estado: x.estado as EstadoUsuario,
+    };
+  });
+
   return {
     baseDeDatos: adaptDataBase({ ...project.base_de_datos, proyecto: null }),
     descripcion: project.descripcion ?? "",
-    integrantes: project.estudiantes ?? [],
+    integrantes: integrantes,
     fav_usuarios: project.fav_usuarios?.map((x) => x.id) ?? [],
     materiaInformacion: {
       cursoId: project.seccion?.curso?.id ?? "1",
@@ -87,7 +98,12 @@ export function adaptProject(project: Partial<ProyectoService>): Proyecto {
     imagen: !project.imagen ? null : removeImageBuffer(project.imagen),
     estadoDeEjecucion: (project.estado_ejecucion as Proyecto["estadoDeEjecucion"]) ?? "E",
     estadoDeProyecto: (project.estado_proyecto as Proyecto["estadoDeProyecto"]) ?? "A",
-    propietario: project.creador,
+    propietario: {
+      id: project.creador?.id ?? 0,
+      nombre: `${project.creador?.nombre} ${project.creador?.apellido} `,
+      imagen: project.creador?.foto_perfil ?? "",
+      estado: project.creador?.estado as EstadoUsuario,
+    },
     ...repositoriosAsignados,
   };
 }
@@ -99,16 +115,25 @@ export function adaptProject(project: Partial<ProyectoService>): Proyecto {
  * @returns {Repositorio} The full repository object with all relevant data.
  */
 export function adaptRepository(repository: RepositorioService): Repositorio {
-  return {
-    tecnologyToShow: (repository.tecnologia ?? "") + ":" + (repository.version ?? ""),
+  const tecnologia = repository.tecnologia ?? null;
+  const version = repository.version ?? null;
+  const framework = repository.framework ?? null;
+
+
+  const out = {
     variables: !repository.variables_de_entorno ? "" : repository.variables_de_entorno,
     url: repository.url ?? "",
     tipo: (repository.tipo as Repositorio["tipo"]) ?? "I",
     docker: {
-      version: repository.version ?? "",
-      tecnologia: repository.tecnologia ?? "",
-      framework: repository.framework ?? "",
+      framework: isTechnologyKey(framework) ? TECNOLOGIES[framework] : null,
+      tecnologia: isTechnologyKey(tecnologia) ? TECNOLOGIES[tecnologia] : null,
+      version: version,
     },
     id: repository.id ?? -1,
   };
+
+    console.log(out)
+
+
+  return out;
 }

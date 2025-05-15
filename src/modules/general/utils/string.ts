@@ -61,3 +61,8 @@ export function transformStringToKV(s: string): VariablesDeEntorno[] | undefined
   if (isInvalid) return undefined;
   return result;
 }
+
+export function capitalizeOnlyFirstLetter(s: string) {
+  const copyS = s.toLowerCase();
+  return String(copyS).charAt(0).toUpperCase() + String(copyS).slice(1);
+}

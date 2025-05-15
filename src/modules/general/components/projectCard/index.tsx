@@ -1,15 +1,14 @@
-import { Alert, Box, Chip, Stack, Typography } from "@mui/material";
-import AnimatedCard from "../animatedCard";
+import { Alert, Box, Divider, Paper, Stack, Typography } from "@mui/material";
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import React, { useContext, useEffect, useState } from "react";
 import { ProjectCardMembers } from "../projectCardAvatar";
-import { labelProjectCard } from "@modules/general/enums/labelProjectCard";
 import { DialogContext } from "@modules/materias/pages/explorar/grupos/id";
 import { useMutation } from "@tanstack/react-query";
 import { postStarProject, postUnStarProject } from "@modules/proyectos/services/post.calificar";
 import { VARIABLES_LOCAL_STORAGE } from "@modules/general/enums/variablesLocalStorage";
 import { useAuth } from "@modules/general/context/accountContext";
 import StarButton from "@modules/proyectos/components/starButton";
+import { getImage } from "@modules/general/utils/getImage";
 
 type ProjectCardProps = {
   /**
@@ -25,19 +24,19 @@ type ProjectCardProps = {
 
 /**
  * ProjectCard Component
- * 
- * A card that displays the details of a project. It includes the project image, 
+ *
+ * A card that displays the details of a project. It includes the project image,
  * title, members, technologies used, and a star button for liking/disliking the project.
  * The component also handles the click events to open a modal or navigate to another page.
- * 
+ *
  * @component
- * 
+ *
  * @param {ProjectCardProps} props - Component properties.
  * @param {ProyectoCard} props.proyecto - The project data to be displayed in the card.
  * @param {Function} props.handleOpen - The callback function to handle the card click event.
- * 
+ *
  * @returns {JSX.Element} A styled project card.
- * 
+ *
  * @example
  * ```tsx
  * <ProjectCard proyecto={projectData} handleOpen={handleCardClick} />
@@ -82,69 +81,50 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }
   });
 
   return (
-    <Box sx={{ position: "relative", height: "100%" }}>
-      <Box sx={{ position: "absolute", top: 4, right: 4, zIndex: 100 }}>
-        <StarButton
-          isLoading={isPending}
-          mutate={mutate}
-          value={localValue ? 1 : 0}
-          modal={false}
+    <Stack sx={{ padding: 1, width: "100%" }} spacing={2} justifyContent={"space-between"} component={Paper}>
+      <Stack spacing={1}>
+        <Box
+          component={"img"}
+          src={proyecto.imagen ?? getImage["not_found"].ruta}
+          sx={{ width: "100%", height: 180, objectFit: "cover" }}
         />
-      </Box>
-      <AnimatedCard
-        sx={{
-          width: 300,
-          paddingBottom: 2,
-          cursor: "pointer",
-          height: "100%",
-        }}
-        onClick={handleOpen}
-      >
-        <Stack direction={"column"} justifyContent={"space-around"} height={"100%"}>
-          {/* Project Image with Status Badge */}
-          {proyecto.imagen ? (
-            <Box
-              component={"img"}
-              sx={{ width: "100%", border: "1px solid black" }}
-              src={proyecto.imagen}
-              alt={proyecto.titulo}
-            />
-          ) : (
-            <Box component={"img"} sx={{ width: "100%", height: 170, backgroundColor: "black" }} />
-          )}
-
-          {/* Project Details */}
-          <Stack spacing={2} sx={{ paddingX: 2 }}>
-            <Box textAlign={"center"}>
-              <Typography variant="h5">{proyecto.titulo}</Typography>
-              {/* <Score value={proyecto.puntuacion} /> */}
-            </Box>
-
-            {/* Members Section */}
-            <Stack spacing={0} alignItems={"center"}>
-              <Typography variant="body1">{labelProjectCard.integrantes}</Typography>
-              <ProjectCardMembers integrantes={proyecto.integrantes} />
-            </Stack>
-
-            {/* Technologies Section */}
-            <Stack spacing={1} alignItems={"center"}>
-              <Typography variant="body1">{labelProjectCard.tecnologias}</Typography>
-              <Stack spacing={3} direction={"row"} justifyContent={"center"}>
-                {proyecto.backend && <Chip label={proyecto.backend} color="error" />}
-                {proyecto.frontend && <Chip label={proyecto.frontend} color="primary" />}
-                {proyecto.integrado && <Chip label={proyecto.integrado} color="info" />}
-                {proyecto.dataBase && <Chip label={proyecto.dataBase} color="warning" />}
-                {!proyecto.integrado && !proyecto.frontend && !proyecto.backend && (
-                  <Alert severity="warning">
-                    Este proyecto actualmente no tiene tecnologías vinculadas
-                  </Alert>
-                )}
-              </Stack>
-            </Stack>
-          </Stack>
+        <Typography
+          sx={{
+            display: "-webkit-box",
+            overflow: "visible",
+            WebkitBoxOrient: "vertical",
+            WebkitLineClamp: 2,
+            wordBreak: "break-all",
+          }}
+          variant="h5"
+        >
+          {proyecto.titulo}
+        </Typography>
+      </Stack>
+      <Stack spacing={2}>
+        
+        {proyecto.descripcion.length > 0 ? (
+          <Typography
+            sx={{
+              display: "-webkit-box",
+              overflow: "hidden",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: 3,
+              wordBreak: "break-all",
+            }}
+          >
+            {proyecto.descripcion}
+          </Typography>
+        ) : (
+          <Alert severity="info">Descripción no disponible</Alert>
+        )}
+        <Divider />
+        <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
+          <ProjectCardMembers integrantes={proyecto.integrantes} />
+          <StarButton modal={false} isLoading={isPending} mutate={mutate} value={localValue} />
         </Stack>
-      </AnimatedCard>
-    </Box>
+      </Stack>
+    </Stack>
   );
 };
 
