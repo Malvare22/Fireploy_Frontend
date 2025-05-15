@@ -1,11 +1,10 @@
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Rating, Tooltip } from "@mui/material";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
 
 type Props = {
   mutate: () => void;
   isLoading: boolean;
-  value: number;
+  value: boolean;
   modal: boolean;
 };
 
@@ -19,8 +18,7 @@ type Props = {
  * @param {Object} props - The component props.
  * @param {boolean} props.isLoading - A flag indicating whether the component is in a loading state (i.e., submitting the rating).
  * @param {Function} props.mutate - A function that will be called when the user changes the rating (e.g., submit the rating).
- * @param {number} props.value - The current rating value (0 or 1). Determines the star rating's visual representation.
- * @param {boolean} props.modal - A flag to customize the appearance of the empty star icon based on the modal's context.
+ * @param {boolean} props.value - The current rating value (0 or 1). Determines the star rating's visual representation.
  * 
  * @returns {JSX.Element} A button with a star icon that serves as a rating control, with a tooltip for additional information.
  * 
@@ -29,7 +27,7 @@ type Props = {
  * <StarButton isLoading={isSubmitting} mutate={handleRatingChange} value={currentRating} modal={isModalContext} />
  * ```
  */
-export default function StarButton({ isLoading, mutate, value, modal }: Props) {
+export default function StarButton({ isLoading, mutate, value }: Props) {
   if (isLoading) {
     return <AccessTimeIcon />;
   }
@@ -41,7 +39,6 @@ export default function StarButton({ isLoading, mutate, value, modal }: Props) {
         size="large"
         onChange={() => mutate()}
         sx={{ stroke: "red 1px" }}
-        emptyIcon={<StarBorderIcon fontSize="inherit" sx={{ color: !modal ? "white" : "gray" }} />}
       />
     </Tooltip>
   );

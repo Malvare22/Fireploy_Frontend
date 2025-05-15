@@ -1,21 +1,13 @@
-import {
-  Alert,
-  Box,
-  Button,
-  Chip,
-  Divider,
-  keyframes,
-  Paper,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, Button, Divider, keyframes, Paper, Stack, Typography, useTheme } from "@mui/material";
 import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
 import { useNavigate } from "react-router";
 import { rutasProyectos } from "@modules/proyectos/router";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { ExecutionState } from "../executionState";
 import { getImage } from "@modules/general/utils/getImage";
+import { TechnologyTags } from "../showTags";
+import { getDataBaseTypesMap } from "@modules/proyectos/utils/database";
+
 interface Props {
   proyecto: Proyecto;
 }
@@ -30,29 +22,6 @@ const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
   }
 
 `;
-
-  function TechnologyTags() {
-    return (
-      <Stack direction="row" alignItems="center" spacing={1} useFlexGap flexWrap="wrap">
-        {proyecto.backend?.docker?.framework && (
-          <Chip label={proyecto.backend?.docker?.framework} color="error" />
-        )}
-        {proyecto.frontend?.docker?.framework && (
-          <Chip label={proyecto.frontend?.docker?.framework} color="primary" />
-        )}
-        {proyecto.integrado?.docker?.framework && (
-          <Chip label={proyecto.integrado?.docker?.framework} color="info" />
-        )}
-        {!proyecto.integrado?.docker?.framework &&
-          !proyecto.frontend?.docker?.framework &&
-          !proyecto.backend?.docker?.framework && (
-            <Alert severity="warning">
-              Este proyecto actualmente no cuenta con tecnologías vinculadas
-            </Alert>
-          )}
-      </Stack>
-    );
-  }
 
   const navigate = useNavigate();
 
@@ -71,7 +40,7 @@ const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: 'space-around',
+        justifyContent: "space-around",
         gap: 2,
         padding: 2,
         position: "relative",
@@ -104,9 +73,13 @@ const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
         <ExecutionState projectStatus={proyecto.estadoDeEjecucion ?? "E"} />
       </Box>
 
-      <Stack alignItems={'center'} spacing={3} >
+      <Stack alignItems={"center"} spacing={3}>
         <Typography variant="h4">{proyecto.titulo} asdasd</Typography>
-        <TechnologyTags />
+        <TechnologyTags
+          backend={proyecto.backend?.docker?.framework ?? undefined}
+          frontend={proyecto.frontend?.docker?.framework ?? undefined}
+          dataBase={getDataBaseTypesMap.get(proyecto.baseDeDatos?.tipo ?? "E")}
+        />
       </Stack>
 
       <Stack spacing={2} sx={{ width: "100%" }}>

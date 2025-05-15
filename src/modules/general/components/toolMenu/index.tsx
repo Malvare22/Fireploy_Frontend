@@ -223,7 +223,7 @@ function ToolbarActions({
             backgroundColor: theme.palette.email.main,
             width: {
               xs: "100%",
-              sm: 400
+              sm: 400,
             },
             padding: 2,
           }}
@@ -486,6 +486,10 @@ export default function DashboardLayoutBasic(props: any) {
                 "& .MuiPaper-root": {
                   backgroundColor: "#2a2a3c", // Fondo del menú desplegable
                 },
+                "& .MuiBox-root": {
+                  backgroundColor: "#2a2a3c", // Fondo del menú desplegable
+                },
+                backgroundColor: "#2a2a3c", // Fondo del menú desplegable
               },
               "& .MuiAppBar-root": {
                 backgroundColor: "#1e1e2f",

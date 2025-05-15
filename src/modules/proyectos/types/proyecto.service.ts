@@ -2,6 +2,7 @@ import { CursoService, SeccionesService } from "@modules/materias/types/curso.se
 import { MateriaService } from "@modules/materias/types/materia.service";
 import { DataBaseService } from "./dabase.service";
 import { UsuarioCurso } from "@modules/materias/types/curso";
+import { UsuarioService } from "@modules/usuarios/types/services.usuario";
 
 /**
  * ProyectoService – Represents the structure of a project as used in service or API layers.
@@ -43,12 +44,12 @@ export type ProyectoService = {
   puerto: number;
   fecha_creacion: string;
   tipo_proyecto: string;
-  estudiantes: UsuarioCurso[];
+  estudiantes: Pick<UsuarioService, 'nombre' | 'apellido' | 'foto_perfil' | 'id' | 'estado'>[];
   seccion?: SeccionesService & { curso: CursoService & { materia: MateriaService } };
   tutor: UsuarioCurso;
   repositorios: RepositorioService[];
   base_de_datos: DataBaseService;
-  creador: UsuarioCurso;
+  creador: Pick<UsuarioService, 'nombre' | 'apellido' | 'foto_perfil' | 'id' | 'estado'>;
 };
 
 /**

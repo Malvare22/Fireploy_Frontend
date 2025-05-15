@@ -171,7 +171,6 @@ function ExplorarProyectos() {
             <Grid2
               container
               spacing={4}
-              paddingX={{ md: 10 }}
               marginTop={4}
               marginBottom={6}
             >

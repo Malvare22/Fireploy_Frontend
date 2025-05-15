@@ -9,26 +9,33 @@ type SelectTechnlogy = {
   versions: string[];
 };
 
+export function isTechnologyKey(key: string | null): key is keyof typeof TECNOLOGIES {
+  if (!key) return false;
+  return key in TECNOLOGIES;
+}
+
 /**
  * TECNOLOGIES – Enum representing a list of technology names.
  *
  * Each entry corresponds to a specific technology used in the project, such as NodeJS, Angular, ReactJS, etc.
  */
 export enum TECNOLOGIES {
-  NodeJS = "NodeJS",
+  Nodejs = "NodeJS",
   Angular = "Angular",
-  ReactJS = "React",
-  NextJS = "NextJs",
-  PHP = "PHP",
+  Reactjs = "React",
+  Nextjs = "NextJs",
+  Php = "PHP",
   Laravel = "Laravel",
   Java = "Java",
-  SpringBoot = "SpringBoot",
-  ExpressJs = "ExpressJS",
+  Springboot = "SpringBoot",
+  Expressjs = "ExpressJS",
   Symphony = "Symphony",
 }
 
+export enum CastTecnology {}
+
 const nodejs: SelectTechnlogy = {
-  technology: TECNOLOGIES.NodeJS,
+  technology: TECNOLOGIES.Nodejs,
   versions: ["23-alpine3.20"],
 };
 
@@ -38,7 +45,7 @@ const java: SelectTechnlogy = {
 };
 
 const php: SelectTechnlogy = {
-  technology: TECNOLOGIES.PHP,
+  technology: TECNOLOGIES.Php,
   versions: ["8.3.20-apache"],
 };
 
@@ -50,11 +57,12 @@ const php: SelectTechnlogy = {
 export const keysOfFrameworks = [
   TECNOLOGIES.Laravel,
   TECNOLOGIES.Angular,
-  TECNOLOGIES.ReactJS,
-  TECNOLOGIES.NextJS,
-  TECNOLOGIES.SpringBoot,
-  TECNOLOGIES.ExpressJs,
+  TECNOLOGIES.Reactjs,
+  TECNOLOGIES.Nextjs,
+  TECNOLOGIES.Springboot,
+  TECNOLOGIES.Expressjs,
   TECNOLOGIES.Symphony,
+  TECNOLOGIES.Nodejs,
 ] as const;
 
 /**
@@ -70,4 +78,5 @@ export const inputSelectFramework: Record<(typeof keysOfFrameworks)[number], Sel
   Laravel: [php],
   Symphony: [php],
   SpringBoot: [java],
+  NodeJS: [nodejs],
 } as const;

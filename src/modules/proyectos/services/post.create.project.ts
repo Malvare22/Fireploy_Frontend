@@ -39,7 +39,6 @@ export async function postCreateProject(token: string, project: ProyectoInformat
     seccionId: project.materiaInformacion.seccionId?.toString() ?? "-1",
     tipo_proyecto: project.tipo,
   };
-  console.log(body)
   const response = await postData<{id: number}>(`/proyecto`, body, {
     sessiontoken: token,
   });
