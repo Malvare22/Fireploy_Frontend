@@ -101,7 +101,7 @@ const SignIn: React.FC = () => {
   };
 
   return (
-    <Card sx={{ padding: 2, maxWidth: 600 }}>
+    <Card sx={{ padding: 2, maxWidth: 600, marginX: 3 }}>
       <CssBaseline />
       <AlertDialog
         handleAccept={handleAccept}

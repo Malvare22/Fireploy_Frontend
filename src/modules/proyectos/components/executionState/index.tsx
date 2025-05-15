@@ -257,7 +257,7 @@ export function ChangeStatus({ projectStatus, id, position, hasUrl }: PropsChang
       </Tooltip>
       <Tooltip title="Pausar Proyecto">
         <IconButton
-          disabled={CURRENT_STATUS == "L" || CURRENT_STATUS == "F" || isLoading}
+          disabled={CURRENT_STATUS != "N" || isLoading}
           onClick={() => handleAction("F")}
         >
           <PauseCircleIcon fontSize="large" />

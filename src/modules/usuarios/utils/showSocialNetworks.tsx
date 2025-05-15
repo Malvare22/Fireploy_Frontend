@@ -1,5 +1,7 @@
+import { IconButton, SvgIconProps } from "@mui/material";
 import SocialNetworkIcon from "../components/socialNetwork";
 import { RedSocialUsuario } from "../types/usuario";
+import { openInNewTab } from "@modules/general/utils/openTab";
 
 /**
  * Renders a list of social network icons based on the user's social media data.
@@ -24,14 +26,14 @@ import { RedSocialUsuario } from "../types/usuario";
  * const socialIcons = showSocialNetworks(redSocial);
  * // This will return JSX with SocialNetworkIcon components for Facebook, Instagram, and X.
  */
-export function showSocialNetworks(redSocial: RedSocialUsuario) {
+export function showSocialNetworks(redSocial: RedSocialUsuario,  props?: SvgIconProps) {
   const iconos = [];
 
   for (const key in redSocial) {
     const validKey = key as keyof RedSocialUsuario;
 
     if (redSocial[validKey] && redSocial[validKey] !== "") {
-      iconos.push(<SocialNetworkIcon redSocial={validKey} />);
+      iconos.push(<IconButton onClick={() => openInNewTab(redSocial[validKey] as string)}><SocialNetworkIcon {...props} redSocial={validKey} /></IconButton>);
     }
   }
 

@@ -10,7 +10,7 @@ type SelectTechnlogy = {
 };
 
 export function isTechnologyKey(key: string | null): key is keyof typeof TECNOLOGIES {
-  if (!key) return false;
+  if (key == null) return false;
   return key in TECNOLOGIES;
 }
 
@@ -23,7 +23,7 @@ export enum TECNOLOGIES {
   Nodejs = "NodeJS",
   Angular = "Angular",
   Reactjs = "React",
-  Nextjs = "NextJs",
+  Nextjs = "NextJS",
   Php = "PHP",
   Laravel = "Laravel",
   Java = "Java",
@@ -73,7 +73,7 @@ export const keysOfFrameworks = [
 export const inputSelectFramework: Record<(typeof keysOfFrameworks)[number], SelectTechnlogy[]> = {
   Angular: [nodejs],
   React: [nodejs],
-  NextJs: [nodejs],
+  NextJS: [nodejs],
   ExpressJS: [nodejs],
   Laravel: [php],
   Symphony: [php],

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Tabs, Tab, Typography, Paper, Stack, IconButton, Tooltip } from "@mui/material";
+import { Container, Tabs, Tab, Typography, Paper, Stack, IconButton, Tooltip, useMediaQuery, useTheme } from "@mui/material";
 import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Information } from "./information";
@@ -56,6 +56,10 @@ export default function ProjectSettings({ project }: Props) {
 
   const definedStatus = currentPosition ? "L" : (project.estadoDeEjecucion ?? "E");
 
+  const theme = useTheme();
+
+  const matchesMedia = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
     <Stack spacing={3}>
       <FormProvider {...methods}>
@@ -84,7 +88,7 @@ export default function ProjectSettings({ project }: Props) {
         {definedStatus == "L" && (
           <ShowDeployLoad projectStatus={definedStatus} queuePosition={currentPosition} />
         )}
-        <Container component={Paper} sx={{ p: 4 }}>
+        <Container component={Paper} sx={{ p: 2 }}>
           <Typography variant="h4" sx={{ mb: 2 }}>
             {labelConfiguracion.configuracion}
           </Typography>
@@ -93,9 +97,11 @@ export default function ProjectSettings({ project }: Props) {
           <Tabs
             value={tabIndex}
             onChange={(_e, newIndex) => setTabIndex(newIndex)}
-            sx={{ borderBottom: 1, borderColor: "divider" }}
+            sx={{ borderBottom: 1, borderColor: "divider", '& .MuiButtonBase-root': {
+              paddingY: 0
+            } }}
             variant="scrollable"
-            scrollButtons
+            scrollButtons={matchesMedia}
             allowScrollButtonsMobile
           >
             <Tab label="Información" icon={<InfoIcon />} iconPosition="start" />
@@ -104,7 +110,7 @@ export default function ProjectSettings({ project }: Props) {
             <Tab label="Colaboradores" icon={<PeopleAltIcon />} iconPosition="start" />
           </Tabs>
 
-          <Stack spacing={3} padding={2}>
+          <Stack spacing={3} padding={1} paddingTop={2}>
             {tabIndex == 0 && <Information type="edit" />}
             {tabIndex == 1 && <Repositories type="edit" />}
             {tabIndex == 2 && <DataBase type="edit" />}

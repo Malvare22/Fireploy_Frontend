@@ -1,5 +1,5 @@
 import { MenuItem, TextField } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import { ProyectoRepositoriesSchema } from "@modules/proyectos/utils/forms/proyecto.schema";
 import { KeysOfRepository } from "@modules/proyectos/types/keysOfRepository";
@@ -10,7 +10,7 @@ type DockerInputsProps = {
 };
 
 /**
- * DockerInputs component – This component provides input fields for configuring Docker-related settings for a project repository.
+ * DockerInputs component – This component provides input fields for configuring informacion-related settings for a project repository.
  * It allows the user to select a technology, version (tag), and framework for the selected technology. These fields are rendered
  * dynamically based on the selected technology, using the `inputSelectTecnology` object to pull available versions and frameworks
  * for each technology.
@@ -19,34 +19,35 @@ type DockerInputsProps = {
  * field with the form context, and displays error messages if validation fails.
  *
  * The available input fields are:
- * - **Tecnología**: A dropdown to select the Docker technology (e.g., Node).
+ * - **Tecnología**: A dropdown to select the informacion technology (e.g., Node).
  * - **Version**: A dropdown to select the version of the chosen technology.
  * - **Framework**: A dropdown to select the framework, available for certain technologies.
  *
  * @component
  *
  * @param {Object} props - Component props.
- * @param {KeysOfRepository} props.fieldName - Optional field name for determining which repository's Docker configuration
+ * @param {KeysOfRepository} props.fieldName - Optional field name for determining which repository's informacion configuration
  * to display (defaults to "backend").
  *
- * @returns {JSX.Element} A set of form inputs for selecting Docker technology, version, and framework for a project repository.
+ * @returns {JSX.Element} A set of form inputs for selecting informacion technology, version, and framework for a project repository.
  *
  * @example
  * ```tsx
  * <DockerInputs fieldName="backend" />
  * ```
  */
-export const DockerInputs: React.FC<DockerInputsProps> = ({ fieldName = "backend" }) => {
+export const TechnologyInputs: React.FC<DockerInputsProps> = ({ fieldName = "backend" }) => {
   const {
     control,
     watch,
     formState: { errors },
+    setValue
   } = useFormContext<ProyectoRepositoriesSchema>();
 
   const selectedFramework = watch(
-    `${fieldName}.docker.framework`
+    `${fieldName}.informacion.framework`
   ) as keyof typeof inputSelectFramework;
-  const selectedTechnology = watch(`${fieldName}.docker.tecnologia`);
+  const selectedTechnology = watch(`${fieldName}.informacion.tecnologia`);
 
   // Tecnologías disponibles según el framework
   const techOptions = selectedFramework ? inputSelectFramework[selectedFramework] : [];
@@ -57,23 +58,33 @@ export const DockerInputs: React.FC<DockerInputsProps> = ({ fieldName = "backend
       ? (techOptions.find((t) => t.technology === selectedTechnology)?.versions ?? [])
       : [];
 
+    if(fieldName == 'frontend')console.log('X ',watch())
+
+    useEffect(() => {
+      setValue(`${fieldName}.informacion.tecnologia`, null)
+    }, [ watch(`${fieldName}.informacion.framework`)]);
+
+    useEffect(() => {
+      setValue(`${fieldName}.informacion.version`, null)
+    }, [ watch(`${fieldName}.informacion.tecnologia`)]);
+
   return (
     <>
       <Controller
         control={control}
-        name={`${fieldName}.docker.framework`}
+        name={`${fieldName}.informacion.framework`}
         render={({ field }) => (
           <TextField
             size="small"
             select
-            label="Versión de Node"
+            label="Framework"
             placeholder="Escribe para buscar..."
             fullWidth
             inputRef={field.ref}
             value={field.value}
             onChange={field.onChange}
-            error={!!errors?.[fieldName]?.docker?.framework}
-            helperText={errors?.[fieldName]?.docker?.framework?.message?.toString() || ""}
+            error={!!errors?.[fieldName]?.informacion?.framework}
+            helperText={errors?.[fieldName]?.informacion?.framework?.message?.toString() || ""}
           >
             {keysOfFrameworks.map((key) => {
               return (
@@ -89,19 +100,19 @@ export const DockerInputs: React.FC<DockerInputsProps> = ({ fieldName = "backend
       {techOptions && (
         <Controller
           control={control}
-          name={`${fieldName}.docker.tecnologia`}
+          name={`${fieldName}.informacion.tecnologia`}
           render={({ field }) => (
             <TextField
               size="small"
               select
-              label="Tag"
+              label="Tecnología"
               placeholder="Escribe para buscar..."
               fullWidth
               inputRef={field.ref}
               value={field.value}
               onChange={field.onChange}
-              error={!!errors?.[fieldName]?.docker?.tecnologia}
-              helperText={errors?.[fieldName]?.docker?.tecnologia?.message?.toString() || ""}
+              error={!!errors?.[fieldName]?.informacion?.tecnologia}
+              helperText={errors?.[fieldName]?.informacion?.tecnologia?.message?.toString() || ""}
             >
               {techOptions.map((tec) => {
                 return (
@@ -119,19 +130,19 @@ export const DockerInputs: React.FC<DockerInputsProps> = ({ fieldName = "backend
       {selectedTechnology && (
         <Controller
           control={control}
-          name={`${fieldName}.docker.version`}
+          name={`${fieldName}.informacion.version`}
           render={({ field }) => (
             <TextField
               size="small"
               select
-              label="Framework"
+              label="Versión"
               placeholder="Escribe para buscar..."
               fullWidth
               inputRef={field.ref}
               value={field.value}
               onChange={field.onChange}
-              error={!!errors?.[fieldName]?.docker?.version}
-              helperText={errors?.[fieldName]?.docker?.version?.message?.toString() || ""}
+              error={!!errors?.[fieldName]?.informacion?.version}
+              helperText={errors?.[fieldName]?.informacion?.version?.message?.toString() || ""}
             >
               {versionOptions.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -146,4 +157,4 @@ export const DockerInputs: React.FC<DockerInputsProps> = ({ fieldName = "backend
   );
 };
 
-export default DockerInputs;
+export default TechnologyInputs;

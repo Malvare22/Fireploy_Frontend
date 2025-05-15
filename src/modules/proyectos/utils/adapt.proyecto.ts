@@ -35,11 +35,11 @@ export function adaptProjectToCard(proyecto: Proyecto): ProyectoCard {
     descripcion: proyecto.descripcion ?? "",
     imagen: proyecto.imagen ? proyecto.imagen : null,
     integrantes: integrantes,
-    frontend: !proyecto.frontend ? null : proyecto.frontend?.docker?.framework || "No especificado",
-    backend: !proyecto.backend ? null : proyecto.frontend?.docker?.framework || "No especificado",
+    frontend: !proyecto.frontend ? null : proyecto.frontend?.informacion?.framework || "No especificado",
+    backend: !proyecto.backend ? null : proyecto.frontend?.informacion?.framework || "No especificado",
     integrado: !proyecto.integrado
       ? null
-      : proyecto.frontend?.docker?.framework || "No especificado",
+      : proyecto.frontend?.informacion?.framework || "No especificado",
     dataBase: proyecto.baseDeDatos?.nombre || "",
 
     fav_usuarios: proyecto.fav_usuarios ?? [],
@@ -124,16 +124,13 @@ export function adaptRepository(repository: RepositorioService): Repositorio {
     variables: !repository.variables_de_entorno ? "" : repository.variables_de_entorno,
     url: repository.url ?? "",
     tipo: (repository.tipo as Repositorio["tipo"]) ?? "I",
-    docker: {
+    informacion: {
       framework: isTechnologyKey(framework) ? TECNOLOGIES[framework] : null,
       tecnologia: isTechnologyKey(tecnologia) ? TECNOLOGIES[tecnologia] : null,
       version: version,
     },
     id: repository.id ?? -1,
   };
-
-    console.log(out)
-
 
   return out;
 }

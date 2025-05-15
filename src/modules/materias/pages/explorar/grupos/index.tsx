@@ -86,7 +86,7 @@ function VerCursosMateria() {
 
       return response;
     },
-    queryKey: ["Get Groups Explore", parseInt(idMateria ?? "-1")],
+    queryKey: ["Get Groups Explore", parseInt(idMateria ?? "-1"), token],
   });
 
   /** Course ID to register */
@@ -110,7 +110,7 @@ function VerCursosMateria() {
       if (IS_TEACHER) return await getCursos(token, { docente: id });
       return [];
     },
-    queryKey: ["Get My Groups For Explore", id],
+    queryKey: ["Get My Groups For Explore", id, token],
   });
 
   /** Handle API error for user groups */
@@ -132,7 +132,7 @@ function VerCursosMateria() {
       if (!IS_TEACHER) return await patchEstudiantesCurso(token, [studentId], "A", cursoId);
       else return await postCreateSolicitudCurso(token, id, cursoId ?? "");
     },
-    mutationKey: ["Register In Group"],
+    mutationKey: ["Register In Group", token],
     onSuccess: () => {
       const isStudentNow = !IS_TEACHER;
       showDialog({
@@ -232,7 +232,7 @@ function VerCursosMateria() {
                           isRegister={myGroupsIds?.get(curso.id ?? "-1") ?? false}
                           onClick={() => handleIdGroup(curso.id)}
                           curso={curso}
-                          userType={'E'}
+                          userType={tipo}
                         />
                       </Grid2>
                     ))}
