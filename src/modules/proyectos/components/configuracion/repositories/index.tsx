@@ -1,5 +1,14 @@
 import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
-import { Box, Divider, Stack, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Grid2,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Controller, useForm, useFormContext } from "react-hook-form";
 import EnviromentVariablesEditor from "../enviroment";
 import { TechnologyInputs } from "../../technologyInputs";
@@ -9,9 +18,12 @@ import {
 } from "@modules/proyectos/utils/forms/proyecto.schema";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "@modules/general/context/accountContext";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { StepperContext } from "@modules/general/context/stepperContex";
-import { patchEditRepository } from "@modules/proyectos/services/patch.edit.repositories";
+import {
+  patchEditRepository,
+  postFileToRepository,
+} from "@modules/proyectos/services/patch.edit.repositories";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,6 +35,10 @@ import AutoFocusOnError from "@modules/general/hooks/useAutoFocusOnError";
 import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
 import { getProjectById } from "@modules/proyectos/services/get.project";
 import { syncErrorProject } from "../../executionState";
+import FolderZipIcon from "@mui/icons-material/FolderZip";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import HiddenButton from "@modules/materias/components/hiddenInput";
+import { KeysOfRepository } from "@modules/proyectos/types/keysOfRepository";
 
 type Props = {
   type: "edit" | "create";
@@ -77,6 +93,7 @@ export function Repositories({ type }: Props) {
     message,
     type: dialogType,
     setOpen,
+    setIsLoading,
   } = useAlertDialog2();
 
   const { setError } = useErrorReader(showDialog);
@@ -86,9 +103,37 @@ export function Repositories({ type }: Props) {
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       const currentStatus = await getProjectById(token, getValuesProject("id") ?? -1);
-      console.log(executionState, currentStatus.estado_ejecucion);
-      if (executionState && currentStatus.estado_ejecucion != executionState) syncErrorProject();
-      await patchEditRepository(token, getValues(), token);
+      setIsLoading(true);
+      if (
+        type == "create" ||
+        (executionState && currentStatus.estado_ejecucion == executionState)
+      ) {
+        await patchEditRepository(token, getValues());
+        if (filesRepo.backend != null) {
+          await postFileToRepository(
+            token,
+            filesRepo.backend,
+            getValuesProject("backend.id") ?? -1
+          );
+        }
+        if (filesRepo.frontend != null) {
+          await postFileToRepository(
+            token,
+            filesRepo.frontend,
+            getValuesProject("frontend.id") ?? -1
+          );
+        }
+        if (filesRepo.integrado != null) {
+          await postFileToRepository(
+            token,
+            filesRepo.integrado,
+            getValuesProject("integrado.id") ?? -1
+          );
+        }
+
+        return;
+      }
+      syncErrorProject();
     },
     onSuccess: () => {
       if (type === "create") {
@@ -109,6 +154,37 @@ export function Repositories({ type }: Props) {
       setError(error);
     },
   });
+
+  type FilesRepo = Record<KeysOfRepository, File | null>;
+  const [filesRepo, setFilesRepo] = useState<FilesRepo>({
+    backend: null,
+    frontend: null,
+    integrado: null,
+  });
+
+  function InputFile({ layer }: { layer: KeysOfRepository }) {
+    function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+      const { files } = e.target;
+
+      if (!files || !files[0]) setFilesRepo({ ...filesRepo, [layer]: null });
+      else {
+        setFilesRepo({ ...filesRepo, [layer]: files[0] });
+      }
+    }
+
+    return (
+      <Button
+        component="label"
+        role={undefined}
+        variant="contained"
+        tabIndex={-1}
+        startIcon={<FolderZipIcon />}
+      >
+        {!filesRepo[layer]?.name ? "Subir .Zip" : filesRepo[layer]?.name}
+        <HiddenButton type="file" onChange={onChange} multiple />
+      </Button>
+    );
+  }
 
   function handleMutate(options: { isEdit: boolean }) {
     mutate(undefined, {
@@ -172,21 +248,37 @@ export function Repositories({ type }: Props) {
               {watch("frontend") && (
                 <>
                   <Typography variant="h6">{labelConfiguracion.frontend}</Typography>
-                  <Controller
-                    name="frontend.url"
-                    control={control}
-                    render={({ field, fieldState }) => (
-                      <TextField
-                        size="small"
-                        {...field}
-                        fullWidth
-                        label={labelConfiguracion.urlFrontend}
-                        error={!!fieldState.error}
-                        helperText={fieldState.error?.message}
-                        inputRef={field.ref}
+                  <Grid2 container>
+                    <Grid2 size={{ md: 6, xs: 12 }}>
+                      <Controller
+                        name="frontend.url"
+                        control={control}
+                        render={({ field, fieldState }) => (
+                          <TextField
+                            size="small"
+                            {...field}
+                            fullWidth
+                            label={labelConfiguracion.urlFrontend}
+                            error={!!fieldState.error}
+                            helperText={fieldState.error?.message}
+                            inputRef={field.ref}
+                            slotProps={{
+                              input: {
+                                endAdornment: (
+                                  <InputAdornment position="end">
+                                    <GitHubIcon />
+                                  </InputAdornment>
+                                ),
+                              },
+                            }}
+                          />
+                        )}
                       />
-                    )}
-                  />
+                    </Grid2>
+                    <Grid2 size={{ md: 6, xs: 12 }}>
+                      <InputFile layer="frontend" />
+                    </Grid2>
+                  </Grid2>
                   <TechnologyInputs fieldName="frontend" />
                   <EnviromentVariablesEditor type="frontend" />
                 </>
@@ -195,21 +287,37 @@ export function Repositories({ type }: Props) {
               {watch("backend") && (
                 <>
                   <Typography variant="h6">{labelConfiguracion.backend}</Typography>
-                  <Controller
-                    name="backend.url"
-                    control={control}
-                    render={({ field, fieldState }) => (
-                      <TextField
-                        size="small"
-                        {...field}
-                        fullWidth
-                        label={labelConfiguracion.urlBackend}
-                        error={!!fieldState.error}
-                        helperText={fieldState.error?.message}
-                        inputRef={field.ref}
+                  <Grid2 container spacing={1}>
+                    <Grid2 size={{ md: 10, xs: 12 }}>
+                      <Controller
+                        name="backend.url"
+                        control={control}
+                        render={({ field, fieldState }) => (
+                          <TextField
+                            size="small"
+                            {...field}
+                            fullWidth
+                            label={labelConfiguracion.urlRepositorio}
+                            error={!!fieldState.error}
+                            helperText={fieldState.error?.message}
+                            inputRef={field.ref}
+                            slotProps={{
+                              input: {
+                                endAdornment: (
+                                  <InputAdornment position="end">
+                                    <GitHubIcon />
+                                  </InputAdornment>
+                                ),
+                              },
+                            }}
+                          />
+                        )}
                       />
-                    )}
-                  />
+                    </Grid2>
+                    <Grid2 size={{ md: 2, xs: 12 }}>
+                      <InputFile layer="backend" />
+                    </Grid2>
+                  </Grid2>
                   <TechnologyInputs fieldName="backend" />
                   <EnviromentVariablesEditor type="backend" />
                 </>
@@ -217,22 +325,38 @@ export function Repositories({ type }: Props) {
 
               {watch("integrado") && (
                 <>
-                  <Typography variant="h6">Repositorio Integrado</Typography>
-                  <Controller
-                    name="integrado.url"
-                    control={control}
-                    render={({ field, fieldState }) => (
-                      <TextField
-                        size="small"
-                        {...field}
-                        fullWidth
-                        label="URL del Monolito"
-                        error={!!fieldState.error}
-                        helperText={fieldState.error?.message}
-                        inputRef={field.ref}
+                  <Typography variant="h6">{labelConfiguracion.integrado}</Typography>
+                  <Grid2 container spacing={1}>
+                    <Grid2 size={{ md: 10, xs: 12 }}>
+                      <Controller
+                        name="integrado.url"
+                        control={control}
+                        render={({ field, fieldState }) => (
+                          <TextField
+                            size="small"
+                            {...field}
+                            fullWidth
+                            label={labelConfiguracion.urlRepositorio}
+                            error={!!fieldState.error}
+                            helperText={fieldState.error?.message}
+                            inputRef={field.ref}
+                            slotProps={{
+                              input: {
+                                endAdornment: (
+                                  <InputAdornment position="end">
+                                    <GitHubIcon />
+                                  </InputAdornment>
+                                ),
+                              },
+                            }}
+                          />
+                        )}
                       />
-                    )}
-                  />
+                    </Grid2>
+                    <Grid2 size={{ md: 2, xs: 12 }}>
+                      <InputFile layer="integrado" />
+                    </Grid2>
+                  </Grid2>
                   <TechnologyInputs fieldName="integrado" />
                   <EnviromentVariablesEditor type="integrado" />
                 </>

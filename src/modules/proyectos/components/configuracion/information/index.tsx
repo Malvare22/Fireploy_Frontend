@@ -136,7 +136,8 @@ export const Information = ({ type }: Props) => {
   const { mutate: mutateEdit, isPending: isPendingEdit } = useMutation({
     mutationFn: async () => {
       setIsLoading(true);
-      const currentStatus = await getProjectById(token, id);
+      const currentStatus = await getProjectById(token, getValuesPrincipal("id") ?? -1);
+
       if (executionState && currentStatus.estado_ejecucion != executionState) syncErrorProject();
       await patchEditProject(token, getValues());
       if (fileImg != undefined) {
