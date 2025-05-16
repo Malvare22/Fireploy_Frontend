@@ -2,12 +2,11 @@ import { patchData } from "@core/services";
 import { ProyectoRepositoriesSchema } from "../utils/forms/proyecto.schema";
 import { transformStringToKV, VariablesDeEntorno } from "@modules/general/utils/string";
 import { Repositorio } from "../types/repositorio";
-import { TECNOLOGIES } from "../utils/docker";
+import { TECNOLOGIES } from "../utils/technologies";
 
 type Body = {
   url: string;
   tecnologia: string | null;
-  version: string | null;
   framework: string | null;
   variables_de_entorno: VariablesDeEntorno[] | null;
 };
@@ -27,7 +26,6 @@ async function query(repository: Repositorio, token: string) {
   const t = transformStringToKV(repository.variables ?? "");
 
   const tecnologia = repository.informacion?.tecnologia ?? null;
-  const version = repository.informacion?.version ?? null;
   const framework = repository.informacion?.framework ?? null;
 
   const findMe = (s: string | null) => {
@@ -37,7 +35,6 @@ async function query(repository: Repositorio, token: string) {
   const body: Body = {
     tecnologia: findMe(tecnologia),
     url: repository.url,
-    version: version,
     framework: findMe(framework),
     variables_de_entorno: t == undefined || repository.variables == "" ? null : t,
   };

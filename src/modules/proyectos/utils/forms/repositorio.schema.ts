@@ -16,14 +16,7 @@ export const RepositorioSchema: z.ZodType<Repositorio> = z.object({
     return transformStringToKV(variable) || variable.length == 0;
   }, "Ingrese variables de entorno con una sintaxis válida (consulta manual de usuario)"),
   informacion: z.object({
-    tecnologia: z.string().nullable(),
-    version: z.string().nullable(),
-    framework: z.string().nullable()
+    tecnologia: z.string({ message: "Es obligatorio seleccionar una tecnología" }),
+    framework: z.string({ message: "Es obligatorio seleccionar un framework" }),
   }),
-}).refine((repo) => repo.informacion.framework ? repo.informacion.tecnologia && repo.informacion.version: true, {
-      message: 'Es obligatorio seleccionar una tecnología y su respectiva versión',
-      path: ["informacion.tecnologia"],
-    }).refine((repo) => repo.informacion.framework ? repo.informacion.tecnologia && repo.informacion.version: true, {
-      message: 'Se requiere seleccionar una versión',
-      path: ["informacion.version"],
-    });
+});

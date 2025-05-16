@@ -6,7 +6,7 @@ import { adaptDataBase } from "./adaptDataBase";
 import { removeImageBuffer } from "@modules/general/utils/removeImageBuffer";
 import { UsuarioCurso } from "@modules/materias/types/curso";
 import { EstadoUsuario } from "@modules/usuarios/types/usuario";
-import { isTechnologyKey, TECNOLOGIES } from "./docker";
+import { isTechnologyKey, TECNOLOGIES } from "./technologies";
 
 // /**
 //  * adaptUsuarioToPortafolioCard – Transforms a user object into a format compatible with a portfolio card, extracting ID, name, and photo.
@@ -116,7 +116,6 @@ export function adaptProject(project: Partial<ProyectoService>): Proyecto {
  */
 export function adaptRepository(repository: RepositorioService): Repositorio {
   const tecnologia = repository.tecnologia ?? null;
-  const version = repository.version ?? null;
   const framework = repository.framework ?? null;
 
 
@@ -127,7 +126,6 @@ export function adaptRepository(repository: RepositorioService): Repositorio {
     informacion: {
       framework: isTechnologyKey(framework) ? TECNOLOGIES[framework] : null,
       tecnologia: isTechnologyKey(tecnologia) ? TECNOLOGIES[tecnologia] : null,
-      version: version,
     },
     id: repository.id ?? -1,
   };

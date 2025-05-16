@@ -4,9 +4,8 @@
  * @property {string[]} versions - The available versions of the technology.
  * @property {string[]} frameworks - The available frameworks associated with the technology.
  */
-type SelectTechnlogy = {
-  technology: string;
-  versions: string[];
+type SelectTecnlogy = {
+  frameworks: string[];
 };
 
 export function isTechnologyKey(key: string | null): key is keyof typeof TECNOLOGIES {
@@ -32,51 +31,37 @@ export enum TECNOLOGIES {
   Symphony = "Symphony",
 }
 
-export enum CastTecnology {}
-
-const nodejs: SelectTechnlogy = {
-  technology: TECNOLOGIES.Nodejs,
-  versions: ["23-alpine3.20"],
-};
-
-const java: SelectTechnlogy = {
-  technology: TECNOLOGIES.Java,
-  versions: ["1.0"],
-};
-
-const php: SelectTechnlogy = {
-  technology: TECNOLOGIES.Php,
-  versions: ["8.3.20-apache"],
-};
-
 /**
  * keysOfTecnologies – A tuple of selected technology keys.
  *
  * This array defines a subset of technologies that are currently supported or being used in the project.
  */
-export const keysOfFrameworks = [
-  TECNOLOGIES.Laravel,
-  TECNOLOGIES.Angular,
-  TECNOLOGIES.Reactjs,
-  TECNOLOGIES.Nextjs,
-  TECNOLOGIES.Springboot,
-  TECNOLOGIES.Expressjs,
-  TECNOLOGIES.Symphony,
-  TECNOLOGIES.Nodejs,
-] as const;
+export const keyOfTechnologies = [TECNOLOGIES.Java, TECNOLOGIES.Nodejs, TECNOLOGIES.Php] as const;
 
 /**
  * inputSelectTecnology – A record mapping each technology (from `keysOfTecnologies`) to its respective SelectTenology.
  *
  * This object contains the available versions and frameworks for each supported technology.
  */
-export const inputSelectFramework: Record<(typeof keysOfFrameworks)[number], SelectTechnlogy[]> = {
-  Angular: [nodejs],
-  React: [nodejs],
-  NextJS: [nodejs],
-  ExpressJS: [nodejs],
-  Laravel: [php],
-  Symphony: [php],
-  SpringBoot: [java],
-  NodeJS: [nodejs],
+export const inputSelectFramework: Record<(typeof keyOfTechnologies)[number], SelectTecnlogy> = {
+  Java: {
+    frameworks: [
+      TECNOLOGIES.Springboot,
+    ],
+  },
+  PHP: {
+    frameworks: [
+      TECNOLOGIES.Laravel,
+      TECNOLOGIES.Symphony,
+    ],
+  },
+  NodeJS: {
+    frameworks: [
+      TECNOLOGIES.Nextjs,
+      TECNOLOGIES.Expressjs,
+      TECNOLOGIES.Nodejs,
+      TECNOLOGIES.Reactjs,
+      TECNOLOGIES.Angular,
+    ],
+  },
 } as const;

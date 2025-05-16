@@ -64,7 +64,6 @@ export type ProyectoService = {
  * @property {string} tipo - The type of the repository (e.g., frontend, backend, integrated).
  * @property {string or null} tecnologia - The main technology used in the repository, or null if unspecified.
  * @property {string or null} variables_de_entorno - Environment variables used in the repository, or null.
- * @property {string or null} version - The version of the code or project in the repository, or null.
  * @property {string or null} framework - The framework used in the repository, or null.
  */
 export type RepositorioService = {
@@ -74,6 +73,5 @@ export type RepositorioService = {
   tipo: string;
   tecnologia: string | null;
   variables_de_entorno: string | null;
-  version: string | null;
   framework: string | null;
 };

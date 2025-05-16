@@ -1,6 +1,6 @@
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import { getImage } from "@modules/general/utils/getImage";
-import { TECNOLOGIES } from "@modules/proyectos/utils/docker";
+import { TECNOLOGIES } from "@modules/proyectos/utils/technologies";
 import { Grid2, IconButton, Paper, Typography } from "@mui/material";
 import { Box, Stack, useMediaQuery, useTheme } from "@mui/system";
 import { keyframes } from "@emotion/react";
