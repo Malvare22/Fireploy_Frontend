@@ -70,7 +70,7 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
         selectUsuario?.id ?? -1,
         selectUsuario?.estado == "A" ? "I" : "A"
       ),
-    mutationKey: ["Update User", selectUsuario?.id ?? -1, selectUsuario?.estado == "A" ? "I" : "A"],
+    mutationKey: ["Update User", selectUsuario?.id ?? -1, selectUsuario?.estado == "A" ? "I" : "A", token],
     onError: (err) => setError(err),
     onSuccess: () => {
       showDialog({

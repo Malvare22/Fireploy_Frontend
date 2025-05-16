@@ -53,7 +53,7 @@ type Props = {
  */
 export function Repositories({ type }: Props) {
   const { getValues: getValuesProject } = useFormContext<ProyectoSchema>();
-  const { token, id: idUser } = useAuth().accountInformation;
+  const { token } = useAuth().accountInformation;
   const { handleNext } = useContext(StepperContext);
 
   const methods = useForm<ProyectoRepositoriesSchema>({
@@ -61,12 +61,7 @@ export function Repositories({ type }: Props) {
     resolver: zodResolver(ProyectoRepositoriesSchema),
   });
 
-  const {
-    getValues,
-    control,
-    watch,
-    reset,
-  } = methods;
+  const { getValues, control, watch, reset } = methods;
 
   useEffect(() => {
     reset(getValuesProject());
@@ -90,9 +85,10 @@ export function Repositories({ type }: Props) {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
-      const currentStatus = await getProjectById(token, idUser);
+      const currentStatus = await getProjectById(token, getValuesProject("id") ?? -1);
+      console.log(executionState, currentStatus.estado_ejecucion);
       if (executionState && currentStatus.estado_ejecucion != executionState) syncErrorProject();
-      patchEditRepository(token, getValues());
+      await patchEditRepository(token, getValues(), token);
     },
     onSuccess: () => {
       if (type === "create") {

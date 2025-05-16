@@ -84,7 +84,7 @@ function ListarMaterias() {
    */
   const { data, isLoading, error } = useQuery({
     queryFn: () => getMateriasService(token),
-    queryKey: ["get Materias"],
+    queryKey: ["Get Materias", token],
   });
 
   /** Alert dialog control hook */

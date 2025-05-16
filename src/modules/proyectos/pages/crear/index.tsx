@@ -55,7 +55,7 @@ export default function CrearProyecto() {
 
   const { data: project, error: _errorProject } = useQuery({
     queryFn: () => getProjectById(token, projectId ?? -1),
-    queryKey: ["Get Project In Create Proccess"],
+    queryKey: ["Get Project In Create Process", token, projectId],
     enabled: projectId !== -1,
     retry: 2,
   });

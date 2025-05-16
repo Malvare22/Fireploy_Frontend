@@ -93,7 +93,7 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard, idMateri
     error,
   } = useQuery({
     queryFn: () => getProjectByIdSection(token, seccion.id || -1),
-    queryKey: ["Get Projects To Section", seccion.id || -1], // No cache key provided (consider improving this)
+    queryKey: ["Get Projects To Section", seccion.id || -1, token],
   });
 
   useEffect(() => {

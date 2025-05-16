@@ -93,7 +93,7 @@ function VerInformacionCurso() {
       if (tipo == 'A' || flag) return { ...response, id: idCurso } as CursoService;
       throw new SpecialError("No te encuentras registrado en este curso", "FRONTEND_ERROR");
     },
-    queryKey: ["Get Curso By Id", idCurso ?? "-1"],
+    queryKey: ["Get Curso By Id", idCurso ?? "-1", token],
   });
 
   /** State to store adapted course */
@@ -137,7 +137,7 @@ function VerInformacionCurso() {
         setIsLoading(true);
         return await patchEstudiantesCurso(token, [studentId], "D", cursoId);
       },
-      mutationKey: ["Register In Group"],
+      mutationKey: ["Register In Group", token],
       onSuccess: () => {
         showDialog({
           title: "Retirarse del curso",

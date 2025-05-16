@@ -39,7 +39,7 @@ function VistaPerfil() {
    */
   const { data, isLoading, error } = useQuery({
     queryFn: () => getUsuarioService(id, token),
-    queryKey: ["Profile", id, token],
+    queryKey: ["Profile", id, token, token],
   });
 
   /** Error dialog state and handlers */

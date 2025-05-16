@@ -53,7 +53,7 @@ function VistaSolicitudes() {
   // 📦 React Query: fetch solicitudes
   const { data, isLoading, error, isSuccess } = useQuery({
     queryFn: () => getSolicitudesService(token, {tipo: 1}),
-    queryKey: ["Solicitudes"],
+    queryKey: ["Solicitudes", token],
   });
 
   // 🛠️ Adapt and store fetched solicitudes

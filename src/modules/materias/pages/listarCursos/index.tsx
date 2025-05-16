@@ -84,7 +84,7 @@ function ListarCursos() {
     error: errorQuery,
   } = useQuery({
     queryFn: () => getCursoByMateriaId(token, idMateria ?? ""),
-    queryKey: [`Fetch Cursos`, idMateria],
+    queryKey: [`Get Cursos`, idMateria, token],
   });
 
   const {

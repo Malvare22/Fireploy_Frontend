@@ -80,7 +80,6 @@ const TablaSolicitudes: React.FC<Props> = ({ solicitudes, tipo }) => {
    */
   const { isPending, mutate } = useMutation({
     mutationFn: () => patchSolicitudService(selectSolicitud?.id ?? -1, estadoSolicitud, id, token),
-    mutationKey: ["changeUser"],
     onError: (error) => setError(error),
     onSuccess: () => {
       showDialog({

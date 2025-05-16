@@ -185,7 +185,7 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
 
   const { isPending, mutate } = useMutation({
     mutationFn: () => patchChangeStatusMateria(token, bodyQuery, selectMateria?.codigo ?? -1),
-    mutationKey: ["Change Status Subject", selectMateria?.codigo],
+    mutationKey: ["Change Status Subject", selectMateria?.codigo, token],
     onSuccess: () =>
       showDialog({
         message: "Materia Actualizada Correctamente",

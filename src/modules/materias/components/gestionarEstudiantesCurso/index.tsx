@@ -73,7 +73,7 @@ function GestionarEstudiantesCurso({ curso, idCurso }: Props) {
       setIsLoading(true);
       return await patchEstudiantesCurso(token, usersToAddCodes, "A", idCurso ?? "-1");
     },
-    mutationKey: ["Add Students", usersToAddCodes],
+    mutationKey: ["Add Students", usersToAddCodes, token],
     onSuccess: () =>
       showDialog({
         title: "Añadir Estudiantes a un Curso",
@@ -93,7 +93,7 @@ function GestionarEstudiantesCurso({ curso, idCurso }: Props) {
       setIsLoading(true);
       return await patchEstudiantesCurso(token, selectStudentsToRemove, "D", idCurso ?? "-1");
     },
-    mutationKey: ["Remove Students"],
+    mutationKey: ["Remove Students", token],
     onSuccess: () =>
       showDialog({
         title: "Eliminar Estudiantes de un Curso",

@@ -104,7 +104,7 @@ function VistaCrearMateria() {
 
   const { isPending, mutate } = useMutation({
     mutationFn: getQueryToMake("crear"),
-    mutationKey: ["Create Subject"],
+    mutationKey: ["Create Subject", token],
     onError: (err) => {
       setError(err);
       setDisableCheck(false);
@@ -124,7 +124,7 @@ function VistaCrearMateria() {
 
   const { isPending: isPendingPostGrupos, mutate: mutatePostGrupos } = useMutation({
     mutationFn: () => createGroupsRequest(getValues("cursos") || []),
-    mutationKey: ["Edit Grupos", getValues("cursos") || []],
+    mutationKey: ["Edit Grupos", getValues("cursos") || [], token],
     onError: (err) => {
       setError(err);
     },

@@ -4,6 +4,19 @@ import { rutasGeneral } from "../router/router";
 import { ShowDialogParams } from "./useAlertDialog";
 
 type SpecialErrorTypes = 'FRONTEND_ERROR'
+
+/**
+ * SpecialError class – custom error type for identifying frontend-specific exceptions.
+ * 
+ * Used to differentiate app-specific frontend errors from general errors.
+ * 
+ * @class
+ * 
+ * @extends {Error}
+ * 
+ * @param {string} message - The error message to be displayed.
+ * @param {SpecialErrorTypes} type - The specific type of the special error.
+ */
 export class SpecialError extends Error {
   type: SpecialErrorTypes;
 
@@ -14,7 +27,14 @@ export class SpecialError extends Error {
   }
 }
 
+/**
+ * specialError – constant instance to represent a known frontend error type.
+ * 
+ * @constant
+ * @type {{ type: SpecialErrorTypes }}
+ */
 export const specialError = {type: 'FRONTEND_ERROR'};
+
 /**
  * Type definition for the function that shows a dialog.
  * The `showDialog` function accepts a `ShowDialogParams` object to configure
@@ -26,19 +46,23 @@ export const specialError = {type: 'FRONTEND_ERROR'};
 type ShowDialogFn = (params: ShowDialogParams) => void;
 
 /**
- * Custom hook to handle centralized error handling and display error dialogs.
- * This hook listens for error changes and shows a dialog with the error message
- * when an error occurs. It also handles specific logic such as navigating on 401 errors.
+ * useErrorReader hook – centralized error handler with built-in dialog integration.
  * 
- * @component
- * @param {ShowDialogFn} showDialog - A function used to show the dialog with the error details.
+ * Monitors errors and displays a configured alert dialog when an error is detected.
+ * Supports automatic navigation behavior on certain error codes or custom error types.
  * 
- * @returns {Object} - An object containing the `setError` function to trigger the error state.
- * @returns {Function} setError - Function to trigger the error state, causing the error dialog to be displayed.
+ * @hook
+ * 
+ * @param {ShowDialogFn} showDialog - Function used to open the error dialog with configuration options.
+ * 
+ * @returns {Object} An object with the `setError` function to trigger error handling behavior.
+ * @returns {Function} setError - Function to trigger an error and display the corresponding dialog.
  * 
  * @example
+ * ```tsx
  * const { setError } = useErrorReader(showDialog);
  * setError(new Error("Something went wrong!"));
+ * ```
  */
 function useErrorReader(showDialog: ShowDialogFn) {
   const [error, setError] = useState<any | null>(null);

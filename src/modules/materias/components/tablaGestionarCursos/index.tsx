@@ -82,7 +82,7 @@ const TablaGestionarCursos = () => {
     error: errorFetchDocentes,
   } = useQuery({
     queryFn: () => getUsuariosByTypeService("Docente", token),
-    queryKey: ["Docentes"],
+    queryKey: ["Get Docentes", token],
   });
 
   const {

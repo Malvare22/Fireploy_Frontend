@@ -28,7 +28,7 @@ export enum TECNOLOGIES {
   Java = "Java",
   Springboot = "SpringBoot",
   Expressjs = "ExpressJS",
-  Symphony = "Symphony",
+  Symfony = "Symfony",
 }
 
 /**
@@ -52,7 +52,7 @@ export const inputSelectFramework: Record<(typeof keyOfTechnologies)[number], Se
   PHP: {
     frameworks: [
       TECNOLOGIES.Laravel,
-      TECNOLOGIES.Symphony,
+      TECNOLOGIES.Symfony,
     ],
   },
   NodeJS: {

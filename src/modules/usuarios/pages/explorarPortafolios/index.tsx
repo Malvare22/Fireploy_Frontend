@@ -43,7 +43,7 @@ function ExplorarPortafolios() {
 
   const { data, isLoading, error, isSuccess } = useQuery({
     queryFn: () => getUsuariosByTypeService("todos", token),
-    queryKey: ["Portafolios", "todos"],
+    queryKey: ["Portafolios", "todos", token],
   });
 
   // Local state to store adapted user portfolio data

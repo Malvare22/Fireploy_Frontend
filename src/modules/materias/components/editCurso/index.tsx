@@ -143,7 +143,7 @@ function EditarCurso({ type }: EditarCursoProps) {
       setIsLoading(true);
       return await patchEditCurso(token, methods.getValues());
     },
-    mutationKey: ["Patch Curso", methods.getValues()],
+    mutationKey: ["Patch Curso", methods.getValues(), token],
     onSuccess: () =>
       showDialog({
         message: "Curso modificado correctamente",
@@ -163,7 +163,7 @@ function EditarCurso({ type }: EditarCursoProps) {
       setIsLoading(true);
       return await postCreateCursoService(token, parseInt(idMateria || "-1"), methods.getValues());
     },
-    mutationKey: ["Create Curso", methods.getValues()],
+    mutationKey: ["Create Curso", methods.getValues(), token],
     onSuccess: () =>
       showDialog({
         message: "Curso creado correctamente",
