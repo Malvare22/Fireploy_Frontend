@@ -20,6 +20,7 @@ import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { getProjectById } from "@modules/proyectos/services/get.project";
 import { syncErrorProject } from "../../executionState";
 import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 type Props = {
   type: "edit" | "create";
@@ -95,12 +96,7 @@ export const DataBase = ({ type }: Props) => {
     },
     mutationKey: ["Create Database", getValues()],
     onSuccess: () => {
-      showDialog({
-        title: "Conexión Base de datos",
-        message: "Se ha terminado de configurar el proyecto 😎",
-        type: "success",
-        onAccept: handleFinish,
-      });
+      onFinish();
     },
     onError: (err) => {
       setError(err);
@@ -111,15 +107,23 @@ export const DataBase = ({ type }: Props) => {
     mutate();
   }
 
-  function handleFinish() {
-    navigate(rutasProyectos.misProyectos);
+  function onFinish() {
+    showDialog({
+      title: "Conexión Base de datos",
+      message:
+        type == "create"
+          ? "Se ha terminado de configurar el proyecto 😎"
+          : "Se ha registrado la base de datos correctamente",
+      type: "success",
+      onAccept: () => navigate(rutasProyectos.misProyectos),
+    });
   }
 
   return (
     <Stack spacing={2}>
       <Typography variant="h5">Base de Datos</Typography>
       <Divider />
-      {type == "create" ? (
+      {type == "create" || (type == "edit" && getValuesProject("baseDeDatos")?.id == -1) ? (
         <form onSubmit={handleSubmit(onSubmit)}>
           <AlertDialog
             handleAccept={handleAccept}
@@ -182,10 +186,28 @@ export const DataBase = ({ type }: Props) => {
                 </TextField>
               )}
             />
-            <Stack>
-              <Box>
-                <GeneralButton mode={buttonTypes.accept} type="submit" />
-              </Box>
+            <Stack direction={"row"} spacing={3}>
+              {type == "create" ? (
+                <>
+                  <Box>
+                    <GeneralButton mode={buttonTypes.accept} type="submit" />
+                  </Box>
+                  <Box>
+                    <Button
+                      onClick={onFinish}
+                      color="warning"
+                      variant="contained"
+                      endIcon={<NavigateNextIcon />}
+                    >
+                      Omitir
+                    </Button>
+                  </Box>
+                </>
+              ) : (
+                <Box>
+                  <GeneralButton mode={buttonTypes.save} type="submit" />
+                </Box>
+              )}
             </Stack>
           </Stack>
         </form>
