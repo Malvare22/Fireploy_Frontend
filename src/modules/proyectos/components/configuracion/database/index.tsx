@@ -17,6 +17,9 @@ import { useNavigate } from "react-router";
 import StorageIcon from "@mui/icons-material/Storage";
 import AlertDialog from "@modules/general/components/alertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
+import { getProjectById } from "@modules/proyectos/services/get.project";
+import { syncErrorProject } from "../../executionState";
+import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
 
 type Props = {
   type: "edit" | "create";
@@ -24,16 +27,16 @@ type Props = {
 
 /**
  * DataBase Component – A component to manage the creation or editing of a database for a project.
- * 
- * This component allows users to either create a new database by entering details like name, password, and type, 
- * or to edit an existing database associated with a project. It uses React Hook Form with validation via Zod 
+ *
+ * This component allows users to either create a new database by entering details like name, password, and type,
+ * or to edit an existing database associated with a project. It uses React Hook Form with validation via Zod
  * and handles submission through React Query.
- * 
+ *
  * @param {Props} props - The props for the DataBase component.
  * @param {"create" | "edit"} props.type - The type of action (either creating or editing a database).
- * 
+ *
  * @returns {JSX.Element} The rendered DataBase form or information for editing an existing database.
- * 
+ *
  * @example
  * <DataBase type="create" />
  * <DataBase type="edit" />
@@ -41,9 +44,18 @@ type Props = {
 export const DataBase = ({ type }: Props) => {
   const { getValues: getValuesProject } = useFormContext<ProyectoSchema>();
 
-  const { showDialog, open, title, message, handleCancel, type: typeAlert, handleAccept, isLoading } = useAlertDialog();
+  const {
+    showDialog,
+    open,
+    title,
+    message,
+    handleCancel,
+    type: typeAlert,
+    handleAccept,
+    isLoading,
+  } = useAlertDialog();
 
-  const {setError} = useErrorReader(showDialog);
+  const { setError } = useErrorReader(showDialog);
 
   const {
     reset,
@@ -64,7 +76,11 @@ export const DataBase = ({ type }: Props) => {
 
   const token = useAuth().accountInformation.token;
   const navigate = useNavigate();
-  // ✅ useEffect corregido
+
+  const { id } = useAuth().accountInformation;
+
+  const { executionState } = useExecutionStatusContext();
+
   useEffect(() => {
     const base = getValuesProject("baseDeDatos");
     if (base) reset(base);
@@ -72,15 +88,19 @@ export const DataBase = ({ type }: Props) => {
   }, [getValuesProject("id"), reset, setValue]);
 
   const { mutate } = useMutation({
-    mutationFn: () => postCreateDatabase(token, getValues()),
+    mutationFn: async () => {
+      const currentStatus = await getProjectById(token, id);
+      if (executionState && currentStatus.estado_ejecucion != executionState) syncErrorProject();
+      postCreateDatabase(token, getValues());
+    },
     mutationKey: ["Create Database", getValues()],
     onSuccess: () => {
       showDialog({
-        title: 'Conexión Base de datos',
-        message: 'Se ha terminado de configurar el proyecto 😎',
-        type: 'success',
+        title: "Conexión Base de datos",
+        message: "Se ha terminado de configurar el proyecto 😎",
+        type: "success",
         onAccept: handleFinish,
-      })
+      });
     },
     onError: (err) => {
       setError(err);
@@ -102,14 +122,14 @@ export const DataBase = ({ type }: Props) => {
       {type == "create" ? (
         <form onSubmit={handleSubmit(onSubmit)}>
           <AlertDialog
-        handleAccept={handleAccept}
-        handleCancel={handleCancel}
-        open={open}
-        title={title}
-        textBody={message}
-        type={typeAlert}
-        isLoading={isLoading}
-      />
+            handleAccept={handleAccept}
+            handleCancel={handleCancel}
+            open={open}
+            title={title}
+            textBody={message}
+            type={typeAlert}
+            isLoading={isLoading}
+          />
           <Stack spacing={3}>
             <Controller
               name="nombre"

@@ -20,6 +20,9 @@ import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { FormProvider } from "react-hook-form";
 import AutoFocusOnError from "@modules/general/hooks/useAutoFocusOnError";
+import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
+import { getProjectById } from "@modules/proyectos/services/get.project";
+import { syncErrorProject } from "../../executionState";
 
 type Props = {
   type: "edit" | "create";
@@ -50,7 +53,7 @@ type Props = {
  */
 export function Repositories({ type }: Props) {
   const { getValues: getValuesProject } = useFormContext<ProyectoSchema>();
-  const { token } = useAuth().accountInformation;
+  const { token, id: idUser } = useAuth().accountInformation;
   const { handleNext } = useContext(StepperContext);
 
   const methods = useForm<ProyectoRepositoriesSchema>({
@@ -58,12 +61,7 @@ export function Repositories({ type }: Props) {
     resolver: zodResolver(ProyectoRepositoriesSchema),
   });
 
-  const {
-    getValues,
-    control,
-    watch,
-    reset,
-  } = methods;
+  const { getValues, control, watch, reset } = methods;
 
   useEffect(() => {
     reset(getValuesProject());
@@ -83,8 +81,14 @@ export function Repositories({ type }: Props) {
 
   const { setError } = useErrorReader(showDialog);
 
+  const { executionState } = useExecutionStatusContext();
+
   const { mutate, isPending } = useMutation({
-    mutationFn: () => patchEditRepository(token, getValues()),
+    mutationFn: async () => {
+      const currentStatus = await getProjectById(token, idUser);
+      if (executionState && currentStatus.estado_ejecucion != executionState) syncErrorProject();
+      patchEditRepository(token, getValues());
+    },
     onSuccess: () => {
       if (type === "create") {
         handleNext();

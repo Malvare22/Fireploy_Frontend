@@ -17,15 +17,7 @@ import {
   ProyectoInformationSchema,
 } from "@modules/proyectos/utils/forms/proyecto.schema";
 import { getProjectTypesMap } from "@modules/proyectos/utils/getProjectTypes";
-import {
-  Box,
-  Button,
-  Grid2,
-  MenuItem,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useFormContext, Controller, useForm } from "react-hook-form";
@@ -33,6 +25,9 @@ import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { urlToBlob } from "@modules/general/utils/urlToBlod";
 import HiddenButton from "@modules/materias/components/hiddenInput";
+import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
+import { getProjectById } from "@modules/proyectos/services/get.project";
+import { syncErrorProject } from "../../executionState";
 
 type Props = {
   type: "edit" | "create";
@@ -75,8 +70,6 @@ export const Information = ({ type }: Props) => {
   }, []);
 
   const [fileImg, setFileImg] = useState<null | undefined | Blob>(undefined);
-
-  console.log(fileImg);
 
   const {
     control,
@@ -138,9 +131,13 @@ export const Information = ({ type }: Props) => {
     onError: setError,
   });
 
+  const { executionState } = useExecutionStatusContext();
+
   const { mutate: mutateEdit, isPending: isPendingEdit } = useMutation({
     mutationFn: async () => {
       setIsLoading(true);
+      const currentStatus = await getProjectById(token, id);
+      if (executionState && currentStatus.estado_ejecucion != executionState) syncErrorProject();
       await patchEditProject(token, getValues());
       if (fileImg != undefined) {
         await patchEditImgProject(token, getValues("id") ?? 0, fileImg);
@@ -427,7 +424,12 @@ const ImagContainer: React.FC<PropsImageContainer> = ({
         <Box
           component={"img"}
           src={currentImg ?? ""}
-          sx={{ width: "300px", height: "170px", objectFit: "contain", border: '1px solid rgb(0,0,0,0.2)' }}
+          sx={{
+            width: "300px",
+            height: "170px",
+            objectFit: "contain",
+            border: "1px solid rgb(0,0,0,0.2)",
+          }}
         />
       )}
       {/* <Alert severity="info">La resolución de la imagen debe ser de mínimo 300x170px</Alert> */}

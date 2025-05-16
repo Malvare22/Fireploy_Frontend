@@ -18,22 +18,24 @@ import { getProjectById } from "@modules/proyectos/services/get.project";
 import { useAuth } from "@modules/general/context/accountContext";
 import { ParamsContext } from "@modules/general/context/paramsContext";
 import { useParamsCustom } from "@modules/general/hooks/useParamsContext";
+import { AlertDialogProvider } from "@modules/general/context/alertDialogContext";
+import { ProjectExecutionStatusContextProvider } from "@modules/proyectos/context/executionStatus.context";
 
 /**
  * CrearProyecto component – A form for creating a project, utilizing a stepper to guide the user through various stages.
- * 
- * This component manages the creation of a project through a multi-step form. It uses the `react-hook-form` library 
- * with `zod` for validation and handles the project data using queries and context providers. The form includes steps 
+ *
+ * This component manages the creation of a project through a multi-step form. It uses the `react-hook-form` library
+ * with `zod` for validation and handles the project data using queries and context providers. The form includes steps
  * to define basic information, register repositories, and define database settings for the project.
- * 
- * The component fetches an existing project (if an `id` is provided in the query params) and uses that data to populate 
+ *
+ * The component fetches an existing project (if an `id` is provided in the query params) and uses that data to populate
  * the form with pre-existing values for editing.
- * 
+ *
  * @component
- * 
- * @returns {JSX.Element} A form with a stepper for creating or editing a project, including fields for project information, 
+ *
+ * @returns {JSX.Element} A form with a stepper for creating or editing a project, including fields for project information,
  * repositories, and database configuration.
- * 
+ *
  * @example
  * ```tsx
  * <CrearProyecto />
@@ -42,7 +44,7 @@ import { useParamsCustom } from "@modules/general/hooks/useParamsContext";
 export default function CrearProyecto() {
   const [projectId, setProjectId] = useState<number | null>(null);
 
-  const {searchParams,  setSearchParams, updateSearchParams} = useParamsCustom();
+  const { searchParams, setSearchParams, updateSearchParams } = useParamsCustom();
 
   useEffect(() => {
     const id = parseInt(searchParams.get("id") ?? "-1");
@@ -70,7 +72,7 @@ export default function CrearProyecto() {
       titulo: "",
       descripcion: "",
     },
-    shouldFocusError: true
+    shouldFocusError: true,
   });
 
   const { reset } = methods;
@@ -84,30 +86,40 @@ export default function CrearProyecto() {
   const { activeStep, handleNext, isStepSkipped } = useStepper();
 
   const contents: [string, React.ReactNode][] = [
-    ["Definir Información Básica", <Information type="create"/>],
-    ["Registrar Proyectos", <Repositories type="create"/>],
-    ["Definir Base de Datos", <DataBase type="create"/>],
+    ["Definir Información Básica", <Information type="create" />],
+    ["Registrar Proyectos", <Repositories type="create" />],
+    ["Definir Base de Datos", <DataBase type="create" />],
   ];
 
   return (
     <FormProvider {...methods}>
-      <StepperContext.Provider value={{ handleNext: handleNext }}>
-      <ParamsContext.Provider value={{searchParams: searchParams, setSearchParams: setSearchParams, updateSearchParams: updateSearchParams}}>
-        <Stack spacing={3} component={Paper} padding={{ xs: 1, md: 3 }}>
-          <Stack direction={"row"} spacing={1} alignItems={"center"}>
-            <Typography variant="h4" sx={{ fontWeight: "500" }}>
-              {labelCreateProject.crearProyecto}
-            </Typography>
-            <PolylineIcon sx={{ fontSize: 32 }} />
-          </Stack>
-          <StepperStandard
-            activeStep={activeStep}
-            isStepSkipped={isStepSkipped}
-            contents={contents}
-          />
-        </Stack>
-        </ParamsContext.Provider>
-      </StepperContext.Provider>
+      <AlertDialogProvider>
+        <ProjectExecutionStatusContextProvider projectId={-1}>
+          <StepperContext.Provider value={{ handleNext: handleNext }}>
+            <ParamsContext.Provider
+              value={{
+                searchParams: searchParams,
+                setSearchParams: setSearchParams,
+                updateSearchParams: updateSearchParams,
+              }}
+            >
+              <Stack spacing={3} component={Paper} padding={{ xs: 1, md: 3 }}>
+                <Stack direction={"row"} spacing={1} alignItems={"center"}>
+                  <Typography variant="h4" sx={{ fontWeight: "500" }}>
+                    {labelCreateProject.crearProyecto}
+                  </Typography>
+                  <PolylineIcon sx={{ fontSize: 32 }} />
+                </Stack>
+                <StepperStandard
+                  activeStep={activeStep}
+                  isStepSkipped={isStepSkipped}
+                  contents={contents}
+                />
+              </Stack>
+            </ParamsContext.Provider>
+          </StepperContext.Provider>
+        </ProjectExecutionStatusContextProvider>
+      </AlertDialogProvider>
     </FormProvider>
   );
 }
