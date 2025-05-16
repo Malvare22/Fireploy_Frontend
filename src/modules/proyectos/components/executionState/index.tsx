@@ -19,7 +19,6 @@ import {
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
-import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import ErrorIcon from "@mui/icons-material/Error";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -29,10 +28,12 @@ import { useAlertDialogContext } from "@modules/general/context/alertDialogConte
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import { getProjectById } from "@modules/proyectos/services/get.project";
 import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
 
-export function ExecutionState() {
-  const { executionState: projectStatus } = useExecutionStatusContext();
-
+type Props = {
+  projectStatus: EstadoEjecucionProyecto;
+};
+export function ExecutionState({ projectStatus }: Props) {
   const ShowState = useMemo(() => {
     switch (projectStatus) {
       case "E":
@@ -106,7 +107,7 @@ type PropsChangeStatus = {
 };
 export function ChangeStatus({ id, hasUrl }: PropsChangeStatus) {
   const { showDialog, setIsLoading, handleClose, isLoading } = useAlertDialogContext();
-  const { executionState: projectStatus } = useExecutionStatusContext();
+  const { executionState: projectStatus, refetchExecutionState } = useExecutionStatusContext();
 
   async function handleAction(newStatus: EstadoEjecucionProyecto | "D") {
     switch (newStatus) {
@@ -167,7 +168,14 @@ export function ChangeStatus({ id, hasUrl }: PropsChangeStatus) {
     mutationFn: async (id: number) => {
       setIsLoading(true);
       const getCurrent = await getProjectById(token, id);
-      if (getCurrent.estado_ejecucion == projectStatus) return await postDeployProject(id, token);
+      if (getCurrent.estado_ejecucion == projectStatus) {
+        const x = postDeployProject(id, token);
+        await setTimeout(async () => {
+          await refetchExecutionState();
+        }, 3000);
+        await x;
+        return;
+      }
 
       syncErrorProject();
     },
@@ -188,7 +196,11 @@ export function ChangeStatus({ id, hasUrl }: PropsChangeStatus) {
     mutationFn: async (id: number) => {
       setIsLoading(true);
       const getCurrent = await getProjectById(token, id);
-      if (getCurrent.estado_ejecucion == projectStatus) return await postStartProject(id, token);
+      if (getCurrent.estado_ejecucion == projectStatus) {
+        await postStartProject(id, token);
+        await refetchExecutionState();
+        return;
+      }
       syncErrorProject();
     },
     mutationKey: ["Start Project", id, token],
@@ -208,14 +220,18 @@ export function ChangeStatus({ id, hasUrl }: PropsChangeStatus) {
     mutationFn: async (id: number) => {
       setIsLoading(true);
       const getCurrent = await getProjectById(token, id);
-      if (getCurrent.estado_ejecucion == projectStatus) return await postStopProject(id, token);
+      if (getCurrent.estado_ejecucion == projectStatus) {
+        await postStopProject(id, token);
+        await refetchExecutionState();
+        return;
+      }
       syncErrorProject();
     },
     mutationKey: ["Stop Project", id, token],
     onError: (error) => setError(error),
     onSuccess: () => {
       showDialog({
-        message: "Se ha pausado el proyecto correctamente",
+        message: "Se ha detenido el proyecto correctamente",
         onAccept: () => handleClose(),
         reload: true,
         title: "Modificación de estado Proyecto",
@@ -244,9 +260,9 @@ export function ChangeStatus({ id, hasUrl }: PropsChangeStatus) {
           <PlayCircleFilledWhiteIcon fontSize="large" />
         </IconButton>
       </Tooltip>
-      <Tooltip title="Pausar Proyecto">
+      <Tooltip title="Detener Proyecto">
         <IconButton disabled={projectStatus != "N" || isLoading} onClick={() => handleAction("F")}>
-          <PauseCircleIcon fontSize="large" />
+          <StopCircleIcon fontSize="large" />
         </IconButton>
       </Tooltip>
     </>

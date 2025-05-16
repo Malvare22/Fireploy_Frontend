@@ -7,6 +7,7 @@ import {
 } from "@modules/general/context/alertDialogContext";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import EditProject from "@modules/proyectos/components/configuracion";
+import { ProjectExecutionStatusContextProvider } from "@modules/proyectos/context/executionStatus.context";
 import { getProjectById } from "@modules/proyectos/services/get.project";
 import { adaptProject } from "@modules/proyectos/utils/adapt.proyecto";
 import { useQuery } from "@tanstack/react-query";
@@ -31,7 +32,7 @@ import { useParams } from "react-router";
  */
 function VerProyecto() {
   function View() {
-    const token = useAuth().accountInformation.token;
+    const { token } = useAuth().accountInformation;
 
     const { id } = useParams();
 
@@ -60,7 +61,13 @@ function VerProyecto() {
           type={type}
           isLoading={isLoading}
         />
-        {isLoading || !data ? <LoaderElement /> : <EditProject project={adaptProject(data)} />}
+        {isLoading || !data ? (
+          <LoaderElement />
+        ) : (
+          <ProjectExecutionStatusContextProvider projectId={parseInt(id ?? "-1")}>
+            <EditProject project={adaptProject(data)} />
+          </ProjectExecutionStatusContextProvider>
+        )}
       </>
     );
   }

@@ -116,6 +116,7 @@ export const Members = () => {
   const { mutate: mutateMembers } = useMutation({
     mutationFn: async () => {
       const currentStatus = await getProjectById(token, id);
+      console.log('ERR', currentStatus.estado_ejecucion, executionState)
       if (executionState && currentStatus.estado_ejecucion != executionState) syncErrorProject();
       await patchEditProjectMembers(token, getValuesProject("id") ?? -1, currentMembers);
     },

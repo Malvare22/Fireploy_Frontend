@@ -130,6 +130,9 @@ export const getTheme = responsiveFontSizes(
       },
       MuiButton: {
         styleOverrides: {
+          root:{
+            textTransform: 'capitalize',
+          },
           contained: {
             "& .MuiSvgIcon-root": {
               fill: "white", // cambia el color del icono

@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getProjectById } from "../services/get.project";
 import { useAuth } from "@modules/general/context/accountContext";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
-import AlertDialog from "@modules/general/components/alertDialog";
 import { useAlertDialogContext } from "@modules/general/context/alertDialogContext";
 import { QueueEntry } from "../types/queueEntry";
 import { useSocketContext } from "@modules/general/context/socketContext";
@@ -33,40 +32,38 @@ export function ProjectExecutionStatusContextProvider({
     refetch,
   } = useQuery({
     queryFn: async () => {
-      if(projectId != -1)
-      return (await getProjectById(token, projectId)).estado_ejecucion;
+      if (projectId != -1) return (await getProjectById(token, projectId)).estado_ejecucion;
     },
     queryKey: ["Get Status Project", projectId, token],
     refetchInterval: 20000,
   });
 
-  const { handleAccept, handleCancel, isLoading, open, title, type, message, showDialog } =
-    useAlertDialogContext();
+  const { showDialog } = useAlertDialogContext();
 
   const { setError } = useErrorReader(showDialog);
 
-    const [currentPosition, setCurrentPosition] = useState<null | number>(null);
+  const [currentPosition, setCurrentPosition] = useState<null | number>(null);
 
   useEffect(() => {
     if (error) setError(error);
   }, [error]);
 
-    const socket = useSocketContext();
-  
-    useEffect(() => {
-      if (!socket) return;
-      const f = (msg: QueueEntry) => {
-        if (msg.projectId == projectId && msg.position) {
-          setCurrentPosition(msg.position);
-          refetch();
-        }
-      };
-      socket.on("deploy_position", f);
-  
-      return () => {
-        socket.off("deploy_position", f);
-      };
-    }, [socket]);
+  const socket = useSocketContext();
+
+  useEffect(() => {
+    if (!socket) return;
+    const f = (msg: QueueEntry) => {
+      if (msg.projectId == projectId && msg.position) {
+        setCurrentPosition(msg.position);
+        refetch();
+      }
+    };
+    socket.on("deploy_position", f);
+
+    return () => {
+      socket.off("deploy_position", f);
+    };
+  }, [socket]);
 
   return (
     <>
@@ -74,22 +71,11 @@ export function ProjectExecutionStatusContextProvider({
         value={{
           executionState: projectStatus ? (projectStatus as EstadoEjecucionProyecto) : null,
           refetchExecutionState: refetch,
-          currentPosition: currentPosition
+          currentPosition: currentPosition,
         }}
       >
         {children}
       </ProjectExecutionStatusContext.Provider>
-      {open && (
-        <AlertDialog
-          handleAccept={handleAccept}
-          open={open}
-          title={title}
-          isLoading={isLoading}
-          type={type}
-          textBody={message}
-          handleCancel={handleCancel}
-        />
-      )}
     </>
   );
 }

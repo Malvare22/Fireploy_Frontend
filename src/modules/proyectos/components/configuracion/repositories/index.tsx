@@ -157,7 +157,6 @@ export function Repositories({ type }: Props) {
         handleCancel={handleClose}
       />
 
-      {/* ✅ FormProvider para compartir el contexto */}
       <FormProvider {...methods}>
         <AutoFocusOnError<ProyectoRepositoriesSchema> />
         <form onSubmit={methods.handleSubmit(onSubmit)}>
