@@ -60,6 +60,10 @@ function MisProyectos() {
 
   const navigate = useNavigate();
 
+  function handleCreateProject() {
+    navigate(rutasProyectos.crear);
+  }
+
   // const sorterOptions: SorterOptions = [
   //   {
   //     key: "calificacion",
@@ -147,12 +151,21 @@ function MisProyectos() {
             sorterOptions={sorterOptions}
             setRefineData={setBufferSort}
           /> */}
-          <Grid2 container spacing={2} paddingX={{  md: 6, xs: 2 }}>
-            {projects.map((proyecto, key) => (
-              <Grid2 size={{ md: 6, xs: 12 }}>
-                <ProjectForList proyecto={proyecto} key={key} />
-              </Grid2>
-            ))}
+          <Grid2 container spacing={2} paddingX={{ md: 6, xs: 2 }}>
+            {projects && projects.length > 0 ? (
+              projects.map((proyecto, key) => (
+                <Grid2 size={{ md: 6, xs: 12 }}>
+                  <ProjectForList proyecto={proyecto} key={key} />
+                </Grid2>
+              ))
+            ) : (
+              <Alert severity="info" color="warning" sx={{ display: "flex", flexDirection: "row", alignItems: "center", width: '100%' }}>
+                <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                  <Typography>Actualmente no cuentas con proyectos</Typography>
+                  <Button variant="outlined" size="small" onClick={handleCreateProject}>Crear</Button>
+                </Stack>
+              </Alert>
+            )}
           </Grid2>
         </Stack>
       )}

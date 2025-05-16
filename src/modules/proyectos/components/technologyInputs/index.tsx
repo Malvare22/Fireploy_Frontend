@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import { ProyectoRepositoriesSchema } from "@modules/proyectos/utils/forms/proyecto.schema";
 import { KeysOfRepository } from "@modules/proyectos/types/keysOfRepository";
-import { inputSelectFramework, keysOfFrameworks } from "@modules/proyectos/utils/docker";
+import { inputSelectFramework } from "@modules/proyectos/utils/technologies";
 
 type DockerInputsProps = {
   fieldName?: KeysOfRepository;
@@ -41,52 +41,42 @@ export const TechnologyInputs: React.FC<DockerInputsProps> = ({ fieldName = "bac
     control,
     watch,
     formState: { errors },
-    setValue
+    setValue,
   } = useFormContext<ProyectoRepositoriesSchema>();
 
-  const selectedFramework = watch(
-    `${fieldName}.informacion.framework`
-  ) as keyof typeof inputSelectFramework;
   const selectedTechnology = watch(`${fieldName}.informacion.tecnologia`);
 
-  // Tecnologías disponibles según el framework
-  const techOptions = selectedFramework ? inputSelectFramework[selectedFramework] : [];
+  const technologyOptions = Object.keys(inputSelectFramework);
 
-  // Versiones disponibles según la tecnología
-  const versionOptions =
-    selectedFramework && selectedTechnology
-      ? (techOptions.find((t) => t.technology === selectedTechnology)?.versions ?? [])
-      : [];
+  const frameworksOptions = selectedTechnology
+    ? inputSelectFramework[selectedTechnology as keyof typeof inputSelectFramework].frameworks
+    : null;
 
-    if(fieldName == 'frontend')console.log('X ',watch())
+  if (fieldName == "frontend") console.log("X ", watch());
 
-    useEffect(() => {
-      setValue(`${fieldName}.informacion.tecnologia`, null)
-    }, [ watch(`${fieldName}.informacion.framework`)]);
-
-    useEffect(() => {
-      setValue(`${fieldName}.informacion.version`, null)
-    }, [ watch(`${fieldName}.informacion.tecnologia`)]);
+  useEffect(() => {
+    setValue(`${fieldName}.informacion.framework`, null);
+  }, [watch(`${fieldName}.informacion.tecnologia`)]);
 
   return (
     <>
       <Controller
         control={control}
-        name={`${fieldName}.informacion.framework`}
+        name={`${fieldName}.informacion.tecnologia`}
         render={({ field }) => (
           <TextField
             size="small"
             select
-            label="Framework"
+            label="Tecnología"
             placeholder="Escribe para buscar..."
             fullWidth
             inputRef={field.ref}
             value={field.value}
             onChange={field.onChange}
-            error={!!errors?.[fieldName]?.informacion?.framework}
-            helperText={errors?.[fieldName]?.informacion?.framework?.message?.toString() || ""}
+            error={!!errors?.[fieldName]?.informacion?.tecnologia}
+            helperText={errors?.[fieldName]?.informacion?.tecnologia?.message?.toString() || ""}
           >
-            {keysOfFrameworks.map((key) => {
+            {technologyOptions.map((key) => {
               return (
                 <MenuItem value={key} key={key}>
                   {key}
@@ -97,10 +87,10 @@ export const TechnologyInputs: React.FC<DockerInputsProps> = ({ fieldName = "bac
         )}
       />
 
-      {techOptions && (
+      {frameworksOptions && (
         <Controller
           control={control}
-          name={`${fieldName}.informacion.tecnologia`}
+          name={`${fieldName}.informacion.framework`}
           render={({ field }) => (
             <TextField
               size="small"
@@ -111,44 +101,16 @@ export const TechnologyInputs: React.FC<DockerInputsProps> = ({ fieldName = "bac
               inputRef={field.ref}
               value={field.value}
               onChange={field.onChange}
-              error={!!errors?.[fieldName]?.informacion?.tecnologia}
-              helperText={errors?.[fieldName]?.informacion?.tecnologia?.message?.toString() || ""}
+              error={!!errors?.[fieldName]?.informacion?.framework}
+              helperText={errors?.[fieldName]?.informacion?.framework?.message?.toString() || ""}
             >
-              {techOptions.map((tec) => {
+              {frameworksOptions.map((framwork) => {
                 return (
-                  <MenuItem key={tec.technology} value={tec.technology}>
-                    {tec.technology}
+                  <MenuItem key={framwork} value={framwork}>
+                    {framwork}
                   </MenuItem>
                 );
               })}
-            </TextField>
-          )}
-        />
-      )}
-
-      {/* Repositorio */}
-      {selectedTechnology && (
-        <Controller
-          control={control}
-          name={`${fieldName}.informacion.version`}
-          render={({ field }) => (
-            <TextField
-              size="small"
-              select
-              label="Versión"
-              placeholder="Escribe para buscar..."
-              fullWidth
-              inputRef={field.ref}
-              value={field.value}
-              onChange={field.onChange}
-              error={!!errors?.[fieldName]?.informacion?.version}
-              helperText={errors?.[fieldName]?.informacion?.version?.message?.toString() || ""}
-            >
-              {versionOptions.map((option) => (
-                <MenuItem key={option} value={option}>
-                  {option}
-                </MenuItem>
-              ))}
             </TextField>
           )}
         />

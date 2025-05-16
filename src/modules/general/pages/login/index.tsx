@@ -24,10 +24,10 @@ import { rutasProyectos } from "@modules/proyectos/router";
 import { useMutation } from "@tanstack/react-query";
 import TextFieldPassword from "@modules/general/components/textFieldPassword";
 import { GoogleLogin } from "@react-oauth/google";
-import { VARIABLES_LOCAL_STORAGE } from "@modules/general/enums/variablesLocalStorage";
 import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
+import { loginUser } from "@modules/general/utils/account";
 
 /**
  * Renders the copyright footer.
@@ -95,8 +95,7 @@ const SignIn: React.FC = () => {
    * @param data SignUpResponse from backend
    */
   const onSuccess = (data: SignUpResponse) => {
-    localStorage.setItem(VARIABLES_LOCAL_STORAGE.TOKEN, data.access_token);
-    localStorage.setItem(VARIABLES_LOCAL_STORAGE.CURRENT_ID, data.id.toString());
+    loginUser(data);
     navigate(rutasProyectos.menu);
   };
 

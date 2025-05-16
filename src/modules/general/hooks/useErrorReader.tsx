@@ -62,7 +62,6 @@ function useErrorReader(showDialog: ShowDialogFn) {
         }
         if (error instanceof SpecialError && error.type === 'FRONTEND_ERROR') {
           navigate(rutasGeneral.detectAnomaly);
-          console.log('EPA')
         }
       },
       onCancel: undefined,

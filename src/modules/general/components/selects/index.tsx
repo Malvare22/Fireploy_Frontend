@@ -61,7 +61,6 @@ export function SelectOrders<T extends Object>({
 }: SelectOrderProps<T>) {
   const { handleOrder, order, orderDataFn, resetOrder } = useOrderSelect<T>();
   useEffect(() => {
-    console.log("A");
     setRefineData(orderDataFn(data));
   }, [order]);
   if (type == "multiple")

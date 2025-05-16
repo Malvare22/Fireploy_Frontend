@@ -36,7 +36,5 @@ export const patchUpdatePhotoService = async (
     }
   );
 
-  console.log(response);
-
   return response;
 };

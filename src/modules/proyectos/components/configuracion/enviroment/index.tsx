@@ -47,7 +47,6 @@ export default function EnviromentVariablesEditor({ type }: Props) {
     editor.setValue(initialValue);
   };
 
-  // 🧠 Obtener error del campo actual (frontend.variables, etc)
   const fieldError = errors?.[type]?.variables;
 
   return (
@@ -72,7 +71,7 @@ export default function EnviromentVariablesEditor({ type }: Props) {
             borderTopRightRadius: "4px",
           }}
         >
-          Archivo .env
+          Fichero .env
         </div>
 
         <div style={{ height: "300px" }}>
@@ -93,7 +92,6 @@ export default function EnviromentVariablesEditor({ type }: Props) {
 
         </div>
       </div>
-                {/* 🔥 Mostrar error si existe */}
                 {fieldError && (
             <Alert severity="error" sx={{ mt: 1 }}>
               {fieldError.message?.toString()}

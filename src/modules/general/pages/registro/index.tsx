@@ -2,7 +2,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { rutasGeneral } from "@modules/general/router/router";
 import { getCurrentDate } from "@modules/general/utils/fechas";
 import { labelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
-import { Box, Button, Card, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  Grid2,
+  MenuItem,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
@@ -16,6 +26,10 @@ import useErrorReader from "@modules/general/hooks/useErrorReader";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { labelRegisterUser } from "@modules/general/enums/labelRegisterUser";
+import { postSignUpWithGoogle, SignUpResponse } from "@modules/general/services/post.signUp";
+import { GoogleLogin } from "@react-oauth/google";
+import { loginUser } from "@modules/general/utils/account";
+import { rutasProyectos } from "@modules/proyectos/router";
 
 /**
  * Registrar component renders the user registration form.
@@ -36,6 +50,18 @@ function Registrar() {
   });
 
   const navigate = useNavigate();
+
+  function onSuccess(data: SignUpResponse) {
+    loginUser(data);
+    navigate(rutasProyectos.menu);
+  }
+
+  const { mutate: mutateGoogle } = useMutation({
+    mutationFn: (googleToken: string) => postSignUpWithGoogle(googleToken),
+    mutationKey: ["Login with Google"],
+    onSuccess: (data) => onSuccess(data),
+    onError: (error) => setError(error),
+  });
 
   /**
    * Navigates to the login page after successful registration.
@@ -73,7 +99,7 @@ function Registrar() {
   };
 
   return (
-    <Card sx={{ maxWidth: 600, padding: 4 }}>
+    <Stack alignItems={"center"} justifyContent={"center"}>
       <AlertDialog
         handleAccept={handleAccept}
         open={open}
@@ -81,13 +107,7 @@ function Registrar() {
         textBody={message}
         type={type}
       />
-      <Stack spacing={3}>
-        <Stack spacing={1} direction={"row"} alignItems={"center"}>
-          <Typography variant="h4" textAlign={"center"}>
-            {labelUsuario.registrarUsuario}
-          </Typography>
-          <AssignmentIndIcon fontSize="large" />
-        </Stack>
+      <Card sx={{ maxWidth: 800, padding: 4 }}>
         <form
           onSubmit={handleSubmit(onSubmit)}
           style={{
@@ -95,91 +115,132 @@ function Registrar() {
           }}
         >
           {/* Row 1: First Name and Last Name */}
-          <Stack spacing={4}>
-            <TextField
-              label="Nombres"
-              type="text"
-              error={!!errors.nombres}
-              helperText={errors.nombres?.message}
-              {...register("nombres")}
-              fullWidth
-            />
-            <TextField
-              label="Apellidos"
-              type="text"
-              error={!!errors.apellidos}
-              helperText={errors.apellidos?.message}
-              {...register("apellidos")}
-              fullWidth
-            />
-
-            {/* Row 2: Email and Gender */}
-            <TextField
-              label="Correo"
-              type="email"
-              error={!!errors.correo}
-              helperText={errors.correo?.message}
-              {...register("correo")}
-              fullWidth
-            />
-
-            <TextField
-              label="Sexo"
-              select
-              error={!!errors.sexo}
-              helperText={errors.sexo?.message}
-              {...register("sexo")}
-              fullWidth
+          <Grid2 container spacing={4}>
+            <Grid2
+              size={12}
+              sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
             >
-              {Array.from(getGender.entries()).map(([valor, texto]) => (
-                <MenuItem key={valor} value={valor}>
-                  {texto}
-                </MenuItem>
-              ))}
-            </TextField>
+              <Typography variant="h4" textAlign={"center"}>
+                {labelUsuario.registrarUsuario}
+              </Typography>
+              <AssignmentIndIcon fontSize="large" />
+            </Grid2>
+            <Grid2 size={12}>
+              <Alert
+                sx={{ display: "flex", alignItems: "center", gap: 3}}
+                severity="info"
+              >
+                <Stack direction={{md:"row", xs: 'column'}} spacing={2} alignItems={{md:"center"}} sx={{ overflow: 'hidden' }}>
+                  <Typography>¿Deseas crear tu cuenta con Google?</Typography>
+                  <GoogleLogin
+                    onSuccess={(credentialResponse) => {
+                      if (credentialResponse.credential)
+                        mutateGoogle(credentialResponse.credential);
+                    }}
+                  />
+                </Stack>
+              </Alert>
+            </Grid2>
+            <Grid2 size={{ sm: 6, xs: 12 }}>
+              <TextField
+                label="Nombres"
+                type="text"
+                error={!!errors.nombres}
+                helperText={errors.nombres?.message}
+                {...register("nombres")}
+                fullWidth
+              />
+            </Grid2>
 
-            {/* Row 3: Start Date and Birth Date */}
-            <TextField
-              label="Fecha de Ingreso"
-              type="date"
-              error={!!errors.estFechaInicio}
-              helperText={errors.estFechaInicio?.message}
-              {...register("estFechaInicio")}
-              InputLabelProps={{ shrink: true }}
-              inputProps={{ max: getCurrentDate() }}
-              fullWidth
-            />
-            <TextField
-              label="Fecha de Nacimiento"
-              type="date"
-              error={!!errors.fechaDeNacimiento}
-              helperText={errors.fechaDeNacimiento?.message}
-              {...register("fechaDeNacimiento")}
-              InputLabelProps={{ shrink: true }}
-              inputProps={{ max: getCurrentDate() }}
-              fullWidth
-            />
+            <Grid2 size={{ sm: 6, xs: 12 }}>
+              <TextField
+                label="Apellidos"
+                type="text"
+                error={!!errors.apellidos}
+                helperText={errors.apellidos?.message}
+                {...register("apellidos")}
+                fullWidth
+              />
+            </Grid2>
 
-            {/* Row 4: Password and Confirm Password */}
-            <TextFieldPassword
-              label="Contraseña"
-              type="password"
-              error={!!errors.contrasenia}
-              helperText={errors.contrasenia?.message}
-              {...register("contrasenia")}
-              fullWidth
-            />
-            <TextFieldPassword
-              label="Confirmar Contraseña"
-              type="password"
-              error={!!errors.confirmarContrasenia}
-              helperText={errors.confirmarContrasenia?.message}
-              {...register("confirmarContrasenia")}
-              fullWidth
-            />
+            <Grid2 size={{ sm: 6, xs: 12 }}>
+              <TextField
+                label="Correo"
+                type="email"
+                error={!!errors.correo}
+                helperText={errors.correo?.message}
+                {...register("correo")}
+                fullWidth
+              />
+            </Grid2>
+
+            <Grid2 size={{ sm: 6, xs: 12 }}>
+              <TextField
+                label="Sexo"
+                select
+                error={!!errors.sexo}
+                helperText={errors.sexo?.message}
+                {...register("sexo")}
+                fullWidth
+              >
+                {Array.from(getGender.entries()).map(([valor, texto]) => (
+                  <MenuItem key={valor} value={valor}>
+                    {texto}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid2>
+
+            <Grid2 size={{ sm: 6, xs: 12 }}>
+              <TextField
+                label="Fecha de Ingreso"
+                type="date"
+                error={!!errors.estFechaInicio}
+                helperText={errors.estFechaInicio?.message}
+                {...register("estFechaInicio")}
+                InputLabelProps={{ shrink: true }}
+                inputProps={{ max: getCurrentDate() }}
+                fullWidth
+              />
+            </Grid2>
+
+            <Grid2 size={{ sm: 6, xs: 12 }}>
+              <TextField
+                label="Fecha de Nacimiento"
+                type="date"
+                error={!!errors.fechaDeNacimiento}
+                helperText={errors.fechaDeNacimiento?.message}
+                {...register("fechaDeNacimiento")}
+                InputLabelProps={{ shrink: true }}
+                inputProps={{ max: getCurrentDate() }}
+                fullWidth
+              />
+            </Grid2>
+
+            <Grid2 size={{ sm: 6, xs: 12 }}>
+              <TextFieldPassword
+                label="Contraseña"
+                type="password"
+                error={!!errors.contrasenia}
+                helperText={errors.contrasenia?.message}
+                {...register("contrasenia")}
+                fullWidth
+              />
+            </Grid2>
+
+            <Grid2 size={{ sm: 6, xs: 12 }}>
+              <TextFieldPassword
+                label="Confirmar Contraseña"
+                type="password"
+                error={!!errors.confirmarContrasenia}
+                helperText={errors.confirmarContrasenia?.message}
+                {...register("confirmarContrasenia")}
+                fullWidth
+              />
+            </Grid2>
 
             {/* Buttons */}
-            <Stack spacing={2} direction="row" justifyContent="center">
+            <Grid2 size={12} sx={{ display: "flex", justifyContent: "center", gap: 3 }}>
               <Box>
                 <Button variant="outlined" onClick={() => navigate(rutasGeneral.login)}>
                   {labelRegisterUser.back}
@@ -190,11 +251,11 @@ function Registrar() {
                   {labelRegisterUser.register}
                 </Button>
               </Box>
-            </Stack>
-          </Stack>
+            </Grid2>
+          </Grid2>
         </form>
-      </Stack>
-    </Card>
+      </Card>
+    </Stack>
   );
   return <></>;
 }

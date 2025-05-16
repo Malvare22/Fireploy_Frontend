@@ -200,8 +200,6 @@ function EditarCurso({ type }: EditarCursoProps) {
     type == "create" ? await mutateCreateCurso() : await mutatePatchCurso();
   };
 
-  console.log(errors);
-
   return (
     <>
       {/* Dialog for displaying feedback messages */}

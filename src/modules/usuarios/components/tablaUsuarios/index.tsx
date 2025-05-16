@@ -211,8 +211,6 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
     },
   ];
 
-  console.log(usuarios)
-
   /**
    * Renders responsive Chip with tooltip icon for role.
    * @param {string} label - Role label.

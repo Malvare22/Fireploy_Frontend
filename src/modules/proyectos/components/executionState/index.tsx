@@ -19,7 +19,6 @@ import {
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
-import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import ErrorIcon from "@mui/icons-material/Error";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -28,12 +27,13 @@ import { useMemo } from "react";
 import { useAlertDialogContext } from "@modules/general/context/alertDialogContext";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import { getProjectById } from "@modules/proyectos/services/get.project";
+import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
 
 type Props = {
   projectStatus: EstadoEjecucionProyecto;
 };
 export function ExecutionState({ projectStatus }: Props) {
-
   const ShowState = useMemo(() => {
     switch (projectStatus) {
       case "E":
@@ -64,60 +64,50 @@ export function ExecutionState({ projectStatus }: Props) {
     return <></>;
   }, [projectStatus]);
 
-  return <Box sx={{ display: "flex", alignItems: "center"}}>{ShowState}</Box>;
+  return <Box sx={{ display: "flex", alignItems: "center" }}>{ShowState}</Box>;
 }
 
 type ShowDeployLoadProps = {
   queuePosition: number | null;
-  projectStatus: EstadoEjecucionProyecto;
 };
-export function ShowDeployLoad({ queuePosition, projectStatus }: ShowDeployLoadProps) {
-
+export function ShowDeployLoad({ queuePosition }: ShowDeployLoadProps) {
   const theme = useTheme();
   return (
     <>
-      {projectStatus == "L" && (
-        <Alert severity="info" sx={{ width: "100%" }}>
-          {queuePosition ? (
-            <>
-              <Typography>Tu proyecto actualmente se encuentra en cola de despliegue</Typography>
+      <Alert severity="info" sx={{ width: "100%" }}>
+        {queuePosition ? (
+          <>
+            <Typography>Tu proyecto actualmente se encuentra en cola de despliegue</Typography>
 
-              <Typography sx={{ fontWeight: 500 }}>Posición actual: {queuePosition}</Typography>
-            </>
-          ) : (
-            <>
-              <Typography variant="h5">Tu proyecto se está desplegando</Typography>
-              <CircularProgress
-                size={64}
-                sx={{
-                  color: theme.palette.primary.main,
-                }}
-              />
-            </>
-          )}
-        </Alert>
-      )}
-      {projectStatus == "E" && <Alert severity="error">Se ha producido un error</Alert>}
-      {projectStatus == "N" && <Alert severity="success">Se ha desplegado correctamente</Alert>}
-      {projectStatus == "L" && (
-        <Box sx={{ width: "100%" }}>
-          <LinearProgress />
-        </Box>
-      )}
+            <Typography sx={{ fontWeight: 500 }}>Posición actual: {queuePosition}</Typography>
+          </>
+        ) : (
+          <>
+            <Typography variant="h5">Tu proyecto se está desplegando</Typography>
+            <CircularProgress
+              size={64}
+              sx={{
+                color: theme.palette.primary.main,
+              }}
+            />
+          </>
+        )}
+      </Alert>
+
+      <Box sx={{ width: "100%" }}>
+        <LinearProgress />
+      </Box>
     </>
   );
 }
 
 type PropsChangeStatus = {
-  position: number | null;
-  projectStatus: EstadoEjecucionProyecto;
   id: number;
   hasUrl: boolean;
 };
-export function ChangeStatus({ projectStatus, id, position, hasUrl }: PropsChangeStatus) {
+export function ChangeStatus({ id, hasUrl }: PropsChangeStatus) {
   const { showDialog, setIsLoading, handleClose, isLoading } = useAlertDialogContext();
-
-  const CURRENT_STATUS = position != null ? "L" : projectStatus;
+  const { executionState: projectStatus, refetchExecutionState } = useExecutionStatusContext();
 
   async function handleAction(newStatus: EstadoEjecucionProyecto | "D") {
     switch (newStatus) {
@@ -178,9 +168,16 @@ export function ChangeStatus({ projectStatus, id, position, hasUrl }: PropsChang
     mutationFn: async (id: number) => {
       setIsLoading(true);
       const getCurrent = await getProjectById(token, id);
-      if (getCurrent.estado_ejecucion == projectStatus) return await postDeployProject(id, token);
+      if (getCurrent.estado_ejecucion == projectStatus) {
+        const x = postDeployProject(id, token);
+        await setTimeout(async () => {
+          await refetchExecutionState();
+        }, 3000);
+        await x;
+        return;
+      }
 
-      throw new Error("El proyecto se encuentra desincronizado, por favor actualiza la vista");
+      syncErrorProject();
     },
     mutationKey: ["Load Project", id, token],
     onError: (error) => setError(error),
@@ -199,8 +196,12 @@ export function ChangeStatus({ projectStatus, id, position, hasUrl }: PropsChang
     mutationFn: async (id: number) => {
       setIsLoading(true);
       const getCurrent = await getProjectById(token, id);
-      if (getCurrent.estado_ejecucion == projectStatus) return await postStartProject(id, token);
-      throw new Error("El proyecto se encuentra desincronizado, por favor actualiza la vista");
+      if (getCurrent.estado_ejecucion == projectStatus) {
+        await postStartProject(id, token);
+        await refetchExecutionState();
+        return;
+      }
+      syncErrorProject();
     },
     mutationKey: ["Start Project", id, token],
     onError: (error) => setError(error),
@@ -219,14 +220,18 @@ export function ChangeStatus({ projectStatus, id, position, hasUrl }: PropsChang
     mutationFn: async (id: number) => {
       setIsLoading(true);
       const getCurrent = await getProjectById(token, id);
-      if (getCurrent.estado_ejecucion == projectStatus) return await postStopProject(id, token);
-      throw new Error("El proyecto se encuentra desincronizado, por favor actualiza la vista");
+      if (getCurrent.estado_ejecucion == projectStatus) {
+        await postStopProject(id, token);
+        await refetchExecutionState();
+        return;
+      }
+      syncErrorProject();
     },
     mutationKey: ["Stop Project", id, token],
     onError: (error) => setError(error),
     onSuccess: () => {
       showDialog({
-        message: "Se ha pausado el proyecto correctamente",
+        message: "Se ha detenido el proyecto correctamente",
         onAccept: () => handleClose(),
         reload: true,
         title: "Modificación de estado Proyecto",
@@ -249,20 +254,21 @@ export function ChangeStatus({ projectStatus, id, position, hasUrl }: PropsChang
       </Box>
       <Tooltip title="Reanudar Proyecto">
         <IconButton
-          disabled={CURRENT_STATUS == "N" || !hasUrl || isLoading}
+          disabled={projectStatus == "N" || !hasUrl || isLoading}
           onClick={() => handleAction("N")}
         >
           <PlayCircleFilledWhiteIcon fontSize="large" />
         </IconButton>
       </Tooltip>
-      <Tooltip title="Pausar Proyecto">
-        <IconButton
-          disabled={CURRENT_STATUS != "N" || isLoading}
-          onClick={() => handleAction("F")}
-        >
-          <PauseCircleIcon fontSize="large" />
+      <Tooltip title="Detener Proyecto">
+        <IconButton disabled={projectStatus != "N" || isLoading} onClick={() => handleAction("F")}>
+          <StopCircleIcon fontSize="large" />
         </IconButton>
       </Tooltip>
     </>
   );
+}
+
+export function syncErrorProject() {
+  throw new Error("El proyecto se encuentra desincronizado, por favor actualiza la vista");
 }

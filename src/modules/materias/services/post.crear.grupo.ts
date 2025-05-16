@@ -28,7 +28,6 @@ export const postCreateCursoService = async (
     docenteId?: number | null | undefined;
     materiaId: number;
   };
-  console.log(idMateria)
 
   const body = {
     descripcion: data.descripcion,

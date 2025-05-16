@@ -34,21 +34,24 @@ import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import useSearch from "@modules/general/hooks/useSearch";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
+import { syncErrorProject } from "../../executionState";
+import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
+import { getProjectById } from "@modules/proyectos/services/get.project";
 
 /**
- * Members component – This component displays the list of members (collaborators) for a project 
- * and allows the user to manage these members by adding or removing them. The component fetches 
- * the project data, shows the members, and provides the UI for user interaction, such as 
+ * Members component – This component displays the list of members (collaborators) for a project
+ * and allows the user to manage these members by adding or removing them. The component fetches
+ * the project data, shows the members, and provides the UI for user interaction, such as
  * adding new users or removing existing ones.
- * 
- * This component is built using MUI components, hooks from React Query, and custom hooks 
+ *
+ * This component is built using MUI components, hooks from React Query, and custom hooks
  * for fetching and updating project data.
- * 
+ *
  * @component
- * 
- * @returns {JSX.Element} A component that displays the project members and allows management 
+ *
+ * @returns {JSX.Element} A component that displays the project members and allows management
  * of these members (adding or removing users).
- * 
+ *
  * @example
  * ```tsx
  * <Members />
@@ -108,8 +111,14 @@ export const Members = () => {
 
   const { setError } = useErrorReader(showDialog);
 
+  const { executionState } = useExecutionStatusContext();
+
   const { mutate: mutateMembers } = useMutation({
-    mutationFn: () => patchEditProjectMembers(token, getValuesProject("id") ?? -1, currentMembers),
+    mutationFn: async () => {
+      const currentStatus = await getProjectById(token, id);
+      if (executionState && currentStatus.estado_ejecucion != executionState) syncErrorProject();
+      await patchEditProjectMembers(token, getValuesProject("id") ?? -1, currentMembers);
+    },
     mutationKey: ["Change Members of Project", selectUser?.id],
     onSuccess: () => {
       handleCloseModalAddUsers();
@@ -236,11 +245,19 @@ export const Members = () => {
         textBody={message}
       />
       <Stack>
-        <Stack marginBottom={2} direction={{md:"row"}} spacing={{md: 0, xs: 1}} justifyContent={{md: "space-between"}}>
+        <Stack
+          marginBottom={2}
+          direction={{ md: "row" }}
+          spacing={{ md: 0, xs: 1 }}
+          justifyContent={{ md: "space-between" }}
+        >
           <Typography variant="h5">{labelConfiguracion.colaboradores}</Typography>
-         <Box> <Button variant="contained" size="small" onClick={handleOpenModalAddUsers}>
-            {labelConfiguracion.invitarIntegrantes}
-          </Button></Box>
+          <Box>
+            {" "}
+            <Button variant="contained" size="small" onClick={handleOpenModalAddUsers}>
+              {labelConfiguracion.invitarIntegrantes}
+            </Button>
+          </Box>
         </Stack>
         <Typography variant="body1" marginBottom={3}>
           {labelConfiguracion.colaboradoresParrafo}
@@ -318,7 +335,7 @@ const CardMember: React.FC<CardMemberProps> = ({
       justifyContent={"space-between"}
       padding={2}
     >
-      <Stack direction={{ md: "row", xs: "column" }} spacing={1} alignItems={{md: "center"}}>
+      <Stack direction={{ md: "row", xs: "column" }} spacing={1} alignItems={{ md: "center" }}>
         <Stack direction={"row"} alignItems={"center"}>
           <ProjectCardAvatar
             usuario={{
@@ -330,8 +347,16 @@ const CardMember: React.FC<CardMemberProps> = ({
           />
           <Typography variant="h6">{member.nombre}</Typography>
         </Stack>
-        {isMe && <Box><Chip color="primary" label={labelConfiguracion.eresTu} /></Box>}
-        {isOwner && <Box><Chip color="secondary" label={labelConfiguracion.propietario} /></Box>}
+        {isMe && (
+          <Box>
+            <Chip color="primary" label={labelConfiguracion.eresTu} />
+          </Box>
+        )}
+        {isOwner && (
+          <Box>
+            <Chip color="secondary" label={labelConfiguracion.propietario} />
+          </Box>
+        )}
       </Stack>
       {editable && (
         <Stack>

@@ -28,7 +28,6 @@ export const postEditMateriaService = async (token: string, data: Materia) => {
     estado: data.estado as string,
     semestre: data.semestre.toString() as string,
   };
-  console.log('AAA', data)
   const response = await patchData<MateriaService>(`/materia/${data.id}`, body, {
     sessiontoken: token,
   });

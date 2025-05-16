@@ -59,6 +59,7 @@ function RecuperarContrasenia() {
       showDialog({
         title: "Recuperar contraseña",
         message: "Se ha enviado un correo de recuperación al correo electrónico ingresado",
+        onAccept: () => navigate(rutasGeneral.login),
       }),
   });
 
@@ -106,7 +107,7 @@ function RecuperarContrasenia() {
               fullWidth
             />
 
-            <Stack alignItems={"center"} direction="row" justifyContent={'center'} spacing={2}>
+            <Stack alignItems={"center"} direction="row" justifyContent={"center"} spacing={2}>
               {/* Submit button */}
               <Box>
                 <Button

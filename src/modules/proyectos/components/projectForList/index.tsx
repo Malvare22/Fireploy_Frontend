@@ -74,7 +74,7 @@ const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
       </Box>
 
       <Stack alignItems={"center"} spacing={3}>
-        <Typography variant="h4">{proyecto.titulo} asdasd</Typography>
+        <Typography variant="h4">{proyecto.titulo}</Typography>
         <TechnologyTags
           backend={proyecto.backend?.informacion?.framework ?? undefined}
           frontend={proyecto.frontend?.informacion?.framework ?? undefined}
