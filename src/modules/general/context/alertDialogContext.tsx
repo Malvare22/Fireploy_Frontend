@@ -28,7 +28,5 @@ export const useAlertDialogContext = (): AlertDialogContextType => {
 export const AlertDialogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const dialog = useAlertDialog();
 
-  console.log('ACA')
-
   return <AlertDialogContext.Provider value={dialog}>{children}</AlertDialogContext.Provider>;
 };

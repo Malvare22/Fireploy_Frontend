@@ -34,9 +34,6 @@ async function query(repository: Repositorio, token: string) {
     return Object.keys(TECNOLOGIES)[Object.values(TECNOLOGIES).indexOf(s as TECNOLOGIES)];
   };
 
-    console.log(findMe(tecnologia), findMe(framework));
-
-
   const body: Body = {
     tecnologia: findMe(tecnologia),
     url: repository.url,

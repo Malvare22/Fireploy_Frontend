@@ -30,7 +30,6 @@ type ProjectCardMembersProps = {
 };
 
 export const ProjectCardMembers: React.FC<ProjectCardMembersProps> = ({ integrantes }) => {
-  console.log(integrantes);
   if (integrantes.length > 4) {
     return (
       <AvatarGroup max={4}>

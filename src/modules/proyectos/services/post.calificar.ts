@@ -17,7 +17,6 @@ import { postData } from "@core/services";
  * ```
  */
 export const postStarProject = async (idProject: number, token: string) => {
-  console.log(idProject)
   const response = await postData<any>(
     `/proyecto/puntuarProyecto/${idProject}`,
     {},

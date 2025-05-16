@@ -118,7 +118,6 @@ function VistaCrearMateria() {
     try {
       await Promise.all(groups.map((group) => postCreateCursoService(token, idMateria!!, group)));
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }
