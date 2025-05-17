@@ -255,13 +255,8 @@ export const Information = ({ type }: Props) => {
                   )}
                 />
               </Grid2>
-              {type == "edit" && (
-                <Grid2 size={12}>
-                  <ImagContainer currentImg={img} setCurrentImg={setImg} setFile={setFileImg} />
-                </Grid2>
-              )}
               <>
-                <Grid2 size={4}>
+                <Grid2 size={{ md: 4, xs: 12 }}>
                   <Controller
                     name="materiaInformacion.materiaId"
                     control={control}
@@ -285,7 +280,7 @@ export const Information = ({ type }: Props) => {
                   />
                 </Grid2>
 
-                <Grid2 size={4}>
+                <Grid2 size={{ md: 4, xs: 12 }}>
                   {getCursosByMateria.get(watch("materiaInformacion.materiaId") ?? 0) && (
                     <Controller
                       name="materiaInformacion.cursoId"
@@ -313,7 +308,7 @@ export const Information = ({ type }: Props) => {
                   )}
                 </Grid2>
 
-                <Grid2 size={4}>
+                <Grid2 size={{ md: 4, xs: 12 }}>
                   {getSeccionByCurso.get(watch("materiaInformacion.cursoId") ?? "") && (
                     <Controller
                       name="materiaInformacion.seccionId"
@@ -366,6 +361,12 @@ export const Information = ({ type }: Props) => {
                 )}
               />
             </Grid2>
+
+                          {type == "edit" && (
+                <Grid2 size={12}>
+                  <ImagContainer currentImg={img} setCurrentImg={setImg} setFile={setFileImg} />
+                </Grid2>
+              )}
 
             <Stack alignItems={"end"}>
               {type == "create" ? (
@@ -425,7 +426,19 @@ const ImagContainer: React.FC<PropsImageContainer> = ({ currentImg, setCurrentIm
   }
 
   return (
-    <Box sx={ currentImg ? { display: 'flex', maxWidth: 300, flexDirection: 'column', alignItems: 'center', gap: 1} : {}}>
+    <Box
+      sx={
+        currentImg
+          ? {
+              display: "flex",
+              maxWidth: 300,
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 1,
+            }
+          : {}
+      }
+    >
       {currentImg && (
         <Box
           component={"img"}
@@ -439,25 +452,25 @@ const ImagContainer: React.FC<PropsImageContainer> = ({ currentImg, setCurrentIm
         />
       )}
       {/* <Alert severity="info">La resolución de la imagen debe ser de mínimo 300x170px</Alert> */}
-        <Stack>
-          <label htmlFor="upload-photo">
-            <HiddenButton
-              accept="image/*"
-              id="upload-photo"
-              type="file"
-              onChange={handlePhotoChange}
-              ref={ref}
-            />
-            <Button variant="outlined" color="secondary" onClick={handleReference}>
-              Cambiar imagen
-            </Button>
-            <Tooltip title="Eliminar Archivo">
-              <IconButton disabled={currentImg == null} onClick={handleDelete}>
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-          </label>
-        </Stack>
-      </Box>
+      <Stack>
+        <label htmlFor="upload-photo">
+          <HiddenButton
+            accept="image/*"
+            id="upload-photo"
+            type="file"
+            onChange={handlePhotoChange}
+            ref={ref}
+          />
+          <Button variant="outlined" color="secondary" onClick={handleReference}>
+            Cambiar imagen
+          </Button>
+          <Tooltip title="Eliminar Archivo">
+            <IconButton disabled={currentImg == null} onClick={handleDelete}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </label>
+      </Stack>
+    </Box>
   );
 };

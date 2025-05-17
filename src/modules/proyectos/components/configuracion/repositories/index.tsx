@@ -43,6 +43,7 @@ import HiddenButton from "@modules/materias/components/hiddenInput";
 import { KeysOfRepository } from "@modules/proyectos/types/keysOfRepository";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+
 type Props = {
   type: "edit" | "create";
 };
@@ -237,6 +238,7 @@ export function Repositories({ type }: Props) {
     }
   }
 
+
   return (
     <>
       <AlertDialog
@@ -248,7 +250,6 @@ export function Repositories({ type }: Props) {
         handleAccept={handleAccept}
         handleCancel={handleClose}
       />
-
       <FormProvider {...methods}>
         <AutoFocusOnError<ProyectoRepositoriesSchema> />
         <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -258,13 +259,12 @@ export function Repositories({ type }: Props) {
               <Divider />
             </Stack>
             <Typography variant="body2">{labelConfiguracion.repositoriosParrafo}</Typography>
-
             <Stack spacing={2}>
               {watch("frontend") && (
                 <>
                   <Typography variant="h6">{labelConfiguracion.frontend}</Typography>
                   <Grid2 container spacing={1}>
-                    <Grid2 size={{ md: 6, xs: 12 }}>
+                    <Grid2 size={{ md: 10, xs: 12 }}>
                       <Controller
                         name="frontend.url"
                         control={control}
@@ -291,7 +291,7 @@ export function Repositories({ type }: Props) {
                         )}
                       />
                     </Grid2>
-                    <Grid2 size={{ md: 6, xs: 12 }}>
+                    <Grid2 size={{ md: 2, xs: 12 }}>
                       <InputFile layer="frontend" />
                     </Grid2>
                   </Grid2>

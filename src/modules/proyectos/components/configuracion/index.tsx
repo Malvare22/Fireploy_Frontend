@@ -10,7 +10,7 @@ import {
   Tooltip,
   useMediaQuery,
   useTheme,
-  Alert,
+  Alert
 } from "@mui/material";
 import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
@@ -30,6 +30,8 @@ import { useExecutionStatusContext } from "@modules/proyectos/context/executionS
 import { Skeleton } from "@mui/material";
 import LogsFiles from "./logSection";
 import ArticleIcon from '@mui/icons-material/Article';
+
+
 
 type Props = {
   project: ProyectoSchema;
