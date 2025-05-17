@@ -248,7 +248,7 @@ export function Repositories({ type }: Props) {
               {watch("frontend") && (
                 <>
                   <Typography variant="h6">{labelConfiguracion.frontend}</Typography>
-                  <Grid2 container>
+                  <Grid2 container spacing={1}>
                     <Grid2 size={{ md: 6, xs: 12 }}>
                       <Controller
                         name="frontend.url"

@@ -28,6 +28,7 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import { ChangeStatus, ExecutionState, ShowDeployLoad } from "../executionState";
 import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
 import { Skeleton } from "@mui/material";
+import LogsFiles from "./logSection";
 
 type Props = {
   project: ProyectoSchema;
@@ -100,6 +101,7 @@ export default function ProjectSettings({ project }: Props) {
               <Tab label="Repositorios" icon={<GitHubIcon />} iconPosition="start" />
               <Tab label="Bases de Datos" icon={<StorageIcon />} iconPosition="start" />
               <Tab label="Colaboradores" icon={<PeopleAltIcon />} iconPosition="start" />
+              <Tab label="Logs" icon={<PeopleAltIcon />} iconPosition="start" />
             </Tabs>
 
             <Stack spacing={3} padding={1} paddingTop={2}>
@@ -107,6 +109,13 @@ export default function ProjectSettings({ project }: Props) {
               {tabIndex == 1 && <Repositories type="edit" />}
               {tabIndex == 2 && <DataBase type="edit" />}
               {tabIndex == 3 && <Members />}
+              {tabIndex == 4 && (
+                <LogsFiles
+                  backend={project.backend?.id}
+                  frontend={project.frontend?.id}
+                  integrado={project.integrado?.id}
+                />
+              )}
             </Stack>
           </Container>
         ) : (

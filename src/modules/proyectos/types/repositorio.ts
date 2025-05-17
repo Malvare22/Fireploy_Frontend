@@ -1,3 +1,5 @@
+import { LogFileService } from "./logFile.service";
+
 /**
  * Repositorio – Defines a project repository with its URL, type ("B" = Backend, "F" = Frontend, "I" = Integrated), environment variables, optional Docker metadata (technology, version, framework), and an optional display name for the technology.
  */
@@ -8,6 +10,7 @@ export type Repositorio = {
   tipo: "B" | "F" | "I";
   variables: string;
   informacion?: { tecnologia: string | null; framework: string | null; };
+  logs?: null | LogFileService[]
 };
 
 /**
