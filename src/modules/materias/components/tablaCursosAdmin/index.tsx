@@ -68,6 +68,7 @@ const TablaCursosAdmin: React.FC<TablaCursosAdminProps> = ({ cursos }) => {
       "Change Status Curso",
       selectCurso?.id || "",
       selectCurso?.estado == "I" ? "A" : "I",
+      token
     ],
     onSuccess: () => {
       showDialog({

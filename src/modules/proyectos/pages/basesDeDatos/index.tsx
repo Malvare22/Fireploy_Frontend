@@ -52,7 +52,7 @@ function VistaBasesDeDatos() {
       }
       return [];
     },
-    queryKey: ["Get DataBases"],
+    queryKey: ["Get DataBases", token, id],
   });
 
   const { setError } = useErrorReader(showDialog);

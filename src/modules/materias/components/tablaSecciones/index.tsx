@@ -97,7 +97,7 @@ const TablaGestionarSecciones = () => {
   }
 
   const { isPending, mutate } = useMutation({
-    mutationKey: ["Edit Section", getValues("secciones") || []],
+    mutationKey: ["Edit Section", getValues("secciones") || [], token],
     mutationFn: async () => {
       setIsLoading(true);
       return await getRequest(getValues("secciones") || []);

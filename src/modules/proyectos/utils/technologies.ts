@@ -21,14 +21,14 @@ export function isTechnologyKey(key: string | null): key is keyof typeof TECNOLO
 export enum TECNOLOGIES {
   Nodejs = "NodeJS",
   Angular = "Angular",
-  Reactjs = "React",
+  React = "React",
   Nextjs = "NextJS",
   Php = "PHP",
   Laravel = "Laravel",
   Java = "Java",
   Springboot = "SpringBoot",
   Expressjs = "ExpressJS",
-  Symphony = "Symphony",
+  Symfony = "Symfony",
 }
 
 /**
@@ -52,7 +52,7 @@ export const inputSelectFramework: Record<(typeof keyOfTechnologies)[number], Se
   PHP: {
     frameworks: [
       TECNOLOGIES.Laravel,
-      TECNOLOGIES.Symphony,
+      TECNOLOGIES.Symfony,
     ],
   },
   NodeJS: {
@@ -60,7 +60,7 @@ export const inputSelectFramework: Record<(typeof keyOfTechnologies)[number], Se
       TECNOLOGIES.Nextjs,
       TECNOLOGIES.Expressjs,
       TECNOLOGIES.Nodejs,
-      TECNOLOGIES.Reactjs,
+      TECNOLOGIES.React,
       TECNOLOGIES.Angular,
     ],
   },

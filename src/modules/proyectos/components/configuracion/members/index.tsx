@@ -91,7 +91,7 @@ export const Members = () => {
     isLoading: isLoadingGroupInformation,
   } = useQuery({
     queryFn: () => getCursoById(token, groupId ?? ""),
-    queryKey: ["Get Course Information", groupId],
+    queryKey: ["Get Course Information", groupId, token],
   });
 
   const [currentMembers, setCurrentMembers] = useState<number[]>([]);
@@ -115,11 +115,11 @@ export const Members = () => {
 
   const { mutate: mutateMembers } = useMutation({
     mutationFn: async () => {
-      const currentStatus = await getProjectById(token, id);
+      const currentStatus = await getProjectById(token, getValuesProject("id") ?? -1);
       if (executionState && currentStatus.estado_ejecucion != executionState) syncErrorProject();
       await patchEditProjectMembers(token, getValuesProject("id") ?? -1, currentMembers);
     },
-    mutationKey: ["Change Members of Project", selectUser?.id],
+    mutationKey: ["Change Members of Project", selectUser?.id, token],
     onSuccess: () => {
       handleCloseModalAddUsers();
       showDialog({

@@ -82,7 +82,7 @@ const Portafolio = () => {
       const projectInfo = await getProjectByUserId(token, parseInt(id || "-1"));
       return { userInfo, projectInfo };
     },
-    queryKey: ["Project & User Information"],
+    queryKey: ["Project & User Information", token],
   });
 
   const { showDialog, handleAccept, title, type, open, message } = useAlertDialog2();

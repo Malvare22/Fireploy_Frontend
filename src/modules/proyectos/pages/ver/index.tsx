@@ -43,7 +43,7 @@ function VerProyecto() {
 
     const { data, error, isLoading } = useQuery({
       queryFn: () => getProjectById(token, parseInt(id ?? "-1")),
-      queryKey: ["Get Project By Id", parseInt(id ?? "-1")],
+      queryKey: ["Get Project By Id", id, token],
     });
 
     useEffect(() => {

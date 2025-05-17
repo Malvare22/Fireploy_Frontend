@@ -16,6 +16,7 @@ export enum labelConfiguracion{
     repositoriosParrafo = 'Vincula tus repositorios de Github para establecer el código que va a conformar cada capa del sistema de software',
     frontend = 'Frontend',
     backend = 'Backend',
+    integrado = 'Integrado',
     urlFrontend = 'URL Frontend',
     urlBackend = 'URL Backend',
     tecnologiaFrontend = 'Tecnología Frontend',

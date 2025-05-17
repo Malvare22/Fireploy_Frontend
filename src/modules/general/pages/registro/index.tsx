@@ -58,7 +58,6 @@ function Registrar() {
 
   const { mutate: mutateGoogle } = useMutation({
     mutationFn: (googleToken: string) => postSignUpWithGoogle(googleToken),
-    mutationKey: ["Login with Google"],
     onSuccess: (data) => onSuccess(data),
     onError: (error) => setError(error),
   });
@@ -79,7 +78,7 @@ function Registrar() {
    * Displays success or error dialog based on the result.
    */
   const { mutate, isPending } = useMutation({
-    mutationKey: ["registrar estudiante"],
+    mutationKey: ["Register Student"],
     mutationFn: () => postCreateUsuarioService("", getValues()),
     onSuccess: () =>
       showDialog({

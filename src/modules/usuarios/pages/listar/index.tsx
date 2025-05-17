@@ -73,7 +73,7 @@ function ListarUsuarios() {
    */
   const { data, isLoading, error, isSuccess } = useQuery({
     queryFn: () => getUsuariosByTypeService("todos", token),
-    queryKey: ["Usuarios", "todos"],
+    queryKey: ["Usuarios", "todos", token],
   });
 
   const {

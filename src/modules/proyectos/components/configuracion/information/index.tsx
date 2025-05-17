@@ -111,7 +111,7 @@ export const Information = ({ type }: Props) => {
     error: errorDataMaterias,
   } = useQuery({
     queryFn: () => getAllAcademicInformation(token, tipo, id),
-    queryKey: ["Get All Academic Information"],
+    queryKey: ["Get All Academic Information", token, tipo, id],
   });
 
   useEffect(() => {
@@ -136,14 +136,15 @@ export const Information = ({ type }: Props) => {
   const { mutate: mutateEdit, isPending: isPendingEdit } = useMutation({
     mutationFn: async () => {
       setIsLoading(true);
-      const currentStatus = await getProjectById(token, id);
+      const currentStatus = await getProjectById(token, getValuesPrincipal("id") ?? -1);
+
       if (executionState && currentStatus.estado_ejecucion != executionState) syncErrorProject();
       await patchEditProject(token, getValues());
       if (fileImg != undefined) {
         await patchEditImgProject(token, getValues("id") ?? 0, fileImg);
       }
     },
-    mutationKey: ["Edit Project"],
+    mutationKey: ["Edit Project", token],
     onError: setError,
     onSuccess: () => {
       showDialog({

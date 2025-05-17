@@ -22,7 +22,7 @@ import nodejs_banner from "@modules/general/assets/bannerLogos/nodejs.png";
 import php_banner from "@modules/general/assets/bannerLogos/php.png";
 import react from "@modules/general/assets/bannerLogos/react.png";
 import springboot_banner from "@modules/general/assets/bannerLogos/springboot.png";
-import symphony_banner from "@modules/general/assets/bannerLogos/symphony.png";
+import symfony_banner from "@modules/general/assets/bannerLogos/symphony.png";
 
 // Logos
 import angular from "@modules/general/assets/tecnologiesLogos/angular.png";
@@ -79,7 +79,7 @@ export const assetImages = {
   php_banner,
   react,
   springboot_banner,
-  symphony_banner,
+  symfony_banner,
 
   // Technology Logos
   angular,

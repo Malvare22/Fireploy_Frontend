@@ -68,7 +68,7 @@ function EditarMateria({ id, handleCloseModal }: Props) {
   /** Fetch current materia data */
   const { data, error, isLoading: isLoadingFetch } = useQuery({
     queryFn: () => getMateriaById(token, id),
-    queryKey: ["get materia editar", id],
+    queryKey: ["get materia editar", id, token],
   });
 
   /** Form methods from react-hook-form with Zod validation */
@@ -96,7 +96,7 @@ function EditarMateria({ id, handleCloseModal }: Props) {
       setIsLoading(true);
       return postEditMateriaService(token, getValues());
     },
-    mutationKey: ["Edit Materia", id],
+    mutationKey: ["Edit Materia", id, token],
     onSuccess: () => {
       showDialog({
         title: "Editar Materia",

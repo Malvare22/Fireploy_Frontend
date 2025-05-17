@@ -78,8 +78,6 @@ export const DataBase = ({ type }: Props) => {
   const token = useAuth().accountInformation.token;
   const navigate = useNavigate();
 
-  const { id } = useAuth().accountInformation;
-
   const { executionState } = useExecutionStatusContext();
 
   useEffect(() => {
@@ -90,11 +88,11 @@ export const DataBase = ({ type }: Props) => {
 
   const { mutate } = useMutation({
     mutationFn: async () => {
-      const currentStatus = await getProjectById(token, id);
+      const currentStatus = await getProjectById(token, getValuesProject("id") ?? -1);
       if (executionState && currentStatus.estado_ejecucion != executionState) syncErrorProject();
       postCreateDatabase(token, getValues());
     },
-    mutationKey: ["Create Database", getValues()],
+    mutationKey: ["Create Database", getValues(), token],
     onSuccess: () => {
       onFinish();
     },

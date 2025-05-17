@@ -115,7 +115,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
       setIsLoading(true);
       return await patchUpdatePhotoService(token, id ?? -1, imgFile!!);
     },
-    mutationKey: ["Change Photo", id ?? -1],
+    mutationKey: ["Change Photo", id ?? -1, token],
     onError: (err) => setError(err),
   });
 
@@ -142,7 +142,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
       setIsLoading(true);
       return await handleGetQuery();
     },
-    mutationKey: ["Change User"],
+    mutationKey: ["Change User",  token],
   });
 
   const handleUpdateUser = async () => {
@@ -503,7 +503,7 @@ const ButtonUpdaterRol = () => {
       setIsLoading(true);
       return await postCreateSolicitudRolDocenteService(id, token);
     },
-    mutationKey: ["Update Rol", id],
+    mutationKey: ["Update Rol", id, token],
     onError: (err) => setError(err),
     onSuccess: () => {
       showDialog({

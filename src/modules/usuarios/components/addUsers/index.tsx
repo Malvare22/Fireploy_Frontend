@@ -72,7 +72,7 @@ const AddUsers: React.FC<Props> = ({
   // Fetch users of given type from backend
   const { data, isLoading, error, isSuccess } = useQuery({
     queryFn: () => getUsuariosByTypeService(typeUsers, token),
-    queryKey: ["Load Users", typeUsers],
+    queryKey: ["Load Users", typeUsers, token],
   });
 
   // Handles alert dialog logic

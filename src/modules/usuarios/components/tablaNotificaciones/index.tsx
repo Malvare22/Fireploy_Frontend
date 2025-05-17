@@ -49,7 +49,7 @@ const TablaNotificaciones: React.FC<Props> = ({ notificaciones, refetch }) => {
 
       await Promise.all(updates);
     },
-    mutationKey: ["changeUser"],
+    mutationKey: ["Change Notification State", token],
     onError: (error) => setError(error),
     onSuccess: () => {
       refetch();

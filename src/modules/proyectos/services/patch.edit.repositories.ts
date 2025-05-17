@@ -3,6 +3,7 @@ import { ProyectoRepositoriesSchema } from "../utils/forms/proyecto.schema";
 import { transformStringToKV, VariablesDeEntorno } from "@modules/general/utils/string";
 import { Repositorio } from "../types/repositorio";
 import { TECNOLOGIES } from "../utils/technologies";
+import axios from "axios";
 
 type Body = {
   url: string;
@@ -113,4 +114,24 @@ export async function patchEditRepository(
   });
 
   return await Promise.all(promises);
+}
+
+export async function postFileToRepository(
+  token: string,
+  file: File,
+  repositoryId: number
+): Promise<unknown | unknown[]> {
+  const body = new FormData();
+  body.append("file", file);
+  const response = await axios({
+    method: "post",
+    url: `${import.meta.env.VITE_URL_BACKEND}/repositorio/uploadZip/${repositoryId}`,
+
+    headers: {
+      sessiontoken: token,
+    },
+    data: body,
+  }).then((response: unknown) => response);
+
+  return response;
 }

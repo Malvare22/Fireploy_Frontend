@@ -50,7 +50,7 @@ function TecnologiesView() {
   const tecnologies: [FilteredKeys, string, string, string][] = [
     ["Angular", getImage["angular"].ruta, "Es un framework open source desarrollado en Typescript, enfocado en la creación de aplicaciones web de una sola página", ""],
     [
-      "Reactjs",
+      "React",
       getImage["react"].ruta,
       "Es una librería de JavaScript, el cual permite agrupar componentes para la creación de interfaces de usuario dinámicas",
       "",
@@ -123,12 +123,12 @@ function Carousel() {
   type FilteredKeys = Exclude<keyof typeof TECNOLOGIES, "Java">;
   const tecs: [FilteredKeys, string][] = [
     ["Angular", getImage["angular_banner"].ruta],
-    ["Reactjs", getImage["react"].ruta],
+    ["React", getImage["react"].ruta],
     ["Nextjs", getImage["nextjs_banner"].ruta],
     ["Laravel", getImage["laravel_banner"].ruta],
     ["Springboot", getImage["springboot_banner"].ruta],
     ["Expressjs", getImage["expressjs_banner"].ruta],
-    ["Symphony", getImage["symphony_banner"].ruta],
+    ["Symfony", getImage["symfony_banner"].ruta],
     ["Php", getImage["php_banner"].ruta],
     ["Nodejs", getImage["nodejs_banner"].ruta],
   ];
@@ -199,7 +199,7 @@ type PropsCardTecnology = {
  * 
  * @example
  * ```tsx
- * <CardTecnology img="react.png" title="ReactJS" subtitle="A JavaScript library for building UIs" url="https://reactjs.org" />
+ * <CardTecnology img="react.png" title="React" subtitle="A JavaScript library for building UIs" url="https://React.org" />
  * ```
  */
 function CardTecnology({ img, subtitle, title, url }: PropsCardTecnology) {
