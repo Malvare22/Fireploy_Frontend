@@ -29,6 +29,7 @@ import { ChangeStatus, ExecutionState, ShowDeployLoad } from "../executionState"
 import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
 import { Skeleton } from "@mui/material";
 import LogsFiles from "./logSection";
+import ArticleIcon from '@mui/icons-material/Article';
 
 type Props = {
   project: ProyectoSchema;
@@ -101,7 +102,7 @@ export default function ProjectSettings({ project }: Props) {
               <Tab label="Repositorios" icon={<GitHubIcon />} iconPosition="start" />
               <Tab label="Bases de Datos" icon={<StorageIcon />} iconPosition="start" />
               <Tab label="Colaboradores" icon={<PeopleAltIcon />} iconPosition="start" />
-              <Tab label="Logs" icon={<PeopleAltIcon />} iconPosition="start" />
+              <Tab label="Logs" icon={<ArticleIcon />} iconPosition="start" />
             </Tabs>
 
             <Stack spacing={3} padding={1} paddingTop={2}>

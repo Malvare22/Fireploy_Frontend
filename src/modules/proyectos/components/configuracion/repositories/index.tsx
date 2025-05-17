@@ -4,9 +4,11 @@ import {
   Button,
   Divider,
   Grid2,
+  IconButton,
   InputAdornment,
   Stack,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { Controller, useForm, useFormContext } from "react-hook-form";
@@ -39,6 +41,7 @@ import FolderZipIcon from "@mui/icons-material/FolderZip";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import HiddenButton from "@modules/materias/components/hiddenInput";
 import { KeysOfRepository } from "@modules/proyectos/types/keysOfRepository";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 type Props = {
   type: "edit" | "create";
@@ -156,6 +159,7 @@ export function Repositories({ type }: Props) {
   });
 
   type FilesRepo = Record<KeysOfRepository, File | null>;
+
   const [filesRepo, setFilesRepo] = useState<FilesRepo>({
     backend: null,
     frontend: null,
@@ -172,17 +176,28 @@ export function Repositories({ type }: Props) {
       }
     }
 
+    function handleDelete() {
+      setFilesRepo({ ...filesRepo, [layer]: null });
+    }
+
     return (
-      <Button
-        component="label"
-        role={undefined}
-        variant="contained"
-        tabIndex={-1}
-        startIcon={<FolderZipIcon />}
-      >
-        {!filesRepo[layer]?.name ? "Subir .Zip" : filesRepo[layer]?.name}
-        <HiddenButton type="file" onChange={onChange} multiple />
-      </Button>
+      <Stack direction={"row"} alignItems={"center"} spacing={1}>
+        <Button
+          component="label"
+          role={undefined}
+          variant="contained"
+          tabIndex={-1}
+          startIcon={<FolderZipIcon />}
+        >
+          {!filesRepo[layer]?.name ? "Subir .Zip" : filesRepo[layer]?.name}
+          <HiddenButton type="file" onChange={onChange} multiple />
+        </Button>
+        <Tooltip title="Eliminar Archivo">
+          <IconButton onClick={handleDelete} disabled={filesRepo[layer] == null}>
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      </Stack>
     );
   }
 
@@ -258,6 +273,7 @@ export function Repositories({ type }: Props) {
                             size="small"
                             {...field}
                             fullWidth
+                            disabled={filesRepo.frontend != null}
                             label={labelConfiguracion.urlFrontend}
                             error={!!fieldState.error}
                             helperText={fieldState.error?.message}
@@ -297,6 +313,7 @@ export function Repositories({ type }: Props) {
                             size="small"
                             {...field}
                             fullWidth
+                            disabled={filesRepo.backend != null}
                             label={labelConfiguracion.urlRepositorio}
                             error={!!fieldState.error}
                             helperText={fieldState.error?.message}
@@ -339,6 +356,7 @@ export function Repositories({ type }: Props) {
                             label={labelConfiguracion.urlRepositorio}
                             error={!!fieldState.error}
                             helperText={fieldState.error?.message}
+                            disabled={filesRepo.integrado != null}
                             inputRef={field.ref}
                             slotProps={{
                               input: {
