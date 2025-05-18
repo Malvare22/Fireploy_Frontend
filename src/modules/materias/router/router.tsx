@@ -65,42 +65,42 @@ export const routerMaterias: RouteObject[] = [
     path: rutasMaterias.explorar,
     element: <ExplorarMaterias />,
   },
-  {
-    path: rutasMaterias.listarMaterias,
-    element: <ListarMaterias/>
-  },
-  {
-    path: rutasMaterias.listarCursos,
-    element: <ListarCursos/>
-  },
-  {
-    path: rutasMaterias.listarMisCursos,
-    element: <ListarMisCursos/>
-  },
-  {
-    path: rutasMaterias.verCurso,
-    element: <VerInformacionCurso />,
-  },
-  {
-    path: rutasMaterias.editarCurso,
-    element: <EditCourseView />,
-  },
-  {
-    path: rutasMaterias.crearCurso,
-    element: <CreateCourseView />,
-  },
-  {
-    path: rutasMaterias.explorarCursos,
-    element: <VerCursosMateria />,
-  },
-  {
-    path: rutasMaterias.crearMateria,
-    element: <VistaCrearMateria />,
-  },
-  {
-    path: rutasMaterias.solicitudes,
-    element: <VistaSolicitudes />,
-  },
+  // {
+  //   path: rutasMaterias.listarMaterias,
+  //   element: <ListarMaterias/>
+  // },
+  // {
+  //   path: rutasMaterias.listarCursos,
+  //   element: <ListarCursos/>
+  // },
+  // {
+  //   path: rutasMaterias.listarMisCursos,
+  //   element: <ListarMisCursos/>
+  // },
+  // {
+  //   path: rutasMaterias.verCurso,
+  //   element: <VerInformacionCurso />,
+  // },
+  // {
+  //   path: rutasMaterias.editarCurso,
+  //   element: <EditCourseView />,
+  // },
+  // {
+  //   path: rutasMaterias.crearCurso,
+  //   element: <CreateCourseView />,
+  // },
+  // {
+  //   path: rutasMaterias.explorarCursos,
+  //   element: <VerCursosMateria />,
+  // },
+  // {
+  //   path: rutasMaterias.crearMateria,
+  //   element: <VistaCrearMateria />,
+  // },
+  // {
+  //   path: rutasMaterias.solicitudes,
+  //   element: <VistaSolicitudes />,
+  // },
  
 
 ];

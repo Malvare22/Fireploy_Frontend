@@ -20,3 +20,67 @@ export type Materia = {
   id?: number | undefined;
   cursos?: Curso[] | null;
 };
+
+export const materiasDePrueba: Materia[] = [
+  {
+    id: 1,
+    nombre: "Matemáticas I",
+    semestre: 1,
+    estado: "A",
+    cursos: [
+      {
+        id: "C101",
+        grupo: "A1",
+        semestre: "2025-1",
+        descripcion: "Curso básico de matemáticas para ingeniería",
+        estado: "A",
+        estudiantes: [],
+        secciones: null,
+        materia: {
+          id: 1,
+          nombre: "Matemáticas I",
+          semestre: "1",
+          estado: "A"
+        }
+      }
+    ]
+  },
+  {
+    id: 2,
+    nombre: "Programación I",
+    semestre: 1,
+    estado: "A",
+    cursos: null
+  },
+  {
+    id: 3,
+    nombre: "Física General",
+    semestre: 2,
+    estado: "I",
+    cursos: [
+      {
+        id: "C202",
+        grupo: "B1",
+        semestre: "2025-1",
+        descripcion: "Introducción a la física clásica",
+        estado: "I",
+        docente: null,
+        estudiantes: [],
+        secciones: null,
+        materia: {
+          id: 3,
+          nombre: "Física General",
+          semestre: "2",
+          estado: "I"
+        }
+      }
+    ]
+  },
+  {
+    id: 4,
+    nombre: "Álgebra Lineal",
+    semestre: 2,
+    estado: "A",
+    cursos: []
+  }
+];
