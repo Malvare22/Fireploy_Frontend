@@ -18,8 +18,10 @@ import {
 } from "@modules/proyectos/utils/forms/proyecto.schema";
 import { getProjectTypesMap } from "@modules/proyectos/utils/getProjectTypes";
 import {
+  Alert,
   Box,
   Button,
+  Collapse,
   Grid2,
   IconButton,
   MenuItem,
@@ -39,6 +41,7 @@ import { useExecutionStatusContext } from "@modules/proyectos/context/executionS
 import { getProjectById } from "@modules/proyectos/services/get.project";
 import { syncErrorProject } from "../../executionState";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CloseIcon from "@mui/icons-material/Close";
 
 type Props = {
   type: "edit" | "create";
@@ -218,6 +221,7 @@ export const Information = ({ type }: Props) => {
         <LoaderElement />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
+          {type == 'create' && <TransitionAlert/>}
           <Stack spacing={2}>
             <Typography variant="h5">Información</Typography>
             <Grid2 container rowSpacing={2} spacing={2}>
@@ -362,11 +366,11 @@ export const Information = ({ type }: Props) => {
               />
             </Grid2>
 
-                          {type == "edit" && (
-                <Grid2 size={12}>
-                  <ImagContainer currentImg={img} setCurrentImg={setImg} setFile={setFileImg} />
-                </Grid2>
-              )}
+            {type == "edit" && (
+              <Grid2 size={12}>
+                <ImagContainer currentImg={img} setCurrentImg={setImg} setFile={setFileImg} />
+              </Grid2>
+            )}
 
             <Stack alignItems={"end"}>
               {type == "create" ? (
@@ -474,3 +478,36 @@ const ImagContainer: React.FC<PropsImageContainer> = ({ currentImg, setCurrentIm
     </Box>
   );
 };
+
+function TransitionAlert() {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <Box sx={{ width: "100%" }}>
+      <Collapse in={open}>
+        <Alert
+          severity="info"
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          sx={{ mb: 2 }}
+        >
+          <Typography>
+            {
+              "Los proyectos se vinculan a secciones de cursos, por lo cual es indispensable encontrarse en un curso que tenga una sección activa para poder crear un proyecto"
+            }
+          </Typography>
+        </Alert>
+      </Collapse>
+    </Box>
+  );
+}

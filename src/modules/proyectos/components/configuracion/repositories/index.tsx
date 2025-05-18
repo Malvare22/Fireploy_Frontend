@@ -42,7 +42,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import HiddenButton from "@modules/materias/components/hiddenInput";
 import { KeysOfRepository } from "@modules/proyectos/types/keysOfRepository";
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import { GitlabIcon } from "@modules/general/components/customIcons";
 
 type Props = {
   type: "edit" | "create";
@@ -81,7 +81,7 @@ export function Repositories({ type }: Props) {
     resolver: zodResolver(ProyectoRepositoriesSchema),
   });
 
-  const { getValues, control, watch, reset } = methods;
+  const { getValues, control, watch, reset, setValue } = methods;
 
   useEffect(() => {
     reset(getValuesProject());
@@ -171,13 +171,16 @@ export function Repositories({ type }: Props) {
     function onChange(e: React.ChangeEvent<HTMLInputElement>) {
       const { files } = e.target;
 
-      if (!files || !files[0]) setFilesRepo({ ...filesRepo, [layer]: null });
-      else {
+      if (!files || !files[0]) {
+        setFilesRepo({ ...filesRepo, [layer]: null });
+      } else {
         setFilesRepo({ ...filesRepo, [layer]: files[0] });
+        setValue(`${layer}.file`, true);
       }
     }
 
     function handleDelete() {
+      setValue(`${layer}.file`, null);
       setFilesRepo({ ...filesRepo, [layer]: null });
     }
 
@@ -238,7 +241,6 @@ export function Repositories({ type }: Props) {
     }
   }
 
-
   return (
     <>
       <AlertDialog
@@ -283,6 +285,7 @@ export function Repositories({ type }: Props) {
                                 endAdornment: (
                                   <InputAdornment position="end">
                                     <GitHubIcon />
+                                    <GitlabIcon sx={{ marginLeft: 1, fontSize: 16 }} />
                                   </InputAdornment>
                                 ),
                               },
@@ -323,6 +326,7 @@ export function Repositories({ type }: Props) {
                                 endAdornment: (
                                   <InputAdornment position="end">
                                     <GitHubIcon />
+                                    <GitlabIcon sx={{ marginLeft: 1, fontSize: 16 }} />
                                   </InputAdornment>
                                 ),
                               },
@@ -363,6 +367,7 @@ export function Repositories({ type }: Props) {
                                 endAdornment: (
                                   <InputAdornment position="end">
                                     <GitHubIcon />
+                                    <GitlabIcon sx={{ marginLeft: 1, fontSize: 16 }} />
                                   </InputAdornment>
                                 ),
                               },

@@ -34,6 +34,7 @@ export type EstadoUsuario = "A" | "I";
  * @property {string} [linkedin] - LinkedIn URL or an empty string if not available.
  * @property {string} [x] - X (formerly Twitter) URL or an empty string if not available.
  * @property {string} [github] - GitHub URL or an empty string if not available.
+ * @property {string} [gitLab] - gitLab URL or an empty string if not available.
  */
 export type RedSocialUsuario = {
   facebook?: "" | null | string;
@@ -41,6 +42,7 @@ export type RedSocialUsuario = {
   linkedin?: "" | null | string;
   x?: "" | null | string;
   github?: "" | null | string;
+  gitLab?: "" | null | string;
 };
 
 /**

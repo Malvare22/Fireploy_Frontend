@@ -3,7 +3,7 @@ import { labelProjectForList } from "@modules/proyectos/enum/labelProjectForList
 import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
 // import { getExecutionStateArray } from "@modules/proyectos/utils/getExecutionState";
 import { Alert, Box, Button, Grid2, Stack, Typography } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getProjectByUserId } from "@modules/proyectos/services/get.project";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
@@ -14,6 +14,14 @@ import AlertDialog from "@modules/general/components/alertDialog";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import { useNavigate } from "react-router";
 import { rutasProyectos } from "@modules/proyectos/router";
+import {
+  FilterOptions,
+  SelectFilters,
+} from "@modules/general/components/selects";
+import { getExecutionStateArray } from "@modules/proyectos/utils/getExecutionState";
+import useSearch from "@modules/general/hooks/useSearch";
+import TextFieldSearch from "@modules/general/components/textFieldSearch";
+import { getNoRepeatValues } from "@modules/general/utils/getNoRepeatValues";
 
 /**
  * MisProyectos component – A page that lists the projects belonging to the authenticated user.
@@ -64,42 +72,53 @@ function MisProyectos() {
     navigate(rutasProyectos.crear);
   }
 
-  // const sorterOptions: SorterOptions = [
-  //   {
-  //     key: "calificacion",
-  //     label: 'Calificación',
-  //     options: {
-  //       asc: labelSelects.mayor,
-  //       desc: labelSelects.menor,
-  //       defaultValue: labelSelects.noAplicar
-  //     }
+  function searchFn(x: Proyecto[], s: string){
+    const _s = s.toLowerCase();
+    return x.filter((y) => y.titulo.toLowerCase().includes(_s));
+  }
 
-  //   },
-  //   {
-  //     key: "fechaUltimaModificacion",
-  //     label: 'Última Calificación',
-  //     options: {
-  //       asc: labelSelects.mayor,
-  //       desc: labelSelects.menor,
-  //       defaultValue: labelSelects.noAplicar
-  //     }
-  //   },
-  // ];
+  const filterOptions: FilterOptions = [
+    {
+      key: "estadoDeEjecucion",
+      label: "Estado",
+      options: getExecutionStateArray.map(
+        ([value, key]) => [key, (x: any) => x == value] as [string, (x: any) => boolean]
+      ),
+    },
+    {
+      key: "backend.informacion.framework",
+      label: "Framework Backend",
+      options: getNoRepeatValues(projects, (x) => x.backend?.informacion?.framework).map(
+        ((value) => [value, (x: any) => x == value] as [string, (x: any) => boolean]
+      )),
+    },
+     {
+      key: "frontend.informacion.framework",
+      label: "Framework Frontend",
+      options: getNoRepeatValues(projects, (x) => x.frontend?.informacion?.framework).map(
+        ((value) => [value, (x: any) => x == value] as [string, (x: any) => boolean]
+      )),
+    },
+    {
+      key: "integrado.informacion.framework",
+      label: "Framework Integrado",
+      options: getNoRepeatValues(projects, (x) => x.frontend?.informacion?.framework).map(
+        ((value) => [value, (x: any) => x == value] as [string, (x: any) => boolean]
+      )),
+    },
+  ];
 
-  // const filterOptions: FilterOptions = [
-  //   {
-  //     key: "Estado",
-  //     label: "estado",
-  //     options: getExecutionStateArray.map(
-  //       ([value, key]) => [key, (x: any) => x.value == value] as [string, (x: any) => boolean]
-  //     ),
-  //   },
-  // ];
+  const {filteredData: applySearch, searchValue, setSearchValue} = useSearch();
 
-  // const [buffer, setBuffer] = useState<Proyecto[]>(projects);
+  const [buffer, setBuffer] = useState<Proyecto[]>(projects);
 
-  // console.log(data, projects, buffer)
-  // const [bufferSort, setBufferSort] = useState<Proyecto[]>(buffer);
+  useEffect(() => {
+    if (projects) setBuffer(projects);
+  }, [projects]);
+
+   const renderData = useMemo(()  => {
+      return applySearch(buffer, searchFn);
+    }, [searchValue, buffer]);
 
   return (
     <>
@@ -141,28 +160,34 @@ function MisProyectos() {
               </Alert>
             </Stack>
           </Box>
-          {/* <SelectFilters<Proyecto>
-            data={projects}
-            filterOptions={filterOptions}
-            setRefineData={setBuffer}
-          />
-          <SelectOrders<Proyecto>
-            data={buffer}
-            sorterOptions={sorterOptions}
-            setRefineData={setBufferSort}
-          /> */}
+          <Stack spacing={2} paddingX={{ md: 6, xs: 2 }}>
+            <SelectFilters<Proyecto>
+              data={projects}
+              filterOptions={filterOptions}
+              setRefineData={setBuffer}
+              
+            />
+            <TextFieldSearch setSearchValue={setSearchValue} label='Buscar proyecto'/>
+          </Stack>
+          {/*  */}
           <Grid2 container spacing={2} paddingX={{ md: 6, xs: 2 }}>
-            {projects && projects.length > 0 ? (
-              projects.map((proyecto, key) => (
+            {renderData && renderData.length > 0 ? (
+              renderData.map((proyecto, key) => (
                 <Grid2 size={{ md: 6, xs: 12 }}>
                   <ProjectForList proyecto={proyecto} key={key} />
                 </Grid2>
               ))
             ) : (
-              <Alert severity="info" color="warning" sx={{ display: "flex", flexDirection: "row", alignItems: "center", width: '100%' }}>
+              <Alert
+                severity="info"
+                color="warning"
+                sx={{ display: "flex", flexDirection: "row", alignItems: "center", width: "100%" }}
+              >
                 <Stack direction={"row"} alignItems={"center"} spacing={1}>
                   <Typography>Actualmente no cuentas con proyectos</Typography>
-                  <Button variant="outlined" size="small" onClick={handleCreateProject}>Crear</Button>
+                  <Button variant="outlined" size="small" onClick={handleCreateProject}>
+                    Crear
+                  </Button>
                 </Stack>
               </Alert>
             )}

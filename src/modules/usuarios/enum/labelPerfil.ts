@@ -17,6 +17,7 @@ export enum labelPerfil{
 
     facebook = 'Facebook',
     gitHub = 'GitHub',
+    gitLab = 'GitLab',
     instagram = 'Instagram',
     linkedin = 'Linkedin',
     x = 'X',

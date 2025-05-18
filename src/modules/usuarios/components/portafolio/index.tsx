@@ -49,6 +49,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import EditIcon from "@mui/icons-material/Edit";
+import { GitlabIcon } from "@modules/general/components/customIcons";
 
 /**
  * Portfolio component – responsible for rendering a user's public profile and projects.
@@ -244,6 +245,24 @@ const Portafolio = () => {
                     <InputAdornment position="end">
                       <IconButton>
                         <GitHubIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid2>
+            <Grid2 size={{ md: 6, xs: 12 }}>
+              <TextField
+                fullWidth
+                label={labelPerfil.gitLab}
+                {...register("redSocial.gitLab")}
+                error={!!errors.redSocial?.gitLab}
+                helperText={errors.redSocial?.gitLab?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton>
+                        <GitlabIcon />
                       </IconButton>
                     </InputAdornment>
                   ),

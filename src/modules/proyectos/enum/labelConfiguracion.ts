@@ -13,7 +13,7 @@ export enum labelConfiguracion{
     seccion = 'Sección',
 
     repositorios = 'Repositorios',
-    repositoriosParrafo = 'Vincula tus repositorios de Github para establecer el código que va a conformar cada capa del sistema de software',
+    repositoriosParrafo = 'Vincula tus repositorios de Github o Gitlab para establecer el código que va a conformar cada capa del sistema de software',
     frontend = 'Frontend',
     backend = 'Backend',
     integrado = 'Integrado',

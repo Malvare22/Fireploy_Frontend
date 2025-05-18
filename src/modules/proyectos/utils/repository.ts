@@ -11,10 +11,10 @@ import { Repositorio } from "../types/repositorio";
  * 
  * @returns {Map<Repositorio["tipo"], string>} A Map where each key is a repository type and the value is the corresponding human-readable string.
  */
-export const getRepositoryTypesMap: Map<Repositorio["tipo"], string> = new Map([
+export const getRepositoryTypesMap: Map<Repositorio["tipo"], string | null> = new Map([
   ["B", "Backend"],
   ["F", "Frontend"],
-  ["I", "Monolito"],
+  ["I", null],
 ]);
 
 /**
@@ -26,28 +26,8 @@ export const getRepositoryTypesMap: Map<Repositorio["tipo"], string> = new Map([
  * 
  * @returns {[Repositorio["tipo"], string][]} An array of tuples representing repository types and their names.
  */
-export const getRepositoryTypesArray: [Repositorio["tipo"], string][] = [
+export const getRepositoryTypesArray: [Repositorio["tipo"], string | null][] = [
   ["B", "Backend"],
   ["F", "Frontend"],
-  ["I", "Monolito"],
+  ["I", null],
 ];
-
-/**
- * getRepositoryTypeColor – A function that returns a Map of colors associated with repository types.
- * 
- * The color map is based on the Material-UI theme, and each repository type is associated with a specific color:
- * - "B" (Backend) -> error light color
- * - "F" (Frontend) -> info light color
- * - "I" (Monolito) -> success light color
- * 
- * @returns {Map<Repositorio["tipo"], string>} A Map where each repository type is associated with a specific color.
- */
-export const getRepositoryTypeColor = () => {
-  const theme = useTheme();
-
-  return new Map<Repositorio["tipo"], string>([
-    ["B", theme.palette.error.light],
-    ["F", theme.palette.info.light],
-    ["I", theme.palette.success.light],
-  ]);
-};
