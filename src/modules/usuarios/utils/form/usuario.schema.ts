@@ -90,6 +90,12 @@ export const redSocialUsuarioSchema = z
       .refine((s) => s?.includes("github.com") || s?.length == 0, {
         message: msgRedSocial,
       }),
+    gitlab: z
+      .string()
+      .optional()
+      .refine((s) => s?.includes("gitlab.com") || s?.length == 0, {
+        message: msgRedSocial,
+      }),
   })
   .strict();
 
@@ -145,18 +151,20 @@ export const UsuarioSchema: z.ZodType<Usuario> = z
     }
   )
   // If user type is "E" (student), estFechaInicio must be a valid date
-  .refine((data) => {
-    if (data.tipo === "E") {
-      return fechaSchema.safeParse(data.estFechaInicio).success;
+  .refine(
+    (data) => {
+      if (data.tipo === "E") {
+        return fechaSchema.safeParse(data.estFechaInicio).success;
+      }
+      return true;
+    },
+    {
+      message: "Requerida fecha de ingreso en la universidad",
+      path: ["estFechaInicio"],
     }
-    return true;
-  },
-  {
-    message: "Requerida fecha de ingreso en la universidad",
-    path: ["estFechaInicio"],
-  });
+  );
 
-export type UsuarioSchema = z.infer<typeof UsuarioSchema>
+export type UsuarioSchema = z.infer<typeof UsuarioSchema>;
 
 /**
  * Default template object for creating a new Usuario instance.

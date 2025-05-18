@@ -4,9 +4,11 @@ import {
   Button,
   Divider,
   Grid2,
+  IconButton,
   InputAdornment,
   Stack,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { Controller, useForm, useFormContext } from "react-hook-form";
@@ -39,6 +41,8 @@ import FolderZipIcon from "@mui/icons-material/FolderZip";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import HiddenButton from "@modules/materias/components/hiddenInput";
 import { KeysOfRepository } from "@modules/proyectos/types/keysOfRepository";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { GitlabIcon } from "@modules/general/components/customIcons";
 
 type Props = {
   type: "edit" | "create";
@@ -77,7 +81,7 @@ export function Repositories({ type }: Props) {
     resolver: zodResolver(ProyectoRepositoriesSchema),
   });
 
-  const { getValues, control, watch, reset } = methods;
+  const { getValues, control, watch, reset, setValue } = methods;
 
   useEffect(() => {
     reset(getValuesProject());
@@ -156,6 +160,7 @@ export function Repositories({ type }: Props) {
   });
 
   type FilesRepo = Record<KeysOfRepository, File | null>;
+
   const [filesRepo, setFilesRepo] = useState<FilesRepo>({
     backend: null,
     frontend: null,
@@ -166,23 +171,37 @@ export function Repositories({ type }: Props) {
     function onChange(e: React.ChangeEvent<HTMLInputElement>) {
       const { files } = e.target;
 
-      if (!files || !files[0]) setFilesRepo({ ...filesRepo, [layer]: null });
-      else {
+      if (!files || !files[0]) {
+        setFilesRepo({ ...filesRepo, [layer]: null });
+      } else {
         setFilesRepo({ ...filesRepo, [layer]: files[0] });
+        setValue(`${layer}.file`, true);
       }
     }
 
+    function handleDelete() {
+      setValue(`${layer}.file`, null);
+      setFilesRepo({ ...filesRepo, [layer]: null });
+    }
+
     return (
-      <Button
-        component="label"
-        role={undefined}
-        variant="contained"
-        tabIndex={-1}
-        startIcon={<FolderZipIcon />}
-      >
-        {!filesRepo[layer]?.name ? "Subir .Zip" : filesRepo[layer]?.name}
-        <HiddenButton type="file" onChange={onChange} multiple />
-      </Button>
+      <Stack direction={"row"} alignItems={"center"} spacing={1}>
+        <Button
+          component="label"
+          role={undefined}
+          variant="contained"
+          tabIndex={-1}
+          startIcon={<FolderZipIcon />}
+        >
+          {!filesRepo[layer]?.name ? "Subir .Zip" : filesRepo[layer]?.name}
+          <HiddenButton type="file" onChange={onChange} multiple />
+        </Button>
+        <Tooltip title="Eliminar Archivo">
+          <IconButton onClick={handleDelete} disabled={filesRepo[layer] == null}>
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      </Stack>
     );
   }
 
@@ -233,7 +252,6 @@ export function Repositories({ type }: Props) {
         handleAccept={handleAccept}
         handleCancel={handleClose}
       />
-
       <FormProvider {...methods}>
         <AutoFocusOnError<ProyectoRepositoriesSchema> />
         <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -243,13 +261,12 @@ export function Repositories({ type }: Props) {
               <Divider />
             </Stack>
             <Typography variant="body2">{labelConfiguracion.repositoriosParrafo}</Typography>
-
             <Stack spacing={2}>
               {watch("frontend") && (
                 <>
                   <Typography variant="h6">{labelConfiguracion.frontend}</Typography>
                   <Grid2 container spacing={1}>
-                    <Grid2 size={{ md: 6, xs: 12 }}>
+                    <Grid2 size={{ md: 10, xs: 12 }}>
                       <Controller
                         name="frontend.url"
                         control={control}
@@ -258,6 +275,7 @@ export function Repositories({ type }: Props) {
                             size="small"
                             {...field}
                             fullWidth
+                            disabled={filesRepo.frontend != null}
                             label={labelConfiguracion.urlFrontend}
                             error={!!fieldState.error}
                             helperText={fieldState.error?.message}
@@ -267,6 +285,7 @@ export function Repositories({ type }: Props) {
                                 endAdornment: (
                                   <InputAdornment position="end">
                                     <GitHubIcon />
+                                    <GitlabIcon sx={{ marginLeft: 1, fontSize: 16 }} />
                                   </InputAdornment>
                                 ),
                               },
@@ -275,7 +294,7 @@ export function Repositories({ type }: Props) {
                         )}
                       />
                     </Grid2>
-                    <Grid2 size={{ md: 6, xs: 12 }}>
+                    <Grid2 size={{ md: 2, xs: 12 }}>
                       <InputFile layer="frontend" />
                     </Grid2>
                   </Grid2>
@@ -297,6 +316,7 @@ export function Repositories({ type }: Props) {
                             size="small"
                             {...field}
                             fullWidth
+                            disabled={filesRepo.backend != null}
                             label={labelConfiguracion.urlRepositorio}
                             error={!!fieldState.error}
                             helperText={fieldState.error?.message}
@@ -306,6 +326,7 @@ export function Repositories({ type }: Props) {
                                 endAdornment: (
                                   <InputAdornment position="end">
                                     <GitHubIcon />
+                                    <GitlabIcon sx={{ marginLeft: 1, fontSize: 16 }} />
                                   </InputAdornment>
                                 ),
                               },
@@ -339,12 +360,14 @@ export function Repositories({ type }: Props) {
                             label={labelConfiguracion.urlRepositorio}
                             error={!!fieldState.error}
                             helperText={fieldState.error?.message}
+                            disabled={filesRepo.integrado != null}
                             inputRef={field.ref}
                             slotProps={{
                               input: {
                                 endAdornment: (
                                   <InputAdornment position="end">
                                     <GitHubIcon />
+                                    <GitlabIcon sx={{ marginLeft: 1, fontSize: 16 }} />
                                   </InputAdornment>
                                 ),
                               },

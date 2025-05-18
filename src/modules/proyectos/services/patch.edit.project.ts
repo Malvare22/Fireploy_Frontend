@@ -5,6 +5,7 @@ interface BodyEditProject {
   titulo: string;
   descripcion: string;
   seccionId: number;
+  imagen: string | null;
 }
 
 /**
@@ -28,6 +29,7 @@ export async function patchEditProject(token: string, project: ProyectoInformati
     titulo: project.titulo,
     descripcion: project.descripcion || "",
     seccionId: project.materiaInformacion.seccionId ?? -1,
+    imagen: project.imagen ? project.imagen : null,
   };
   const response = await patchData<unknown>(`/proyecto/${project.id}`, body, {
     sessiontoken: token,

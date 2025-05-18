@@ -2,7 +2,10 @@ import { MateriaInformacion, Proyecto } from "@modules/proyectos/types/proyecto.
 import { z } from "zod";
 import { RepositorioSchema } from "./repositorio.schema";
 import { BaseDeDatosSchema } from "./baseDeDatos.schema";
-import { DescriptionStringSchema, StandardStringRequiredSchema } from "@modules/materias/utils/forms/string.schema";
+import {
+  DescriptionStringSchema,
+  StandardStringRequiredSchema,
+} from "@modules/materias/utils/forms/string.schema";
 import { UrlSchema } from "@modules/materias/utils/forms/url.schema";
 import { UsuarioCursoSchema } from "@modules/materias/utils/forms/form.schema";
 
@@ -18,7 +21,7 @@ export const MateriaInformacionSchema: z.ZodType<MateriaInformacion> = z.object(
 /**
  * ProyectoSchema – Zod schema that validates a complete project structure (excluding favorite users), including title, optional description, URL, database info, optional repositories (backend, frontend, integrated), type ("M" = Modular, "S" = Simple), academic info, and list of participants.
  */
-export const ProyectoSchema: z.ZodType<Omit<Proyecto, 'fav_usuarios'>> = z.object({
+export const ProyectoSchema: z.ZodType<Omit<Proyecto, "fav_usuarios">> = z.object({
   titulo: StandardStringRequiredSchema,
   descripcion: DescriptionStringSchema.optional(),
   url: UrlSchema,
@@ -29,20 +32,21 @@ export const ProyectoSchema: z.ZodType<Omit<Proyecto, 'fav_usuarios'>> = z.objec
   tipo: z.enum(["M", "S"]),
   materiaInformacion: MateriaInformacionSchema,
   integrantes: z.array(z.lazy(() => UsuarioCursoSchema)),
-  imagen: z.string().nullable().optional()
+  imagen: z.string().nullable().optional(),
 });
 
 /**
  * ProyectoInformationSchema – Zod schema that validates project metadata: optional ID, title, optional description, academic info, and type ("M" = Modular, "S" = Simple).
  */
 export const ProyectoInformationSchema: z.ZodType<
-  Pick<Proyecto, "titulo" | "descripcion" | "materiaInformacion" | "tipo" | "id">
+  Pick<Proyecto, "titulo" | "descripcion" | "materiaInformacion" | "tipo" | "id" | "imagen">
 > = z.object({
   id: z.number().optional(),
   titulo: StandardStringRequiredSchema,
   descripcion: DescriptionStringSchema.optional(),
   materiaInformacion: MateriaInformacionSchema,
   tipo: z.enum(["M", "S"]),
+  imagen: z.string().nullable().optional(),
 });
 
 /**

@@ -9,8 +9,9 @@ export type Repositorio = {
   url: string;
   tipo: "B" | "F" | "I";
   variables: string;
-  informacion?: { tecnologia: string | null; framework: string | null; };
-  logs?: null | LogFileService[]
+  informacion?: { tecnologia: string | null; framework: string | null };
+  logs?: null | LogFileService[];
+  file?: boolean | null | undefined;
 };
 
 /**

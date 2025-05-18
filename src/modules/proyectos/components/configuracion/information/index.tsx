@@ -17,7 +17,19 @@ import {
   ProyectoInformationSchema,
 } from "@modules/proyectos/utils/forms/proyecto.schema";
 import { getProjectTypesMap } from "@modules/proyectos/utils/getProjectTypes";
-import { Box, Button, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Collapse,
+  Grid2,
+  IconButton,
+  MenuItem,
+  Stack,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useFormContext, Controller, useForm } from "react-hook-form";
@@ -28,6 +40,8 @@ import HiddenButton from "@modules/materias/components/hiddenInput";
 import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
 import { getProjectById } from "@modules/proyectos/services/get.project";
 import { syncErrorProject } from "../../executionState";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CloseIcon from "@mui/icons-material/Close";
 
 type Props = {
   type: "edit" | "create";
@@ -138,9 +152,17 @@ export const Information = ({ type }: Props) => {
       setIsLoading(true);
       const currentStatus = await getProjectById(token, getValuesPrincipal("id") ?? -1);
 
+      const callback = (): ProyectoInformationSchema => {
+        if (img) return getValues();
+        else {
+          return { ...getValues(), imagen: null };
+        }
+      };
+
       if (executionState && currentStatus.estado_ejecucion != executionState) syncErrorProject();
-      await patchEditProject(token, getValues());
-      if (fileImg != undefined) {
+      await patchEditProject(token, callback());
+
+      if (fileImg) {
         await patchEditImgProject(token, getValues("id") ?? 0, fileImg);
       }
     },
@@ -199,6 +221,7 @@ export const Information = ({ type }: Props) => {
         <LoaderElement />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
+          {type == 'create' && <TransitionAlert/>}
           <Stack spacing={2}>
             <Typography variant="h5">Información</Typography>
             <Grid2 container rowSpacing={2} spacing={2}>
@@ -236,19 +259,35 @@ export const Information = ({ type }: Props) => {
                   )}
                 />
               </Grid2>
-              {type == "edit" && (
-                <ImagContainer
-                  currentImg={img}
-                  initialImg=""
-                  setCurrentImg={setImg}
-                  setFile={setFileImg}
-                />
-              )}
-              {type == "create" && (
-                <>
-                  <Grid2 size={4}>
+              <>
+                <Grid2 size={{ md: 4, xs: 12 }}>
+                  <Controller
+                    name="materiaInformacion.materiaId"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        size="small"
+                        fullWidth
+                        {...field}
+                        select
+                        label="Materia"
+                        error={!!errors.materiaInformacion?.materiaId}
+                        helperText={errors.materiaInformacion?.materiaId?.message?.toString()}
+                      >
+                        {Array.from(selectMaterias.entries()).map(([value, label]) => (
+                          <MenuItem value={value} key={value}>
+                            {label}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    )}
+                  />
+                </Grid2>
+
+                <Grid2 size={{ md: 4, xs: 12 }}>
+                  {getCursosByMateria.get(watch("materiaInformacion.materiaId") ?? 0) && (
                     <Controller
-                      name="materiaInformacion.materiaId"
+                      name="materiaInformacion.cursoId"
                       control={control}
                       render={({ field }) => (
                         <TextField
@@ -256,103 +295,80 @@ export const Information = ({ type }: Props) => {
                           fullWidth
                           {...field}
                           select
-                          label="Materia"
-                          error={!!errors.materiaInformacion?.materiaId}
-                          helperText={errors.materiaInformacion?.materiaId?.message?.toString()}
+                          label="Curso"
+                          error={!!errors.materiaInformacion?.cursoId}
+                          helperText={errors.materiaInformacion?.cursoId?.message?.toString()}
                         >
-                          {Array.from(selectMaterias.entries()).map(([value, label]) => (
-                            <MenuItem value={value} key={value}>
-                              {label}
+                          {Array.from(
+                            getCursosByMateria.get(watch("materiaInformacion.materiaId") ?? 0) || []
+                          ).map((curso) => (
+                            <MenuItem value={curso} key={curso}>
+                              {selectCurso.get(curso)}
                             </MenuItem>
                           ))}
                         </TextField>
                       )}
                     />
-                  </Grid2>
+                  )}
+                </Grid2>
 
-                  <Grid2 size={4}>
-                    {getCursosByMateria.get(watch("materiaInformacion.materiaId") ?? 0) && (
-                      <Controller
-                        name="materiaInformacion.cursoId"
-                        control={control}
-                        render={({ field }) => (
-                          <TextField
-                            size="small"
-                            fullWidth
-                            {...field}
-                            select
-                            label="Curso"
-                            error={!!errors.materiaInformacion?.cursoId}
-                            helperText={errors.materiaInformacion?.cursoId?.message?.toString()}
-                          >
-                            {Array.from(
-                              getCursosByMateria.get(watch("materiaInformacion.materiaId") ?? 0) ||
-                                []
-                            ).map((curso) => (
-                              <MenuItem value={curso} key={curso}>
-                                {selectCurso.get(curso)}
-                              </MenuItem>
-                            ))}
-                          </TextField>
-                        )}
-                      />
-                    )}
-                  </Grid2>
-
-                  <Grid2 size={4}>
-                    {getSeccionByCurso.get(watch("materiaInformacion.cursoId") ?? "") && (
-                      <Controller
-                        name="materiaInformacion.seccionId"
-                        control={control}
-                        render={({ field }) => (
-                          <TextField
-                            size="small"
-                            fullWidth
-                            {...field}
-                            select
-                            label="Sección"
-                            error={!!errors.materiaInformacion?.seccionId}
-                            helperText={errors.materiaInformacion?.seccionId?.message?.toString()}
-                          >
-                            {Array.from(
-                              getSeccionByCurso.get(watch("materiaInformacion.cursoId") ?? "") || []
-                            ).map((seccionId) => (
-                              <MenuItem value={seccionId} key={seccionId}>
-                                {selectSeccion.get(seccionId)}
-                              </MenuItem>
-                            ))}
-                          </TextField>
-                        )}
-                      />
-                    )}
-                  </Grid2>
-                </>
-              )}
+                <Grid2 size={{ md: 4, xs: 12 }}>
+                  {getSeccionByCurso.get(watch("materiaInformacion.cursoId") ?? "") && (
+                    <Controller
+                      name="materiaInformacion.seccionId"
+                      control={control}
+                      render={({ field }) => (
+                        <TextField
+                          size="small"
+                          fullWidth
+                          {...field}
+                          select
+                          label="Sección"
+                          error={!!errors.materiaInformacion?.seccionId}
+                          helperText={errors.materiaInformacion?.seccionId?.message?.toString()}
+                        >
+                          {Array.from(
+                            getSeccionByCurso.get(watch("materiaInformacion.cursoId") ?? "") || []
+                          ).map((seccionId) => (
+                            <MenuItem value={seccionId} key={seccionId}>
+                              {selectSeccion.get(seccionId)}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      )}
+                    />
+                  )}
+                </Grid2>
+              </>
             </Grid2>
 
-            {type == "create" && (
-              <Grid2 size={8}>
-                <Controller
-                  name="tipo"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      size="small"
-                      fullWidth
-                      {...field}
-                      select
-                      label="Tipo de proyecto"
-                      error={!!errors.tipo}
-                      helperText={errors.tipo?.message?.toString()}
-                    >
-                      {Array.from(getProjectTypesMap.entries()).map(([key, label]) => (
-                        <MenuItem value={key} key={key}>
-                          {label}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  )}
-                />
+            <Grid2 size={12}>
+              <Controller
+                name="tipo"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    size="small"
+                    fullWidth
+                    {...field}
+                    select
+                    label="Tipo de proyecto"
+                    error={!!errors.tipo}
+                    helperText={errors.tipo?.message?.toString()}
+                  >
+                    {Array.from(getProjectTypesMap.entries()).map(([key, label]) => (
+                      <MenuItem value={key} key={key}>
+                        {label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
+            </Grid2>
+
+            {type == "edit" && (
+              <Grid2 size={12}>
+                <ImagContainer currentImg={img} setCurrentImg={setImg} setFile={setFileImg} />
               </Grid2>
             )}
 
@@ -382,34 +398,23 @@ export const Information = ({ type }: Props) => {
 type PropsImageContainer = {
   currentImg: string | null | undefined;
   setCurrentImg: React.Dispatch<string | null | undefined>;
-  initialImg: string;
   setFile: React.Dispatch<Blob | undefined | null>;
 };
-const ImagContainer: React.FC<PropsImageContainer> = ({
-  currentImg,
-  initialImg,
-  setCurrentImg,
-  setFile,
-}) => {
-  useEffect(() => {
-    const f = async () => {
-      if (currentImg) {
-        if (currentImg != initialImg) setFile(await urlToBlob(currentImg));
-      } else if (!currentImg) {
-        setFile(null);
-        if (ref.current) {
-          ref.current.value = "";
-        }
-      }
-    };
-    f();
-  }, [currentImg]);
-
-  const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+const ImagContainer: React.FC<PropsImageContainer> = ({ currentImg, setCurrentImg, setFile }) => {
+  const handlePhotoChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
       const reader = new FileReader();
-      reader.onload = (e) => setCurrentImg(e.target?.result as string);
-      reader.readAsDataURL(event.target.files[0]);
+
+      reader.onload = async (e) => {
+        const imgUrl = e.target?.result as string;
+        setCurrentImg(imgUrl);
+
+        const blob = await urlToBlob(imgUrl);
+        setFile(blob);
+      };
+
+      reader.readAsDataURL(file);
     }
   };
 
@@ -419,8 +424,25 @@ const ImagContainer: React.FC<PropsImageContainer> = ({
     if (ref) ref.current?.click();
   }
 
+  function handleDelete() {
+    setFile(null);
+    setCurrentImg(null);
+  }
+
   return (
-    <Box>
+    <Box
+      sx={
+        currentImg
+          ? {
+              display: "flex",
+              maxWidth: 300,
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 1,
+            }
+          : {}
+      }
+    >
       {currentImg && (
         <Box
           component={"img"}
@@ -434,22 +456,58 @@ const ImagContainer: React.FC<PropsImageContainer> = ({
         />
       )}
       {/* <Alert severity="info">La resolución de la imagen debe ser de mínimo 300x170px</Alert> */}
-      <Box>
-        <Stack direction="row" spacing={1} alignItems={"center"} justifyContent={"center"}>
-          <label htmlFor="upload-photo">
-            <HiddenButton
-              accept="image/*"
-              id="upload-photo"
-              type="file"
-              onChange={handlePhotoChange}
-              ref={ref}
-            />
-            <Button variant="outlined" color="secondary" onClick={handleReference}>
-              Cambiar imagen
-            </Button>
-          </label>
-        </Stack>
-      </Box>
+      <Stack>
+        <label htmlFor="upload-photo">
+          <HiddenButton
+            accept="image/*"
+            id="upload-photo"
+            type="file"
+            onChange={handlePhotoChange}
+            ref={ref}
+          />
+          <Button variant="outlined" color="secondary" onClick={handleReference}>
+            Cambiar imagen
+          </Button>
+          <Tooltip title="Eliminar Archivo">
+            <IconButton disabled={currentImg == null} onClick={handleDelete}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </label>
+      </Stack>
     </Box>
   );
 };
+
+function TransitionAlert() {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <Box sx={{ width: "100%" }}>
+      <Collapse in={open}>
+        <Alert
+          severity="info"
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          sx={{ mb: 2 }}
+        >
+          <Typography>
+            {
+              "Los proyectos se vinculan a secciones de cursos, por lo cual es indispensable encontrarse en un curso que tenga una sección activa para poder crear un proyecto"
+            }
+          </Typography>
+        </Alert>
+      </Collapse>
+    </Box>
+  );
+}

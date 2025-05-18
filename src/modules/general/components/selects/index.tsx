@@ -1,7 +1,20 @@
 import { useFilters } from "@modules/general/hooks/useFilters";
 import useOrderSelect, { Order } from "@modules/general/hooks/useOrder";
-import { FormControl, Grid2, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  FormControl,
+  Grid2,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import React, { useEffect, useMemo } from "react";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 export type SorterOptions = {
   key: string;
@@ -31,22 +44,22 @@ type SelectFiltersProps<T> = {
 
 /**
  * SelectOrders component – allows users to select ordering preferences for a given dataset.
- * 
- * This component supports both single and multiple order selectors. When `type` is set to "multiple", 
- * multiple order selectors are displayed for each sorting criterion. If `type` is "single", a single select 
- * input is displayed for ordering. The component uses `useOrderSelect` to manage and apply the sorting order 
+ *
+ * This component supports both single and multiple order selectors. When `type` is set to "multiple",
+ * multiple order selectors are displayed for each sorting criterion. If `type` is "single", a single select
+ * input is displayed for ordering. The component uses `useOrderSelect` to manage and apply the sorting order
  * to the provided data.
- * 
+ *
  * @component
- * 
+ *
  * @param {Array} sorterOptions - List of sorting options, each containing sorting `key`, `label`, and `options` for asc/desc.
  * @param {Array} data - The dataset that needs to be sorted.
  * @param {React.Dispatch} setRefineData - Function to update the filtered data after sorting.
  * @param {"multiple" | "single"} [type="multiple"] - Defines if multiple sorting options or a single one should be displayed.
  * @param {string} label - The label to display for the ordering controls.
- * 
+ *
  * @returns {JSX.Element} A set of sorting controls (either multiple selects or one select).
- * 
+ *
  * @example
  * ```tsx
  * <SelectOrders sorterOptions={sortOptions} data={data} setRefineData={setRefineData} />
@@ -127,19 +140,19 @@ export function SelectOrders<T extends Object>({
 
 /**
  * SelectFilters component – provides filters for refining the displayed dataset based on given criteria.
- * 
- * The component renders a set of filter options that the user can choose from, which dynamically updates the 
- * displayed data. It uses `useFilters` to manage the active filters and applies them to the data. Each filter can 
+ *
+ * The component renders a set of filter options that the user can choose from, which dynamically updates the
+ * displayed data. It uses `useFilters` to manage the active filters and applies them to the data. Each filter can
  * have a group of options, and selecting an option refines the displayed results.
- * 
+ *
  * @component
- * 
+ *
  * @param {Array} filterOptions - List of filter options, where each option group contains a key, label, and options.
  * @param {React.Dispatch} setRefineData - Function to update the filtered data after applying the selected filters.
  * @param {Array} data - The dataset that needs to be filtered.
- * 
+ *
  * @returns {JSX.Element} A set of filtering controls, such as dropdowns, for the dataset.
- * 
+ *
  * @example
  * ```tsx
  * <SelectFilters filterOptions={filterOptions} data={data} setRefineData={setRefineData} />
@@ -151,6 +164,8 @@ export function SelectFilters<T extends Object>({
   data,
 }: SelectFiltersProps<T>) {
   const { filterDataFn, handleFilter, filters } = useFilters<T>();
+
+  const matches = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   const showOptions = useMemo(() => {
     return filterOptions.map((optionGroup) => ({
@@ -165,32 +180,73 @@ export function SelectFilters<T extends Object>({
 
   return (
     <Grid2 container spacing={2}>
-      {showOptions.map(({ key, options, label }) => {
-        return (
-          <Grid2 size={{ md: 3, xs: 12 }} key={key}>
-            <FormControl fullWidth>
-              <InputLabel>{label}</InputLabel>
-              <Select
-                label={label}
-                onChange={(e) => {
-                  const idx = parseInt(e.target.value ? (e.target.value as string) : "0");
-                  handleFilter(key, options[idx][1]);
-                }}
-                defaultValue={options.length - 1}
-                size="small"
-              >
-                {options.map(([text], i) => {
-                  return (
-                    <MenuItem key={text} value={i}>
-                      {[text]}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          </Grid2>
-        );
-      })}
+      {!matches &&
+        showOptions.map(({ key, options, label }) => {
+          return (
+            <>
+              <Grid2 size={3} key={key}>
+                <FormControl fullWidth>
+                  <InputLabel>{label}</InputLabel>
+                  <Select
+                    label={label}
+                    onChange={(e) => {
+                      const idx = parseInt(e.target.value ? (e.target.value as string) : "0");
+                      handleFilter(key, options[idx][1]);
+                    }}
+                    defaultValue={options.length - 1}
+                    size="small"
+                  >
+                    {options.map(([text], i) => {
+                      return (
+                        <MenuItem key={text} value={i}>
+                          {[text]}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Grid2>
+            </>
+          );
+        })}
+
+      {matches &&
+        
+          <Accordion sx={{width: "100%", padding: 0}}>
+            <AccordionSummary
+              expandIcon={<ArrowDropDownIcon />}
+              aria-controls="panel2-content"
+              id="panel2-header"
+            >
+              <Typography component="span">Filtros</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+             { showOptions.map(({ key, options, label }) => (
+              <Grid2 size={12} key={key}>
+                <FormControl fullWidth>
+                  <InputLabel>{label}</InputLabel>
+                  <Select
+                    label={label}
+                    onChange={(e) => {
+                      const idx = parseInt(e.target.value ? (e.target.value as string) : "0");
+                      handleFilter(key, options[idx][1]);
+                    }}
+                    defaultValue={options.length - 1}
+                    size="small"
+                  >
+                    {options.map(([text], i) => {
+                      return (
+                        <MenuItem key={text} value={i}>
+                          {[text]}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Grid2>))}
+            </AccordionDetails>
+          </Accordion>
+        }
     </Grid2>
   );
 }

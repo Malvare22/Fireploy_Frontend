@@ -38,6 +38,8 @@ export enum TECNOLOGIES {
  */
 export const keyOfTechnologies = [TECNOLOGIES.Java, TECNOLOGIES.Nodejs, TECNOLOGIES.Php] as const;
 
+export const keyOfTechnologiesForAlert: string[] = [TECNOLOGIES.React] as const;
+
 /**
  * inputSelectTecnology – A record mapping each technology (from `keysOfTecnologies`) to its respective SelectTenology.
  *
@@ -45,15 +47,10 @@ export const keyOfTechnologies = [TECNOLOGIES.Java, TECNOLOGIES.Nodejs, TECNOLOG
  */
 export const inputSelectFramework: Record<(typeof keyOfTechnologies)[number], SelectTecnlogy> = {
   Java: {
-    frameworks: [
-      TECNOLOGIES.Springboot,
-    ],
+    frameworks: [TECNOLOGIES.Springboot],
   },
   PHP: {
-    frameworks: [
-      TECNOLOGIES.Laravel,
-      TECNOLOGIES.Symfony,
-    ],
+    frameworks: [TECNOLOGIES.Laravel, TECNOLOGIES.Symfony],
   },
   NodeJS: {
     frameworks: [
@@ -64,4 +61,17 @@ export const inputSelectFramework: Record<(typeof keyOfTechnologies)[number], Se
       TECNOLOGIES.Angular,
     ],
   },
+} as const;
+
+export const getFrameworkEnvAlert: Record<
+  (typeof keyOfTechnologiesForAlert)[number],
+  { message: string; myDocUrl: string }
+> = {
+  React: { message: "Debido a que usas React, se requiere que uses el prefijo `VITE` en tus variables de entorno", myDocUrl: "https://vite.dev/guide/env-and-mode" },
+};
+
+export const reservedVariables = {
+  SQL: ["DB_DATABASE", "DB_PORT", "DB_HOST", "DB_USER", "DB_PASSWORD"],
+  NO_SQL: ["DB_CONNECTION_URI"],
+  GENERAL: ["PORT", "HOST", "BASE_PATH", "URL_FRONTEND", "URL_BACKEND"],
 } as const;

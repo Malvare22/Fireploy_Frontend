@@ -52,8 +52,6 @@ export const TechnologyInputs: React.FC<DockerInputsProps> = ({ fieldName = "bac
     ? inputSelectFramework[selectedTechnology as keyof typeof inputSelectFramework].frameworks
     : null;
 
-  if (fieldName == "frontend") console.log("X ", watch());
-
   useEffect(() => {
     setValue(`${fieldName}.informacion.framework`, null);
   }, [watch(`${fieldName}.informacion.tecnologia`)]);
