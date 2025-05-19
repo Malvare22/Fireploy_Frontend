@@ -41,7 +41,7 @@ function NewEntriesView() {
 
   //   const example = { confirmarContrasenia: "", contrasenia: "", estFechaInicio: "", sexo: "M" };
 
-  const { control, register, handleSubmit, formState, reset } = useForm<UsuarioSchema>({
+  const { control, register, handleSubmit, formState, reset, watch } = useForm<UsuarioSchema>({
     defaultValues: {
       estFechaInicio: "",
       sexo: "M",
@@ -63,6 +63,8 @@ function NewEntriesView() {
     queryFn: () => getUsuarioService(id, token),
     queryKey: ["Profile", id, token],
   });
+
+  console.log(watch())
 
   useEffect(() => {
     if (userData) {
@@ -128,11 +130,11 @@ function NewEntriesView() {
         textBody={message}
         type={type}
       />
-      <Modal handleClose={handleCloseModal} open={openModal} sx={{ padding: 2, width: 600 }}>
+      <Modal handleClose={handleCloseModal} open={openModal} sx={{ padding: 2, width: {md: 600, xs: '80%'} }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={3}>
             <Typography variant="h6" textAlign={"center"}>
-              Registro de Información Restante
+              {"Registro de Información Restante"}
             </Typography>
             <TextField
               type="date"

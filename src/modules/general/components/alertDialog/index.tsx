@@ -96,6 +96,7 @@ const AlertDialog: React.FC<Props> = ({
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         fullWidth
+        sx={{maxHeight: '70vh', overflowY: 'scroll'}}
       >
         <Box>
           <DialogTitle id="alert-dialog-title">{title}</DialogTitle>

@@ -1,5 +1,5 @@
 import CardMateria from "@modules/materias/components/cardMateria";
-import { Materia, materiasDePrueba } from "@modules/materias/types/materia";
+import { Materia } from "@modules/materias/types/materia";
 import {
   Grid2,
   MenuItem,
@@ -45,11 +45,11 @@ function ExplorarMaterias() {
   const { accountInformation } = useAuth();
   const { token } = accountInformation;
 
-  // // Fetch materias using React Query
-  // const { data, isLoading, error } = useQuery({
-  //   queryFn: () => getMateriasService(token),
-  //   queryKey: ["Cursos for Materia", token],
-  // });
+  // Fetch materias using React Query
+  const { data, isLoading, error } = useQuery({
+    queryFn: () => getMateriasService(token),
+    queryKey: ["Cursos for Materia", token],
+  });
 
   // Dialog control for handling fetch errors
   const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
@@ -59,19 +59,18 @@ function ExplorarMaterias() {
   // Hook to manage sorting behavior
   const {handleOrder, orderDataFn,order } = useOrderSelect<Materia>();
 
-  // // Update materias state when data is fetched
-  // useEffect(() => {
-  //   if (data) {
-  //     setMaterias(data.map((materia) => adaptMateriaServiceToMateria(materia)));
-  //   }
-  // }, [data]);
+  // Update materias state when data is fetched
+  useEffect(() => {
+    if (data) {
+      setMaterias(data.map((materia) => adaptMateriaServiceToMateria(materia)));
+    }
+  }, [data]);
 
-  // useEffect(() => {
-  //   if (error) {
-  //     setMaterias(materiasDePrueba)
-  //     // setError(error);
-  //   }
-  // }, [error]);
+  useEffect(() => {
+    if (error) {
+      setError(error);
+    }
+  }, [error]);
 
   const {filteredData, setSearchValue, searchValue} = useSearch();
 
@@ -103,7 +102,7 @@ function ExplorarMaterias() {
       />
 
       {/* Loader or main content */}
-      {false ? (
+      {isLoading ? (
         <LoaderElement />
       ) : (
         <Stack spacing={5}>
@@ -148,7 +147,7 @@ function ExplorarMaterias() {
           </Stack>
 
           {/* List of filtered/sorted materias */}
-          <Grid2 container spacing={5} paddingX={{ md: 10 }}>
+          <Grid2 container spacing={5} paddingX={{ md: 4 }}>
             {dataToLoad.map((materia, key) => (
               <Grid2 size={{ xl: 4, sm: 6, xs: 12 }} key={key}>
                 <CardMateria materia={materia} />

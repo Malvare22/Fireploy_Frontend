@@ -1,11 +1,14 @@
 import { labelModalProyectoPortafolio } from "@modules/proyectos/enum/labelModalProyectoPortafolio";
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import {
+  Avatar,
   Box,
   Button,
   Card,
   Chip,
+  Grid2,
   Stack,
+  Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -21,6 +24,16 @@ import AlertDialog from "@modules/general/components/alertDialog";
 import { VARIABLES_LOCAL_STORAGE } from "@modules/general/enums/variablesLocalStorage";
 import StarButton from "../starButton";
 import { getImage } from "@modules/general/utils/getImage";
+import {
+  exampleProjectsModal,
+  ProjectModal,
+  Proyecto,
+} from "@modules/proyectos/types/proyecto.tipo";
+import { GitlabIcon } from "@modules/general/components/customIcons";
+import { GitHub, Star } from "@mui/icons-material";
+import { UsuarioCurso } from "@modules/materias/types/curso";
+import { useNavigate } from "react-router";
+import { rutasUsuarios } from "@modules/usuarios/router/router";
 
 export enum labelModalProject {
   noQualify = "Actualmente este proyecto no se encuentra calificado",
@@ -32,23 +45,23 @@ type Props = {
 };
 
 /**
- * ModalProyectoPortafolio component – This component displays detailed information about a project in a modal format. 
- * It includes the project's title, technologies, description, team members, and the project's current status. 
+ * ModalProyectoPortafolio component – This component displays detailed information about a project in a modal format.
+ * It includes the project's title, technologies, description, team members, and the project's current status.
  * Additionally, users can favorite or unfavorite the project and view the project's image.
- * 
+ *
  * @component
- * 
+ *
  * @param {Object} props - The component props.
  * @param {ProyectoCard} props.proyecto - The project data to display in the modal.
- * 
+ *
  * @returns {JSX.Element} The modal displaying project details with a favorite button and status indicator.
- * 
+ *
  * @example
  * ```tsx
  * <ModalProyectoPortafolio proyecto={projectData} />
  * ```
  */
-const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto }) => {
+export const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto }) => {
   const theme = useTheme();
 
   const { id, token } = useAuth().accountInformation;
@@ -99,135 +112,94 @@ const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto }) => {
         textBody={message}
         type={type}
       />
-      <Stack
-        sx={{
-          overflowY: "scroll",
-          width: { md: "80vw", xs: "70vw" },
-          maxHeight: "85vh",
-          backgroundColor: "none",
-        }}
-        spacing={3}
-      >
-        <Box>
-          <CardEstado estado={proyecto.estado} />
-        </Box>
-        <Stack direction={"row"} spacing={1} alignItems={"center"}>
-          <Typography variant="h4" fontWeight={"bold"}>
-            {proyecto.titulo}
-          </Typography>
-          <StarButton isLoading={isPending} mutate={mutate} value={localValue} modal={true}/>
-        </Stack>
-        <Stack direction={{ xl: "row" }} spacing={6}>
-          <Box
-            component={"img"}
-            sx={{ width: { md: 650, xs: "100%", border: "1px solid black" } }}
-            src={proyecto.imagen ?? getImage['not_found'].ruta}
-          />
-          <Stack spacing={4} width={"100%"} height={"100%"} border={"1px solid black"}>
-            <Stack spacing={2}>
-              <Typography variant="h5" fontWeight={"bold"}>
-                {labelModalProyectoPortafolio.tecnologias}
-              </Typography>
-              <Stack direction={"row"} spacing={2}>
-                <Chip color="error" label={proyecto.backend} />
-                <Chip
-                  sx={{ backgroundColor: theme.palette.terciary.main }}
-                  label={proyecto.dataBase}
-                />
-                <Chip color="primary" label={proyecto.frontend} />
-              </Stack>
-            </Stack>
-          </Stack>
-        </Stack>
-
-        {proyecto.descripcion.trim() && (
-          <Stack spacing={1}>
-            <Typography variant="h5" fontWeight={"bold"}>
-              {labelModalProyectoPortafolio.descripcion}
-            </Typography>
-            {<Typography>{proyecto.descripcion}</Typography>}
-          </Stack>
-        )}
-        <Stack spacing={1}>
-          <Typography variant="h5" fontWeight={"bold"}>
-            {labelModalProyectoPortafolio.integrantes}
-          </Typography>
-          {/* <Grid2 container spacing={2} paddingY={2}>
-            {proyecto.integrantes.map((integrante) => (
-              <Grid2 size={{ md: 4, sm: 6, xs: 12 }}>
-                <PortafolioCard usuario={integrante} key={integrante.id} />
-              </Grid2>
-            ))}
-          </Grid2> */}
-        </Stack>
-      </Stack>
     </>
   );
 };
 
-type CardEstadoProps = {
-  estado: ProyectoCard["estado"];
+
+type CardProjectModalProps = {
+  project: ProjectModal;
 };
-
-/**
- * CardEstado component – This component displays the project's current status in a card, indicating whether the 
- * project is online or offline. It also provides a button to visit the project if it's online.
- * 
- * @component
- * 
- * @param {Object} props - The component props.
- * @param {string} props.estado - The current status of the project (online or offline).
- * 
- * @returns {JSX.Element} The card displaying the project's status and a button to visit the project if it's online.
- */
-const CardEstado: React.FC<CardEstadoProps> = ({ estado }) => {
-  const theme = useTheme();
-
-  function getColor() {
-    return estado == "E" ? theme.palette.success.light : theme.palette.warning.light;
+export function CardProjectModal({ project }: CardProjectModalProps) {
+  function getRepoButtonIcon(s: string) {
+    return s.includes("gitlab") ? <GitlabIcon /> : <GitHub />;
   }
 
-  function getLabel() {
-    return (
-      <Stack direction={{ md: "row", xs: "column" }} alignItems={"center"} spacing={1}>
-        {estado == "E" ? (
-          <>
-            <Typography fontWeight="bold" textAlign={"center"}>
-              {labelModalProyectoPortafolio.online}
-            </Typography>
-            <CheckCircleOutlineIcon />
-          </>
-        ) : (
-          <>
-            <Typography fontWeight="bold" textAlign={"center"}>
-              {labelModalProyectoPortafolio.offline}
-            </Typography>
-            <CloudOffIcon />
-          </>
-        )}
-      </Stack>
-    );
+  function getRepoName(s: string) {
+    const _s = s.split("/");
+    return _s[_s.length - 1];
   }
 
   return (
-    <Card sx={{ backgroundColor: getColor(), color: "white", paddingY: 1 }}>
-      <Stack
-        direction={{ md: "row", sm: "column" }}
-        alignItems={"center"}
-        justifyContent={"center"}
-        spacing={2}
-      >
-        {getLabel()}
-        {estado == "E" && (
-          <Box sx={{ marginY: { xs: 1, md: 0 } }}>
-            <Button variant="outlined" color="inherit">
-              {labelModalProyectoPortafolio.visitar}
-            </Button>
-          </Box>
-        )}
+    <Card>
+      <Stack spacing={3}>
+        <Typography variant="h3">{project.title}</Typography>
+        <Grid2 container>
+          <Grid2 size={{ md: 5, xs: 12 }} sx={{ display: "flex", justifyContent: "center" }}>
+            <Box component={"img"} src={project.img} />
+          </Grid2>
+          <Grid2 size={{ md: 7, xs: 12 }}>
+            <Stack>
+              {project.repositories.map((repo) => (
+                <Button endIcon={getRepoButtonIcon(repo)}>{getRepoName(repo)}</Button>
+              ))}
+            </Stack>
+            <Stack>
+              {project.technologies.map((tec) => (
+                <Chip label={tec} key={tec} color="secondary" />
+              ))}
+            </Stack>
+          </Grid2>
+        </Grid2>
+        <Grid2 container>
+          <Grid2 size={{ md: 8, xs: 12 }} sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <Typography variant="h4">{"Descripción"}</Typography>
+            <Typography sx={{ wordBreak: "break-word" }}>{project.description}</Typography>
+          </Grid2>
+          <Grid2 size={{ md: 4, xs: 12 }} sx={{ display: "flex", justifyContent: "center" }}>
+            <Stack sx={{ maxWidth: 300 }} alignItems={"center"} spacing={1}>
+              <Star sx={{ fontSize: 48 }} />
+              <Typography variant="h4">{project.rating}</Typography>
+            </Stack>
+          </Grid2>
+        </Grid2>
+        <Typography variant="h4">{"Integrantes"}</Typography>
+        <Grid2 container sx={{ paddingX: 1 }}>
+          {project.members.map((member) => (
+            <Grid2 size={{ md: 4, xs: 6 }}>
+              <MemberCard user={member} key={member.id} />
+            </Grid2>
+          ))}
+        </Grid2>
       </Stack>
     </Card>
   );
+}
+
+type MemberCardProps = {
+  user: UsuarioCurso;
 };
+function MemberCard({ user }: MemberCardProps) {
+  const navigate = useNavigate();
+
+  function handleButton() {
+    navigate(rutasUsuarios.portafolio.replace(":id", user.id.toString()));
+  }
+
+  return (
+    <Card>
+      <Stack sx={{ padding: 2 }} spacing={2} alignItems={"center"}>
+        <Tooltip title={user.nombre}>
+          <Button onClick={handleButton}>
+            <Avatar src={user.imagen} />
+          </Button>
+        </Tooltip>
+        <Typography variant="h5" sx={{ textAlign: "center" }}>
+          {user.nombre}
+        </Typography>
+      </Stack>
+    </Card>
+  );
+}
 
 export default ModalProyectoPortafolio;

@@ -54,7 +54,7 @@ export const materiasDePrueba: Materia[] = [
   },
   {
     id: 3,
-    nombre: "Física General",
+    nombre: "Análisis y diseño de los sistemas de información",
     semestre: 2,
     estado: "I",
     cursos: [

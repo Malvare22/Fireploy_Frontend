@@ -102,6 +102,7 @@ const SpringModal: React.FC<SpringModalProps> = ({ children, open, handleClose, 
     paddingX: 4,
     paddingY: 3,
     borderRadius: 2,
+    maxHeight: '90%', overflowY: 'scroll'
   };
 
   return (

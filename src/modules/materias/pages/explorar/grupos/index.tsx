@@ -20,7 +20,7 @@ import { getCursoById, getCursos } from "@modules/materias/services/get.curso";
 import { getMateriaById } from "@modules/materias/services/get.materia.services";
 import { patchEstudiantesCurso } from "@modules/materias/services/patch.curso.estudiantes";
 import { postCreateSolicitudCurso } from "@modules/materias/services/post.solicitud.curso";
-import { Materia } from "@modules/materias/types/materia";
+import { Materia, materiasDePrueba } from "@modules/materias/types/materia";
 import { adaptMateriaServiceToMateria } from "@modules/materias/utils/adapters/materia.service";
 import { Alert, Card, Grid2, Stack, Typography } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -149,7 +149,7 @@ function VerCursosMateria() {
   });
 
   /** Adapted materia object for rendering */
-  const [materia, setMateria] = useState<Materia | undefined>(undefined);
+  const [materia, setMateria] = useState<Materia | undefined>(materiasDePrueba[0]);
 
   /** When API data is ready, adapt it for the UI */
   useEffect(() => {
@@ -207,13 +207,13 @@ function VerCursosMateria() {
       />
 
       {/* Show loader while data is loading */}
-      {isLoading || isLoadingMyGroups ? (
+      {/* {!isLoading || !isLoadingMyGroups ? (
         <LoaderElement />
-      ) : (
+      ) : ( */}
         <>
           {/* Render content only if materia is available */}
           {materia && (
-            <Stack spacing={3} paddingX={6}>
+            <Stack spacing={3} paddingX={2}>
               {/* Subject name */}
               <Card>
                 <Stack spacing={3} margin={4}>
@@ -246,7 +246,7 @@ function VerCursosMateria() {
             </Stack>
           )}
         </>
-      )}
+      {/* )} */}
     </>
   );
 }

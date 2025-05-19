@@ -79,6 +79,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
     }
   }
 
+
   const {
     showDialog,
     open,
@@ -95,6 +96,9 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
   const { setError } = useErrorReader(showDialog);
 
   const { errors } = formState;
+
+    console.log(errors, watch())
+
 
   const [photo, setPhoto] = useState<string | null>(getValues("fotoDePerfil"));
 

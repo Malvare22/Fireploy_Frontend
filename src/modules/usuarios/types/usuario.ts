@@ -272,7 +272,7 @@ export const usuarioTemplate: Usuario =  {
   fechaDeNacimiento: "",
   sexo: "" as SexoUsuario,
   tipo: "E",
-  estFechaInicio: "",
+  estFechaInicio: undefined,
   estado: "A",
   redSocial: {
     facebook: "",

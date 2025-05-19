@@ -35,23 +35,59 @@ const CardMateria: React.FC<CardMateriaProps> = ({ materia }) => {
 
   const navigate = useNavigate();
 
+  function handleButton() {
+    navigate(rutasMaterias.explorarCursos.replace(":idMateria", (materia.id ?? -1).toString()));
+  }
+
   const nCursos = (materia.cursos || []).length;
 
   return (
-    <Card sx={{ width: 300, height: "100%" }}>
+    <Card sx={{ padding: 0 }}>
       <Stack spacing={3}>
-        <Box sx={{ backgroundColor: theme.palette.primary.main }}>
-          <Typography sx={{ textAling: "center", color: "white" }}>{materia.nombre}</Typography>
+        <Box
+          sx={{
+            backgroundColor: theme.palette.primary.main,
+            textAling: "center",
+            color: "white",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: { md: 150, xs: 0 },
+            padding: 2,
+          }}
+        >
+          <Typography
+            variant="h4"
+            sx={{
+              textAlign: "center",
+              color: "white",
+              display: "inline-block",
+              whiteSpace: "pre-line",
+            }}
+          >
+            {materia.nombre}
+          </Typography>
         </Box>
-        <Stack direction={"row"} alignItems={"center"}>
+        <Stack
+          direction={"row"}
+          alignItems={"center"}
+          paddingX={2}
+          flexWrap={"wrap"}
+          spacing={2}
+          justifyContent={"center"}
+        >
           <Chip color="secondary" label={`Semestre: S${materia.semestre}`} />
           {nCursos > 0 ? (
-            <Chip color="info" label={`Cursos: S${nCursos}`} />
+            <Chip color="info" label={`${nCursos} cursos disponibles`} />
           ) : (
             <Chip color="default" label={`Cursos no disponibles`} />
           )}
         </Stack>
-        <Stack><Box><Button variant="outlined">{"Ver más"}</Button></Box></Stack>
+        <Stack alignItems={"center"} paddingBottom={2}>
+          <Box>
+            <Button onClick={handleButton} variant="outlined">{"Ver más"}</Button>
+          </Box>
+        </Stack>
       </Stack>
     </Card>
   );
