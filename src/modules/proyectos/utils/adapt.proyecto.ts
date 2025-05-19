@@ -1,12 +1,14 @@
 import { ProyectoCard } from "../types/proyecto.card";
 import { ProyectoService, RepositorioService } from "../types/proyecto.service";
-import { Proyecto } from "../types/proyecto.tipo";
+import { ProjectModal, Proyecto } from "../types/proyecto.tipo";
 import { Repositorio } from "../types/repositorio";
 import { adaptDataBase } from "./adaptDataBase";
 import { removeImageBuffer } from "@modules/general/utils/removeImageBuffer";
 import { UsuarioCurso } from "@modules/materias/types/curso";
 import { EstadoUsuario } from "@modules/usuarios/types/usuario";
 import { isTechnologyKey, TECNOLOGIES } from "./technologies";
+import { getImage } from "@modules/general/utils/getImage";
+import { KeysOfRepository } from "../types/keysOfRepository";
 
 // /**
 //  * adaptUsuarioToPortafolioCard – Transforms a user object into a format compatible with a portfolio card, extracting ID, name, and photo.
@@ -131,4 +133,33 @@ export function adaptRepository(repository: RepositorioService): Repositorio {
   };
 
   return out;
+}
+
+
+export function adaptToProjectModal(p: Proyecto): ProjectModal{
+
+  const getTecAndUrl = (p: Proyecto)  : {framework: string, url: string}[] => {
+    const getFramework = (field: KeysOfRepository): {framework: string, url: string} | null => {
+      const framework =  p[field]?.informacion?.framework;
+      const url =  p[field]?.url;
+      if (!framework || !url) return null;
+      else return {framework, url };
+    }
+    return [getFramework('backend'), getFramework('frontend'), getFramework('integrado')].filter((x) => x != null);
+    
+  }
+
+  return {
+    description: p.descripcion ? p.descripcion : null,
+    group: p.materiaInformacion.cursoId ?p.materiaInformacion.cursoId: 'AA',
+    img: p.imagen ? p.imagen : getImage['defaultProjectImage'].ruta,
+    members: p.integrantes,
+    technologies: getTecAndUrl(p).map(({framework})=> framework),
+    repositories: getTecAndUrl(p).map(({url})=> url),
+    rating: p.estadoDeProyecto?.length ?? 0,
+    status: p.estadoDeEjecucion ?? 'E',
+    subject: (p.materiaInformacion.materiaId ?? -1).toString(),
+    title: p.titulo,
+    url: p.url
+  }
 }

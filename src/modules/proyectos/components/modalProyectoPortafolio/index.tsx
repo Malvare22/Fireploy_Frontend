@@ -34,6 +34,7 @@ import { GitHub, Star } from "@mui/icons-material";
 import { UsuarioCurso } from "@modules/materias/types/curso";
 import { useNavigate } from "react-router";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { adaptToProjectModal } from "@modules/proyectos/utils/adapt.proyecto";
 
 export enum labelModalProject {
   noQualify = "Actualmente este proyecto no se encuentra calificado",
@@ -112,6 +113,7 @@ export const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto }) => {
         textBody={message}
         type={type}
       />
+      <CardProjectModal project={adaptToProjectModal(proyecto)}/>
     </>
   );
 };

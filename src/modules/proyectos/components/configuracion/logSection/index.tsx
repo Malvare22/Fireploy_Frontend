@@ -1,5 +1,6 @@
 import {
   Accordion,
+  Alert,
   Box,
   Divider,
   Pagination,
@@ -99,15 +100,22 @@ function LogsFiles({ backend, frontend, integrado }: LogsFilesProps) {
       <Box>
         <Typography variant="body1">{labelLogs.parrafo}</Typography>
       </Box>
-      <Container logsFiles={data ?? []} />
+      {data && data.length > 0 ? (
+        <Container logsFiles={data} />
+      ) : (
+        <Alert severity="info">{"No dispones de registros .log actualmente"}</Alert>
+      )}
     </Box>
   );
 }
 
 type ContainerProps = { logsFiles: LogFile[] };
 const Container = ({ logsFiles }: ContainerProps) => {
-
-  const { goToPage, hasNextPage, hasPrevPage, totalPages, paginatedData} = usePagination(logsFiles, 5, 1);
+  const { goToPage, hasNextPage, hasPrevPage, totalPages, paginatedData } = usePagination(
+    logsFiles,
+    5,
+    1
+  );
 
   return (
     <>
@@ -125,7 +133,12 @@ const Container = ({ logsFiles }: ContainerProps) => {
           justifyItems: "center",
         }}
       >
-        <Pagination count={totalPages} hideNextButton={!hasNextPage} hidePrevButton={!hasPrevPage} onChange={(_e, v) => goToPage(v)}/>
+        <Pagination
+          count={totalPages}
+          hideNextButton={!hasNextPage}
+          hidePrevButton={!hasPrevPage}
+          onChange={(_e, v) => goToPage(v)}
+        />
       </Box>
     </>
   );

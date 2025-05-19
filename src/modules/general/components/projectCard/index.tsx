@@ -1,4 +1,4 @@
-import { Alert, Box, Divider, Paper, Stack, Typography } from "@mui/material";
+import { Alert, Box, CardActionArea, Divider, Paper, Stack, Typography } from "@mui/material";
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import React, { useContext, useEffect, useState } from "react";
 import { ProjectCardMembers } from "../projectCardAvatar";
@@ -42,7 +42,7 @@ type ProjectCardProps = {
  * <ProjectCard proyecto={projectData} handleOpen={handleCardClick} />
  * ```
  */
-export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto }) => {
+export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }) => {
   const [localValue, setLocalValue] = useState<boolean>(false);
   const { token, id } = useAuth().accountInformation;
 
@@ -83,6 +83,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto }) => {
   return (
     <Stack sx={{ padding: 1, width: "100%" }} spacing={2} justifyContent={"space-between"} component={Paper}>
       <Stack spacing={1}>
+        <CardActionArea onClick={handleOpen}>
         <Box
           component={"img"}
           src={proyecto.imagen ?? getImage["not_found"].ruta}
@@ -100,8 +101,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto }) => {
         >
           {proyecto.titulo}
         </Typography>
-      </Stack>
-      <Stack spacing={2}>
         
         {proyecto.descripcion.length > 0 ? (
           <Typography
@@ -116,13 +115,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto }) => {
             {proyecto.descripcion}
           </Typography>
         ) : (
-          <Alert severity="info">Descripción no disponible</Alert>
-        )}
-        <Divider />
+          <Alert severity="info"><Typography variant="body2">{"Descripción no disponible"}</Typography></Alert>
+        )}</CardActionArea>
+        <Box><Divider />
         <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
           <ProjectCardMembers integrantes={proyecto.integrantes} />
           <StarButton modal={false} isLoading={isPending} mutate={mutate} value={localValue} />
-        </Stack>
+        </Stack></Box>
       </Stack>
     </Stack>
   );

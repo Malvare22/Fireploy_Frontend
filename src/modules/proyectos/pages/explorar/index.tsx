@@ -1,16 +1,14 @@
 import {
+  Alert,
   Grid2,
-  InputAdornment,
   MenuItem,
   Select,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
-import {  useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
-import SearchIcon from "@mui/icons-material/Search";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 
 import AlertDialog from "@modules/general/components/alertDialog";
@@ -27,43 +25,39 @@ import { labelExplorarProyectos } from "@modules/proyectos/enum/labelExplorarPro
 import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyectoPortafolio";
 import { adaptProject, adaptProjectToCard } from "@modules/proyectos/utils/adapt.proyecto";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
+import LoaderElement from "@modules/general/components/loaderElement";
+import useSearch from "@modules/general/hooks/useSearch";
+import TextFieldSearch from "@modules/general/components/textFieldSearch";
 
 /**
- * ExplorarProyectos component – A project exploration interface that allows users to search and filter through 
+ * ExplorarProyectos component – A project exploration interface that allows users to search and filter through
  * available projects, displaying them in a list or grid format with sorting options.
- * 
- * This component fetches a list of all available projects and allows users to filter them by search keywords. 
- * The user can also sort projects alphabetically, by semester, or by rating. Clicking on a project card opens a 
+ *
+ * This component fetches a list of all available projects and allows users to filter them by search keywords.
+ * The user can also sort projects alphabetically, by semester, or by rating. Clicking on a project card opens a
  * modal with more details about the selected project.
- * 
+ *
  * The component also handles error states by showing an alert dialog when there's an issue fetching project data.
- * 
+ *
  * @component
- * 
- * @returns {JSX.Element} A project exploration interface with search, filter, and sorting options, 
+ *
+ * @returns {JSX.Element} A project exploration interface with search, filter, and sorting options,
  * as well as the ability to view project details in a modal.
- * 
+ *
  * @example
  * ```tsx
  * <ExplorarProyectos />
  * ```
  */
 function ExplorarProyectos() {
-  const [search, setSearch] = useState("");
-  const [selectProyecto, setSelectProyecto] = useState<ProyectoCard>();
+
+  const [selectProyecto, setSelectProyecto] = useState<ProyectoCard | null>(null);
+
   const { handleClose: closeModal, handleOpen: openModal, open: modalOpen } = useModal();
 
-  const {
-    handleOrder, orderDataFn, order
-  } = useOrderSelect<ProyectoCard>();
+  const { handleOrder, orderDataFn, order } = useOrderSelect<ProyectoCard>();
 
-  const {
-    data,
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useQuery<ProyectoService[]>({
+  const { data, isLoading, isError, error, refetch } = useQuery<ProyectoService[]>({
     queryKey: ["Projects All"],
     queryFn: getProyectosAllService,
     refetchOnWindowFocus: false,
@@ -74,12 +68,15 @@ function ExplorarProyectos() {
     return data.map((project) => adaptProjectToCard(adaptProject(project)));
   }, [data]);
 
-  const filteredProyectos = useMemo(() => {
-    const searchLower = search.toLowerCase();
-    return orderDataFn(proyectos).filter((p) =>
-      p.titulo.toLowerCase().includes(searchLower)
-    );
-  }, [search, proyectos, order]);
+  const {filteredData, searchValue, setSearchValue} = useSearch();
+
+  function searchFn(x: ProyectoCard[], s: string){
+    return x.filter((y) => y.titulo.toLowerCase().includes(s.toLowerCase()))
+  }
+
+  const renderData = useMemo(() => {
+    return filteredData(orderDataFn(proyectos), searchFn);
+  }, [searchValue, proyectos, order]);
 
   return (
     <>
@@ -108,33 +105,18 @@ function ExplorarProyectos() {
 
         {/* Filtros */}
         <Stack direction={{ sm: "row", xs: "column" }} justifyContent="center" spacing={1}>
-          <TextField
-            label="Buscar proyecto"
-            fullWidth
-            sx={{ maxWidth: 600 }}
-            size="small"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-
+          
+          <TextFieldSearch fullWidth sx={{width: {md: '70%', xs:'100%'}}} setSearchValue={setSearchValue}/>
           <Select
             size="small"
             sx={{ width: 250 }}
             onChange={(e) => {
               const val = JSON.parse(e.target.value as string);
-            if(val.key == undefined){
-              handleOrder("titulo", undefined);
-              handleOrder("semestre", undefined);
-              handleOrder("puntuacion", undefined);
-            }
-              else handleOrder(val.key, val.order);
+              if (val.key == undefined) {
+                handleOrder("titulo", undefined);
+                handleOrder("semestre", undefined);
+                handleOrder("puntuacion", undefined);
+              } else handleOrder(val.key, val.order);
             }}
           >
             <MenuItem value={JSON.stringify({ key: undefined, order: undefined })}>
@@ -164,16 +146,11 @@ function ExplorarProyectos() {
         {/* Lista de proyectos */}
         <Stack>
           {isLoading ? (
-            <Typography textAlign="center" mt={4}>Cargando proyectos...</Typography>
-          ) : filteredProyectos.length === 0 ? (
-            <Typography textAlign="center" mt={4}>No se encontraron proyectos.</Typography>
+            <LoaderElement />
+          ) : renderData.length === 0 ? (
+            <Alert severity="info">{"No se encontraron proyectos"}</Alert>
           ) : (
-            <Grid2
-              container
-              spacing={4}
-              marginTop={4}
-              marginBottom={6}
-            >
+            <Grid2 container spacing={4} marginTop={4} marginBottom={6}>
               {orderDataFn(proyectos).map((proyecto) => (
                 <Grid2
                   key={proyecto.id}
