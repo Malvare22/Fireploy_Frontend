@@ -9,7 +9,7 @@ import { fechaSchema } from "./fechaSchema";
 
 export type RegisterGoogleSchema = Pick<
   UsuarioSchema,
-  "contrasenia" | "confirmarContrasenia" | "sexo" | "estFechaInicio"
+  "contrasenia" | "confirmarContrasenia" | "sexo" | "estFechaInicio" | "fechaDeNacimiento"
 >;
 
 /**
@@ -53,6 +53,7 @@ export const RegistroGoogleSchema: z.ZodType<RegisterGoogleSchema> = z
     contrasenia: contraseniaSchema.optional(),
     confirmarContrasenia: z.string().optional(),
     tipo: tiposUsuarioSchema.optional(),
+    fechaDeNacimiento: fechaSchema
   })
   // Passwords must match if provided
   .refine(

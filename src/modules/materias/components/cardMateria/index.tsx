@@ -1,9 +1,6 @@
-import AnimatedCard from "@modules/general/components/animatedCard";
-import { labelCardMateria } from "@modules/materias/enums/labelCardMateria";
 import { Materia } from "@modules/materias/types/materia";
 import { Box, Button, Card, Chip, Stack, Typography, useTheme } from "@mui/material";
 import React from "react";
-import StyleIcon from "@mui/icons-material/Style";
 import { useNavigate } from "react-router-dom";
 import { rutasMaterias } from "@modules/materias/router/routes";
 

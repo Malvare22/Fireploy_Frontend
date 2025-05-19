@@ -1,6 +1,6 @@
-import { ProyectoCard } from "../types/proyecto.card";
+import { ProyectoCard, RepositoryForCard } from "../types/proyecto.card";
 import { ProyectoService, RepositorioService } from "../types/proyecto.service";
-import { ProjectModal, Proyecto } from "../types/proyecto.tipo";
+import { Proyecto } from "../types/proyecto.tipo";
 import { Repositorio } from "../types/repositorio";
 import { adaptDataBase } from "./adaptDataBase";
 import { removeImageBuffer } from "@modules/general/utils/removeImageBuffer";
@@ -29,29 +29,31 @@ import { KeysOfRepository } from "../types/keysOfRepository";
  * @returns {ProyectoCard} The project data formatted as a project card.
  */
 export function adaptProjectToCard(proyecto: Proyecto): ProyectoCard {
+  const getRepository = (field: KeysOfRepository): RepositoryForCard | undefined => {
+    const framework = proyecto[field]?.informacion?.framework;
+    const url = proyecto[field]?.url;
+    if (!framework || !url) return undefined;
+    else return { framework, url };
+  };
+
   const integrantes = [...(proyecto.integrantes ?? [])];
   if (proyecto.propietario) integrantes.push(proyecto.propietario);
+
   return {
     id: proyecto.id || 0,
     titulo: proyecto.titulo,
     descripcion: proyecto.descripcion ?? "",
-    imagen: proyecto.imagen ? proyecto.imagen : null,
+    imagen: proyecto.imagen ? proyecto.imagen : getImage["defaultProjectImage"].ruta,
     integrantes: integrantes,
-    frontend: !proyecto.frontend ? null : proyecto.frontend?.informacion?.framework || "No especificado",
-    backend: !proyecto.backend ? null : proyecto.frontend?.informacion?.framework || "No especificado",
-    integrado: !proyecto.integrado
-      ? null
-      : proyecto.frontend?.informacion?.framework || "No especificado",
-    dataBase: proyecto.baseDeDatos?.nombre || "",
-
+    frontend: getRepository("frontend"),
+    backend: getRepository("backend"),
+    integrado: getRepository("integrado"),
+    dataBase: proyecto.baseDeDatos?.nombre,
     fav_usuarios: proyecto.fav_usuarios ?? [],
-
     materia: proyecto.materiaInformacion?.materiaId?.toString() || "N/A",
     grupo: proyecto.materiaInformacion?.cursoId?.toString() || "N/A",
-    seccion: proyecto.materiaInformacion?.seccionId?.toString() || "N/A",
-
-    semestre: "2024-1", // Puedes cambiar esto si tienes lógica real
     estado: proyecto.estadoDeEjecucion || "E",
+    url: proyecto.url
   };
 }
 
@@ -120,7 +122,6 @@ export function adaptRepository(repository: RepositorioService): Repositorio {
   const tecnologia = repository.tecnologia ?? null;
   const framework = repository.framework ?? null;
 
-
   const out = {
     variables: !repository.variables_de_entorno ? "" : repository.variables_de_entorno,
     url: repository.url ?? "",
@@ -133,33 +134,4 @@ export function adaptRepository(repository: RepositorioService): Repositorio {
   };
 
   return out;
-}
-
-
-export function adaptToProjectModal(p: Proyecto): ProjectModal{
-
-  const getTecAndUrl = (p: Proyecto)  : {framework: string, url: string}[] => {
-    const getFramework = (field: KeysOfRepository): {framework: string, url: string} | null => {
-      const framework =  p[field]?.informacion?.framework;
-      const url =  p[field]?.url;
-      if (!framework || !url) return null;
-      else return {framework, url };
-    }
-    return [getFramework('backend'), getFramework('frontend'), getFramework('integrado')].filter((x) => x != null);
-    
-  }
-
-  return {
-    description: p.descripcion ? p.descripcion : null,
-    group: p.materiaInformacion.cursoId ?p.materiaInformacion.cursoId: 'AA',
-    img: p.imagen ? p.imagen : getImage['defaultProjectImage'].ruta,
-    members: p.integrantes,
-    technologies: getTecAndUrl(p).map(({framework})=> framework),
-    repositories: getTecAndUrl(p).map(({url})=> url),
-    rating: p.estadoDeProyecto?.length ?? 0,
-    status: p.estadoDeEjecucion ?? 'E',
-    subject: (p.materiaInformacion.materiaId ?? -1).toString(),
-    title: p.titulo,
-    url: p.url
-  }
 }

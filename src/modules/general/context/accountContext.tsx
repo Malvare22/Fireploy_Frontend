@@ -136,15 +136,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
   const { setError } = useErrorReader(showDialog);
 
-  // /**
-  //  * @effect
-  //  * Triggers the error handler when an error occurs in the query.
-  //  */
-  // useEffect(() => {
-  //   if (error) {
-  //     setError(error);
-  //   }
-  // }, [error]);
+  /**
+   * @effect
+   * Triggers the error handler when an error occurs in the query.
+   */
+  useEffect(() => {
+    if (error) {
+      setError(error);
+    }
+  }, [error]);
 
   /**
    * @effect

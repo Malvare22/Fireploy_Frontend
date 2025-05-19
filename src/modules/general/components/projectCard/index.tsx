@@ -1,4 +1,4 @@
-import { Alert, Box, CardActionArea, Divider, Paper, Stack, Typography } from "@mui/material";
+import { Alert, Box, CardActionArea, Divider, Paper, Stack, Typography, useTheme } from "@mui/material";
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import React, { useContext, useEffect, useState } from "react";
 import { ProjectCardMembers } from "../projectCardAvatar";
@@ -9,6 +9,7 @@ import { VARIABLES_LOCAL_STORAGE } from "@modules/general/enums/variablesLocalSt
 import { useAuth } from "@modules/general/context/accountContext";
 import StarButton from "@modules/proyectos/components/starButton";
 import { getImage } from "@modules/general/utils/getImage";
+import { ExecutionState } from "@modules/proyectos/components/executionState";
 
 type ProjectCardProps = {
   /**
@@ -43,6 +44,9 @@ type ProjectCardProps = {
  * ```
  */
 export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }) => {
+
+  const theme = useTheme();
+
   const [localValue, setLocalValue] = useState<boolean>(false);
   const { token, id } = useAuth().accountInformation;
 
@@ -81,14 +85,17 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }
   });
 
   return (
-    <Stack sx={{ padding: 1, width: "100%" }} spacing={2} justifyContent={"space-between"} component={Paper}>
-      <Stack spacing={1}>
-        <CardActionArea onClick={handleOpen}>
-        <Box
+    <Stack sx={{ padding: 1, width: "100%" }} justifyContent={"space-between"} component={Paper}>
+      <CardActionArea onClick={handleOpen} sx={{display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 1}}>
+        <Box sx={{position: 'relative', width: 'inherit'}}>
+          <Box
           component={"img"}
           src={proyecto.imagen ?? getImage["not_found"].ruta}
-          sx={{ width: "100%", height: 180, objectFit: "cover" }}
-        />
+          sx={{ width: "100%", height: 180, borderRadius: 1, objectFit: "cover" }}
+        >
+        </Box>
+          <Box sx={{position: 'absolute', top: 4, left: 4, backgroundColor: theme.palette.background.paper, opacity: 0.8, borderRadius: 3, padding: 0.5}}><ExecutionState projectStatus={proyecto.estado}/></Box>
+        </Box>
         <Typography
           sx={{
             display: "-webkit-box",
@@ -101,8 +108,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }
         >
           {proyecto.titulo}
         </Typography>
-        
-        {proyecto.descripcion.length > 0 ? (
+
+       <Box sx={{marginBottom: 1}}> {proyecto.descripcion.length > 0 ? (
           <Typography
             sx={{
               display: "-webkit-box",
@@ -111,17 +118,22 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }
               WebkitLineClamp: 3,
               wordBreak: "break-all",
             }}
+            variant="body2"
           >
             {proyecto.descripcion}
           </Typography>
         ) : (
-          <Alert severity="info"><Typography variant="body2">{"Descripción no disponible"}</Typography></Alert>
-        )}</CardActionArea>
-        <Box><Divider />
+          <Alert severity="info">
+            <Typography variant="body2">{"Descripción no disponible"}</Typography>
+          </Alert>
+        )}</Box>
+      </CardActionArea>
+      <Stack spacing={1}>
+        <Divider />
         <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
           <ProjectCardMembers integrantes={proyecto.integrantes} />
           <StarButton modal={false} isLoading={isPending} mutate={mutate} value={localValue} />
-        </Stack></Box>
+        </Stack>
       </Stack>
     </Stack>
   );
