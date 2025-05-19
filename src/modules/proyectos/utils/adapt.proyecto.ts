@@ -1,4 +1,4 @@
-import { ProyectoCard } from "../types/proyecto.card";
+import { ProyectoCard, RepositoryForCard } from "../types/proyecto.card";
 import { ProyectoService, RepositorioService } from "../types/proyecto.service";
 import { Proyecto } from "../types/proyecto.tipo";
 import { Repositorio } from "../types/repositorio";
@@ -7,6 +7,8 @@ import { removeImageBuffer } from "@modules/general/utils/removeImageBuffer";
 import { UsuarioCurso } from "@modules/materias/types/curso";
 import { EstadoUsuario } from "@modules/usuarios/types/usuario";
 import { isTechnologyKey, TECNOLOGIES } from "./technologies";
+import { getImage } from "@modules/general/utils/getImage";
+import { KeysOfRepository } from "../types/keysOfRepository";
 
 // /**
 //  * adaptUsuarioToPortafolioCard – Transforms a user object into a format compatible with a portfolio card, extracting ID, name, and photo.
@@ -27,29 +29,31 @@ import { isTechnologyKey, TECNOLOGIES } from "./technologies";
  * @returns {ProyectoCard} The project data formatted as a project card.
  */
 export function adaptProjectToCard(proyecto: Proyecto): ProyectoCard {
+  const getRepository = (field: KeysOfRepository): RepositoryForCard | undefined => {
+    const framework = proyecto[field]?.informacion?.framework;
+    const url = proyecto[field]?.url;
+    if (!framework || !url) return undefined;
+    else return { framework, url };
+  };
+
   const integrantes = [...(proyecto.integrantes ?? [])];
   if (proyecto.propietario) integrantes.push(proyecto.propietario);
+
   return {
     id: proyecto.id || 0,
     titulo: proyecto.titulo,
     descripcion: proyecto.descripcion ?? "",
-    imagen: proyecto.imagen ? proyecto.imagen : null,
+    imagen: proyecto.imagen ? proyecto.imagen : getImage["defaultProjectImage"].ruta,
     integrantes: integrantes,
-    frontend: !proyecto.frontend ? null : proyecto.frontend?.informacion?.framework || "No especificado",
-    backend: !proyecto.backend ? null : proyecto.frontend?.informacion?.framework || "No especificado",
-    integrado: !proyecto.integrado
-      ? null
-      : proyecto.frontend?.informacion?.framework || "No especificado",
-    dataBase: proyecto.baseDeDatos?.nombre || "",
-
+    frontend: getRepository("frontend"),
+    backend: getRepository("backend"),
+    integrado: getRepository("integrado"),
+    dataBase: proyecto.baseDeDatos?.nombre,
     fav_usuarios: proyecto.fav_usuarios ?? [],
-
     materia: proyecto.materiaInformacion?.materiaId?.toString() || "N/A",
     grupo: proyecto.materiaInformacion?.cursoId?.toString() || "N/A",
-    seccion: proyecto.materiaInformacion?.seccionId?.toString() || "N/A",
-
-    semestre: "2024-1", // Puedes cambiar esto si tienes lógica real
     estado: proyecto.estadoDeEjecucion || "E",
+    url: proyecto.url
   };
 }
 
@@ -117,7 +121,6 @@ export function adaptProject(project: Partial<ProyectoService>): Proyecto {
 export function adaptRepository(repository: RepositorioService): Repositorio {
   const tecnologia = repository.tecnologia ?? null;
   const framework = repository.framework ?? null;
-
 
   const out = {
     variables: !repository.variables_de_entorno ? "" : repository.variables_de_entorno,

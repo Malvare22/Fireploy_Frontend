@@ -37,7 +37,7 @@ import AlertDialog from "@modules/general/components/alertDialog";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UsuarioSchema } from "@modules/usuarios/utils/form/usuario.schema";
+import { PortafolioSchema } from "@modules/usuarios/utils/form/usuario.schema";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { postChangeUsuarioService } from "@modules/usuarios/services/post.modificar.usuario";
@@ -86,7 +86,8 @@ const Portafolio = () => {
     queryKey: ["Project & User Information", token],
   });
 
-  const { showDialog, handleAccept, title, type, open, message } = useAlertDialog2();
+  const { showDialog, handleAccept, title, type, open, message, setIsLoading, isLoading:isLoadingModal } =
+    useAlertDialog2();
   const { setError } = useErrorReader(showDialog);
   useEffect(() => {
     if (isSuccess && data) {
@@ -127,15 +128,19 @@ const Portafolio = () => {
       register,
       formState: { errors },
       handleSubmit,
-    } = useForm<UsuarioSchema>({
-      resolver: zodResolver(UsuarioSchema),
+      getValues,
+    } = useForm<Usuario>({
+      resolver: zodResolver(PortafolioSchema),
       defaultValues: user,
     });
 
     const token = useAuth().accountInformation.token;
 
     const { mutate: updatePortafolioInformation, isPending } = useMutation({
-      mutationFn: (user: Usuario) => postChangeUsuarioService(user.id ?? 0, token, user),
+      mutationFn: async () => {
+        setIsLoading(true);
+        await postChangeUsuarioService(getValues().id ?? -1, token, getValues());
+      },
       onError: (err) => setError(err),
       onSuccess: () => {
         showDialog({
@@ -148,8 +153,8 @@ const Portafolio = () => {
       },
     });
 
-    async function onSubmit(user: Usuario) {
-      await updatePortafolioInformation(user);
+    async function onSubmit() {
+      await updatePortafolioInformation();
     }
 
     return (
@@ -310,6 +315,7 @@ const Portafolio = () => {
         title={title}
         type={type}
         textBody={message}
+        isLoading={isLoadingModal}
       />
       {usuario && (
         <SpringModal handleClose={handleCloseModalEdit} open={openModalEdit}>

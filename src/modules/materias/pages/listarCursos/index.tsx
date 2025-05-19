@@ -17,10 +17,10 @@ import { buttonTypes } from "@modules/general/types/buttons";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { FilterOptions, SelectFilters } from "@modules/general/components/selects";
-import { rutasMaterias } from "@modules/materias/router/router";
 import HiddenButton from "@modules/materias/components/hiddenInput";
 import { postCargaMasivaCursos } from "@modules/materias/services/post.cargar.cursos";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { rutasMaterias } from "@modules/materias/router/routes";
 
 const filterOptions: FilterOptions = [
   {

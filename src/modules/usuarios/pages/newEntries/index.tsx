@@ -10,9 +10,9 @@ import { buttonTypes } from "@modules/general/types/buttons";
 import { rutasProyectos } from "@modules/proyectos/router";
 import { getUsuarioService } from "@modules/usuarios/services/get.usuario";
 import { postChangeUsuarioService } from "@modules/usuarios/services/post.modificar.usuario";
+import { Usuario } from "@modules/usuarios/types/usuario";
 import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
 import { RegistroGoogleSchema } from "@modules/usuarios/utils/form/register.google";
-import { UsuarioSchema } from "@modules/usuarios/utils/form/usuario.schema";
 import { getGenderArray } from "@modules/usuarios/utils/usuario.map";
 import { Box, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -41,10 +41,11 @@ function NewEntriesView() {
 
   //   const example = { confirmarContrasenia: "", contrasenia: "", estFechaInicio: "", sexo: "M" };
 
-  const { control, register, handleSubmit, formState, reset } = useForm<UsuarioSchema>({
+  const { control, register, handleSubmit, formState, reset, watch } = useForm<Usuario>({
     defaultValues: {
       estFechaInicio: "",
       sexo: "M",
+      fechaDeNacimiento: ""
     },
     resolver: zodResolver(RegistroGoogleSchema),
   });
@@ -63,6 +64,8 @@ function NewEntriesView() {
     queryFn: () => getUsuarioService(id, token),
     queryKey: ["Profile", id, token],
   });
+
+  console.log(watch())
 
   useEffect(() => {
     if (userData) {
@@ -90,7 +93,7 @@ function NewEntriesView() {
   }, []);
 
   const { mutate: mutateChangeInformation } = useMutation({
-    mutationFn: async (user: UsuarioSchema) => {
+    mutationFn: async (user: Usuario) => {
       await postChangeUsuarioService(id, token, user);
     },
     onError: (error) => {
@@ -109,7 +112,7 @@ function NewEntriesView() {
     },
   });
 
-  function onSubmit(user: UsuarioSchema) {
+  function onSubmit(user: Usuario) {
     mutateChangeInformation(user);
   }
 
@@ -128,11 +131,11 @@ function NewEntriesView() {
         textBody={message}
         type={type}
       />
-      <Modal handleClose={handleCloseModal} open={openModal} sx={{ padding: 2, width: 600 }}>
+      <Modal handleClose={handleCloseModal} open={openModal} sx={{ padding: 2, width: {md: 600, xs: '80%'} }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={3}>
             <Typography variant="h6" textAlign={"center"}>
-              Registro de Información Restante
+              {"Registro de Información Restante"}
             </Typography>
             <TextField
               type="date"
@@ -140,6 +143,15 @@ function NewEntriesView() {
               error={!!errors.estFechaInicio}
               helperText={errors.estFechaInicio?.message}
               label="Fecha de Ingreso a la institución"
+              InputLabelProps={{ shrink: true }}
+              size="small"
+            />
+            <TextField
+              type="date"
+              {...register("fechaDeNacimiento")}
+              error={!!errors.fechaDeNacimiento}
+              helperText={errors.fechaDeNacimiento?.message}
+              label="Fecha de Nacimiento"
               InputLabelProps={{ shrink: true }}
               size="small"
             />

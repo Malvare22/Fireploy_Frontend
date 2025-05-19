@@ -22,7 +22,6 @@ import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import PeopleIcon from "@mui/icons-material/People";
 import { useNavigate, useLocation } from "react-router-dom";
-import { rutasMaterias } from "@modules/materias/router/router";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { rutasProyectos } from "@modules/proyectos/router";
 import { AccountInformation, useAuth } from "@modules/general/context/accountContext";
@@ -42,6 +41,7 @@ import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { NotificationMessage } from "@modules/usuarios/types/notification";
 import { useNotificationContext } from "@modules/general/context/notificationContext";
+import { rutasMaterias } from "@modules/materias/router/routes";
 
 function getNavigationElements(userInformation: AccountInformation): Navigation {
   return [
@@ -431,7 +431,7 @@ export default function DashboardLayoutBasic(props: any) {
 
   return (
     <>
-      {accountInformation.id !== -1 ? (
+      {accountInformation.id != -1 ? (
         <AppProvider
           navigation={getNavigationElements(accountInformation)}
           router={router}

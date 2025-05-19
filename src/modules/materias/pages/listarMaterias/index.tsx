@@ -14,7 +14,6 @@ import { getMateriasSemestresLabels } from "@modules/materias/utils/materias";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { useNavigate } from "react-router";
-import { rutasMaterias } from "@modules/materias/router/router";
 import { useAuth } from "@modules/general/context/accountContext";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
@@ -27,6 +26,7 @@ import HiddenButton from "@modules/materias/components/hiddenInput";
 import { postCargaMasivaMaterias } from "@modules/materias/services/post.cargar.materias";
 import useSearch from "@modules/general/hooks/useSearch";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
+import { rutasMaterias } from "@modules/materias/router/routes";
 
 /**
  * ListarMaterias component – A component that handles listing, searching, filtering, and displaying subjects (materias).

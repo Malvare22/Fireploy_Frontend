@@ -58,7 +58,7 @@ const msgRedSocial = "Ingrese un link válido para la respectiva red social o de
  * Zod schema for validating user's social network links.
  * Each field must be either a valid URL for the given platform or an empty string.
  */
-export const redSocialUsuarioSchema = z
+export const RedSocialUsuarioSchema = z
   .object({
     facebook: z
       .string()
@@ -90,7 +90,7 @@ export const redSocialUsuarioSchema = z
       .refine((s) => s?.includes("github.com") || s?.length == 0, {
         message: msgRedSocial,
       }),
-    gitlab: z
+    gitLab: z
       .string()
       .optional()
       .refine((s) => s?.includes("gitlab.com") || s?.length == 0, {
@@ -120,18 +120,17 @@ export const CorreoSchema = z.object({ correo: correoSchema });
  * Full Zod schema for validating a complete Usuario object.
  * Includes validations for fields, conditional logic, and password matching.
  */
-export const UsuarioSchema: z.ZodType<Usuario> = z
+export const UsuarioSchema: z.ZodType<Omit<Usuario, 'redSocial'>> = z
   .object({
     id: z.number().optional(),
     correo: correoSchema,
     nombres: nombresSchema,
     apellidos: apellidosSchema.optional(),
     fechaDeNacimiento: fechaSchema,
-    estFechaInicio: fechaSchema.optional(),
+    estFechaInicio: z.string().optional(),
     estado: estadoUsuarioSchema,
     sexo: sexoUsuarioSchema,
     tipo: tiposUsuarioSchema.optional(),
-    redSocial: redSocialUsuarioSchema,
     descripcion: descripcionSchema,
     fotoDePerfil: fotoDePerfilSchema,
     contrasenia: contraseniaSchema.optional(),
@@ -191,3 +190,10 @@ export const usuarioTemplate: Usuario = {
   contrasenia: "",
   confirmarContrasenia: "",
 };
+
+export const PortafolioSchema: z.ZodType<Pick<Usuario, 'descripcion' | 'redSocial'>> = z.object({
+  redSocial: RedSocialUsuarioSchema,
+  descripcion: descripcionSchema
+})
+
+export type PortafolioSchema= z.infer<typeof PortafolioSchema>;

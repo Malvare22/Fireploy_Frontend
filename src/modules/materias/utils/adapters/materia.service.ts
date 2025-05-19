@@ -56,7 +56,7 @@ export function adaptMateriaServiceToMateria(materia: MateriaService): Materia {
       estado: curso.estado as Materia["estado"],
       docente: curso.docente
         ? {
-            nombre: curso.docente.nombre,
+            nombre: curso.docente.nombre + ' ' + curso.docente.apellido,
             correo: curso.docente.correo,
             imagen: curso.docente.foto_perfil ? curso.docente.foto_perfil : "",
             id: curso.docente.id,

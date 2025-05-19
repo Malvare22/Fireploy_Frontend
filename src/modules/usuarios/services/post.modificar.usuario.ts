@@ -57,6 +57,8 @@ export const postChangeUsuarioService = async (id: number, token: string, user: 
     body.est_fecha_inicio = user.estFechaInicio;
   }
 
+  console.log(body)
+
   const response = await patchData<UsuarioService>(`/usuario/${id}`, body, {
     sessiontoken: token,
   });

@@ -117,7 +117,7 @@ function ExplorarMaterias() {
           {/* Search and sort controls */}
           <Stack direction={{ sm: "row", xs: "column" }} justifyContent={"center"} spacing={1}>
             {/* Search input */}
-            <TextFieldSearch setSearchValue={setSearchValue}/>
+            <TextFieldSearch sx={{maxWidth: '70%'}} fullWidth setSearchValue={setSearchValue}/>
 
             {/* Sorting select */}
             <Select
@@ -147,7 +147,7 @@ function ExplorarMaterias() {
           </Stack>
 
           {/* List of filtered/sorted materias */}
-          <Grid2 container spacing={5} paddingX={{ md: 10 }}>
+          <Grid2 container spacing={5} paddingX={{ md: 4 }}>
             {dataToLoad.map((materia, key) => (
               <Grid2 size={{ xl: 4, sm: 6, xs: 12 }} key={key}>
                 <CardMateria materia={materia} />

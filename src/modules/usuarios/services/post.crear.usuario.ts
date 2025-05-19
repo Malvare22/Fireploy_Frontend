@@ -2,7 +2,6 @@ import { postData } from "@core/services";
 import { UsuarioService } from "../types/services.usuario";
 import { Usuario } from "../types/usuario";
 import { getUserTypes } from "../utils/usuario.map";
-import { getImage } from "@modules/general/utils/getImage";
 
 /**
  * Creates a new user by sending a POST request to the server with the user's data.
@@ -58,7 +57,7 @@ export const postCreateUsuarioService = async (token: string, user: Usuario) => 
     contrasenia: user.contrasenia!!,
     red_social: JSON.stringify(user.redSocial),
     tipo: getUserTypes.get(user.tipo!!) || "Estudiante",
-    foto_perfil: getImage.defaultProfileImage.ruta,
+    foto_perfil: "",
   };
 
   if (user.estFechaInicio) {
