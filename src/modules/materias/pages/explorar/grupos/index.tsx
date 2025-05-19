@@ -207,9 +207,9 @@ function VerCursosMateria() {
       />
 
       {/* Show loader while data is loading */}
-      {/* {!isLoading || !isLoadingMyGroups ? (
+      {isLoading || isLoadingMyGroups ? (
         <LoaderElement />
-      ) : ( */}
+      ) : (
         <>
           {/* Render content only if materia is available */}
           {materia && (
@@ -246,7 +246,7 @@ function VerCursosMateria() {
             </Stack>
           )}
         </>
-      {/* )} */}
+      )}
     </>
   );
 }

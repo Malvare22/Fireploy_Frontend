@@ -117,7 +117,7 @@ function ExplorarMaterias() {
           {/* Search and sort controls */}
           <Stack direction={{ sm: "row", xs: "column" }} justifyContent={"center"} spacing={1}>
             {/* Search input */}
-            <TextFieldSearch setSearchValue={setSearchValue}/>
+            <TextFieldSearch sx={{maxWidth: '70%'}} fullWidth setSearchValue={setSearchValue}/>
 
             {/* Sorting select */}
             <Select

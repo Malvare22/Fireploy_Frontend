@@ -37,6 +37,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { patchEstudiantesCurso } from "@modules/materias/services/patch.curso.estudiantes";
 import { rutasProyectos } from "@modules/proyectos/router";
+import EditIcon from "@mui/icons-material/Edit";
+import { rutasMaterias } from "@modules/materias/router/routes";
 
 export const DialogContext = createContext({
   showDialog: (_x: ShowDialogParams) => {},
@@ -90,7 +92,7 @@ function VerInformacionCurso() {
           return;
         }
       });
-      if (tipo == 'A' || flag) return { ...response, id: idCurso } as CursoService;
+      if (tipo == "A" || flag) return { ...response, id: idCurso } as CursoService;
       throw new SpecialError("No te encuentras registrado en este curso", "FRONTEND_ERROR");
     },
     queryKey: ["Get Curso By Id", idCurso ?? "-1", token],
@@ -172,6 +174,10 @@ function VerInformacionCurso() {
       });
     }
 
+    function handleEdit() {
+      navigate(rutasMaterias.editarCurso.replace(":idCurso", idCurso ?? "-1"));
+    }
+
     return (
       <div>
         <IconButton onClick={handleClick} size="large">
@@ -195,14 +201,26 @@ function VerInformacionCurso() {
           }}
         >
           <MenuList>
-            <MenuItem onClick={handleLeaveCourse}>
-              <ListItemIcon>
-                <ExitToAppIcon fontSize="medium" color="error" />
-              </ListItemIcon>
-              <Typography variant="body2" color="error">
-                Desvincularse del curso
-              </Typography>
-            </MenuItem>
+            {tipo == "E" && (
+              <MenuItem onClick={handleLeaveCourse}>
+                <ListItemIcon>
+                  <ExitToAppIcon fontSize="medium" color="error" />
+                </ListItemIcon>
+                <Typography variant="body2" color="error">
+                  Desvincularse del curso
+                </Typography>
+              </MenuItem>
+            )}
+            {tipo != "E" && (
+              <MenuItem onClick={handleEdit}>
+                <ListItemIcon>
+                  <EditIcon fontSize="medium"/>
+                </ListItemIcon>
+                <Typography variant="body2">
+                  Editar Curso
+                </Typography>
+              </MenuItem>
+            )}
           </MenuList>
         </Menu>
       </div>
@@ -238,11 +256,9 @@ function VerInformacionCurso() {
                 <Typography variant="h3">
                   {curso.materia?.nombre} - {curso.grupo}
                 </Typography>
-                {tipo == "E" && (
-                  <Box>
-                    <MenuCurso />
-                  </Box>
-                )}
+                <Box>
+                  <MenuCurso />
+                </Box>
               </Stack>
 
               {/* Course description */}

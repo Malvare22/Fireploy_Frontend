@@ -12,7 +12,6 @@ import InfoIcon from "@mui/icons-material/Info";
 import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import { patchChangeStatusMateria } from "@modules/materias/services/patch.change.materia";
-import { rutasMaterias } from "@modules/materias/router/router";
 import { useAuth } from "@modules/general/context/accountContext";
 import { useMutation } from "@tanstack/react-query";
 import LoaderElement from "@modules/general/components/loaderElement";
@@ -22,6 +21,7 @@ import SpringModal from "@modules/general/components/springModal";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { useCustomTableStyles } from "@modules/general/styles";
 import { paginationComponentOptions } from "@modules/general/utils/pagination";
+import { rutasMaterias } from "@modules/materias/router/routes";
 
 type TablaMateriasProps = {
   materias: MateriaTabla[];

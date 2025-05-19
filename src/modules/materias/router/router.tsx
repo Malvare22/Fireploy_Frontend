@@ -9,23 +9,7 @@ import EditCourseView from "../pages/editarCurso";
 import CreateCourseView from "../pages/crearCurso";
 import ListarMisCursos from "../pages/misCursos";
 import VistaSolicitudes from "../pages/vistaSolicitudes";
-
-export const rutaBase = "/app/materias";
-
-export enum rutasMaterias {
-  explorar = rutaBase + "/explorar",
-  //verInformacionCursos = rutaBase + "/:id",
-  listarMaterias = rutaBase + "/listar",
-  listarCursos = rutaBase + '/:idMateria/cursos/listar',
-  listarMisCursos = rutaBase + '/misCursos',
-  verCurso = rutaBase + "/cursos/:idCurso",
-  crearCurso = rutaBase + "/cursos/crear/:idMateria",
-  editarCurso = rutaBase + "/cursos/editar/:idCurso",
-  crearMateria = rutaBase + '/crear',
-  editarMateria = rutaBase + '/editar/:idMateria',
-  explorarCursos = rutaBase + '/explorar/:idMateria/cursos',
-  solicitudes = rutaBase + '/solicitudes'
-}
+import { rutasMaterias } from "./routes";
 
 /**
  * Routing configuration for the "Materias" section of the application.

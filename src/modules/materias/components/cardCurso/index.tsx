@@ -1,4 +1,3 @@
-import AnimatedCard from "@modules/general/components/animatedCard";
 import {
   Alert,
   Avatar,
@@ -14,14 +13,12 @@ import {
 } from "@mui/material";
 import React from "react";
 import { labelCardCurso } from "@modules/materias/enums/labelCardCurso";
-import InputIcon from "@mui/icons-material/Input";
 // import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import { Curso, UsuarioCurso } from "@modules/materias/types/curso";
-import LoginIcon from "@mui/icons-material/Login";
 import { useNavigate } from "react-router";
-import { rutasMaterias } from "@modules/materias/router/router";
 import { AccountInformation, useAuth } from "@modules/general/context/accountContext";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { rutasMaterias } from "@modules/materias/router/routes";
 
 type CardCursoProps = {
   curso: Curso;
@@ -36,6 +33,8 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, userType, isRegis
   const { id } = useAuth().accountInformation;
 
   const theme = useTheme();
+
+  console.log(curso)
 
   const buttonText = () => {
     if (userType == "E") return isRegister ? "Acceder" : labelCardCurso.inscribirme;
@@ -65,7 +64,7 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, userType, isRegis
       <Stack spacing={2} sx={{padding: 1}}>
         <Box>
           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", padding:1 }}>
-            <Box sx={{ padding: 2 , backgroundColor: theme.palette.error.main, borderRadius: 2}}>
+            <Box sx={{ width: 64, height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: theme.palette.error.main, borderRadius: 2}}>
               <Typography variant="h4" color='white'>{curso.grupo}</Typography>
             </Box>
           </Box>
@@ -102,14 +101,14 @@ function FrameDocente({ docente }: PropsFrameDocente) {
     return (
       <Card>
         <Grid2 container sx={{ padding: 1 }}>
-          <Grid2 size={5} sx={{ display: "flex", alignItems: "center" }}>
+          <Grid2 size={5} sx={{ display: "flex", alignItems: "center", justifyContent: 'center' }}>
             <Tooltip title={docente.nombre}>
               <Button onClick={onClick}>
-                <Avatar src={docente.imagen} />
+                <Avatar src={docente.imagen} sx={{width: 64, height: 64}}/>
               </Button>
             </Tooltip>
           </Grid2>
-          <Grid2 size={7}>
+          <Grid2 size={7}  sx={{ display: "flex", alignItems: "center"}}>
             <Typography variant="h5" sx={{ wordBreak: "break-word" }}>
               {docente.nombre}
             </Typography>

@@ -5,7 +5,7 @@ import { Box, Button, Card, Chip, Stack, Typography, useTheme } from "@mui/mater
 import React from "react";
 import StyleIcon from "@mui/icons-material/Style";
 import { useNavigate } from "react-router-dom";
-import { rutasMaterias } from "@modules/materias/router/router";
+import { rutasMaterias } from "@modules/materias/router/routes";
 
 type CardMateriaProps = {
   materia: Materia;
