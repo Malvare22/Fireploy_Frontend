@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { rutasGeneral } from "@modules/general/router/router";
+import { rutasGeneral } from "@modules/general/router/routes";
 import { getCurrentDate } from "@modules/general/utils/fechas";
 import { labelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
 import {

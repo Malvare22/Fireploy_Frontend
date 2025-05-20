@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { rutasGeneral } from "@modules/general/router/router";
+import { rutasGeneral } from "@modules/general/router/routes";
 import { Button, Card, Stack, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";

@@ -8,7 +8,6 @@ import {
   Usuario,
 } from "../types/usuario";
 import { UsuarioCampoBusqueda } from "@modules/general/hooks/useSearchUsers";
-import { UsuarioPortafolioCard } from "../types/usuario.portafolio";
 import { getUserLetterTypes, UserTypeFullString } from "./usuario.map";
 import { removeImageBuffer } from "@modules/general/utils/removeImageBuffer";
 
@@ -48,12 +47,12 @@ import { removeImageBuffer } from "@modules/general/utils/removeImageBuffer";
 export const adaptUser = (usuario: Partial<UsuarioService>): Usuario => {
   const _usuario: Usuario = {
     correo: usuario.correo ?? '',
-    id: usuario.id,
+    id: usuario.id ?? -1,
     fechaDeNacimiento:  usuario.fecha_nacimiento ? adaptDateBackend(usuario.fecha_nacimiento) : '',
     estado: usuario.estado as EstadoUsuario,
     tipo: getUserLetterTypes.get(usuario.tipo as UserTypeFullString) as TiposUsuario,
     nombres: usuario.nombre ?? '',
-    apellidos: usuario.apellido,
+    apellidos: usuario.apellido ?? '',
     sexo: usuario.sexo as SexoUsuario,
     fotoDePerfil:
       usuario.foto_perfil == "" || !usuario.foto_perfil
@@ -118,36 +117,5 @@ export function adaptUserServiceToCB(usuario: UsuarioService): UsuarioCampoBusqu
     id: usuario.id,
     foto: usuario.foto_perfil || "",
     nombreCompleto: `${usuario.nombre} ${usuario.apellido}`,
-  };
-}
-
-/**
- * Converts a `Usuario` object into a `UsuarioPortafolioCard`,
- * which is used for displaying a user's portfolio card.
- * 
- * This function creates a portfolio card object for displaying user information,
- * such as the profile picture, full name, role, and achievements.
- *
- * @param usuario The standardized `Usuario` object.
- * @returns A formatted portfolio card object.
- * 
- * @example
- * const usuario = {
- *   fotoDePerfil: "https://example.com/profile.jpg",
- *   nombres: "Juan",
- *   apellidos: "Pérez",
- *   id: "123",
- *   tipo: "A"
- * };
- * const portfolioCard = adaptUserToPC(usuario);
- * console.log(portfolioCard);
- */
-export function adaptUserToPC(usuario: Usuario): UsuarioPortafolioCard {
-  return {
-    foto: usuario.fotoDePerfil || "",
-    nombres: `${usuario.nombres} ${usuario.apellidos}`,
-    id: usuario.id ? usuario.id.toString() : "",
-    rol: usuario.tipo || "E",
-    logros: [{ titulo: "Ejemplo", valor: "X" }],
   };
 }

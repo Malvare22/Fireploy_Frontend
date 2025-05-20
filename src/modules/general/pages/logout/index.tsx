@@ -1,5 +1,5 @@
 import { accountInformationTemplate, useAuth } from "@modules/general/context/accountContext";
-import { rutasGeneral } from "@modules/general/router/router";
+import { rutasGeneral } from "@modules/general/router/routes";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 

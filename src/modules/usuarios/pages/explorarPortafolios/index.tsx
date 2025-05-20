@@ -1,11 +1,8 @@
 import { labelListarPortafolios } from "@modules/usuarios/enum/labelListarPortafolios";
-import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import { Grid2, Pagination, Stack, Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import PortafolioCard from "@modules/general/components/portafolioCard";
-import { getUsuariosByTypeService } from "@modules/usuarios/services/get.usuarios.[tipo]";
-import { adaptUser, adaptUserToPC } from "@modules/usuarios/utils/adapt.usuario";
-import { useAuth } from "@modules/general/context/accountContext";
+import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
 import { useQuery } from "@tanstack/react-query";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
@@ -15,6 +12,8 @@ import { SelectOrders, SorterOptions } from "@modules/general/components/selects
 import useSearch from "@modules/general/hooks/useSearch";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import { usePagination } from "@modules/general/hooks/usePagination";
+import { Usuario } from "@modules/usuarios/types/usuario";
+import { getAllUserPublic } from "@modules/usuarios/services/get.usuario";
 
 /**
  * ExplorarPortafolios component – A component for exploring all available user portfolios.
@@ -38,16 +37,14 @@ import { usePagination } from "@modules/general/hooks/usePagination";
  */
 function ExplorarPortafolios() {
   // Retrieve user token from authentication context
-  const { accountInformation } = useAuth();
-  const { token } = accountInformation;
 
-  const { data, isLoading, error, isSuccess } = useQuery({
-    queryFn: () => getUsuariosByTypeService("todos", token),
-    queryKey: ["Portafolios", "todos", token],
+  const { data, isLoading, error } = useQuery({
+    queryFn: () => getAllUserPublic(),
+    queryKey: ["Portafolios Get All"],
   });
 
   // Local state to store adapted user portfolio data
-  const [usuarios, setUsuarios] = useState<UsuarioPortafolioCard[]>([]);
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
 
   const { showDialog, open, title, message, handleCancel, type, handleAccept } = useAlertDialog();
 
@@ -58,10 +55,10 @@ function ExplorarPortafolios() {
    * Transforms raw user data into a portfolio card-friendly format.
    */
   useEffect(() => {
-    if (isSuccess && data) {
-      setUsuarios(data.map((user) => adaptUserToPC(adaptUser(user))));
+    if (data) {
+      setUsuarios(data.map(user => adaptUser(user)));
     }
-  }, [isSuccess, data]);
+  }, [data]);
 
   /**
    * Effect triggered when an error occurs during the fetch.
@@ -73,7 +70,7 @@ function ExplorarPortafolios() {
     }
   }, [error]);
 
-  const [buffer, setBuffer] = useState<UsuarioPortafolioCard[]>([]);
+  const [buffer, setBuffer] = useState<Usuario[]>([]);
 
   useEffect(() => {
     setBuffer(usuarios);
@@ -85,7 +82,7 @@ function ExplorarPortafolios() {
 
   const { searchValue, setSearchValue } = useSearch();
 
-  function searchFn(x: UsuarioPortafolioCard[], s: string) {
+  function searchFn(x: Usuario[], s: string) {
     return x.filter((a) => (a.nombres + a.id).trim().toLowerCase().includes(s.toLowerCase()));
   }
 
@@ -94,7 +91,7 @@ function ExplorarPortafolios() {
   }, [buffer, searchValue]);
 
   const { goToPage, hasNextPage, hasPrevPage, paginatedData, totalPages } =
-    usePagination<UsuarioPortafolioCard>(dataToRender, 10, 1);
+    usePagination<Usuario>(dataToRender, 10, 1);
 
   return (
     <>

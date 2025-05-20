@@ -1,6 +1,6 @@
-import { ProjectCardAvatar } from "@modules/general/components/projectCardAvatar";
 import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
 import {
+  Avatar,
   Box,
   Button,
   Chip,
@@ -37,6 +37,8 @@ import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import { syncErrorProject } from "../../executionState";
 import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
 import { getProjectById } from "@modules/proyectos/services/get.project";
+import { useNavigate } from "react-router";
+import { rutasUsuarios } from "@modules/usuarios/router/router";
 
 /**
  * Members component – This component displays the list of members (collaborators) for a project
@@ -327,6 +329,12 @@ const CardMember: React.FC<CardMemberProps> = ({
     setAnchorEl(null);
   };
 
+  const navigate = useNavigate();
+
+  function handleButton() {
+    navigate(rutasUsuarios.portafolio.replace(":id", member.id.toString()));
+  }
+
   return (
     <Stack
       direction={"row"}
@@ -337,14 +345,9 @@ const CardMember: React.FC<CardMemberProps> = ({
     >
       <Stack direction={{ md: "row", xs: "column" }} spacing={1} alignItems={{ md: "center" }}>
         <Stack direction={"row"} alignItems={"center"}>
-          <ProjectCardAvatar
-            usuario={{
-              foto: member.imagen || "",
-              id: member.id.toString(),
-              nombres: member.nombre,
-            }}
-            sx={{ width: 48, height: 48 }}
-          />
+          <Tooltip onClick={handleButton} title={member.nombre}>
+            <Avatar src={member.imagen} sx={{ width: 48, height: 48 }} />
+          </Tooltip>
           <Typography variant="h6">{member.nombre}</Typography>
         </Stack>
         {isMe && (

@@ -10,7 +10,7 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { rutasGeneral } from "@modules/general/router/router";
+import { rutasGeneral } from "@modules/general/router/routes";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { Paper, Stack, useMediaQuery, useTheme } from "@mui/material";
 
@@ -20,6 +20,8 @@ export enum labelsNavbarPrelogin {
   signUp = "Iniciar Sesión",
   register = "Registrarse",
   technologies = "Tecnologías",
+  portafolios = 'Portafolios',
+  proyectos = 'Proyectos'
 }
 
 /**
@@ -46,6 +48,8 @@ function NavbarPrelogin(): JSX.Element {
     [labelsNavbarPrelogin.home, rutasGeneral.home],
     [labelsNavbarPrelogin.team, rutasGeneral.developTeam],
     [labelsNavbarPrelogin.technologies, rutasGeneral.tecnologias],
+    [labelsNavbarPrelogin.portafolios, rutasGeneral.explorarPortafolios],
+    [labelsNavbarPrelogin.proyectos, rutasGeneral.explorarProyectos],
   ];
 
   // State to manage the mobile menu anchor

@@ -28,6 +28,8 @@ import { getImage } from "@modules/general/utils/getImage";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
+import { useNavigate } from "react-router";
+import { rutasGeneral } from "@modules/general/router/routes";
 
 export enum labelHome {
   princialContent = "Despliega tus aplicativos web de manera automática",
@@ -246,6 +248,12 @@ function Deploy() {
     [<SchoolIcon sx={{ fontSize: 56 }} />, labelHome.deployShareTitle, labelHome.deployShareBody],
   ];
 
+  const navigate = useNavigate();
+
+  function handleButton() {
+    navigate(rutasGeneral.explorarProyectos);
+  }
+
   return (
     <Box
       sx={{
@@ -293,8 +301,8 @@ function Deploy() {
         </Grid2>
         <Stack alignItems={"center"}>
           <Box>
-            <Button variant="contained" color="primary">
-              Explora Proyectos
+            <Button variant="contained" color="primary" onClick={handleButton}>
+              {"Explora Proyectos"}
             </Button>
           </Box>
         </Stack>
@@ -304,6 +312,12 @@ function Deploy() {
 }
 
 function PortafolioSection() {
+  const navigate = useNavigate();
+
+  function handleButton() {
+    navigate(rutasGeneral.explorarPortafolios);
+  }
+
   return (
     <Grid2 container sx={{ color: "white", marginX: 20, padding: 4 }} spacing={4}>
       <Grid2 size={5}>
@@ -319,7 +333,7 @@ function PortafolioSection() {
           <Typography variant="body1">{labelHome.portafolioBody}</Typography>
           <Stack alignItems={"start"}>
             <Box>
-              <Button variant="contained" color="secondary">
+              <Button variant="contained" onClick={handleButton} color="secondary">
                 {labelHome.portafolioButton}
               </Button>
             </Box>
@@ -416,7 +430,7 @@ function AcademicSection() {
       <Typography variant="h3">{labelHome.educacional}</Typography>
       <SchoolIcon sx={{ fontSize: 56 }} />
       <Grid2 container>
-        <Grid2 size={12} sx={{marginX: 20}}>
+        <Grid2 size={12} sx={{ marginX: 20 }}>
           <ControlledAccordions />
         </Grid2>
       </Grid2>

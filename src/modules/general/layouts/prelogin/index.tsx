@@ -32,7 +32,7 @@ function LayoutPrelogin() {
           justifyContent: "center",
           "> div": { width: "100%" },
           minHeight: "80vh",
-          paddingTop: '20vh',
+          paddingTop: '10vh',
           overflow: "hidden",
           backgroundImage: `url(${getImage["wallpaper_home"].ruta})`,
           backgroundSize: "cover",

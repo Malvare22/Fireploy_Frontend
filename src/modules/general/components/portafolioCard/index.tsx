@@ -1,42 +1,32 @@
-import { Box, Stack, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, Stack, Typography } from "@mui/material";
 import React from "react";
 import AnimatedCard from "../animatedCard";
-import { Logro, UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
-import { ProjectCardAvatar } from "../projectCardAvatar";
 import { getUserTypes } from "@modules/usuarios/utils/usuario.map";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { useNavigate } from "react-router";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { rutasGeneral } from "@modules/general/router/routes";
+import { useAuth } from "@modules/general/context/accountContext";
 
 type Props = {
-  usuario: UsuarioPortafolioCard;
+  usuario: Usuario;
 };
 
-/**
- * PortafolioCard Component
- * 
- * A card component that displays a user's profile in the portfolio section. 
- * This component includes the user's avatar, name, and role. When clicked, 
- * it navigates to the user's portfolio page.
- * 
- * @component
- * 
- * @param {Props} props - Component properties.
- * @param {UsuarioPortafolioCard} props.usuario - The user data to display in the card.
- * 
- * @returns {JSX.Element} A styled card showing the user's avatar, name, and role.
- * 
- * @example
- * ```tsx
- * <PortafolioCard usuario={userData} />
- * ```
- */
 const PortafolioCard: React.FC<Props> = ({ usuario }) => {
+  const { id } = useAuth().accountInformation;
 
   const navigate = useNavigate();
 
+  function handleButton() {
+    if (id != -1) {
+      navigate(rutasUsuarios.portafolio.replace(":id", usuario.id.toString()));
+    } else {
+      navigate(rutasGeneral.portafolioPorUsuario.replace(":id", usuario.id.toString()));
+    }
+  }
+
   return (
-    <AnimatedCard sx={{ padding: 2, cursor: 'pointer' }} onClick={() => navigate(rutasUsuarios.portafolio.replace(':id', usuario.id))}>
+    <AnimatedCard sx={{ padding: 2, cursor: "pointer" }} onClick={handleButton}>
       <Box
         sx={{
           display: "flex",
@@ -46,7 +36,7 @@ const PortafolioCard: React.FC<Props> = ({ usuario }) => {
         }}
       >
         {/* User Avatar */}
-        <ProjectCardAvatar usuario={usuario} sx={{ width: 64, height: 64 }} />
+        <Avatar src={usuario.fotoDePerfil} sx={{ width: 64, height: 64 }} />
 
         {/* User Information */}
         <Box
@@ -60,13 +50,13 @@ const PortafolioCard: React.FC<Props> = ({ usuario }) => {
           <Stack direction={"column"} spacing={1}>
             {/* User Name */}
             <Box sx={{ textAlign: { xs: "center", md: "left" } }}>
-              <Typography variant="h5">{usuario.nombres}</Typography>
+              <Typography variant="h5">{``}</Typography>
             </Box>
 
             {/* User Role */}
             <Box sx={{ textAlign: { xs: "center", md: "left" } }}>
               <Typography variant="body1">
-                {getUserTypes.get((usuario.rol as Usuario["tipo"]) ?? "E")}
+                {getUserTypes.get((usuario.tipo as Usuario["tipo"]) ?? "E")}
               </Typography>
             </Box>
           </Stack>
@@ -75,45 +65,6 @@ const PortafolioCard: React.FC<Props> = ({ usuario }) => {
 
       <Box></Box>
     </AnimatedCard>
-  );
-};
-
-type ShowGoalProps = {
-  logro: Logro;
-};
-
-/**
- * ShowGoal component that displays a user's achievement.
- *
- * @param {ShowGoalProps} props - Component props.
- * @param {Logro} props.logro - Achievement data.
- *
- * @returns {JSX.Element} A styled card displaying an achievement.
- */
-export const ShowGoal: React.FC<ShowGoalProps> = ({ logro }) => {
-  const theme = useTheme();
-
-  return (
-    <Stack
-      sx={{
-        backgroundColor: theme.palette.warning.light,
-        color: "white",
-        padding: 1,
-        borderRadius: 2,
-        maxWidth: 170,
-      }}
-      direction={"column"}
-    >
-      {/* Achievement Title */}
-      <Typography variant="body2" textAlign={"center"}>
-        {logro.titulo}
-      </Typography>
-
-      {/* Achievement Value */}
-      <Typography variant="h6" textAlign={"center"}>
-        {logro.valor}
-      </Typography>
-    </Stack>
   );
 };
 

@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import React from "react";
 import { labelCardCurso } from "@modules/materias/enums/labelCardCurso";
-// import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import { Curso, UsuarioCurso } from "@modules/materias/types/curso";
 import { useNavigate } from "react-router";
 import { AccountInformation, useAuth } from "@modules/general/context/accountContext";

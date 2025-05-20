@@ -30,13 +30,13 @@ export const getUsuarioService = async (id: number, token: string) => {
   return response;
 };
 
-export const getAllUsuarioPublic = async () => {
+export const getAllUserPublic = async () => {
   const response = await getData<UsuarioService[]>(`/usuario/public`, {}, {});
 
   return response;
 };
 
-export const getUsuarioPublicById = async (id: number) => {
+export const getUserPublicById = async (id: number) => {
   const response = await getData<UsuarioService>(`/usuario/public/${id}`, {});
 
   return response;

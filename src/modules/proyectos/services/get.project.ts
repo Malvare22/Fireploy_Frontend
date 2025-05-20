@@ -47,14 +47,14 @@ export async function getProjectByUserId(token: string, id: number) {
   return response;
 }
 
-export async function getProjectsByUserIdPublic(id: number) {
+export async function getPublicProjectById(id: number) {
   const response = await getData<ProyectoService[]>(`/proyecto/${id}`, {}, {});
 
   return response;
 }
 
-export async function getProjectAllProjectsPublic(id: number) {
-  const response = await getData<ProyectoService[]>(`/proyecto/${id}`, {}, {});
+export async function getAllPublicProjects() {
+  const response = await getData<ProyectoService[]>(`/proyecto`, {}, {});
 
   return response;
 }

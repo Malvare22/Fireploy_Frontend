@@ -21,29 +21,10 @@ type ProjectCardProps = {
    * Callback function to handle card click events (e.g. open modal or navigate).
    */
   handleOpen: () => void;
+
 };
 
-/**
- * ProjectCard Component
- *
- * A card that displays the details of a project. It includes the project image,
- * title, members, technologies used, and a star button for liking/disliking the project.
- * The component also handles the click events to open a modal or navigate to another page.
- *
- * @component
- *
- * @param {ProjectCardProps} props - Component properties.
- * @param {ProyectoCard} props.proyecto - The project data to be displayed in the card.
- * @param {Function} props.handleOpen - The callback function to handle the card click event.
- *
- * @returns {JSX.Element} A styled project card.
- *
- * @example
- * ```tsx
- * <ProjectCard proyecto={projectData} handleOpen={handleCardClick} />
- * ```
- */
-export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }) => {
+export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen}) => {
 
   const theme = useTheme();
 
@@ -132,7 +113,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }
         <Divider />
         <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
           <ProjectCardMembers integrantes={proyecto.integrantes} />
-          <StarButton modal={false} isLoading={isPending} mutate={mutate} value={localValue} />
+          {id != -1 && <StarButton modal={false} isLoading={isPending} mutate={mutate} value={localValue} />}
         </Stack>
       </Stack>
     </Stack>
