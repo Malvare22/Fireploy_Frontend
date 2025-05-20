@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { rutasGeneral } from "@modules/general/router/router";
+import { rutasGeneral } from "@modules/general/router/routes";
 import { Button, Card, Stack, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -120,7 +120,7 @@ function ReestablecerContrasenia() {
 
             {/* Current password input */}
             <TextFieldPassword
-              label="Contraseña actual"
+              label="Contraseña nueva"
               type="password"
               error={!!errors.contrasenia}
               helperText={errors.contrasenia?.message}
@@ -130,7 +130,7 @@ function ReestablecerContrasenia() {
 
             {/* New password input */}
             <TextFieldPassword
-              label="Nueva contraseña"
+              label="Confirmar nueva contraseña"
               type="password"
               error={!!errors.nuevaContrasenia}
               helperText={errors.nuevaContrasenia?.message}

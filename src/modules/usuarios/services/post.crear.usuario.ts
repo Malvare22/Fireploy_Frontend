@@ -52,7 +52,7 @@ export const postCreateUsuarioService = async (token: string, user: Usuario) => 
     apellido: user.apellidos ?? '',
     fecha_nacimiento: user.fechaDeNacimiento, // Formato ISO (YYYY-MM-DD)
     sexo: user.sexo, // Si hay más opciones, puedes usar string
-    descripcion: user.descripcion,
+    descripcion: user.descripcion ?? '',
     correo: user.correo,
     contrasenia: user.contrasenia!!,
     red_social: JSON.stringify(user.redSocial),

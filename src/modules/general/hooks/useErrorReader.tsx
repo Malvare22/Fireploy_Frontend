@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { rutasGeneral } from "../router/router";
+import { rutasGeneral } from "@modules/general/router/routes";
 import { ShowDialogParams } from "./useAlertDialog";
 
 type SpecialErrorTypes = 'FRONTEND_ERROR'

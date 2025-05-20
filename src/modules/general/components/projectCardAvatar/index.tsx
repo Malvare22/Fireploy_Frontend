@@ -1,45 +1,12 @@
-import { Avatar, IconButton, Tooltip, AvatarGroup, Stack, AvatarProps } from "@mui/material";
+import { Avatar, IconButton, Tooltip, AvatarGroup, Stack } from "@mui/material";
 import React from "react";
 // import { useNavigate } from "react-router-dom";
-import { UsuarioPortafolioCard } from "@modules/usuarios/types/usuario.portafolio";
 import { UsuarioCurso } from "@modules/materias/types/curso";
 import { useNavigate } from "react-router";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { useAuth } from "@modules/general/context/accountContext";
+import { rutasGeneral } from "@modules/general/router/routes";
 
-type Props = {
-  usuario: UsuarioPortafolioCard;
-} & AvatarProps;
-
-/**
- * ProjectCardAvatar component – renders an avatar for a given user inside a tooltip and button.
- * When clicked, navigates to the user's portfolio page.
- *
- * Uses Material UI's Avatar, Tooltip, and IconButton components for UI rendering.
- * Supports all additional props accepted by MUI's Avatar component.
- *
- * @component
- *
- * @param {UsuarioPortafolioCard} usuario - The user object containing ID, name, and photo URL.
- * @param {...AvatarProps} rest - Additional props passed down to the Avatar component.
- *
- * @returns {JSX.Element} A clickable avatar wrapped in a tooltip that navigates to the user's portfolio.
- *
- * @example
- * ```tsx
- * <ProjectCardAvatar usuario={user} />
- * ```
- */
-export const ProjectCardAvatar: React.FC<Props> = ({ usuario, ...rest }) => {
-  const navigate = useNavigate();
-
-  return (
-    <Tooltip title={usuario.nombres}>
-      <IconButton onClick={() => navigate(rutasUsuarios.portafolio.replace(":id", usuario.id))}>
-        <Avatar alt={usuario.nombres} src={usuario.foto} {...rest} />
-      </IconButton>
-    </Tooltip>
-  );
-};
 
 type ProjectCardMembersProps = {
   integrantes: UsuarioCurso[];
@@ -64,8 +31,11 @@ type ProjectCardMembersProps = {
 export const ProjectCardMembers: React.FC<ProjectCardMembersProps> = ({ integrantes }) => {
   const navigate = useNavigate();
 
-  function handleButton(id: number) {
-    navigate(rutasUsuarios.portafolio.replace(":id", id.toString()));
+  const { id } = useAuth().accountInformation;
+
+  function handleButton(idUser: number) {
+    if (id != -1) navigate(rutasUsuarios.portafolio.replace(":id", idUser.toString()));
+    else navigate(rutasGeneral.portafolioPorUsuario.replace(":id", idUser.toString()));
   }
 
   if (integrantes.length > 4) {

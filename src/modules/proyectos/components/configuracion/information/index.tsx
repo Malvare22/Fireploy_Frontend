@@ -323,7 +323,7 @@ export const Information = ({ type }: Props) => {
                           fullWidth
                           {...field}
                           select
-                          label="Sección"
+                          label="Actividad"
                           error={!!errors.materiaInformacion?.seccionId}
                           helperText={errors.materiaInformacion?.seccionId?.message?.toString()}
                         >
@@ -503,7 +503,7 @@ function TransitionAlert() {
         >
           <Typography>
             {
-              "Los proyectos se vinculan a secciones de cursos, por lo cual es indispensable encontrarse en un curso que tenga una sección activa para poder crear un proyecto"
+              "Los proyectos se vinculan a secciones de cursos, por lo cual es indispensable encontrarse en un curso que tenga una actividad habilitada para poder crear un proyecto"
             }
           </Typography>
         </Alert>

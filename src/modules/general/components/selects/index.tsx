@@ -1,20 +1,14 @@
 import { useFilters } from "@modules/general/hooks/useFilters";
 import useOrderSelect, { Order } from "@modules/general/hooks/useOrder";
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
+  Box,
   FormControl,
-  Grid2,
   InputLabel,
   MenuItem,
   Select,
   TextField,
-  Typography,
-  useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useMemo } from "react";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 export type SorterOptions = {
   key: string;
@@ -78,10 +72,8 @@ export function SelectOrders<T extends Object>({
   }, [order]);
   if (type == "multiple")
     return (
-      <Grid2 container spacing={2}>
-        {sorterOptions?.map(({ key, options, label }) => (
-          <Grid2 size={{ md: 4, xs: 12 }}>
-            <FormControl size="small" key={key} fullWidth>
+        <>{sorterOptions?.map(({ key, options, label }) => (
+            <FormControl size="small" key={key} sx={{minWidth: 150}}>
               <InputLabel>{label}</InputLabel>
               <Select
                 label={key}
@@ -95,9 +87,7 @@ export function SelectOrders<T extends Object>({
                 <MenuItem value={""}>{options.defaultValue || ""}</MenuItem>
               </Select>
             </FormControl>
-          </Grid2>
-        ))}
-      </Grid2>
+        ))}</>
     );
   else {
     return (
@@ -132,7 +122,7 @@ export function SelectOrders<T extends Object>({
             {options.desc}
           </MenuItem>,
         ])}
-        <MenuItem value="_none_">No Aplicar</MenuItem>
+        <MenuItem value="_none_">{"No Aplicar"}</MenuItem>
       </TextField>
     );
   }
@@ -165,8 +155,6 @@ export function SelectFilters<T extends Object>({
 }: SelectFiltersProps<T>) {
   const { filterDataFn, handleFilter, filters } = useFilters<T>();
 
-  const matches = useMediaQuery((theme) => theme.breakpoints.down("md"));
-
   const showOptions = useMemo(() => {
     return filterOptions.map((optionGroup) => ({
       ...optionGroup,
@@ -179,13 +167,12 @@ export function SelectFilters<T extends Object>({
   }, [filters]);
 
   return (
-    <Grid2 container spacing={2}>
-      {!matches &&
+    <Box sx={{display:'flex', flexWrap: 'wrap', gap: 2}}>
+      {
         showOptions.map(({ key, options, label }) => {
           return (
             <>
-              <Grid2 size={3} key={key}>
-                <FormControl fullWidth>
+                <FormControl sx={{minWidth: 150}}>
                   <InputLabel>{label}</InputLabel>
                   <Select
                     label={label}
@@ -205,12 +192,16 @@ export function SelectFilters<T extends Object>({
                     })}
                   </Select>
                 </FormControl>
-              </Grid2>
             </>
           );
         })}
 
-      {matches &&
+
+    </Box>
+  );
+}
+
+      /* {matches &&
         
           <Accordion sx={{width: "100%", padding: 0}}>
             <AccordionSummary
@@ -246,7 +237,4 @@ export function SelectFilters<T extends Object>({
               </Grid2>))}
             </AccordionDetails>
           </Accordion>
-        }
-    </Grid2>
-  );
-}
+        } */

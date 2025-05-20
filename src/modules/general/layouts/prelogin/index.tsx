@@ -30,16 +30,16 @@ function LayoutPrelogin() {
         sx={{
           display: "flex",
           justifyContent: "center",
-          "> div": { width: "100%" },
-          minHeight: "80vh",
-          paddingTop: '20vh',
+          alignItems: 'center',
+          "> div": { width: "100%", paddingY: 3 },
+          minHeight: "100vh",
+          paddingTop: '10vh',
           overflow: "hidden",
           backgroundImage: `url(${getImage["wallpaper_home"].ruta})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           backgroundAttachment: "fixed",
-          paddingBottom: 10
         }}
       >
         <Outlet />

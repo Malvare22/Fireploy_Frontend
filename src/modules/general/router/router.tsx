@@ -12,38 +12,11 @@ import TeamView from "../pages/team";
 import { routerUsuarios } from "@modules/usuarios/router/router";
 import { routerProyectos } from "@modules/proyectos/router";
 import TecnologiesView from "../pages/tecnologies";
-import Portafolio from "@modules/usuarios/components/portafolio";
 import ExplorarPortafolios from "@modules/usuarios/pages/explorarPortafolios";
-
-/**
- * Base route path of the application.
- * This path is used as the root path for all routes in the app.
- *
- * @constant {string} rutaBase - The root path for the application.
- *
- * @example
- * const homeRoute = rutaBase; // '/'
- */
-export const rutaBase = "/";
-
-/**
- * Enum defining the general public routes of the application.
- * These routes are accessible without authentication and include paths for login, registration, password recovery, etc.
- *
- * @enum {string}
- */
-export enum rutasGeneral {
-  home = rutaBase,
-  login = rutaBase + "login",
-  recuperar = rutaBase + "recuperar",
-  registrar = rutaBase + "registrar",
-  cambiarContrasenia = rutaBase + "reset-password/:token",
-  developTeam = rutaBase + "developTeam",
-  tecnologias = rutaBase + "tecnologias",
-  detectAnomaly = rutaBase + "detectAnomaly",
-  portafolios = rutaBase + "portafolios",
-  portafolioByUser = rutaBase + "portafolios/:id",
-}
+import PortafolioView from "@modules/usuarios/pages/portafolio";
+import { rutasGeneral } from "@modules/general/router/routes";
+import ExplorarProyectos from "@modules/proyectos/pages/explorar";
+import LayoutPreLoginPaper from "../layouts/preloginPaper";
 
 /**
  * Route configuration for public routes.
@@ -96,17 +69,30 @@ export const routerGeneral: RouteObject = {
       element: <ErrorPage />,
     },
     {
-      path: rutasGeneral.portafolioByUser,
-      element: <Portafolio />,
-    },
-    {
-      path: rutasGeneral.portafolios,
-      element: <ExplorarPortafolios />,
-    },
-    {
       path: "*",
       element: <ErrorPage />,
     },
+  ],
+};
+
+
+export const routerGeneralPaper: RouteObject = {
+  path: "/",
+  element: <LayoutPreLoginPaper />, // Use layout with navbar for pre-login pages
+  children: [
+    {
+      path: rutasGeneral.portafolioPorUsuario,
+      element: <PortafolioView />,
+    },
+    {
+      path: rutasGeneral.explorarPortafolios,
+      element: <ExplorarPortafolios />,
+    },
+    {
+      path: rutasGeneral.explorarProyectos,
+      element: <ExplorarProyectos />,
+    },
+
   ],
 };
 

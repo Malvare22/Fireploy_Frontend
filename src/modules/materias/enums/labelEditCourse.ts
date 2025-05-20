@@ -3,10 +3,10 @@ export enum labelEditCourse {
   alternativeTitle= 'Crear Curso',
   description = "Descripción",
   status = "Estado",
-  sections = "Secciones",
+  sections = "Actividades",
   titleModalStudent = "Agregar Estudiantes",
   notHasStudents = "Actualmente no hay estudiantes registrados",
-  notHasSection = "Actualmente no hay secciones registradas",
-  modificarSecciones = "Guardar Cambios Secciones",
+  notHasSection = "Actualmente no hay actividades registradas",
+  modificarSecciones = "Guardar Cambios Actividades",
   identificator = 'Identificador'
 }

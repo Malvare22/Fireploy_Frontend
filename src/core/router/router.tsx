@@ -1,4 +1,4 @@
-import { authenticatedRoutes, routerGeneral } from "@modules/general/router/router";
+import { authenticatedRoutes, routerGeneral, routerGeneralPaper } from "@modules/general/router/router";
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 
 /**
@@ -11,7 +11,7 @@ import { createBrowserRouter, RouteObject } from "react-router-dom";
  */
 const allRoutes: RouteObject = {
   path: "/",
-  children: [routerGeneral, authenticatedRoutes],
+  children: [routerGeneral, routerGeneralPaper, authenticatedRoutes],
 };
 
 /**

@@ -21,17 +21,10 @@ import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyecto
 import { useFilters } from "@modules/general/hooks/useFilters";
 import useOrderSelect, { Order } from "@modules/general/hooks/useOrder";
 import { labelSelects } from "@modules/general/enums/labelSelects";
-import { ShowGoal } from "@modules/general/components/portafolioCard";
-import { useParams } from "react-router";
 import { useAuth } from "@modules/general/context/accountContext";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getUsuarioService } from "@modules/usuarios/services/get.usuario";
-import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
 import { labelPortafolio } from "@modules/usuarios/enum/labelPortafolio";
 import LoaderElement from "@modules/general/components/loaderElement";
-import { getProjectByUserId } from "@modules/proyectos/services/get.project";
-import { adaptProject, adaptProjectToCard } from "@modules/proyectos/utils/adapt.proyecto";
-import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
@@ -50,6 +43,14 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import EditIcon from "@mui/icons-material/Edit";
 import { GitlabIcon } from "@modules/general/components/customIcons";
+import { getUserPublicById, getUsuarioService } from "@modules/usuarios/services/get.usuario";
+import { getAllPublicProjects } from "@modules/proyectos/services/get.project";
+import { ProyectoService } from "@modules/proyectos/types/proyecto.service";
+import { adaptUsuarioPortafolio } from "@modules/usuarios/utils/adapt.usuario.portafolio";
+import { UsuarioPortafolio } from "@modules/usuarios/types/usuario.portafolio";
+import { useAlertDialogContext } from "@modules/general/context/alertDialogContext";
+import { VARIABLES_LOCAL_STORAGE } from "@modules/general/enums/variablesLocalStorage";
+import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
 
 /**
  * Portfolio component – responsible for rendering a user's public profile and projects.
@@ -69,32 +70,46 @@ import { GitlabIcon } from "@modules/general/components/customIcons";
  * <Portafolio />
  * ```
  */
-const Portafolio = () => {
-  const { id } = useParams();
+const Portafolio = ({ id }: { id: number }) => {
+  const [usuario, setUsuario] = useState<UsuarioPortafolio | undefined>(undefined);
 
-  const { accountInformation } = useAuth();
-  const { token, id: idAccount } = accountInformation;
-  const [usuario, setUsuario] = useState<Usuario | undefined>(undefined);
-  const [projects, setProjects] = useState<ProyectoCard[]>([]);
-
-  const { data, isLoading, error, isSuccess } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryFn: async () => {
-      const userInfo = await getUsuarioService(parseInt(id || "-1"), token);
-      const projectInfo = await getProjectByUserId(token, parseInt(id || "-1"));
-      return { userInfo, projectInfo };
+      const projects = await getAllPublicProjects();
+      const user = await getUserPublicById(id);
+
+      const setProjects = new Set<ProyectoService>();
+      projects.forEach((p) => {
+        if (p.creador.id == id) {
+          setProjects.add(p);
+          return;
+        }
+
+        const exist = p.estudiantes.find((i) => i.id == id);
+        if (exist) setProjects.add(p);
+      });
+
+      return adaptUsuarioPortafolio(user, [...setProjects]);
     },
-    queryKey: ["Project & User Information", token],
+    queryKey: ["Project & User Information", id],
   });
 
-  const { showDialog, handleAccept, title, type, open, message, setIsLoading, isLoading:isLoadingModal } =
-    useAlertDialog2();
+  const {
+    showDialog,
+    handleAccept,
+    title,
+    type,
+    open,
+    message,
+    isLoading: isLoadingModal,
+  } = useAlertDialogContext();
+
   const { setError } = useErrorReader(showDialog);
   useEffect(() => {
-    if (isSuccess && data) {
-      setUsuario(adaptUser(data.userInfo));
-      setProjects(data.projectInfo.map((project) => adaptProjectToCard(adaptProject(project))));
+    if (data) {
+      setUsuario(data);
     }
-  }, [isSuccess, data]);
+  }, [data]);
 
   useEffect(() => {
     if (error) setError(error);
@@ -121,185 +136,7 @@ const Portafolio = () => {
 
   const { filterDataFn } = useFilters<ProyectoCard>();
 
-  const logros = { titulo: "Repositorios en GitHub", valor: "50+" };
-
-  const ModalEdit = ({ user }: { user: Usuario }) => {
-    const {
-      register,
-      formState: { errors },
-      handleSubmit,
-      getValues,
-    } = useForm<Usuario>({
-      resolver: zodResolver(PortafolioSchema),
-      defaultValues: user,
-    });
-
-    const token = useAuth().accountInformation.token;
-
-    const { mutate: updatePortafolioInformation, isPending } = useMutation({
-      mutationFn: async () => {
-        setIsLoading(true);
-        await postChangeUsuarioService(getValues().id ?? -1, token, getValues());
-      },
-      onError: (err) => setError(err),
-      onSuccess: () => {
-        showDialog({
-          message: "Se ha modificado exitosamente la información de portafolio del usuario",
-          title: "Actualización Portafolio",
-          type: "success",
-          onAccept: () => handleAccept(),
-          reload: true,
-        });
-      },
-    });
-
-    async function onSubmit() {
-      await updatePortafolioInformation();
-    }
-
-    return (
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={2}>
-          <Typography variant="h4" textAlign={"center"}>
-            Editar Información de Portafolio
-          </Typography>
-          {/* Redes Sociales */}
-          <Typography variant="h6">{labelPerfil.redesSociales}</Typography>
-          <Grid2 container spacing={2}>
-            <Grid2 size={{ md: 6, xs: 12 }}>
-              <TextField
-                fullWidth
-                label={labelPerfil.facebook}
-                {...register("redSocial.facebook")}
-                error={!!errors.redSocial?.facebook}
-                helperText={errors.redSocial?.facebook?.message}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton>
-                        <FacebookIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid2>
-            <Grid2 size={{ md: 6, xs: 12 }}>
-              <TextField
-                fullWidth
-                label={labelPerfil.instagram}
-                {...register("redSocial.instagram")}
-                error={!!errors.redSocial?.instagram}
-                helperText={errors.redSocial?.instagram?.message}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton>
-                        <InstagramIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid2>
-            <Grid2 size={{ md: 6, xs: 12 }}>
-              <TextField
-                fullWidth
-                label={labelPerfil.linkedin}
-                {...register("redSocial.linkedin")}
-                error={!!errors.redSocial?.linkedin}
-                helperText={errors.redSocial?.linkedin?.message}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton>
-                        <LinkedInIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid2>
-            <Grid2 size={{ md: 6, xs: 12 }}>
-              <TextField
-                fullWidth
-                label={labelPerfil.x}
-                {...register("redSocial.x")}
-                error={!!errors.redSocial?.x}
-                helperText={errors.redSocial?.x?.message}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton>
-                        <TwitterIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid2>
-            <Grid2 size={{ md: 6, xs: 12 }}>
-              <TextField
-                fullWidth
-                label={labelPerfil.gitHub}
-                {...register("redSocial.github")}
-                error={!!errors.redSocial?.github}
-                helperText={errors.redSocial?.github?.message}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton>
-                        <GitHubIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid2>
-            <Grid2 size={{ md: 6, xs: 12 }}>
-              <TextField
-                fullWidth
-                label={labelPerfil.gitLab}
-                {...register("redSocial.gitLab")}
-                error={!!errors.redSocial?.gitLab}
-                helperText={errors.redSocial?.gitLab?.message}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton>
-                        <GitlabIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid2>
-          </Grid2>
-          <Typography variant="h6">Descripción</Typography>
-          <TextField
-            multiline
-            minRows={4}
-            {...register("descripcion")}
-            error={!!errors.descripcion}
-            helperText={errors.descripcion?.message}
-            fullWidth
-          />
-          <Stack alignItems={"center"} justifyContent={"center"} direction={"row"} spacing={2}>
-            <Box>
-              <GeneralButton mode={buttonTypes.save} loading={isPending} type="submit" />
-            </Box>
-            <Box>
-              <GeneralButton
-                mode={buttonTypes.cancel}
-                onClick={handleCloseModalEdit}
-                disabled={isPending}
-              />
-            </Box>
-          </Stack>
-        </Stack>
-      </form>
-    );
-  };
+  const MY_ID = localStorage.getItem(VARIABLES_LOCAL_STORAGE.CURRENT_ID);
 
   const {
     handleClose: handleCloseModalEdit,
@@ -317,9 +154,9 @@ const Portafolio = () => {
         textBody={message}
         isLoading={isLoadingModal}
       />
-      {usuario && (
+      {usuario && openModalEdit && (
         <SpringModal handleClose={handleCloseModalEdit} open={openModalEdit}>
-          <ModalEdit user={usuario} />
+          <ModalEdit id={id} handleClose={handleCloseModalEdit} />
         </SpringModal>
       )}
       {isLoading ? (
@@ -339,7 +176,7 @@ const Portafolio = () => {
                   position: "relative",
                 }}
               >
-                {idAccount === parseInt(id ?? "-1") && (
+                {MY_ID && parseInt(MY_ID) == id && (
                   <Box sx={{ position: "absolute", right: 10, top: 10 }}>
                     <Tooltip title="Editar">
                       <IconButton onClick={handleOpenModalEdit}>
@@ -354,7 +191,7 @@ const Portafolio = () => {
                     <Typography variant="h4" textAlign={"center"}>
                       {`${usuario.nombres} ${usuario.apellidos}`}
                     </Typography>
-                    {usuario.descripcion.trim().length > 0 && (
+                    {usuario.descripcion && usuario.descripcion.trim().length > 0 && (
                       <Stack alignItems={"center"} marginTop={3} spacing={4}>
                         <Stack spacing={2}>
                           <Typography variant="h6" textAlign={"center"}>
@@ -368,16 +205,7 @@ const Portafolio = () => {
                     )}
                   </Stack>
                   <Stack alignItems={"center"} spacing={3}>
-                    <Stack direction="row" spacing={2}>
-                      {showSocialNetworks(usuario.redSocial, { sx: { fontSize: 32 } })}
-                    </Stack>
-                    <Grid2 container spacing={2} display={"flex"} justifyContent={"center"}>
-                      {[0, 1, 2].map(() => (
-                        <Grid2 size={{ xs: 6, md: 4 }}>
-                          <ShowGoal logro={logros} />
-                        </Grid2>
-                      ))}
-                    </Grid2>
+                    {showSocialNetworks(usuario.redSocial, { sx: { fontSize: 32 } })}
                   </Stack>
                 </Stack>
               </Card>
@@ -439,9 +267,9 @@ const Portafolio = () => {
                 </Card>
 
                 <Box sx={{ flexGrow: 1 }}>
-                  {projects.length > 0 ? (
+                  {usuario.proyectos.length > 0 ? (
                     <Grid2 container spacing={1} rowSpacing={4}>
-                      {filterDataFn(orderDataFn(projects)).map((proyecto) => (
+                      {filterDataFn(orderDataFn(usuario.proyectos)).map((proyecto) => (
                         <Grid2
                           size={{ xl: 4, sm: 6, xs: 12 }}
                           display={"flex"}
@@ -472,3 +300,207 @@ const Portafolio = () => {
 };
 
 export default Portafolio;
+
+const ModalEdit = ({ id, handleClose }: { id: number; handleClose: Function }) => {
+  const { token } = useAuth().accountInformation;
+  const { data, error, isLoading } = useQuery({
+    queryFn: async () => {
+      return await getUsuarioService(id, token);
+    },
+    queryKey: ["Get User By Id Complete", token],
+  });
+  const { setIsLoading, showDialog, handleAccept } = useAlertDialogContext();
+  const { setError } = useErrorReader(showDialog);
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    getValues,
+    reset,
+  } = useForm<Usuario>({
+    resolver: zodResolver(PortafolioSchema),
+    defaultValues: {} as Usuario,
+  });
+
+  useEffect(() => {
+    if (error) setError(error);
+  }, [error]);
+
+  useEffect(() => {
+    if (data) {
+      reset(adaptUser(data));
+    }
+  }, [data]);
+
+  const { mutate: updatePortafolioInformation, isPending } = useMutation({
+    mutationFn: async () => {
+      setIsLoading(true);
+      await postChangeUsuarioService(getValues().id ?? -1, token, getValues());
+    },
+    onError: (err) => setError(err),
+    onSuccess: () => {
+      showDialog({
+        message: "Se ha modificado exitosamente la información de portafolio del usuario",
+        title: "Actualización Portafolio",
+        type: "success",
+        onAccept: () => handleAccept(),
+        reload: true,
+      });
+    },
+  });
+
+  async function onSubmit() {
+    await updatePortafolioInformation();
+  }
+
+  return (
+    <>
+      {" "}
+      {isLoading ? (
+        <LoaderElement />
+      ) : (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <LoaderElement />
+          <Stack spacing={2}>
+            <Typography variant="h4" textAlign={"center"}>
+              Editar Información de Portafolio
+            </Typography>
+            {/* Redes Sociales */}
+            <Typography variant="h6">{labelPerfil.redesSociales}</Typography>
+            <Grid2 container spacing={2}>
+              <Grid2 size={{ md: 6, xs: 12 }}>
+                <TextField
+                  fullWidth
+                  label={labelPerfil.facebook}
+                  {...register("redSocial.facebook")}
+                  error={!!errors.redSocial?.facebook}
+                  helperText={errors.redSocial?.facebook?.message}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton>
+                          <FacebookIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid2>
+              <Grid2 size={{ md: 6, xs: 12 }}>
+                <TextField
+                  fullWidth
+                  label={labelPerfil.instagram}
+                  {...register("redSocial.instagram")}
+                  error={!!errors.redSocial?.instagram}
+                  helperText={errors.redSocial?.instagram?.message}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton>
+                          <InstagramIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid2>
+              <Grid2 size={{ md: 6, xs: 12 }}>
+                <TextField
+                  fullWidth
+                  label={labelPerfil.linkedin}
+                  {...register("redSocial.linkedin")}
+                  error={!!errors.redSocial?.linkedin}
+                  helperText={errors.redSocial?.linkedin?.message}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton>
+                          <LinkedInIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid2>
+              <Grid2 size={{ md: 6, xs: 12 }}>
+                <TextField
+                  fullWidth
+                  label={labelPerfil.x}
+                  {...register("redSocial.x")}
+                  error={!!errors.redSocial?.x}
+                  helperText={errors.redSocial?.x?.message}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton>
+                          <TwitterIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid2>
+              <Grid2 size={{ md: 6, xs: 12 }}>
+                <TextField
+                  fullWidth
+                  label={labelPerfil.gitHub}
+                  {...register("redSocial.github")}
+                  error={!!errors.redSocial?.github}
+                  helperText={errors.redSocial?.github?.message}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton>
+                          <GitHubIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid2>
+              <Grid2 size={{ md: 6, xs: 12 }}>
+                <TextField
+                  fullWidth
+                  label={labelPerfil.gitLab}
+                  {...register("redSocial.gitLab")}
+                  error={!!errors.redSocial?.gitLab}
+                  helperText={errors.redSocial?.gitLab?.message}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton>
+                          <GitlabIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid2>
+            </Grid2>
+            <Typography variant="h6">Descripción</Typography>
+            <TextField
+              multiline
+              minRows={4}
+              {...register("descripcion")}
+              error={!!errors.descripcion}
+              helperText={errors.descripcion?.message}
+              fullWidth
+            />
+            <Stack alignItems={"center"} justifyContent={"center"} direction={"row"} spacing={2}>
+              <Box>
+                <GeneralButton mode={buttonTypes.save} loading={isPending} type="submit" />
+              </Box>
+              <Box>
+                <GeneralButton
+                  mode={buttonTypes.cancel}
+                  onClick={() => handleClose()}
+                  disabled={isPending}
+                />
+              </Box>
+            </Stack>
+          </Stack>
+        </form>
+      )}
+    </>
+  );
+};

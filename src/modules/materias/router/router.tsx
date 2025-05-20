@@ -10,6 +10,7 @@ import CreateCourseView from "../pages/crearCurso";
 import ListarMisCursos from "../pages/misCursos";
 import VistaSolicitudes from "../pages/vistaSolicitudes";
 import { rutasMaterias } from "./routes";
+import VistaProyectosDeMisEstudiantes from "../pages/proyectosMisEstudiantes";
 
 /**
  * Routing configuration for the "Materias" section of the application.
@@ -85,6 +86,10 @@ export const routerMaterias: RouteObject[] = [
     path: rutasMaterias.solicitudes,
     element: <VistaSolicitudes />,
   },
+  {
+    path: rutasMaterias.proyectosDeMisEstudiantes,
+    element: <VistaProyectosDeMisEstudiantes/>
+  }
  
 
 ];

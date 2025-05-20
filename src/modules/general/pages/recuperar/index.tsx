@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import AlertDialog from "@modules/general/components/alertDialog";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
-import { rutasGeneral } from "@modules/general/router/router";
+import { rutasGeneral } from "@modules/general/router/routes";
 import { postSendEmail } from "@modules/general/services/post.send.email";
 import { CorreoSchema } from "@modules/usuarios/utils/form/usuario.schema";
 import { Button, Typography, TextField, Stack, Card, Box } from "@mui/material";

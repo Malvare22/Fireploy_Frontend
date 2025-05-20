@@ -129,7 +129,7 @@ function SeccionesForm({ onAccept, onCancel, index }: Props) {
           </TextField>
         )}
       />
-      <Stack spacing={2} direction={"row"}>
+      <Stack spacing={2} direction={"row"} justifyContent={'center'}>
         <GeneralButton mode={buttonTypes.save} type="submit" />
         <GeneralButton mode={buttonTypes.cancel} onClick={onCancelForm} />
       </Stack>

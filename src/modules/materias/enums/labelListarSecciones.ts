@@ -7,5 +7,5 @@ export enum labelListarSecciones {
   fechaLimite = "Fecha límite",
   fechaDeInicio = "Fecha de Inicio",
   acciones = "Acciones",
-  informacion = "Las secciones de curso no pueden ser eliminadas al ser registradas en el sistema",
+  informacion = "Las actividades de curso no pueden ser eliminadas al ser registradas en el sistema",
 }

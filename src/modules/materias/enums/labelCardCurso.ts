@@ -1,5 +1,5 @@
 export enum labelCardCurso{
-    secciones = 'Secciones',
+    secciones = 'Actividades',
     estudiantes = 'Estudiantes',
     docente = 'Docente',
     grupo = 'Grupo',

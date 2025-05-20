@@ -65,23 +65,22 @@ export type RedSocialUsuario = {
  * @property {string} [confirmarContrasenia] - Optional confirmation of the user's password.
  */
 export type Usuario = {
-  id?: number | undefined;
+  id: number;
   correo: string;
   nombres: string;
-  apellidos?: string | undefined;
+  apellidos: string;
   fotoDePerfil: string;
   fechaDeNacimiento: string;
   sexo: SexoUsuario;
 
-  tipo?: TiposUsuario | undefined;
+  tipo: TiposUsuario;
   estFechaInicio?: string | undefined;
   estado: EstadoUsuario;
 
   redSocial: RedSocialUsuario;
-  descripcion: string;
+  descripcion: string | null;
 
   contrasenia?: string | undefined;
-  confirmarContrasenia?: string | undefined;
 };
 
 /**

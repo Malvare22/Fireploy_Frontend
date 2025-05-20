@@ -11,5 +11,6 @@ export enum rutasMaterias {
   crearMateria = rutaBase + '/crear',
   editarMateria = rutaBase + '/editar/:idMateria',
   explorarCursos = rutaBase + '/explorar/:idMateria/cursos',
-  solicitudes = rutaBase + '/solicitudes'
+  solicitudes = rutaBase + '/solicitudes',
+  proyectosDeMisEstudiantes = rutaBase + '/proyectosEstudiantes'
 }

@@ -1,7 +1,6 @@
 import { RouteObject } from "react-router-dom";
 import VistaPerfil from "../pages/perfil";
 import ListarPortafolios from "../pages/explorarPortafolios";
-import Portafolio from "../components/portafolio";
 import ListarUsuarios from "../pages/listar";
 import GestionarPerfil from "../pages/admin/modificarPerfil";
 import CrearUsuario from "../pages/admin/crearUsuario";
@@ -9,6 +8,7 @@ import Logout from "@modules/general/pages/logout";
 import VistaSolicitudes from "../pages/solicitudes";
 import NewEntriesView from "../pages/newEntries";
 import NotificacionesView from "../pages/notificaciones";
+import PortafolioView from "../pages/portafolio";
 
 const rutaBase = "/app/usuarios";
 
@@ -50,7 +50,7 @@ export const routerUsuarios: RouteObject[] = [
   },
   {
     path: rutasUsuarios.portafolio,
-    element: <Portafolio/>
+    element: <PortafolioView/>
   },
   {
     path: rutasUsuarios.listarUsuarios,

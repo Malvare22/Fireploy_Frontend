@@ -1,11 +1,4 @@
-import {
-  Alert,
-  Grid2,
-  MenuItem,
-  Select,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Alert, Grid2, MenuItem, Select, Stack, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -50,7 +43,6 @@ import TextFieldSearch from "@modules/general/components/textFieldSearch";
  * ```
  */
 function ExplorarProyectos() {
-
   const [selectProyecto, setSelectProyecto] = useState<ProyectoCard | null>(null);
 
   const { handleClose: closeModal, handleOpen: openModal, open: modalOpen } = useModal();
@@ -68,10 +60,10 @@ function ExplorarProyectos() {
     return data.map((project) => adaptProjectToCard(adaptProject(project)));
   }, [data]);
 
-  const {filteredData, searchValue, setSearchValue} = useSearch();
+  const { filteredData, searchValue, setSearchValue } = useSearch();
 
-  function searchFn(x: ProyectoCard[], s: string){
-    return x.filter((y) => y.titulo.toLowerCase().includes(s.toLowerCase()))
+  function searchFn(x: ProyectoCard[], s: string) {
+    return x.filter((y) => y.titulo.toLowerCase().includes(s.toLowerCase()));
   }
 
   const renderData = useMemo(() => {
@@ -105,8 +97,11 @@ function ExplorarProyectos() {
 
         {/* Filtros */}
         <Stack direction={{ sm: "row", xs: "column" }} justifyContent="center" spacing={1}>
-          
-          <TextFieldSearch fullWidth sx={{width: {md: '70%', xs:'100%'}}} setSearchValue={setSearchValue}/>
+          <TextFieldSearch
+            fullWidth
+            sx={{ width: { md: "70%", xs: "100%" } }}
+            setSearchValue={setSearchValue}
+          />
           <Select
             size="small"
             sx={{ width: 250 }}
@@ -127,18 +122,6 @@ function ExplorarProyectos() {
             </MenuItem>
             <MenuItem value={JSON.stringify({ key: "titulo", order: "desc" })}>
               {labelSelects.alfabeticamenteMenor}
-            </MenuItem>
-            <MenuItem value={JSON.stringify({ key: "semestre", order: "asc" })}>
-              {labelSelects.semestreMayor}
-            </MenuItem>
-            <MenuItem value={JSON.stringify({ key: "semestre", order: "desc" })}>
-              {labelSelects.semestreMenor}
-            </MenuItem>
-            <MenuItem value={JSON.stringify({ key: "puntuacion", order: "asc" })}>
-              {labelSelects.puntuacionMayor}
-            </MenuItem>
-            <MenuItem value={JSON.stringify({ key: "puntuacion", order: "desc" })}>
-              {labelSelects.puntuacionMenor}
             </MenuItem>
           </Select>
         </Stack>
