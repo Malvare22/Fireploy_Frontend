@@ -175,7 +175,7 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard, idMateri
               </Grid2>
             </>
           ) : (
-            <Alert severity="info">Actualmente no hay cursos vinculados a esta sección</Alert>
+            <Alert severity="info">{"Actualmente no hay cursos vinculados a esta actividad"}</Alert>
           )}
         </Stack>
       )}

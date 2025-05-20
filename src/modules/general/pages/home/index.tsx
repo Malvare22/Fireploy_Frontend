@@ -74,7 +74,7 @@ export enum labelHome {
   educacionalTitle3 = "Aprendizaje centrado en la práctica",
   educacionalBody3 = "Convierte cada clase en una oportunidad de experimentar. Los alumnos aprenden creando, probando y desplegando sus propias apps.",
   educacionalTitle4 = "Control y seguimiento del progreso",
-  educacionalBody4 = "Sigue el avance de tus alumnos por curso, sección y proyecto. Visualiza quién ha completado qué y personaliza el ritmo de enseñanza.",
+  educacionalBody4 = "Sigue el avance de tus alumnos por curso, actividad y proyecto. Visualiza quién ha completado qué y personaliza el ritmo de enseñanza.",
 }
 
 /**

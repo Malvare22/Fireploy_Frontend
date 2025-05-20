@@ -46,7 +46,7 @@ import { rutasMaterias } from "@modules/materias/router/routes";
 function getNavigationElements(userInformation: AccountInformation): Navigation {
   return [
     {
-      title: "Portfolios",
+      title: "Portafolios",
       icon: <ContactMailIcon sx={{ fill: "white" }} />,
       children: [
         {

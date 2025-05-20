@@ -165,7 +165,7 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
       sortFunction: (rowA, rowB) => rowA.estado.localeCompare(rowB.estado),
     },
     {
-      name: "Social Networks",
+      name: "Redes Sociales",
       cell: (row) => {
         const redesSociales = showSocialNetworks(row.redSocial);
         if (redesSociales.length == 0)
@@ -181,16 +181,18 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
       },
     },
     {
-      name: "Actions",
+      name: "Acciones",
       cell: (row) => (
         <Stack direction={"row"}>
           <ActionButton
             mode={actionButtonTypes.ver}
             onClick={() =>
-              navigate(rutasUsuarios.modificarPerfil.replace(":id", row.id!!.toString()))
+              navigate(rutasUsuarios.portafolio.replace(":id", row.id.toString()))
             }
           />
-          <ActionButton mode={actionButtonTypes.editar} />
+          <ActionButton mode={actionButtonTypes.editar} onClick={() =>
+              navigate(rutasUsuarios.modificarPerfil.replace(":id", row.id.toString()))
+            }/>
           {row.estado == "A" ? (
             <ActionButton
               mode={actionButtonTypes.deshabilitarUsuario}
@@ -207,7 +209,7 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
         </Stack>
       ),
       ignoreRowClick: true,
-      style: { display: "flex", justifyContent: "center" },
+      center: true,
     },
   ];
 

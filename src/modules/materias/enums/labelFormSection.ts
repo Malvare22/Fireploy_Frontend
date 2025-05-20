@@ -1,3 +1,3 @@
 export enum labelFormSection{
-    editSection = 'Editar Sección'
+    editSection = 'Editar Actividad'
   }
