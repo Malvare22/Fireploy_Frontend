@@ -42,6 +42,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import { NotificationMessage } from "@modules/usuarios/types/notification";
 import { useNotificationContext } from "@modules/general/context/notificationContext";
 import { rutasMaterias } from "@modules/materias/router/routes";
+import SchoolIcon from '@mui/icons-material/School';
 
 function getNavigationElements(userInformation: AccountInformation): Navigation {
   return [
@@ -123,6 +124,15 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
                 icon: <LibraryBooksIcon sx={{ fill: "white" }} />,
                 segment: rutasMaterias.listarMisCursos as string,
               },
+              ...(userInformation.tipo == "D"
+                ? [
+                    {
+                      title: "Proyectos de estudiantes",
+                      icon: <SchoolIcon sx={{ fill: "white" }} />,
+                      segment: rutasMaterias.proyectosDeMisEstudiantes as string,
+                    },
+                  ]
+                : []),
             ],
           },
         ]
@@ -233,7 +243,7 @@ function ToolbarActions({
               Notificación
             </Typography>
             <Divider />
-            <Box sx={{ overflowY: "scroll", width: '100%', height: 400 }}>
+            <Box sx={{ overflowY: "scroll", width: "100%", height: 400 }}>
               {notificaciones.length > 0 ? (
                 notificaciones.slice(0, 5).map((notificacion) => (
                   <>

@@ -66,7 +66,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen})
   });
 
   return (
-    <Stack sx={{ padding: 1, width: "100%" }} justifyContent={"space-between"} component={Paper}>
+    <Stack sx={{ padding: 1, width: "100%", height: '100%' }} justifyContent={"space-between"} component={Paper}>
       <CardActionArea onClick={handleOpen} sx={{display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 1}}>
         <Box sx={{position: 'relative', width: 'inherit'}}>
           <Box

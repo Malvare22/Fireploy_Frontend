@@ -55,7 +55,6 @@ function ExplorarProyectos() {
     refetchOnWindowFocus: false,
   });
 
-
   const proyectos: ProyectoCard[] = useMemo(() => {
     if (!data) return [];
     return data.map((project) => adaptProjectToCard(adaptProject(project)));
@@ -123,18 +122,6 @@ function ExplorarProyectos() {
             </MenuItem>
             <MenuItem value={JSON.stringify({ key: "titulo", order: "desc" })}>
               {labelSelects.alfabeticamenteMenor}
-            </MenuItem>
-            <MenuItem value={JSON.stringify({ key: "semestre", order: "asc" })}>
-              {labelSelects.semestreMayor}
-            </MenuItem>
-            <MenuItem value={JSON.stringify({ key: "semestre", order: "desc" })}>
-              {labelSelects.semestreMenor}
-            </MenuItem>
-            <MenuItem value={JSON.stringify({ key: "puntuacion", order: "asc" })}>
-              {labelSelects.puntuacionMayor}
-            </MenuItem>
-            <MenuItem value={JSON.stringify({ key: "puntuacion", order: "desc" })}>
-              {labelSelects.puntuacionMenor}
             </MenuItem>
           </Select>
         </Stack>
