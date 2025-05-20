@@ -9,14 +9,14 @@ export type ProyectoCard = {
   id: number;
   titulo: string;
   descripcion: string;
-  imagen: string;
+  imagen: string | null;
   integrantes: UsuarioCurso[];
   frontend?: RepositoryForCard | undefined;
   backend?: RepositoryForCard | undefined;
   integrado?: RepositoryForCard | undefined;
   dataBase: string | null | undefined;
   fav_usuarios: number[];
-  materia: string;
+  materia: string | null;
   grupo: string;
   estado: EstadoEjecucionProyecto;
   url: string | null;
