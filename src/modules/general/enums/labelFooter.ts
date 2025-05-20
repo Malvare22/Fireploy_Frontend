@@ -8,5 +8,6 @@ export enum LabelFooter {
     linkedin = "Linkedin",
     facebook = "Facebook",
     terminosLegales = "Términos Legales",
-    licencia = "El contenido de este sitio está licenciado bajo la licencia Creative Commons Attribution-ShareAlike 4.0."
+    licencia = "El contenido de este sitio está licenciado bajo la licencia MIT",
+    otros = 'Los logotipos de las tecnologías y su descripción fueron tomados directamente de los sitios oficiales del fabricante. Tanto para los logotipos, como para la descripción y las tecnologías, en lo que respecta a Firedeploy, se usan únicamente con propósitos educativos y sin ningún interés comercial'
   }

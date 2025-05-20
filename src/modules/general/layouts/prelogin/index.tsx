@@ -31,7 +31,7 @@ function LayoutPrelogin() {
           display: "flex",
           justifyContent: "center",
           alignItems: 'center',
-          "> div": { width: "100%", paddingY: 3 },
+          "> div": { width: "100%", paddingY: 3, paddingBottom: 10 },
           minHeight: "100vh",
           paddingTop: '10vh',
           overflow: "hidden",

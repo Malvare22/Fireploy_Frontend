@@ -42,7 +42,7 @@ function Footer(): JSX.Element {
             <Typography variant="h5">{LabelFooter.fireploy}</Typography>
           </Box>
           <Box>
-            <Typography variant="body1">®</Typography>
+            <Typography variant="body1">™</Typography>
           </Box>
         </Box>
 
