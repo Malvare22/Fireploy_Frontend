@@ -9,7 +9,7 @@ export type ProyectoCard = {
   id: number;
   titulo: string;
   descripcion: string;
-  imagen: string | null;
+  imagen: string;
   integrantes: UsuarioCurso[];
   frontend?: RepositoryForCard | undefined;
   backend?: RepositoryForCard | undefined;
