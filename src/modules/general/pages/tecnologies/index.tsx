@@ -168,7 +168,7 @@ function Carousel() {
               key={idx}
               component="img"
               src={img[1]}
-              sx={{ height: { md: 70, xs: 40 }, objectFit: "contain" }}
+              sx={{ height: { md: 60, xs: 40 }, objectFit: "contain" }}
             />
           ))}
         </Box>

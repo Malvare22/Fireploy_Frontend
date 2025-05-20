@@ -6,7 +6,6 @@ import { useNavigate } from "react-router";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { useAuth } from "@modules/general/context/accountContext";
 import { rutasGeneral } from "@modules/general/router/routes";
-import { Usuario } from "@modules/usuarios/types/usuario";
 
 
 type ProjectCardMembersProps = {

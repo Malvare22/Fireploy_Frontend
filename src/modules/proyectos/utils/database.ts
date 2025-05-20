@@ -13,7 +13,7 @@ import { getImage } from "@modules/general/utils/getImage";
 export const getDataBaseTypesMap: Map<BaseDeDatos["tipo"], string> = new Map([
   ["S", "SQL"],
   ["N", "MongoDB"],
-  ["E", "No Seleccionado"],
+  ["E", "Sin base de datos"],
 ]);
 
 /**
@@ -27,7 +27,7 @@ export const getDataBaseTypesMap: Map<BaseDeDatos["tipo"], string> = new Map([
 export const getDataBaseTypesArray: [BaseDeDatos["tipo"], string][] = [
   ["S", "SQL"],
   ["N", "MongoDB"],
-  ["E", "No Seleccionado"],
+  ["E", "Sin base de datos"],
 ];
 
 /**

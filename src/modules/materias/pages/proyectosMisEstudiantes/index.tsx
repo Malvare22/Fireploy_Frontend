@@ -112,7 +112,9 @@ function VistaProyectosDeMisEstudiantes() {
 
   function searchFn(x: ProyectoCard[], s: string) {
     const _s = s.toLowerCase();
-    return x.filter((p) => p.titulo.toLowerCase().includes(_s));
+    return x.filter((p) => {
+      p.titulo.toLowerCase().includes(_s);
+    });
   }
 
   const { setSearchValue, searchValue, filteredData } = useSearch();

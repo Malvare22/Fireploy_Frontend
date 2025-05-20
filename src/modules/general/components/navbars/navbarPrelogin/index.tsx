@@ -20,8 +20,8 @@ export enum labelsNavbarPrelogin {
   signUp = "Iniciar Sesión",
   register = "Registrarse",
   technologies = "Tecnologías",
-  portafolios = 'Portafolios',
-  proyectos = 'Proyectos'
+  portafolios = "Portafolios",
+  proyectos = "Proyectos",
 }
 
 /**
@@ -74,35 +74,17 @@ function NavbarPrelogin(): JSX.Element {
 
   const matches = useMediaQuery(theme.breakpoints.down("md"));
 
-  function Title() {
-    return (
-      <Stack direction={"row"} alignItems={"center"} spacing={1}>
-        <Typography
-          variant="h5"
-          noWrap
-          component="a"
-          href="#app-bar-with-responsive-menu"
-          sx={{
-            mr: 2,
-            fontFamily: "monospace",
-            fontWeight: 700,
-            color: "inherit",
-            textDecoration: "none",
-          }}
-        >
-          FIREPLOY
-        </Typography>
-        <RocketLaunchIcon sx={{ fontSize: 32 }} />
-      </Stack>
-    );
-  }
-
   return (
     <AppBar
       position="fixed"
       component={Paper}
       variant="dark"
-      sx={{ boxShadow: "none", borderBottom: "1px solid rgba(0, 0, 0, 0.1)",backgroundColor: theme.palette.secondary.main, height: '10vh'}}
+      sx={{
+        boxShadow: "none",
+        borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
+        backgroundColor: theme.palette.secondary.main,
+        height: "10vh",
+      }}
     >
       <Container maxWidth="xl" sx={{ color: "white" }}>
         <Toolbar disableGutters sx={{ justifyContent: { md: "space-between", xs: "center" } }}>
@@ -157,7 +139,24 @@ function NavbarPrelogin(): JSX.Element {
           </Box>
 
           <Stack direction={"row"} spacing={3}>
-            <Title />
+            <Button onClick={() => navigate(rutasGeneral.home)}>
+              <Typography
+                variant="h5"
+                noWrap
+                component="a"
+                href="#app-bar-with-responsive-menu"
+                sx={{
+                  fontFamily: "monospace",
+                  fontWeight: 700,
+                  color: "inherit",
+                  textDecoration: "none",
+                  marginRight: 0.5,
+                }}
+              >
+                FIREPLOY
+              </Typography>
+              <RocketLaunchIcon sx={{ fontSize: 32 }} />
+            </Button>{" "}
             <>
               {!matches &&
                 pages.map(([text, link]) => (
@@ -168,7 +167,6 @@ function NavbarPrelogin(): JSX.Element {
                       my: 2,
                       display: "block",
                       minWidth: 100,
-                      
                     }}
                     size="small"
                   >

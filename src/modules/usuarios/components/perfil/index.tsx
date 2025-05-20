@@ -66,16 +66,16 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
   const [id, setId] = useState<number | undefined>(undefined);
 
   const { register, handleSubmit, formState, getValues, control, watch, setValue } =
-    useForm<Usuario>({
+    useForm<UsuarioSchema>({
       resolver: zodResolver(UsuarioSchema),
       defaultValues: type == "crear" ? usuarioTemplate : usuario,
     });
 
   async function handleGetQuery() {
     if (type == "crear") {
-      return postCreateUsuarioService(token, getValues());
+      return postCreateUsuarioService(token, getValues() as Usuario);
     } else {
-      return postChangeUsuarioService(getValues().id!!, token, getValues());
+      return postChangeUsuarioService(getValues().id!!, token, getValues() as Usuario);
     }
   }
 

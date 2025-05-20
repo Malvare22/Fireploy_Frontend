@@ -120,7 +120,7 @@ function ReestablecerContrasenia() {
 
             {/* Current password input */}
             <TextFieldPassword
-              label="Contraseña actual"
+              label="Contraseña nueva"
               type="password"
               error={!!errors.contrasenia}
               helperText={errors.contrasenia?.message}
@@ -130,7 +130,7 @@ function ReestablecerContrasenia() {
 
             {/* New password input */}
             <TextFieldPassword
-              label="Nueva contraseña"
+              label="Confirmar nueva contraseña"
               type="password"
               error={!!errors.nuevaContrasenia}
               helperText={errors.nuevaContrasenia?.message}

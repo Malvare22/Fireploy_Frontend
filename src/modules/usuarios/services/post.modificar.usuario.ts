@@ -47,7 +47,7 @@ export const postChangeUsuarioService = async (id: number, token: string, user: 
     apellido: user.apellidos ?? '',
     fecha_nacimiento: user.fechaDeNacimiento, // Formato ISO (YYYY-MM-DD)
     sexo: user.sexo, // Si hay más opciones, puedes usar string
-    descripcion: user.descripcion,
+    descripcion: user.descripcion ?? '',
     foto_perfil: user.fotoDePerfil,
     red_social:
       typeof user.redSocial === "object" ? JSON.stringify(user.redSocial) : user.redSocial,

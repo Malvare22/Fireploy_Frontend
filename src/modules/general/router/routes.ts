@@ -20,7 +20,7 @@ export enum rutasGeneral {
   login = rutaBase + "login",
   recuperar = rutaBase + "recuperar",
   registrar = rutaBase + "registrar",
-  cambiarContrasenia = rutaBase + "reset-password/:token",
+  cambiarContrasenia = rutaBase + "reset-password",
   developTeam = rutaBase + "developTeam",
   tecnologias = rutaBase + "tecnologias",
   detectAnomaly = rutaBase + "detectAnomaly",

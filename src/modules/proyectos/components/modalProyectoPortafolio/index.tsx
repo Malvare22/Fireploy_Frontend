@@ -26,6 +26,8 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { openInNewTab } from "@modules/general/utils/openTab";
 import { VARIABLES_LOCAL_STORAGE } from "@modules/general/enums/variablesLocalStorage";
 import { useAuth } from "@modules/general/context/accountContext";
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+
 
 export enum labelModalProject {
   noQualify = "Actualmente este proyecto no se encuentra calificado",
@@ -94,11 +96,15 @@ export function CardProjectModal({ project }: CardProjectModalProps) {
           size={{ md: 6, xs: 12 }}
           sx={{ display: "flex", justifyContent: "center", border: "1px solid black" }}
         >
-          <Box
+         {project.imagen ?  <Box
             component={"img"}
             src={project.imagen}
             sx={{ objectFit: "contain", width: "100%" }}
-          />
+          />: <Box
+              sx={{ width: "100%", height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: theme.palette.primary.main}}
+            >
+              <RocketLaunchIcon sx={{fontSize: 96, color: 'white'}}/>
+            </Box>}
         </Grid2>
         <Grid2
           size={{ md: 6, xs: 12 }}

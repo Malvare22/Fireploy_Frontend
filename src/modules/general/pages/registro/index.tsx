@@ -44,7 +44,7 @@ function Registrar() {
     handleSubmit,
     formState: { errors },
     getValues,
-  } = useForm<Usuario>({
+  } = useForm<UsuarioSchema>({
     resolver: zodResolver(UsuarioSchema),
     defaultValues: usuarioTemplate,
   });
@@ -79,7 +79,7 @@ function Registrar() {
    */
   const { mutate, isPending } = useMutation({
     mutationKey: ["Register Student"],
-    mutationFn: () => postCreateUsuarioService("", getValues()),
+    mutationFn: () => postCreateUsuarioService("", getValues() as Usuario),
     onSuccess: () =>
       showDialog({
         message: "Usuario Creado Correctamente",

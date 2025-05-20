@@ -4,9 +4,9 @@ import { useNavigate } from "react-router";
 import { rutasProyectos } from "@modules/proyectos/router";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { ExecutionState } from "../executionState";
-import { getImage } from "@modules/general/utils/getImage";
 import { TechnologyTags } from "../showTags";
 import { getDataBaseTypesMap } from "@modules/proyectos/utils/database";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 
 interface Props {
   proyecto: Proyecto;
@@ -46,16 +46,32 @@ const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
         position: "relative",
       }}
     >
-      <Box
-        component={"img"}
-        src={proyecto.imagen ?? getImage["not_found"].ruta}
-        sx={{
-          border: "rgb(0,0,0,0.2) 1px solid",
-          width: "100%",
-          height: "250px", // 🔧 Altura fija
-          objectFit: "cover", // 🔧 Mejor apariencia con recorte
-        }}
-      />
+      {proyecto.imagen ? (
+        <Box
+          component={"img"}
+          src={proyecto.imagen}
+          sx={{
+            border: "rgb(0,0,0,0.2) 1px solid",
+            width: "100%",
+            height: "250px", // 🔧 Altura fija
+            objectFit: "cover", // 🔧 Mejor apariencia con recorte
+          }}
+        />
+      ) : (
+        <Box
+          sx={{
+            width: "100%",
+            height: "250px",
+            display: "flex",
+            alignItems: "center",
+            borderRadius: 1,
+            justifyContent: "center",
+            backgroundColor: theme.palette.primary.main,
+          }}
+        >
+          <RocketLaunchIcon sx={{ fontSize: 96, color: "white" }} />
+        </Box>
+      )}
 
       <Box
         sx={{
@@ -78,6 +94,7 @@ const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
         <TechnologyTags
           backend={proyecto.backend?.informacion?.framework ?? undefined}
           frontend={proyecto.frontend?.informacion?.framework ?? undefined}
+          integrado={proyecto.integrado?.informacion?.framework ?? undefined}
           dataBase={getDataBaseTypesMap.get(proyecto.baseDeDatos?.tipo ?? "E")}
         />
       </Stack>

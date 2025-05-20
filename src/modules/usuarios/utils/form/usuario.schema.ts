@@ -120,17 +120,17 @@ export const CorreoSchema = z.object({ correo: correoSchema });
  * Full Zod schema for validating a complete Usuario object.
  * Includes validations for fields, conditional logic, and password matching.
  */
-export const UsuarioSchema: z.ZodType<Omit<Usuario, 'redSocial'>> = z
+export const UsuarioSchema: z.ZodType<Omit<Usuario & { confirmarContrasenia?: string | undefined }, 'redSocial'>> = z
   .object({
-    id: z.number().optional(),
+    id: z.number(),
     correo: correoSchema,
     nombres: nombresSchema,
-    apellidos: apellidosSchema.optional(),
+    apellidos: apellidosSchema,
     fechaDeNacimiento: fechaSchema,
     estFechaInicio: z.string().optional(),
     estado: estadoUsuarioSchema,
     sexo: sexoUsuarioSchema,
-    tipo: tiposUsuarioSchema.optional(),
+    tipo: tiposUsuarioSchema,
     descripcion: descripcionSchema,
     fotoDePerfil: fotoDePerfilSchema,
     contrasenia: contraseniaSchema.optional(),
@@ -168,7 +168,7 @@ export type UsuarioSchema = z.infer<typeof UsuarioSchema>;
 /**
  * Default template object for creating a new Usuario instance.
  */
-export const usuarioTemplate: Usuario = {
+export const usuarioTemplate: Usuario & { confirmarContrasenia?: string | undefined } = {
   id: 1,
   nombres: "",
   apellidos: "",
@@ -196,4 +196,4 @@ export const PortafolioSchema: z.ZodType<Pick<Usuario, 'descripcion' | 'redSocia
   descripcion: descripcionSchema
 })
 
-export type PortafolioSchema= z.infer<typeof PortafolioSchema>;
+export type PortafolioSchema = z.infer<typeof PortafolioSchema>;

@@ -7,7 +7,6 @@ import { removeImageBuffer } from "@modules/general/utils/removeImageBuffer";
 import { UsuarioCurso } from "@modules/materias/types/curso";
 import { EstadoUsuario } from "@modules/usuarios/types/usuario";
 import { isTechnologyKey, TECNOLOGIES } from "./technologies";
-import { getImage } from "@modules/general/utils/getImage";
 import { KeysOfRepository } from "../types/keysOfRepository";
 
 // /**
@@ -43,7 +42,7 @@ export function adaptProjectToCard(proyecto: Proyecto): ProyectoCard {
     id: proyecto.id || 0,
     titulo: proyecto.titulo,
     descripcion: proyecto.descripcion ?? "",
-    imagen: proyecto.imagen ? proyecto.imagen : getImage["defaultProjectImage"].ruta,
+    imagen: !proyecto.imagen || proyecto.imagen.trim().length == 0 ? null : proyecto.imagen,
     integrantes: integrantes,
     frontend: getRepository("frontend"),
     backend: getRepository("backend"),
