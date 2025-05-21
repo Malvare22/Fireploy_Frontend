@@ -97,8 +97,8 @@ export function Repositories({ type }: Props) {
     title,
     message,
     type: dialogType,
-    setOpen,
     setIsLoading,
+    handleCancel
   } = useAlertDialog2();
 
   const { setError } = useErrorReader(showDialog);
@@ -108,6 +108,9 @@ export function Repositories({ type }: Props) {
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       let fetchProject = await getProjectById(token, getValuesProject("id") ?? -1);
+      let front = false;
+      let back = false;
+      let inte = false;
       setIsLoading(true);
       if (type == "create" || (executionState && fetchProject &&  fetchProject.estado_ejecucion == executionState)) {
         if (filesRepo.backend != null) {
@@ -116,6 +119,7 @@ export function Repositories({ type }: Props) {
             filesRepo.backend,
             getValuesProject("backend.id") ?? -1
           );
+          back = true;
         }
         if (filesRepo.frontend != null) {
           await postFileToRepository(
@@ -123,6 +127,7 @@ export function Repositories({ type }: Props) {
             filesRepo.frontend,
             getValuesProject("frontend.id") ?? -1
           );
+          front = true;
         }
         if (filesRepo.integrado != null) {
           await postFileToRepository(
@@ -130,6 +135,7 @@ export function Repositories({ type }: Props) {
             filesRepo.integrado,
             getValuesProject("integrado.id") ?? -1
           );
+          inte = true;
         }
 
         const { frontend, backend, integrado } = adaptProject(
@@ -138,15 +144,15 @@ export function Repositories({ type }: Props) {
 
         const myData = getValues();
 
-        if (myData.frontend) {
+        if (myData.frontend && front) {
           myData.frontend.url = frontend?.url ?? "";
         }
 
-        if (myData.backend) {
+        if (myData.backend && back) {
           myData.backend.url = backend?.url ?? "";
         }
 
-        if (myData.integrado) {
+        if (myData.integrado && inte) {
           myData.integrado.url = integrado?.url ?? "";
         }
 
@@ -156,25 +162,7 @@ export function Repositories({ type }: Props) {
       }
 
       syncErrorProject();
-    },
-    onSuccess: () => {
-      if (type === "create") {
-        handleNext();
-      } else {
-        showDialog({
-          message: "Repositorios actualizados correctamente",
-          type: "success",
-          title: "Éxito",
-          onAccept: () => {
-            setOpen(false);
-          },
-          reload: true,
-        });
-      }
-    },
-    onError: (error) => {
-      setError(error);
-    },
+    }
   });
 
   type FilesRepo = Record<KeysOfRepository, File | null>;
@@ -232,7 +220,7 @@ export function Repositories({ type }: Props) {
             type: "success",
             title: "Éxito",
             onAccept: () => {
-              setOpen(false);
+              handleClose;
             },
             reload: true,
           });
@@ -268,7 +256,7 @@ export function Repositories({ type }: Props) {
         isLoading={isLoading}
         type={dialogType}
         handleAccept={handleAccept}
-        handleCancel={handleClose}
+        handleCancel={handleCancel}
       />
       <FormProvider {...methods}>
         <AutoFocusOnError<ProyectoRepositoriesSchema> />

@@ -42,7 +42,7 @@ export const RepositorioSchema: z.ZodType<Repositorio> = z
     (data) => {
       if (!data.file) {
         const urlCheck = UrlSchema.safeParse(data.url);
-        return urlCheck;
+        return urlCheck.success;
       }
       else return true;
     },
