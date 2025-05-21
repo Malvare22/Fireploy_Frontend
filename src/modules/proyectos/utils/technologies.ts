@@ -29,6 +29,9 @@ export enum TECNOLOGIES {
   Springboot = "SpringBoot",
   Expressjs = "ExpressJS",
   Symfony = "Symfony",
+  Html = 'HTML',
+  Python = 'Python',
+  Django = 'Django'
 }
 
 /**
@@ -36,7 +39,7 @@ export enum TECNOLOGIES {
  *
  * This array defines a subset of technologies that are currently supported or being used in the project.
  */
-export const keyOfTechnologies = [TECNOLOGIES.Java, TECNOLOGIES.Nodejs, TECNOLOGIES.Php] as const;
+export const keyOfTechnologies = [TECNOLOGIES.Java, TECNOLOGIES.Nodejs, TECNOLOGIES.Php, TECNOLOGIES.Html, TECNOLOGIES.Python] as const;
 
 export const keyOfTechnologiesForAlert: string[] = [TECNOLOGIES.React] as const;
 
@@ -61,6 +64,16 @@ export const inputSelectFramework: Record<(typeof keyOfTechnologies)[number], Se
       TECNOLOGIES.Angular,
     ],
   },
+  HTML: {
+    frameworks: [
+      TECNOLOGIES.Html
+    ]
+  },
+  Python: {
+    frameworks: [
+      TECNOLOGIES.Django
+    ]
+  }
 } as const;
 
 export const getFrameworkEnvAlert: Record<

@@ -1,14 +1,29 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
-import DoDisturbAltIcon from "@mui/icons-material/DoDisturbAlt";
-import { labelErrorPage } from "@modules/general/enums/labelErrorPage";
+import { Box, Button, Grid2, Typography } from "@mui/material";
+
 import { useNavigate } from "react-router";
+import { getImage } from "@modules/general/utils/getImage";
+import { rutasGeneral } from "@modules/general/router/routes";
 
 /**
- * Represents the error page displayed when a route is not found or an error occurs.
- * It includes an icon, a title, a descriptive paragraph, and a button to return to the home page.
- *
+ * ErrorPage component – a user-friendly error screen for unknown or invalid routes.
+ * 
+ * This component displays a 404 message with a playful theme and provides a button
+ * that redirects users back to the home page. It includes text content and an illustrative image.
+ * 
  * @component
+ * 
+ * @returns Returns a JSX element that renders a responsive 404 error page with
+ * informative text, a call-to-action button, and an image.
+ * 
+ * @example
+ * ```tsx
+ * <ErrorPage />
+ * ```
+ */
+
+/**
+ * Handles the click event of the "Regresar" button.
+ * Navigates the user back to the home page defined in the routing module.
  */
 function ErrorPage() {
   const navigate = useNavigate();
@@ -18,47 +33,32 @@ function ErrorPage() {
    * Redirects the user to the home page.
    */
   function handleButton() {
-    navigate("/");
+    navigate(rutasGeneral.home);
   }
 
   return (
-    <Stack sx={{ height: "80vh" }} spacing={3}>
-      {/* Icon section with layered symbols */}
-      <Box
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-        position={"relative"}
+    <Grid2 container>
+      <Grid2
+        size={{ md: 6, xs: 12 }}
+        sx={{ display: "flex", flexDirection: "column", gap: 4, justifyContent: "center" }}
       >
-        <DoDisturbAltIcon
-          sx={{ fontSize: 120, position: "absolute" }}
-          color="error"
-        />
-        <RocketLaunchIcon sx={{ fontSize: 72 }} />
-      </Box>
-
-      {/* Title of the error page */}
-      <Typography textAlign={"center"} variant="h2" fontWeight={"500"}>
-        {labelErrorPage.titulo}
-      </Typography>
-
-      {/* Description or explanation of the error */}
-      <Typography textAlign={"center"} variant="h6">
-        {labelErrorPage.parrafo}
-      </Typography>
-
-      {/* Button to return to the home page */}
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Button
-          onClick={handleButton}
-          variant="contained"
-          color="warning"
-          sx={{ color: "white" }}
-        >
-          {labelErrorPage.volverAlInicio}
+        <Typography sx={{ fontSize: 100 }}>{"404"}</Typography>
+        <Typography variant="h3">{"Can you hear me, Major Tom?"}</Typography>
+        <Typography variant="h4">
+          {"Parece que te encuentras flotando entre rutas inexistentes, ¡regresa a orbita!"}
+        </Typography>
+        <Button sx={{ fontSize: 24 }} variant="contained" onClick={handleButton}>
+          {"Regresar"}
         </Button>
-      </Box>
-    </Stack>
+      </Grid2>
+      <Grid2 size={{ md: 6, xs: 12 }} sx={{ display: "flex", alignItems: "end" }}>
+        <Box
+          component={"img"}
+          sx={{ width: "100%", marginBottom: -6 }}
+          src={getImage["not_found_404"].ruta}
+        />
+      </Grid2>
+    </Grid2>
   );
 }
 

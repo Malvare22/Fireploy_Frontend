@@ -30,6 +30,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import { useNavigate } from "react-router";
 import { rutasGeneral } from "@modules/general/router/routes";
+import { openInNewTab } from "@modules/general/utils/openTab";
 
 export enum labelHome {
   princialContent = "Despliega tus aplicativos web de manera automática",
@@ -89,7 +90,7 @@ export default function Home() {
   const theme = useTheme();
   return (
     <Box>
-      <Box sx={{ paddingX: { md: 4, xs: 2 }, height: "80vh" }}>
+      <Box sx={{ paddingX: { md: 4, xs: 2 }, minHeight: "90vh" }}>
         <Principal />
       </Box>
       <Stack sx={{ backgroundColor: theme.palette.background.default }}>
@@ -111,11 +112,13 @@ function Principal() {
   // const navigate = useNavigate();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
 
+  const navigate = useNavigate();
+
   return (
     <>
       <Grid2 container sx={{ display: "flex", alignItems: "center" }}>
-        <Grid2 size={{ md: 5, xs: 12 }}>
-          <Stack sx={{ height: "100%" }} spacing={8}>
+        <Grid2 size={{ lg: 5, xs: 12 }}>
+          <Stack sx={{ height: "100%" }} spacing={{ md: 8, xs: 4 }}>
             <Typography variant="h2" sx={{ fontWeight: "440", color: "white" }} color="secondary">
               {labelHome.princialContent}
             </Typography>
@@ -131,6 +134,7 @@ function Principal() {
                   size={!matches ? "medium" : "large"}
                   endIcon={<GitHubIcon />}
                   sx={{ borderRadius: 2, backgroundColor: "rgb(64, 56, 56)" }}
+                  onClick={() => openInNewTab("https://github.com/Fireploy")}
                 >
                   {labelHome.github}
                 </Button>
@@ -141,25 +145,36 @@ function Principal() {
                   size={!matches ? "medium" : "large"}
                   endIcon={<DescriptionIcon />}
                   sx={{ borderRadius: 2, backgroundColor: "rgb(64, 56, 56)" }}
+                  onClick={() => openInNewTab("http://fireploy.online:3001/docs/introduccion")}
                 >
                   {labelHome.docs}
                 </Button>
               </Box>
               <Box>
-                <Button variant="contained" size={!matches ? "medium" : "large"}>
+                <Button
+                  variant="contained"
+                  size={!matches ? "medium" : "large"}
+                  onClick={() => navigate(rutasGeneral.login)}
+                >
                   {labelHome.principalButton}
                 </Button>
               </Box>
             </Stack>
           </Stack>
         </Grid2>
-        {matches && (
-          <Grid2 size={{ md: 7, xs: 12 }}>
+        {
+          <Grid2
+            size={{ lg: 7, xs: 12 }}
+            sx={{
+              height: { xs: 400, sm: 400, md: "auto" },
+              marginTop: { xs: -16, sm: -10, md: 0 },
+            }}
+          >
             <Box>
               <PrincipalAnimation />
             </Box>
           </Grid2>
-        )}
+        }
       </Grid2>
     </>
   );
@@ -191,21 +206,23 @@ function PrincipalAnimation() {
             rotate(${angle}deg)
             translate(${radius})
           `,
-          transformOrigin: "0 0",
         }}
       />
     );
   });
 
   return (
-    <Box>
+    <Box className={styles.templateWrapper}>
       <Box className={styles.container}>
         <Box className={styles.containerRaysWrapper}>
           <Box className={styles.containerRays}>{rays}</Box>
         </Box>
         <Box className={styles.sun} />
         <Box className={styles.iconContainer}>
-          <RocketLaunchIcon sx={{ width: "70%", height: "70%" }} className={styles.icon} />
+          <RocketLaunchIcon
+            sx={{ width: "70%", height: "70%", color: "white" }}
+            className={styles.icon}
+          />
         </Box>
         <Box>
           <DatabaseFillGearIcon sx={sxIcons} className={styles.iconElement} />
@@ -213,24 +230,22 @@ function PrincipalAnimation() {
           <PaletteIcon sx={sxIcons} className={styles.iconElement} />
           <PersonLinesFillIcon sx={sxIcons} className={styles.iconElement} />
         </Box>
-        <Box
-          height="100%"
-          width="100%"
-          sx={{ line: { stroke: theme.palette.primary.main, strokeWidth: 0.5 } }}
-        >
-          <svg
-            className={styles.containerLines}
-            height="100%"
-            width="100%"
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-          >
-            <line x1="50" y1="50" x2="10" y2="15" />
-            <line x1="50" y1="50" x2="10" y2="85" />
-            <line x1="50" y1="50" x2="90" y2="15" />
-            <line x1="50" y1="50" x2="90" y2="85" />
+        <div>
+          <svg className={styles.containerLines} height="100%" width="100%">
+            <line x1="150" y1="120" x2="300" y2="120" stroke="#1976d2" />
+            <line x1="300" y1="120" x2="300" y2="200" stroke="#1976d2" />
+            <line x1="300" y1="200" x2="500" y2="200" stroke="#1976d2" />
+            <line x1="500" y1="200" x2="700" y2="200" stroke="#1976d2" />
+            <line x1="700" y1="200" x2="700" y2="120" stroke="#1976d2" />
+            <line x1="700" y1="120" x2="800" y2="120" stroke="#1976d2" />
+            <line x1="300" y1="280" x2="500" y2="280" stroke="#1976d2" />
+            <line x1="300" y1="280" x2="300" y2="360" stroke="#1976d2" />
+            <line x1="300" y1="360" x2="140" y2="360" stroke="#1976d2" />
+            <line x1="500" y1="280" x2="700" y2="280" stroke="#1976d2" />
+            <line x1="700" y1="280" x2="700" y2="360" stroke="#1976d2" />
+            <line x1="700" y1="360" x2="820" y2="360" stroke="#1976d2" />
           </svg>
-        </Box>
+        </div>
       </Box>
     </Box>
   );
