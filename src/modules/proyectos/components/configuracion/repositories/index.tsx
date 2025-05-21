@@ -43,6 +43,7 @@ import HiddenButton from "@modules/materias/components/hiddenInput";
 import { KeysOfRepository } from "@modules/proyectos/types/keysOfRepository";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { GitlabIcon } from "@modules/general/components/customIcons";
+import { adaptProject } from "@modules/proyectos/utils/adapt.proyecto";
 
 type Props = {
   type: "edit" | "create";
@@ -106,13 +107,9 @@ export function Repositories({ type }: Props) {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
-      const currentStatus = await getProjectById(token, getValuesProject("id") ?? -1);
+      let fetchProject = await getProjectById(token, getValuesProject("id") ?? -1);
       setIsLoading(true);
-      if (
-        type == "create" ||
-        (executionState && currentStatus.estado_ejecucion == executionState)
-      ) {
-        await patchEditRepository(token, getValues());
+      if (type == "create" || (executionState && fetchProject.estado_ejecucion == executionState)) {
         if (filesRepo.backend != null) {
           await postFileToRepository(
             token,
@@ -134,6 +131,26 @@ export function Repositories({ type }: Props) {
             getValuesProject("integrado.id") ?? -1
           );
         }
+
+        const { frontend, backend, integrado } = adaptProject(
+          await getProjectById(token, getValuesProject("id") ?? -1)
+        );
+
+        const myData = getValues();
+
+        if (myData.frontend) {
+          myData.frontend.url = frontend?.url ?? "";
+        }
+
+        if (myData.backend) {
+          myData.backend.url = backend?.url ?? "";
+        }
+
+        if (myData.integrado) {
+          myData.integrado.url = integrado?.url ?? "";
+        }
+
+        await patchEditRepository(token, myData);
 
         return;
       }

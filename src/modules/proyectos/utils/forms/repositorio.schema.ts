@@ -40,7 +40,6 @@ export const RepositorioSchema: z.ZodType<Repositorio> = z
   })
   .refine(
     (data) => {
-      console.log(data.file)
       if (!data.file) {
         const urlCheck = UrlSchema.safeParse(data.url);
         return urlCheck;
