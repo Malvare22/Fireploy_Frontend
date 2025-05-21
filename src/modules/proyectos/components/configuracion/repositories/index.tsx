@@ -97,8 +97,8 @@ export function Repositories({ type }: Props) {
     title,
     message,
     type: dialogType,
-    setOpen,
     setIsLoading,
+    handleCancel
   } = useAlertDialog2();
 
   const { setError } = useErrorReader(showDialog);
@@ -162,25 +162,7 @@ export function Repositories({ type }: Props) {
       }
 
       syncErrorProject();
-    },
-    onSuccess: () => {
-      if (type === "create") {
-        handleNext();
-      } else {
-        showDialog({
-          message: "Repositorios actualizados correctamente",
-          type: "success",
-          title: "Éxito",
-          onAccept: () => {
-            setOpen(false);
-          },
-          reload: true,
-        });
-      }
-    },
-    onError: (error) => {
-      setError(error);
-    },
+    }
   });
 
   type FilesRepo = Record<KeysOfRepository, File | null>;
@@ -238,7 +220,7 @@ export function Repositories({ type }: Props) {
             type: "success",
             title: "Éxito",
             onAccept: () => {
-              setOpen(false);
+              handleClose;
             },
             reload: true,
           });
@@ -274,7 +256,7 @@ export function Repositories({ type }: Props) {
         isLoading={isLoading}
         type={dialogType}
         handleAccept={handleAccept}
-        handleCancel={handleClose}
+        handleCancel={handleCancel}
       />
       <FormProvider {...methods}>
         <AutoFocusOnError<ProyectoRepositoriesSchema> />
