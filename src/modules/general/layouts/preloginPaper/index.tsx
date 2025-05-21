@@ -7,7 +7,7 @@ function LayoutPreLoginPaper() {
   return (
     <>
       <NavbarPrelogin />
-      <Paper sx={{ border: "1px solid white", paddingY: "14vh", minHeight: '86vh', paddingX: { md: 10, xs: 2 } }}>
+      <Paper sx={{ border: "1px solid white", paddingTop: "10vh", minHeight: '90vh', paddingX: { md: 10, xs: 2 } }}>
         {<Outlet />}
       </Paper>
       <Footer />

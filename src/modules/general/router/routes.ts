@@ -23,8 +23,8 @@ export enum rutasGeneral {
   cambiarContrasenia = rutaBase + "reset-password",
   developTeam = rutaBase + "developTeam",
   tecnologias = rutaBase + "tecnologias",
-  detectAnomaly = rutaBase + "detectAnomaly",
+  detectAnomaly = rutaBase + "404_not_found",
   explorarPortafolios = rutaBase + "portafolios",
   portafolioPorUsuario = rutaBase + "portafolios/:id",
-   explorarProyectos = rutaBase + "proyectos",
+  explorarProyectos = rutaBase + "proyectos",
 }

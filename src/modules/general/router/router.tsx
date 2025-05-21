@@ -64,17 +64,8 @@ export const routerGeneral: RouteObject = {
       path: rutasGeneral.tecnologias,
       element: <TecnologiesView />,
     },
-    {
-      path: rutasGeneral.detectAnomaly,
-      element: <ErrorPage />,
-    },
-    {
-      path: "*",
-      element: <ErrorPage />,
-    },
   ],
 };
-
 
 export const routerGeneralPaper: RouteObject = {
   path: "/",
@@ -92,7 +83,14 @@ export const routerGeneralPaper: RouteObject = {
       path: rutasGeneral.explorarProyectos,
       element: <ExplorarProyectos />,
     },
-
+    {
+      path: rutasGeneral.detectAnomaly,
+      element: <ErrorPage />,
+    },
+    {
+      path: "*",
+      element: <ErrorPage />,
+    },
   ],
 };
 

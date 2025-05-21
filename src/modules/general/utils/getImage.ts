@@ -39,6 +39,8 @@ import portafolio_home from "@modules/general/assets/home/portafolioHome.png";
 
 import not_found from "@modules/general/assets/generic/image-not-found.png";
 
+import not_found_404 from "@modules/general/assets/404.png";
+
 /**
  * **Collection of imported images.**
  *
@@ -93,6 +95,7 @@ export const assetImages = {
   portafolio_home,
 
   not_found,
+  not_found_404
 } as const;
 
 /**

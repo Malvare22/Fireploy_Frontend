@@ -35,7 +35,7 @@ export function ProjectExecutionStatusContextProvider({
       if (projectId != -1) return (await getProjectById(token, projectId)).estado_ejecucion;
     },
     queryKey: ["Get Status Project", projectId, token],
-    refetchInterval: 20000,
+    refetchInterval: 10000,
   });
 
   const { showDialog } = useAlertDialogContext();

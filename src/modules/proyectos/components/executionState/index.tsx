@@ -169,11 +169,10 @@ export function ChangeStatus({ id, hasUrl }: PropsChangeStatus) {
       setIsLoading(true);
       const getCurrent = await getProjectById(token, id);
       if (getCurrent.estado_ejecucion == projectStatus) {
-        const x = postDeployProject(id, token);
+        postDeployProject(id, token);
         await setTimeout(async () => {
           await refetchExecutionState();
-        }, 3000);
-        await x;
+        }, 1500);
         return;
       }
 
@@ -181,15 +180,6 @@ export function ChangeStatus({ id, hasUrl }: PropsChangeStatus) {
     },
     mutationKey: ["Load Project", id, token],
     onError: (error) => setError(error),
-    onSuccess: () => {
-      showDialog({
-        message: "Se ha desplegado el proyecto correctamente",
-        onAccept: () => handleClose(),
-        reload: true,
-        title: "Modificación de estado Proyecto",
-        type: "success",
-      });
-    },
   });
 
   const { mutate: startProject } = useMutation({
@@ -247,7 +237,7 @@ export function ChangeStatus({ id, hasUrl }: PropsChangeStatus) {
           variant="contained"
           endIcon={<RocketLaunchIcon />}
           onClick={() => handleAction("D")}
-          disabled={isLoading}
+          loading={isLoading}
         >
           Desplegar
         </Button>
