@@ -89,7 +89,7 @@ export default function Home() {
   const theme = useTheme();
   return (
     <Box>
-      <Box sx={{ paddingX: { md: 4, xs: 2 }, height: "80vh" }}>
+      <Box sx={{ paddingX: { md: 4, xs: 2 }, height: "90vh" }}>
         <Principal />
       </Box>
       <Stack sx={{ backgroundColor: theme.palette.background.default }}>
