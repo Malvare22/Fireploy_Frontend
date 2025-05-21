@@ -109,7 +109,7 @@ export function Repositories({ type }: Props) {
     mutationFn: async () => {
       let fetchProject = await getProjectById(token, getValuesProject("id") ?? -1);
       setIsLoading(true);
-      if (type == "create" || (executionState && fetchProject.estado_ejecucion == executionState)) {
+      if (type == "create" || (executionState && fetchProject &&  fetchProject.estado_ejecucion == executionState)) {
         if (filesRepo.backend != null) {
           await postFileToRepository(
             token,
@@ -154,6 +154,7 @@ export function Repositories({ type }: Props) {
 
         return;
       }
+
       syncErrorProject();
     },
     onSuccess: () => {

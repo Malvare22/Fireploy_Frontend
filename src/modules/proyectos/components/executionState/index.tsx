@@ -166,7 +166,6 @@ export function ChangeStatus({ id, hasUrl }: PropsChangeStatus) {
 
   const { mutate: loadProject } = useMutation({
     mutationFn: async (id: number) => {
-      setIsLoading(true);
       const getCurrent = await getProjectById(token, id);
       if (getCurrent.estado_ejecucion == projectStatus) {
         postDeployProject(id, token);
@@ -237,9 +236,9 @@ export function ChangeStatus({ id, hasUrl }: PropsChangeStatus) {
           variant="contained"
           endIcon={<RocketLaunchIcon />}
           onClick={() => handleAction("D")}
-          loading={isLoading}
+          loading={isLoading || projectStatus == "L"}
         >
-          Desplegar
+          {"Desplegar"}
         </Button>
       </Box>
       <Tooltip title="Reanudar Proyecto">

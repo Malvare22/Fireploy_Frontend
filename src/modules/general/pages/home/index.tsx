@@ -30,6 +30,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import { useNavigate } from "react-router";
 import { rutasGeneral } from "@modules/general/router/routes";
+import { openInNewTab } from "@modules/general/utils/openTab";
 
 export enum labelHome {
   princialContent = "Despliega tus aplicativos web de manera automática",
@@ -111,11 +112,13 @@ function Principal() {
   // const navigate = useNavigate();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
 
+  const navigate = useNavigate();
+
   return (
     <>
       <Grid2 container sx={{ display: "flex", alignItems: "center" }}>
         <Grid2 size={{ lg: 5, xs: 12 }}>
-          <Stack sx={{ height: "100%" }} spacing={{md: 8, xs: 4}}>
+          <Stack sx={{ height: "100%" }} spacing={{ md: 8, xs: 4 }}>
             <Typography variant="h2" sx={{ fontWeight: "440", color: "white" }} color="secondary">
               {labelHome.princialContent}
             </Typography>
@@ -131,6 +134,7 @@ function Principal() {
                   size={!matches ? "medium" : "large"}
                   endIcon={<GitHubIcon />}
                   sx={{ borderRadius: 2, backgroundColor: "rgb(64, 56, 56)" }}
+                  onClick={() => openInNewTab("https://github.com/Fireploy")}
                 >
                   {labelHome.github}
                 </Button>
@@ -141,25 +145,36 @@ function Principal() {
                   size={!matches ? "medium" : "large"}
                   endIcon={<DescriptionIcon />}
                   sx={{ borderRadius: 2, backgroundColor: "rgb(64, 56, 56)" }}
+                  onClick={() => openInNewTab("http://fireploy.online:3001/docs/introduccion")}
                 >
                   {labelHome.docs}
                 </Button>
               </Box>
               <Box>
-                <Button variant="contained" size={!matches ? "medium" : "large"}>
+                <Button
+                  variant="contained"
+                  size={!matches ? "medium" : "large"}
+                  onClick={() => navigate(rutasGeneral.login)}
+                >
                   {labelHome.principalButton}
                 </Button>
               </Box>
             </Stack>
           </Stack>
         </Grid2>
-        {(
-          <Grid2 size={{ lg: 7, xs: 12 }} sx={{height: {xs: 400, sm: 400, md: 'auto'}, marginTop: {xs: -16, sm: -10, md: 0}}}>
+        {
+          <Grid2
+            size={{ lg: 7, xs: 12 }}
+            sx={{
+              height: { xs: 400, sm: 400, md: "auto" },
+              marginTop: { xs: -16, sm: -10, md: 0 },
+            }}
+          >
             <Box>
               <PrincipalAnimation />
             </Box>
           </Grid2>
-        )}
+        }
       </Grid2>
     </>
   );
@@ -204,7 +219,10 @@ function PrincipalAnimation() {
         </Box>
         <Box className={styles.sun} />
         <Box className={styles.iconContainer}>
-          <RocketLaunchIcon sx={{ width: "70%", height: "70%", color:'white' }}  className={styles.icon} />
+          <RocketLaunchIcon
+            sx={{ width: "70%", height: "70%", color: "white" }}
+            className={styles.icon}
+          />
         </Box>
         <Box>
           <DatabaseFillGearIcon sx={sxIcons} className={styles.iconElement} />

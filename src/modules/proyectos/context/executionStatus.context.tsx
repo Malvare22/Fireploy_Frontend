@@ -12,6 +12,7 @@ type ProjectExecutionStatusContext = {
   executionState: EstadoEjecucionProyecto | null;
   refetchExecutionState: Function;
   currentPosition: null | number;
+  currentUrl: string;
 };
 export const ProjectExecutionStatusContext = createContext<
   ProjectExecutionStatusContext | undefined
@@ -26,13 +27,9 @@ export function ProjectExecutionStatusContextProvider({
 }) {
   const { token } = useAuth().accountInformation;
 
-  const {
-    data: projectStatus,
-    error,
-    refetch,
-  } = useQuery({
+  const { data, error, refetch } = useQuery({
     queryFn: async () => {
-      if (projectId != -1) return (await getProjectById(token, projectId)).estado_ejecucion;
+      if (projectId != -1) return await getProjectById(token, projectId);
     },
     queryKey: ["Get Status Project", projectId, token],
     refetchInterval: 10000,
@@ -69,9 +66,10 @@ export function ProjectExecutionStatusContextProvider({
     <>
       <ProjectExecutionStatusContext.Provider
         value={{
-          executionState: projectStatus ? (projectStatus as EstadoEjecucionProyecto) : null,
+          executionState: data ? (data.estado_ejecucion as EstadoEjecucionProyecto) : null,
           refetchExecutionState: refetch,
           currentPosition: currentPosition,
+          currentUrl: data ? data.url : "",
         }}
       >
         {children}

@@ -52,7 +52,7 @@ export default function ProjectSettings({ project }: Props) {
 
   const matchesMedia = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const { executionState, currentPosition } = useExecutionStatusContext();
+  const { executionState, currentPosition, currentUrl } = useExecutionStatusContext();
 
   return (
     <Stack spacing={3}>
@@ -62,12 +62,12 @@ export default function ProjectSettings({ project }: Props) {
             <Typography variant="h4">{project.titulo}</Typography>
             {executionState && <ExecutionState projectStatus={executionState} />}
           </Stack>
-          {project.url.trim() != "" && executionState == "N" && (
+          {currentUrl.trim() != "" && executionState == "N" && (
             <Alert severity="info" sx={{ display: "flex", alignItems: "center" }}>
               <Stack direction={"row"} alignItems={"center"}>
                 <Typography>Proyecto disponible actualmente </Typography>
                 <Tooltip title="Abrir URL">
-                  <IconButton onClick={() => handleUrl(project.url)}>
+                  <IconButton onClick={() => handleUrl(currentUrl)}>
                     <OpenInNewIcon color="info" sx={{ fontSize: 24 }} />
                   </IconButton>
                 </Tooltip>
