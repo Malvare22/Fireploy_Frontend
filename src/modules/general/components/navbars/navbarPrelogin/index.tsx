@@ -144,7 +144,6 @@ function NavbarPrelogin(): JSX.Element {
                 variant="h5"
                 noWrap
                 component="a"
-                href="#app-bar-with-responsive-menu"
                 sx={{
                   fontFamily: "monospace",
                   fontWeight: 700,
