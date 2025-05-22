@@ -11,6 +11,7 @@ export type ArchivoLog = { id: number; nombre: string; url: string };
 export type MateriaInformacion = {
   seccionId: Seccion["id"];
   materiaId: Materia["id"];
+  nombre?: string | undefined;
   cursoId: Curso["id"];
 };
 

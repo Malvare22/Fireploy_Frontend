@@ -8,6 +8,7 @@ import { UsuarioCurso } from "@modules/materias/types/curso";
 import { EstadoUsuario } from "@modules/usuarios/types/usuario";
 import { isTechnologyKey, TECNOLOGIES } from "./technologies";
 import { KeysOfRepository } from "../types/keysOfRepository";
+import { getDataBaseTypesMap } from "./database";
 
 // /**
 //  * adaptUsuarioToPortafolioCard – Transforms a user object into a format compatible with a portfolio card, extracting ID, name, and photo.
@@ -47,9 +48,9 @@ export function adaptProjectToCard(proyecto: Proyecto): ProyectoCard {
     frontend: getRepository("frontend"),
     backend: getRepository("backend"),
     integrado: getRepository("integrado"),
-    dataBase: proyecto.baseDeDatos?.nombre,
+    dataBase: proyecto.baseDeDatos && proyecto.baseDeDatos.tipo != 'E' ? getDataBaseTypesMap.get(proyecto.baseDeDatos.tipo) : null,
     fav_usuarios: proyecto.fav_usuarios ?? [],
-    materia: proyecto.materiaInformacion?.materiaId?.toString() || "N/A",
+    materia: proyecto.materiaInformacion.nombre || "N/A",
     grupo: proyecto.materiaInformacion?.cursoId?.toString() || "N/A",
     estado: proyecto.estadoDeEjecucion || "E",
     url: proyecto.url
@@ -93,6 +94,7 @@ export function adaptProject(project: Partial<ProyectoService>): Proyecto {
       cursoId: project.seccion?.curso?.id ?? "1",
       materiaId: project.seccion?.curso?.materia?.id ?? 1,
       seccionId: project.seccion?.id ?? 1,
+      nombre: project.seccion?.curso?.materia?.nombre ?? ''
     },
     titulo: project.titulo ?? "",
     tipo: project.tipo_proyecto === "M" ? "M" : "S",

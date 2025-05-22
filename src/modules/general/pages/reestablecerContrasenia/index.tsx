@@ -86,7 +86,7 @@ function ReestablecerContrasenia() {
   };
 
   return (
-    <Card sx={{ maxWidth: 600, padding: 4 }}>
+    <Card sx={{  }}>
       {/* Alert dialog for confirmation or error messages */}
       <AlertDialog
         handleAccept={handleAccept}
@@ -106,7 +106,7 @@ function ReestablecerContrasenia() {
         </Stack>
 
         {/* Password reset form */}
-        <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={4}>
             {/* Email input */}
             <TextField

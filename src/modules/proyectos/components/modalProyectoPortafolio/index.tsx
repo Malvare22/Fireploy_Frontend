@@ -4,9 +4,6 @@ import {
   Avatar,
   Box,
   Button,
-  Card,
-  CardActionArea,
-  Chip,
   Grid2,
   IconButton,
   Stack,
@@ -28,6 +25,8 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { useQuery } from "@tanstack/react-query";
 import { getPublicProjectById } from "@modules/proyectos/services/get.project";
 import StarButton from "../starButton";
+import ProjectTags from "@modules/general/components/projectTags";
+import { rutasGeneral } from "@modules/general/router/routes";
 
 export enum labelModalProject {
   noQualify = "Actualmente este proyecto no se encuentra calificado",
@@ -89,10 +88,10 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
   console.log(data);
 
   return (
-    <Stack sx={{ width: { md: 700, xs: "70vw" } }} spacing={3}>
+    <Stack sx={{ width: { md: 900, xs: 300, sm: 600 } }} spacing={3}>
       <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
         <Typography variant="h3">{project.titulo}</Typography>
-        {currentCheck != null && (
+        {id!= -1 && currentCheck != null && (
           <StarButton
             callback={updateCallback}
             check={currentCheck}
@@ -106,19 +105,25 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
       <Grid2 container spacing={2}>
         <Grid2
           size={{ md: 6, xs: 12 }}
-          sx={{ display: "flex", justifyContent: "center", border: "1px solid black" }}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            border: "1px solid rgb(0,0,0,0.2)",
+            borderRadius: 1,
+            overflow: "hidden",
+          }}
         >
           {project.imagen ? (
             <Box
               component={"img"}
               src={project.imagen}
-              sx={{ objectFit: "contain", width: "100%" }}
+              sx={{ objectFit: "contain", width: "100%", height: { md: 180, xs: 120 } }}
             />
           ) : (
             <Box
               sx={{
                 width: "100%",
-                height: "100%",
+                height: { md: 180, xs: 120 },
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -134,7 +139,7 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
           sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}
         >
           <Stack spacing={3}>
-            <Stack>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, alignItems: "center" }}>
               {project.backend && (
                 <Box>
                   <Button
@@ -168,59 +173,21 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
                   </Button>
                 </Box>
               )}
-            </Stack>
-            <Stack direction="row" spacing={1} alignItems={"center"}>
-              {project.integrado && (
-                <Box>
-                  <Chip
-                    label={<Typography>{project.integrado.framework}</Typography>}
-                    key={project.integrado.framework}
-                    color="info"
-                  />
-                </Box>
-              )}
-              {project.backend && (
-                <Box>
-                  <Chip
-                    label={<Typography>{project.backend.framework}</Typography>}
-                    key={project.backend.framework}
-                    color="info"
-                  />
-                </Box>
-              )}
-              {project.frontend && (
-                <Box>
-                  <Chip
-                    label={<Typography>{project.frontend.framework}</Typography>}
-                    key={project.frontend.framework}
-                    color="info"
-                  />
-                </Box>
-              )}
-              {/* <Box>
-                <Chip
-                  label={<Typography>{project.materia}</Typography>}
-                  key={project.materia}
-                  color="primary"
-                />
-              </Box> */}
-            </Stack>
-            <Alert
-              severity="success"
-              sx={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 0.5 }}
-            >
-              <Stack direction={"row"} alignItems={"center"}>
-                <Typography variant="subtitle2">{"Proyecto disponible"}</Typography>
-                <Tooltip title="Visitar sitio">
-                  <IconButton onClick={() => handleButtonUrl(project.url)}>
-                    <ExitToAppIcon>{"Visitar"}</ExitToAppIcon>
-                  </IconButton>
-                </Tooltip>
-              </Stack>
-            </Alert>
+            </Box>
+            <ProjectTags proyecto={project} />
           </Stack>
         </Grid2>
       </Grid2>
+      <Alert severity="success" sx={{ display: "flex", alignItems: "center" }}>
+        <Stack direction={"row"} alignItems={"center"}>
+          <Typography>{"Proyecto disponible"}</Typography>
+          <Tooltip title="Visitar sitio">
+            <IconButton onClick={() => handleButtonUrl(project.url)}>
+              <ExitToAppIcon sx={{ fontSize: 24 }}>{"Visitar"}</ExitToAppIcon>
+            </IconButton>
+          </Tooltip>
+        </Stack>
+      </Alert>
       <Grid2 container spacing={2}>
         <Grid2 size={12} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <Typography variant="h5">{"Descripción"}</Typography>
@@ -234,9 +201,9 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
         </Grid2>
       </Grid2>
       <Typography variant="h5">{"Integrantes"}</Typography>
-      <Grid2 container sx={{ paddingX: 1 }}>
+      <Grid2 container sx={{ paddingX: 1, display: "flex" }}>
         {project.integrantes.map((member) => (
-          <Grid2 size={{ md: 4, xs: 6 }}>
+          <Grid2 size={{ md: 2, xs: 4 }} sx={{ display: "flex", justifyContent: "center" }}>
             <MemberCard user={member} key={member.id} />
           </Grid2>
         ))}
@@ -251,23 +218,24 @@ type MemberCardProps = {
 function MemberCard({ user }: MemberCardProps) {
   const navigate = useNavigate();
 
+  const { id } = useAuth().accountInformation;
+
   function handleButton() {
-    navigate(rutasUsuarios.portafolio.replace(":id", user.id.toString()));
+    if (id == -1) {
+      navigate(rutasGeneral.portafolioPorUsuario.replace(":id", user.id.toString()));
+      navigate(0);
+    } else {
+      navigate(rutasUsuarios.portafolio.replace(":id", user.id.toString()));
+      navigate(0);
+    }
   }
 
   return (
-    <Card>
-      <CardActionArea onClick={handleButton}>
-        <Stack sx={{ padding: 2 }} spacing={2} alignItems={"center"}>
-          <Tooltip title={user.nombre}>
-            <Avatar src={user.imagen} />
-          </Tooltip>
-          <Typography variant="h6" sx={{ textAlign: "center" }}>
-            {user.nombre}
-          </Typography>
-        </Stack>
-      </CardActionArea>
-    </Card>
+    <>
+      <Tooltip title={user.nombre} onClick={handleButton}>
+        <Avatar src={user.imagen} sx={{ width: 64, height: 64, cursor: "pointer" }} />
+      </Tooltip>
+    </>
   );
 }
 
