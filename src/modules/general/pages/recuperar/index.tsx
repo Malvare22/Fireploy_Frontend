@@ -84,7 +84,7 @@ function RecuperarContrasenia() {
         type={type}
       />
 
-      <Card sx={{ maxWidth: 700, display: "flex", alignItems: "center" }}>
+      <Card sx={{ marginX: {md: 30, xs: 3}}}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={5} sx={{ paddingX: 4 }}>
             {/* Title */}
@@ -107,7 +107,7 @@ function RecuperarContrasenia() {
               fullWidth
             />
 
-            <Stack alignItems={"center"} direction="row" justifyContent={"center"} spacing={2}>
+            <Stack alignItems={"center"} direction={{md:"row", xs: 'column'}} justifyContent={"center"} spacing={2}>
               {/* Submit button */}
               <Box>
                 <Button

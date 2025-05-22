@@ -244,14 +244,14 @@ function Registrar() {
                 fullWidth
               />
             </Grid2>
-            <Stack direction={"row"} alignItems={"center"}>
+            <Box sx={{display: 'flex', flexWrap: 'wrap', alignItems: 'center'}}>
               <Checkbox checked={checked} onChange={() => setChecked(!checked)} />
-              <Typography>{"He leído y acepto las "}</Typography>
+              <Typography variant="body2">{"He leído y acepto las "}</Typography>
               <Link sx={{ marginLeft: 0.5 }} target='_blank' href="http://fireploy.online:3001/docs/politicas-de-servicio" color="inherit">
-                <Typography>{"políticas de uso y privacidad"}</Typography>
+                <Typography variant="body2">{"políticas de uso y privacidad"}</Typography>
               </Link>
-              <Typography sx={{ marginLeft: 0.5 }}>{"del servicio de Fireploy"}</Typography>
-            </Stack>
+              <Typography variant="body2" sx={{ marginLeft: 0.5 }}>{"del servicio de Fireploy"}</Typography>
+            </Box>
             {/* Buttons */}
             <Grid2 size={12} sx={{ display: "flex", justifyContent: "center", gap: 3 }}>
               <Box>

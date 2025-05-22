@@ -14,7 +14,7 @@ export type ProyectoCard = {
   frontend?: RepositoryForCard | undefined;
   backend?: RepositoryForCard | undefined;
   integrado?: RepositoryForCard | undefined;
-  dataBase: string | null | undefined;
+  dataBase?: string | null | undefined;
   fav_usuarios: number[];
   materia: string | null;
   grupo: string;

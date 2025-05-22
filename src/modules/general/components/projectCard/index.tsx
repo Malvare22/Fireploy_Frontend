@@ -18,6 +18,7 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { ExecutionState } from "@modules/proyectos/components/executionState";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { openInNewTab } from "@modules/general/utils/openTab";
+import ProjectTags from "../projectTags";
 
 type ProjectCardProps = {
   proyecto: ProyectoCard;
@@ -96,15 +97,16 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen, 
           gap: 1,
         }}
       >
-        <Box sx={{ position: "relative", width: "inherit" }}>
+        <Box sx={{ position: "relative", width: "inherit", border: "1px solid rgb(0,0,0,0.2)", borderRadius: 1, overflow: 'hidden' }}>
           {proyecto.imagen ? (
-            <Box
-              component={"img"}
-              src={proyecto.imagen}
-              sx={{ width: "100%", height: 180, borderRadius: 1, objectFit: "cover" }}
-            >
+            <>
+              <Box
+                component={"img"}
+                src={proyecto.imagen}
+                sx={{ width: "100%", height: 180, borderRadius: 1, objectFit: "contain" }}
+              />
               <ContentImage />
-            </Box>
+            </>
           ) : (
             <Box
               sx={{
@@ -134,6 +136,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen, 
         >
           {proyecto.titulo}
         </Typography>
+
+        <Box sx={{ marginBottom: 1 }}>
+          <ProjectTags proyecto={proyecto} />
+        </Box>
 
         <Box sx={{ marginBottom: 1 }}>
           {proyecto.descripcion.length > 0 ? (

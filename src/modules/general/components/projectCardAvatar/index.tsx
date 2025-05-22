@@ -1,11 +1,7 @@
-import { Avatar, IconButton, Tooltip, AvatarGroup, Stack } from "@mui/material";
+import { Avatar,AvatarGroup } from "@mui/material";
 import React from "react";
 // import { useNavigate } from "react-router-dom";
 import { UsuarioCurso } from "@modules/materias/types/curso";
-import { useNavigate } from "react-router";
-import { rutasUsuarios } from "@modules/usuarios/router/router";
-import { useAuth } from "@modules/general/context/accountContext";
-import { rutasGeneral } from "@modules/general/router/routes";
 
 
 type ProjectCardMembersProps = {
@@ -29,33 +25,14 @@ type ProjectCardMembersProps = {
  * ```
  */
 export const ProjectCardMembers: React.FC<ProjectCardMembersProps> = ({ integrantes }) => {
-  const navigate = useNavigate();
-
-  const { id } = useAuth().accountInformation;
-
-  function handleButton(idUser: number) {
-    if (id != -1) navigate(rutasUsuarios.portafolio.replace(":id", idUser.toString()));
-    else navigate(rutasGeneral.portafolioPorUsuario.replace(":id", idUser.toString()));
-  }
-
-  if (integrantes.length > 4) {
+  
+  
     return (
-      <AvatarGroup max={4}>
+      <AvatarGroup max={6}>
         {integrantes.map((integrante) => (
           <Avatar alt={integrante.nombre} src={integrante.imagen} />
         ))}
       </AvatarGroup>
     );
-  } else
-    return (
-      <Stack direction={"row"} spacing={2}>
-        {integrantes.map((integrante) => (
-          <Tooltip title={integrante.nombre}>
-            <IconButton onClick={() => handleButton(integrante.id)}>
-              <Avatar src={integrante.imagen} />
-            </IconButton>
-          </Tooltip>
-        ))}
-      </Stack>
-    );
+ 
 };
