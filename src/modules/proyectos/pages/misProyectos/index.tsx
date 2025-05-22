@@ -22,6 +22,8 @@ import { getExecutionStateArray } from "@modules/proyectos/utils/getExecutionSta
 import useSearch from "@modules/general/hooks/useSearch";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import { getNoRepeatValues } from "@modules/general/utils/getNoRepeatValues";
+import GeneralButton from "@modules/general/components/button";
+import { buttonTypes } from "@modules/general/types/buttons";
 
 /**
  * MisProyectos component – A page that lists the projects belonging to the authenticated user.
@@ -120,6 +122,10 @@ function MisProyectos() {
       return applySearch(buffer, searchFn);
     }, [searchValue, buffer]);
 
+    function handleButtonAdd(){
+      navigate(rutasProyectos.crear);
+    }
+
   return (
     <>
       <AlertDialog
@@ -138,7 +144,7 @@ function MisProyectos() {
               <Typography variant="h4" textTransform={"capitalize"}>
                 {labelProjectForList.titulo}
               </Typography>
-              <Alert
+              {/* <Alert
                 severity="info"
                 sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
               >
@@ -157,7 +163,7 @@ function MisProyectos() {
                     </Button>
                   </Stack>
                 </Stack>
-              </Alert>
+              </Alert> */}
             </Stack>
           </Box>
           <Stack spacing={2} paddingX={{ md: 6, xs: 2 }}>
@@ -168,6 +174,9 @@ function MisProyectos() {
               
             />
             <TextFieldSearch setSearchValue={setSearchValue} label='Buscar proyecto'/>
+            <Stack alignItems={'end'}>
+              <Box><GeneralButton mode={buttonTypes.add} onClick={handleButtonAdd}/></Box>
+            </Stack>
           </Stack>
           {/*  */}
           <Grid2 container spacing={2} paddingX={{ md: 6, xs: 2 }}>

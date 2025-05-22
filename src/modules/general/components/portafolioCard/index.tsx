@@ -17,6 +17,8 @@ const PortafolioCard: React.FC<Props> = ({ usuario }) => {
 
   const navigate = useNavigate();
 
+  console.log(usuario.fotoDePerfil)
+
   function handleButton() {
     if (id != -1) {
       navigate(rutasUsuarios.portafolio.replace(":id", usuario.id.toString()));

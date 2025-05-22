@@ -187,7 +187,7 @@ const Portafolio = ({ id }: { id: number }) => {
                 )}
                 <Stack spacing={3}>
                   <Stack spacing={3} alignItems={"center"}>
-                    <Avatar src={usuario.fotoDePerfil} sx={{ width: 96, height: 96 }} />
+                    <Avatar src={usuario.fotoDePerfil} sx={{ width: 124, height: 124 }} />
                     <Typography variant="h4" textAlign={"center"}>
                       {`${usuario.nombres} ${usuario.apellidos}`}
                     </Typography>
@@ -355,12 +355,10 @@ const ModalEdit = ({ id, handleClose }: { id: number; handleClose: Function }) =
 
   return (
     <>
-      {" "}
       {isLoading ? (
         <LoaderElement />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
-          <LoaderElement />
           <Stack spacing={2}>
             <Typography variant="h4" textAlign={"center"}>
               Editar Información de Portafolio

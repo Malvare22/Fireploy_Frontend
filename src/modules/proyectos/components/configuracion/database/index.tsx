@@ -113,7 +113,8 @@ export const DataBase = ({ type }: Props) => {
           ? "Se ha terminado de configurar el proyecto 😎"
           : "Se ha registrado la base de datos correctamente",
       type: "success",
-      onAccept: () => navigate(rutasProyectos.misProyectos),
+      onAccept: () =>
+        navigate(rutasProyectos.ver.replace(":id", (getValuesProject("id") ?? -1).toString())),
     });
   }
 

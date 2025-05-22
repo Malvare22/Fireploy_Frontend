@@ -322,7 +322,7 @@ function CardTecnology({
           </Box>
         </Grid2>
         <Grid2 size={8}>
-          <Stack spacing={2}>
+          <Stack spacing={2} sx={{height: '100%'}} justifyContent={'space-between'}>
             <Stack spacing={1}>
               <Stack direction={"row"} justifyContent={"space-between"}>
                 <Typography variant="h4">{title}</Typography>
@@ -332,7 +332,7 @@ function CardTecnology({
               </Stack>
               <Typography variant="body2">{subtitle}</Typography>
             </Stack>
-            <Stack spacing={1}>
+            <Stack spacing={1} sx={{paddingBottom: 2}}>
               <Box>
                 <Button
                   endIcon={<RocketLaunchIcon />}
