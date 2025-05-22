@@ -17,7 +17,9 @@ import {
 import { useEffect, useState } from "react";
 import ProjectCard from "@modules/general/components/projectCard";
 import SpringModal from "@modules/general/components/springModal";
-import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyectoPortafolio";
+import  {
+  CardProjectModal,
+} from "@modules/proyectos/components/modalProyectoPortafolio";
 import { useFilters } from "@modules/general/hooks/useFilters";
 import useOrderSelect, { Order } from "@modules/general/hooks/useOrder";
 import { labelSelects } from "@modules/general/enums/labelSelects";
@@ -73,7 +75,7 @@ import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
 const Portafolio = ({ id }: { id: number }) => {
   const [usuario, setUsuario] = useState<UsuarioPortafolio | undefined>(undefined);
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryFn: async () => {
       const projects = await getAllPublicProjects();
       const user = await getUserPublicById(id);
@@ -167,7 +169,7 @@ const Portafolio = ({ id }: { id: number }) => {
             <Box>
               <SpringModal handleClose={handleCloseModal} open={openModal}>
                 {selectProyecto != undefined && (
-                  <ModalProyectoPortafolio proyecto={selectProyecto} />
+                  <CardProjectModal project={selectProyecto} callback={refetch} />
                 )}
               </SpringModal>
               <Card
@@ -187,7 +189,7 @@ const Portafolio = ({ id }: { id: number }) => {
                 )}
                 <Stack spacing={3}>
                   <Stack spacing={3} alignItems={"center"}>
-                    <Avatar src={usuario.fotoDePerfil} sx={{ width: 96, height: 96 }} />
+                    <Avatar src={usuario.fotoDePerfil} sx={{ width: 124, height: 124 }} />
                     <Typography variant="h4" textAlign={"center"}>
                       {`${usuario.nombres} ${usuario.apellidos}`}
                     </Typography>
@@ -278,6 +280,7 @@ const Portafolio = ({ id }: { id: number }) => {
                           <ProjectCard
                             handleOpen={() => handleCard(proyecto)}
                             proyecto={proyecto}
+                            callback={refetch}
                           />
                         </Grid2>
                       ))}
@@ -355,12 +358,10 @@ const ModalEdit = ({ id, handleClose }: { id: number; handleClose: Function }) =
 
   return (
     <>
-      {" "}
       {isLoading ? (
         <LoaderElement />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
-          <LoaderElement />
           <Stack spacing={2}>
             <Typography variant="h4" textAlign={"center"}>
               Editar Información de Portafolio

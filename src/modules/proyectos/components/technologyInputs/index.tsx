@@ -93,7 +93,7 @@ export const TechnologyInputs: React.FC<DockerInputsProps> = ({ fieldName = "bac
             <TextField
               size="small"
               select
-              label="Tecnología"
+              label="Framework"
               placeholder="Escribe para buscar..."
               fullWidth
               inputRef={field.ref}

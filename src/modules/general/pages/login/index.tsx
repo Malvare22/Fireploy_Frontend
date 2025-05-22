@@ -36,10 +36,7 @@ import { loginUser } from "@modules/general/utils/account";
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Fireploy
-      </Link>{" "}
+      {"Fireploy™ "}
       {new Date().getFullYear()}
       {"."}
     </Typography>

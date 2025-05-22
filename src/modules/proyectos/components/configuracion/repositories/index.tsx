@@ -44,6 +44,7 @@ import { KeysOfRepository } from "@modules/proyectos/types/keysOfRepository";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { GitlabIcon } from "@modules/general/components/customIcons";
 import { adaptProject } from "@modules/proyectos/utils/adapt.proyecto";
+import TransitionAlert from "@modules/general/components/transitionAlert";
 
 type Props = {
   type: "edit" | "create";
@@ -98,7 +99,7 @@ export function Repositories({ type }: Props) {
     message,
     type: dialogType,
     setIsLoading,
-    handleCancel
+    handleCancel,
   } = useAlertDialog2();
 
   const { setError } = useErrorReader(showDialog);
@@ -112,7 +113,10 @@ export function Repositories({ type }: Props) {
       let back = false;
       let inte = false;
       setIsLoading(true);
-      if (type == "create" || (executionState && fetchProject &&  fetchProject.estado_ejecucion == executionState)) {
+      if (
+        type == "create" ||
+        (executionState && fetchProject && fetchProject.estado_ejecucion == executionState)
+      ) {
         if (filesRepo.backend != null) {
           await postFileToRepository(
             token,
@@ -162,7 +166,7 @@ export function Repositories({ type }: Props) {
       }
 
       syncErrorProject();
-    }
+    },
   });
 
   type FilesRepo = Record<KeysOfRepository, File | null>;
@@ -262,7 +266,13 @@ export function Repositories({ type }: Props) {
         <AutoFocusOnError<ProyectoRepositoriesSchema> />
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Stack spacing={3}>
+            
             <Stack>
+              <TransitionAlert severity="info">
+              {
+                "Para que surjan efecto los cambios realizados en esta sección, se requiere volver a desplegar el aplicativo"
+              }
+            </TransitionAlert>
               <Typography variant="h5">{labelConfiguracion.repositorios}</Typography>
               <Divider />
             </Stack>

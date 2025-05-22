@@ -72,7 +72,7 @@ function NavbarPrelogin(): JSX.Element {
 
   const theme = useTheme();
 
-  const matches = useMediaQuery(theme.breakpoints.down("md"));
+  const matches = useMediaQuery(theme.breakpoints.down("lg"));
 
   return (
     <AppBar
@@ -87,11 +87,11 @@ function NavbarPrelogin(): JSX.Element {
       }}
     >
       <Container maxWidth="xl" sx={{ color: "white" }}>
-        <Toolbar disableGutters sx={{ justifyContent: { md: "space-between", xs: "center" } }}>
+        <Toolbar disableGutters sx={{ justifyContent: { lg: "space-between", xs: "center" } }}>
           {/* Brand title (shown only on larger screens) */}
 
           {/* Mobile menu button */}
-          <Box sx={{ display: { xs: "flex", md: "none" }, position: "absolute", left: 0 }}>
+          <Box sx={{ display: { xs: "flex", lg: "none" }, position: "absolute", left: 0 }}>
             <IconButton
               size="large"
               aria-label="toggle navigation menu"
@@ -112,7 +112,7 @@ function NavbarPrelogin(): JSX.Element {
               transformOrigin={{ vertical: "top", horizontal: "left" }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: "block", md: "none" } }}
+              sx={{ display: { xs: "block", lg: "none" } }}
             >
               {pages.map(([text, link]) => (
                 <MenuItem key={text} onClick={handleCloseNavMenu}>
@@ -144,7 +144,6 @@ function NavbarPrelogin(): JSX.Element {
                 variant="h5"
                 noWrap
                 component="a"
-                href="#app-bar-with-responsive-menu"
                 sx={{
                   fontFamily: "monospace",
                   fontWeight: 700,
@@ -178,7 +177,7 @@ function NavbarPrelogin(): JSX.Element {
             </>
           </Stack>
 
-          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3 }}>
+          <Box sx={{ display: { xs: "none", lg: "flex" }, gap: 3 }}>
             <Button variant="outlined" size="medium" onClick={() => navigate(rutasGeneral.login)}>
               <Typography variant="body1" sx={{ color: "white" }}>
                 {labelsNavbarPrelogin.signUp}

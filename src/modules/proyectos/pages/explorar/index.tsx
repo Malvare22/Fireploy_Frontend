@@ -21,6 +21,7 @@ import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import LoaderElement from "@modules/general/components/loaderElement";
 import useSearch from "@modules/general/hooks/useSearch";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
+import { AlertDialogProvider } from "@modules/general/context/alertDialogContext";
 
 /**
  * ExplorarProyectos component – A project exploration interface that allows users to search and filter through
@@ -71,10 +72,10 @@ function ExplorarProyectos() {
   }, [searchValue, proyectos, order]);
 
   return (
-    <>
+    <AlertDialogProvider>
       {/* Modal */}
       <SpringModal open={modalOpen} handleClose={closeModal}>
-        {selectProyecto && <ModalProyectoPortafolio proyecto={selectProyecto} />}
+        {selectProyecto && <ModalProyectoPortafolio callback={refetch} project={selectProyecto} />}
       </SpringModal>
 
       {/* Alerta de error */}
@@ -146,6 +147,7 @@ function ExplorarProyectos() {
                       setSelectProyecto(proyecto);
                       openModal();
                     }}
+                    callback={refetch}
                   />
                 </Grid2>
               ))}
@@ -153,7 +155,7 @@ function ExplorarProyectos() {
           )}
         </Stack>
       </Stack>
-    </>
+    </AlertDialogProvider>
   );
 }
 

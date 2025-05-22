@@ -9,14 +9,13 @@ import {
   Chip,
   Grid2,
   IconButton,
-  Rating,
   Stack,
   SxProps,
   Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { GitlabIcon } from "@modules/general/components/customIcons";
 import { GitHub } from "@mui/icons-material";
 import { UsuarioCurso } from "@modules/materias/types/curso";
@@ -24,54 +23,49 @@ import { useNavigate } from "react-router";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { openInNewTab } from "@modules/general/utils/openTab";
-import { VARIABLES_LOCAL_STORAGE } from "@modules/general/enums/variablesLocalStorage";
 import { useAuth } from "@modules/general/context/accountContext";
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
-
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import { useQuery } from "@tanstack/react-query";
+import { getPublicProjectById } from "@modules/proyectos/services/get.project";
+import StarButton from "../starButton";
 
 export enum labelModalProject {
   noQualify = "Actualmente este proyecto no se encuentra calificado",
   qualify = "Calificar",
 }
 
-type Props = {
-  proyecto: ProyectoCard;
-};
-
-export const ModalProyectoPortafolio: React.FC<Props> = ({ proyecto }) => {
-  return (
-    <>
-      <CardProjectModal project={proyecto} />
-    </>
-  );
-};
-
 type CardProjectModalProps = {
   project: ProyectoCard;
+  callback: () => Promise<unknown>;
 };
-export function CardProjectModal({ project }: CardProjectModalProps) {
+export function CardProjectModal({ project, callback }: CardProjectModalProps) {
   function getRepoButtonIcon(s: string) {
     return s.includes("gitlab") ? <GitlabIcon /> : <GitHub />;
   }
+  const { id } = useAuth().accountInformation;
 
-  const {id} = useAuth().accountInformation;
+  const currentProjectId = project.id;
 
-  const [score, setScore] = useState<number>(project.fav_usuarios.length);
-
-   useEffect(() => {
-      if (!localStorage.getItem(VARIABLES_LOCAL_STORAGE.SCORES))
-        localStorage.setItem(VARIABLES_LOCAL_STORAGE.SCORES, JSON.stringify([]));
-      else {
-        const LIKES = JSON.parse(
-          localStorage.getItem(VARIABLES_LOCAL_STORAGE.SCORES) ?? "[]"
-        ) as number[];
-        if(LIKES.includes(project.id) && !project.fav_usuarios.includes(id)){
-          setScore(score + 1);
-        }
-      }
-    }, []);
+  const { refetch, data } = useQuery({
+    queryFn: async () => {
+      return (await getPublicProjectById(currentProjectId)).fav_usuarios.map((user) => user.id);
+    },
+    queryKey: ["Get Project by Id", currentProjectId],
+  });
 
   const theme = useTheme();
+
+  const currentCheck = useMemo(() => {
+    if (data) {
+      return data.includes(id);
+    } else return null;
+  }, [data]);
+
+  const currentCount = useMemo(() => {
+    if (data) {
+      return data.length;
+    } else return 0;
+  }, [data]);
 
   function getRepoName(s: string) {
     const _s = s.split("/");
@@ -83,28 +77,57 @@ export function CardProjectModal({ project }: CardProjectModalProps) {
     backgroundColor: theme.palette.secondary.main,
   };
 
-  function handleButtonUrl(s: string | null | undefined){
-    if(s)
-    openInNewTab(s);
+  function handleButtonUrl(s: string | null | undefined) {
+    if (s) openInNewTab(s);
   }
+
+  const updateCallback = async () => {
+    await callback();
+    await refetch();
+  };
+
+  console.log(data);
 
   return (
     <Stack sx={{ width: { md: 700, xs: "70vw" } }} spacing={3}>
-      <Typography variant="h3">{project.titulo}</Typography>
+      <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+        <Typography variant="h3">{project.titulo}</Typography>
+        {currentCheck != null && (
+          <StarButton
+            callback={updateCallback}
+            check={currentCheck}
+            count={currentCount}
+            projectId={currentProjectId}
+            sx={{ fontSize: 48 }}
+          />
+        )}
+      </Box>
+
       <Grid2 container spacing={2}>
         <Grid2
           size={{ md: 6, xs: 12 }}
           sx={{ display: "flex", justifyContent: "center", border: "1px solid black" }}
         >
-         {project.imagen ?  <Box
-            component={"img"}
-            src={project.imagen}
-            sx={{ objectFit: "contain", width: "100%" }}
-          />: <Box
-              sx={{ width: "100%", height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: theme.palette.primary.main}}
+          {project.imagen ? (
+            <Box
+              component={"img"}
+              src={project.imagen}
+              sx={{ objectFit: "contain", width: "100%" }}
+            />
+          ) : (
+            <Box
+              sx={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: theme.palette.primary.main,
+              }}
             >
-              <RocketLaunchIcon sx={{fontSize: 96, color: 'white'}}/>
-            </Box>}
+              <RocketLaunchIcon sx={{ fontSize: 96, color: "white" }} />
+            </Box>
+          )}
         </Grid2>
         <Grid2
           size={{ md: 6, xs: 12 }}
@@ -114,27 +137,39 @@ export function CardProjectModal({ project }: CardProjectModalProps) {
             <Stack>
               {project.backend && (
                 <Box>
-                  <Button sx={sxButtons} onClick={() => handleButtonUrl(project.backend?.url)} endIcon={getRepoButtonIcon(project.backend.url)}>
+                  <Button
+                    sx={sxButtons}
+                    onClick={() => handleButtonUrl(project.backend?.url)}
+                    endIcon={getRepoButtonIcon(project.backend.url)}
+                  >
                     {getRepoName(project.backend.url)}
                   </Button>
                 </Box>
               )}
               {project.frontend && (
                 <Box>
-                  <Button sx={sxButtons} onClick={() => handleButtonUrl(project.frontend?.url)} endIcon={getRepoButtonIcon(project.frontend.url)}>
+                  <Button
+                    sx={sxButtons}
+                    onClick={() => handleButtonUrl(project.frontend?.url)}
+                    endIcon={getRepoButtonIcon(project.frontend.url)}
+                  >
                     {getRepoName(project.frontend.url)}
                   </Button>
                 </Box>
               )}
               {project.integrado && (
                 <Box>
-                  <Button sx={sxButtons} onClick={() => handleButtonUrl(project.integrado?.url)} endIcon={getRepoButtonIcon(project.integrado.url)}>
+                  <Button
+                    sx={sxButtons}
+                    onClick={() => handleButtonUrl(project.integrado?.url)}
+                    endIcon={getRepoButtonIcon(project.integrado.url)}
+                  >
                     {getRepoName(project.integrado.url)}
                   </Button>
                 </Box>
               )}
             </Stack>
-            <Stack direction='row' spacing={1} alignItems={'center'}>
+            <Stack direction="row" spacing={1} alignItems={"center"}>
               {project.integrado && (
                 <Box>
                   <Chip
@@ -187,26 +222,15 @@ export function CardProjectModal({ project }: CardProjectModalProps) {
         </Grid2>
       </Grid2>
       <Grid2 container spacing={2}>
-        <Grid2 size={{ md: 9, xs: 12 }} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <Grid2 size={12} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <Typography variant="h5">{"Descripción"}</Typography>
-          {project.descripcion.trim().length > 0 ? <Typography sx={{ wordBreak: "break-word" }} variant="body2">
-            {project.descripcion}
-          </Typography>: <Alert severity="info">{"Descripción no disponible"}</Alert>}
-        </Grid2>
-        <Grid2
-          size={{ md: 3, xs: 12 }}
-          sx={{ display: "flex", justifyContent: "center", alignItems: "start" }}
-        >
-          <Card
-            component={Stack}
-            direction={"row"}
-            alignItems={"center"}
-            justifyContent={"center"}
-            sx={{ padding: 2 }}
-          >
-            <Rating sx={{ fontSize: 48 }} value={1} readOnly max={1} />
-            <Typography variant="h4">{score}</Typography>
-          </Card>
+          {project.descripcion.trim().length > 0 ? (
+            <Typography sx={{ wordBreak: "break-word" }} variant="body2">
+              {project.descripcion}
+            </Typography>
+          ) : (
+            <Alert severity="info">{"Descripción no disponible"}</Alert>
+          )}
         </Grid2>
       </Grid2>
       <Typography variant="h5">{"Integrantes"}</Typography>
@@ -247,4 +271,4 @@ function MemberCard({ user }: MemberCardProps) {
   );
 }
 
-export default ModalProyectoPortafolio;
+export default CardProjectModal;

@@ -14,10 +14,13 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import ProjectCard from "@modules/general/components/projectCard";
 import SpringModal from "@modules/general/components/springModal";
-import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyectoPortafolio";
+import  {
+  CardProjectModal,
+} from "@modules/proyectos/components/modalProyectoPortafolio";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import useSearch from "@modules/general/hooks/useSearch";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
+import { AlertDialogProvider } from "@modules/general/context/alertDialogContext";
 
 export enum labelProyectosEstudiantes {
   curso = "Curso",
@@ -72,6 +75,7 @@ function VistaProyectosDeMisEstudiantes() {
     data,
     error,
     isLoading: isLoadingQuery,
+    refetch,
   } = useQuery({
     queryFn: async () => {
       const cursos = (await getCursos(token, { docente: id })).map((curso) =>
@@ -153,7 +157,7 @@ function VistaProyectosDeMisEstudiantes() {
   }, [data]);
 
   return (
-    <>
+    <AlertDialogProvider>
       <AlertDialog
         handleAccept={handleAccept}
         open={open}
@@ -164,7 +168,7 @@ function VistaProyectosDeMisEstudiantes() {
         handleCancel={handleCancel}
       />
       <SpringModal open={openModal} handleClose={handleCloseModal}>
-        {selectProject && <ModalProyectoPortafolio proyecto={selectProject} />}
+        {selectProject && <CardProjectModal project={selectProject} callback={refetch} />}
       </SpringModal>
 
       {isLoadingQuery ? (
@@ -233,7 +237,7 @@ function VistaProyectosDeMisEstudiantes() {
               <Grid2 container spacing={3}>
                 {arrProjects.map((p) => (
                   <Grid2 size={{ md: 4, xs: 12 }}>
-                    <ProjectCard key={p.id} proyecto={p} handleOpen={() => handleProject(p)} />
+                    <ProjectCard key={p.id} proyecto={p} callback={refetch} handleOpen={() => handleProject(p)} />
                   </Grid2>
                 ))}
               </Grid2>
@@ -243,7 +247,7 @@ function VistaProyectosDeMisEstudiantes() {
           </Stack>
         </Stack>
       )}
-    </>
+    </AlertDialogProvider>
   );
 }
 

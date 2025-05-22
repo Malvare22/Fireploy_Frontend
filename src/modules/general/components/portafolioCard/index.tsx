@@ -17,6 +17,8 @@ const PortafolioCard: React.FC<Props> = ({ usuario }) => {
 
   const navigate = useNavigate();
 
+  console.log(usuario.fotoDePerfil)
+
   function handleButton() {
     if (id != -1) {
       navigate(rutasUsuarios.portafolio.replace(":id", usuario.id.toString()));
@@ -50,7 +52,7 @@ const PortafolioCard: React.FC<Props> = ({ usuario }) => {
           <Stack direction={"column"} spacing={1}>
             {/* User Name */}
             <Box sx={{ textAlign: { xs: "center", md: "left" } }}>
-              <Typography variant="h5">{``}</Typography>
+              <Typography variant="h5">{`${usuario.nombres}`}</Typography>
             </Box>
 
             {/* User Role */}

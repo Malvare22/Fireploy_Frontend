@@ -1,45 +1,50 @@
+import { useAuth } from "@modules/general/context/accountContext";
+import { useAlertDialogContext } from "@modules/general/context/alertDialogContext";
+import useErrorReader from "@modules/general/hooks/useErrorReader";
+import { postStarProject, postUnStarProject } from "@modules/proyectos/services/post.calificar";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import { Rating, Tooltip } from "@mui/material";
+import { Box, Rating, RatingProps, Tooltip, Typography } from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
 
 type Props = {
-  mutate: () => void;
-  isLoading: boolean;
-  value: boolean;
-  modal: boolean;
-};
+  check: boolean;
+  callback: () => Promise<unknown>;
+  projectId: number;
+  count: number;
+} & RatingProps;
+export default function StarButton({ check, callback, projectId, count, ...props }: Props) {
+  const { token } = useAuth().accountInformation;
 
-/**
- * StarButton component – A button for rating a project or item using a star icon. 
- * The component uses the `Rating` component from Material-UI, allowing users to give a rating of 0 or 1 star.
- * The component also shows a loading icon when the rating is being submitted, and uses a tooltip to indicate the action.
- * 
- * @component
- * 
- * @param {Object} props - The component props.
- * @param {boolean} props.isLoading - A flag indicating whether the component is in a loading state (i.e., submitting the rating).
- * @param {Function} props.mutate - A function that will be called when the user changes the rating (e.g., submit the rating).
- * @param {boolean} props.value - The current rating value (0 or 1). Determines the star rating's visual representation.
- * 
- * @returns {JSX.Element} A button with a star icon that serves as a rating control, with a tooltip for additional information.
- * 
- * @example
- * ```tsx
- * <StarButton isLoading={isSubmitting} mutate={handleRatingChange} value={currentRating} modal={isModalContext} />
- * ```
- */
-export default function StarButton({ isLoading, mutate, value }: Props) {
-  if (isLoading) {
+  const { showDialog } = useAlertDialogContext();
+  const { setError } = useErrorReader(showDialog);
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async () => {
+      if (check) {
+        await postUnStarProject(projectId, token);
+      } else {
+        await postStarProject(projectId, token);
+      }
+
+      await callback();
+    },
+    onError: (err) => setError(err),
+  });
+
+  if (isPending) {
     return <AccessTimeIcon />;
   }
   return (
-    <Tooltip title="Puntuar">
-      <Rating
-        value={value ? 1 : 0}
-        max={1}
-        size="large"
-        onChange={() => mutate()}
-        sx={{ stroke: "red 1px" }}
-      />
-    </Tooltip>
+    <Box sx={{display: 'flex', alignItems: 'center'}}>
+      <Tooltip title="Puntuar">
+        <Rating
+          value={check ? 1 : 0}
+          max={1}
+          onChange={() => mutate()}
+          {...props}
+        />
+      </Tooltip>
+      {count != null && count >0 && <Typography variant="h5">({count})</Typography>}
+    </Box>
   );
 }

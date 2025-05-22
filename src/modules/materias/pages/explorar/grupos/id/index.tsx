@@ -1,7 +1,5 @@
 import AlertDialog from "@modules/general/components/alertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
-import { useModal } from "@modules/general/components/modal/hooks/useModal";
-import SpringModal from "@modules/general/components/springModal";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog, { ShowDialogParams } from "@modules/general/hooks/useAlertDialog";
 import useErrorReader, { SpecialError } from "@modules/general/hooks/useErrorReader";
@@ -11,16 +9,9 @@ import { getCursoById, getCursos } from "@modules/materias/services/get.curso";
 import { Curso } from "@modules/materias/types/curso";
 import { CursoService } from "@modules/materias/types/curso.service";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
-import ModalProyectoPortafolio from "@modules/proyectos/components/modalProyectoPortafolio";
-import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
-import { rutasUsuarios } from "@modules/usuarios/router/router";
 import {
   Alert,
-  Avatar,
   Box,
-  Button,
-  Card,
-  Grid2,
   IconButton,
   ListItemIcon,
   Menu,
@@ -28,7 +19,6 @@ import {
   MenuList,
   Stack,
   Typography,
-  useTheme,
 } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createContext, useEffect, useState } from "react";
@@ -39,6 +29,7 @@ import { patchEstudiantesCurso } from "@modules/materias/services/patch.curso.es
 import { rutasProyectos } from "@modules/proyectos/router";
 import EditIcon from "@mui/icons-material/Edit";
 import { rutasMaterias } from "@modules/materias/router/routes";
+import { AlertDialogProvider } from "@modules/general/context/alertDialogContext";
 
 export const DialogContext = createContext({
   showDialog: (_x: ShowDialogParams) => {},
@@ -92,8 +83,11 @@ function VerInformacionCurso() {
           return;
         }
       });
-      if (tipo == "A" || flag) return { ...response, id: idCurso } as CursoService;
-      throw new SpecialError("No te encuentras registrado en este curso", "FRONTEND_ERROR");
+      if (!(tipo == "A" || flag)) {
+        throw new SpecialError("No te encuentras registrado en este curso", "FRONTEND_ERROR");
+      }
+
+      return { ...response, id: idCurso } as CursoService;
     },
     queryKey: ["Get Curso By Id", idCurso ?? "-1", token],
   });
@@ -116,19 +110,6 @@ function VerInformacionCurso() {
       setCurso(adaptCursoService(data));
     }
   }, [data]);
-
-  const [projectSelect, setProjectSelect] = useState<ProyectoCard | null>(null);
-
-  function handleCard(project: ProyectoCard) {
-    setProjectSelect(project);
-    handleOpenModal();
-  }
-
-  const {
-    handleClose: handleCloseModal,
-    handleOpen: handleOpenModal,
-    open: openModal,
-  } = useModal();
 
   function MenuCurso() {
     /**
@@ -214,11 +195,9 @@ function VerInformacionCurso() {
             {tipo != "E" && (
               <MenuItem onClick={handleEdit}>
                 <ListItemIcon>
-                  <EditIcon fontSize="medium"/>
+                  <EditIcon fontSize="medium" />
                 </ListItemIcon>
-                <Typography variant="body2">
-                  Editar Curso
-                </Typography>
+                <Typography variant="body2">Editar Curso</Typography>
               </MenuItem>
             )}
           </MenuList>
@@ -228,7 +207,7 @@ function VerInformacionCurso() {
   }
 
   return (
-    <DialogContext.Provider value={{ showDialog: showDialog, setError: setError }}>
+    <AlertDialogProvider>
       {/* Generic alert dialog for success/error */}
       <AlertDialog
         handleAccept={handleAccept}
@@ -239,9 +218,6 @@ function VerInformacionCurso() {
         type={type}
         isLoading={isLoading}
       />
-      <SpringModal handleClose={handleCloseModal} open={openModal}>
-        <>{projectSelect && <ModalProyectoPortafolio proyecto={projectSelect} />}</>
-      </SpringModal>
 
       {/* Loader during data fetching */}
       {isLoadingFetch ? (
@@ -250,7 +226,7 @@ function VerInformacionCurso() {
         <>
           {/* Render only if course is available */}
           {curso && (
-            <Stack spacing={3} paddingX={{ lg: 5 }}>
+            <Stack spacing={3}>
               {/* Subject name and course group */}
               <Stack direction={"row"} justifyContent={"space-between"}>
                 <Typography variant="h3">
@@ -270,82 +246,73 @@ function VerInformacionCurso() {
               <Typography variant="h4">{LabelCurso.secciones}</Typography>
 
               {/* Sections layout */}
-              <Grid2 container spacing={3} direction={{ xs: "column-reverse", xl: "row" }}>
-                {/* List of course sections */}
-                <Grid2 size={{ xs: 12, lg: 8 }}>
-                  <Stack spacing={2}>
-                    {curso.secciones && curso.secciones.length > 0 ? (
-                      curso.secciones?.map((seccion, key) => (
-                        <CardSeccion
-                          seccion={seccion}
-                          idMateria={curso.materia?.id ?? 0}
-                          idCurso={curso.id}
-                          handleCard={handleCard}
-                          key={key}
-                        />
-                      ))
-                    ) : (
-                      <Alert severity="info">
-                        Este curso actualmente no tiene secciones agregadas
-                      </Alert>
-                    )}
-                  </Stack>
-                </Grid2>
 
-                <Grid2 size={{ xs: 12, lg: 4 }}>
-                  <FrameDocente docente={curso.docente} />
-                </Grid2>
-              </Grid2>
+              {/* List of course sections */}
+
+              <Stack spacing={2}>
+                {curso.secciones && curso.secciones.length > 0 ? (
+                  curso.secciones?.map((seccion, key) => (
+                    <CardSeccion
+                      seccion={seccion}
+                      idMateria={curso.materia?.id ?? 0}
+                      idCurso={curso.id}
+                      key={key}
+                    />
+                  ))
+                ) : (
+                  <Alert severity="info">Este curso actualmente no tiene secciones agregadas</Alert>
+                )}
+              </Stack>
             </Stack>
           )}
         </>
       )}
-    </DialogContext.Provider>
+    </AlertDialogProvider>
   );
 }
 
 export default VerInformacionCurso;
 
-/**
- * Optional component to render teacher (docente) information.
- * Uncomment and adapt if you need to display teacher cards in the future.
- */
+// /**
+//  * Optional component to render teacher (docente) information.
+//  * Uncomment and adapt if you need to display teacher cards in the future.
+//  */
 
-type FrameDocenteProps = {
-  docente: Curso["docente"];
-};
-const FrameDocente: React.FC<FrameDocenteProps> = ({ docente }) => {
-  if (!docente) return <></>;
-  const theme = useTheme();
+// type FrameDocenteProps = {
+//   docente: Curso["docente"];
+// };
+// const FrameDocente: React.FC<FrameDocenteProps> = ({ docente }) => {
+//   if (!docente) return <></>;
+//   const theme = useTheme();
 
-  const navigate = useNavigate();
+//   const navigate = useNavigate();
 
-  function nav() {
-    const ID: string = (docente?.id ?? "-1").toString();
-    navigate(rutasUsuarios.portafolio.replace(":id", ID));
-  }
+//   function nav() {
+//     const ID: string = (docente?.id ?? "-1").toString();
+//     navigate(rutasUsuarios.portafolio.replace(":id", ID));
+//   }
 
-  return (
-    <Card
-      sx={{
-        height: "auto",
-        padding: 2,
-        color: "white",
-        backgroundColor: theme.palette.primary.main,
-      }}
-    >
-      <Stack spacing={1}>
-        <Button onClick={nav}>
-          <Avatar src={docente.imagen} sx={{ width: 64, height: 64 }} />
-        </Button>
-        <Button
-          sx={{ textTransform: "none", color: "white", textAlign: "left" }}
-          onClick={nav}
-          variant="text"
-        >
-          <Typography variant="h6">{docente.nombre}</Typography>
-        </Button>
-      </Stack>
-    </Card>
-  );
-};
+//   return (
+//     <Card
+//       sx={{
+//         height: "auto",
+//         padding: 2,
+//         color: "white",
+//         backgroundColor: theme.palette.primary.main,
+//       }}
+//     >
+//       <Stack spacing={1}>
+//         <Button onClick={nav}>
+//           <Avatar src={docente.imagen} sx={{ width: 64, height: 64 }} />
+//         </Button>
+//         <Button
+//           sx={{ textTransform: "none", color: "white", textAlign: "left" }}
+//           onClick={nav}
+//           variant="text"
+//         >
+//           <Typography variant="h6">{docente.nombre}</Typography>
+//         </Button>
+//       </Stack>
+//     </Card>
+//   );
+// };

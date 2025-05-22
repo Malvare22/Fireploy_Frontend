@@ -31,8 +31,6 @@ import { Skeleton } from "@mui/material";
 import LogsFiles from "./logSection";
 import ArticleIcon from '@mui/icons-material/Article';
 
-
-
 type Props = {
   project: ProyectoSchema;
 };
