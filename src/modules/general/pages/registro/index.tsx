@@ -7,7 +7,9 @@ import {
   Box,
   Button,
   Card,
+  Checkbox,
   Grid2,
+  Link,
   MenuItem,
   Stack,
   TextField,
@@ -30,6 +32,7 @@ import { postSignUpWithGoogle, SignUpResponse } from "@modules/general/services/
 import { GoogleLogin } from "@react-oauth/google";
 import { loginUser } from "@modules/general/utils/account";
 import { rutasProyectos } from "@modules/proyectos/router";
+import { useState } from "react";
 
 /**
  * Registrar component renders the user registration form.
@@ -72,6 +75,8 @@ function Registrar() {
   const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
 
   const { setError } = useErrorReader(showDialog);
+
+  const [checked, setChecked] = useState<boolean>(false);
 
   /**
    * Handles the registration mutation.
@@ -125,11 +130,13 @@ function Registrar() {
               <AssignmentIndIcon fontSize="large" />
             </Grid2>
             <Grid2 size={12}>
-              <Alert
-                sx={{ display: "flex", alignItems: "center", gap: 3}}
-                severity="info"
-              >
-                <Stack direction={{md:"row", xs: 'column'}} spacing={2} alignItems={{md:"center"}} sx={{ overflow: 'hidden' }}>
+              <Alert sx={{ display: "flex", alignItems: "center", gap: 3 }} severity="info">
+                <Stack
+                  direction={{ md: "row", xs: "column" }}
+                  spacing={2}
+                  alignItems={{ md: "center" }}
+                  sx={{ overflow: "hidden" }}
+                >
                   <Typography>¿Deseas crear tu cuenta con Google?</Typography>
                   <GoogleLogin
                     onSuccess={(credentialResponse) => {
@@ -237,7 +244,14 @@ function Registrar() {
                 fullWidth
               />
             </Grid2>
-
+            <Stack direction={"row"} alignItems={"center"}>
+              <Checkbox checked={checked} onChange={() => setChecked(!checked)} />
+              <Typography>{"He leído y acepto las "}</Typography>
+              <Link sx={{ marginLeft: 0.5 }} target='_blank' href="http://fireploy.online:3001/docs/politicas-de-servicio" color="inherit">
+                <Typography>{"políticas de uso y privacidad"}</Typography>
+              </Link>
+              <Typography sx={{ marginLeft: 0.5 }}>{"del servicio de Fireploy"}</Typography>
+            </Stack>
             {/* Buttons */}
             <Grid2 size={12} sx={{ display: "flex", justifyContent: "center", gap: 3 }}>
               <Box>
@@ -246,7 +260,7 @@ function Registrar() {
                 </Button>
               </Box>
               <Box>
-                <Button variant="contained" loading={isPending} type="submit">
+                <Button variant="contained" loading={isPending} disabled={!checked} type="submit">
                   {labelRegisterUser.register}
                 </Button>
               </Box>
