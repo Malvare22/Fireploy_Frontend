@@ -124,7 +124,7 @@ function Principal() {
             </Typography>
             <Stack
               direction={{ md: "row", xs: "column" }}
-              justifyContent={{ md: "start", xs: "center" }}
+              justifyContent={{ lg: "start", xs: "center" }}
               alignItems={"center"}
               gap={3}
             >
@@ -253,14 +253,14 @@ function PrincipalAnimation() {
 
 function Deploy() {
   const content: [ReactNode, string, string][] = [
-    [<CloudSyncIcon sx={{ fontSize: 56 }} />, labelHome.deployDBTitle, labelHome.deployDBBody],
+    [<CloudSyncIcon sx={{ fontSize: 72 }} />, labelHome.deployDBTitle, labelHome.deployDBBody],
     [
-      <ContactPageIcon sx={{ fontSize: 56 }} />,
+      <ContactPageIcon sx={{ fontSize: 72 }} />,
       labelHome.deployHTTPSTitle,
       labelHome.deployHTTPSBody,
     ],
-    [<SchoolIcon sx={{ fontSize: 56 }} />, labelHome.deployLayersTitle, labelHome.deployLayersBody],
-    [<SchoolIcon sx={{ fontSize: 56 }} />, labelHome.deployShareTitle, labelHome.deployShareBody],
+    [<SchoolIcon sx={{ fontSize: 72 }} />, labelHome.deployLayersTitle, labelHome.deployLayersBody],
+    [<SchoolIcon sx={{ fontSize: 72 }} />, labelHome.deployShareTitle, labelHome.deployShareBody],
   ];
 
   const navigate = useNavigate();
@@ -290,11 +290,11 @@ function Deploy() {
           <Typography textAlign={"center"}>{labelHome.deployText}</Typography>
         </Stack>
 
-        <Grid2 container spacing={4} sx={{ paddingX: 10 }}>
-          {content.map((x) => {
+        <Grid2 container spacing={4} sx={{ paddingX: { md: 10, xs: 2 } }}>
+          {content.map(([icono, titulo, subtitulo]) => {
             return (
               <Grid2
-                size={6}
+                size={{md:6, xs: 12}}
                 component={Paper}
                 variant="dark"
                 sx={{
@@ -303,13 +303,15 @@ function Deploy() {
                   borderRadius: 2,
                 }}
               >
-                <Stack direction={"row"} alignItems={"center"} spacing={2}>
-                  {x[0]}
-                  <Stack spacing={1}>
-                    <Typography variant="h5">{x[1]}</Typography>
-                    <Typography>{x[2]}</Typography>
-                  </Stack>
-                </Stack>
+                <Grid2 container spacing={2} sx={{height: '100%'}}>
+                  <Grid2 size={{xs: 12, sm: 2}} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>{icono}</Grid2>
+                  <Grid2 size={{xs: 12, sm: 10}} sx={{height: '100%'}}>
+                    <Stack spacing={1}>
+                      <Typography variant="h5">{titulo}</Typography>
+                      <Typography>{subtitulo}</Typography>
+                    </Stack>
+                  </Grid2>
+                </Grid2>
               </Grid2>
             );
           })}
@@ -334,15 +336,15 @@ function PortafolioSection() {
   }
 
   return (
-    <Grid2 container sx={{ color: "white", marginX: 20, padding: 4 }} spacing={4}>
-      <Grid2 size={5}>
+    <Grid2 container sx={{ color: "white", marginX: { md: 20 }, padding: 4 }} direction={'column-reverse'} spacing={4}>
+      <Grid2 size={{ md: 5, xs: 12 }}>
         <Box
           component={"img"}
           src={getImage["portafolio_home"].ruta ?? ""}
-          sx={{ width: "100%", height: "300px", objectFit: "contain" }}
+          sx={{ width: "100%", objectFit: "contain" }}
         />
       </Grid2>
-      <Grid2 size={7}>
+      <Grid2 size={{ md: 7, xs: 12 }}>
         <Stack spacing={3}>
           <Typography variant="h3">{labelHome.portafolioTitle}</Typography>
           <Typography variant="body1">{labelHome.portafolioBody}</Typography>
