@@ -1,14 +1,12 @@
-import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import { getImage } from "@modules/general/utils/getImage";
 import { TECNOLOGIES } from "@modules/proyectos/utils/technologies";
-import { Grid2, IconButton, Paper, Typography } from "@mui/material";
+import { Button, Grid2, IconButton, Paper, Typography } from "@mui/material";
 import { Box, Stack, useMediaQuery, useTheme } from "@mui/system";
 import { keyframes } from "@emotion/react";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { openInNewTab } from "@modules/general/utils/openTab";
-import useSearch from "@modules/general/hooks/useSearch";
-import { useMemo } from "react";
+import HelpIcon from "@mui/icons-material/Help";
 
 export enum labelTecnologiesView {
   title = "Tecnologías",
@@ -20,84 +18,153 @@ export enum labelTecnologiesView {
 /**
  * TecnologiesView component – A section that displays available technologies for deployment,
  * including a list of technology cards with detailed descriptions and a search feature.
- * 
- * This component allows filtering of technology cards by search input, rendering a list 
+ *
+ * This component allows filtering of technology cards by search input, rendering a list
  * of technologies with titles, images, descriptions, and links.
- * 
+ *
  * @component
- * 
+ *
  * @returns {JSX.Element} The TecnologiesView section that includes technology cards and search functionality.
- * 
+ *
  * @example
  * ```tsx
  * <TecnologiesView />
  * ```
  */
 function TecnologiesView() {
-
   const init = keyframes`
   0% {
     opacity: 0;
   }
   100% {
     opacity: 1;
-  }`
+  }`;
 
-  type FilteredKeys = Exclude<
-    keyof typeof TECNOLOGIES,
-    "Java" | "PHP" | "ExpressJs" | "NodeJS" | "SpringBoot" | "Symphony"
-  >;
-  const tecnologies: [FilteredKeys, string, string, string][] = [
-    ["Angular", getImage["angular"].ruta, "Es un framework open source desarrollado en Typescript, enfocado en la creación de aplicaciones web de una sola página", ""],
+  type FilteredKeys = Exclude<keyof typeof TECNOLOGIES, "Java" | "PHP">;
+  const tecnologies: [FilteredKeys, string, string, string, string, string][] = [
+    [
+      "Angular",
+      getImage["angular"].ruta,
+      "Es un marco web que permite a los desarrolladores crear aplicaciones rápidas y confiables. Angular, gestionado por un equipo dedicado de Google, ofrece un amplio conjunto de herramientas, API y bibliotecas para simplificar y optimizar tu flujo de trabajo de desarrollo.",
+      "http://fireploy.online:3001/docs/introduccion",
+      "https://angular.dev/",
+      "https://github.com/Fireploy/Angular-Template",
+    ],
     [
       "React",
       getImage["react"].ruta,
-      "Es una librería de JavaScript, el cual permite agrupar componentes para la creación de interfaces de usuario dinámicas",
+      "React es una biblioteca. Te permite agrupar componentes, pero no prescribe cómo hacer el enrutamiento y la obtención de datos.",
+      "http://fireploy.online:3001/docs/introduccion",
+      "https://es.react.dev/",
+      "https://github.com/Fireploy/React-Template",
+    ],
+    [
+      "Nextjs",
+      getImage["nextjs"].ruta,
+      "Utilizado por algunas de las empresas más grandes del mundo, Next.js le permite crear aplicaciones web de alta calidad con el poder de los componentes React",
+      "http://fireploy.online:3001/docs/introduccion",
+      "https://nextjs.org/",
+      "https://github.com/Fireploy/NextJS-Template",
+    ],
+    [
+      "Laravel",
+      getImage["laravel"].ruta,
+      "Ofrece un ecosistema completo para desarrolladores web. Nuestro framework PHP de código abierto, productos, paquetes y kits de inicio ofrecen todo lo necesario para crear, implementar y supervisar aplicaciones web.",
+      "http://fireploy.online:3001/docs/introduccion",
+      "https://laravel.com/",
+      "https://github.com/Fireploy/Laravel-Template",
+    ],
+    [
+      "Nodejs",
+      getImage["nodejs_banner"].ruta,
+      "Node.js® es un entorno de ejecución de JavaScript multiplataforma, de código abierto y gratuito que permite a los desarrolladores crear servidores, aplicaciones web, herramientas de línea de comando y scripts.",
+      "http://fireploy.online:3001/docs/introduccion",
+      "https://nodejs.org/es",
+      "https://github.com/Fireploy/React-Template",
+    ],
+    [
+      "Symfony",
+      getImage["symfony_banner"].ruta,
+      "Symfony es un conjunto de paquetes PHP, un marco de aplicaciones web, una filosofía y una comunidad, todos trabajando juntos en armonía.",
+      "http://fireploy.online:3001/docs/introduccion",
+      "https://symfony.com/",
+      "https://github.com/Fireploy/Symfony-Template",
+    ],
+    [
+      "Expressjs",
+      getImage["expressjs_banner"].ruta,
+      "Express es un marco de aplicación web Node.js mínimo y flexible que proporciona un conjunto sólido de características para aplicaciones web y móviles.",
+      "http://fireploy.online:3001/docs/introduccion",
+      "https://expressjs.com/",
+      "https://github.com/Fireploy/Express-Template",
+    ],
+    [
+      "Springboot",
+      getImage["springboot"].ruta,
+      "Spring Boot facilita la creación de aplicaciones independientes basadas en Spring y de nivel de producción que puedes simplemente ejecutar. La mayoría de las aplicaciones Spring Boot requieren una configuración mínima de Spring.",
+      "http://fireploy.online:3001/docs/introduccion",
+      "https://spring.io/projects/spring-boot",
+      "https://github.com/Fireploy/SpringBoot-Template",
+    ],
+    [
+      "Html",
+      getImage["html5"].ruta,
+      "Es el componente más básico de la Web. Define el significado y la estructura del contenido web. Además de HTML, generalmente se utilizan otras tecnologías para describir la apariencia/presentación de una página web (CSS) o la funcionalidad/comportamiento (JavaScript).",
+      "http://fireploy.online:3001/docs/introduccion",
+      "https://developer.mozilla.org/es/docs/Web/HTML",
+      "https://github.com/Fireploy/Html-Template",
+    ],
+    [
+      "Django",
+      getImage["django_banner"].ruta,
+      "Django es un framework web de alto nivel basado en Python que fomenta el desarrollo rápido y un diseño limpio y pragmático. Desarrollado por desarrolladores experimentados, se encarga de gran parte de las complicaciones del desarrollo web, para que puedas concentrarte en escribir tu aplicación sin tener que reinventar la rueda. Es gratuito y de código abierto.",
+      "http://fireploy.online:3001/docs/introduccion",
+      "https://www.djangoproject.com/",
       "",
     ],
-    ["Nextjs", getImage["nextjs"].ruta, "Es un marco web de desarrollo de React, el cual permite funcionalidades desde el lado del servidor, como el renderizado de sitios en este", ""],
-    ["Laravel", getImage["laravel"].ruta, "Es un framework para el desarrollo de sitios web con PHP, que busca la sintaxis expresiva y elegante", ""],
   ];
 
-  const {filteredData, setSearchValue, searchValue} = useSearch();
-
-  function searchFn(x: typeof tecnologies, s: string){
-    return x.filter(([titulo]) => titulo.toLowerCase().includes(s.toLowerCase()));
-  }
-
-  const cardsFiltered = useMemo(()=> {
-    return filteredData(tecnologies, searchFn);
-  }, [searchValue])
-
   return (
-    <Stack spacing={5} sx={{animation: `${init} 2s`,  color: "white"}}>
+    <Stack spacing={5} sx={{ animation: `${init} 2s`, color: "white" }}>
       <Box>
-        <Stack spacing={3} >
-          <Typography textAlign={'center'} variant="h3">{labelTecnologiesView.title}</Typography>
-          <Typography textAlign={'center'} sx={{ paddingX: {md: 20, xs: 2} }} variant="h6">{labelTecnologiesView.bodyPrincial}</Typography>
+        <Stack spacing={3}>
+          <Typography textAlign={"center"} variant="h3">
+            {labelTecnologiesView.title}
+          </Typography>
+          <Typography textAlign={"center"} sx={{ paddingX: { md: 20, xs: 2 } }} variant="h6">
+            {labelTecnologiesView.bodyPrincial}
+          </Typography>
           <Carousel />
         </Stack>
       </Box>
-      <Stack spacing={3} sx={{ paddingX: {md: 20, xs: 2} }}>
+      <Stack spacing={3} sx={{ paddingX: { md: 10, xs: 2 } }}>
         <Stack spacing={3}>
-          <Typography textAlign={'center'} variant="h4">{labelTecnologiesView.subTitle}</Typography>
-          <Typography textAlign={'center'}>{labelTecnologiesView.bodySecondary}</Typography>
+          <Typography textAlign={"center"} variant="h4">
+            {labelTecnologiesView.subTitle}
+          </Typography>
+          <Typography textAlign={"center"}>{labelTecnologiesView.bodySecondary}</Typography>
         </Stack>
-        <Stack spacing={3}>
-          <Grid2 container sx={{ display: "flex", justifyContent: "end" }}>
-            <Grid2 size={{ xs: 12, md: 4 }}>
-              <TextFieldSearch setSearchValue={setSearchValue} fullWidth />
+        <Grid2 container spacing={3}>
+          {tecnologies.map(([title, img, text, myDoc, oficialDoc, template]) => (
+            <Grid2 size={{ md: 6, xs: 12 }}>
+              <CardTecnology
+                img={img}
+                subtitle={text}
+                title={title}
+                urlDoc={myDoc}
+                urlOficialDoc={oficialDoc}
+                urlTemplate={template}
+              />
             </Grid2>
-          </Grid2>
-          <Grid2 container spacing={3}>
-            {cardsFiltered.map(([title, img, text, url]) => (
-              <Grid2 size={{ md: 6, xs: 12 }}>
-                <CardTecnology img={img} subtitle={text} title={title} url={url} />
-              </Grid2>
-            ))}
-          </Grid2>
-        </Stack>
+          ))}
+        </Grid2>
+        
       </Stack>
+      <Box sx={{display: 'flex', justifyContent: 'center', paddingX: 2}}><Typography variant="caption" maxWidth={'800px'} textAlign={"center"}>
+          {
+            "Fireploy no asume ninguna autoría sobre lo redactado en las descripciones de los frameworks y librerías plasmadas en esta vista, así como sus respectivas imágenes, dicha información fue extraída de sus sitios web oficiales y posee unicamente fines informativos y educativos."
+          }
+        </Typography></Box>
     </Stack>
   );
 }
@@ -107,13 +174,13 @@ export default TecnologiesView;
 /**
  * Carousel component – Displays a scrolling carousel of technology banners.
  * The carousel continuously scrolls banners horizontally to showcase various technologies.
- * 
+ *
  * This component is responsive and adjusts the animation speed based on the screen size.
- * 
+ *
  * @component
- * 
+ *
  * @returns {JSX.Element} A horizontally scrolling carousel of technology banners.
- * 
+ *
  * @example
  * ```tsx
  * <Carousel />
@@ -131,6 +198,8 @@ function Carousel() {
     ["Symfony", getImage["symfony_banner"].ruta],
     ["Php", getImage["php_banner"].ruta],
     ["Nodejs", getImage["nodejs_banner"].ruta],
+    ["Django", getImage["django_banner"].ruta],
+    ["Html", getImage["html5"].ruta],
   ];
 
   const scrollRightToLeft = keyframes`
@@ -151,7 +220,7 @@ function Carousel() {
         sx={{
           width: "100%",
           overflow: "hidden",
-          boxShadow: '0px 0px 2px 0px rgba(0,0,0,0.25)',
+          boxShadow: "0px 0px 2px 0px rgba(0,0,0,0.25)",
           paddingY: 2,
         }}
       >
@@ -181,74 +250,115 @@ type PropsCardTecnology = {
   img: string;
   title: string;
   subtitle: string;
-  url: string;
+  urlDoc: string;
+  urlOficialDoc: string;
+  urlTemplate: string;
 };
 
 /**
  * CardTecnology component – Displays a card for a single technology with an image, title, description, and external link.
  * The card includes the technology's image, a short description, and a link to more details about the technology.
- * 
+ *
  * @component
- * 
+ *
  * @param {string} img - The image source URL for the technology.
  * @param {string} title - The title of the technology.
  * @param {string} subtitle - A brief description of the technology.
  * @param {string} url - The URL for the technology's details.
- * 
+ *
  * @returns {JSX.Element} A card with technology information and a link to more details.
- * 
+ *
  * @example
  * ```tsx
  * <CardTecnology img="react.png" title="React" subtitle="A JavaScript library for building UIs" url="https://React.org" />
  * ```
  */
-function CardTecnology({ img, subtitle, title, url }: PropsCardTecnology) {
+function CardTecnology({
+  img,
+  subtitle,
+  title,
+  urlDoc,
+  urlOficialDoc,
+  urlTemplate,
+}: PropsCardTecnology) {
+  function handleSupport() {
+    openInNewTab(urlDoc);
+  }
+
+  function handleTemplate() {
+    openInNewTab(urlTemplate);
+  }
+
+  function handleOfficial() {
+    openInNewTab(urlOficialDoc);
+  }
+
   return (
-    <Paper variant="glass">
-      <Grid2 container sx={{ overflow: "hidden", height: 200}} spacing={3} padding={0}>
-      <Grid2 size={4}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-            padding: 1,
-            boxSizing: "border-box",
-          }}
-        >
+    <Paper variant="glass" sx={{ height: "100%" }}>
+      <Grid2 container sx={{ overflow: "hidden", height: "inherit" }} spacing={3} padding={0}>
+        <Grid2 size={4}>
           <Box
-            component="img"
-            src={img}
-            alt={title}
             sx={{
-              maxWidth: "100%",
-              maxHeight: "100%",
-              objectFit: "contain",
-              width: "auto",
-              height: "auto",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+              padding: 1,
+              boxSizing: "border-box",
             }}
-          />
-        </Box>
-      </Grid2>
-      <Grid2 size={8}>
-        <Stack justifyContent="space-between" sx={{ height: "100%" }}>
-          <Stack spacing={1}>
-            <Typography variant="h4">{title}</Typography>
-            <Typography variant="body2">{subtitle}</Typography>
-          </Stack>
-          <Stack direction={"row"} justifyContent={"space-between"}>
-            <Stack direction={"row"} spacing={0.5} alignItems={"center"}>
-              <Typography variant="caption">by Fireploy</Typography>
-              <RocketLaunchIcon />
+          >
+            <Box
+              component="img"
+              src={img}
+              alt={title}
+              sx={{
+                maxWidth: "100%",
+                maxHeight: "100%",
+                objectFit: "contain",
+                width: "auto",
+                height: "auto",
+              }}
+            />
+          </Box>
+        </Grid2>
+        <Grid2 size={8}>
+          <Stack spacing={2}>
+            <Stack spacing={1}>
+              <Stack direction={"row"} justifyContent={"space-between"}>
+                <Typography variant="h4">{title}</Typography>
+                <IconButton onClick={handleSupport}>
+                  <HelpIcon sx={{ color: "white" }} />
+                </IconButton>
+              </Stack>
+              <Typography variant="body2">{subtitle}</Typography>
             </Stack>
-            <IconButton onClick={() => openInNewTab(url)}>
-              <OpenInNewIcon />
-            </IconButton>
+            <Stack spacing={1}>
+              <Box>
+                <Button
+                  endIcon={<RocketLaunchIcon />}
+                  onClick={handleTemplate}
+                  variant="contained"
+                  color="primary"
+                  sx={{ borderRadius: 2 }}
+                >
+                  <Typography variant="caption">{"Get Template by Fireploy"}</Typography>
+                </Button>
+              </Box>
+              <Box>
+                <Button
+                  endIcon={<OpenInNewIcon />}
+                  onClick={handleOfficial}
+                  variant="contained"
+                  color="secondary"
+                  sx={{ borderRadius: 2 }}
+                >
+                  <Typography variant="caption">{"Ver Documentación oficial"}</Typography>
+                </Button>
+              </Box>
+            </Stack>
           </Stack>
-        </Stack>
+        </Grid2>
       </Grid2>
-    </Grid2>
     </Paper>
   );
 }

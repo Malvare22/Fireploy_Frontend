@@ -23,11 +23,18 @@ import php_banner from "@modules/general/assets/bannerLogos/php.png";
 import react from "@modules/general/assets/bannerLogos/react.png";
 import springboot_banner from "@modules/general/assets/bannerLogos/springboot.png";
 import symfony_banner from "@modules/general/assets/bannerLogos/symphony.png";
+import django_banner from "@modules/general/assets/bannerLogos/django.png";
+
+
 
 // Logos
+import nextjs from "@modules/general/assets/tecnologiesLogos/nextjs.png";
 import angular from "@modules/general/assets/tecnologiesLogos/angular.png";
 import laravel from "@modules/general/assets/tecnologiesLogos/laravel.png";
-import nextjs from "@modules/general/assets/tecnologiesLogos/nextjs.png";
+import springboot from "@modules/general/assets/tecnologiesLogos/springBoot.png";
+import html5 from "@modules/general/assets/tecnologiesLogos/html5.png";
+
+
 
 //BD
 import mongodb from "@modules/general/assets/tecnologias/mongoDB.png";
@@ -82,11 +89,14 @@ export const assetImages = {
   react,
   springboot_banner,
   symfony_banner,
+  django_banner,
 
   // Technology Logos
   angular,
   laravel,
   nextjs,
+  springboot,
+  html5,
 
   mongodb,
   mysql,

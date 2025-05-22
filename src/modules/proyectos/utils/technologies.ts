@@ -31,7 +31,7 @@ export enum TECNOLOGIES {
   Symfony = "Symfony",
   Html = 'HTML',
   Python = 'Python',
-  Django = 'Django'
+  Django = 'Django',
 }
 
 /**
