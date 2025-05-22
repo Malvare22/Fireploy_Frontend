@@ -21,12 +21,14 @@ import { Materia } from "@modules/materias/types/materia";
 import { rutasProyectos } from "@modules/proyectos/router";
 import { Curso } from "@modules/materias/types/curso";
 import { evaluateDate, getCurrentDate } from "@modules/general/utils/fechas";
+import { useModal } from "@modules/general/components/modal/hooks/useModal";
+import SpringModal from "@modules/general/components/springModal";
+import CardProjectModal from "@modules/proyectos/components/modalProyectoPortafolio";
 
 type CardSeccionProps = {
   seccion: Seccion;
   idMateria: Materia["id"];
   idCurso: Curso["id"];
-  handleCard: (project: ProyectoCard) => void;
 };
 
 /**
@@ -57,10 +59,23 @@ type CardSeccionProps = {
  * />
  * ```
  */
-const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard, idMateria, idCurso }) => {
+const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, idMateria, idCurso }) => {
   const [proyectos, setProyectos] = useState<ProyectoCard[]>([]);
 
   const [buffer, setBuffer] = useState<ProyectoCard[]>([]);
+
+  const [projectSelect, setProjectSelect] = useState<ProyectoCard | null>(null);
+
+  function handleCard(project: ProyectoCard) {
+    setProjectSelect(project);
+    handleOpenModal();
+  }
+
+  const {
+    handleClose: handleCloseModal,
+    handleOpen: handleOpenModal,
+    open: openModal,
+  } = useModal();
 
   const navigate = useNavigate();
 
@@ -91,6 +106,7 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard, idMateri
     data,
     isLoading: isLoadingFetch,
     error,
+    refetch,
   } = useQuery({
     queryFn: () => getProjectByIdSection(token, seccion.id || -1),
     queryKey: ["Get Projects To Section", seccion.id || -1, token],
@@ -103,6 +119,8 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard, idMateri
   useEffect(() => {
     if (data) setProyectos(data.map(adaptProject).map(adaptProjectToCard));
   }, [data]);
+
+  console.log(data)
 
   const theme = useTheme();
 
@@ -150,6 +168,10 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard, idMateri
         type={type}
         textBody={message}
       />
+      <SpringModal handleClose={handleCloseModal} open={openModal}>
+        <>{projectSelect && <CardProjectModal project={projectSelect} callback={refetch} />}</>
+      </SpringModal>
+
       {isLoadingFetch ? (
         <LoaderElement />
       ) : (
@@ -157,18 +179,24 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard, idMateri
           <Typography>{seccion.descripcion}</Typography>
           <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
             <Typography variant="h5">{labelCardSeccion.proyectos}</Typography>
-            <GeneralButton mode={buttonTypes.add} onClick={nav} disabled={disabledButton} size="small" />
+            <GeneralButton
+              mode={buttonTypes.add}
+              onClick={nav}
+              disabled={disabledButton}
+              size="small"
+            />
           </Stack>
           {buffer.length > 0 ? (
             <>
               <SelectOrders data={proyectos} setRefineData={setBuffer} sorterOptions={sorters} />
-              <Grid2 container spacing={3} >
+              <Grid2 container spacing={3}>
                 {buffer.map((proyecto, key) => (
                   <Grid2 size={{ lg: 4, md: 6, xs: 12 }} display={"flex"} justifyContent={"center"}>
                     <ProjectCard
                       handleOpen={() => handleCard(proyecto)}
                       proyecto={proyecto}
                       key={key}
+                      callback={refetch}
                     />
                   </Grid2>
                 ))}

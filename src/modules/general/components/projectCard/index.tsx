@@ -10,76 +10,41 @@ import {
   useTheme,
 } from "@mui/material";
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import { ProjectCardMembers } from "../projectCardAvatar";
-import { DialogContext } from "@modules/materias/pages/explorar/grupos/id";
-import { useMutation } from "@tanstack/react-query";
-import { postStarProject, postUnStarProject } from "@modules/proyectos/services/post.calificar";
-import { VARIABLES_LOCAL_STORAGE } from "@modules/general/enums/variablesLocalStorage";
 import { useAuth } from "@modules/general/context/accountContext";
 import StarButton from "@modules/proyectos/components/starButton";
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { ExecutionState } from "@modules/proyectos/components/executionState";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { openInNewTab } from "@modules/general/utils/openTab";
 
 type ProjectCardProps = {
-  /**
-   * Project data to be rendered in the card.
-   */
   proyecto: ProyectoCard;
 
-  /**
-   * Callback function to handle card click events (e.g. open modal or navigate).
-   */
   handleOpen: () => void;
+
+  callback: () => Promise<unknown>;
 };
 
-export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }) => {
+export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen, callback }) => {
   const theme = useTheme();
 
-  const [localValue, setLocalValue] = useState<boolean>(false);
-  const { token, id } = useAuth().accountInformation;
-
-  const { setError } = useContext(DialogContext);
-
-  useEffect(() => {
-    if (!localStorage.getItem(VARIABLES_LOCAL_STORAGE.SCORES))
-      localStorage.setItem(VARIABLES_LOCAL_STORAGE.SCORES, JSON.stringify([]));
-    else {
-      const LIKES = JSON.parse(
-        localStorage.getItem(VARIABLES_LOCAL_STORAGE.SCORES) ?? "[]"
-      ) as number[];
-      setLocalValue(LIKES.includes(proyecto.id) || proyecto.fav_usuarios.includes(id));
-    }
-  }, []);
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: async () => {
-      if (localValue) {
-        return await postUnStarProject(proyecto.id, token);
-      } else {
-        return await postStarProject(proyecto.id, token);
-      }
-    },
-    onSuccess: () => {
-      const LIKES = JSON.parse(
-        localStorage.getItem(VARIABLES_LOCAL_STORAGE.SCORES) ?? "[]"
-      ) as number[];
-      const nValue = localValue
-        ? LIKES.filter((_proyectoId) => _proyectoId != proyecto.id)
-        : [...LIKES, proyecto.id];
-      localStorage.setItem(VARIABLES_LOCAL_STORAGE.SCORES, JSON.stringify(nValue));
-      setLocalValue(!localValue);
-    },
-    onError: (err) => setError(err),
-  });
+  const { id } = useAuth().accountInformation;
 
   const disableUrl = !proyecto.url || proyecto.url?.trim().length == 0 || proyecto.estado != "N";
 
   function handleUrl() {
     if (proyecto.url) openInNewTab(proyecto.url);
   }
+
+  const currentValues = useMemo(() => {
+    if (proyecto) {
+      const count = proyecto.fav_usuarios.length;
+      const check = proyecto.fav_usuarios.includes(id);
+      return { count, check };
+    } else return null;
+  }, [proyecto]);
 
   function ContentImage() {
     return (
@@ -142,9 +107,17 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }
             </Box>
           ) : (
             <Box
-              sx={{ width: "100%", height: 180, display: 'flex', alignItems: 'center', borderRadius: 1, justifyContent: 'center', backgroundColor: theme.palette.primary.main}}
+              sx={{
+                width: "100%",
+                height: 180,
+                display: "flex",
+                alignItems: "center",
+                borderRadius: 1,
+                justifyContent: "center",
+                backgroundColor: theme.palette.primary.main,
+              }}
             >
-              <RocketLaunchIcon sx={{fontSize: 96, color: 'white'}}/>
+              <RocketLaunchIcon sx={{ fontSize: 96, color: "white" }} />
               <ContentImage />
             </Box>
           )}
@@ -195,8 +168,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen }
         <Divider />
         <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
           <ProjectCardMembers integrantes={proyecto.integrantes} />
-          {id != -1 && (
-            <StarButton modal={false} isLoading={isPending} mutate={mutate} value={localValue} />
+          {id != -1 && currentValues && (
+            <StarButton
+              callback={callback}
+              check={currentValues.check}
+              count={currentValues.count}
+              projectId={proyecto.id}
+            />
           )}
         </Stack>
       </Stack>

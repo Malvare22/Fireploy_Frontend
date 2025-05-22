@@ -48,7 +48,7 @@ export async function getProjectByUserId(token: string, id: number) {
 }
 
 export async function getPublicProjectById(id: number) {
-  const response = await getData<ProyectoService[]>(`/proyecto/${id}`, {}, {});
+  const response = await getData<ProyectoService>(`/proyecto/public/${id}`, {}, {});
 
   return response;
 }
