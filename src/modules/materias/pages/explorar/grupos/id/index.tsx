@@ -214,11 +214,9 @@ function VerInformacionCurso() {
             {tipo != "E" && (
               <MenuItem onClick={handleEdit}>
                 <ListItemIcon>
-                  <EditIcon fontSize="medium"/>
+                  <EditIcon fontSize="medium" />
                 </ListItemIcon>
-                <Typography variant="body2">
-                  Editar Curso
-                </Typography>
+                <Typography variant="body2">Editar Curso</Typography>
               </MenuItem>
             )}
           </MenuList>
@@ -250,7 +248,7 @@ function VerInformacionCurso() {
         <>
           {/* Render only if course is available */}
           {curso && (
-            <Stack spacing={3} paddingX={{ lg: 5 }}>
+            <Stack spacing={3}>
               {/* Subject name and course group */}
               <Stack direction={"row"} justifyContent={"space-between"}>
                 <Typography variant="h3">
@@ -270,32 +268,23 @@ function VerInformacionCurso() {
               <Typography variant="h4">{LabelCurso.secciones}</Typography>
 
               {/* Sections layout */}
-              <Grid2 container spacing={3} direction={{ xs: "column-reverse", xl: "row" }}>
-                {/* List of course sections */}
-                <Grid2 size={{ xs: 12, lg: 8 }}>
-                  <Stack spacing={2}>
-                    {curso.secciones && curso.secciones.length > 0 ? (
-                      curso.secciones?.map((seccion, key) => (
-                        <CardSeccion
-                          seccion={seccion}
-                          idMateria={curso.materia?.id ?? 0}
-                          idCurso={curso.id}
-                          handleCard={handleCard}
-                          key={key}
-                        />
-                      ))
-                    ) : (
-                      <Alert severity="info">
-                        Este curso actualmente no tiene secciones agregadas
-                      </Alert>
-                    )}
-                  </Stack>
-                </Grid2>
 
-                <Grid2 size={{ xs: 12, lg: 4 }}>
-                  <FrameDocente docente={curso.docente} />
-                </Grid2>
-              </Grid2>
+              {/* List of course sections */}
+
+              <Stack spacing={2}>
+                {curso.secciones && curso.secciones.length > 0 ? (
+                  curso.secciones?.map((seccion, key) => (
+                    <CardSeccion
+                      seccion={seccion}
+                      idMateria={curso.materia?.id ?? 0}
+                      idCurso={curso.id}
+                      key={key}
+                    />
+                  ))
+                ) : (
+                  <Alert severity="info">Este curso actualmente no tiene secciones agregadas</Alert>
+                )}
+              </Stack>
             </Stack>
           )}
         </>

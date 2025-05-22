@@ -20,8 +20,10 @@ import { getCursoById, getCursos } from "@modules/materias/services/get.curso";
 import { getMateriaById } from "@modules/materias/services/get.materia.services";
 import { patchEstudiantesCurso } from "@modules/materias/services/patch.curso.estudiantes";
 import { postCreateSolicitudCurso } from "@modules/materias/services/post.solicitud.curso";
-import { Materia, materiasDePrueba } from "@modules/materias/types/materia";
-import { adaptMateriaServiceToMateria } from "@modules/materias/utils/adapters/materia.service";
+import { Curso } from "@modules/materias/types/curso";
+import { Materia } from "@modules/materias/types/materia";
+import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
+import { adaptMateriaService } from "@modules/materias/utils/adapters/materia.service";
 import { Alert, Card, Grid2, Stack, Typography } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -29,7 +31,7 @@ import { useParams } from "react-router-dom";
 
 /**
  * VerCursosMateria component – Displays all available course groups (cursos) for a specific subject (materia).
- * 
+ *
  * This component fetches the details of a subject (materia) from the API, and then displays the list of available course groups (cursos).
  * It also allows users (students or teachers) to register for a course or submit a course request, depending on their role.
  * The component handles loading, success, and error states with modal dialogs and feedback messages.
@@ -40,9 +42,9 @@ import { useParams } from "react-router-dom";
  * ```tsx
  * <VerCursosMateria />
  * ```
- * 
+ *
  * @returns {JSX.Element} The rendered component displaying the course groups for a subject, with registration functionality.
- * 
+ *
  * @notes
  * - Students can register for available courses directly.
  * - Teachers can submit a course request for approval.
@@ -53,6 +55,10 @@ function VerCursosMateria() {
 
   /** Map of course IDs the user is registered in */
   const [myGroupsIds, setMyGroupsIds] = useState<Map<string, boolean> | undefined>(undefined);
+
+    const [materia, setMateria] = useState<Materia | undefined>(undefined);
+
+    const [cursos, setCursos] = useState<Curso[] | undefined>(undefined);
 
   /** Alert dialog control hook */
   const { showDialog, open, title, message, type, handleAccept, isLoading, setIsLoading } =
@@ -70,21 +76,24 @@ function VerCursosMateria() {
   /**
    * Query to get subject (materia) details by ID
    */
-  const { data, error } = useQuery({
+  const { isPending, error } = useQuery({
     queryFn: async () => {
-      let response = await getMateriaById(token, parseInt(idMateria ?? "-1"));
+      let materia = await getMateriaById(token, parseInt(idMateria ?? "-1"));
 
-      if (response.cursos) {
+      if (materia.cursos) {
         const updatedCursos = await Promise.all(
-          response.cursos.map(async (curso) => {
-            const { docente } = await getCursoById(token, curso.id);
-            return { ...curso, docente };
+          materia.cursos.map(async (curso) => {
+            return await getCursoById(token, curso.id);
           })
         );
-        response.cursos = updatedCursos;
+        
+        setCursos(updatedCursos.map((x) => adaptCursoService(x)));
+
       }
 
-      return response;
+      setMateria(adaptMateriaService(materia));
+
+      return true;
     },
     queryKey: ["Get Groups Explore", parseInt(idMateria ?? "-1"), token],
   });
@@ -110,7 +119,7 @@ function VerCursosMateria() {
       if (IS_TEACHER) return await getCursos(token, { docente: id });
       return [];
     },
-    queryKey: ["Get My Groups For Explore", id, token],
+    queryKey: ["Get My Groups For Explore", token, idMateria],
   });
 
   /** Handle API error for user groups */
@@ -127,7 +136,7 @@ function VerCursosMateria() {
    * Mutation to register student to a course
    */
   const { isPending: isPendingRegister, mutate: mutateRegister } = useMutation({
-    mutationFn: async ({cursoId, studentId}:{cursoId: string, studentId: number}) => {
+    mutationFn: async ({ cursoId, studentId }: { cursoId: string; studentId: number }) => {
       setIsLoading(true);
       if (!IS_TEACHER) return await patchEstudiantesCurso(token, [studentId], "A", cursoId);
       else return await postCreateSolicitudCurso(token, id, cursoId ?? "");
@@ -148,19 +157,11 @@ function VerCursosMateria() {
     onError: (error) => setError(error),
   });
 
-  /** Adapted materia object for rendering */
-  const [materia, setMateria] = useState<Materia | undefined>(materiasDePrueba[0]);
 
-  /** When API data is ready, adapt it for the UI */
-  useEffect(() => {
-    if (data) {
-      setMateria(adaptMateriaServiceToMateria(data));
-    }
-  }, [data]);
 
   /** Confirm registration when user accepts modal */
   function handleAcceptConfirmation() {
-    mutateRegister({cursoId: idCurso ?? '', studentId: id});
+    mutateRegister({ cursoId: idCurso ?? "", studentId: id });
   }
 
   /** Modal dialog hook */
@@ -207,7 +208,7 @@ function VerCursosMateria() {
       />
 
       {/* Show loader while data is loading */}
-      {isLoading || isLoadingMyGroups ? (
+      {isPending || isLoadingMyGroups ? (
         <LoaderElement />
       ) : (
         <>
@@ -222,16 +223,17 @@ function VerCursosMateria() {
               </Card>
 
               {/* List of course groups or warning if none available */}
-              {materia.cursos && materia.cursos.length > 0 ? (
+              {cursos && cursos.length > 0 ? (
                 <>
-                  <Typography variant="h4">{labelListarCursos.grupos}</Typography>
+                  <Typography variant="h4">{labelListarCursos.titulo}</Typography>
                   <Grid2 container spacing={4}>
-                    {materia?.cursos?.map((curso, key) => (
-                      <Grid2 size={{ xl: 4, md: 6, xs: 12 }} key={key}>
+                    {cursos.map((curso) => (
+                      <Grid2 size={12} key={curso.grupo}>
                         <CardCurso
                           isRegister={myGroupsIds?.get(curso.id ?? "-1") ?? false}
                           onClick={() => handleIdGroup(curso.id)}
                           curso={curso}
+                          materiaNombre={materia.nombre}
                           userType={tipo}
                         />
                       </Grid2>

@@ -162,9 +162,9 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, handleCard, idMateri
           {buffer.length > 0 ? (
             <>
               <SelectOrders data={proyectos} setRefineData={setBuffer} sorterOptions={sorters} />
-              <Grid2 container rowSpacing={2}>
+              <Grid2 container spacing={3} >
                 {buffer.map((proyecto, key) => (
-                  <Grid2 size={{ lg: 6, md: 6, xs: 12 }} display={"flex"} justifyContent={"center"}>
+                  <Grid2 size={{ lg: 4, md: 6, xs: 12 }} display={"flex"} justifyContent={"center"}>
                     <ProjectCard
                       handleOpen={() => handleCard(proyecto)}
                       proyecto={proyecto}

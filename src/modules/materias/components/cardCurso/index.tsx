@@ -4,7 +4,7 @@ import {
   Box,
   Button,
   Card,
-  Divider,
+  Chip,
   Grid2,
   Stack,
   Tooltip,
@@ -18,22 +18,31 @@ import { useNavigate } from "react-router";
 import { AccountInformation, useAuth } from "@modules/general/context/accountContext";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { rutasMaterias } from "@modules/materias/router/routes";
+import SchoolIcon from "@mui/icons-material/School";
+import EditNoteIcon from "@mui/icons-material/EditNote";
 
 type CardCursoProps = {
   curso: Curso;
-  onClick: () => void;
   userType: AccountInformation["tipo"];
-  isRegister?: boolean;
+  isRegister: boolean;
+  materiaNombre: string;
+  onClick?: () => void;
 };
 
-const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, userType, isRegister }) => {
+const CardCurso: React.FC<CardCursoProps> = ({
+  curso,
+  onClick,
+  userType,
+  isRegister,
+  materiaNombre,
+}) => {
   const navigate = useNavigate();
 
   const { id } = useAuth().accountInformation;
 
   const theme = useTheme();
 
-  console.log(curso)
+  const showDocentOwnerStyle = !(userType != "D" || (userType == "D" && !isRegister));
 
   const buttonText = () => {
     if (userType == "E") return isRegister ? "Acceder" : labelCardCurso.inscribirme;
@@ -48,7 +57,7 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, userType, isRegis
   function handleButton() {
     if (isRegister || userType == "A")
       navigate(rutasMaterias.verCurso.replace(":idCurso", curso.id ?? "-1"));
-    else onClick();
+    else if (onClick) onClick();
   }
 
   /**
@@ -59,25 +68,66 @@ const CardCurso: React.FC<CardCursoProps> = ({ curso, onClick, userType, isRegis
   };
 
   return (
-    <Card >
-      <Stack spacing={2} sx={{padding: 1}}>
-        <Box>
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", padding:1 }}>
-            <Box sx={{ width: 64, height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: theme.palette.error.main, borderRadius: 2}}>
-              <Typography variant="h4" color='white'>{curso.grupo}</Typography>
+    <Card sx={{ width: "100%" }}>
+      {/* o cualquier altura deseada */}
+      <Grid2 container spacing={1}>
+        <Grid2
+          sx={{
+            backgroundColor: theme.palette.primary.main,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            paddingY: 2,
+          }}
+          size={{ md: 3, xs: 12 }}
+        >
+          <Typography variant="h3" color="white">
+            {curso.grupo}
+          </Typography>
+        </Grid2>
+
+        <Grid2
+          size={{ md: 9, xs: 12 }}
+          sx={{
+            flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            padding: 1,
+          }}
+        >
+          <Stack spacing={2}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography variant="h5">{materiaNombre}</Typography>
             </Box>
-          </Box>
-          <Divider sx={{padding: -2}}/>
-        </Box>
-        <FrameDocente docente={!curso.docente ? null : (curso.docente as UsuarioCurso)} />
-        <Stack alignItems={"end"}>
-          <Box>
-            <Button disabled={buttonDisable()} variant="outlined" onClick={handleButton}>
+
+            <ActivityAndStudends
+              cntActities={(curso.estudiantes ?? []).length}
+              cntStudents={(curso.secciones ?? []).length}
+              condition={showDocentOwnerStyle}
+            />
+            {!showDocentOwnerStyle && (
+              <FrameDocente docente={!curso.docente ? null : (curso.docente as UsuarioCurso)} />
+            )}
+          </Stack>
+          <Box sx={{ display: "flex", justifyContent: "end", marginTop: 2 }}>
+            <Button
+              disabled={buttonDisable()}
+              size="small"
+              variant="contained"
+              onClick={handleButton}
+            >
               {buttonText()}
             </Button>
           </Box>
-        </Stack>
-      </Stack>
+        </Grid2>
+      </Grid2>
     </Card>
   );
 };
@@ -95,24 +145,49 @@ function FrameDocente({ docente }: PropsFrameDocente) {
   }
 
   if (!docente) {
-    return <Alert severity="info"><Typography variant="caption">{"No se ha asignado un docente a este curso"}</Typography></Alert>;
+    return (
+      <Alert severity="info">
+        <Typography variant="caption">{"No se ha asignado un docente a este curso"}</Typography>
+      </Alert>
+    );
   } else
     return (
-      <Card>
-        <Grid2 container sx={{ padding: 1 }}>
-          <Grid2 size={5} sx={{ display: "flex", alignItems: "center", justifyContent: 'center' }}>
-            <Tooltip title={docente.nombre}>
-              <Button onClick={onClick}>
-                <Avatar src={docente.imagen} sx={{width: 64, height: 64}}/>
-              </Button>
-            </Tooltip>
-          </Grid2>
-          <Grid2 size={7}  sx={{ display: "flex", alignItems: "center"}}>
-            <Typography variant="h5" sx={{ wordBreak: "break-word" }}>
-              {docente.nombre}
-            </Typography>
-          </Grid2>
-        </Grid2>
+      <Card sx={{ display: "flex", gap: 0, alignItems: "center" }}>
+        <Tooltip title={docente.nombre}>
+          <Button onClick={onClick}>
+            <Avatar src={docente.imagen} sx={{ width: 32, height: 32 }} />
+          </Button>
+        </Tooltip>
+        <Typography variant="body1" sx={{ wordBreak: "break-word" }}>
+          {docente.nombre}
+        </Typography>
       </Card>
     );
+}
+
+function ActivityAndStudends({
+  cntActities,
+  cntStudents,
+  condition,
+}: {
+  cntStudents: number;
+  cntActities: number;
+  condition: boolean;
+}) {
+  return (
+    <Stack direction={"row"} spacing={2}>
+      <Chip
+        label={`Actividades: ${cntActities}`}
+        icon={<EditNoteIcon />}
+        color="error"
+        size={condition ? "medium" : "small"}
+      />
+      <Chip
+        label={`Estudiantes: ${cntStudents}`}
+        color="info"
+        size={condition ? "medium" : "small"}
+        icon={<SchoolIcon />}
+      />
+    </Stack>
+  );
 }
