@@ -108,7 +108,7 @@ export const Members = () => {
     if (errorGetGroup) setError(errorGetGroup);
   }, [errorGetGroup]);
 
-  const { handleAccept, handleClose, isLoading, message, open, title, type, showDialog } =
+  const { handleAccept, handleClose, handleCancel, isLoading, message, open, title, type, showDialog } =
     useAlertDialog2();
 
   const { setError } = useErrorReader(showDialog);
@@ -160,7 +160,7 @@ export const Members = () => {
           return updated;
         });
       },
-      onCancel: () => {},
+      onCancel: handleClose,
       isLoading: false,
       reload: false,
       title: "Eliminar Usuario",
@@ -188,7 +188,7 @@ export const Members = () => {
           return updated;
         });
       },
-      onCancel: () => {},
+      onCancel: handleClose,
       isLoading: false,
       reload: false,
       title: "Agregar Usuario",
@@ -243,7 +243,7 @@ export const Members = () => {
         open={open}
         title={title}
         isLoading={isLoading}
-        handleCancel={handleClose}
+        handleCancel={handleCancel}
         textBody={message}
       />
       <Stack>
@@ -344,11 +344,13 @@ const CardMember: React.FC<CardMemberProps> = ({
       padding={2}
     >
       <Stack direction={{ md: "row", xs: "column" }} spacing={1} alignItems={{ md: "center" }}>
-        <Stack direction={"row"} alignItems={"center"}>
-          <Tooltip onClick={handleButton} title={member.nombre}>
+        <Stack direction={"row"} spacing={1} alignItems={"center"}>
+          <IconButton onClick={handleButton}>
+            <Tooltip  title={member.nombre}>
             <Avatar src={member.imagen} sx={{ width: 48, height: 48 }} />
           </Tooltip>
-          <Typography variant="h6">{member.nombre}</Typography>
+          </IconButton>
+          <Button variant="text" onClick={handleButton}><Typography variant="h6">{member.nombre}</Typography></Button>
         </Stack>
         {isMe && (
           <Box>

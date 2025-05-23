@@ -244,6 +244,7 @@ export function Repositories({ type }: Props) {
         title: "Cambios Repositorio",
         message: "¿Está seguro de que desea modificar la información de repositorios?",
         onAccept: () => handleMutate({ isEdit: true }),
+        onCancel: () => handleClose(),
         isLoading: isPending,
       });
     } else {

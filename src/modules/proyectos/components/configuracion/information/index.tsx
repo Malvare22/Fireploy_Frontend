@@ -108,6 +108,7 @@ export const Information = ({ type }: Props) => {
   const {
     handleAccept,
     handleClose,
+    handleCancel,
     isLoading,
     message,
     open,
@@ -194,6 +195,7 @@ export const Information = ({ type }: Props) => {
         title: "Confirmar Edición",
         message: "¿Está seguro de guardar los cambios?",
         onAccept: () => mutateEdit(),
+        onCancel: () => handleClose(),
         isLoading: isPendingEdit,
       });
     } else {
@@ -210,7 +212,7 @@ export const Information = ({ type }: Props) => {
     <>
       <AlertDialog
         handleAccept={handleAccept}
-        handleCancel={handleClose}
+        handleCancel={handleCancel}
         open={open}
         title={title}
         textBody={message}
