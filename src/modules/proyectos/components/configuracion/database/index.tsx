@@ -54,6 +54,7 @@ export const DataBase = ({ type }: Props) => {
     type: typeAlert,
     handleAccept,
     isLoading,
+    handleClose
   } = useAlertDialog();
 
   const { setError } = useErrorReader(showDialog);
@@ -102,7 +103,7 @@ export const DataBase = ({ type }: Props) => {
   });
 
   function onSubmit() {
-    mutate();
+    handleConfirm();
   }
 
   function onFinish() {
@@ -113,8 +114,22 @@ export const DataBase = ({ type }: Props) => {
           ? "Se ha terminado de configurar el proyecto 😎"
           : "Se ha registrado la base de datos correctamente",
       type: "success",
-      onAccept: () =>
-        navigate(rutasProyectos.ver.replace(":id", (getValuesProject("id") ?? -1).toString())),
+      onAccept: () => {
+        navigate(rutasProyectos.ver.replace(":id", (getValuesProject("id") ?? -1).toString()));
+        handleClose();
+        navigate(0);
+      }
+        
+    });
+  }
+
+  function handleConfirm(){
+    showDialog({
+      title: "Conexión Base de datos",
+      message: "¿Está seguro de que desea crear una base de datos?",
+      type: "default",
+      onAccept: () => mutate(),
+      onCancel: () => handleClose()
     });
   }
 
