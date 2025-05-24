@@ -87,7 +87,7 @@ export const Information = ({ type }: Props) => {
 
   const {
     control,
-    formState: { errors },
+    formState: { errors, isDirty },
     watch,
     handleSubmit,
     getValues,
@@ -134,6 +134,8 @@ export const Information = ({ type }: Props) => {
       setError(errorDataMaterias);
     }
   }, [errorDataMaterias]);
+
+  const [flagChangeImg, setFlagChangeImg] = useState<boolean>(false);
 
   const {
     mutate: mutateCreate,
@@ -223,7 +225,7 @@ export const Information = ({ type }: Props) => {
         <LoaderElement />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
-          {type == 'create' && <TransitionAlert/>}
+          {type == "create" && <TransitionAlert />}
           <Stack spacing={2}>
             <Typography variant="h5">Información</Typography>
             <Grid2 container rowSpacing={2} spacing={2}>
@@ -356,6 +358,7 @@ export const Information = ({ type }: Props) => {
                     select
                     label="Tipo de proyecto"
                     error={!!errors.tipo}
+                    disabled={type == "edit" && executionState == "N"}
                     helperText={errors.tipo?.message?.toString()}
                   >
                     {Array.from(getProjectTypesMap.entries()).map(([key, label]) => (
@@ -370,24 +373,22 @@ export const Information = ({ type }: Props) => {
 
             {type == "edit" && (
               <Grid2 size={12}>
-                <ImagContainer currentImg={img} setCurrentImg={setImg} setFile={setFileImg} />
+                <ImagContainer currentImg={img} setCurrentImg={setImg} setFile={setFileImg} setFlag={setFlagChangeImg}/>
               </Grid2>
             )}
 
             <Stack alignItems={"end"}>
-              {type == "create" ? (
-                <Box>
-                  <GeneralButton
-                    size="small"
-                    loading={isPendingCreate}
-                    type="submit"
-                    mode={buttonTypes.next}
-                  />
-                </Box>
-              ) : (
-                <Box>
-                  <GeneralButton loading={isPendingCreate} type="submit" mode={buttonTypes.save} />
-                </Box>
+              {(isDirty || flagChangeImg) && (
+                <Stack alignItems="end">
+                  <Box>
+                    <GeneralButton
+                      size="small"
+                      loading={type === "create" ? isPendingCreate : isPendingEdit}
+                      type="submit"
+                      mode={type === "create" ? buttonTypes.next : buttonTypes.save}
+                    />
+                  </Box>
+                </Stack>
               )}
             </Stack>
           </Stack>
@@ -401,8 +402,14 @@ type PropsImageContainer = {
   currentImg: string | null | undefined;
   setCurrentImg: React.Dispatch<string | null | undefined>;
   setFile: React.Dispatch<Blob | undefined | null>;
+  setFlag: React.Dispatch<boolean>;
 };
-const ImagContainer: React.FC<PropsImageContainer> = ({ currentImg, setCurrentImg, setFile }) => {
+const ImagContainer: React.FC<PropsImageContainer> = ({
+  currentImg,
+  setCurrentImg,
+  setFile,
+  setFlag,
+}) => {
   const handlePhotoChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
@@ -411,6 +418,7 @@ const ImagContainer: React.FC<PropsImageContainer> = ({ currentImg, setCurrentIm
       reader.onload = async (e) => {
         const imgUrl = e.target?.result as string;
         setCurrentImg(imgUrl);
+        setFlag(true);
 
         const blob = await urlToBlob(imgUrl);
         setFile(blob);
@@ -429,6 +437,7 @@ const ImagContainer: React.FC<PropsImageContainer> = ({ currentImg, setCurrentIm
   function handleDelete() {
     setFile(null);
     setCurrentImg(null);
+    setFlag(true);
   }
 
   return (

@@ -1,3 +1,5 @@
+import { Repositorio } from "./repositorio";
+
 /**
  * KeysOfRepository – Defines the valid string keys that identify types of repositories.
  * 
@@ -10,3 +12,19 @@
  * Useful for enforcing consistency when referencing repository categories across the application.
  */
 export type KeysOfRepository = "backend" | "frontend" | "integrado";
+
+
+export function getKeyOfRepository(k: Repositorio['tipo']): KeysOfRepository {
+    switch (k) {
+        case 'B':
+
+            return 'backend';
+
+        case 'F':
+
+            return 'frontend';
+        case 'I':
+
+            return 'integrado';
+    }
+}

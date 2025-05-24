@@ -71,3 +71,10 @@ export function evaluateDate(a: string, b: string, c: string) {
 export function sortDates(a: string, b: string) {
   return new Date(a).getTime() - new Date(b).getTime();
 }
+
+
+export function getFormatDayTime(a: string){
+  const aux =  a.split('T');
+
+  return aux[0] + ' ' + aux[1].slice(0, 8);
+}
