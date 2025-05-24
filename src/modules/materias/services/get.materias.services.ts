@@ -3,6 +3,7 @@ import { MateriaService } from "../types/materia.service";
 import { getCursos } from "./get.curso";
 import { AccountInformation } from "@modules/general/context/accountContext";
 import { CursoService } from "../types/curso.service";
+import { adaptDateBackend, evaluateDate, getCurrentDate } from "@modules/general/utils/fechas";
 
 /**
  * Fetches all subjects ("materias") from the backend.
@@ -56,7 +57,8 @@ export const getMateriasService = async (token: string) => {
 export const getAllAcademicInformation = async (
   token: string,
   userType: AccountInformation["tipo"],
-  id: AccountInformation["id"]
+  id: AccountInformation["id"],
+  validDates?: boolean
 ) => {
   let cursos: CursoService[] = [];
   switch (userType) {
@@ -98,7 +100,17 @@ export const getAllAcademicInformation = async (
     );
 
     curso.secciones.forEach((seccion) => {
-      selectSeccion.set(seccion.id, seccion.titulo);
+      console.log('OBSERVA ', seccion)
+      if (!validDates) selectSeccion.set(seccion.id, seccion.titulo);
+      else {
+        
+        const l = adaptDateBackend(seccion.fecha_inicio);
+        const r = adaptDateBackend(seccion.fecha_fin);
+        const today = getCurrentDate();
+        if (evaluateDate(l, r, today)) {
+          selectSeccion.set(seccion.id, seccion.titulo);
+        }
+      }
     });
   }
 
