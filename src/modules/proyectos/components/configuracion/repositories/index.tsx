@@ -33,7 +33,6 @@ import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { FormProvider } from "react-hook-form";
-import AutoFocusOnError from "@modules/general/hooks/useAutoFocusOnError";
 import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
 import { getProjectById } from "@modules/proyectos/services/get.project";
 import { syncErrorProject } from "../../executionState";
@@ -83,15 +82,12 @@ export function Repositories({ type }: Props) {
     resolver: zodResolver(ProyectoRepositoriesSchema),
   });
 
-  const { getValues, control, watch, reset, setValue, formState } = methods;
-
-  const { isDirty } = formState;
+  const { getValues, control, watch, reset, setValue } = methods;
 
   useEffect(() => {
     reset(getValuesProject());
   }, [getValuesProject("backend"), getValuesProject("frontend"), getValuesProject("integrado")]);
 
-  const [flagInputFile, setFlagInputFile] = useState<boolean>(false);
 
   const {
     showDialog,
@@ -184,7 +180,6 @@ export function Repositories({ type }: Props) {
   function InputFile({ layer, disabled }: { layer: KeysOfRepository; disabled: boolean }) {
     function onChange(e: React.ChangeEvent<HTMLInputElement>) {
       const { files } = e.target;
-      setFlagInputFile(true);
 
       if (!files || !files[0]) {
         setFilesRepo({ ...filesRepo, [layer]: null });
@@ -195,7 +190,6 @@ export function Repositories({ type }: Props) {
     }
 
     function handleDelete() {
-      setFlagInputFile(true);
       setValue(`${layer}.file`, null);
       setFilesRepo({ ...filesRepo, [layer]: null });
     }
@@ -273,7 +267,6 @@ export function Repositories({ type }: Props) {
         handleCancel={handleCancel}
       />
       <FormProvider {...methods}>
-        <AutoFocusOnError<ProyectoRepositoriesSchema> />
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Stack spacing={3}>
             <Stack>
@@ -412,7 +405,7 @@ export function Repositories({ type }: Props) {
             </Stack>
 
             <Stack alignItems={"end"}>
-              {isDirty || flagInputFile && (
+              {!isDisabled && (
                 <Box>
                   <GeneralButton
                     loading={isPending}
