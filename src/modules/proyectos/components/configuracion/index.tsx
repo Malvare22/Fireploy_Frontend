@@ -6,21 +6,18 @@ import {
   Typography,
   Paper,
   Stack,
-  IconButton,
-  Tooltip,
   useMediaQuery,
   useTheme,
-  Alert
+  Alert,
+  Link,
 } from "@mui/material";
 import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Information } from "./information";
 import { Repositories } from "./repositories";
 import { DataBase } from "./database";
 import { Members } from "./members";
 import { ProyectoSchema } from "@modules/proyectos/utils/forms/proyecto.schema";
 import { FormProvider, useForm } from "react-hook-form";
-import { openInNewTab } from "@modules/general/utils/openTab";
 import InfoIcon from "@mui/icons-material/Info";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import StorageIcon from "@mui/icons-material/Storage";
@@ -29,7 +26,7 @@ import { ChangeStatus, ExecutionState, ShowDeployLoad } from "../executionState"
 import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
 import { Skeleton } from "@mui/material";
 import LogsFiles from "./logSection";
-import ArticleIcon from '@mui/icons-material/Article';
+import ArticleIcon from "@mui/icons-material/Article";
 
 type Props = {
   project: ProyectoSchema;
@@ -42,9 +39,9 @@ export default function ProjectSettings({ project }: Props) {
     defaultValues: project,
   });
 
-  function handleUrl(url: string) {
-    if (url) openInNewTab(url);
-  }
+  // function handleUrl(url: string) {
+  //   if (url) openInNewTab(url);
+  // }
 
   const theme = useTheme();
 
@@ -61,14 +58,22 @@ export default function ProjectSettings({ project }: Props) {
             {executionState && <ExecutionState projectStatus={executionState} />}
           </Stack>
           {currentUrl.trim() != "" && executionState == "N" && (
-            <Alert severity="info" sx={{ display: "flex", alignItems: "center" }}>
-              <Stack direction={"row"} alignItems={"center"}>
-                <Typography>Proyecto disponible actualmente </Typography>
-                <Tooltip title="Abrir URL">
+            <Alert severity={executionState != 'N' ? "info": 'success'} sx={{ display: "flex", alignItems: "center" }}>
+              <Stack direction={"row"} spacing={1} alignItems={"center"}>
+                <Typography>
+                  {executionState == "N"
+                    ? "Tu proyecto se encuentra disponible en la siguiente URL:"
+                    : "Tu proyecto se va a encontrar disponible en la siguiente URL:"}
+                </Typography>
+                <Link
+                  href={`https://proyectos.fireploy.online/app${project.id}`}
+                  target="_blank"
+                >{`https://proyectos.fireploy.online/app${project.id}`}</Link>
+                {/* <Tooltip title="Abrir URL">
                   <IconButton onClick={() => handleUrl(currentUrl)}>
                     <OpenInNewIcon color="info" sx={{ fontSize: 24 }} />
                   </IconButton>
-                </Tooltip>
+                </Tooltip> */}
               </Stack>
             </Alert>
           )}

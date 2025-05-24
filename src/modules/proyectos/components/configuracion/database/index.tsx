@@ -9,7 +9,18 @@ import { postCreateDatabase } from "@modules/proyectos/services/post.base.datos"
 import { getDataBaseTypesArray, getDataBaseTypesMap } from "@modules/proyectos/utils/database";
 import { BaseDeDatosRegisterSchema } from "@modules/proyectos/utils/forms/baseDeDatos.schema";
 import { ProyectoSchema } from "@modules/proyectos/utils/forms/proyecto.schema";
-import { Box, Button, Chip, Divider, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  Chip,
+  Divider,
+  Grid2,
+  MenuItem,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useFormContext, Controller, useForm } from "react-hook-form";
@@ -21,6 +32,7 @@ import { getProjectById } from "@modules/proyectos/services/get.project";
 import { syncErrorProject } from "../../executionState";
 import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import TransitionAlert from "@modules/general/components/transitionAlert";
 
 type Props = {
   type: "edit" | "create";
@@ -54,7 +66,7 @@ export const DataBase = ({ type }: Props) => {
     type: typeAlert,
     handleAccept,
     isLoading,
-    handleClose
+    handleClose,
   } = useAlertDialog();
 
   const { setError } = useErrorReader(showDialog);
@@ -106,6 +118,8 @@ export const DataBase = ({ type }: Props) => {
     handleConfirm();
   }
 
+  console.log(getValues());
+
   function onFinish() {
     showDialog({
       title: "Conexión Base de datos",
@@ -118,18 +132,17 @@ export const DataBase = ({ type }: Props) => {
         navigate(rutasProyectos.ver.replace(":id", (getValuesProject("id") ?? -1).toString()));
         handleClose();
         navigate(0);
-      }
-        
+      },
     });
   }
 
-  function handleConfirm(){
+  function handleConfirm() {
     showDialog({
       title: "Conexión Base de datos",
       message: "¿Está seguro de que desea crear una base de datos?",
       type: "default",
       onAccept: () => mutate(),
-      onCancel: () => handleClose()
+      onCancel: () => handleClose(),
     });
   }
 
@@ -227,13 +240,19 @@ export const DataBase = ({ type }: Props) => {
         </form>
       ) : (
         <Stack spacing={3}>
+          <TransitionAlert severity="info">
+            {
+              "Recuerda: tus crendeciales de base de datos son privadas, jamás las compartas con otros usuarios"
+            }
+          </TransitionAlert>
           <Stack direction={"row"} alignItems={"center"} spacing={2}>
             <Typography>Seleccionada: </Typography>
             <Chip color="info" label={getDataBaseTypesMap.get(getValues("tipo"))} />
           </Stack>
+          <ShowCredentials password={getValues("contrasenia")} user={getValues("nombre")} />
           <Box>
             <Button variant="contained" endIcon={<StorageIcon />}>
-              Ver Base de Datos
+              {"Ver Base de Datos"}
             </Button>
           </Box>
         </Stack>
@@ -241,3 +260,28 @@ export const DataBase = ({ type }: Props) => {
     </Stack>
   );
 };
+
+type ShowCredentialsProps = {
+  user: string;
+  password: string;
+};
+function ShowCredentials({ password, user }: ShowCredentialsProps) {
+  return (
+    <Card sx={{ maxWidth: 400 }}>
+      <Grid2 container rowSpacing={2} sx={{ display: "flex", padding: 1, alignItems: "center" }}>
+        <Grid2 size={3}>
+          <Typography sx={{ fontWeight: 500 }}>{"Usuario:"}</Typography>
+        </Grid2>
+        <Grid2 size={9}>
+          <TextField fullWidth size="small" disabled value={user} />
+        </Grid2>
+        <Grid2 size={3}>
+          <Typography sx={{ fontWeight: 500 }}>{"Contraseña:"}</Typography>
+        </Grid2>
+        <Grid2 size={9}>
+          <TextFieldPassword fullWidth size="small" disabled value={password} />
+        </Grid2>
+      </Grid2>
+    </Card>
+  );
+}

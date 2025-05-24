@@ -9,10 +9,10 @@ export type EstadoEjecucionProyecto = "F" | "N" | "E" | "L";
 export type EstadoProyecto = "A" | "I"; // Ejemplo, ajusta según tus necesidades
 export type ArchivoLog = { id: number; nombre: string; url: string };
 export type MateriaInformacion = {
-  seccionId: Seccion["id"];
-  materiaId: Materia["id"];
+  seccionId: Seccion["id"] | null;
+  materiaId: Materia["id"] | null;
   nombre?: string | undefined;
-  cursoId: Curso["id"];
+  cursoId: Curso["id"] | null;
 };
 
 export type TipoRepositorio = "B" | "F" | "I";

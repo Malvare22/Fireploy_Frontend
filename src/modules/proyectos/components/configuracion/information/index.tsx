@@ -98,10 +98,25 @@ export const Information = ({ type }: Props) => {
   });
 
   useEffect(() => {
+    setValue("materiaInformacion.cursoId", null);
+    setValue("materiaInformacion.seccionId", null);
+  }, [getValues("materiaInformacion.materiaId")]);
+
+  useEffect(() => {
+    setValue("materiaInformacion.seccionId", null);
+  }, [getValues("materiaInformacion.cursoId")]);
+
+  useEffect(() => {
     if (searchParams.get("materia") && searchParams.get("curso") && searchParams.get("seccion")) {
-      setValue("materiaInformacion.materiaId", parseInt(searchParams.get("materia") ?? "0"));
-      setValue("materiaInformacion.cursoId", searchParams.get("curso") ?? "0");
-      setValue("materiaInformacion.seccionId", parseInt(searchParams.get("seccion") ?? "0"));
+      setValue(
+        "materiaInformacion.materiaId",
+        parseInt(searchParams.get("materia") ?? "0") ?? null
+      );
+      setValue("materiaInformacion.cursoId", searchParams.get("curso") ?? null);
+      setValue(
+        "materiaInformacion.seccionId",
+        parseInt(searchParams.get("seccion") ?? "0") ?? null
+      );
     }
   }, [searchParams]);
 
@@ -125,7 +140,7 @@ export const Information = ({ type }: Props) => {
     isLoading: isLoadingMaterias,
     error: errorDataMaterias,
   } = useQuery({
-    queryFn: () => getAllAcademicInformation(token, tipo, id),
+    queryFn: async () => getAllAcademicInformation(token, tipo, id, true),
     queryKey: ["Get All Academic Information", token, tipo, id],
   });
 
@@ -144,7 +159,7 @@ export const Information = ({ type }: Props) => {
     isSuccess: isSuccessCreate,
   } = useMutation({
     mutationFn: () => postCreateProject(token, getValues()),
-    mutationKey: ["Create Project"],
+    mutationKey: ["Create Project", getValues(), token],
     onError: setError,
   });
 
@@ -210,6 +225,9 @@ export const Information = ({ type }: Props) => {
   const { getCursosByMateria, getSeccionByCurso, selectCurso, selectMaterias, selectSeccion } =
     dataMaterias;
 
+  const currentMateriaId = watch("materiaInformacion.materiaId");
+  const currentCursoId = watch("materiaInformacion.cursoId");
+
   return (
     <>
       <AlertDialog
@@ -227,7 +245,7 @@ export const Information = ({ type }: Props) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           {type == "create" && <TransitionAlert />}
           <Stack spacing={2}>
-            <Typography variant="h5">Información</Typography>
+            <Typography variant="h5">{"Información"}</Typography>
             <Grid2 container rowSpacing={2} spacing={2}>
               <Grid2 size={{ xs: 12, md: 6 }}>
                 <Controller
@@ -274,6 +292,7 @@ export const Information = ({ type }: Props) => {
                         fullWidth
                         {...field}
                         select
+
                         label="Materia"
                         error={!!errors.materiaInformacion?.materiaId}
                         helperText={errors.materiaInformacion?.materiaId?.message?.toString()}
@@ -289,13 +308,14 @@ export const Information = ({ type }: Props) => {
                 </Grid2>
 
                 <Grid2 size={{ md: 4, xs: 12 }}>
-                  {getCursosByMateria.get(watch("materiaInformacion.materiaId") ?? 0) && (
+                  {currentMateriaId && getCursosByMateria.get(currentMateriaId) && (
                     <Controller
                       name="materiaInformacion.cursoId"
                       control={control}
                       render={({ field }) => (
                         <TextField
                           size="small"
+
                           fullWidth
                           {...field}
                           select
@@ -315,26 +335,25 @@ export const Information = ({ type }: Props) => {
                     />
                   )}
                 </Grid2>
-
                 <Grid2 size={{ md: 4, xs: 12 }}>
-                  {getSeccionByCurso.get(watch("materiaInformacion.cursoId") ?? "") && (
+                  {currentCursoId  && getSeccionByCurso.get(currentCursoId) && (
                     <Controller
                       name="materiaInformacion.seccionId"
                       control={control}
                       render={({ field }) => (
                         <TextField
                           size="small"
+
                           fullWidth
                           {...field}
                           select
+
                           label="Actividad"
                           error={!!errors.materiaInformacion?.seccionId}
                           helperText={errors.materiaInformacion?.seccionId?.message?.toString()}
                         >
-                          {Array.from(
-                            getSeccionByCurso.get(watch("materiaInformacion.cursoId") ?? "") || []
-                          ).map((seccionId) => (
-                            <MenuItem value={seccionId} key={seccionId}>
+                          {getSeccionByCurso.get(currentCursoId)?.map((seccionId) => (
+                            selectSeccion.get(seccionId) && <MenuItem value={seccionId} key={`${currentCursoId}-${seccionId}`}>
                               {selectSeccion.get(seccionId)}
                             </MenuItem>
                           ))}
@@ -373,7 +392,12 @@ export const Information = ({ type }: Props) => {
 
             {type == "edit" && (
               <Grid2 size={12}>
-                <ImagContainer currentImg={img} setCurrentImg={setImg} setFile={setFileImg} setFlag={setFlagChangeImg}/>
+                <ImagContainer
+                  currentImg={img}
+                  setCurrentImg={setImg}
+                  setFile={setFileImg}
+                  setFlag={setFlagChangeImg}
+                />
               </Grid2>
             )}
 
