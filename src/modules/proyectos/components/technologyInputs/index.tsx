@@ -7,6 +7,7 @@ import { inputSelectFramework } from "@modules/proyectos/utils/technologies";
 
 type DockerInputsProps = {
   fieldName?: KeysOfRepository;
+  disabled: boolean;
 };
 
 /**
@@ -36,7 +37,10 @@ type DockerInputsProps = {
  * <DockerInputs fieldName="backend" />
  * ```
  */
-export const TechnologyInputs: React.FC<DockerInputsProps> = ({ fieldName = "backend" }) => {
+export const TechnologyInputs: React.FC<DockerInputsProps> = ({
+  fieldName = "backend",
+  disabled,
+}) => {
   const {
     control,
     watch,
@@ -68,6 +72,7 @@ export const TechnologyInputs: React.FC<DockerInputsProps> = ({ fieldName = "bac
             label="Tecnología"
             placeholder="Escribe para buscar..."
             fullWidth
+            disabled={disabled}
             inputRef={field.ref}
             value={field.value}
             onChange={field.onChange}
@@ -96,6 +101,7 @@ export const TechnologyInputs: React.FC<DockerInputsProps> = ({ fieldName = "bac
               label="Framework"
               placeholder="Escribe para buscar..."
               fullWidth
+              disabled={disabled}
               inputRef={field.ref}
               value={field.value}
               onChange={field.onChange}

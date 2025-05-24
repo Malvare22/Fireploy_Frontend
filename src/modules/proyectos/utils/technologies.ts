@@ -32,6 +32,7 @@ export enum TECNOLOGIES {
   Html = 'HTML',
   Python = 'Python',
   Django = 'Django',
+  Fastapi = 'FastAPI'
 }
 
 /**
@@ -71,7 +72,8 @@ export const inputSelectFramework: Record<(typeof keyOfTechnologies)[number], Se
   },
   Python: {
     frameworks: [
-      TECNOLOGIES.Django
+      TECNOLOGIES.Django,
+      TECNOLOGIES.Fastapi
     ]
   }
 } as const;

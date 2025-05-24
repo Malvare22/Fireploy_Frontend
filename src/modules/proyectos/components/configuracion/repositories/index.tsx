@@ -83,11 +83,15 @@ export function Repositories({ type }: Props) {
     resolver: zodResolver(ProyectoRepositoriesSchema),
   });
 
-  const { getValues, control, watch, reset, setValue } = methods;
+  const { getValues, control, watch, reset, setValue, formState } = methods;
+
+  const { isDirty } = formState;
 
   useEffect(() => {
     reset(getValuesProject());
   }, [getValuesProject("backend"), getValuesProject("frontend"), getValuesProject("integrado")]);
+
+  const [flagInputFile, setFlagInputFile] = useState<boolean>(false);
 
   const {
     showDialog,
@@ -177,9 +181,10 @@ export function Repositories({ type }: Props) {
     integrado: null,
   });
 
-  function InputFile({ layer }: { layer: KeysOfRepository }) {
+  function InputFile({ layer, disabled }: { layer: KeysOfRepository; disabled: boolean }) {
     function onChange(e: React.ChangeEvent<HTMLInputElement>) {
       const { files } = e.target;
+      setFlagInputFile(true);
 
       if (!files || !files[0]) {
         setFilesRepo({ ...filesRepo, [layer]: null });
@@ -190,6 +195,7 @@ export function Repositories({ type }: Props) {
     }
 
     function handleDelete() {
+      setFlagInputFile(true);
       setValue(`${layer}.file`, null);
       setFilesRepo({ ...filesRepo, [layer]: null });
     }
@@ -200,6 +206,7 @@ export function Repositories({ type }: Props) {
           component="label"
           role={undefined}
           variant="contained"
+          disabled={disabled}
           tabIndex={-1}
           startIcon={<FolderZipIcon />}
         >
@@ -252,6 +259,8 @@ export function Repositories({ type }: Props) {
     }
   }
 
+  const isDisabled = executionState === "N";
+
   return (
     <>
       <AlertDialog
@@ -267,13 +276,12 @@ export function Repositories({ type }: Props) {
         <AutoFocusOnError<ProyectoRepositoriesSchema> />
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Stack spacing={3}>
-            
             <Stack>
-              <TransitionAlert severity="info">
-              {
-                "Para que surjan efecto los cambios realizados en esta sección, se requiere volver a desplegar el aplicativo"
-              }
-            </TransitionAlert>
+              <TransitionAlert severity="warning">
+                {
+                  "Para que surjan efecto los cambios realizados en esta sección, se requiere volver a desplegar el aplicativo"
+                }
+              </TransitionAlert>
               <Typography variant="h5">{labelConfiguracion.repositorios}</Typography>
               <Divider />
             </Stack>
@@ -292,7 +300,7 @@ export function Repositories({ type }: Props) {
                             size="small"
                             {...field}
                             fullWidth
-                            disabled={filesRepo.frontend != null}
+                            disabled={filesRepo.frontend != null || isDisabled}
                             label={labelConfiguracion.urlFrontend}
                             error={!!fieldState.error}
                             helperText={fieldState.error?.message}
@@ -312,11 +320,11 @@ export function Repositories({ type }: Props) {
                       />
                     </Grid2>
                     <Grid2 size={{ md: 2, xs: 12 }}>
-                      <InputFile layer="frontend" />
+                      <InputFile layer="frontend" disabled={isDisabled} />
                     </Grid2>
                   </Grid2>
-                  <TechnologyInputs fieldName="frontend" />
-                  <EnviromentVariablesEditor type="frontend" />
+                  <TechnologyInputs fieldName="frontend" disabled={isDisabled} />
+                  <EnviromentVariablesEditor type="frontend" disabled={isDisabled} />
                 </>
               )}
 
@@ -333,7 +341,7 @@ export function Repositories({ type }: Props) {
                             size="small"
                             {...field}
                             fullWidth
-                            disabled={filesRepo.backend != null}
+                            disabled={filesRepo.backend != null || isDisabled}
                             label={labelConfiguracion.urlRepositorio}
                             error={!!fieldState.error}
                             helperText={fieldState.error?.message}
@@ -353,11 +361,11 @@ export function Repositories({ type }: Props) {
                       />
                     </Grid2>
                     <Grid2 size={{ md: 2, xs: 12 }}>
-                      <InputFile layer="backend" />
+                      <InputFile layer="backend" disabled={isDisabled} />
                     </Grid2>
                   </Grid2>
-                  <TechnologyInputs fieldName="backend" />
-                  <EnviromentVariablesEditor type="backend" />
+                  <TechnologyInputs disabled={isDisabled} fieldName="backend" />
+                  <EnviromentVariablesEditor disabled={isDisabled} type="backend" />
                 </>
               )}
 
@@ -377,7 +385,7 @@ export function Repositories({ type }: Props) {
                             label={labelConfiguracion.urlRepositorio}
                             error={!!fieldState.error}
                             helperText={fieldState.error?.message}
-                            disabled={filesRepo.integrado != null}
+                            disabled={filesRepo.integrado != null || isDisabled}
                             inputRef={field.ref}
                             slotProps={{
                               input: {
@@ -394,23 +402,25 @@ export function Repositories({ type }: Props) {
                       />
                     </Grid2>
                     <Grid2 size={{ md: 2, xs: 12 }}>
-                      <InputFile layer="integrado" />
+                      <InputFile layer="integrado" disabled={isDisabled} />
                     </Grid2>
                   </Grid2>
-                  <TechnologyInputs fieldName="integrado" />
-                  <EnviromentVariablesEditor type="integrado" />
+                  <TechnologyInputs disabled={isDisabled} fieldName="integrado" />
+                  <EnviromentVariablesEditor disabled={isDisabled} type="integrado" />
                 </>
               )}
             </Stack>
 
             <Stack alignItems={"end"}>
-              <Box>
-                <GeneralButton
-                  loading={isPending}
-                  mode={type == "create" ? buttonTypes.next : buttonTypes.save}
-                  type="submit"
-                />
-              </Box>
+              {isDirty || flagInputFile && (
+                <Box>
+                  <GeneralButton
+                    loading={isPending}
+                    mode={type == "create" ? buttonTypes.next : buttonTypes.save}
+                    type="submit"
+                  />
+                </Box>
+              )}
             </Stack>
           </Stack>
         </form>

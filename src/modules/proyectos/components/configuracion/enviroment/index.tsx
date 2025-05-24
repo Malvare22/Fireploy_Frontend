@@ -1,6 +1,15 @@
 import { Editor, OnMount, useMonaco } from "@monaco-editor/react";
 import { useEffect, useRef, useState } from "react";
-import { Alert, AlertTitle, Box, Button, Collapse, IconButton, Stack, Typography } from "@mui/material";
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  Collapse,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
 import { ProyectoRepositoriesSchema } from "@modules/proyectos/utils/forms/proyecto.schema";
 import { KeysOfRepository } from "@modules/proyectos/types/keysOfRepository";
@@ -16,6 +25,7 @@ import { reservedVariables } from "@modules/proyectos/utils/technologies";
 
 type Props = {
   type: KeysOfRepository; // "frontend" | "backend" | "integrado"
+  disabled: boolean;
 };
 
 /**
@@ -33,11 +43,10 @@ type Props = {
  * <EnviromentVariablesEditor type="backend" />
  * <EnviromentVariablesEditor type="integrado" />
  */
-export default function EnviromentVariablesEditor({ type }: Props) {
+export default function EnviromentVariablesEditor({ type, disabled }: Props) {
   const monacoInstance = useMonaco();
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 
-  
   function TransitionAlert() {
     const [open, setOpen] = useState(true);
 
@@ -91,6 +100,7 @@ export default function EnviromentVariablesEditor({ type }: Props) {
   const handleEditorDidMount: OnMount = (editor, _monacoInstance) => {
     editorRef.current = editor;
     const initialValue = getValues(`${type}.variables`) || "";
+    editor.updateOptions({ readOnly: disabled });
     editor.setValue(initialValue);
   };
 
@@ -99,10 +109,13 @@ export default function EnviromentVariablesEditor({ type }: Props) {
   function getAlertInformation(framework: string | null) {
     if (framework && keyOfTechnologiesForAlert.includes(framework)) {
       return (
-        <Alert sx={{display: 'flex', alignItems: 'center'}} severity="warning">
+        <Alert sx={{ display: "flex", alignItems: "center" }} severity="warning">
           <Stack direction={"row"} alignItems={"center"} spacing={1}>
             <Typography>{getFrameworkEnvAlert[framework].message}</Typography>
-            <Button variant="outlined" onClick={() => openInNewTab(getFrameworkEnvAlert[framework].myDocUrl)}>
+            <Button
+              variant="outlined"
+              onClick={() => openInNewTab(getFrameworkEnvAlert[framework].myDocUrl)}
+            >
               Ver más detalles
             </Button>
           </Stack>
@@ -118,7 +131,7 @@ export default function EnviromentVariablesEditor({ type }: Props) {
       <Typography variant="body1" marginBottom={3}>
         {labelConfiguracion.variablesDeEntornoParrafo}
       </Typography>
-      <TransitionAlert/>
+      <TransitionAlert />
       {getAlertInformation(framework)}
       <div>
         <div
