@@ -3,14 +3,13 @@ import {
   Box,
   Button,
   Card,
-  CssBaseline,
   Link,
   Stack,
   TextField,
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { labelLogin } from "@modules/general/enums/labelLogin";
 import { rutasGeneral } from "@modules/general/router/routes";
@@ -28,6 +27,9 @@ import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { loginUser } from "@modules/general/utils/account";
+import { useForm } from "react-hook-form";
+import { LoginSchema } from "@modules/general/utils/form/login.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 /**
  * Renders the copyright footer.
@@ -54,26 +56,25 @@ function Copyright() {
 const SignIn: React.FC = () => {
   const theme = useTheme();
 
-  /**
-   * Represents the login credentials
-   */
-  type SignUp = {
-    email: string;
-    password: string;
-  };
-
   const { handleAccept, message, open, title, showDialog, type } = useAlertDialog2();
   const { setError } = useErrorReader(showDialog);
 
-  const [singUp, setSingUp] = useState<SignUp>({ email: "", password: "" });
-
-  const handleInput = (key: keyof SignUp, value: string) => {
-    setSingUp({ ...singUp, [key]: value });
-  };
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    getValues,
+  } = useForm<LoginSchema>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    resolver: zodResolver(LoginSchema),
+  });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: () => postSignUp(singUp.email, singUp.password),
-    mutationKey: ["Iniciar Sesion", singUp.email, singUp.password],
+    mutationFn: () => postSignUp(getValues("email"), getValues("password")),
+    mutationKey: ["Iniciar Sesion", getValues("email"), getValues("password")],
     onSuccess: (data) => onSuccess(data),
     onError: (error) => setError(error),
   });
@@ -96,17 +97,20 @@ const SignIn: React.FC = () => {
     navigate(rutasProyectos.menu);
   };
 
+  const onSubmit = () => {
+    mutate();
+  };
+
   return (
     <Card sx={{ padding: 2, maxWidth: 600, marginX: 3 }}>
-      <CssBaseline />
-      <AlertDialog
-        handleAccept={handleAccept}
-        open={open}
-        title={title}
-        textBody={message}
-        type={type}
-      />
-      <div>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <AlertDialog
+          handleAccept={handleAccept}
+          open={open}
+          title={title}
+          textBody={message}
+          type={type}
+        />
         <Box
           sx={{
             display: "flex",
@@ -125,56 +129,56 @@ const SignIn: React.FC = () => {
         <TextField
           variant="outlined"
           margin="normal"
-          required
           fullWidth
           id="email"
           label={labelLogin.correoElectronico}
-          name="email"
           autoComplete="email"
           autoFocus
-          onChange={(e) => handleInput("email", e.target.value)}
+          {...register("email")}
+          error={!!errors.email}
+          helperText={errors.email?.message}
         />
         <TextFieldPassword
           variant="outlined"
           margin="normal"
-          required
           fullWidth
           label={labelLogin.contrasenia}
           type="password"
           id="password"
           autoComplete="current-password"
-          onChange={(e) => handleInput("password", e.target.value)}
+          {...register("password")}
+          error={!!errors.password}
+          helperText={errors.password?.message}
         />
-        <Stack sx={{ alignItems: "center", marginY: 1 }}>
-          <GoogleLogin
-            onSuccess={(credentialResponse) => {
-              if (credentialResponse.credential) mutateGoogle(credentialResponse.credential);
-            }}
-          />
+        <Stack spacing={2}>
+          <Stack sx={{ alignItems: "center" }}>
+            <GoogleLogin
+              onSuccess={(credentialResponse) => {
+                if (credentialResponse.credential) mutateGoogle(credentialResponse.credential);
+              }}
+            />
+          </Stack>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ marginY: 2 }}
+            loading={isPending}
+          >
+            {labelLogin.ingresar}
+          </Button>
+          <Stack spacing={2} direction={"row"} alignItems={"center"} justifyContent={"center"}>
+            <Link href={rutasGeneral.recuperar} sx={{ color: "black" }} variant="body2">
+              {labelLogin.olvide}
+            </Link>
+            <Link href={rutasGeneral.registrar} sx={{ color: "black" }} variant="body2">
+              {labelLogin.registrarse}
+            </Link>
+          </Stack>
+          <Copyright />
         </Stack>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-          sx={{ marginY: 2 }}
-          onClick={() => mutate()}
-          loading={isPending}
-        >
-          {labelLogin.ingresar}
-        </Button>
-        <Stack spacing={2} direction={"row"} alignItems={"center"} justifyContent={"center"}>
-          <Link href={rutasGeneral.recuperar} sx={{color: 'black'}} variant="body2">
-            {labelLogin.olvide}
-          </Link>
-          <Link href={rutasGeneral.registrar} sx={{color: 'black'}} variant="body2">
-            {labelLogin.registrarse}
-          </Link>
-        </Stack>
-      </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
+      </form>
     </Card>
   );
 };

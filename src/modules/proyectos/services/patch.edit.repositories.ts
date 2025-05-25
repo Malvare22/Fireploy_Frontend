@@ -24,7 +24,6 @@ type Body = {
  * @returns {Promise<unknown>} A promise that resolves with the response from the PATCH request.
  */
 async function query(repository: Repositorio, token: string) {
-  const t = transformStringToKV(repository.variables ?? "");
 
   const tecnologia = repository.informacion?.tecnologia ?? null;
   const framework = repository.informacion?.framework ?? null;
@@ -37,7 +36,7 @@ async function query(repository: Repositorio, token: string) {
     tecnologia: findMe(tecnologia),
     url: repository.url,
     framework: findMe(framework),
-    variables_de_entorno: t == undefined || repository.variables == "" ? null : t,
+    variables_de_entorno: repository.variables == "" ? null : transformStringToKV(repository.variables),
   };
 
   return await patchData<unknown>(`/repositorio/${repository.id}`, body, {

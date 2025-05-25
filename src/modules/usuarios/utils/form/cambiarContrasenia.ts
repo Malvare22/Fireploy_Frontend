@@ -1,5 +1,5 @@
+import { FORM_CONSTRAINS } from "@modules/general/utils/formConstrains";
 import { z } from "zod";
-import { contraseniaSchema, correoSchema } from "./usuario.schema";
 
 /**
  * Schema for changing the password.
@@ -29,8 +29,8 @@ import { contraseniaSchema, correoSchema } from "./usuario.schema";
  */
 export const CambiarContrasenaSchema = z
   .object({
-    correo: correoSchema,
-    contrasenia: contraseniaSchema,
+    correo: FORM_CONSTRAINS.EMAIL,
+    contrasenia: FORM_CONSTRAINS.PASSWORD,
     nuevaContrasenia: z.string(),
   })
   // Passwords must match if provided

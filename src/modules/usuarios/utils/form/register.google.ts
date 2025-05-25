@@ -1,11 +1,10 @@
 import { z } from "zod";
 import {
-  contraseniaSchema,
   sexoUsuarioSchema,
   tiposUsuarioSchema,
   UsuarioSchema,
 } from "./usuario.schema";
-import { fechaSchema } from "./fechaSchema";
+import { FORM_CONSTRAINS } from "@modules/general/utils/formConstrains";
 
 export type RegisterGoogleSchema = Pick<
   UsuarioSchema,
@@ -47,13 +46,13 @@ export type RegisterGoogleSchema = Pick<
  */
 export const RegistroGoogleSchema: z.ZodType<RegisterGoogleSchema> = z
   .object({
-    id: z.number().optional(),
-    estFechaInicio: z.string().optional(),
+    id: FORM_CONSTRAINS.ID.optional(),
+    estFechaInicio: FORM_CONSTRAINS.DATE.optional(),
     sexo: sexoUsuarioSchema,
-    contrasenia: contraseniaSchema.optional(),
+    contrasenia: FORM_CONSTRAINS.PASSWORD.optional(),
     confirmarContrasenia: z.string().optional(),
     tipo: tiposUsuarioSchema.optional(),
-    fechaDeNacimiento: fechaSchema
+    fechaDeNacimiento: FORM_CONSTRAINS.DATE
   })
   // Passwords must match if provided
   .refine(
@@ -71,7 +70,7 @@ export const RegistroGoogleSchema: z.ZodType<RegisterGoogleSchema> = z
   // If user type is "E" (student), estFechaInicio must be a valid date
   .refine((data) => {
     if (data.tipo === "E") {
-      return fechaSchema.safeParse(data.estFechaInicio).success;
+      return FORM_CONSTRAINS.DATE.safeParse(data.estFechaInicio).success;
     }
     return true;
   });

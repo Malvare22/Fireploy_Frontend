@@ -17,9 +17,7 @@ import {
 import { useEffect, useState } from "react";
 import ProjectCard from "@modules/general/components/projectCard";
 import SpringModal from "@modules/general/components/springModal";
-import  {
-  CardProjectModal,
-} from "@modules/proyectos/components/modalProyectoPortafolio";
+import { CardProjectModal } from "@modules/proyectos/components/modalProyectoPortafolio";
 import { useFilters } from "@modules/general/hooks/useFilters";
 import useOrderSelect, { Order } from "@modules/general/hooks/useOrder";
 import { labelSelects } from "@modules/general/enums/labelSelects";
@@ -46,8 +44,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import EditIcon from "@mui/icons-material/Edit";
 import { GitlabIcon } from "@modules/general/components/customIcons";
 import { getUserPublicById, getUsuarioService } from "@modules/usuarios/services/get.usuario";
-import { getAllPublicProjects } from "@modules/proyectos/services/get.project";
-import { ProyectoService } from "@modules/proyectos/types/proyecto.service";
+import { getProjectByUserId } from "@modules/proyectos/services/get.project";
 import { adaptUsuarioPortafolio } from "@modules/usuarios/utils/adapt.usuario.portafolio";
 import { UsuarioPortafolio } from "@modules/usuarios/types/usuario.portafolio";
 import { useAlertDialogContext } from "@modules/general/context/alertDialogContext";
@@ -77,21 +74,10 @@ const Portafolio = ({ id }: { id: number }) => {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryFn: async () => {
-      const projects = await getAllPublicProjects();
       const user = await getUserPublicById(id);
+      const projects = await getProjectByUserId(id);
 
-      const setProjects = new Set<ProyectoService>();
-      projects.forEach((p) => {
-        if (p.creador.id == id) {
-          setProjects.add(p);
-          return;
-        }
-
-        const exist = p.estudiantes.find((i) => i.id == id);
-        if (exist) setProjects.add(p);
-      });
-
-      return adaptUsuarioPortafolio(user, [...setProjects]);
+      return adaptUsuarioPortafolio(user, [...projects]);
     },
     queryKey: ["Project & User Information", id],
   });

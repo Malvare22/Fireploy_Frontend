@@ -36,7 +36,7 @@ function VistaBasesDeDatos() {
 
   const { data: dataBases = [], error } = useQuery({
     queryFn: async (): Promise<BaseDeDatos[]> => {
-      const projectsByUser = await getProjectByUserId(token, id);
+      const projectsByUser = await getProjectByUserId(id);
       if (projectsByUser) {
         const dataBases = await Promise.all(
           projectsByUser.map(async (project) => {

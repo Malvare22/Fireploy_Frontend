@@ -1,8 +1,8 @@
 import { Repositorio } from "@modules/proyectos/types/repositorio";
 import { z } from "zod";
-import { UrlSchema } from "../../../materias/utils/forms/url.schema";
 import { transformStringToKV } from "@modules/general/utils/string";
 import { reservedVariables } from "../technologies";
+import { FORM_CONSTRAINS } from "@modules/general/utils/formConstrains";
 
 /**
  * RepositorioSchema – Zod schema that validates a repository object, including its ID, URL, type ("B" = Backend, "F" = Frontend, "I" = Integrated), environment variables string (must be convertible to key-value pairs or empty), Docker metadata (technology, version, framework), and a display name for the technology.
@@ -16,9 +16,6 @@ export const RepositorioSchema: z.ZodType<Repositorio> = z
     }),
     variables: z
       .string()
-      .refine((variable) => {
-        return transformStringToKV(variable) || variable.length == 0;
-      }, "Ingrese variables de entorno con una sintaxis válida (consulta manual de usuario)")
       .refine((variable) => {
         if (variable.length == 0) return true;
         const transformed = transformStringToKV(variable);
@@ -41,7 +38,7 @@ export const RepositorioSchema: z.ZodType<Repositorio> = z
   .refine(
     (data) => {
       if (!data.file) {
-        const urlCheck = UrlSchema.safeParse(data.url);
+        const urlCheck = FORM_CONSTRAINS.URL.safeParse(data.url);
         return urlCheck.success;
       }
       else return true;
