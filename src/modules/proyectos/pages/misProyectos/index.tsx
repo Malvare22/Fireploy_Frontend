@@ -48,7 +48,7 @@ function MisProyectos() {
   const { token, id } = useAuth().accountInformation;
 
   const { data, isLoading, error } = useQuery({
-    queryFn: () => getProjectByUserId(token, id),
+    queryFn: () => getProjectByUserId(id),
     queryKey: ["Get All Project by User Id", id, token],
   });
 
