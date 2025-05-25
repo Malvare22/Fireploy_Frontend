@@ -5,7 +5,7 @@ import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import { labelCardSeccion } from "@modules/materias/enums/labelCardSeccion";
 import { Seccion } from "@modules/materias/types/seccion";
 import ProjectCard from "@modules/general/components/projectCard";
-import { SelectOrders, SorterOptions } from "@modules/general/components/selects";
+// import { SelectOrders, SorterOptions } from "@modules/general/components/selects";
 import { useQuery } from "@tanstack/react-query";
 import { getProjectByIdSection } from "@modules/proyectos/services/get.project";
 import { useAuth } from "@modules/general/context/accountContext";
@@ -62,7 +62,7 @@ type CardSeccionProps = {
 const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, idMateria, idCurso }) => {
   const [proyectos, setProyectos] = useState<ProyectoCard[]>([]);
 
-  const [buffer, setBuffer] = useState<ProyectoCard[]>([]);
+  // const [buffer, setBuffer] = useState<ProyectoCard[]>([]);
 
   const [projectSelect, setProjectSelect] = useState<ProyectoCard | null>(null);
 
@@ -94,9 +94,9 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, idMateria, idCurso }
 
   const { setError } = useErrorReader(showDialog);
 
-  useEffect(() => {
-    setBuffer(proyectos);
-  }, [proyectos]);
+  // useEffect(() => {
+  //   setBuffer(proyectos);
+  // }, [proyectos]);
 
   const { token } = useAuth().accountInformation;
   /**
@@ -108,7 +108,9 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, idMateria, idCurso }
     error,
     refetch,
   } = useQuery({
-    queryFn: () => getProjectByIdSection(token, seccion.id || -1),
+    queryFn: async () => {
+      return await getProjectByIdSection(token, seccion.id || -1);
+    },
     queryKey: ["Get Projects To Section", seccion.id || -1, token],
   });
 
@@ -117,6 +119,7 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, idMateria, idCurso }
   }, [error]);
 
   useEffect(() => {
+    console.log(data)
     if (data) setProyectos(data.map(adaptProject).map(adaptProjectToCard));
   }, [data]);
 
@@ -124,13 +127,13 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, idMateria, idCurso }
 
   const theme = useTheme();
 
-  const sorters: SorterOptions = [
-    {
-      key: "titulo",
-      options: { asc: "A-Z", desc: "Z-A", defaultValue: "No Aplicar" },
-      label: "Título",
-    },
-  ];
+  // const sorters: SorterOptions = [
+  //   {
+  //     key: "titulo",
+  //     options: { asc: "A-Z", desc: "Z-A", defaultValue: "No Aplicar" },
+  //     label: "Título",
+  //   },
+  // ];
 
   const Title = () => {
     return (
@@ -186,16 +189,16 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, idMateria, idCurso }
               size="small"
             />
           </Stack>
-          {buffer.length > 0 ? (
+          {/* <SelectOrders data={proyectos} setRefineData={setBuffer} sorterOptions={sorters} /> */}
+          {proyectos && proyectos.length > 0 ? (
             <>
-              <SelectOrders data={proyectos} setRefineData={setBuffer} sorterOptions={sorters} />
               <Grid2 container spacing={3}>
-                {buffer.map((proyecto, key) => (
+                {proyectos.map((proyecto) => (
                   <Grid2 size={{ lg: 4, md: 6, xs: 12 }} display={"flex"} justifyContent={"center"}>
                     <ProjectCard
                       handleOpen={() => handleCard(proyecto)}
                       proyecto={proyecto}
-                      key={key}
+                      key={proyecto.id}
                       callback={refetch}
                     />
                   </Grid2>
