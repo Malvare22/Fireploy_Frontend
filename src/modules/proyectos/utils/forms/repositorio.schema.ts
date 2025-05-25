@@ -17,9 +17,6 @@ export const RepositorioSchema: z.ZodType<Repositorio> = z
     variables: z
       .string()
       .refine((variable) => {
-        return transformStringToKV(variable) || variable.length == 0;
-      }, "Ingrese variables de entorno con una sintaxis válida (consulta manual de usuario)")
-      .refine((variable) => {
         if (variable.length == 0) return true;
         const transformed = transformStringToKV(variable);
         const allRestringid = ([] as string[]).concat(
@@ -28,6 +25,7 @@ export const RepositorioSchema: z.ZodType<Repositorio> = z
           [...reservedVariables.SQL]
         );
         if (transformed) {
+          console.log(transformed)
           return !transformed.some(({ clave }) => allRestringid.includes(clave));
         }
         return true;
