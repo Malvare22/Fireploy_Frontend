@@ -1,17 +1,15 @@
 import { z } from "zod";
 import { BaseDeDatos } from "@modules/proyectos/types/baseDeDatos";
-import { contraseniaSchema } from "@modules/usuarios/utils/form/usuario.schema";
-import { UrlSchema } from "../../../materias/utils/forms/url.schema";
-import { StandardStringRequiredSchema } from "@modules/materias/utils/forms/string.schema";
+import { FORM_CONSTRAINS } from "@modules/general/utils/formConstrains";
 
 /**
  * BaseDeDatosSchema – Zod schema used to validate a database object (excluding its relation to a project), including optional ID, name, password, URL, and type ("S" = SQL, "N" = NoSQL, "E" = Embedded).
  */
 export const BaseDeDatosSchema: z.ZodType<Omit<BaseDeDatos, "proyecto">> = z.object({
-  id: z.number().optional(),
-  nombre: StandardStringRequiredSchema,
-  contrasenia: contraseniaSchema,
-  url: UrlSchema.min(1, "Campo Obligatorio"),
+  id: FORM_CONSTRAINS.ID.optional(),
+  nombre: FORM_CONSTRAINS.TEXT_LABEL,
+  contrasenia: FORM_CONSTRAINS.PASSWORD,
+  url: FORM_CONSTRAINS.URL,
   tipo: z.enum(["S", "N", "E"], {
     errorMap: () => ({ message: "Selecciona un tipo de base de datos válido" }),
   }),
@@ -29,8 +27,8 @@ export const BaseDeDatosRegisterSchema: z.ZodType<
   Pick<BaseDeDatos, "contrasenia" | "nombre" | "tipo" | "proyectoId">
 > = z.object({
   proyectoId: z.number().optional(),
-  nombre: StandardStringRequiredSchema,
-  contrasenia: contraseniaSchema,
+  nombre: FORM_CONSTRAINS.TEXT_LABEL,
+  contrasenia: FORM_CONSTRAINS.PASSWORD,
   tipo: z.enum(["S", "N", "E"], {
     errorMap: () => ({ message: "Selecciona un tipo de base de datos válido" }),
   }),

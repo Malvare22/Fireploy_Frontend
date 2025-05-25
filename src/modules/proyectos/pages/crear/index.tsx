@@ -1,7 +1,6 @@
 import { Stack, Paper, Typography } from "@mui/material";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import PolylineIcon from "@mui/icons-material/Polyline";
 import { labelCreateProject } from "@modules/proyectos/enum/labelCrear"; // Ajusta el path
 import { ProyectoSchema } from "@modules/proyectos/utils/forms/proyecto.schema";

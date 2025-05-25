@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { getGender, getUserStatus, getUserTypes } from "../usuario.map";
 import { SexoUsuario, Usuario } from "@modules/usuarios/types/usuario";
-import { fechaSchema } from "./fechaSchema";
+import { FORM_CONSTRAINS } from "@modules/general/utils/formConstrains";
 
 /**
  * Zod schema for validating user status (EstadoUsuario).
@@ -27,37 +27,8 @@ export const sexoUsuarioSchema = z.enum(Array.from(getGender.keys()) as ["M", "F
   message: "Ingrese un sexo válido",
 });
 
-/**
- * Zod schema for validating user passwords.
- * Enforces:
- * - Minimum length of 8 characters
- * - At least one uppercase letter
- * - At least one lowercase letter
- * - At least one number
- * - At least one special character
- */
-export const contraseniaSchema = z
-  .string()
-  .min(8, { message: "La contraseña debe tener al menos 8 caracteres." })
-  .regex(/[A-Z]/, {
-    message: "La contraseña debe contener al menos una letra mayúscula.",
-  })
-  .regex(/[a-z]/, {
-    message: "La contraseña debe contener al menos una letra minúscula.",
-  })
-  .regex(/[0-9]/, {
-    message: "La contraseña debe contener al menos un número.",
-  })
-  .regex(/[@$!%*?&#]/, {
-    message: "La contraseña debe contener al menos un carácter especial (@$!%*?&#).",
-  });
-
 const msgRedSocial = "Ingrese un link válido para la respectiva red social o deje en blanco";
 
-/**
- * Zod schema for validating user's social network links.
- * Each field must be either a valid URL for the given platform or an empty string.
- */
 export const RedSocialUsuarioSchema = z
   .object({
     facebook: z
@@ -100,41 +71,24 @@ export const RedSocialUsuarioSchema = z
   .strict();
 
 /**
- * Zod schemas for individual personal data fields of the user.
- */
-export const nombresSchema = z.string().min(1, { message: "El nombre no puede estar vacío" });
-
-export const apellidosSchema = z.string().min(0, { message: "El apellido no puede estar vacío" });
-
-export const fotoDePerfilSchema = z
-  .string()
-  .min(0, { message: "Es obligatorio agregar una imagen" });
-
-export const descripcionSchema = z.string();
-
-export const correoSchema = z.string().email({ message: "Debe ser un correo válido" });
-
-export const CorreoSchema = z.object({ correo: correoSchema });
-
-/**
  * Full Zod schema for validating a complete Usuario object.
  * Includes validations for fields, conditional logic, and password matching.
  */
 export const UsuarioSchema: z.ZodType<Omit<Usuario & { confirmarContrasenia?: string | undefined }, 'redSocial'>> = z
   .object({
     id: z.number(),
-    correo: correoSchema,
-    nombres: nombresSchema,
-    apellidos: apellidosSchema,
-    fechaDeNacimiento: fechaSchema,
-    estFechaInicio: z.string().optional(),
+    correo: FORM_CONSTRAINS.EMAIL,
+    nombres: FORM_CONSTRAINS.TEXT_LABEL,
+    apellidos: FORM_CONSTRAINS.TEXT_LABEL,
+    fechaDeNacimiento: FORM_CONSTRAINS.DATE,
+    estFechaInicio: FORM_CONSTRAINS.DATE.optional(),
     estado: estadoUsuarioSchema,
     sexo: sexoUsuarioSchema,
     tipo: tiposUsuarioSchema,
-    descripcion: descripcionSchema,
-    fotoDePerfil: fotoDePerfilSchema,
-    contrasenia: contraseniaSchema.optional(),
-    confirmarContrasenia: z.string().optional(),
+    descripcion: FORM_CONSTRAINS.TEXT_DESCRIPTION,
+    fotoDePerfil: FORM_CONSTRAINS.LINK_LENGTH,
+    contrasenia: FORM_CONSTRAINS.PASSWORD.optional(),
+    confirmarContrasenia: FORM_CONSTRAINS.PASSWORD.optional(),
   })
   // Passwords must match if provided
   .refine(
@@ -153,7 +107,7 @@ export const UsuarioSchema: z.ZodType<Omit<Usuario & { confirmarContrasenia?: st
   .refine(
     (data) => {
       if (data.tipo === "E") {
-        return fechaSchema.safeParse(data.estFechaInicio).success;
+        return FORM_CONSTRAINS.DATE.safeParse(data.estFechaInicio).success;
       }
       return true;
     },
@@ -193,7 +147,11 @@ export const usuarioTemplate: Usuario & { confirmarContrasenia?: string | undefi
 
 export const PortafolioSchema: z.ZodType<Pick<Usuario, 'descripcion' | 'redSocial'>> = z.object({
   redSocial: RedSocialUsuarioSchema,
-  descripcion: descripcionSchema
+  descripcion: FORM_CONSTRAINS.TEXT_DESCRIPTION
+})
+
+export const CorreoSchema = z.object({
+  correo: FORM_CONSTRAINS.EMAIL
 })
 
 export type PortafolioSchema = z.infer<typeof PortafolioSchema>;
