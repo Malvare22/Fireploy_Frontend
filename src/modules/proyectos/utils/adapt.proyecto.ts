@@ -9,6 +9,7 @@ import { EstadoUsuario } from "@modules/usuarios/types/usuario";
 import { isTechnologyKey, TECNOLOGIES } from "./technologies";
 import { KeysOfRepository } from "../types/keysOfRepository";
 import { getDataBaseTypesMap } from "./database";
+import { Fichero, FicheroService } from "../types/fichero";
 
 // /**
 //  * adaptUsuarioToPortafolioCard – Transforms a user object into a format compatible with a portfolio card, extracting ID, name, and photo.
@@ -72,9 +73,9 @@ export function adaptProject(project: Partial<ProyectoService>): Proyecto {
         ? { integrado: adaptRepository(repos[0]) }
         : undefined
       : {
-          ...(repos[0] ? { frontend: adaptRepository(repos[0]) } : {}),
-          ...(repos[1] ? { backend: adaptRepository(repos[1]) } : {}),
-        };
+        ...(repos[0] ? { frontend: adaptRepository(repos[0]) } : {}),
+        ...(repos[1] ? { backend: adaptRepository(repos[1]) } : {}),
+      };
 
   const integrantes: UsuarioCurso[] = (project.estudiantes ?? []).map((x) => {
     return {
@@ -113,6 +114,15 @@ export function adaptProject(project: Partial<ProyectoService>): Proyecto {
   };
 }
 
+export function adaptFichero(f: FicheroService): Fichero {
+  const jsonStr = atob(f.contenido);
+  const jsonObj = JSON.parse(jsonStr);
+  return {
+    contenido: jsonObj,
+    nombre: f.nombre
+  }
+}
+
 /**
  * adaptRepository – Transforms a repository service object into a full repository object, extracting information like technology, version, environment variables, and Docker data.
  *
@@ -132,6 +142,7 @@ export function adaptRepository(repository: RepositorioService): Repositorio {
       tecnologia: isTechnologyKey(tecnologia) ? TECNOLOGIES[tecnologia] : null,
     },
     id: repository.id ?? -1,
+    ficheros: repository.ficheros?.map(adaptFichero)
   };
 
   return out;

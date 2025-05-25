@@ -1,3 +1,4 @@
+import { Fichero } from "./fichero";
 import { LogFileService } from "./logFile.service";
 
 /**
@@ -12,6 +13,7 @@ export type Repositorio = {
   informacion?: { tecnologia: string | null; framework: string | null };
   logs?: null | LogFileService[];
   file?: boolean | null | undefined;
+  ficheros?: Fichero[]
 };
 
 /**

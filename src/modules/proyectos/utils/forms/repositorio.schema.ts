@@ -4,10 +4,7 @@ import { transformStringToKV } from "@modules/general/utils/string";
 import { reservedVariables } from "../technologies";
 import { FORM_CONSTRAINS } from "@modules/general/utils/formConstrains";
 
-/**
- * RepositorioSchema – Zod schema that validates a repository object, including its ID, URL, type ("B" = Backend, "F" = Frontend, "I" = Integrated), environment variables string (must be convertible to key-value pairs or empty), Docker metadata (technology, version, framework), and a display name for the technology.
- */
-export const RepositorioSchema: z.ZodType<Repositorio> = z
+export const RepositorioSchema: z.ZodType<Omit<Repositorio, 'ficheros'>> = z
   .object({
     id: z.number(),
     url: z.string(),
@@ -48,3 +45,6 @@ export const RepositorioSchema: z.ZodType<Repositorio> = z
       path: ["url"]
     }
   );
+
+export type RepositorioSchema = z.infer<typeof RepositorioSchema>
+
