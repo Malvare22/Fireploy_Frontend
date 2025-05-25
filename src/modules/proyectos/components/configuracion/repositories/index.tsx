@@ -44,6 +44,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { GitlabIcon } from "@modules/general/components/customIcons";
 import { adaptProject } from "@modules/proyectos/utils/adapt.proyecto";
 import TransitionAlert from "@modules/general/components/transitionAlert";
+import TablaGestionarFicheros from "../../ficherosTable";
+import { postFichero } from "@modules/proyectos/services/post.fichero";
 
 type Props = {
   type: "edit" | "create";
@@ -82,12 +84,13 @@ export function Repositories({ type }: Props) {
     resolver: zodResolver(ProyectoRepositoriesSchema),
   });
 
-  const { getValues, control, watch, reset, setValue } = methods;
+  const { getValues, control, watch, reset, setValue, formState: {errors} } = methods;
+
+  console.log(errors)
 
   useEffect(() => {
     reset(getValuesProject());
   }, [getValuesProject("backend"), getValuesProject("frontend"), getValuesProject("integrado")]);
-
 
   const {
     showDialog,
@@ -160,7 +163,21 @@ export function Repositories({ type }: Props) {
           myData.integrado.url = integrado?.url ?? "";
         }
 
+        const setFicheros = async (field: KeysOfRepository) => {
+          const ficheros = getValues(`${field}.ficheros`);
+          const id = getValuesProject(`${field}.id`) ?? -1;
+          if (ficheros) {
+            for (const fichero of ficheros) {
+              await postFichero(token, fichero, id);
+            }
+          }
+        };
+
         await patchEditRepository(token, myData);
+
+        await setFicheros("backend");
+        await setFicheros("frontend");
+        await setFicheros("integrado");
 
         return;
       }
@@ -318,6 +335,7 @@ export function Repositories({ type }: Props) {
                   </Grid2>
                   <TechnologyInputs fieldName="frontend" disabled={isDisabled} />
                   <EnviromentVariablesEditor type="frontend" disabled={isDisabled} />
+                  <TablaGestionarFicheros field="frontend" disabled={isDisabled} />
                 </>
               )}
 
@@ -359,6 +377,7 @@ export function Repositories({ type }: Props) {
                   </Grid2>
                   <TechnologyInputs disabled={isDisabled} fieldName="backend" />
                   <EnviromentVariablesEditor disabled={isDisabled} type="backend" />
+                  <TablaGestionarFicheros field="backend" disabled={isDisabled} />
                 </>
               )}
 
@@ -400,6 +419,7 @@ export function Repositories({ type }: Props) {
                   </Grid2>
                   <TechnologyInputs disabled={isDisabled} fieldName="integrado" />
                   <EnviromentVariablesEditor disabled={isDisabled} type="integrado" />
+                  <TablaGestionarFicheros field="integrado" disabled={isDisabled} />
                 </>
               )}
             </Stack>

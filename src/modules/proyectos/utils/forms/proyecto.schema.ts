@@ -5,7 +5,6 @@ import { BaseDeDatosSchema } from "./baseDeDatos.schema";
 import { FORM_CONSTRAINS } from "@modules/general/utils/formConstrains";
 import { UsuarioCursoSchema } from "@modules/materias/utils/forms/form.schema";
 
-
 /**
  * MateriaInformacionSchema – Zod schema to validate academic context information for a project, including section ID, subject ID, and course ID as numeric and string fields.
  */
@@ -18,7 +17,7 @@ export const MateriaInformacionSchema: z.ZodType<MateriaInformacion> = z.object(
 /**
  * ProyectoSchema – Zod schema that validates a complete project structure (excluding favorite users), including title, optional description, URL, database info, optional repositories (backend, frontend, integrated), type ("M" = Modular, "S" = Simple), academic info, and list of participants.
  */
-export const ProyectoSchema: z.ZodType<Omit<Proyecto, "fav_usuarios">> = z.object({
+export const ProyectoSchema:  z.ZodType<Omit<Proyecto, 'fav_usuarios'>> = z.object({
   titulo: FORM_CONSTRAINS.TEXT_LABEL,
   descripcion: FORM_CONSTRAINS.TEXT_DESCRIPTION.optional(),
   url: FORM_CONSTRAINS.URL,

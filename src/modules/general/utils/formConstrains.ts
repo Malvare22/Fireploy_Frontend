@@ -1,11 +1,11 @@
 import { z } from "zod";
 export const FORM_CONSTRAINS = {
-  TEXT_LABEL: z.string().min(1, "Campo obligatorio").email({ message: "Se requiere una dirección de correo válida" }),
+  TEXT_LABEL: z.string().min(1, "Campo obligatorio"),
   LINK_LENGTH: z.string().max(256, "La longitud máxima permitida es de 256 caracteres"),
   TEXT_DESCRIPTION: z.string().max(512, "La longitud máxima permitida es de 512 caracteres"),
   DATE: z.string().date("Se requiere una fecha formal en YYYY/MM/DD"),
   ID: z.number().min(0, "Ingrese un valor númerico positivo"),
-  EMAIL: z.string().email('Ingrese una dirección de correo electronica válida'),
+  EMAIL: z.string().min(0, 'Campo requerido').email('Ingrese una dirección de correo electronica válida'),
   URL: z.string().max(256).url("URL inválida"),
   PASSWORD: z.string()
     .min(8, { message: "La contraseña debe tener al menos 8 caracteres." })

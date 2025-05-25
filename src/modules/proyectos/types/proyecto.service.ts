@@ -3,6 +3,7 @@ import { MateriaService } from "@modules/materias/types/materia.service";
 import { DataBaseService } from "./dabase.service";
 import { UsuarioCurso } from "@modules/materias/types/curso";
 import { UsuarioService } from "@modules/usuarios/types/services.usuario";
+import { FicheroService } from "./fichero";
 
 /**
  * ProyectoService – Represents the structure of a project as used in service or API layers.
@@ -74,4 +75,5 @@ export type RepositorioService = {
   tecnologia: string | null;
   variables_de_entorno: string | null;
   framework: string | null;
+  ficheros?: FicheroService[]
 };
