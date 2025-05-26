@@ -81,7 +81,7 @@ export default function ProjectSettings({ project }: Props) {
             <ChangeStatus id={project.id ?? 0} hasUrl={(project.url.trim() ?? "") != ""} />
           </Stack>
         </Stack>
-        {executionState == "L" && <ShowDeployLoad queuePosition={currentPosition} />}
+        {executionState != "L" && <ShowDeployLoad queuePosition={currentPosition} />}
         {executionState != "L" ? (
           <Container component={Paper} sx={{ p: 2 }}>
             <Typography variant="h4" sx={{ mb: 2 }}>

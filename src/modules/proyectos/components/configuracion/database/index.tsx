@@ -118,8 +118,6 @@ export const DataBase = ({ type }: Props) => {
     handleConfirm();
   }
 
-  console.log(getValues());
-
   function onFinish() {
     showDialog({
       title: "Conexión Base de datos",

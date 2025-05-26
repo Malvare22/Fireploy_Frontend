@@ -10,7 +10,7 @@ export const BaseDeDatosSchema: z.ZodType<Omit<BaseDeDatos, "proyecto">> = z.obj
   nombre: FORM_CONSTRAINS.TEXT_LABEL,
   contrasenia: FORM_CONSTRAINS.PASSWORD,
   url: FORM_CONSTRAINS.URL,
-  tipo: z.enum(["S", "N", "E"], {
+  tipo: z.enum(["S", "N", "E", 'P', 'M'], {
     errorMap: () => ({ message: "Selecciona un tipo de base de datos válido" }),
   }),
 });
@@ -29,7 +29,7 @@ export const BaseDeDatosRegisterSchema: z.ZodType<
   proyectoId: z.number().optional(),
   nombre: FORM_CONSTRAINS.TEXT_LABEL,
   contrasenia: FORM_CONSTRAINS.PASSWORD,
-  tipo: z.enum(["S", "N", "E"], {
+  tipo: z.enum(["S", "N", "E", 'P', 'M'], {
     errorMap: () => ({ message: "Selecciona un tipo de base de datos válido" }),
   }),
 });

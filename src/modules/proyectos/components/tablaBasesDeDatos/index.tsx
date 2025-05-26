@@ -1,11 +1,11 @@
 import DataTable from "react-data-table-component";
 import { TableColumn } from "react-data-table-component";
-import {  Button, Chip, Typography } from "@mui/material";
+import {  Button, Chip, Typography, useTheme } from "@mui/material";
 import React, { useMemo } from "react";
 import InfoIcon from "@mui/icons-material/Info";
 import { BaseDeDatos } from "@modules/proyectos/types/baseDeDatos";
 import { labelBaseDeDatos } from "@modules/proyectos/enum/labelBaseDeDatos";
-import { getDataBaseTypeColor, getDataBaseTypesMap } from "@modules/proyectos/utils/database";
+import { getDataBaseTypesMap } from "@modules/proyectos/utils/database";
 import StorageIcon from "@mui/icons-material/Storage";
 import { useCustomTableStyles } from "@modules/general/styles";
 import { openInNewTab } from "@modules/general/utils/openTab";
@@ -32,6 +32,7 @@ type TablaBasesDeDatosProps = {
  * ```
  */
 const TablaBasesDeDatos: React.FC<TablaBasesDeDatosProps> = ({ basesDeDatos }) => {
+  const theme = useTheme();
   const columns: TableColumn<BaseDeDatos & { rowIndex: number }>[] = [
     {
       name: labelBaseDeDatos.id,
@@ -50,7 +51,7 @@ const TablaBasesDeDatos: React.FC<TablaBasesDeDatosProps> = ({ basesDeDatos }) =
           return (
             <Chip
               sx={{
-                backgroundColor: getDataBaseTypeColor().get(row.tipo),
+                backgroundColor: theme.palette.error.main,
                 color: "white",
               }}
               label={getDataBaseTypesMap.get(row.tipo)}
@@ -61,7 +62,7 @@ const TablaBasesDeDatos: React.FC<TablaBasesDeDatosProps> = ({ basesDeDatos }) =
           return (
             <Chip
               sx={{
-                backgroundColor: getDataBaseTypeColor().get(row.tipo),
+                backgroundColor:  theme.palette.info.main,
                 color: "white",
               }}
               label={getDataBaseTypesMap.get(row.tipo)}
