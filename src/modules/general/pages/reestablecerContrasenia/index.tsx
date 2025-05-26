@@ -86,7 +86,7 @@ function ReestablecerContrasenia() {
   };
 
   return (
-    <Card sx={{  }}>
+    <Card sx={{ border: '3px solid black', maxWidth: 800, padding: 3}}>
       {/* Alert dialog for confirmation or error messages */}
       <AlertDialog
         handleAccept={handleAccept}
