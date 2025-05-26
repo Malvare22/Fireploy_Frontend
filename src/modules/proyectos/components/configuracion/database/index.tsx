@@ -252,6 +252,7 @@ export const DataBase = ({ type }: Props) => {
             <Button variant="contained" endIcon={<StorageIcon />}>
               {"Ver Base de Datos"}
             </Button>
+            <Typography>{getValues('url')}</Typography>
           </Box>
         </Stack>
       )}
