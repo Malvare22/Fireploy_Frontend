@@ -40,35 +40,29 @@ function VistaSolicitudes() {
   const { searchValue, setSearchValue, filteredData: filterDataFunction } = useSearch();
   const { filterDataFn, handleFilter, filters } = useFilters();
 
-  // 🗂️ State for solicitudes
   const [solicitudes, setSolicitudes] = useState<Solicitud[]>([]);
 
-  // 🔐 Auth context for token
   const { accountInformation } = useAuth();
   const { token } = accountInformation;
   const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
 
   const { setError } = useErrorReader(showDialog);
 
-  // 📦 React Query: fetch solicitudes
   const { data, isLoading, error, isSuccess } = useQuery({
     queryFn: () => getSolicitudesService(token, {tipo: 1}),
     queryKey: ["Solicitudes", token],
   });
 
-  // 🛠️ Adapt and store fetched solicitudes
   useEffect(() => {
     if (isSuccess && data) {
       setSolicitudes(data.map((solicitud) => adaptSolicitudService(solicitud)));
     }
   }, [isSuccess, data]);
 
-  // 🛑 Handle fetch errors
   useEffect(() => {
     if (error) setError(error);
   }, [error]);
 
-  // 🔍 Filtered data with conditions and search
   const solicitudesToRender = useMemo(() => {
     const y = searchValue.toLowerCase();
     return filterDataFunction(
@@ -89,7 +83,6 @@ function VistaSolicitudes() {
       <TextField
         select
         size="small"
-        variant="standard"
         label={labelSolicitudes.fechaSolicitud}
         fullWidth
         onChange={(e) => {
@@ -116,7 +109,6 @@ function VistaSolicitudes() {
       <TextField
         select
         size="small"
-        variant="standard"
         label={labelSolicitudes.fechaAceptacion}
         fullWidth
         onChange={(e) => {
@@ -175,7 +167,6 @@ function VistaSolicitudes() {
                 select
                 size="small"
                 label={labelSolicitudes.estado}
-                variant="standard"
                 fullWidth
                 onChange={(e) => {
                   const value = e.target.value || "";
