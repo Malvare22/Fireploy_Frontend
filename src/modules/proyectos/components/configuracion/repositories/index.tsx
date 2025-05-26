@@ -45,35 +45,12 @@ import { GitlabIcon } from "@modules/general/components/customIcons";
 import { adaptProject } from "@modules/proyectos/utils/adapt.proyecto";
 import TransitionAlert from "@modules/general/components/transitionAlert";
 import TablaGestionarFicheros from "../../ficherosTable";
-import { postFichero } from "@modules/proyectos/services/post.fichero";
+import { deleteFichero, postFichero } from "@modules/proyectos/services/post.fichero";
 
 type Props = {
   type: "edit" | "create";
 };
 
-/**
- * Repositories component – This component is responsible for managing the repository information
- * for a project. It allows users to create or edit repository details, such as the frontend, backend,
- * and integrated repositories, including their URLs and environment variables.
- *
- * The component uses React Hook Form for form management, React Query for API interaction, and
- * Material-UI for UI components. It also includes an alert dialog to confirm repository updates and
- * handles form submission to update repositories.
- *
- * @component
- *
- * @param {Object} props - Component props.
- * @param {"edit" | "create"} props.type - Specifies whether the user is editing an existing repository
- * or creating a new one.
- *
- * @returns {JSX.Element} A form allowing the user to input repository information (frontend, backend, integrated).
- * It provides options to submit the data or cancel changes, and handles success/error dialogs.
- *
- * @example
- * ```tsx
- * <Repositories type="create" />
- * ```
- */
 export function Repositories({ type }: Props) {
   const { getValues: getValuesProject } = useFormContext<ProyectoSchema>();
   const { token } = useAuth().accountInformation;
@@ -84,9 +61,13 @@ export function Repositories({ type }: Props) {
     resolver: zodResolver(ProyectoRepositoriesSchema),
   });
 
-  const { getValues, control, watch, reset, setValue, formState: {errors} } = methods;
-
-  console.log(errors)
+  const {
+    getValues,
+    control,
+    watch,
+    reset,
+    setValue,
+  } = methods;
 
   useEffect(() => {
     reset(getValuesProject());
@@ -164,10 +145,18 @@ export function Repositories({ type }: Props) {
         }
 
         const setFicheros = async (field: KeysOfRepository) => {
-          const ficheros = getValues(`${field}.ficheros`);
+          const ficheros = getValuesProject(`${field}.ficheros`);
+
           const id = getValuesProject(`${field}.id`) ?? -1;
           if (ficheros) {
             for (const fichero of ficheros) {
+              if (fichero.id) await deleteFichero(token, fichero.id);
+            }
+          }
+          const currentFicheros = getValues(`${field}.ficheros`);
+
+          if (currentFicheros) {
+            for (const fichero of currentFicheros) {
               await postFichero(token, fichero, id);
             }
           }

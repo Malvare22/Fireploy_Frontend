@@ -120,8 +120,6 @@ const TablaGestionarFicheros = ({ field, disabled }: Props) => {
     },
   ];
 
-  console.log(files);
-
   const dataConIndice = useMemo(() => {
     const ficherosCurrent = files ?? [];
     return ficherosCurrent.map((fichero, index) => ({
@@ -142,6 +140,9 @@ const TablaGestionarFicheros = ({ field, disabled }: Props) => {
         {files && files.length != 0 ? (
           <>
             <Divider />
+            <Alert severity="warning">
+              {"Es necesario que los archivos dispongan de un nombre y su respectiva extensión"}
+            </Alert>
             <Box sx={{ maxWidth: 500 }}>
               <DataTable
                 columns={columns}
@@ -155,7 +156,7 @@ const TablaGestionarFicheros = ({ field, disabled }: Props) => {
         ) : (
           <Alert severity="warning">{"Sin ficheros de Firebase vinculados"}</Alert>
         )}
-        <Stack alignItems={"end"} sx={{ maxWidth: 500 }}>
+        <Stack alignItems={!files || files.length == 0 ? "start" : "end"} sx={{ maxWidth: 500 }}>
           <Box>
             <GeneralButton
               onClick={handleAdd}
@@ -188,15 +189,8 @@ function FileInput({ setFichero, fichero, index, disabled = false }: FileInputPr
     const file = files[0];
     const reader = new FileReader();
 
-    reader.onload = (event) => {
-      try {
-        const text = event.target?.result as string;
-        JSON.parse(text); // validamos que sea JSON
-        setFichero(index, { contenido: file, nombre: file.name });
-      } catch {
-        alert("El archivo no es un JSON válido");
-        setFichero(index, { ...ficheroTemplate });
-      }
+    reader.onload = (_event) => {
+      setFichero(index, { contenido: file, nombre: file.name });
     };
 
     reader.readAsText(file);
@@ -224,7 +218,7 @@ function FileInput({ setFichero, fichero, index, disabled = false }: FileInputPr
         color="secondary"
       >
         {"Subir fichero"}
-        <HiddenButton type="file" accept=".json" onChange={onChange} multiple />
+        <HiddenButton type="file" accept=".json,.env" onChange={onChange} multiple />
       </Button>
     </Stack>
   );

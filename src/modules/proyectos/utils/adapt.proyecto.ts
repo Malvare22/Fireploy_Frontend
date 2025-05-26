@@ -113,13 +113,65 @@ export function adaptProject(project: Partial<ProyectoService>): Proyecto {
     ...repositoriosAsignados,
   };
 }
+function getMimeTypeFromExtension(fileName: string): string {
+  const extension = fileName.split(".").pop()?.toLowerCase();
+
+  switch (extension) {
+    case "json":
+      return "application/json";
+    case "txt":
+      return "text/plain";
+    case "csv":
+      return "text/csv";
+    case "pdf":
+      return "application/pdf";
+    case "jpg":
+    case "jpeg":
+      return "image/jpeg";
+    case "png":
+      return "image/png";
+    case "gif":
+      return "image/gif";
+    case "doc":
+      return "application/msword";
+    case "docx":
+      return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    case "xls":
+      return "application/vnd.ms-excel";
+    case "xlsx":
+      return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    default:
+      return "application/octet-stream"; // binario genérico
+  }
+}
 
 export function adaptFichero(f: FicheroService): Fichero {
-  const jsonStr = atob(f.contenido);
-  const jsonObj = JSON.parse(jsonStr);
-  return {
-    contenido: jsonObj,
-    nombre: f.nombre
+  try {
+    const binaryData = atob(f.contenido); // Decodifica Base64 a binario (string)
+    const byteArray = Uint8Array.from(binaryData, c => c.charCodeAt(0)); // Convierte a array de bytes
+
+    const fileName = f.nombre;
+    const mimeType = getMimeTypeFromExtension(fileName);
+
+    const blob = new Blob([byteArray], { type: mimeType });
+
+    const file = new File([blob], fileName, {
+      type: mimeType,
+      lastModified: Date.now(),
+    });
+
+    return {
+      contenido: file,
+      nombre: f.nombre,
+      id: f.id ?? -1,
+    };
+  } catch (error) {
+    console.error("Error al adaptar fichero:", error);
+    return {
+      nombre: f.nombre,
+      id: f.id ?? -1,
+      contenido: null,
+    };
   }
 }
 
@@ -132,8 +184,7 @@ export function adaptFichero(f: FicheroService): Fichero {
 export function adaptRepository(repository: RepositorioService): Repositorio {
   const tecnologia = repository.tecnologia ?? null;
   const framework = repository.framework ?? null;
-
-  const out = {
+  return {
     variables: !repository.variables_de_entorno ? "" : repository.variables_de_entorno,
     url: repository.url ?? "",
     tipo: (repository.tipo as Repositorio["tipo"]) ?? "I",
@@ -145,5 +196,4 @@ export function adaptRepository(repository: RepositorioService): Repositorio {
     ficheros: repository.ficheros?.map(adaptFichero)
   };
 
-  return out;
 }

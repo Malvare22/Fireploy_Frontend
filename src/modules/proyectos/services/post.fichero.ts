@@ -24,3 +24,19 @@ export async function postFichero(
 
   return response;
 }
+
+export async function deleteFichero(
+  token: string,
+  ficheroId: number
+): Promise<unknown | unknown[]> {
+
+  const response = await axios({
+    method: "delete",
+    url: `${import.meta.env.VITE_URL_BACKEND}/ficheros/${ficheroId}`,
+    headers: {
+      sessiontoken: token,
+    },
+  }).then((response: unknown) => response);
+
+  return response;
+}

@@ -38,5 +38,5 @@ export type BaseDeDatos = {
   nombre: string;
   contrasenia: string;
   url?: string,
-  tipo: "S" | "N" | "E";
+  tipo: "S" | "N" | "E" | 'P' | 'M';
 };

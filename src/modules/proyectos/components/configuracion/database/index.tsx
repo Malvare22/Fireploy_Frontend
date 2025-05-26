@@ -118,8 +118,6 @@ export const DataBase = ({ type }: Props) => {
     handleConfirm();
   }
 
-  console.log(getValues());
-
   function onFinish() {
     showDialog({
       title: "Conexión Base de datos",
@@ -254,6 +252,7 @@ export const DataBase = ({ type }: Props) => {
             <Button variant="contained" endIcon={<StorageIcon />}>
               {"Ver Base de Datos"}
             </Button>
+            <Typography>{getValues('url')}</Typography>
           </Box>
         </Stack>
       )}

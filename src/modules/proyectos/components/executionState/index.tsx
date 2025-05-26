@@ -13,7 +13,6 @@ import {
   CircularProgress,
   IconButton,
   LinearProgress,
-  Stack,
   Tooltip,
   Typography,
   useTheme,
@@ -75,7 +74,10 @@ export function ShowDeployLoad({ queuePosition }: ShowDeployLoadProps) {
   const theme = useTheme();
   return (
     <>
-      <Alert severity="info" sx={{ width: "100%", direction: 'flex', alignItems: 'center' }}>
+      <Alert
+        severity="info"
+        sx={{display: "flex", alignItems: "center"}}
+      >
         {queuePosition ? (
           <>
             <Typography>Tu proyecto actualmente se encuentra en cola de despliegue</Typography>
@@ -83,15 +85,16 @@ export function ShowDeployLoad({ queuePosition }: ShowDeployLoadProps) {
             <Typography sx={{ fontWeight: 600 }}>Posición actual: {queuePosition}</Typography>
           </>
         ) : (
-          <Stack direction={'row'} alignItems={'center'} spacing={2}>
-              <Typography variant="h5">Tu proyecto se está desplegando</Typography>
-              <Box><CircularProgress
-              size={64}
+          <Box sx={{display: 'flex', alignItems: 'center', gap: 1, width: '100%', overflow: 'hidden'}}
+          >
+            <Typography variant="h6">Tu proyecto se está desplegando</Typography>
+            <Box><CircularProgress
+              size={32}
               sx={{
                 color: theme.palette.primary.main,
               }}
             /></Box>
-          </Stack>
+          </Box>
         )}
       </Alert>
 

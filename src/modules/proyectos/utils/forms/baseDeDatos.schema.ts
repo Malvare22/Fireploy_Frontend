@@ -10,7 +10,7 @@ export const BaseDeDatosSchema: z.ZodType<Omit<BaseDeDatos, "proyecto">> = z.obj
   nombre: FORM_CONSTRAINS.TEXT_LABEL,
   contrasenia: FORM_CONSTRAINS.PASSWORD,
   url: FORM_CONSTRAINS.URL,
-  tipo: z.enum(["S", "N", "E"], {
+  tipo: z.enum(["S", "N", "E", 'P', 'M'], {
     errorMap: () => ({ message: "Selecciona un tipo de base de datos válido" }),
   }),
 });
@@ -24,14 +24,15 @@ export type BaseDeDatosSchema = z.infer<typeof BaseDeDatosSchema>;
  * BaseDeDatosRegisterSchema – Zod schema used for registering a database, validating name, password, type, and optionally the related project ID. Type values: "S" = SQL, "N" = NoSQL, "E" = Embedded.
  */
 export const BaseDeDatosRegisterSchema: z.ZodType<
-  Pick<BaseDeDatos, "contrasenia" | "nombre" | "tipo" | "proyectoId">
+  Pick<BaseDeDatos, "contrasenia" | "nombre" | "tipo" | "proyectoId" | 'url'>
 > = z.object({
   proyectoId: z.number().optional(),
   nombre: FORM_CONSTRAINS.TEXT_LABEL,
   contrasenia: FORM_CONSTRAINS.PASSWORD,
-  tipo: z.enum(["S", "N", "E"], {
+  tipo: z.enum(["S", "N", "E", 'P', 'M'], {
     errorMap: () => ({ message: "Selecciona un tipo de base de datos válido" }),
   }),
+  url: z.string().optional()
 });
 
 /**
