@@ -42,7 +42,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import { NotificationMessage } from "@modules/usuarios/types/notification";
 import { useNotificationContext } from "@modules/general/context/notificationContext";
 import { rutasMaterias } from "@modules/materias/router/routes";
-import SchoolIcon from '@mui/icons-material/School';
+import SchoolIcon from "@mui/icons-material/School";
 
 function getNavigationElements(userInformation: AccountInformation): Navigation {
   return [
@@ -247,7 +247,7 @@ function ToolbarActions({
               {notificaciones.length > 0 ? (
                 notificaciones.slice(0, 5).map((notificacion) => (
                   <>
-                    <Box sx={{ paddingY: 1 }}>
+                    <Box sx={{ paddingY: 1 }} key={notificacion.id}>
                       <Typography sx={{ fontWeight: 700 }} variant="subtitle2">
                         {notificacion.titulo}
                       </Typography>
