@@ -175,6 +175,15 @@ export function adaptFichero(f: FicheroService): Fichero {
   }
 }
 
+export function adaptFichero(f: FicheroService): Fichero {
+  const jsonStr = atob(f.contenido);
+  const jsonObj = JSON.parse(jsonStr);
+  return {
+    contenido: jsonObj,
+    nombre: f.nombre
+  }
+}
+
 /**
  * adaptRepository – Transforms a repository service object into a full repository object, extracting information like technology, version, environment variables, and Docker data.
  *
