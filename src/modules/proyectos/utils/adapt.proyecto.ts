@@ -54,7 +54,8 @@ export function adaptProjectToCard(proyecto: Proyecto): ProyectoCard {
     materia: proyecto.materiaInformacion.nombre || "N/A",
     grupo: proyecto.materiaInformacion?.cursoId?.toString() || "N/A",
     estado: proyecto.estadoDeEjecucion || "E",
-    url: proyecto.url
+    url: proyecto.url,
+    puntuacion: (proyecto.fav_usuarios ?? []).length
   };
 }
 

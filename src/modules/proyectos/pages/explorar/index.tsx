@@ -1,4 +1,4 @@
-import { Alert, Grid2, MenuItem, Select, Stack, Typography } from "@mui/material";
+import { Alert, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -7,10 +7,6 @@ import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import AlertDialog from "@modules/general/components/alertDialog";
 import ProjectCard from "@modules/general/components/projectCard";
 import SpringModal from "@modules/general/components/springModal";
-
-import { labelSelects } from "@modules/general/enums/labelSelects";
-import useOrderSelect from "@modules/general/hooks/useOrder";
-
 import { getProyectosAllService } from "@modules/proyectos/services/get.proyectos.all";
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import { ProyectoService } from "@modules/proyectos/types/proyecto.service";
@@ -22,6 +18,12 @@ import LoaderElement from "@modules/general/components/loaderElement";
 import useSearch from "@modules/general/hooks/useSearch";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import { AlertDialogProvider } from "@modules/general/context/alertDialogContext";
+import {
+  filterByFrameworkPC,
+  getOptionsFrameworksPC,
+} from "@modules/proyectos/utils/getInputsFramework";
+import { getExecutionStateArray } from "@modules/proyectos/utils/getExecutionState";
+import { labelSelects } from "@modules/general/enums/labelSelects";
 
 /**
  * ExplorarProyectos component – A project exploration interface that allows users to search and filter through
@@ -46,9 +48,29 @@ import { AlertDialogProvider } from "@modules/general/context/alertDialogContext
 function ExplorarProyectos() {
   const [selectProyecto, setSelectProyecto] = useState<ProyectoCard | null>(null);
 
-  const { handleClose: closeModal, handleOpen: openModal, open: modalOpen } = useModal();
+  // Estado para la opción de ordenamiento
+  const [sortOption, setSortOption] = useState<string>("puntuacion-desc");
 
-  const { handleOrder, orderDataFn, order } = useOrderSelect<ProyectoCard>();
+  // Estados para los nuevos filtros (replicados de MisProyectos)
+  const [selectFramework, setSelectFramework] = useState("");
+  const [selectExecutionState, setSelectExecutionState] = useState("");
+
+  // Manejador para el cambio de opción de ordenamiento
+  const handleChangeOption = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSortOption(event.target.value as string);
+  };
+
+  // Manejador para el cambio de selección del framework (replicado de MisProyectos)
+  function handleFramework(e: React.ChangeEvent<HTMLInputElement>) {
+    setSelectFramework(e.target.value);
+  }
+
+  // Manejador para el cambio de selección del estado de ejecución (replicado de MisProyectos)
+  function handleExecutionState(e: React.ChangeEvent<HTMLInputElement>) {
+    setSelectExecutionState(e.target.value);
+  }
+
+  const { handleClose: closeModal, handleOpen: openModal, open: modalOpen } = useModal();
 
   const { data, isLoading, isError, error, refetch } = useQuery<ProyectoService[]>({
     queryKey: ["Projects All"],
@@ -67,9 +89,42 @@ function ExplorarProyectos() {
     return x.filter((y) => y.titulo.toLowerCase().includes(s.toLowerCase()));
   }
 
+  const sortedData = useMemo(() => {
+    // Es importante crear una copia del array antes de ordenar para no mutar el estado original
+    const dataToSort = [...proyectos];
+    return dataToSort.sort((a, b) => {
+      switch (sortOption) {
+        case "puntuacion-asc":
+          return a.fav_usuarios.length - b.fav_usuarios.length;
+        case "puntuacion-desc":
+          return b.fav_usuarios.length - a.fav_usuarios.length;
+        case "titulo-desc":
+          return b.titulo.localeCompare(a.titulo);
+        case "titulo-asc":
+          return a.titulo.localeCompare(b.titulo);
+        default:
+          return 0;
+      }
+    });
+  }, [proyectos, sortOption]);
+
   const renderData = useMemo(() => {
-    return filteredData(orderDataFn(proyectos), searchFn);
-  }, [searchValue, proyectos, order]);
+    let _projects = [...sortedData]; // Empezamos con los datos ya ordenados
+
+    // Aplicar filtro por framework
+    if (selectFramework !== "") {
+      _projects = filterByFrameworkPC(_projects, selectFramework);
+    }
+
+    // Aplicar filtro por estado de ejecución
+    if (selectExecutionState !== "") {
+      // Asumiendo que ProyectoCard tiene una propiedad 'estadoDeEjecucion'
+      _projects = _projects.filter((p) => p.estado === selectExecutionState);
+    }
+
+    // Finalmente, aplicar la búsqueda
+    return filteredData(_projects, searchFn);
+  }, [searchValue, selectFramework, selectExecutionState, sortedData, filteredData, searchFn]);
 
   return (
     <AlertDialogProvider>
@@ -87,7 +142,7 @@ function ExplorarProyectos() {
       />
 
       {/* Contenido */}
-      <Stack spacing={5}>
+      <Stack spacing={3}>
         {/* Título */}
         <Stack direction="row" alignItems="center" justifyContent="center" spacing={2}>
           <Typography variant="h3" textAlign="center">
@@ -97,34 +152,54 @@ function ExplorarProyectos() {
         </Stack>
 
         {/* Filtros */}
-        <Stack direction={{ sm: "row", xs: "column" }} justifyContent="center" spacing={1}>
+        <Stack alignItems={'center'}>
           <TextFieldSearch
-            fullWidth
-            sx={{ width: { md: "70%", xs: "100%" } }}
-            setSearchValue={setSearchValue}
-          />
-          <Select
+          fullWidth
+          sx={{ width: { md: "70%", xs: "100%" } }}
+          setSearchValue={setSearchValue}
+        />
+        </Stack>
+        <Stack direction={{ sm: "row", xs: "column" }} justifyContent="center" spacing={1}>
+          <TextField select size="small" sx={{ width: 250 }} onChange={handleChangeOption}>
+            <MenuItem value={"titulo-asc"}>{"A-Z"}</MenuItem>
+            <MenuItem value={"titulo-desc"}>{"Z-A"}</MenuItem>
+            <MenuItem value={"puntuacion-asc"}>{"Mayor puntuación"}</MenuItem>
+            <MenuItem value={"puntuacion-desc"}>{"Menor puntuación"}</MenuItem>
+          </TextField>
+          <TextField
+            select
             size="small"
-            sx={{ width: 250 }}
-            onChange={(e) => {
-              const val = JSON.parse(e.target.value as string);
-              if (val.key == undefined) {
-                handleOrder("titulo", undefined);
-                handleOrder("semestre", undefined);
-                handleOrder("puntuacion", undefined);
-              } else handleOrder(val.key, val.order);
-            }}
+            sx={{ maxWidth: 250 }}
+            label="Framework"
+            fullWidth
+            onChange={handleFramework}
           >
-            <MenuItem value={JSON.stringify({ key: undefined, order: undefined })}>
-              {labelSelects.noAplicar}
-            </MenuItem>
-            <MenuItem value={JSON.stringify({ key: "titulo", order: "asc" })}>
-              {labelSelects.alfabeticamenteMayor}
-            </MenuItem>
-            <MenuItem value={JSON.stringify({ key: "titulo", order: "desc" })}>
-              {labelSelects.alfabeticamenteMenor}
-            </MenuItem>
-          </Select>
+            {getOptionsFrameworksPC(proyectos).map((op) => {
+              return (
+                <MenuItem key={op} value={op}>
+                  {op}
+                </MenuItem>
+              );
+            })}
+            <MenuItem value={""}>{labelSelects.noAplicar}</MenuItem>
+          </TextField>
+          <TextField
+            select
+            size="small"
+            fullWidth
+            sx={{ maxWidth: 250 }}
+            label="Estado de Ejecución"
+            onChange={handleExecutionState}
+          >
+            {getExecutionStateArray.map(([value, label]) => {
+              return (
+                <MenuItem key={value} value={value}>
+                  {label}
+                </MenuItem>
+              );
+            })}
+            <MenuItem value={""}>{labelSelects.noAplicar}</MenuItem>
+          </TextField>
         </Stack>
 
         {/* Lista de proyectos */}
@@ -135,7 +210,7 @@ function ExplorarProyectos() {
             <Alert severity="info">{"No se encontraron proyectos"}</Alert>
           ) : (
             <Grid2 container spacing={4} marginTop={4} marginBottom={6}>
-              {orderDataFn(proyectos).map((proyecto) => (
+              {renderData.map((proyecto) => (
                 <Grid2
                   key={proyecto.id}
                   size={{ xl: 4, sm: 6, xs: 12 }}

@@ -2,7 +2,7 @@ import ProjectForList from "@modules/proyectos/components/projectForList";
 import { labelProjectForList } from "@modules/proyectos/enum/labelProjectForList";
 import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
 // import { getExecutionStateArray } from "@modules/proyectos/utils/getExecutionState";
-import { Alert, Box, Button, Grid2, Stack, Typography } from "@mui/material";
+import { Alert, Box, Button, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getProjectByUserId } from "@modules/proyectos/services/get.project";
@@ -14,16 +14,16 @@ import AlertDialog from "@modules/general/components/alertDialog";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import { useNavigate } from "react-router";
 import { rutasProyectos } from "@modules/proyectos/router";
-import {
-  FilterOptions,
-  SelectFilters,
-} from "@modules/general/components/selects";
-import { getExecutionStateArray } from "@modules/proyectos/utils/getExecutionState";
 import useSearch from "@modules/general/hooks/useSearch";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
-import { getNoRepeatValues } from "@modules/general/utils/getNoRepeatValues";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
+import {
+  filterByFrameworkLegacy,
+  getOptionsFrameworksLegacy,
+} from "@modules/proyectos/utils/getInputsFramework";
+import { labelSelects } from "@modules/general/enums/labelSelects";
+import { getExecutionStateArray } from "@modules/proyectos/utils/getExecutionState";
 
 /**
  * MisProyectos component – A page that lists the projects belonging to the authenticated user.
@@ -52,6 +52,17 @@ function MisProyectos() {
     queryKey: ["Get All Project by User Id", id, token],
   });
 
+  const [selectFramework, setSelectFramework] = useState("");
+  const [selectExecutionState, setSelectExecutionState] = useState("");
+
+  function handleFramework(e: React.ChangeEvent<HTMLInputElement>) {
+    setSelectFramework(e.target.value as string);
+  }
+
+  function handleExecutionState(e: React.ChangeEvent<HTMLInputElement>) {
+    setSelectExecutionState(e.target.value as string);
+  }
+
   const [projects, setProjects] = useState<Proyecto[]>([]);
 
   useEffect(() => {
@@ -74,57 +85,26 @@ function MisProyectos() {
     navigate(rutasProyectos.crear);
   }
 
-  function searchFn(x: Proyecto[], s: string){
+  function searchFn(x: Proyecto[], s: string) {
     const _s = s.toLowerCase();
     return x.filter((y) => y.titulo.toLowerCase().includes(_s));
   }
 
-  const filterOptions: FilterOptions = [
-    {
-      key: "estadoDeEjecucion",
-      label: "Estado",
-      options: getExecutionStateArray.map(
-        ([value, key]) => [key, (x: any) => x == value] as [string, (x: any) => boolean]
-      ),
-    },
-    {
-      key: "backend.informacion.framework",
-      label: "Framework Backend",
-      options: getNoRepeatValues(projects, (x) => x.backend?.informacion?.framework).map(
-        ((value) => [value, (x: any) => x == value] as [string, (x: any) => boolean]
-      )),
-    },
-     {
-      key: "frontend.informacion.framework",
-      label: "Framework Frontend",
-      options: getNoRepeatValues(projects, (x) => x.frontend?.informacion?.framework).map(
-        ((value) => [value, (x: any) => x == value] as [string, (x: any) => boolean]
-      )),
-    },
-    {
-      key: "integrado.informacion.framework",
-      label: "Framework Integrado",
-      options: getNoRepeatValues(projects, (x) => x.frontend?.informacion?.framework).map(
-        ((value) => [value, (x: any) => x == value] as [string, (x: any) => boolean]
-      )),
-    },
-  ];
+  const { filteredData: applySearch, searchValue, setSearchValue } = useSearch();
 
-  const {filteredData: applySearch, searchValue, setSearchValue} = useSearch();
+  const renderData = useMemo(() => {
+    let _projects =
+      selectFramework == "" ? projects : filterByFrameworkLegacy(projects, selectFramework);
 
-  const [buffer, setBuffer] = useState<Proyecto[]>(projects);
+    if (selectExecutionState != "")
+      _projects = _projects.filter((p) => p.estadoDeEjecucion == selectExecutionState);
 
-  useEffect(() => {
-    if (projects) setBuffer(projects);
-  }, [projects]);
+    return applySearch(_projects, searchFn);
+  }, [searchValue, selectFramework, selectExecutionState, projects]);
 
-   const renderData = useMemo(()  => {
-      return applySearch(buffer, searchFn);
-    }, [searchValue, buffer]);
-
-    function handleButtonAdd(){
-      navigate(rutasProyectos.crear);
-    }
+  function handleButtonAdd() {
+    navigate(rutasProyectos.crear);
+  }
 
   return (
     <>
@@ -167,18 +147,49 @@ function MisProyectos() {
             </Stack>
           </Box>
           <Stack spacing={2} paddingX={{ md: 6, xs: 2 }}>
-            <SelectFilters<Proyecto>
-              data={projects}
-              filterOptions={filterOptions}
-              setRefineData={setBuffer}
-              
-            />
-            <TextFieldSearch setSearchValue={setSearchValue} label='Buscar proyecto'/>
-            <Stack alignItems={'end'}>
-              <Box><GeneralButton mode={buttonTypes.add} onClick={handleButtonAdd}/></Box>
+            <TextFieldSearch setSearchValue={setSearchValue} label="Buscar proyecto" />
+           <Stack direction={'row'} spacing={1}>
+             <TextField
+              select
+              size="small"
+              sx={{ maxWidth: 250 }}
+              label="Framework"
+              fullWidth
+              onChange={handleFramework}
+            >
+              {getOptionsFrameworksLegacy(projects).map((op) => {
+                return (
+                  <MenuItem key={op} value={op}>
+                    {op}
+                  </MenuItem>
+                );
+              })}
+              <MenuItem value={""}>{labelSelects.noAplicar}</MenuItem>
+            </TextField>
+            <TextField
+              select
+              size="small"
+              fullWidth
+              sx={{ maxWidth: 250 }}
+              label="Estado de Ejecución"
+              onChange={handleExecutionState}
+            >
+              {getExecutionStateArray.map(([value, label]) => {
+                return (
+                  <MenuItem key={value} value={value}>
+                    {label}
+                  </MenuItem>
+                );
+              })}
+              <MenuItem value={""}>{labelSelects.noAplicar}</MenuItem>
+            </TextField>
+           </Stack>
+            <Stack alignItems={"end"}>
+              <Box>
+                <GeneralButton mode={buttonTypes.add} onClick={handleButtonAdd} />
+              </Box>
             </Stack>
           </Stack>
-          {/*  */}
           <Grid2 container spacing={2} paddingX={{ md: 6, xs: 2 }}>
             {renderData && renderData.length > 0 ? (
               renderData.map((proyecto, key) => (

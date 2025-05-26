@@ -20,4 +20,5 @@ export type ProyectoCard = {
   grupo: string;
   estado: EstadoEjecucionProyecto;
   url: string | null;
+  puntuacion: number;
 };

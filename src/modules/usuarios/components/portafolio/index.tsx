@@ -198,61 +198,26 @@ const Portafolio = ({ id }: { id: number }) => {
                 </Stack>
               </Card>
               <Stack spacing={4} marginTop={3}>
-                <Card sx={{ width: "100%" }}>
-                  <Grid2
-                    container
-                    spacing={2}
-                    sx={{ margin: 2, marginBottom: 4, display: "flex", alignItems: "center" }}
+                <Box sx={{ width: "100%", display: "flex", alignItems: "center", gap: 2 }}>
+                  <Typography variant="body1" fontWeight="bold">
+                    {labelPortafolio.ordenarPor}
+                  </Typography>
+                  <TextField
+                    select
+                    onChange={(e) => handleOrder("puntuacion", e.target.value as Order)}
+                    InputLabelProps={{ shrink: true }}
+                    variant="outlined"
+                    label={labelPortafolio.puntuacion}
+                    size="small"
+                    sx={{minWidth: 300}}
                   >
-                    <Grid2
-                      size={{ md: 2, xs: 12 }}
-                      height={"100%"}
-                      display={"flex"}
-                      alignItems={"center"}
-                    >
-                      <Typography variant="body1" fontWeight="bold">
-                        {labelPortafolio.ordenarPor}
-                      </Typography>
-                    </Grid2>
-                    <Grid2 size={{ md: 4, xs: 12 }}>
-                      <TextField
-                        select
-                        onChange={(e) => handleOrder("puntuacion", e.target.value as Order)}
-                        InputLabelProps={{ shrink: true }}
-                        variant="outlined"
-                        label={labelPortafolio.puntuacion}
-                        size="small"
-                        fullWidth
-                      >
-                        <MenuItem value="No Aplicar">
-                          <em>No aplicar</em>
-                        </MenuItem>
-                        <MenuItem value="asc">{labelSelects.mayor}</MenuItem>
-                        <MenuItem value="desc">{labelSelects.menor}</MenuItem>
-                      </TextField>
-                    </Grid2>
-
-                    <Grid2 size={{ md: 4, xs: 12 }}>
-                      <TextField
-                        onChange={(e) =>
-                          handleOrder("semestre", (e.target.value as Order) || undefined)
-                        }
-                        select
-                        InputLabelProps={{ shrink: true }}
-                        variant="outlined"
-                        label={labelPortafolio.semestre}
-                        size="small"
-                        fullWidth
-                      >
-                        <MenuItem value="No Aplicar">
-                          <em>No aplicar</em>
-                        </MenuItem>
-                        <MenuItem value="asc">{labelSelects.mayor}</MenuItem>
-                        <MenuItem value="desc">{labelSelects.menor}</MenuItem>
-                      </TextField>
-                    </Grid2>
-                  </Grid2>
-                </Card>
+                    <MenuItem value="No Aplicar">
+                      <em>{labelSelects.noAplicar}</em>
+                    </MenuItem>
+                    <MenuItem value="desc">{labelSelects.mayor}</MenuItem>
+                    <MenuItem value="asc">{labelSelects.menor}</MenuItem>
+                  </TextField>
+                </Box>
 
                 <Box sx={{ flexGrow: 1 }}>
                   {usuario.proyectos.length > 0 ? (
