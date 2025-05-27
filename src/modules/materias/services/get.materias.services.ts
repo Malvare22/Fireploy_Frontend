@@ -100,7 +100,6 @@ export const getAllAcademicInformation = async (
     );
 
     curso.secciones.forEach((seccion) => {
-      console.log('OBSERVA ', seccion)
       if (!validDates) selectSeccion.set(seccion.id, seccion.titulo);
       else {
         

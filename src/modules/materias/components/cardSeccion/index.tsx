@@ -119,11 +119,8 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, idMateria, idCurso }
   }, [error]);
 
   useEffect(() => {
-    console.log(data)
     if (data) setProyectos(data.map(adaptProject).map(adaptProjectToCard));
   }, [data]);
-
-  console.log(data)
 
   const theme = useTheme();
 

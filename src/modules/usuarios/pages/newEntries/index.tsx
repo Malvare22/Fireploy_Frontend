@@ -65,8 +65,6 @@ function NewEntriesView() {
     queryKey: ["Profile", id, token],
   });
 
-  console.log(watch())
-
   useEffect(() => {
     if (userData) {
       reset(adaptUser(userData));
