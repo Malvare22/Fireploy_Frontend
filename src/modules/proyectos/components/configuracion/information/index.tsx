@@ -161,7 +161,8 @@ export const Information = ({ type }: Props) => {
   } = useMutation({
     mutationFn: () => postCreateProject(token, getValues()),
     mutationKey: ["Create Project", getValues(), token],
-    onError: (err) => {setError(err);
+    onError: (err) => {
+      setError(err);
       setLocalLoading(false);
     },
   });
@@ -181,7 +182,14 @@ export const Information = ({ type }: Props) => {
       };
 
       if (executionState && currentStatus.estado_ejecucion != executionState) syncErrorProject();
-      await patchEditProject(token, callback());
+      const dataForRequest = callback();
+      await patchEditProject(token, getValues("id") ?? -1, {
+        descripcion: dataForRequest.descripcion ?? "",
+        imagen: dataForRequest.imagen,
+        tipo_proyecto: dataForRequest.tipo,
+        titulo: dataForRequest.titulo,
+        seccionId: dataForRequest.materiaInformacion.seccionId ?? -1,
+      });
 
       if (fileImg) {
         await patchEditImgProject(token, getValues("id") ?? 0, fileImg);
@@ -296,7 +304,6 @@ export const Information = ({ type }: Props) => {
                         fullWidth
                         {...field}
                         select
-
                         label="Materia"
                         error={!!errors.materiaInformacion?.materiaId}
                         helperText={errors.materiaInformacion?.materiaId?.message?.toString()}
@@ -319,7 +326,6 @@ export const Information = ({ type }: Props) => {
                       render={({ field }) => (
                         <TextField
                           size="small"
-
                           fullWidth
                           {...field}
                           select
@@ -340,27 +346,28 @@ export const Information = ({ type }: Props) => {
                   )}
                 </Grid>
                 <Grid size={{ md: 4, xs: 12 }}>
-                  {currentCursoId  && getSeccionByCurso.get(currentCursoId) && (
+                  {currentCursoId && getSeccionByCurso.get(currentCursoId) && (
                     <Controller
                       name="materiaInformacion.seccionId"
                       control={control}
                       render={({ field }) => (
                         <TextField
                           size="small"
-
                           fullWidth
                           {...field}
                           select
-
                           label="Actividad"
                           error={!!errors.materiaInformacion?.seccionId}
                           helperText={errors.materiaInformacion?.seccionId?.message?.toString()}
                         >
-                          {getSeccionByCurso.get(currentCursoId)?.map((seccionId) => (
-                            selectSeccion.get(seccionId) && <MenuItem value={seccionId} key={`${currentCursoId}-${seccionId}`}>
-                              {selectSeccion.get(seccionId)}
-                            </MenuItem>
-                          ))}
+                          {getSeccionByCurso.get(currentCursoId)?.map(
+                            (seccionId) =>
+                              selectSeccion.get(seccionId) && (
+                                <MenuItem value={seccionId} key={`${currentCursoId}-${seccionId}`}>
+                                  {selectSeccion.get(seccionId)}
+                                </MenuItem>
+                              )
+                          )}
                         </TextField>
                       )}
                     />

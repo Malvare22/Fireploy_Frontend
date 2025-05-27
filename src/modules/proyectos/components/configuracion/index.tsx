@@ -10,6 +10,7 @@ import {
   useTheme,
   Alert,
   Link,
+  Tooltip,
 } from "@mui/material";
 import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
 import { Information } from "./information";
@@ -29,6 +30,8 @@ import LogsFiles from "./logSection";
 import ArticleIcon from "@mui/icons-material/Article";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import DangerZone from "./others";
+import DisabledVisibleIcon from "@mui/icons-material/DisabledVisible";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 type Props = {
   project: ProyectoSchema;
@@ -45,6 +48,17 @@ export default function ProjectSettings({ project }: Props) {
   //   if (url) openInNewTab(url);
   // }
 
+  const currentIcon =
+    project.estadoDeProyecto && project.estadoDeProyecto == "I" ? (
+      <Tooltip title="Proyecto no visible">
+        <DisabledVisibleIcon sx={{ fontSize: 32 }} />
+      </Tooltip>
+    ) : (
+      <Tooltip title="Proyecto visible">
+        <VisibilityIcon sx={{ fontSize: 32 }} />
+      </Tooltip>
+    );
+
   const theme = useTheme();
 
   const matchesMedia = useMediaQuery(theme.breakpoints.down("sm"));
@@ -55,9 +69,10 @@ export default function ProjectSettings({ project }: Props) {
     <Stack spacing={3}>
       <FormProvider {...methods}>
         <Stack spacing={1}>
-          <Stack direction={"row"} spacing={1} alignItems={"center"}>
+          <Stack direction={"row"} spacing={2} alignItems={"center"}>
             <Typography variant="h4">{project.titulo}</Typography>
             {executionState && <ExecutionState projectStatus={executionState} />}
+            {currentIcon}
           </Stack>
           {currentUrl.trim() != "" && executionState == "N" && (
             <Alert
@@ -70,10 +85,14 @@ export default function ProjectSettings({ project }: Props) {
                     ? "Tu proyecto se encuentra disponible en la siguiente URL:"
                     : "Tu proyecto se va a encontrar disponible en la siguiente URL:"}
                 </Typography>
-                <Link
-                  href={`https://proyectos.fireploy.online/app${project.id}`}
-                  target="_blank"
-                >{`https://proyectos.fireploy.online/app${project.id}`}</Link>
+                {executionState == "N" ? (
+                  <Link
+                    href={`https://proyectos.fireploy.online/app${project.id}`}
+                    target="_blank"
+                  >{`https://proyectos.fireploy.online/app${project.id}`}</Link>
+                ) : (
+                  <Typography>{`https://proyectos.fireploy.online/app${project.id}`}</Typography>
+                )}
                 {/* <Tooltip title="Abrir URL">
                   <IconButton onClick={() => handleUrl(currentUrl)}>
                     <OpenInNewIcon color="info" sx={{ fontSize: 24 }} />
@@ -128,7 +147,13 @@ export default function ProjectSettings({ project }: Props) {
                   integrado={project.integrado?.id}
                 />
               )}
-              {tabIndex == 5 && <DangerZone projectTitle={project.titulo} id={project.id ?? -1} viewStatus={project.estadoDeProyecto ?? 'I'} />}
+              {tabIndex == 5 && (
+                <DangerZone
+                  projectTitle={project.titulo}
+                  id={project.id ?? -1}
+                  viewStatus={project.estadoDeProyecto ?? "I"}
+                />
+              )}
             </Stack>
           </Container>
         ) : (
