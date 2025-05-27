@@ -1,13 +1,6 @@
 import { useFilters } from "@modules/general/hooks/useFilters";
 import useOrderSelect, { Order } from "@modules/general/hooks/useOrder";
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import React, { useEffect, useMemo } from "react";
 
 export type SorterOptions = {
@@ -72,22 +65,24 @@ export function SelectOrders<T extends Object>({
   }, [order]);
   if (type == "multiple")
     return (
-        <>{sorterOptions?.map(({ key, options, label }) => (
-            <FormControl size="small" key={key} sx={{minWidth: 150}}>
-              <InputLabel>{label}</InputLabel>
-              <Select
-                label={key}
-                onChange={(e) =>
-                  handleOrder(key, e.target.value == "" ? undefined : (e.target.value as Order))
-                }
-                size="small"
-              >
-                <MenuItem value={"asc"}>{options.asc}</MenuItem>
-                <MenuItem value={"desc"}>{options.desc}</MenuItem>
-                <MenuItem value={""}>{options.defaultValue || ""}</MenuItem>
-              </Select>
-            </FormControl>
-        ))}</>
+      <>
+        {sorterOptions?.map(({ key, options, label }) => (
+          <FormControl size="small" key={key} sx={{ minWidth: 150 }}>
+            <InputLabel>{label}</InputLabel>
+            <Select
+              label={key}
+              onChange={(e) =>
+                handleOrder(key, e.target.value == "" ? undefined : (e.target.value as Order))
+              }
+              size="small"
+            >
+              <MenuItem value={"asc"}>{options.asc}</MenuItem>
+              <MenuItem value={"desc"}>{options.desc}</MenuItem>
+              <MenuItem value={""}>{options.defaultValue || ""}</MenuItem>
+            </Select>
+          </FormControl>
+        ))}
+      </>
     );
   else {
     return (
@@ -167,41 +162,38 @@ export function SelectFilters<T extends Object>({
   }, [filters]);
 
   return (
-    <Box sx={{display:'flex', flexWrap: 'wrap', gap: 2}}>
-      {
-        showOptions.map(({ key, options, label }) => {
-          return (
-            <>
-                <FormControl sx={{minWidth: 150}}>
-                  <InputLabel>{label}</InputLabel>
-                  <Select
-                    label={label}
-                    onChange={(e) => {
-                      const idx = parseInt(e.target.value ? (e.target.value as string) : "0");
-                      handleFilter(key, options[idx][1]);
-                    }}
-                    defaultValue={options.length - 1}
-                    size="small"
-                  >
-                    {options.map(([text], i) => {
-                      return (
-                        <MenuItem key={text} value={i}>
-                          {[text]}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-            </>
-          );
-        })}
-
-
+    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+      {showOptions.map(({ key, options, label }) => {
+        return (
+          <>
+            <FormControl sx={{ minWidth: 150 }}>
+              <InputLabel>{label}</InputLabel>
+              <Select
+                label={label}
+                onChange={(e) => {
+                  const idx = e.target.value;
+                  handleFilter(key, options[idx][1]);
+                }}
+                defaultValue={options.length - 1}
+                size="small"
+              >
+                {options.map(([text], i) => {
+                  return (
+                    <MenuItem key={text} value={i}>
+                      {[text]}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </>
+        );
+      })}
     </Box>
   );
 }
 
-      /* {matches &&
+/* {matches &&
         
           <Accordion sx={{width: "100%", padding: 0}}>
             <AccordionSummary

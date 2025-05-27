@@ -59,12 +59,10 @@ const palette: PaletteOptions = {
   },
   email: {
     main: '#fffcf4'
-  }
-  // success: {
-  //   main: "rgb(67, 106, 68)",        // #81C784
-  // },
-  // error: {
-  //   main: "rgb(91, 43, 43)",          // #EF5350
+  },
+  success: {
+    main: "rgb(67, 106, 68)",        // #81C784
+  },
 };
 
 /**

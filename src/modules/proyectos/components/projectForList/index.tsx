@@ -1,118 +1,154 @@
-import { Box, Button, Divider, keyframes, Paper, Stack, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  Grid,
+  Paper,
+  Rating,
+  Stack,
+  SxProps,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
 import { useNavigate } from "react-router";
 import { rutasProyectos } from "@modules/proyectos/router";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { ExecutionState } from "../executionState";
+import { ChipExecutionState } from "../executionState";
 import { TechnologyTags } from "../showTags";
 import { getDataBaseTypesMap } from "@modules/proyectos/utils/database";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import DisabledVisibleIcon from "@mui/icons-material/DisabledVisible";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 interface Props {
   proyecto: Proyecto;
 }
 
 const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
-  const myEffect = keyframes`
-  from {
-    opacity: 0.5;
-  }
-  to {
-    opacity: 0.8;
-  }
-
-`;
-
-  const navigate = useNavigate();
-
-  function handleEdit() {
-    navigate(rutasProyectos.ver.replace(":id", (proyecto.id ?? "-1").toString()));
-  }
-
-  const theme = useTheme();
-
-  return (
-    <Paper
-      variant="elevation"
-      sx={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "space-around",
-        gap: 2,
-        padding: 2,
-        position: "relative",
-      }}
-    >
-      {proyecto.imagen ? (
-        <Box
-          component={"img"}
-          src={proyecto.imagen}
-          sx={{
-            border: "rgb(0,0,0,0.2) 1px solid",
-            width: "100%",
-            height: "250px", // 🔧 Altura fija
-            objectFit: "cover", // 🔧 Mejor apariencia con recorte
-          }}
-        />
-      ) : (
+  function EmptyImage() {
+    return (
+      <>
         <Box
           sx={{
             width: "100%",
-            height: "250px",
+            height: "100%",
+            minHeight: 200,
             display: "flex",
             alignItems: "center",
-            borderRadius: 1,
+            borderTopLeftRadius: 10,
+            borderBottomLeftRadius: { xs: 0, md: 10 },
+            borderTopRightRadius: { xs: 10, md: 0 },
             justifyContent: "center",
             backgroundColor: theme.palette.primary.main,
           }}
         >
           <RocketLaunchIcon sx={{ fontSize: 96, color: "white" }} />
         </Box>
-      )}
+      </>
+    );
+  }
 
-      <Box
-        sx={{
-          position: "absolute",
-          left: 25,
-          top: 25,
-          display: "flex",
-          justifyContent: "center",
-          borderRadius: 3,
-          padding: 0.5,
-          backgroundColor: theme.palette.background.paper,
-          animation: `${myEffect} 1s infinite alternate`,
-        }}
-      >
-        <ExecutionState projectStatus={proyecto.estadoDeEjecucion ?? "E"} />
-      </Box>
+  const navigate = useNavigate();
 
-      <Stack alignItems={"center"} spacing={3}>
-        <Typography variant="h4">{proyecto.titulo}</Typography>
-        <TechnologyTags
-          backend={proyecto.backend?.informacion?.framework ?? undefined}
-          frontend={proyecto.frontend?.informacion?.framework ?? undefined}
-          integrado={proyecto.integrado?.informacion?.framework ?? undefined}
-          dataBase={getDataBaseTypesMap.get(proyecto.baseDeDatos?.tipo ?? "E")}
-        />
-      </Stack>
+  function Score() {
+    return (
+      <Card>
+        <Stack direction={"row"} alignItems="center">
+          <Rating max={1} value={1} sx={{ fontSize: 32 }} />
+          <Typography variant="h5">{proyecto.fav_usuarios.length}</Typography>
+        </Stack>
+      </Card>
+    );
+  }
 
-      <Stack spacing={2} sx={{ width: "100%" }}>
-        <Divider sx={{ color: "black" }} />
-        <Box sx={{ display: "flex", width: "100%", justifyContent: "end" }}>
-          <Button
-            variant="contained"
-            color="secondary"
-            size="small"
-            endIcon={<SettingsIcon />}
-            onClick={handleEdit}
-          >
-            Configurar
-          </Button>
+  function handleEdit() {
+    navigate(rutasProyectos.ver.replace(":id", (proyecto.id ?? "-1").toString()));
+  }
+
+  function Visibilitity() {
+    const styles: SxProps = {
+      backgroundColor: theme.palette.info.main,
+      display: "flex",
+      alignItems: "center",
+      gap: 1,
+      paddingX: 2,
+      paddingY: 0.5,
+      color: "white",
+      borderRadius: 1,
+    };
+
+    if (proyecto.estadoDeProyecto && proyecto.estadoDeProyecto == "A")
+      return (
+        <Box sx={styles}>
+          <Typography>{"Visible"}</Typography>
+          <VisibilityIcon fontSize="medium" />
         </Box>
-      </Stack>
+      );
+    return (
+      <Box sx={styles}>
+        <Typography>{"Visible"}</Typography>
+        <DisabledVisibleIcon fontSize="medium" />
+      </Box>
+    );
+  }
+
+  const theme = useTheme();
+
+  return (
+    <Paper variant="elevation">
+      <Grid container sx={{ height: "100%" }}>
+        <Grid size={{ md: 5, xs: 12 }}>
+          {proyecto.imagen ? (
+            <Box
+              component={"img"}
+              sx={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderTopLeftRadius: 10,
+                borderBottomLeftRadius: { xs: 0, md: 10 },
+                borderTopRightRadius: { xs: 10, md: 0 },
+              }}
+              src={proyecto.imagen}
+            />
+          ) : (
+            <EmptyImage />
+          )}
+        </Grid>
+        <Grid size={{ md: 7, xs: 12 }}>
+          <Stack sx={{ padding: 3 }} spacing={3}>
+            <Stack direction={"row"} spacing={2} alignItems={"center"}>
+              <Typography variant="h4" sx={{ fontWeight: 450 }}>
+                {proyecto.titulo}
+              </Typography>
+              <Score />
+            </Stack>
+            <Stack direction={"row"} spacing={2} alignItems={"center"}>
+              <ChipExecutionState projectStatus={proyecto.estadoDeEjecucion ?? "E"} />
+              <Box>
+                <Visibilitity />
+              </Box>
+            </Stack>
+            <TechnologyTags
+              backend={proyecto.backend?.informacion?.framework ?? undefined}
+              frontend={proyecto.frontend?.informacion?.framework ?? undefined}
+              integrado={proyecto.integrado?.informacion?.framework ?? undefined}
+              dataBase={getDataBaseTypesMap.get(proyecto.baseDeDatos?.tipo ?? "E")}
+            />
+            <Box sx={{ display: "flex", justifyContent: "end" }}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleEdit}
+                endIcon={<SettingsIcon />}
+              >
+                {"Configurar"}
+              </Button>
+            </Box>
+          </Stack>
+        </Grid>
+      </Grid>
     </Paper>
   );
 };
