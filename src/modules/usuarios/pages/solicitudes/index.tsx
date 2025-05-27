@@ -2,7 +2,7 @@ import useSearch from "@modules/general/hooks/useSearch";
 import TablaSolicitudes from "@modules/usuarios/components/tablaSolicitudes";
 import { labelSolicitudes } from "@modules/usuarios/enum/labelSolicitudes";
 import { getDatesSolicitudes, Solicitud, } from "@modules/usuarios/types/solicitud.promover";
-import { Divider, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import { Divider, Grid, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import { useEffect, useMemo, useState } from "react";
@@ -150,19 +150,19 @@ function VistaSolicitudes() {
           </Stack>
 
           {/* 🔍 Search Bar */}
-          <Grid2 container>
-            <Grid2 size={{ xs: 12, md: 6 }}>
+          <Grid container>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextFieldSearch
                 setSearchValue={setSearchValue}
                 label={labelSolicitudes.buscarSolicitud}
                 fullWidth
               />
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
 
           {/* ⛳ Filters */}
-          <Grid2 container columnSpacing={4}>
-            <Grid2 size={{ xs: 12, md: 4 }}>
+          <Grid container columnSpacing={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <TextField
                 select
                 size="small"
@@ -180,10 +180,10 @@ function VistaSolicitudes() {
                 <MenuItem value="P">{labelSelects.pendiente}</MenuItem>
                 <MenuItem value="R">{labelSelects.rechazada}</MenuItem>
               </TextField>
-            </Grid2>
-            <Grid2 size={{ xs: 12, md: 4 }}>{selectDatesAnswer}</Grid2>
-            <Grid2 size={{ xs: 12, md: 4 }}>{selectDatesReceipt}</Grid2>
-          </Grid2>
+            </Grid>
+            <Grid size={{ xs: 12, md: 4 }}>{selectDatesAnswer}</Grid>
+            <Grid size={{ xs: 12, md: 4 }}>{selectDatesReceipt}</Grid>
+          </Grid>
 
           {/* 📄 Solicitudes Table */}
           <TablaSolicitudes solicitudes={solicitudesToRender} tipo={1}/>

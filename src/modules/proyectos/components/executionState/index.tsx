@@ -67,6 +67,82 @@ export function ExecutionState({ projectStatus }: Props) {
   return <Box sx={{ display: "flex", alignItems: "center" }}>{ShowState}</Box>;
 }
 
+export function ExecutionStateWithoutStyles({ projectStatus }: Props) {
+  const ShowState = useMemo(() => {
+    switch (projectStatus) {
+      case "E":
+        return (
+          <Tooltip title="Se ha presentado un error en el despliegue">
+            <ErrorIcon fontSize="medium" />
+          </Tooltip>
+        );
+      case "N":
+        return (
+          <Tooltip title="Instancia en ejecución">
+            <CheckCircleIcon fontSize="medium" />
+          </Tooltip>
+        );
+      case "F":
+        return (
+          <Tooltip title="Tu proyecto se encuentra offline">
+            <CloudOffIcon fontSize="medium" />
+          </Tooltip>
+        );
+      case "L":
+        return (
+          <Tooltip title="Tu proyecto se encuentra cargando">
+            <AccessTimeFilledIcon fontSize="medium" />
+          </Tooltip>
+        );
+    }
+    return <></>;
+  }, [projectStatus]);
+
+  return <Box sx={{ display: "flex", alignItems: "center" }}>{ShowState}</Box>;
+}
+
+type ChipExecutionStateProps = {
+  projectStatus: EstadoEjecucionProyecto;
+};
+export function ChipExecutionState({ projectStatus }: ChipExecutionStateProps) {
+  const theme = useTheme();
+
+  const label = useMemo((): { color: string; text: string } => {
+    switch (projectStatus) {
+      case "E":
+        return { color: theme.palette.error.main, text: "Error" };
+      case "N":
+        return { color: theme.palette.success.light, text: "Online" };
+      case "F":
+        return { color: theme.palette.info.main, text: "Offline" };
+      case "L":
+        return { color: theme.palette.warning.main, text: "Cargando" };
+    }
+    return { color: theme.palette.error.main, text: "Error" };
+  }, [projectStatus]);
+
+  return (
+    <Box sx={{ display: "inline-block" }}>
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2,
+          borderRadius: 1,
+          alignItems: "center",
+          backgroundColor: label.color,
+          color: "white",
+          maxWidth: "fit-content",
+          paddingX: 2,
+          paddingY: 0.5
+        }}
+      >
+        <Typography>{label.text}</Typography>
+        <ExecutionStateWithoutStyles projectStatus={projectStatus} />
+      </Box>
+    </Box>
+  );
+}
+
 type ShowDeployLoadProps = {
   queuePosition: number | null;
 };
@@ -74,10 +150,7 @@ export function ShowDeployLoad({ queuePosition }: ShowDeployLoadProps) {
   const theme = useTheme();
   return (
     <>
-      <Alert
-        severity="info"
-        sx={{display: "flex", alignItems: "center"}}
-      >
+      <Alert severity="info" sx={{ display: "flex", alignItems: "center" }}>
         {queuePosition ? (
           <>
             <Typography>Tu proyecto actualmente se encuentra en cola de despliegue</Typography>
@@ -85,15 +158,24 @@ export function ShowDeployLoad({ queuePosition }: ShowDeployLoadProps) {
             <Typography sx={{ fontWeight: 600 }}>Posición actual: {queuePosition}</Typography>
           </>
         ) : (
-          <Box sx={{display: 'flex', alignItems: 'center', gap: 1, width: '100%', overflow: 'hidden'}}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              width: "100%",
+              overflow: "hidden",
+            }}
           >
             <Typography variant="h6">Tu proyecto se está desplegando</Typography>
-            <Box><CircularProgress
-              size={32}
-              sx={{
-                color: theme.palette.primary.main,
-              }}
-            /></Box>
+            <Box>
+              <CircularProgress
+                size={32}
+                sx={{
+                  color: theme.palette.primary.main,
+                }}
+              />
+            </Box>
           </Box>
         )}
       </Alert>

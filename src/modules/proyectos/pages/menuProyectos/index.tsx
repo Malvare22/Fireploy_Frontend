@@ -1,5 +1,5 @@
 import { labelListarProyecto } from "@modules/proyectos/enum/labelListarProyectos";
-import { Alert, Box, Button, Grid2, Paper, Stack, Typography } from "@mui/material";
+import { Alert, Box, Button, Grid, Paper, Stack, Typography } from "@mui/material";
 import { ReactNode } from "react";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
@@ -27,7 +27,7 @@ function ListarProyectos() {
 
   function CardElement(title: string, text: string, icon: ReactNode) {
     return (
-      <Grid2
+      <Grid
         container
         direction={"row"}
         sx={{
@@ -38,21 +38,21 @@ function ListarProyectos() {
         }}
         component={Paper}
       >
-        <Grid2
+        <Grid
           size={{ md: 3, xs: 12 }}
           marginBottom={{ xs: 2, md: 0 }}
           display={"flex"}
           justifyContent={"center"}
         >
           {icon}
-        </Grid2>
-        <Grid2 size={{ md: 9, xs: 12 }} textAlign={{ xs: "center", md: "start" }}>
+        </Grid>
+        <Grid size={{ md: 9, xs: 12 }} textAlign={{ xs: "center", md: "start" }}>
           <Stack spacing={3}>
             <Typography variant="h5">{title}</Typography>
             <Typography variant="subtitle2">{text}</Typography>
           </Stack>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     );
   }
   return (

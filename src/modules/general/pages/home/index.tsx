@@ -2,7 +2,7 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import {
   Box,
   Button,
-  Grid2,
+  Grid,
   Paper,
   Stack,
   SxProps,
@@ -116,8 +116,8 @@ function Principal() {
 
   return (
     <>
-      <Grid2 container sx={{ display: "flex", alignItems: "center" }}>
-        <Grid2 size={{ lg: 5, xs: 12 }}>
+      <Grid container sx={{ display: "flex", alignItems: "center" }}>
+        <Grid size={{ lg: 5, xs: 12 }}>
           <Stack sx={{ height: "100%" }} spacing={{ md: 8, xs: 4 }}>
             <Typography variant="h2" sx={{ fontWeight: "440", color: "white" }} color="secondary">
               {labelHome.princialContent}
@@ -161,9 +161,9 @@ function Principal() {
               </Box>
             </Stack>
           </Stack>
-        </Grid2>
+        </Grid>
         {
-          <Grid2
+          <Grid
             size={{ lg: 7, xs: 12 }}
             sx={{
               height: { xs: 400, sm: 400, md: "auto" },
@@ -173,9 +173,9 @@ function Principal() {
             <Box>
               <PrincipalAnimation />
             </Box>
-          </Grid2>
+          </Grid>
         }
-      </Grid2>
+      </Grid>
     </>
   );
 }
@@ -290,10 +290,10 @@ function Deploy() {
           <Typography textAlign={"center"}>{labelHome.deployText}</Typography>
         </Stack>
 
-        <Grid2 container spacing={4} sx={{ paddingX: { md: 10, xs: 2 } }}>
+        <Grid container spacing={4} sx={{ paddingX: { md: 10, xs: 2 } }}>
           {content.map(([icono, titulo, subtitulo]) => {
             return (
-              <Grid2
+              <Grid
                 size={{md:6, xs: 12}}
                 component={Paper}
                 variant="dark"
@@ -303,19 +303,19 @@ function Deploy() {
                   borderRadius: 2,
                 }}
               >
-                <Grid2 container spacing={2} sx={{height: '100%'}}>
-                  <Grid2 size={{xs: 12, sm: 2}} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>{icono}</Grid2>
-                  <Grid2 size={{xs: 12, sm: 10}} sx={{height: '100%'}}>
+                <Grid container spacing={2} sx={{height: '100%'}}>
+                  <Grid size={{xs: 12, sm: 2}} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>{icono}</Grid>
+                  <Grid size={{xs: 12, sm: 10}} sx={{height: '100%'}}>
                     <Stack spacing={1}>
                       <Typography variant="h5">{titulo}</Typography>
                       <Typography>{subtitulo}</Typography>
                     </Stack>
-                  </Grid2>
-                </Grid2>
-              </Grid2>
+                  </Grid>
+                </Grid>
+              </Grid>
             );
           })}
-        </Grid2>
+        </Grid>
         <Stack alignItems={"center"}>
           <Box>
             <Button variant="contained" color="primary" onClick={handleButton}>
@@ -336,15 +336,15 @@ function PortafolioSection() {
   }
 
   return (
-    <Grid2 container sx={{ color: "white", marginX: { md: 20 }, padding: 4 }} direction={'column-reverse'} spacing={4}>
-      <Grid2 size={{ md: 5, xs: 12 }}>
+    <Grid container sx={{ color: "white", marginX: { md: 20 }, padding: 4 }} direction={'column-reverse'} spacing={4}>
+      <Grid size={{ md: 5, xs: 12 }}>
         <Box
           component={"img"}
           src={getImage["portafolio_home"].ruta ?? ""}
           sx={{ width: "100%", objectFit: "contain" }}
         />
-      </Grid2>
-      <Grid2 size={{ md: 7, xs: 12 }}>
+      </Grid>
+      <Grid size={{ md: 7, xs: 12 }}>
         <Stack spacing={3}>
           <Typography variant="h3">{labelHome.portafolioTitle}</Typography>
           <Typography variant="body1">{labelHome.portafolioBody}</Typography>
@@ -356,8 +356,8 @@ function PortafolioSection() {
             </Box>
           </Stack>
         </Stack>
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 }
 
@@ -369,8 +369,8 @@ function ControlledAccordions() {
   };
 
   return (
-    <Grid2 container spacing={4}>
-      <Grid2 size={{ md: 6, xs: 12 }}>
+    <Grid container spacing={4}>
+      <Grid size={{ md: 6, xs: 12 }}>
         <CustomAccordion
           body={labelHome.educacionalBody1}
           title={labelHome.educacionalTitle1}
@@ -378,8 +378,8 @@ function ControlledAccordions() {
           handleChange={handleChange}
           value={"1"}
         />
-      </Grid2>
-      <Grid2 size={{ md: 6, xs: 12 }}>
+      </Grid>
+      <Grid size={{ md: 6, xs: 12 }}>
         <CustomAccordion
           body={labelHome.educacionalBody2}
           title={labelHome.educacionalTitle2}
@@ -387,8 +387,8 @@ function ControlledAccordions() {
           handleChange={handleChange}
           value={"2"}
         />
-      </Grid2>
-      <Grid2 size={{ md: 6, xs: 12 }}>
+      </Grid>
+      <Grid size={{ md: 6, xs: 12 }}>
         <CustomAccordion
           body={labelHome.educacionalBody3}
           title={labelHome.educacionalTitle3}
@@ -396,8 +396,8 @@ function ControlledAccordions() {
           handleChange={handleChange}
           value={"3"}
         />
-      </Grid2>
-      <Grid2 size={{ md: 6, xs: 12 }}>
+      </Grid>
+      <Grid size={{ md: 6, xs: 12 }}>
         <CustomAccordion
           body={labelHome.educacionalBody4}
           title={labelHome.educacionalTitle4}
@@ -405,8 +405,8 @@ function ControlledAccordions() {
           handleChange={handleChange}
           value={"4"}
         />
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 }
 
@@ -446,11 +446,11 @@ function AcademicSection() {
     <Stack spacing={3} alignItems={"center"} paddingY={4}>
       <Typography variant="h3">{labelHome.educacional}</Typography>
       <SchoolIcon sx={{ fontSize: 56 }} />
-      <Grid2 container>
-        <Grid2 size={12} sx={{ marginX: 20 }}>
+      <Grid container>
+        <Grid size={12} sx={{ marginX: 20 }}>
           <ControlledAccordions />
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </Stack>
   );
 }

@@ -8,7 +8,7 @@ import { adaptCursoService } from "@modules/materias/utils/adapters/curso.servic
 import { getProjectByIdSection } from "@modules/proyectos/services/get.project";
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
 import { adaptProject, adaptProjectToCard } from "@modules/proyectos/utils/adapt.proyecto";
-import { Alert, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Grid, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -177,11 +177,11 @@ function VistaProyectosDeMisEstudiantes() {
         <Stack spacing={3}>
           <Typography variant="h4">{labelProyectosEstudiantes.titulo}</Typography>
 
-          <Grid2 container>
-            <Grid2 size={{ md: 4, xs: 12 }}>
+          <Grid container>
+            <Grid size={{ md: 4, xs: 12 }}>
               <TextFieldSearch fullWidth setSearchValue={setSearchValue} />
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
 
           {/* Filtros */}
           <Stack direction="row" spacing={2}>
@@ -234,13 +234,13 @@ function VistaProyectosDeMisEstudiantes() {
           {/* Proyectos */}
           <Stack spacing={2}>
             {arrProjects && arrProjects.length > 0 ? (
-              <Grid2 container spacing={3}>
+              <Grid container spacing={3}>
                 {arrProjects.map((p) => (
-                  <Grid2 size={{ md: 4, xs: 12 }}>
+                  <Grid size={{ md: 4, xs: 12 }}>
                     <ProjectCard key={p.id} proyecto={p} callback={refetch} handleOpen={() => handleProject(p)} />
-                  </Grid2>
+                  </Grid>
                 ))}
-              </Grid2>
+              </Grid>
             ) : (
               <Alert severity="warning">{"No hay proyectos disponibles"}</Alert>
             )}

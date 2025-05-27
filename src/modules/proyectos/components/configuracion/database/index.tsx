@@ -10,19 +10,21 @@ import { getDataBaseTypesArray, getDataBaseTypesMap } from "@modules/proyectos/u
 import { BaseDeDatosRegisterSchema } from "@modules/proyectos/utils/forms/baseDeDatos.schema";
 import { ProyectoSchema } from "@modules/proyectos/utils/forms/proyecto.schema";
 import {
+  Alert,
   Box,
   Button,
   Card,
   Chip,
   Divider,
-  Grid2,
+  Grid,
   MenuItem,
+  Snackbar,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFormContext, Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import StorageIcon from "@mui/icons-material/Storage";
@@ -144,6 +146,18 @@ export const DataBase = ({ type }: Props) => {
     });
   }
 
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const textToCopy = getValues("url") ?? "";
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      setOpenSnackbar(true);
+    } catch (err) {
+      console.error("Error al copiar:", err);
+    }
+  };
+
   return (
     <Stack spacing={2}>
       <Typography variant="h5">Base de Datos</Typography>
@@ -249,11 +263,24 @@ export const DataBase = ({ type }: Props) => {
           </Stack>
           <ShowCredentials password={getValues("contrasenia")} user={getValues("nombre")} />
           <Box>
-            <Button variant="contained" endIcon={<StorageIcon />}>
-              {"Ver Base de Datos"}
+            <Button variant="contained" endIcon={<StorageIcon />} onClick={handleCopy}>
+              {"Obtener URI Base de Datos"}
             </Button>
-            <Typography>{getValues('url')}</Typography>
           </Box>
+          <Snackbar
+            open={openSnackbar}
+            autoHideDuration={2000}
+            onClose={() => setOpenSnackbar(false)}
+          >
+            <Alert
+              onClose={() => setOpenSnackbar(false)}
+              variant="filled"
+              sx={{ width: "100%" }}
+              severity="info"
+            >
+              {"Texto copiado al portapapeles"}
+            </Alert>
+          </Snackbar>
         </Stack>
       )}
     </Stack>
@@ -267,20 +294,20 @@ type ShowCredentialsProps = {
 function ShowCredentials({ password, user }: ShowCredentialsProps) {
   return (
     <Card sx={{ maxWidth: 400 }}>
-      <Grid2 container rowSpacing={2} sx={{ display: "flex", padding: 1, alignItems: "center" }}>
-        <Grid2 size={3}>
+      <Grid container rowSpacing={2} sx={{ display: "flex", padding: 1, alignItems: "center" }}>
+        <Grid size={3}>
           <Typography sx={{ fontWeight: 500 }}>{"Usuario:"}</Typography>
-        </Grid2>
-        <Grid2 size={9}>
+        </Grid>
+        <Grid size={9}>
           <TextField fullWidth size="small" disabled value={user} />
-        </Grid2>
-        <Grid2 size={3}>
+        </Grid>
+        <Grid size={3}>
           <Typography sx={{ fontWeight: 500 }}>{"Contraseña:"}</Typography>
-        </Grid2>
-        <Grid2 size={9}>
+        </Grid>
+        <Grid size={9}>
           <TextFieldPassword fullWidth size="small" disabled value={password} />
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </Card>
   );
 }

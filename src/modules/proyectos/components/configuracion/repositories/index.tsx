@@ -3,7 +3,7 @@ import {
   Box,
   Button,
   Divider,
-  Grid2,
+  Grid,
   IconButton,
   InputAdornment,
   Stack,
@@ -289,8 +289,8 @@ export function Repositories({ type }: Props) {
               {watch("frontend") && (
                 <>
                   <Typography variant="h6">{labelConfiguracion.frontend}</Typography>
-                  <Grid2 container spacing={1}>
-                    <Grid2 size={{ md: 10, xs: 12 }}>
+                  <Grid container spacing={1}>
+                    <Grid size={{ md: 10, xs: 12 }}>
                       <Controller
                         name="frontend.url"
                         control={control}
@@ -317,11 +317,11 @@ export function Repositories({ type }: Props) {
                           />
                         )}
                       />
-                    </Grid2>
-                    <Grid2 size={{ md: 2, xs: 12 }}>
+                    </Grid>
+                    <Grid size={{ md: 2, xs: 12 }}>
                       <InputFile layer="frontend" disabled={isDisabled} />
-                    </Grid2>
-                  </Grid2>
+                    </Grid>
+                  </Grid>
                   <TechnologyInputs fieldName="frontend" disabled={isDisabled} />
                   <EnviromentVariablesEditor type="frontend" disabled={isDisabled} />
                   <TablaGestionarFicheros field="frontend" disabled={isDisabled} />
@@ -331,8 +331,8 @@ export function Repositories({ type }: Props) {
               {watch("backend") && (
                 <>
                   <Typography variant="h6">{labelConfiguracion.backend}</Typography>
-                  <Grid2 container spacing={1}>
-                    <Grid2 size={{ md: 10, xs: 12 }}>
+                  <Grid container spacing={1}>
+                    <Grid size={{ md: 10, xs: 12 }}>
                       <Controller
                         name="backend.url"
                         control={control}
@@ -359,11 +359,11 @@ export function Repositories({ type }: Props) {
                           />
                         )}
                       />
-                    </Grid2>
-                    <Grid2 size={{ md: 2, xs: 12 }}>
+                    </Grid>
+                    <Grid size={{ md: 2, xs: 12 }}>
                       <InputFile layer="backend" disabled={isDisabled} />
-                    </Grid2>
-                  </Grid2>
+                    </Grid>
+                  </Grid>
                   <TechnologyInputs disabled={isDisabled} fieldName="backend" />
                   <EnviromentVariablesEditor disabled={isDisabled} type="backend" />
                   <TablaGestionarFicheros field="backend" disabled={isDisabled} />
@@ -373,8 +373,8 @@ export function Repositories({ type }: Props) {
               {watch("integrado") && (
                 <>
                   <Typography variant="h6">{labelConfiguracion.integrado}</Typography>
-                  <Grid2 container spacing={1}>
-                    <Grid2 size={{ md: 10, xs: 12 }}>
+                  <Grid container spacing={1}>
+                    <Grid size={{ md: 10, xs: 12 }}>
                       <Controller
                         name="integrado.url"
                         control={control}
@@ -401,11 +401,11 @@ export function Repositories({ type }: Props) {
                           />
                         )}
                       />
-                    </Grid2>
-                    <Grid2 size={{ md: 2, xs: 12 }}>
+                    </Grid>
+                    <Grid size={{ md: 2, xs: 12 }}>
                       <InputFile layer="integrado" disabled={isDisabled} />
-                    </Grid2>
-                  </Grid2>
+                    </Grid>
+                  </Grid>
                   <TechnologyInputs disabled={isDisabled} fieldName="integrado" />
                   <EnviromentVariablesEditor disabled={isDisabled} type="integrado" />
                   <TablaGestionarFicheros field="integrado" disabled={isDisabled} />

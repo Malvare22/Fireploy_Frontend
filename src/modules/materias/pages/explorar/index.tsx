@@ -1,7 +1,7 @@
 import CardMateria from "@modules/materias/components/cardMateria";
 import { Materia } from "@modules/materias/types/materia";
 import {
-  Grid2,
+  Grid,
   MenuItem,
   Select,
   Stack,
@@ -147,13 +147,13 @@ function ExplorarMaterias() {
           </Stack>
 
           {/* List of filtered/sorted materias */}
-          <Grid2 container spacing={5} paddingX={{ md: 4 }}>
+          <Grid container spacing={5} paddingX={{ md: 4 }}>
             {dataToLoad.map((materia, key) => (
-              <Grid2 size={{ xl: 4, sm: 6, xs: 12 }} key={key}>
+              <Grid size={{ xl: 4, sm: 6, xs: 12 }} key={key}>
                 <CardMateria materia={materia} />
-              </Grid2>
+              </Grid>
             ))}
-          </Grid2>
+          </Grid>
         </Stack>
       )}
     </>

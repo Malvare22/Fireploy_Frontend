@@ -1,39 +1,17 @@
 import { patchData } from "@core/services";
-import { ProyectoInformationSchema } from "../utils/forms/proyecto.schema";
 
 interface BodyEditProject {
-  titulo: string;
-  descripcion: string;
-  seccionId: number;
-  imagen: string | null;
-  tipo_proyecto: string;
+  titulo?: string;
+  descripcion?: string;
+  seccionId?: number;
+  imagen?: string | null;
+  tipo_proyecto?: string;
+  estado_proyecto?: string;
 }
 
-/**
- * patchEditProject function – Edits the details of an existing project.
- *
- * This function allows you to update the project details, including its title,
- * description, and section ID. It sends a PATCH request to the API to modify the
- * specified project.
- *
- * @param {string} token - The authentication token for the session.
- * @param {ProyectoInformationSchema} project - The project information to update.
- *
- * @returns {Promise<unknown>} A promise that resolves with the response from the PATCH request.
- *
- * @example
- * const updatedProject = await patchEditProject(token, project);
- * console.log('Project updated:', updatedProject);
- */
-export async function patchEditProject(token: string, project: ProyectoInformationSchema) {
-  const body: BodyEditProject = {
-    titulo: project.titulo,
-    descripcion: project.descripcion || "",
-    seccionId: project.materiaInformacion.seccionId ?? -1,
-    imagen: project.imagen ? project.imagen : null,
-    tipo_proyecto: project.tipo
-  };
-  const response = await patchData<unknown>(`/proyecto/${project.id}`, body, {
+export async function patchEditProject(token: string,id: number, body: BodyEditProject) {
+
+  const response = await patchData<unknown>(`/proyecto/${id}`, body, {
     sessiontoken: token,
   });
 

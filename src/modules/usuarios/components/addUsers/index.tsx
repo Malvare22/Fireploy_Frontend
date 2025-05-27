@@ -4,7 +4,7 @@ import { useSearchUsers, UsuarioCampoBusqueda } from "@modules/general/hooks/use
 import { buttonTypes } from "@modules/general/types/buttons";
 import { getUsuariosByTypeService } from "@modules/usuarios/services/get.usuarios.[tipo]";
 import { UserTypeFullString } from "@modules/usuarios/utils/usuario.map";
-import { Avatar, Box, Chip, Grid2, Stack, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, Chip, Grid, Stack, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
@@ -155,7 +155,7 @@ const AddUsers: React.FC<Props> = ({
 
             {/* List of selected users displayed as chips */}
             <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
-              <Grid2
+              <Grid
                 spacing={2}
                 container
                 sx={{
@@ -166,16 +166,16 @@ const AddUsers: React.FC<Props> = ({
                 }}
               >
                 {selectUsers.map((user) => (
-                  <Grid2 key={user.id}>
+                  <Grid key={user.id}>
                     <Chip
                       onDelete={() => handleDelete(user.id)}
                       avatar={<Avatar src={user.foto} />}
                       label={user.nombreCompleto}
                       color="info"
                     />
-                  </Grid2>
+                  </Grid>
                 ))}
-              </Grid2>
+              </Grid>
             </Box>
 
             {/* Action buttons */}

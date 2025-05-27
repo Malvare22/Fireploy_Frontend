@@ -2,7 +2,7 @@ import ProjectForList from "@modules/proyectos/components/projectForList";
 import { labelProjectForList } from "@modules/proyectos/enum/labelProjectForList";
 import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
 // import { getExecutionStateArray } from "@modules/proyectos/utils/getExecutionState";
-import { Alert, Box, Button, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, Grid, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getProjectByUserId } from "@modules/proyectos/services/get.project";
@@ -190,12 +190,12 @@ function MisProyectos() {
               </Box>
             </Stack>
           </Stack>
-          <Grid2 container spacing={2} paddingX={{ md: 6, xs: 2 }}>
+          <Grid container spacing={4} paddingX={{ md: 6, xs: 2 }}>
             {renderData && renderData.length > 0 ? (
               renderData.map((proyecto, key) => (
-                <Grid2 size={{ md: 6, xs: 12 }}>
+                <Grid size={{md: 6, xs: 12}}>
                   <ProjectForList proyecto={proyecto} key={key} />
-                </Grid2>
+                </Grid>
               ))
             ) : (
               <Alert
@@ -211,7 +211,7 @@ function MisProyectos() {
                 </Stack>
               </Alert>
             )}
-          </Grid2>
+          </Grid>
         </Stack>
       )}
     </>

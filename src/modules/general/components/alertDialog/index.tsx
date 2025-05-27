@@ -6,7 +6,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Alert, Box, Button, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
 
-export type AlertDialogTypes = "error" | "success" | "default";
+export type AlertDialogTypes = "error" | "success" | "default" | "warning";
 
 interface Props {
   title: string;
@@ -74,6 +74,9 @@ const AlertDialog: React.FC<Props> = ({
 
       case "success":
         return <Alert severity="success">{children}</Alert>;
+
+      case "warning":
+        return <Alert severity="warning">{children}</Alert>;
     }
     return <></>;
   }
@@ -96,7 +99,7 @@ const AlertDialog: React.FC<Props> = ({
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         fullWidth
-        sx={{maxHeight: '70vh', overflowY: 'scroll'}}
+        sx={{ maxHeight: "70vh", overflowY: "scroll" }}
       >
         <Box>
           <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
@@ -121,7 +124,7 @@ const AlertDialog: React.FC<Props> = ({
             }
             {handleCancel && (
               <Box>
-                <Button variant="contained" size="small" color="inherit" onClick={handleCancel}>
+                <Button variant="contained" size="small" color="inherit" disabled={isLoading} onClick={handleCancel}>
                   Cancelar
                 </Button>
               </Box>

@@ -1,4 +1,4 @@
-import { Alert, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Grid, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -209,9 +209,9 @@ function ExplorarProyectos() {
           ) : renderData.length === 0 ? (
             <Alert severity="info">{"No se encontraron proyectos"}</Alert>
           ) : (
-            <Grid2 container spacing={4} marginTop={4} marginBottom={6}>
+            <Grid container spacing={4} marginTop={4} marginBottom={6}>
               {renderData.map((proyecto) => (
-                <Grid2
+                <Grid
                   key={proyecto.id}
                   size={{ xl: 4, sm: 6, xs: 12 }}
                   sx={{ display: "flex", justifyContent: "center" }}
@@ -224,9 +224,9 @@ function ExplorarProyectos() {
                     }}
                     callback={refetch}
                   />
-                </Grid2>
+                </Grid>
               ))}
-            </Grid2>
+            </Grid>
           )}
         </Stack>
       </Stack>

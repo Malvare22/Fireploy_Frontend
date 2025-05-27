@@ -22,7 +22,7 @@ import {
   Box,
   Button,
   Collapse,
-  Grid2,
+  Grid,
   IconButton,
   MenuItem,
   Stack,
@@ -144,6 +144,8 @@ export const Information = ({ type }: Props) => {
     queryKey: ["Get All Academic Information", token, tipo, id],
   });
 
+  const [localLoading, setLocalLoading] = useState<boolean>(false);
+
   useEffect(() => {
     if (errorDataMaterias) {
       setError(errorDataMaterias);
@@ -154,13 +156,15 @@ export const Information = ({ type }: Props) => {
 
   const {
     mutate: mutateCreate,
-    isPending: isPendingCreate,
     data: dataCreate,
     isSuccess: isSuccessCreate,
   } = useMutation({
     mutationFn: () => postCreateProject(token, getValues()),
     mutationKey: ["Create Project", getValues(), token],
-    onError: setError,
+    onError: (err) => {
+      setError(err);
+      setLocalLoading(false);
+    },
   });
 
   const { executionState } = useExecutionStatusContext();
@@ -178,7 +182,14 @@ export const Information = ({ type }: Props) => {
       };
 
       if (executionState && currentStatus.estado_ejecucion != executionState) syncErrorProject();
-      await patchEditProject(token, callback());
+      const dataForRequest = callback();
+      await patchEditProject(token, getValues("id") ?? -1, {
+        descripcion: dataForRequest.descripcion ?? "",
+        imagen: dataForRequest.imagen,
+        tipo_proyecto: dataForRequest.tipo,
+        titulo: dataForRequest.titulo,
+        seccionId: dataForRequest.materiaInformacion.seccionId ?? -1,
+      });
 
       if (fileImg) {
         await patchEditImgProject(token, getValues("id") ?? 0, fileImg);
@@ -216,6 +227,7 @@ export const Information = ({ type }: Props) => {
         isLoading: isPendingEdit,
       });
     } else {
+      setLocalLoading(true);
       mutateCreate();
     }
   }
@@ -246,8 +258,8 @@ export const Information = ({ type }: Props) => {
           {type == "create" && <TransitionAlert />}
           <Stack spacing={2}>
             <Typography variant="h5">{"Información"}</Typography>
-            <Grid2 container rowSpacing={2} spacing={2}>
-              <Grid2 size={{ xs: 12, md: 6 }}>
+            <Grid container rowSpacing={2} spacing={2}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <Controller
                   name="titulo"
                   control={control}
@@ -262,8 +274,8 @@ export const Information = ({ type }: Props) => {
                     />
                   )}
                 />
-              </Grid2>
-              <Grid2 size={12}>
+              </Grid>
+              <Grid size={12}>
                 <Controller
                   name="descripcion"
                   control={control}
@@ -280,9 +292,9 @@ export const Information = ({ type }: Props) => {
                     />
                   )}
                 />
-              </Grid2>
+              </Grid>
               <>
-                <Grid2 size={{ md: 4, xs: 12 }}>
+                <Grid size={{ md: 4, xs: 12 }}>
                   <Controller
                     name="materiaInformacion.materiaId"
                     control={control}
@@ -292,7 +304,6 @@ export const Information = ({ type }: Props) => {
                         fullWidth
                         {...field}
                         select
-
                         label="Materia"
                         error={!!errors.materiaInformacion?.materiaId}
                         helperText={errors.materiaInformacion?.materiaId?.message?.toString()}
@@ -305,9 +316,9 @@ export const Information = ({ type }: Props) => {
                       </TextField>
                     )}
                   />
-                </Grid2>
+                </Grid>
 
-                <Grid2 size={{ md: 4, xs: 12 }}>
+                <Grid size={{ md: 4, xs: 12 }}>
                   {currentMateriaId && getCursosByMateria.get(currentMateriaId) && (
                     <Controller
                       name="materiaInformacion.cursoId"
@@ -315,7 +326,6 @@ export const Information = ({ type }: Props) => {
                       render={({ field }) => (
                         <TextField
                           size="small"
-
                           fullWidth
                           {...field}
                           select
@@ -334,38 +344,39 @@ export const Information = ({ type }: Props) => {
                       )}
                     />
                   )}
-                </Grid2>
-                <Grid2 size={{ md: 4, xs: 12 }}>
-                  {currentCursoId  && getSeccionByCurso.get(currentCursoId) && (
+                </Grid>
+                <Grid size={{ md: 4, xs: 12 }}>
+                  {currentCursoId && getSeccionByCurso.get(currentCursoId) && (
                     <Controller
                       name="materiaInformacion.seccionId"
                       control={control}
                       render={({ field }) => (
                         <TextField
                           size="small"
-
                           fullWidth
                           {...field}
                           select
-
                           label="Actividad"
                           error={!!errors.materiaInformacion?.seccionId}
                           helperText={errors.materiaInformacion?.seccionId?.message?.toString()}
                         >
-                          {getSeccionByCurso.get(currentCursoId)?.map((seccionId) => (
-                            selectSeccion.get(seccionId) && <MenuItem value={seccionId} key={`${currentCursoId}-${seccionId}`}>
-                              {selectSeccion.get(seccionId)}
-                            </MenuItem>
-                          ))}
+                          {getSeccionByCurso.get(currentCursoId)?.map(
+                            (seccionId) =>
+                              selectSeccion.get(seccionId) && (
+                                <MenuItem value={seccionId} key={`${currentCursoId}-${seccionId}`}>
+                                  {selectSeccion.get(seccionId)}
+                                </MenuItem>
+                              )
+                          )}
                         </TextField>
                       )}
                     />
                   )}
-                </Grid2>
+                </Grid>
               </>
-            </Grid2>
+            </Grid>
 
-            <Grid2 size={12}>
+            <Grid size={12}>
               <Controller
                 name="tipo"
                 control={control}
@@ -388,17 +399,17 @@ export const Information = ({ type }: Props) => {
                   </TextField>
                 )}
               />
-            </Grid2>
+            </Grid>
 
             {type == "edit" && (
-              <Grid2 size={12}>
+              <Grid size={12}>
                 <ImagContainer
                   currentImg={img}
                   setCurrentImg={setImg}
                   setFile={setFileImg}
                   setFlag={setFlagChangeImg}
                 />
-              </Grid2>
+              </Grid>
             )}
 
             <Stack alignItems={"end"}>
@@ -407,7 +418,7 @@ export const Information = ({ type }: Props) => {
                   <Box>
                     <GeneralButton
                       size="small"
-                      loading={type === "create" ? isPendingCreate : isPendingEdit}
+                      loading={type === "create" ? localLoading : isPendingEdit}
                       type="submit"
                       mode={type === "create" ? buttonTypes.next : buttonTypes.save}
                     />

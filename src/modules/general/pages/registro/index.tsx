@@ -8,7 +8,7 @@ import {
   Button,
   Card,
   Checkbox,
-  Grid2,
+  Grid,
   Link,
   MenuItem,
   Stack,
@@ -119,8 +119,8 @@ function Registrar() {
           }}
         >
           {/* Row 1: First Name and Last Name */}
-          <Grid2 container spacing={4}>
-            <Grid2
+          <Grid container spacing={4}>
+            <Grid
               size={12}
               sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
             >
@@ -128,8 +128,8 @@ function Registrar() {
                 {labelUsuario.registrarUsuario}
               </Typography>
               <AssignmentIndIcon fontSize="large" />
-            </Grid2>
-            <Grid2 size={12}>
+            </Grid>
+            <Grid size={12}>
               <Alert sx={{ display: "flex", alignItems: "center", gap: 3 }} severity="info">
                 <Stack
                   direction={{ md: "row", xs: "column" }}
@@ -146,8 +146,8 @@ function Registrar() {
                   />
                 </Stack>
               </Alert>
-            </Grid2>
-            <Grid2 size={{ sm: 6, xs: 12 }}>
+            </Grid>
+            <Grid size={{ sm: 6, xs: 12 }}>
               <TextField
                 label="Nombres"
                 type="text"
@@ -156,9 +156,9 @@ function Registrar() {
                 {...register("nombres")}
                 fullWidth
               />
-            </Grid2>
+            </Grid>
 
-            <Grid2 size={{ sm: 6, xs: 12 }}>
+            <Grid size={{ sm: 6, xs: 12 }}>
               <TextField
                 label="Apellidos"
                 type="text"
@@ -167,9 +167,9 @@ function Registrar() {
                 {...register("apellidos")}
                 fullWidth
               />
-            </Grid2>
+            </Grid>
 
-            <Grid2 size={{ sm: 6, xs: 12 }}>
+            <Grid size={{ sm: 6, xs: 12 }}>
               <TextField
                 label="Correo"
                 type="email"
@@ -178,9 +178,9 @@ function Registrar() {
                 {...register("correo")}
                 fullWidth
               />
-            </Grid2>
+            </Grid>
 
-            <Grid2 size={{ sm: 6, xs: 12 }}>
+            <Grid size={{ sm: 6, xs: 12 }}>
               <TextField
                 label="Sexo"
                 select
@@ -195,9 +195,9 @@ function Registrar() {
                   </MenuItem>
                 ))}
               </TextField>
-            </Grid2>
+            </Grid>
 
-            <Grid2 size={{ sm: 6, xs: 12 }}>
+            <Grid size={{ sm: 6, xs: 12 }}>
               <TextField
                 label="Fecha de Ingreso"
                 type="date"
@@ -208,9 +208,9 @@ function Registrar() {
                 inputProps={{ max: getCurrentDate() }}
                 fullWidth
               />
-            </Grid2>
+            </Grid>
 
-            <Grid2 size={{ sm: 6, xs: 12 }}>
+            <Grid size={{ sm: 6, xs: 12 }}>
               <TextField
                 label="Fecha de Nacimiento"
                 type="date"
@@ -221,9 +221,9 @@ function Registrar() {
                 inputProps={{ max: getCurrentDate() }}
                 fullWidth
               />
-            </Grid2>
+            </Grid>
 
-            <Grid2 size={{ sm: 6, xs: 12 }}>
+            <Grid size={{ sm: 6, xs: 12 }}>
               <TextFieldPassword
                 label="Contraseña"
                 type="password"
@@ -232,9 +232,9 @@ function Registrar() {
                 {...register("contrasenia")}
                 fullWidth
               />
-            </Grid2>
+            </Grid>
 
-            <Grid2 size={{ sm: 6, xs: 12 }}>
+            <Grid size={{ sm: 6, xs: 12 }}>
               <TextFieldPassword
                 label="Confirmar Contraseña"
                 type="password"
@@ -243,7 +243,7 @@ function Registrar() {
                 {...register("confirmarContrasenia")}
                 fullWidth
               />
-            </Grid2>
+            </Grid>
             <Box sx={{display: 'flex', flexWrap: 'wrap', alignItems: 'center'}}>
               <Checkbox checked={checked} onChange={() => setChecked(!checked)} />
               <Typography variant="body2">{"He leído y acepto las "}</Typography>
@@ -253,7 +253,7 @@ function Registrar() {
               <Typography variant="body2" sx={{ marginLeft: 0.5 }}>{"del servicio de Fireploy"}</Typography>
             </Box>
             {/* Buttons */}
-            <Grid2 size={12} sx={{ display: "flex", justifyContent: "center", gap: 3 }}>
+            <Grid size={12} sx={{ display: "flex", justifyContent: "center", gap: 3 }}>
               <Box>
                 <Button variant="outlined" onClick={() => navigate(rutasGeneral.login)}>
                   {labelRegisterUser.back}
@@ -264,8 +264,8 @@ function Registrar() {
                   {labelRegisterUser.register}
                 </Button>
               </Box>
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
         </form>
       </Card>
     </Stack>

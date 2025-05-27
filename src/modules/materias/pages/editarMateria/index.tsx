@@ -17,7 +17,7 @@ import {
   getMateriasSemestresLabels,
   getMateriaStatesArray,
 } from "@modules/materias/utils/materias";
-import { Divider, Grid2, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import { Divider, Grid, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { Controller, FormProvider, SubmitHandler, useForm } from "react-hook-form";
@@ -162,7 +162,7 @@ function EditarMateria({ id, handleCloseModal }: Props) {
               </Stack>
 
               {/* Form fields */}
-              <Grid2 container spacing={3} padding={2}>
+              <Grid container spacing={3} padding={2}>
                 <TextField
                   fullWidth
                   label={labelGestionarMateria.nombre}
@@ -217,7 +217,7 @@ function EditarMateria({ id, handleCloseModal }: Props) {
                     </TextField>
                   )}
                 />
-              </Grid2>
+              </Grid>
 
               {/* Action buttons */}
               <Stack direction={"row"} spacing={2} justifyContent={"center"}>

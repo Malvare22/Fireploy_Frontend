@@ -1,4 +1,4 @@
-import { Box, Button, Grid2, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 
 import { useNavigate } from "react-router";
 import { getImage } from "@modules/general/utils/getImage";
@@ -37,8 +37,8 @@ function ErrorPage() {
   }
 
   return (
-    <Grid2 container>
-      <Grid2
+    <Grid container>
+      <Grid
         size={{ md: 6, xs: 12 }}
         sx={{ display: "flex", flexDirection: "column", gap: 4, justifyContent: "center" }}
       >
@@ -50,15 +50,15 @@ function ErrorPage() {
         <Button sx={{ fontSize: 24 }} variant="contained" onClick={handleButton}>
           {"Regresar"}
         </Button>
-      </Grid2>
-      <Grid2 size={{ md: 6, xs: 12 }} sx={{ display: "flex", alignItems: "end" }}>
+      </Grid>
+      <Grid size={{ md: 6, xs: 12 }} sx={{ display: "flex", alignItems: "end" }}>
         <Box
           component={"img"}
           sx={{ width: "100%", marginBottom: -6 }}
           src={getImage["not_found_404"].ruta}
         />
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 }
 
