@@ -193,7 +193,7 @@ function MisProyectos() {
           <Grid container spacing={4} paddingX={{ md: 6, xs: 2 }}>
             {renderData && renderData.length > 0 ? (
               renderData.map((proyecto, key) => (
-                <Grid size={{md: 6, xs: 12}}>
+                <Grid size={12}>
                   <ProjectForList proyecto={proyecto} key={key} />
                 </Grid>
               ))

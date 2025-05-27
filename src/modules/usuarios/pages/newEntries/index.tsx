@@ -41,7 +41,7 @@ function NewEntriesView() {
 
   //   const example = { confirmarContrasenia: "", contrasenia: "", estFechaInicio: "", sexo: "M" };
 
-  const { control, register, handleSubmit, formState, reset, watch } = useForm<Usuario>({
+  const { control, register, handleSubmit, formState, reset } = useForm<Usuario>({
     defaultValues: {
       estFechaInicio: "",
       sexo: "M",
@@ -64,8 +64,6 @@ function NewEntriesView() {
     queryFn: () => getUsuarioService(id, token),
     queryKey: ["Profile", id, token],
   });
-
-  console.log(watch())
 
   useEffect(() => {
     if (userData) {

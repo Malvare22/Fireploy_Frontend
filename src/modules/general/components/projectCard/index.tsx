@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Divider,
-  IconButton,
   Paper,
   Stack,
   Typography,
@@ -63,21 +62,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen, 
         >
           <ExecutionState projectStatus={proyecto.estado} />
         </Box>
-        <Box
-          sx={{
-            position: "absolute",
-            top: 4,
-            right: 4,
-            backgroundColor: theme.palette.background.paper,
-            opacity: 0.8,
-            borderRadius: 3,
-            padding: 0.5,
-          }}
-        >
-          <IconButton onClick={handleUrl} disabled={disableUrl}>
-            <OpenInNewIcon />
-          </IconButton>
-        </Box>
       </>
     );
   }
@@ -97,13 +81,30 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen, 
           gap: 1,
         }}
       >
-        <Box sx={{ position: "relative", width: "inherit", border: "1px solid rgb(0,0,0,0.2)", borderRadius: 1, overflow: 'hidden' }}>
+        <Box
+          sx={{
+            position: "relative",
+            width: "inherit",
+            border: "1px solid rgba(0,0,0,0.2)",
+            borderRadius: 1,
+            overflow: "hidden",
+            "&:hover .hover-content": {
+              transform: "translateY(0%)",
+              opacity: 1,
+            },
+          }}
+        >
           {proyecto.imagen ? (
             <>
               <Box
-                component={"img"}
+                component="img"
                 src={proyecto.imagen}
-                sx={{ width: "100%", height: 180, borderRadius: 1, objectFit: "contain" }}
+                sx={{
+                  width: "100%",
+                  height: 180,
+                  borderRadius: 1,
+                  objectFit: "contain",
+                }}
               />
               <ContentImage />
             </>
@@ -114,8 +115,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen, 
                 height: 180,
                 display: "flex",
                 alignItems: "center",
-                borderRadius: 1,
                 justifyContent: "center",
+                borderRadius: 1,
                 backgroundColor: theme.palette.primary.main,
               }}
             >
@@ -123,7 +124,46 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen, 
               <ContentImage />
             </Box>
           )}
+
+          {/* Hover content */}
+          <Box
+            className="hover-content"
+            sx={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              background: "rgba(0, 0, 0, 0.1)",
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "center",
+              transform: "translateY(20%)",
+              opacity: 0,
+              transition: "transform 0.5s ease, opacity 0.5s ease",
+              paddingBottom: 2,
+            }}
+          >
+            {!disableUrl ? (
+              <Button
+                variant="contained"
+                endIcon={<OpenInNewIcon />}
+                onClick={handleUrl}
+                color="info"
+              >
+                Visitar
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                color="error"
+              >
+                Sitio no disponible
+              </Button>
+            )}
+          </Box>
         </Box>
+
         <Typography
           sx={{
             display: "-webkit-box",

@@ -97,12 +97,16 @@ export const Information = ({ type }: Props) => {
     resolver: zodResolver(ProyectoInformationSchema),
   });
 
+  const [prevRenderNull, setPrevRenderNull] = useState(true);
+
   useEffect(() => {
+    if (prevRenderNull) return;
     setValue("materiaInformacion.cursoId", null);
     setValue("materiaInformacion.seccionId", null);
   }, [getValues("materiaInformacion.materiaId")]);
 
   useEffect(() => {
+    if (prevRenderNull) return;
     setValue("materiaInformacion.seccionId", null);
   }, [getValues("materiaInformacion.cursoId")]);
 
@@ -119,6 +123,10 @@ export const Information = ({ type }: Props) => {
       );
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    setPrevRenderNull(false);
+  }, []);
 
   const {
     handleAccept,
@@ -154,16 +162,17 @@ export const Information = ({ type }: Props) => {
 
   const [flagChangeImg, setFlagChangeImg] = useState<boolean>(false);
 
-  const {
-    mutate: mutateCreate,
-    data: dataCreate,
-    isSuccess: isSuccessCreate,
-  } = useMutation({
+  const [dataCreate, setDateCreate] = useState<undefined | { id: number }>(undefined);
+
+  const { mutate: mutateCreate } = useMutation({
     mutationFn: () => postCreateProject(token, getValues()),
     mutationKey: ["Create Project", getValues(), token],
     onError: (err) => {
       setError(err);
       setLocalLoading(false);
+    },
+    onSuccess: (data) => {
+      setDateCreate(data);
     },
   });
 
@@ -209,12 +218,12 @@ export const Information = ({ type }: Props) => {
   });
 
   useEffect(() => {
-    if (!dataCreate || !isSuccessCreate) return;
+    if (!dataCreate) return;
     updateSearchParams("id", dataCreate.id.toString());
-  }, [dataCreate, isSuccessCreate]);
+  }, [dataCreate]);
 
   useEffect(() => {
-    if (dataCreate && isSuccessCreate) handleNext();
+    if (dataCreate) handleNext();
   }, [searchParams]);
 
   function onSubmit() {

@@ -85,13 +85,11 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
     await refetch();
   };
 
-  console.log(data);
-
   return (
     <Stack sx={{ width: { md: 900, xs: 300, sm: 600 } }} spacing={3}>
       <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
         <Typography variant="h3">{project.titulo}</Typography>
-        {id!= -1 && currentCheck != null && (
+        {id != -1 && currentCheck != null && (
           <StarButton
             callback={updateCallback}
             check={currentCheck}
@@ -178,16 +176,18 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
           </Stack>
         </Grid>
       </Grid>
-      <Alert severity="success" sx={{ display: "flex", alignItems: "center" }}>
-        <Stack direction={"row"} alignItems={"center"}>
-          <Typography>{"Proyecto disponible"}</Typography>
-          <Tooltip title="Visitar sitio">
-            <IconButton onClick={() => handleButtonUrl(project.url)}>
-              <ExitToAppIcon sx={{ fontSize: 24 }}>{"Visitar"}</ExitToAppIcon>
-            </IconButton>
-          </Tooltip>
-        </Stack>
-      </Alert>
+      {project.estado == "N" && (
+        <Alert severity="success" sx={{ display: "flex", alignItems: "center" }}>
+          <Stack direction={"row"} alignItems={"center"}>
+            <Typography>{"Proyecto disponible"}</Typography>
+            <Tooltip title="Visitar sitio">
+              <IconButton onClick={() => handleButtonUrl(project.url)}>
+                <ExitToAppIcon sx={{ fontSize: 24 }} />
+              </IconButton>
+            </Tooltip>
+          </Stack>
+        </Alert>
+      )}
       <Grid container spacing={2}>
         <Grid size={12} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <Typography variant="h5">{"Descripción"}</Typography>

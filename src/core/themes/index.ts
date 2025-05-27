@@ -60,9 +60,9 @@ const palette: PaletteOptions = {
   email: {
     main: '#fffcf4'
   },
-  success: {
-    main: "rgb(67, 106, 68)",        // #81C784
-  },
+  // success: {
+  //   main: "rgb(67, 106, 68)",        // #81C784
+  // },
 };
 
 /**
