@@ -87,11 +87,11 @@ export default function ProjectSettings({ project }: Props) {
                 </Typography>
                 {executionState == "N" ? (
                   <Link
-                    href={`https://proyectos.fireploy.online/app${project.id}`}
+                    href={`https://app${project.id}.proyectos.fireploy.online/`}
                     target="_blank"
-                  >{`https://proyectos.fireploy.online/app${project.id}`}</Link>
+                  >{`https://app${project.id}.proyectos.fireploy.online/`}</Link>
                 ) : (
-                  <Typography>{`https://proyectos.fireploy.online/app${project.id}`}</Typography>
+                  <Typography>{`https://app${project.id}.proyectos.fireploy.online/`}</Typography>
                 )}
                 {/* <Tooltip title="Abrir URL">
                   <IconButton onClick={() => handleUrl(currentUrl)}>
