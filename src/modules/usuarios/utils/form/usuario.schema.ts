@@ -118,8 +118,8 @@ export const UsuarioSchema: z.ZodType<Omit<Usuario & { confirmarContrasenia?: st
     if (!data.estFechaInicio) return true;
     const birth = new Date(data.fechaDeNacimiento).getTime();
     const entryToUniversity = new Date(data.estFechaInicio).getTime();
-    return birth > entryToUniversity;
-  }, { message: 'La fecha de ingreso a la universidad no puede ser mayor o igual a la fecha de nacimiento', path: ['estFechaInicio'] });
+    return birth < entryToUniversity;
+  }, { message: 'La fecha de ingreso a la universidad no puede ser menor o igual a la fecha de nacimiento', path: ['estFechaInicio'] });
 
 export type UsuarioSchema = z.infer<typeof UsuarioSchema>;
 
