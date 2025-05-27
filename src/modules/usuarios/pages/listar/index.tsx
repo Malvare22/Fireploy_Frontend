@@ -16,7 +16,7 @@
  */
 
 import { useState, useEffect, useMemo } from "react";
-import { Alert, Box, Button, Divider, Grid2, Stack, Typography } from "@mui/material";
+import { Alert, Box, Button, Divider, Grid, Stack, Typography } from "@mui/material";
 import useSearch from "@modules/general/hooks/useSearch";
 import TablaUsuarios from "@modules/usuarios/components/tablaUsuarios";
 import { labelListarUsuarios } from "@modules/usuarios/enum/labelListarUsuarios";
@@ -201,11 +201,11 @@ function ListarUsuarios() {
             <Divider />
           </Stack>
 
-          <Grid2 container>
-            <Grid2 size={{ xs: 12, md: 6 }}>
+          <Grid container>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextFieldSearch setSearchValue={setSearchValue} fullWidth />
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
 
           <SelectFilters data={usuarios} filterOptions={filterOptions} setRefineData={setBuffer} />
 

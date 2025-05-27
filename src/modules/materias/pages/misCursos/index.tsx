@@ -1,4 +1,4 @@
-import { Grid2, Stack, Typography } from "@mui/material";
+import { Grid, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
 import { getCursos } from "@modules/materias/services/get.curso";
@@ -109,24 +109,24 @@ function ListarMisCursos() {
       ) : (
         <Stack spacing={3}>
           <Typography variant="h4">{labelListarCursos.titulo}</Typography>
-          {/* <Grid2 container sx={{ width: "100%" }}>
-            <Grid2 size={{ md: 6, xs: 12 }}>
+          {/* <Grid container sx={{ width: "100%" }}>
+            <Grid size={{ md: 6, xs: 12 }}>
               <TextFieldSearch setSearchValue={setSearchValue} fullWidth />
-            </Grid2>
-          </Grid2> */}
+            </Grid>
+          </Grid> */}
           <SelectFilters
             data={cursos}
             filterOptions={filterOptions}
             setRefineData={setCursosBuffer}
           />
 
-          <Grid2 container spacing={3}>
+          <Grid container spacing={3}>
             {cursosBuffer.map((curso) => (
-              <Grid2 size={tipo == "D" ? { md: 6, xs: 12 } : 12}>
+              <Grid size={tipo == "D" ? { md: 6, xs: 12 } : 12}>
                 <CardCurso materiaNombre={curso.materia?.nombre ?? ''} curso={curso} isRegister={true} userType={tipo} />
-              </Grid2>
+              </Grid>
             ))}
-          </Grid2>
+          </Grid>
         </Stack>
       )}
     </>

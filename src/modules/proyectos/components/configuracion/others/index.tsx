@@ -1,12 +1,18 @@
-import { Box, Button, Divider, Grid2, Stack, Typography } from "@mui/material";
+import { Box, Button, Divider, Grid, Stack, TextField, Typography } from "@mui/material";
 import DisabledVisibleIcon from "@mui/icons-material/DisabledVisible";
 import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useAlertDialogContext } from "@modules/general/context/alertDialogContext";
 import { useNavigate } from "react-router";
 import { rutasProyectos } from "@modules/proyectos/router";
+import AlertDialog from "@modules/general/components/alertDialog";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useModal } from "@modules/general/components/modal/hooks/useModal";
+import AlertDialogCustom from "@modules/general/components/customAlertDialog";
 
 export enum labelDangerZone {
   btnVisibilityOff = "Ocultar Proyecto",
@@ -18,8 +24,9 @@ export enum labelDangerZone {
 type Props = {
   id: Proyecto["id"];
   viewStatus: "A" | "I";
+  projectTitle: string;
 };
-function DangerZone({ id, viewStatus }: Props) {
+function DangerZone({ id, viewStatus, projectTitle }: Props) {
   const navigate = useNavigate();
 
   function handleReturnToList() {
@@ -40,6 +47,7 @@ function DangerZone({ id, viewStatus }: Props) {
     showDialog({
       message: `¿Está seguro de que desea eliminar este proyecto`,
       onAccept: () => {
+        handleOpenModal();
         handleClose();
       },
       onCancel: () => {
@@ -50,9 +58,14 @@ function DangerZone({ id, viewStatus }: Props) {
     });
   }
 
-  function handleChangeVisibility() {
+  const formSchema = z.object({
+    title: z.string().refine((x) => x === projectTitle, {
+      message: "El título no coincide. Por favor, ingrese el título exacto del proyecto.",
+    }),
+  });
 
-    const text = viewStatus == 'A' ? 'ocultar' : 'mostrar';
+  function handleChangeVisibility() {
+    const text = viewStatus == "A" ? "ocultar" : "mostrar";
 
     showDialog({
       message: `¿Está seguro de que desea ${text} este proyecto a los demás usuarios?`,
@@ -67,8 +80,73 @@ function DangerZone({ id, viewStatus }: Props) {
     });
   }
 
+  type FormType = {
+    title: string;
+  };
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    watch,
+  } = useForm<FormType>({
+    defaultValues: { title: "" },
+    resolver: zodResolver(formSchema),
+  });
+
+  console.log(watch("title"), errors);
+
+  const {
+    handleClose: handleCloseModal,
+    handleOpen: handleOpenModal,
+    open: openModal,
+  } = useModal();
+
+  function deleteProject() {
+    handleCloseModal();
+  }
+
   return (
     <>
+      <AlertDialogCustom
+        title="Eliminar Proyecto"
+        open={openModal}
+        content={
+          <form onSubmit={handleSubmit(deleteProject)}>
+            <Stack spacing={2}>
+                <Typography>
+              {"Por favor ingrese el titulo de su proyecto en el siguiente campo como confirmación"}
+            </Typography>
+            <TextField
+              size="small"
+              {...register("title")}
+              error={!!errors.title}
+              helperText={errors.title?.message}
+              fullWidth
+            />
+            </Stack>
+          </form>
+        }
+        actions={
+          <Stack direction="row" spacing={2}>
+            <Box>
+              <Button
+                color="error"
+                onClick={handleSubmit(deleteProject)}
+                variant="contained"
+                type="submit"
+              >
+                {"Eliminar Proyecto"}
+              </Button>
+            </Box>
+            <Box>
+              <Button color="inherit" variant="contained" onClick={handleCloseModal}>
+                {"Cancelar"}
+              </Button>
+            </Box>
+          </Stack>
+        }
+      />
       <Stack spacing={3}>
         <Stack spacing={1}>
           <Typography variant="h5">{"Otras Configuraciones"}</Typography>
@@ -78,26 +156,28 @@ function DangerZone({ id, viewStatus }: Props) {
           {"Estos son los ajustes que repercuten en la integridad del proyecto y su visibilidad"}
         </Typography>
         <Typography>{"Zona de Peligro"}</Typography>
-        <Grid2 container>
-          <Grid2 size={4}>
+        <Grid container>
+          <Grid size={4}>
             <Typography variant="h6">{"Visibilidad del Proyecto"}</Typography>
-          </Grid2>
-          <Grid2 size={6}>
+          </Grid>
+          <Grid size={6}>
             <Box>
-              <Button onClick={handleChangeVisibility} endIcon={ButtonIcon}>{ButtonText}</Button>
+              <Button onClick={handleChangeVisibility} endIcon={ButtonIcon}>
+                {ButtonText}
+              </Button>
             </Box>
-          </Grid2>
-          <Grid2 size={4}>
+          </Grid>
+          <Grid size={4}>
             <Typography variant="h6">{"Eliminar Proyecto"}</Typography>
-          </Grid2>
-          <Grid2 size={6}>
+          </Grid>
+          <Grid size={6}>
             <Box>
               <Button color="error" onClick={handleRemove} size="large" endIcon={<DeleteIcon />}>
                 {"Eliminar Proyecto"}
               </Button>
             </Box>
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
       </Stack>
     </>
   );

@@ -6,7 +6,7 @@ import {
   Avatar,
   Box,
   Card,
-  Grid2,
+  Grid,
   IconButton,
   MenuItem,
   Stack,
@@ -221,9 +221,9 @@ const Portafolio = ({ id }: { id: number }) => {
 
                 <Box sx={{ flexGrow: 1 }}>
                   {usuario.proyectos.length > 0 ? (
-                    <Grid2 container spacing={1} rowSpacing={4}>
+                    <Grid container spacing={1} rowSpacing={4}>
                       {filterDataFn(orderDataFn(usuario.proyectos)).map((proyecto) => (
-                        <Grid2
+                        <Grid
                           size={{ xl: 4, sm: 6, xs: 12 }}
                           display={"flex"}
                           justifyContent={"center"}
@@ -233,9 +233,9 @@ const Portafolio = ({ id }: { id: number }) => {
                             proyecto={proyecto}
                             callback={refetch}
                           />
-                        </Grid2>
+                        </Grid>
                       ))}
-                    </Grid2>
+                    </Grid>
                   ) : (
                     <Alert severity={"info"} sx={{ width: "100&" }}>
                       No se han encontrado proyectos
@@ -319,8 +319,8 @@ const ModalEdit = ({ id, handleClose }: { id: number; handleClose: Function }) =
             </Typography>
             {/* Redes Sociales */}
             <Typography variant="h6">{labelPerfil.redesSociales}</Typography>
-            <Grid2 container spacing={2}>
-              <Grid2 size={{ md: 6, xs: 12 }}>
+            <Grid container spacing={2}>
+              <Grid size={{ md: 6, xs: 12 }}>
                 <TextField
                   fullWidth
                   label={labelPerfil.facebook}
@@ -337,8 +337,8 @@ const ModalEdit = ({ id, handleClose }: { id: number; handleClose: Function }) =
                     ),
                   }}
                 />
-              </Grid2>
-              <Grid2 size={{ md: 6, xs: 12 }}>
+              </Grid>
+              <Grid size={{ md: 6, xs: 12 }}>
                 <TextField
                   fullWidth
                   label={labelPerfil.instagram}
@@ -355,8 +355,8 @@ const ModalEdit = ({ id, handleClose }: { id: number; handleClose: Function }) =
                     ),
                   }}
                 />
-              </Grid2>
-              <Grid2 size={{ md: 6, xs: 12 }}>
+              </Grid>
+              <Grid size={{ md: 6, xs: 12 }}>
                 <TextField
                   fullWidth
                   label={labelPerfil.linkedin}
@@ -373,8 +373,8 @@ const ModalEdit = ({ id, handleClose }: { id: number; handleClose: Function }) =
                     ),
                   }}
                 />
-              </Grid2>
-              <Grid2 size={{ md: 6, xs: 12 }}>
+              </Grid>
+              <Grid size={{ md: 6, xs: 12 }}>
                 <TextField
                   fullWidth
                   label={labelPerfil.x}
@@ -391,8 +391,8 @@ const ModalEdit = ({ id, handleClose }: { id: number; handleClose: Function }) =
                     ),
                   }}
                 />
-              </Grid2>
-              <Grid2 size={{ md: 6, xs: 12 }}>
+              </Grid>
+              <Grid size={{ md: 6, xs: 12 }}>
                 <TextField
                   fullWidth
                   label={labelPerfil.gitHub}
@@ -409,8 +409,8 @@ const ModalEdit = ({ id, handleClose }: { id: number; handleClose: Function }) =
                     ),
                   }}
                 />
-              </Grid2>
-              <Grid2 size={{ md: 6, xs: 12 }}>
+              </Grid>
+              <Grid size={{ md: 6, xs: 12 }}>
                 <TextField
                   fullWidth
                   label={labelPerfil.gitLab}
@@ -427,8 +427,8 @@ const ModalEdit = ({ id, handleClose }: { id: number; handleClose: Function }) =
                     ),
                   }}
                 />
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
             <Typography variant="h6">Descripción</Typography>
             <TextField
               multiline

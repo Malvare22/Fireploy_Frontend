@@ -1,6 +1,6 @@
 import { getImage } from "@modules/general/utils/getImage";
 import { TECNOLOGIES } from "@modules/proyectos/utils/technologies";
-import { Button, Grid2, IconButton, Paper, Typography } from "@mui/material";
+import { Button, Grid, IconButton, Paper, Typography } from "@mui/material";
 import { Box, Stack, useMediaQuery, useTheme } from "@mui/system";
 import { keyframes } from "@emotion/react";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
@@ -144,9 +144,9 @@ function TecnologiesView() {
           </Typography>
           <Typography textAlign={"center"}>{labelTecnologiesView.bodySecondary}</Typography>
         </Stack>
-        <Grid2 container spacing={3}>
+        <Grid container spacing={3}>
           {tecnologies.map(([title, img, text, myDoc, oficialDoc, template]) => (
-            <Grid2 size={{ md: 6, xs: 12 }}>
+            <Grid size={{ md: 6, xs: 12 }}>
               <CardTecnology
                 img={img}
                 subtitle={text}
@@ -155,9 +155,9 @@ function TecnologiesView() {
                 urlOficialDoc={oficialDoc}
                 urlTemplate={template}
               />
-            </Grid2>
+            </Grid>
           ))}
-        </Grid2>
+        </Grid>
         
       </Stack>
       <Box sx={{display: 'flex', justifyContent: 'center', paddingX: 2}}><Typography variant="caption" maxWidth={'800px'} textAlign={"center"}>
@@ -295,8 +295,8 @@ function CardTecnology({
 
   return (
     <Paper variant="glass" sx={{ height: "100%" }}>
-      <Grid2 container sx={{ overflow: "hidden", height: "inherit" }} spacing={3} padding={0}>
-        <Grid2 size={4}>
+      <Grid container sx={{ overflow: "hidden", height: "inherit" }} spacing={3} padding={0}>
+        <Grid size={4}>
           <Box
             sx={{
               display: "flex",
@@ -320,8 +320,8 @@ function CardTecnology({
               }}
             />
           </Box>
-        </Grid2>
-        <Grid2 size={8}>
+        </Grid>
+        <Grid size={8}>
           <Stack spacing={2} sx={{height: '100%'}} justifyContent={'space-between'}>
             <Stack spacing={1}>
               <Stack direction={"row"} justifyContent={"space-between"}>
@@ -357,8 +357,8 @@ function CardTecnology({
               </Box>
             </Stack>
           </Stack>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </Paper>
   );
 }

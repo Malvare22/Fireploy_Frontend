@@ -15,7 +15,7 @@ import {
   Card,
   Chip,
   Divider,
-  Grid2,
+  Grid,
   MenuItem,
   Stack,
   TextField,
@@ -267,20 +267,20 @@ type ShowCredentialsProps = {
 function ShowCredentials({ password, user }: ShowCredentialsProps) {
   return (
     <Card sx={{ maxWidth: 400 }}>
-      <Grid2 container rowSpacing={2} sx={{ display: "flex", padding: 1, alignItems: "center" }}>
-        <Grid2 size={3}>
+      <Grid container rowSpacing={2} sx={{ display: "flex", padding: 1, alignItems: "center" }}>
+        <Grid size={3}>
           <Typography sx={{ fontWeight: 500 }}>{"Usuario:"}</Typography>
-        </Grid2>
-        <Grid2 size={9}>
+        </Grid>
+        <Grid size={9}>
           <TextField fullWidth size="small" disabled value={user} />
-        </Grid2>
-        <Grid2 size={3}>
+        </Grid>
+        <Grid size={3}>
           <Typography sx={{ fontWeight: 500 }}>{"Contraseña:"}</Typography>
-        </Grid2>
-        <Grid2 size={9}>
+        </Grid>
+        <Grid size={9}>
           <TextFieldPassword fullWidth size="small" disabled value={password} />
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </Card>
   );
 }

@@ -1,5 +1,5 @@
 import { labelListarPortafolios } from "@modules/usuarios/enum/labelListarPortafolios";
-import { Grid2, Pagination, Stack, Typography } from "@mui/material";
+import { Grid, Pagination, Stack, Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import PortafolioCard from "@modules/general/components/portafolioCard";
 import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
@@ -118,11 +118,11 @@ function ExplorarPortafolios() {
             {/* Optional icon can go here */}
           </Stack>
 
-          <Grid2 container display={"flex"} justifyContent={"center"} spacing={2}>
-            <Grid2 size={{ xs: 12, md: 6 }}>
+          <Grid container display={"flex"} justifyContent={"center"} spacing={2}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextFieldSearch fullWidth setSearchValue={setSearchValue} />
-            </Grid2>
-            <Grid2 size={{ xs: 12, md: 3 }}>
+            </Grid>
+            <Grid size={{ xs: 12, md: 3 }}>
               <SelectOrders
                 data={usuarios}
                 setRefineData={setBuffer}
@@ -130,17 +130,17 @@ function ExplorarPortafolios() {
                 label="Ordenar Por"
                 type="single"
               />
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
 
           {/* Portfolio card grid */}
-          <Grid2 container spacing={5} display={"flex"} justifyContent={"center"}>
+          <Grid container spacing={5} display={"flex"} justifyContent={"center"}>
             {paginatedData.map((usuario, key) => (
-              <Grid2 size={{ xl: 8, xs: 10 }} key={key}>
+              <Grid size={{ xl: 8, xs: 10 }} key={key}>
                 <PortafolioCard usuario={usuario} />
-              </Grid2>
+              </Grid>
             ))}
-          </Grid2>
+          </Grid>
           <Stack alignItems={"center"}>
             <Pagination
               count={totalPages}

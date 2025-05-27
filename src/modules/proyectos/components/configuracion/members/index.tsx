@@ -5,7 +5,7 @@ import {
   Button,
   Chip,
   Divider,
-  Grid2,
+  Grid,
   IconButton,
   Menu,
   MenuItem,
@@ -267,7 +267,7 @@ export const Members = () => {
         <Divider />
       </Stack>
       <Divider />
-      <Grid2
+      <Grid
         container
         sx={{
           padding: 2,
@@ -275,15 +275,15 @@ export const Members = () => {
           width: "100%",
         }}
       >
-        <Grid2 size={{ md: 6, xs: 12 }}>
+        <Grid size={{ md: 6, xs: 12 }}>
           <TextFieldSearch
             setSearchValue={setSearchValue}
             fullWidth
             size="small"
             placeholder={labelConfiguracion.filtrarColaboradores}
           />
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
       <Divider />
       <Typography padding={2}>{labelConfiguracion.cuenta}</Typography>
       <Divider />

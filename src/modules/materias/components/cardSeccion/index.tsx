@@ -1,4 +1,4 @@
-import { Alert, Box, Grid2, Stack, Typography, useTheme } from "@mui/material";
+import { Alert, Box, Grid, Stack, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AccordionUsage from "@modules/general/components/accordionUsage";
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
@@ -192,18 +192,18 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, idMateria, idCurso }
           {/* <SelectOrders data={proyectos} setRefineData={setBuffer} sorterOptions={sorters} /> */}
           {proyectos && proyectos.length > 0 ? (
             <>
-              <Grid2 container spacing={3}>
+              <Grid container spacing={3}>
                 {proyectos.map((proyecto) => (
-                  <Grid2 size={{ lg: 4, md: 6, xs: 12 }} display={"flex"} justifyContent={"center"}>
+                  <Grid size={{ lg: 4, md: 6, xs: 12 }} display={"flex"} justifyContent={"center"}>
                     <ProjectCard
                       handleOpen={() => handleCard(proyecto)}
                       proyecto={proyecto}
                       key={proyecto.id}
                       callback={refetch}
                     />
-                  </Grid2>
+                  </Grid>
                 ))}
-              </Grid2>
+              </Grid>
             </>
           ) : (
             <Alert severity="info">{"Actualmente no hay cursos vinculados a esta actividad"}</Alert>

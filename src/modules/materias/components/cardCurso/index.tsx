@@ -5,7 +5,7 @@ import {
   Button,
   Card,
   Chip,
-  Grid2,
+  Grid,
   Stack,
   Tooltip,
   Typography,
@@ -70,8 +70,8 @@ const CardCurso: React.FC<CardCursoProps> = ({
   return (
     <Card sx={{ width: "100%" }}>
       {/* o cualquier altura deseada */}
-      <Grid2 container spacing={1}>
-        <Grid2
+      <Grid container spacing={1}>
+        <Grid
           sx={{
             backgroundColor: theme.palette.primary.main,
             display: "flex",
@@ -84,9 +84,9 @@ const CardCurso: React.FC<CardCursoProps> = ({
           <Typography variant="h3" color="white">
             {curso.grupo}
           </Typography>
-        </Grid2>
+        </Grid>
 
-        <Grid2
+        <Grid
           size={{ md: 9, xs: 12 }}
           sx={{
             flexGrow: 1,
@@ -126,8 +126,8 @@ const CardCurso: React.FC<CardCursoProps> = ({
               {buttonText()}
             </Button>
           </Box>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </Card>
   );
 };

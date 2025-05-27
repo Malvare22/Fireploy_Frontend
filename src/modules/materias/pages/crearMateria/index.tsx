@@ -21,7 +21,7 @@ import {
   Checkbox,
   Divider,
   FormControlLabel,
-  Grid2,
+  Grid,
   MenuItem,
   Stack,
   TextField,
@@ -176,8 +176,8 @@ function VistaCrearMateria() {
                 <Typography variant="h4">{labelGestionarMateria.titulo}</Typography>
                 <Divider />
               </Stack>
-              <Grid2 container spacing={3} padding={2}>
-                <Grid2 size={{ xs: 12, md: 8 }}>
+              <Grid container spacing={3} padding={2}>
+                <Grid size={{ xs: 12, md: 8 }}>
                   <TextField
                     fullWidth
                     label={labelGestionarMateria.nombre}
@@ -185,8 +185,8 @@ function VistaCrearMateria() {
                     error={!!methods.formState.errors.nombre}
                     helperText={methods.formState.errors.nombre?.message}
                   />
-                </Grid2>
-                <Grid2 size={{ xs: 12, md: 8 }}>
+                </Grid>
+                <Grid size={{ xs: 12, md: 8 }}>
                   <TextField
                     fullWidth
                     select
@@ -201,8 +201,8 @@ function VistaCrearMateria() {
                       </MenuItem>
                     ))}
                   </TextField>
-                </Grid2>
-                <Grid2 size={{ xs: 12, md: 8 }}>
+                </Grid>
+                <Grid size={{ xs: 12, md: 8 }}>
                   <TextField
                     fullWidth
                     label={labelGestionarMateria.estado}
@@ -217,17 +217,17 @@ function VistaCrearMateria() {
                       </MenuItem>
                     ))}
                   </TextField>
-                </Grid2>
-                <Grid2 size={{ xs: 12, md: 8 }}>
+                </Grid>
+                <Grid size={{ xs: 12, md: 8 }}>
                   <FormControlLabel
                     control={<Checkbox onClick={handleCheck} disabled={disableCheck} />}
                     label={labelGestionarMateria.checkBox}
                   />
-                </Grid2>
-                <Grid2 size={{ xl: 10, xs: 12 }}>
+                </Grid>
+                <Grid size={{ xl: 10, xs: 12 }}>
                   <Card>{createGroups && <TablaGestionarCursos />}</Card>
-                </Grid2>
-              </Grid2>
+                </Grid>
+              </Grid>
               <Box>
                 <Button
                   type="submit"

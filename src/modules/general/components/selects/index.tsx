@@ -213,7 +213,7 @@ export function SelectFilters<T extends Object>({
             </AccordionSummary>
             <AccordionDetails>
              { showOptions.map(({ key, options, label }) => (
-              <Grid2 size={12} key={key}>
+              <Grid size={12} key={key}>
                 <FormControl fullWidth>
                   <InputLabel>{label}</InputLabel>
                   <Select
@@ -234,7 +234,7 @@ export function SelectFilters<T extends Object>({
                     })}
                   </Select>
                 </FormControl>
-              </Grid2>))}
+              </Grid>))}
             </AccordionDetails>
           </Accordion>
         } */

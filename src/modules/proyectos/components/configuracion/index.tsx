@@ -27,6 +27,8 @@ import { useExecutionStatusContext } from "@modules/proyectos/context/executionS
 import { Skeleton } from "@mui/material";
 import LogsFiles from "./logSection";
 import ArticleIcon from "@mui/icons-material/Article";
+import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import DangerZone from "./others";
 
 type Props = {
   project: ProyectoSchema;
@@ -58,7 +60,10 @@ export default function ProjectSettings({ project }: Props) {
             {executionState && <ExecutionState projectStatus={executionState} />}
           </Stack>
           {currentUrl.trim() != "" && executionState == "N" && (
-            <Alert severity={executionState != 'N' ? "info": 'success'} sx={{ display: "flex", alignItems: "center" }}>
+            <Alert
+              severity={executionState != "N" ? "info" : "success"}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
               <Stack direction={"row"} spacing={1} alignItems={"center"}>
                 <Typography>
                   {executionState == "N"
@@ -108,6 +113,7 @@ export default function ProjectSettings({ project }: Props) {
               <Tab label="Bases de Datos" icon={<StorageIcon />} iconPosition="start" />
               <Tab label="Colaboradores" icon={<PeopleAltIcon />} iconPosition="start" />
               <Tab label="Logs" icon={<ArticleIcon />} iconPosition="start" />
+              <Tab label="Otros aspectos" icon={<SettingsSuggestIcon />} iconPosition="start" />
             </Tabs>
 
             <Stack spacing={3} padding={1} paddingTop={2}>
@@ -122,6 +128,7 @@ export default function ProjectSettings({ project }: Props) {
                   integrado={project.integrado?.id}
                 />
               )}
+              {tabIndex == 5 && <DangerZone projectTitle="A" id={0} viewStatus="A" />}
             </Stack>
           </Container>
         ) : (

@@ -4,7 +4,7 @@ import {
   Typography,
   Avatar,
   Stack,
-  Grid2,
+  Grid,
   Paper,
   useTheme,
   MenuItem,
@@ -203,10 +203,10 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
           <AccountBoxIcon sx={{ fontSize: 48 }} />
         </Stack>
         <Typography variant="h6">{labelPerfil.informacionCuenta}</Typography>
-        <Grid2 container spacing={2}>
-          <Grid2 size={{ md: 9, xs: 12 }}>
-            <Grid2 container sx={{ padding: 2 }} spacing={2}>
-              <Grid2 size={{ md: 6, xs: 12 }}>
+        <Grid container spacing={2}>
+          <Grid size={{ md: 9, xs: 12 }}>
+            <Grid container sx={{ padding: 2 }} spacing={2}>
+              <Grid size={{ md: 6, xs: 12 }}>
                 <TextField
                   fullWidth
                   label={labelPerfil.nombres}
@@ -214,8 +214,8 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
                   error={!!errors.nombres}
                   helperText={errors.nombres?.message}
                 />
-              </Grid2>
-              <Grid2 size={{ md: 6, xs: 12 }}>
+              </Grid>
+              <Grid size={{ md: 6, xs: 12 }}>
                 <TextField
                   fullWidth
                   label={labelPerfil.apellidos}
@@ -223,8 +223,8 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
                   error={!!errors.apellidos}
                   helperText={errors.apellidos?.message}
                 />
-              </Grid2>
-              <Grid2 size={{ md: 6, xs: 12 }}>
+              </Grid>
+              <Grid size={{ md: 6, xs: 12 }}>
                 <TextField
                   fullWidth
                   label="Correo"
@@ -233,9 +233,9 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
                   helperText={errors.correo?.message}
                   disabled={type != "crear"}
                 />
-              </Grid2>
+              </Grid>
               {getValues("tipo") && (
-                <Grid2 size={{ md: 6, xs: 12 }}>
+                <Grid size={{ md: 6, xs: 12 }}>
                   <Controller
                     name="tipo"
                     control={control}
@@ -257,11 +257,11 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
                       </TextField>
                     )}
                   />
-                </Grid2>
+                </Grid>
               )}
               {type == "crear" && (
                 <>
-                  <Grid2 size={{ md: 6, xs: 12 }}>
+                  <Grid size={{ md: 6, xs: 12 }}>
                     <TextFieldPassword
                       fullWidth
                       label={labelPerfil.contrasenia}
@@ -269,8 +269,8 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
                       error={!!errors.contrasenia}
                       helperText={errors.contrasenia?.message}
                     />
-                  </Grid2>
-                  <Grid2 size={{ md: 6, xs: 12 }}>
+                  </Grid>
+                  <Grid size={{ md: 6, xs: 12 }}>
                     <TextFieldPassword
                       fullWidth
                       label={labelPerfil.confirmarContrasenia}
@@ -278,11 +278,11 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
                       error={!!errors.confirmarContrasenia}
                       helperText={errors.confirmarContrasenia?.message}
                     />
-                  </Grid2>
+                  </Grid>
                 </>
               )}
               {watch("tipo") == "E" && (
-                <Grid2 size={{ md: 6, xs: 12 }}>
+                <Grid size={{ md: 6, xs: 12 }}>
                   <TextField
                     fullWidth
                     label="Fecha de Ingreso a la Universidad"
@@ -293,9 +293,9 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
                     type="date"
                     InputLabelProps={{ shrink: true }}
                   />
-                </Grid2>
+                </Grid>
               )}
-              <Grid2 size={{ md: 6, xs: 12 }}>
+              <Grid size={{ md: 6, xs: 12 }}>
                 {CURRENT_USER_TYPE == "E" && (
                   <Box
                     display={"flex"}
@@ -306,10 +306,10 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
                     <ButtonUpdaterRol />
                   </Box>
                 )}
-              </Grid2>
-            </Grid2>
-          </Grid2>
-          <Grid2 size={{ md: 3, xs: 12 }}>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid size={{ md: 3, xs: 12 }}>
             {
               <ProfilePhotoUploader
                 photo={photo}
@@ -319,13 +319,13 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
                 onChange={() => setValue("fotoDePerfil", "")}
               />
             }
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
 
         {/* Información Personal */}
         <Typography variant="h6">{labelPerfil.informacionPersonal}</Typography>
-        <Grid2 container spacing={2}>
-          <Grid2 size={{ md: 6, xs: 12 }}>
+        <Grid container spacing={2}>
+          <Grid size={{ md: 6, xs: 12 }}>
             <TextField
               fullWidth
               label={labelPerfil.fechaNacimiento}
@@ -335,8 +335,8 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
               helperText={errors.fechaDeNacimiento?.message}
               InputLabelProps={{ shrink: true }}
             />
-          </Grid2>
-          <Grid2 size={{ md: 6, xs: 12 }}>
+          </Grid>
+          <Grid size={{ md: 6, xs: 12 }}>
             <Controller
               name="sexo"
               control={control}
@@ -357,8 +357,8 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
                 </TextField>
               )}
             />
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
 
         {showButton && (
           <Stack direction={"row"} spacing={1} justifyContent={"end"}>

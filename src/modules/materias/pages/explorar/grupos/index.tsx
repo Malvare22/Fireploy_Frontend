@@ -24,7 +24,7 @@ import { Curso } from "@modules/materias/types/curso";
 import { Materia } from "@modules/materias/types/materia";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
 import { adaptMateriaService } from "@modules/materias/utils/adapters/materia.service";
-import { Alert, Card, Grid2, Stack, Typography } from "@mui/material";
+import { Alert, Card, Grid, Stack, Typography } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -226,9 +226,9 @@ function VerCursosMateria() {
               {cursos && cursos.length > 0 ? (
                 <>
                   <Typography variant="h4">{labelListarCursos.titulo}</Typography>
-                  <Grid2 container spacing={4}>
+                  <Grid container spacing={4}>
                     {cursos.map((curso) => (
-                      <Grid2 size={12} key={curso.grupo}>
+                      <Grid size={12} key={curso.grupo}>
                         <CardCurso
                           isRegister={myGroupsIds?.get(curso.id ?? "-1") ?? false}
                           onClick={() => handleIdGroup(curso.id)}
@@ -236,9 +236,9 @@ function VerCursosMateria() {
                           materiaNombre={materia.nombre}
                           userType={tipo}
                         />
-                      </Grid2>
+                      </Grid>
                     ))}
-                  </Grid2>
+                  </Grid>
                 </>
               ) : (
                 <Alert severity="warning" sx={{ fontSize: 64 }}>

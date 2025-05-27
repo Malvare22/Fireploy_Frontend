@@ -1,5 +1,5 @@
 import { getImage } from "@modules/general/utils/getImage";
-import { Box, Grid2, IconButton, keyframes, Stack, Typography, useTheme } from "@mui/material";
+import { Box, Grid, IconButton, keyframes, Stack, Typography, useTheme } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { labelTeam } from "@modules/general/enums/labelTeam";
 import styles from "./team.module.css";
@@ -75,7 +75,7 @@ function TeamView() {
         </Typography>
 
         {/* Team cards layout */}
-        <Grid2
+        <Grid
           container
           display={"flex"}
           justifyContent={"center"}
@@ -83,16 +83,16 @@ function TeamView() {
           paddingBottom={6}
           spacing={6}
         >
-          <Grid2 className={styles.card01} size={{ md: 4, xs: 12 }}>
+          <Grid className={styles.card01} size={{ md: 4, xs: 12 }}>
             <TeamCard member={labels[0]} />
-          </Grid2>
-          <Grid2 className={styles.card02} size={{ md: 4, xs: 12 }}>
+          </Grid>
+          <Grid className={styles.card02} size={{ md: 4, xs: 12 }}>
             <TeamCard member={labels[1]} />
-          </Grid2>
-          <Grid2 className={styles.card03} size={{ md: 4, xs: 12 }}>
+          </Grid>
+          <Grid className={styles.card03} size={{ md: 4, xs: 12 }}>
             <TeamCard member={labels[2]} />
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
         <Wave />
       </Stack>
     </Box>

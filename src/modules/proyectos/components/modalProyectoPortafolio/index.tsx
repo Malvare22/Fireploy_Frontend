@@ -4,7 +4,7 @@ import {
   Avatar,
   Box,
   Button,
-  Grid2,
+  Grid,
   IconButton,
   Stack,
   SxProps,
@@ -102,8 +102,8 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
         )}
       </Box>
 
-      <Grid2 container spacing={2}>
-        <Grid2
+      <Grid container spacing={2}>
+        <Grid
           size={{ md: 6, xs: 12 }}
           sx={{
             display: "flex",
@@ -133,8 +133,8 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
               <RocketLaunchIcon sx={{ fontSize: 96, color: "white" }} />
             </Box>
           )}
-        </Grid2>
-        <Grid2
+        </Grid>
+        <Grid
           size={{ md: 6, xs: 12 }}
           sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}
         >
@@ -176,8 +176,8 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
             </Box>
             <ProjectTags proyecto={project} />
           </Stack>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
       <Alert severity="success" sx={{ display: "flex", alignItems: "center" }}>
         <Stack direction={"row"} alignItems={"center"}>
           <Typography>{"Proyecto disponible"}</Typography>
@@ -188,8 +188,8 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
           </Tooltip>
         </Stack>
       </Alert>
-      <Grid2 container spacing={2}>
-        <Grid2 size={12} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      <Grid container spacing={2}>
+        <Grid size={12} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <Typography variant="h5">{"Descripción"}</Typography>
           {project.descripcion.trim().length > 0 ? (
             <Typography sx={{ wordBreak: "break-word" }} variant="body2">
@@ -198,16 +198,16 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
           ) : (
             <Alert severity="info">{"Descripción no disponible"}</Alert>
           )}
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
       <Typography variant="h5">{"Integrantes"}</Typography>
-      <Grid2 container sx={{ paddingX: 1, display: "flex" }}>
+      <Grid container sx={{ paddingX: 1, display: "flex" }}>
         {project.integrantes.map((member) => (
-          <Grid2 size={{ md: 2, xs: 4 }} sx={{ display: "flex", justifyContent: "center" }}>
+          <Grid size={{ md: 2, xs: 4 }} sx={{ display: "flex", justifyContent: "center" }}>
             <MemberCard user={member} key={member.id} />
-          </Grid2>
+          </Grid>
         ))}
-      </Grid2>
+      </Grid>
     </Stack>
   );
 }

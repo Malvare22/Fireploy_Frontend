@@ -124,7 +124,7 @@ const AlertDialog: React.FC<Props> = ({
             }
             {handleCancel && (
               <Box>
-                <Button variant="contained" size="small" color="inherit" onClick={handleCancel}>
+                <Button variant="contained" size="small" color="inherit" disabled={isLoading} onClick={handleCancel}>
                   Cancelar
                 </Button>
               </Box>

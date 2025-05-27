@@ -8,7 +8,7 @@ import { labelListarMaterias } from "@modules/materias/enums/labelListarMaterias
 import { getMateriasService } from "@modules/materias/services/get.materias.services";
 import { MateriaTabla } from "@modules/materias/types/materia.tabla";
 import { adaptMateriaService } from "@modules/materias/utils/adapters/materia.service";
-import { Box, Button, Grid2, Stack, Typography } from "@mui/material";
+import { Box, Button, Grid, Stack, Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { getMateriasSemestresLabels } from "@modules/materias/utils/materias";
 import GeneralButton from "@modules/general/components/button";
@@ -199,11 +199,11 @@ function ListarMaterias() {
           {/* Page title */}
           <Typography variant="h4">{labelListarMaterias.titulo}</Typography>
 
-          <Grid2 container>
-            <Grid2 size={{ md: 4, xs: 12 }}>
+          <Grid container>
+            <Grid size={{ md: 4, xs: 12 }}>
               <TextFieldSearch fullWidth setSearchValue={setSearchValue} />
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
 
           <SelectFilters data={materias} setRefineData={setBuffer} filterOptions={filterOptions} />
 
