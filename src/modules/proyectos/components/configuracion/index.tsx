@@ -128,7 +128,7 @@ export default function ProjectSettings({ project }: Props) {
                   integrado={project.integrado?.id}
                 />
               )}
-              {tabIndex == 5 && <DangerZone projectTitle="A" id={0} viewStatus="A" />}
+              {tabIndex == 5 && <DangerZone projectTitle={project.titulo} id={project.id ?? -1} viewStatus={project.estadoDeProyecto ?? 'I'} />}
             </Stack>
           </Container>
         ) : (
