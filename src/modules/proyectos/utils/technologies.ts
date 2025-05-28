@@ -55,7 +55,7 @@ export const inputSelectFramework: Record<(typeof keyOfTechnologies)[number], Se
     frameworks: [TECNOLOGIES.Springboot],
   },
   PHP: {
-    frameworks: [TECNOLOGIES.Laravel, TECNOLOGIES.Symfony],
+    frameworks: [TECNOLOGIES.Php, TECNOLOGIES.Laravel, TECNOLOGIES.Symfony],
   },
   NodeJS: {
     frameworks: [
