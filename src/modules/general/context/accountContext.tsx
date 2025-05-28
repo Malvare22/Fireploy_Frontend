@@ -8,6 +8,7 @@ import useErrorReader from "../hooks/useErrorReader";
 import AlertDialog from "../components/alertDialog";
 import { useNavigate } from "react-router";
 import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { ACCOUNT_INITIAL_VALUES } from "../enums/accountInfoValues";
 
 /**
  * Represents the account information structure for authenticated users.
@@ -29,17 +30,12 @@ export type AccountInformation = {
   correo: string;
 };
 
-/**
- * Default account information template used as an initial or fallback state.
- *
- * @constant
- * @type {AccountInformation}
- */
+
 export const accountInformationTemplate: AccountInformation = {
-  nombre: "Not Found",
-  token: "Not Found",
+  nombre: ACCOUNT_INITIAL_VALUES.TIPO,
+  token: ACCOUNT_INITIAL_VALUES.TOKEN,
   tipo: "E",
-  foto: "Not Found",
+  foto: ACCOUNT_INITIAL_VALUES.FOTO,
   id: -1,
   correo: "",
 };

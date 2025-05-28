@@ -336,7 +336,7 @@ function PortafolioSection() {
   }
 
   return (
-    <Grid container sx={{ color: "white", marginX: { md: 20 }, padding: 4 }} direction={'column-reverse'} spacing={4}>
+    <Grid container sx={{ color: "white", marginX: { md: 20 }, padding: 4 }} direction={{xs: 'column-reverse', md: 'row'}} spacing={4}>
       <Grid size={{ md: 5, xs: 12 }}>
         <Box
           component={"img"}
