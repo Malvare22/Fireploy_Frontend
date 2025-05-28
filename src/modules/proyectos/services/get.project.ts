@@ -25,11 +25,13 @@ export async function getProjectById(token: string, id: number) {
 }
 
 
-export async function getProjectByUserId(id: number) {
+export async function getProjectByUserId(id: number, token?: string) {
+
   const response = await getData<ProyectoService[]>(
     `/proyecto/usuario/${id}`,
     {},
-    {
+    !token ? {} : {
+      sessiontoken: token,
     }
   );
 

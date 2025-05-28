@@ -24,6 +24,7 @@ import {
 } from "@modules/proyectos/utils/getInputsFramework";
 import { labelSelects } from "@modules/general/enums/labelSelects";
 import { getExecutionStateArray } from "@modules/proyectos/utils/getExecutionState";
+import { ACCOUNT_INITIAL_VALUES } from "@modules/general/enums/accountInfoValues";
 
 /**
  * MisProyectos component – A page that lists the projects belonging to the authenticated user.
@@ -45,10 +46,18 @@ import { getExecutionStateArray } from "@modules/proyectos/utils/getExecutionSta
 function MisProyectos() {
   const proyectosSectionRef = useRef<HTMLDivElement>(null);
 
-  const { token, id } = useAuth().accountInformation;
+  const { id } = useAuth().accountInformation;
+
+  const token =
+    useAuth().accountInformation.token == ACCOUNT_INITIAL_VALUES.TOKEN
+      ? null
+      : useAuth().accountInformation.token;
 
   const { data, isLoading, error } = useQuery({
-    queryFn: () => getProjectByUserId(id),
+    queryFn: async () => {
+      if (token) return await getProjectByUserId(id, token);
+      return await getProjectByUserId(id);
+    },
     queryKey: ["Get All Project by User Id", id, token],
   });
 
@@ -148,42 +157,42 @@ function MisProyectos() {
           </Box>
           <Stack spacing={2} paddingX={{ md: 6, xs: 2 }}>
             <TextFieldSearch setSearchValue={setSearchValue} label="Buscar proyecto" />
-           <Stack direction={'row'} spacing={1}>
-             <TextField
-              select
-              size="small"
-              sx={{ maxWidth: 250 }}
-              label="Framework"
-              fullWidth
-              onChange={handleFramework}
-            >
-              {getOptionsFrameworksLegacy(projects).map((op) => {
-                return (
-                  <MenuItem key={op} value={op}>
-                    {op}
-                  </MenuItem>
-                );
-              })}
-              <MenuItem value={""}>{labelSelects.noAplicar}</MenuItem>
-            </TextField>
-            <TextField
-              select
-              size="small"
-              fullWidth
-              sx={{ maxWidth: 250 }}
-              label="Estado de Ejecución"
-              onChange={handleExecutionState}
-            >
-              {getExecutionStateArray.map(([value, label]) => {
-                return (
-                  <MenuItem key={value} value={value}>
-                    {label}
-                  </MenuItem>
-                );
-              })}
-              <MenuItem value={""}>{labelSelects.noAplicar}</MenuItem>
-            </TextField>
-           </Stack>
+            <Stack direction={"row"} spacing={1}>
+              <TextField
+                select
+                size="small"
+                sx={{ maxWidth: 250 }}
+                label="Framework"
+                fullWidth
+                onChange={handleFramework}
+              >
+                {getOptionsFrameworksLegacy(projects).map((op) => {
+                  return (
+                    <MenuItem key={op} value={op}>
+                      {op}
+                    </MenuItem>
+                  );
+                })}
+                <MenuItem value={""}>{labelSelects.noAplicar}</MenuItem>
+              </TextField>
+              <TextField
+                select
+                size="small"
+                fullWidth
+                sx={{ maxWidth: 250 }}
+                label="Estado de Ejecución"
+                onChange={handleExecutionState}
+              >
+                {getExecutionStateArray.map(([value, label]) => {
+                  return (
+                    <MenuItem key={value} value={value}>
+                      {label}
+                    </MenuItem>
+                  );
+                })}
+                <MenuItem value={""}>{labelSelects.noAplicar}</MenuItem>
+              </TextField>
+            </Stack>
             <Stack alignItems={"end"}>
               <Box>
                 <GeneralButton mode={buttonTypes.add} onClick={handleButtonAdd} />
