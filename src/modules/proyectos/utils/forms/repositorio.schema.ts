@@ -1,7 +1,7 @@
 import { Repositorio } from "@modules/proyectos/types/repositorio";
 import { z } from "zod";
 import { transformStringToKV } from "@modules/general/utils/string";
-import { reservedVariables } from "../technologies";
+import { frameworkValidation, TECNOLOGIES } from "../technologies";
 import { FORM_CONSTRAINS } from "@modules/general/utils/formConstrains";
 
 export const RepositorioSchema: z.ZodType<Omit<Repositorio, 'ficheros'>> = z
@@ -12,20 +12,7 @@ export const RepositorioSchema: z.ZodType<Omit<Repositorio, 'ficheros'>> = z
       message: "El tipo debe ser Backend, Frontend o de una capa",
     }),
     variables: z
-      .string()
-      .refine((variable) => {
-        if (variable.length == 0) return true;
-        const transformed = transformStringToKV(variable);
-        const allRestringid = ([] as string[]).concat(
-          [...reservedVariables.GENERAL],
-          [...reservedVariables.NO_SQL],
-          [...reservedVariables.SQL]
-        );
-        if (transformed) {
-          return !transformed.some(({ clave }) => allRestringid.includes(clave));
-        }
-        return true;
-      }, "Una o más variables coinciden con las que se encuentran restringidas"),
+      .string(),
     informacion: z.object({
       tecnologia: z.string({ message: "Es obligatorio seleccionar una tecnología" }),
       framework: z.string({ message: "Es obligatorio seleccionar un framework" }),
@@ -44,7 +31,18 @@ export const RepositorioSchema: z.ZodType<Omit<Repositorio, 'ficheros'>> = z
       message: "Lo ingresado no corresponde a un URL válida, ejemplo: https://www.google.com",
       path: ["url"]
     }
-  );
+  ).refine((data) => {
+    if (data.variables.length == 0) return true;
+    const transformed = transformStringToKV(data.variables);
+
+    if (transformed) {
+      return frameworkValidation(data.informacion.framework as TECNOLOGIES, transformed.map(({ clave }) => clave));
+    }
+    return true;
+  }, {
+    message: "Una o más variables coinciden con las que se encuentran restringidas o presentan errores de sintaxis",
+    path: ["variables"]
+  });
 
 export type RepositorioSchema = z.infer<typeof RepositorioSchema>
 

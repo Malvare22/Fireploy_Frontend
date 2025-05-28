@@ -21,7 +21,7 @@ import {
 } from "@modules/proyectos/utils/technologies";
 import { openInNewTab } from "@modules/general/utils/openTab";
 import CloseIcon from "@mui/icons-material/Close";
-import { reservedVariables } from "@modules/proyectos/utils/technologies";
+import { RESERVED_VARIABLES } from "@modules/proyectos/utils/technologies";
 
 type Props = {
   type: KeysOfRepository; // "frontend" | "backend" | "integrado"
@@ -75,9 +75,9 @@ export default function EnviromentVariablesEditor({ type, disabled }: Props) {
                 "El siguiente es un listado de las variables no permitidas para el correcto funcionamiento del sistema de despliegues:"
               }
             </Typography>
-            <Typography>{`Cualquier tipo de proyecto: ${reservedVariables.GENERAL.join(", ")}`}</Typography>
-            <Typography>{`Proyectos con base de datos SQL: ${reservedVariables.SQL.join(", ")}`}</Typography>
-            <Typography>{`Proyectos con base de datos  NoSQL: ${reservedVariables.NO_SQL.join(", ")}`}</Typography>
+            <Typography>{`Cualquier tipo de proyecto: ${RESERVED_VARIABLES.GENERAL.join(", ")}`}</Typography>
+            <Typography>{`Proyectos con base de datos SQL: ${RESERVED_VARIABLES.SQL.join(", ")}`}</Typography>
+            <Typography>{`Proyectos con base de datos  NoSQL: ${RESERVED_VARIABLES.NO_SQL.join(", ")}`}</Typography>
           </Alert>
         </Collapse>
       </Box>
