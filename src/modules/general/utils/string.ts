@@ -51,3 +51,11 @@ export function capitalizeOnlyFirstLetter(s: string) {
   const copyS = s.toLowerCase();
   return String(copyS).charAt(0).toUpperCase() + String(copyS).slice(1);
 }
+
+export function validationPrefix(s: string, prefix: string) {
+  if (s.length <= prefix.length) return false;
+  for (let i = 0; i < prefix.length; i++) {
+    if (s[i] != prefix[i]) return false;
+  }
+  return true;
+}
