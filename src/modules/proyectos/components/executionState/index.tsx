@@ -336,7 +336,7 @@ export function ChangeStatus({ id, hasUrl }: PropsChangeStatus) {
         </IconButton>
       </Tooltip>
       <Tooltip title="Detener Proyecto">
-        <IconButton disabled={projectStatus != "N" || isLoading} onClick={() => handleAction("F")}>s
+        <IconButton disabled={projectStatus != "N" || isLoading} onClick={() => handleAction("F")}>
           <StopCircleIcon fontSize="large" />
         </IconButton>
       </Tooltip>
