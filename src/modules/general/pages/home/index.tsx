@@ -145,7 +145,7 @@ function Principal() {
                   size={!matches ? "medium" : "large"}
                   endIcon={<DescriptionIcon />}
                   sx={{ borderRadius: 2, backgroundColor: "rgb(64, 56, 56)" }}
-                  onClick={() => openInNewTab("http://fireploy.online:3001/docs/introduccion")}
+                  onClick={() => openInNewTab("https://app103.proyectos.fireploy.online/docs/intro")}
                 >
                   {labelHome.docs}
                 </Button>
