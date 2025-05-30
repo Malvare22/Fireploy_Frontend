@@ -54,7 +54,7 @@ export const keyOfTechnologiesForAlert: string[] = [TECNOLOGIES.React, TECNOLOGI
  */
 export const inputSelectFramework: Record<(typeof keyOfTechnologies)[number], SelectTecnlogy> = {
   Java: {
-    frameworks: [TECNOLOGIES.Springboot],
+    frameworks: [TECNOLOGIES.Springboot, TECNOLOGIES.Java],
   },
   PHP: {
     frameworks: [TECNOLOGIES.Php, TECNOLOGIES.Laravel, TECNOLOGIES.Symfony],

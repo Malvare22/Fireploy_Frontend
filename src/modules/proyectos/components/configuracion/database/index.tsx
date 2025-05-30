@@ -79,6 +79,7 @@ export const DataBase = ({ type }: Props) => {
     handleSubmit,
     setValue,
     getValues,
+    watch,
     formState: { errors },
   } = useForm<BaseDeDatosRegisterSchema>({
     defaultValues: {
@@ -159,131 +160,144 @@ export const DataBase = ({ type }: Props) => {
   };
 
   return (
-    <Stack spacing={2}>
-      <Typography variant="h5">Base de Datos</Typography>
-      <Divider />
-      {type == "create" || (type == "edit" && getValuesProject("baseDeDatos")?.id == -1) ? (
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <AlertDialog
-            handleAccept={handleAccept}
-            handleCancel={handleCancel}
-            open={open}
-            title={title}
-            textBody={message}
-            type={typeAlert}
-            isLoading={isLoading}
-          />
-          <Stack spacing={3}>
-            <Controller
-              name="nombre"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  fullWidth
-                  label="Nombre"
-                  {...field}
-                  size="small"
-                  sx={{ width: "50%" }}
-                  error={!!errors.nombre}
-                  helperText={errors.nombre?.message}
-                />
-              )}
-            />
-            <Controller
-              name="contrasenia"
-              control={control}
-              render={({ field }) => (
-                <TextFieldPassword
-                  fullWidth
-                  label="Contraseña"
-                  {...field}
-                  size="small"
-                  sx={{ width: "50%" }}
-                  error={!!errors.contrasenia}
-                  helperText={errors.contrasenia?.message}
-                />
-              )}
-            />
-            <Controller
-              name="tipo"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  select
-                  fullWidth
-                  {...field}
-                  size="small"
-                  sx={{ width: "50%" }}
-                  error={!!errors.tipo}
-                  helperText={errors.tipo?.message}
-                >
-                  {getDataBaseTypesArray.map(([key, value]) => (
-                    <MenuItem value={key} key={key}>
-                      {value}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              )}
-            />
-            <Stack direction={"row"} spacing={3}>
-              {type == "create" ? (
+    <>
+      <AlertDialog
+        handleAccept={handleAccept}
+        handleCancel={handleCancel}
+        open={open}
+        title={title}
+        textBody={message}
+        type={typeAlert}
+        isLoading={isLoading}
+      />
+      <Stack spacing={2}>
+        <Typography variant="h5">Base de Datos</Typography>
+        <Divider />
+        {type == "create" || (type == "edit" && getValuesProject("baseDeDatos")?.id == -1) ? (
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Stack spacing={3}>
+              <Controller
+                name="tipo"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    select
+                    fullWidth
+                    {...field}
+                    size="small"
+                    sx={{ width: "50%" }}
+                    error={!!errors.tipo}
+                    helperText={errors.tipo?.message}
+                  >
+                    {getDataBaseTypesArray.map(([key, value]) => (
+                      <MenuItem value={key} key={key}>
+                        {value}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
+              {watch("tipo") != "E" && (
                 <>
-                  <Box>
-                    <GeneralButton mode={buttonTypes.accept} type="submit" />
-                  </Box>
-                  <Box>
-                    <Button
-                      onClick={onFinish}
-                      color="warning"
-                      variant="contained"
-                      endIcon={<NavigateNextIcon />}
-                    >
-                      Omitir
-                    </Button>
-                  </Box>
+                  <Controller
+                    name="nombre"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        fullWidth
+                        label="Nombre"
+                        {...field}
+                        size="small"
+                        sx={{ width: "50%" }}
+                        error={!!errors.nombre}
+                        helperText={errors.nombre?.message}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name="contrasenia"
+                    control={control}
+                    render={({ field }) => (
+                      <TextFieldPassword
+                        fullWidth
+                        label="Contraseña"
+                        {...field}
+                        size="small"
+                        sx={{ width: "50%" }}
+                        error={!!errors.contrasenia}
+                        helperText={errors.contrasenia?.message}
+                      />
+                    )}
+                  />
                 </>
-              ) : (
-                <Box>
-                  <GeneralButton mode={buttonTypes.save} type="submit" />
-                </Box>
               )}
+
+              <Stack direction={"row"} spacing={3}>
+                {type == "create" ? (
+                  <>
+                    {watch("tipo") != "E" && (
+                      <Box>
+                        <GeneralButton mode={buttonTypes.accept} type="submit" />
+                      </Box>
+                    )}
+                    <Box>
+                      <Button
+                        onClick={onFinish}
+                        color="warning"
+                        variant="contained"
+                        endIcon={<NavigateNextIcon />}
+                      >
+                        Omitir
+                      </Button>
+                    </Box>
+                  </>
+                ) : (
+                  <>
+                    {watch("tipo") != "E" && (
+                      <Box>
+                        <GeneralButton mode={buttonTypes.save} type="submit" />
+                      </Box>
+                    )}
+                  </>
+                )}
+              </Stack>
             </Stack>
-          </Stack>
-        </form>
-      ) : (
-        <Stack spacing={3}>
-          <TransitionAlert severity="info">
-            {
-              "Recuerda: tus crendeciales de base de datos son privadas, jamás las compartas con otros usuarios"
-            }
-          </TransitionAlert>
-          <Stack direction={"row"} alignItems={"center"} spacing={2}>
-            <Typography>Seleccionada: </Typography>
-            <Chip color="info" label={getDataBaseTypesMap.get(getValues("tipo"))} />
-          </Stack>
-          <ShowCredentials password={getValues("contrasenia")} user={getValues("nombre")} />
-          <Box>
-            <Button variant="contained" endIcon={<StorageIcon />} onClick={handleCopy}>
-              {"Obtener URI Base de Datos"}
-            </Button>
-          </Box>
-          <Snackbar
-            open={openSnackbar}
-            autoHideDuration={2000}
-            onClose={() => setOpenSnackbar(false)}
-          >
-            <Alert
+          </form>
+        ) : (
+          <Stack spacing={3}>
+            <TransitionAlert severity="info">
+              {
+                "Recuerda: tus credenciales de base de datos son privadas, jamás las compartas con otros usuarios"
+              }
+            </TransitionAlert>
+            <Stack direction={"row"} alignItems={"center"} spacing={2}>
+              <Typography>Seleccionada: </Typography>
+              <Chip color="info" label={getDataBaseTypesMap.get(getValues("tipo"))} />
+            </Stack>
+            <ShowCredentials password={getValues("contrasenia")} user={getValues("nombre")} />
+            <Box>
+              <Button variant="contained" endIcon={<StorageIcon />} onClick={handleCopy}>
+                {"Obtener URI Base de Datos"}
+              </Button>
+            </Box>
+            <Snackbar
+              open={openSnackbar}
+              autoHideDuration={2000}
               onClose={() => setOpenSnackbar(false)}
-              variant="filled"
-              sx={{ width: "100%" }}
-              severity="info"
             >
-              {"Texto copiado al portapapeles"}
-            </Alert>
-          </Snackbar>
-        </Stack>
-      )}
-    </Stack>
+              <Alert
+                onClose={() => setOpenSnackbar(false)}
+                variant="filled"
+                sx={{ width: "100%" }}
+                severity="info"
+              >
+                {"Texto copiado al portapapeles"}
+              </Alert>
+            </Snackbar>
+          </Stack>
+        )}
+      </Stack>
+    </>
   );
 };
 
