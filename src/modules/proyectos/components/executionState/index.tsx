@@ -329,7 +329,7 @@ export function ChangeStatus({ id, hasUrl }: PropsChangeStatus) {
       </Box>
       <Tooltip title="Reanudar Proyecto">
         <IconButton
-          disabled={projectStatus == "N" || projectStatus == 'E' || !hasUrl || isLoading}
+          disabled={projectStatus != "F" || !hasUrl || isLoading}
           onClick={() => handleAction("N")}
         >
           <PlayCircleFilledWhiteIcon fontSize="large" />

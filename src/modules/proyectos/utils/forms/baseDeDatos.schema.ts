@@ -2,13 +2,26 @@ import { z } from "zod";
 import { BaseDeDatos } from "@modules/proyectos/types/baseDeDatos";
 import { FORM_CONSTRAINS } from "@modules/general/utils/formConstrains";
 
+const passwordSchema = z.string().min(8, { message: "La contraseña debe tener al menos 8 caracteres." })
+  .regex(/[A-Z]/, {
+    message: "La contraseña debe contener al menos una letra mayúscula.",
+  })
+  .regex(/[a-z]/, {
+    message: "La contraseña debe contener al menos una letra minúscula.",
+  })
+  .regex(/[0-9]/, {
+    message: "La contraseña debe contener al menos un número.",
+  }).regex(/^[^@:/?&]+$/, "No puede contener ninguno de los siguientes caracteres: [@, :, /, ?, &,]");
+
+const userNameSchema = FORM_CONSTRAINS.TEXT_LABEL.regex(/^[^@:/?&]+$/, 'No puede contener ninguno de los siguientes caracteres: [@, :, /, ?, &,]')
+
 /**
  * BaseDeDatosSchema – Zod schema used to validate a database object (excluding its relation to a project), including optional ID, name, password, URL, and type ("S" = SQL, "N" = NoSQL, "E" = Embedded).
  */
 export const BaseDeDatosSchema: z.ZodType<Omit<BaseDeDatos, "proyecto">> = z.object({
   id: FORM_CONSTRAINS.ID.optional(),
-  nombre: FORM_CONSTRAINS.TEXT_LABEL,
-  contrasenia: FORM_CONSTRAINS.PASSWORD,
+  nombre: userNameSchema,
+  contrasenia: passwordSchema,
   url: FORM_CONSTRAINS.URL,
   tipo: z.enum(["S", "N", "E", 'P', 'M'], {
     errorMap: () => ({ message: "Selecciona un tipo de base de datos válido" }),
@@ -27,8 +40,8 @@ export const BaseDeDatosRegisterSchema: z.ZodType<
   Pick<BaseDeDatos, "contrasenia" | "nombre" | "tipo" | "proyectoId" | 'url'>
 > = z.object({
   proyectoId: z.number().optional(),
-  nombre: FORM_CONSTRAINS.TEXT_LABEL,
-  contrasenia: FORM_CONSTRAINS.PASSWORD,
+  nombre: userNameSchema,
+  contrasenia: passwordSchema,
   tipo: z.enum(["S", "N", "E", 'P', 'M'], {
     errorMap: () => ({ message: "Selecciona un tipo de base de datos válido" }),
   }),
