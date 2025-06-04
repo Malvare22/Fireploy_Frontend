@@ -145,7 +145,7 @@ function VerInformacionCurso() {
 
     function handleLeaveCourse() {
       showDialog({
-        message: `¿Está seguro de que desea desvincularse del curso ${curso?.materia?.nombre ?? ""}:${curso?.grupo ?? ""}?`,
+        message: `¿Está seguro de que desea desvincularse del curso ${curso?.materia?.nombre ?? ""}: ${curso?.grupo ?? ""}?`,
         title: "Desvinculación de curso",
         onAccept: () => {
           logoutCourse({ cursoId: idCurso ?? "", studentId: idUser });
