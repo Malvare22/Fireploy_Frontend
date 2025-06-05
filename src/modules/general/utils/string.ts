@@ -59,3 +59,17 @@ export function validationPrefix(s: string, prefix: string) {
   }
   return true;
 }
+
+
+export function downloadString(fileName: string, content: string) {
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const enlace = document.createElement('a');
+  enlace.href = url;
+  enlace.download = `${fileName}.txt`;
+  document.body.appendChild(enlace);
+  enlace.click();
+  document.body.removeChild(enlace);
+  URL.revokeObjectURL(url);
+}
+

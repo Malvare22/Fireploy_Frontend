@@ -154,7 +154,7 @@ const TablaGestionarFicheros = ({ field, disabled }: Props) => {
             </Box>
           </>
         ) : (
-          <Alert severity="warning">{"Sin ficheros de Firebase vinculados"}</Alert>
+          <Alert severity="warning">{"Sin ficheros de configuración vinculados"}</Alert>
         )}
         <Stack alignItems={!files || files.length == 0 ? "start" : "end"} sx={{ maxWidth: 500 }}>
           <Box>

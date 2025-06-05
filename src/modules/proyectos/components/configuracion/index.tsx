@@ -93,11 +93,6 @@ export default function ProjectSettings({ project }: Props) {
                 ) : (
                   <Typography>{`https://app${project.id}.proyectos.fireploy.online/`}</Typography>
                 )}
-                {/* <Tooltip title="Abrir URL">
-                  <IconButton onClick={() => handleUrl(currentUrl)}>
-                    <OpenInNewIcon color="info" sx={{ fontSize: 24 }} />
-                  </IconButton>
-                </Tooltip> */}
               </Stack>
             </Alert>
           )}
@@ -142,6 +137,7 @@ export default function ProjectSettings({ project }: Props) {
               {tabIndex == 3 && <Members />}
               {tabIndex == 4 && (
                 <LogsFiles
+                  projectId={project.id ?? -1}
                   backend={project.backend?.id}
                   frontend={project.frontend?.id}
                   integrado={project.integrado?.id}
