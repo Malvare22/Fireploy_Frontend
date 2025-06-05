@@ -81,6 +81,8 @@ export type Usuario = {
   descripcion: string | null;
 
   contrasenia?: string | undefined;
+
+  local_imagen?: string
 };
 
 /**

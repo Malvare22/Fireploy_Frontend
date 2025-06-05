@@ -81,7 +81,7 @@ const CardCurso: React.FC<CardCursoProps> = ({
           }}
           size={{ md: 3, xs: 12 }}
         >
-          <Typography variant="h3" color="white">
+          <Typography variant="h1" sx={{fontWeight: 500}} color="white">
             {curso.grupo}
           </Typography>
         </Grid>
@@ -107,10 +107,9 @@ const CardCurso: React.FC<CardCursoProps> = ({
               <Typography variant="h5">{materiaNombre}</Typography>
             </Box>
 
-            <ActivityAndStudends
+            <ActivityAndStudents
               cntActities={(curso.estudiantes ?? []).length}
               cntStudents={(curso.secciones ?? []).length}
-              condition={showDocentOwnerStyle}
             />
             {!showDocentOwnerStyle && (
               <FrameDocente docente={!curso.docente ? null : (curso.docente as UsuarioCurso)} />
@@ -155,7 +154,7 @@ function FrameDocente({ docente }: PropsFrameDocente) {
       <Card sx={{ display: "flex", gap: 0, alignItems: "center" }}>
         <Tooltip title={docente.nombre}>
           <Button onClick={onClick}>
-            <Avatar src={docente.imagen} sx={{ width: 32, height: 32 }} />
+            <Avatar src={docente.imagen} sx={{ width: 48, height: 48 }} />
           </Button>
         </Tooltip>
         <Typography variant="body1" sx={{ wordBreak: "break-word" }}>
@@ -165,14 +164,12 @@ function FrameDocente({ docente }: PropsFrameDocente) {
     );
 }
 
-function ActivityAndStudends({
+function ActivityAndStudents({
   cntActities,
   cntStudents,
-  condition,
 }: {
   cntStudents: number;
   cntActities: number;
-  condition: boolean;
 }) {
   return (
     <Stack direction={"row"} spacing={2}>
@@ -180,12 +177,12 @@ function ActivityAndStudends({
         label={`Actividades: ${cntActities}`}
         icon={<EditNoteIcon />}
         color="error"
-        size={condition ? "medium" : "small"}
+        size={"medium"}
       />
       <Chip
         label={`Estudiantes: ${cntStudents}`}
         color="info"
-        size={condition ? "medium" : "small"}
+        size={"medium"}
         icon={<SchoolIcon />}
       />
     </Stack>

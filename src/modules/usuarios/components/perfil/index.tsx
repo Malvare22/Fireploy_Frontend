@@ -97,9 +97,6 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
 
   const { errors } = formState;
 
-    console.log(errors, watch())
-
-
   const [photo, setPhoto] = useState<string | null>(getValues("fotoDePerfil"));
 
   const [imgFile, setImgFile] = useState<Blob | undefined>(undefined);

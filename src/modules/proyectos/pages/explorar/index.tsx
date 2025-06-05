@@ -160,7 +160,7 @@ function ExplorarProyectos() {
         />
         </Stack>
         <Stack direction={{ sm: "row", xs: "column" }} justifyContent="center" spacing={1}>
-          <TextField select size="small" sx={{ width: 250 }} onChange={handleChangeOption}>
+          <TextField select size="small" sx={{ width: 250 }} label="Ordenar" onChange={handleChangeOption}>
             <MenuItem value={"titulo-asc"}>{"A-Z"}</MenuItem>
             <MenuItem value={"titulo-desc"}>{"Z-A"}</MenuItem>
             <MenuItem value={"puntuacion-asc"}>{"Mayor puntuación"}</MenuItem>

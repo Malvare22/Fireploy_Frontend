@@ -1,3 +1,6 @@
 export function removeImageBuffer(img: string) {
-  return `${img.replace(/\?t=.*/, "")}?t=${Date.now()}}`;
+  if (img.includes("googleusercontent.com")) {
+    return img;
+  }
+  return `${img.replace(/\?t=.*/, "")}?t=${Date.now()}`;
 }
