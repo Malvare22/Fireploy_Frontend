@@ -79,7 +79,7 @@ export default function ProjectSettings({ project }: Props) {
               severity={executionState != "N" ? "info" : "success"}
               sx={{ display: "flex", alignItems: "center" }}
             >
-              <Stack direction={"row"} spacing={1} alignItems={"center"}>
+              <Stack direction={{ md: "row", xs: "column" }} spacing={1} alignItems={"center"}>
                 <Typography>
                   {executionState == "N"
                     ? "Tu proyecto se encuentra disponible en la siguiente URL:"
