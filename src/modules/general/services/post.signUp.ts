@@ -40,7 +40,6 @@ export const postSignUpWithGoogle = async (idToken: string) => {
   const data = { idToken: idToken };
 
   const response = await postData<SignUpResponse & { message: string }>("/auth/loginGoogle", data);
-  response.googleRegister = response.message != "Usario logueado con exito";
 
   return response;
 };

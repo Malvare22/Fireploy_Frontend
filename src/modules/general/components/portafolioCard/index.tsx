@@ -36,6 +36,7 @@ const PortafolioCard: React.FC<Props> = ({ usuario }) => {
         }}
       >
         {/* User Avatar */}
+
         <Avatar src={usuario.fotoDePerfil} sx={{ width: 64, height: 64 }} />
 
         {/* User Information */}

@@ -246,8 +246,8 @@ function ToolbarActions({
             <Box sx={{ overflowY: "scroll", width: "100%", height: 400 }}>
               {notificaciones.length > 0 ? (
                 notificaciones.slice(0, 5).map((notificacion) => (
-                  <>
-                    <Box sx={{ paddingY: 1 }} key={notificacion.id}>
+                  <Box key={notificacion.id}>
+                    <Box sx={{ paddingY: 1 }} >
                       <Typography sx={{ fontWeight: 700 }} variant="subtitle2">
                         {notificacion.titulo}
                       </Typography>
@@ -264,7 +264,7 @@ function ToolbarActions({
                       </Typography>
                     </Box>
                     <Divider />
-                  </>
+                  </Box>
                 ))
               ) : (
                 <Alert severity="info">No se encontraron notificaciones nuevas</Alert>

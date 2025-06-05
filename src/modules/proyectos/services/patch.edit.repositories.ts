@@ -39,8 +39,6 @@ async function query(repository: Repositorio, token: string) {
     variables_de_entorno: repository.variables == "" ? [] : transformStringToKV(repository.variables),
   };
 
-  console.log('VARIABLES ', body)
-
   return await patchData<unknown>(`/repositorio/${repository.id}`, body, {
     sessiontoken: token,
   });

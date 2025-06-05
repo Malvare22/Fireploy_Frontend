@@ -83,7 +83,7 @@ function ExplorarPortafolios() {
   const { searchValue, setSearchValue } = useSearch();
 
   function searchFn(x: Usuario[], s: string) {
-    return x.filter((a) => (a.nombres + a.id).trim().toLowerCase().includes(s.toLowerCase()));
+    return x.filter((a) => (a.nombres + a.apellidos + a.id.toString()).trim().toLowerCase().includes(s.toLowerCase()));
   }
 
   const dataToRender = useMemo(() => {
@@ -135,8 +135,8 @@ function ExplorarPortafolios() {
 
           {/* Portfolio card grid */}
           <Grid container spacing={5} display={"flex"} justifyContent={"center"}>
-            {paginatedData.map((usuario, key) => (
-              <Grid size={{ xl: 8, xs: 10 }} key={key}>
+            {paginatedData.map((usuario) => (
+              <Grid size={{ xl: 8, xs: 10 }} key={usuario.id}>
                 <PortafolioCard usuario={usuario} />
               </Grid>
             ))}
