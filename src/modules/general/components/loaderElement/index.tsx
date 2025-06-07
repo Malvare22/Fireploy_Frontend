@@ -24,7 +24,7 @@ function LoaderElement() {
   const theme = useTheme();
 
   return (
-    <Box sx={{ width: '100%', height: '100%',display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+    <Box sx={{ width: '100%', height: '80vh',display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
       {/* Global styles for orbit and blink animations */}
       <GlobalStyles
         styles={{

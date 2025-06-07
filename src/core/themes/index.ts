@@ -39,30 +39,36 @@ declare module "@mui/material/Paper" {
 
 const palette: PaletteOptions = {
   primary: {
-    main: "rgb(60, 55, 147)", // #6C63FF
+    main: "#614B8C", // #6C63FF
     contrastText: "rgb(255, 255, 255)",
   },
   secondary: {
-    main: "rgb(21,21,21)", // #FF8A65
+    main: "rgb(21,21,21)",
+        contrastText: "rgb(255, 255, 255)",
   },
   terciary: {
-    main: "rgb(151, 60, 27)", // #C3D8FF
+    main: "rgb(151, 60, 27)",
   },
   info: {
-    main: "rgb(41, 61, 111)", // #A5BFFF
+    main: "#1976D2",
   },
   warning: {
-    main: "rgb(255, 209, 103)", // #FFD180
+    main: "#FFB74D",
   },
   background: {
-    default: "#fff",
+    default: "#F5F5F5",
+    paper: "#FFFFFF"
   },
   email: {
     main: '#fffcf4'
   },
-  // success: {
-  //   main: "rgb(67, 106, 68)",        // #81C784
-  // },
+  success: {
+    main: "#00897B"
+  },
+  error: {
+    main: "#E53935"
+  }
+  
 };
 
 /**
