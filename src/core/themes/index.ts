@@ -10,6 +10,7 @@ declare module "@mui/material/styles" {
   interface Palette {
     terciary: {
       main: string;
+      contrastText: string;
     };
     email: {
       main: string;
@@ -22,10 +23,17 @@ declare module "@mui/material/styles" {
   interface PaletteOptions {
     terciary?: {
       main: string;
+      contrastText: string;
     };
     email?: {
       main: string;
     };
+  }
+}
+
+declare module "@mui/material/Chip" {
+  interface ChipPropsColorOverrides {
+    terciary: true;
   }
 }
 
@@ -44,10 +52,11 @@ const palette: PaletteOptions = {
   },
   secondary: {
     main: "rgb(21,21,21)",
-        contrastText: "rgb(255, 255, 255)",
+    contrastText: "rgb(255, 255, 255)",
   },
   terciary: {
-    main: "rgb(151, 60, 27)",
+    main: "#332D41",
+    contrastText: "rgb(255, 255, 255)",
   },
   info: {
     main: "#1976D2",
@@ -68,7 +77,7 @@ const palette: PaletteOptions = {
   error: {
     main: "#E53935"
   }
-  
+
 };
 
 /**
@@ -107,9 +116,9 @@ export const getTheme = responsiveFontSizes(
               },
 
               "& .MuiTypography-root, & .MuiSvgIcon-root, & .MuiIconButton-root, & .MuiButtonBase-root":
-                {
-                  color: "inherit",
-                },
+              {
+                color: "inherit",
+              },
             }),
           },
           {
@@ -123,6 +132,15 @@ export const getTheme = responsiveFontSizes(
         ],
       },
       MuiChip: {
+        variants: [
+          {
+            props: { color: "terciary" },
+            style: ({ theme }) => ({
+              backgroundColor: theme.palette.terciary.main,
+              color: theme.palette.terciary.contrastText, // Asegúrate de que el texto sea legible
+            }),
+          },
+        ],
         styleOverrides: {
           icon: {
             fill: "white", // Esto aplica al ícono dentro del chip
@@ -134,7 +152,7 @@ export const getTheme = responsiveFontSizes(
       },
       MuiButton: {
         styleOverrides: {
-          root:{
+          root: {
             textTransform: 'capitalize',
           },
           contained: {

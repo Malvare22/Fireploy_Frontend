@@ -1,4 +1,4 @@
-import { Alert, Box, Grid, Stack, Typography, useTheme } from "@mui/material";
+import { Alert, Box, Chip, Grid, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AccordionUsage from "@modules/general/components/accordionUsage";
 import { ProyectoCard } from "@modules/proyectos/types/proyecto.card";
@@ -122,42 +122,32 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, idMateria, idCurso }
     if (data) setProyectos(data.map(adaptProject).map(adaptProjectToCard));
   }, [data]);
 
-  const theme = useTheme();
-
-  // const sorters: SorterOptions = [
-  //   {
-  //     key: "titulo",
-  //     options: { asc: "A-Z", desc: "Z-A", defaultValue: "No Aplicar" },
-  //     label: "Título",
-  //   },
-  // ];
-
-  const Title = () => {
-    return (
-      <Stack spacing={1}>
-        <Typography variant="h6">{seccion.titulo}</Typography>
-        <Box>
-          <Typography
-            display={"inline-block"}
-            sx={{
-              backgroundColor: theme.palette.terciary.main,
-              color: "white",
-              fontWeight: "500",
-              padding: 1,
-              borderRadius: 1,
-            }}
-            variant="body2"
-          >{`${seccion.fechaDeInicio} - ${seccion.fechaDeCierre}`}</Typography>
-        </Box>
-      </Stack>
-    );
-  };
-
   const disabledButton = !evaluateDate(
     seccion.fechaDeInicio,
     seccion.fechaDeCierre,
     getCurrentDate()
   );
+
+  const Title = () => {
+    return (
+      <Stack spacing={1}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Typography variant="h5" sx={{ fontWeight: 450 }}>
+            {seccion.titulo}
+          </Typography>
+          {!disabledButton ? (
+            <Chip color="success" label="Activa" />
+          ) : (
+            <Chip color="warning" label="Cerrada" />
+          )}
+        </Box>
+        <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+          <Typography fontWeight={450}>{`Fecha de inicio: ${seccion.fechaDeInicio}`}</Typography>
+          <Typography fontWeight={450}>{`Fecha de cierre: ${seccion.fechaDeCierre}`}</Typography>
+        </Box>
+      </Stack>
+    );
+  };
 
   return (
     <AccordionUsage title={<Title />}>

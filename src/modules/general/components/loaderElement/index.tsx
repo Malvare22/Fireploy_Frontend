@@ -90,7 +90,7 @@ function LoaderElement() {
         <RocketLaunchIcon
           sx={{
             fontSize: 36,
-            color: theme.palette.info.main,
+            color: "rgb(41, 61, 111)",
             animation: "blink 2s infinite",
           }}
         />
