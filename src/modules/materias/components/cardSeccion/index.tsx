@@ -158,7 +158,7 @@ const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, idMateria, idCurso }
         type={type}
         textBody={message}
       />
-      <SpringModal handleClose={handleCloseModal} open={openModal}>
+      <SpringModal handleClose={handleCloseModal} open={openModal} sx={{overflow: 'scroll'}}>
         <>{projectSelect && <CardProjectModal project={projectSelect} callback={refetch} />}</>
       </SpringModal>
 

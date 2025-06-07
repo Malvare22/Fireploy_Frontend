@@ -181,7 +181,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen, 
           <ProjectTags proyecto={proyecto} />
         </Box>
 
-        <Box sx={{ marginBottom: 1 }}>
+        <Box sx={{ marginBottom: 1, width: '100%' }}>
           {proyecto.descripcion.length > 0 ? (
             <Typography
               sx={{

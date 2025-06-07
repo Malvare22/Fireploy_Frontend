@@ -231,11 +231,12 @@ function MemberCard({ user }: MemberCardProps) {
   }
 
   return (
-    <>
+    <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1}}>
       <Tooltip title={user.nombre} onClick={handleButton}>
         <Avatar src={user.imagen} sx={{ width: 64, height: 64, cursor: "pointer" }} />
       </Tooltip>
-    </>
+      <Typography variant="body1" sx={{textAlign: 'center'}}>{user.nombre}</Typography>
+    </Box>
   );
 }
 

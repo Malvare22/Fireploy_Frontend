@@ -167,7 +167,7 @@ function VistaProyectosDeMisEstudiantes() {
         textBody={message}
         handleCancel={handleCancel}
       />
-      <SpringModal open={openModal} handleClose={handleCloseModal}>
+      <SpringModal open={openModal} handleClose={handleCloseModal} sx={{overflow: 'scroll'}}>
         {selectProject && <CardProjectModal project={selectProject} callback={refetch} />}
       </SpringModal>
 
