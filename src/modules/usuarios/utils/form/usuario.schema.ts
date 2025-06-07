@@ -2,6 +2,7 @@ import { z } from "zod";
 import { getGender, getUserStatus, getUserTypes } from "../usuario.map";
 import { SexoUsuario, Usuario } from "@modules/usuarios/types/usuario";
 import { FORM_CONSTRAINS } from "@modules/general/utils/formConstrains";
+import { calculateAge } from "@modules/general/utils/fechas";
 
 /**
  * Zod schema for validating user status (EstadoUsuario).
@@ -70,6 +71,17 @@ export const RedSocialUsuarioSchema = z
   })
   .strict();
 
+
+const birthSchema = FORM_CONSTRAINS.DATE.refine((x) => {
+
+  return (calculateAge(x) >= 16)
+}, "Se requiere una edad mínima de 16 años para registrarse al sistema");
+
+const universityDateSchema = FORM_CONSTRAINS.DATE.refine((x) => {
+
+  return (calculateAge(x) >= 16)
+}, "Se requiere una edad mínima de 16 años para registrarse al sistema");
+
 /**
  * Full Zod schema for validating a complete Usuario object.
  * Includes validations for fields, conditional logic, and password matching.
@@ -80,8 +92,8 @@ export const UsuarioSchema: z.ZodType<Omit<Usuario & { confirmarContrasenia?: st
     correo: FORM_CONSTRAINS.EMAIL,
     nombres: FORM_CONSTRAINS.TEXT_LABEL,
     apellidos: FORM_CONSTRAINS.TEXT_LABEL,
-    fechaDeNacimiento: FORM_CONSTRAINS.DATE,
-    estFechaInicio: FORM_CONSTRAINS.DATE.optional(),
+    fechaDeNacimiento: birthSchema,
+    estFechaInicio: universityDateSchema.optional(),
     estado: estadoUsuarioSchema,
     sexo: sexoUsuarioSchema,
     tipo: tiposUsuarioSchema,
@@ -119,7 +131,12 @@ export const UsuarioSchema: z.ZodType<Omit<Usuario & { confirmarContrasenia?: st
     const birth = new Date(data.fechaDeNacimiento).getTime();
     const entryToUniversity = new Date(data.estFechaInicio).getTime();
     return birth < entryToUniversity;
-  }, { message: 'La fecha de ingreso a la universidad no puede ser menor o igual a la fecha de nacimiento', path: ['estFechaInicio'] });
+  }, { message: 'La fecha de ingreso a la universidad no puede ser menor o igual a la fecha de nacimiento', path: ['estFechaInicio'] }).refine((data) => {
+    if (!data.estFechaInicio) return true;
+    const birth = new Date(data.fechaDeNacimiento).getTime();
+    const entryToUniversity = new Date(data.estFechaInicio).getTime();
+    return birth < entryToUniversity;
+  }, { message: 'Los datos ingresados en las fechas son poco verosímiles (contacta a soporte)', path: ['estFechaInicio'] });
 
 export type UsuarioSchema = z.infer<typeof UsuarioSchema>;
 

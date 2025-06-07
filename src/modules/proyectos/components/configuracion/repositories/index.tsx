@@ -61,13 +61,7 @@ export function Repositories({ type }: Props) {
     resolver: zodResolver(ProyectoRepositoriesSchema),
   });
 
-  const {
-    getValues,
-    control,
-    watch,
-    reset,
-    setValue,
-  } = methods;
+  const { getValues, control, watch, reset, setValue } = methods;
 
   useEffect(() => {
     reset(getValuesProject());
@@ -191,13 +185,28 @@ export function Repositories({ type }: Props) {
         setFilesRepo({ ...filesRepo, [layer]: null });
       } else {
         setFilesRepo({ ...filesRepo, [layer]: files[0] });
-        setValue(`${layer}.file`, true);
+        if (files[0].name.endsWith(".rar") || files[0].name.endsWith(".zip"))
+          setValue(`${layer}.file`, true);
+        else {
+          setValue(`${layer}.file`, null);
+          setFilesRepo({ ...filesRepo, [layer]: null });
+          showError();
+        }
       }
     }
 
     function handleDelete() {
       setValue(`${layer}.file`, null);
       setFilesRepo({ ...filesRepo, [layer]: null });
+    }
+
+    function showError() {
+      showDialog({
+        message: "Solo se admiten archivos .zip o .rar",
+        type: "error",
+        onAccept: handleClose,
+        title: "Archivo no válido",
+      });
     }
 
     return (
@@ -211,7 +220,7 @@ export function Repositories({ type }: Props) {
           startIcon={<FolderZipIcon />}
         >
           {!filesRepo[layer]?.name ? "Subir .Zip" : filesRepo[layer]?.name}
-          <HiddenButton type="file" onChange={onChange} multiple />
+          <HiddenButton type="file" accept=".zip,.rar" onChange={onChange} />
         </Button>
         <Tooltip title="Eliminar Archivo">
           <IconButton onClick={handleDelete} disabled={filesRepo[layer] == null}>

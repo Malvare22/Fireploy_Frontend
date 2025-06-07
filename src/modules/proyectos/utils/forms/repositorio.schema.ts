@@ -2,7 +2,6 @@ import { Repositorio } from "@modules/proyectos/types/repositorio";
 import { z } from "zod";
 import { transformStringToKV } from "@modules/general/utils/string";
 import { frameworkValidation, TECNOLOGIES } from "../technologies";
-import { FORM_CONSTRAINS } from "@modules/general/utils/formConstrains";
 
 export const RepositorioSchema: z.ZodType<Omit<Repositorio, 'ficheros'>> = z
   .object({
@@ -22,13 +21,26 @@ export const RepositorioSchema: z.ZodType<Omit<Repositorio, 'ficheros'>> = z
   .refine(
     (data) => {
       if (!data.file) {
-        const urlCheck = FORM_CONSTRAINS.URL.safeParse(data.url);
-        return urlCheck.success;
+        return !!data.url && data.url.length <= 256;
       }
-      else return true;
+      return false;
     },
     {
-      message: "Lo ingresado no corresponde a un URL válida, ejemplo: https://www.google.com",
+      message: "La longitud máxima permitida es de 256 caracteres",
+      path: ["url"]
+    }
+  ).refine(
+    (data) => {
+      if (!data.file) {
+        const urlCheck = z.string().refine((data) => {
+          return (data.startsWith("https://github.com/") || data.startsWith("https://gitlab.com/"));
+        }).safeParse(data.url);
+        return urlCheck.success;
+      }
+      return false;
+    },
+    {
+      message: "Debe ser una dirección URL válida de GitHub o GitLab",
       path: ["url"]
     }
   ).refine((data) => {
