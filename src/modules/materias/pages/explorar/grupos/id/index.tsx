@@ -175,8 +175,8 @@ function VerInformacionCurso() {
 
     return (
       <div>
-        <IconButton onClick={handleClick} size="large">
-          <SettingsIcon sx={{ color: "white", fontSize: 42 }} />
+        <IconButton onClick={handleClick} size="large" sx={{ padding: 0 }}>
+          <SettingsIcon sx={{ color: "white", fontSize: { md: 42, xs: 32 } }} />
         </IconButton>
         <Menu
           id="basic-menu"
@@ -237,7 +237,7 @@ function VerInformacionCurso() {
       {isLoadingFetch ? (
         <LoaderElement />
       ) : (
-        <Box sx={{display: 'flex', flexDirection: 'column', gap: 3}}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
           {/* Render only if course is available */}
           {curso && (
             <>
@@ -268,25 +268,32 @@ function VerInformacionCurso() {
                   dolor ullamco commodo culpa. Occaecat voluptate officia velit officia sint est
                   esse mollit irure aliquip est non mollit veniam.
                 </Typography>
-                <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
-                                  <ActivityAndStudents
-                  cntActities={(curso.estudiantes ?? []).length}
-                  cntStudents={(curso.secciones ?? []).length}
-                />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: { md: "row", xs: "column" },
+                    alignItems: "center",
+                    gap: 2,
+                  }}
+                >
+                  <ActivityAndStudents
+                    cntActities={(curso.estudiantes ?? []).length}
+                    cntStudents={(curso.secciones ?? []).length}
+                  />
                   {curso.docente ? (
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Tooltip title={curso.docente?.nombre}>
-                      <Button onClick={handleClickDocente}>
-                        <Avatar sx={{ width: 48, height: 48 }} src={curso.docente?.imagen} />
-                      </Button>
-                    </Tooltip>
-                    <Typography variant="h5">{curso.docente?.nombre}</Typography>
-                  </Box>
-                ) : (
-                  <Alert severity="info">
-                    {"El curso actualmente no cuenta con un docente asignado"}
-                  </Alert>
-                )}
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Tooltip title={curso.docente?.nombre}>
+                        <Button onClick={handleClickDocente}>
+                          <Avatar sx={{ width: 48, height: 48 }} src={curso.docente?.imagen} />
+                        </Button>
+                      </Tooltip>
+                      <Typography variant="h5">{curso.docente?.nombre}</Typography>
+                    </Box>
+                  ) : (
+                    <Alert severity="info">
+                      {"El curso actualmente no cuenta con un docente asignado"}
+                    </Alert>
+                  )}
                 </Box>
               </Card>
               {/* Section title */}
