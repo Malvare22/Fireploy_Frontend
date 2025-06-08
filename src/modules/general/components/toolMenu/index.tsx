@@ -260,7 +260,7 @@ function ToolbarActions({
     return (
       <Box sx={{ display: "flex", alingItems: "center" }}>
         {matches && (
-          <Box sx={{ display: "flex", alingItems: "center", gap: 2 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <Avatar src={account.foto} sx={{ width: 48, height: 48 }} />
             <Typography
               sx={{
@@ -277,7 +277,7 @@ function ToolbarActions({
             </Typography>
           </Box>
         )}
-        <Box sx={{marginLeft: -3}}><SessionMenu /></Box>
+        <Box ><SessionMenu /></Box>
       </Box>
     );
   }, [account, matches]);
