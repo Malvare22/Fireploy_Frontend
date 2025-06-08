@@ -6,6 +6,7 @@ import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
+import { CheckRegister } from "@modules/general/pages/registro";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { rutasProyectos } from "@modules/proyectos/router";
 import { getUsuarioService } from "@modules/usuarios/services/get.usuario";
@@ -16,7 +17,7 @@ import { RegistroGoogleSchema } from "@modules/usuarios/utils/form/register.goog
 import { getGenderArray } from "@modules/usuarios/utils/usuario.map";
 import { Box, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 // import { useNavigate } from "react-router";
@@ -49,6 +50,8 @@ function NewEntriesView() {
     },
     resolver: zodResolver(RegistroGoogleSchema),
   });
+
+  const [check, setCheck] = useState<boolean>(false);
 
   const { token, id } = useAuth().accountInformation;
 
@@ -140,7 +143,7 @@ function NewEntriesView() {
               {...register("estFechaInicio")}
               error={!!errors.estFechaInicio}
               helperText={errors.estFechaInicio?.message}
-              label="Fecha de Ingreso a la institución"
+              label="Fecha de Ingreso a la Universidad"
               InputLabelProps={{ shrink: true }}
               size="small"
             />
@@ -174,10 +177,11 @@ function NewEntriesView() {
                 </TextField>
               )}
             />
+            <CheckRegister check={check} setCheck={setCheck}/>
 
             <Stack direction={"row"} justifyContent={"center"}>
               <Box>
-                <GeneralButton mode={buttonTypes.save} type="submit" />
+                <GeneralButton mode={buttonTypes.save} disabled={!check} type="submit" />
               </Box>
             </Stack>
           </Stack>
