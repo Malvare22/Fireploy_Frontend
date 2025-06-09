@@ -1,15 +1,20 @@
-import { FORM_CONSTRAINS } from "@modules/general/utils/formConstrains";
+import {
+  FORM_CONSTRAINS,
+  MESSAGE_ERRORS,
+} from "@modules/general/utils/formConstrains";
 import { Curso, UsuarioCurso } from "@modules/materias/types/curso";
 import { Materia } from "@modules/materias/types/materia";
 import { Seccion } from "@modules/materias/types/seccion";
 import { number, z } from "zod";
 
-
 export const SeccionSchema: z.ZodType<Seccion> = z
   .object({
     id: FORM_CONSTRAINS.ID.optional(),
     titulo: FORM_CONSTRAINS.TEXT_LABEL,
-    descripcion: FORM_CONSTRAINS.TEXT_DESCRIPTION,
+    descripcion: FORM_CONSTRAINS.TEXT_DESCRIPTION.refine(
+      (text) => text.trim().length > 0,
+      MESSAGE_ERRORS.REQUIRED
+    ),
     fechaDeCierre: FORM_CONSTRAINS.DATE,
     fechaDeInicio: FORM_CONSTRAINS.DATE,
     estado: z.enum(["A", "I"]),
@@ -34,7 +39,6 @@ export const SeccionesSchema = z.object({
 
 export type SeccionesSchema = z.infer<typeof SeccionesSchema>;
 
-
 export const UsuarioCursoSchema: z.ZodType<UsuarioCurso> = z.object({
   id: FORM_CONSTRAINS.ID,
   nombre: FORM_CONSTRAINS.TEXT_LABEL,
@@ -43,28 +47,33 @@ export const UsuarioCursoSchema: z.ZodType<UsuarioCurso> = z.object({
   estado: z.enum(["A", "I"]),
 });
 
-export const UsuarioCursoMinimalSchema: z.ZodType<Partial<UsuarioCurso>> = z.object({
-  id: FORM_CONSTRAINS.ID,
-  nombre: FORM_CONSTRAINS.TEXT_LABEL,
-  correo: FORM_CONSTRAINS.EMAIL.optional(),
-  imagen: z.string().optional(),
-  estado: z.enum(["A", "I"]).optional(),
-});
+export const UsuarioCursoMinimalSchema: z.ZodType<Partial<UsuarioCurso>> =
+  z.object({
+    id: FORM_CONSTRAINS.ID,
+    nombre: FORM_CONSTRAINS.TEXT_LABEL,
+    correo: FORM_CONSTRAINS.EMAIL.optional(),
+    imagen: z.string().optional(),
+    estado: z.enum(["A", "I"]).optional(),
+  });
 
-type UsuarioCursoMinimalSchema = z.infer<typeof UsuarioCursoMinimalSchema>
+type UsuarioCursoMinimalSchema = z.infer<typeof UsuarioCursoMinimalSchema>;
 
-export const MateriaSchema: z.ZodType<Omit<Materia, 'cursos'> & {cursos?: CursoSchema[]}> = z.object({
+export const MateriaSchema: z.ZodType<
+  Omit<Materia, "cursos"> & { cursos?: CursoSchema[] }
+> = z.object({
   estado: z.enum(["A", "I"]),
   nombre: FORM_CONSTRAINS.TEXT_LABEL,
-  semestre: z.number().refine((x)=> {
-    return x <= 10 && x>=1;
-  }, 'El semestre debe ser un valor numérico que se encuentre en el intervalo [1,10]'),
+  semestre: z.number().refine((x) => {
+    return x <= 10 && x >= 1;
+  }, "El semestre debe ser un valor numérico que se encuentre en el intervalo [1,10]"),
   id: FORM_CONSTRAINS.ID.optional(),
   cursos: z.array(z.lazy(() => CursoSchema)).optional(),
 });
 
-type NeoCurso = Omit<Curso, 'docente' | 'estudiantes'> & {docente?: UsuarioCursoMinimalSchema | null, estudiantes?: UsuarioCursoMinimalSchema[] | null};
-
+type NeoCurso = Omit<Curso, "docente" | "estudiantes"> & {
+  docente?: UsuarioCursoMinimalSchema | null;
+  estudiantes?: UsuarioCursoMinimalSchema[] | null;
+};
 
 export const CursoSchema: z.ZodType<NeoCurso> = z.object({
   id: z.string().optional(),
@@ -75,12 +84,14 @@ export const CursoSchema: z.ZodType<NeoCurso> = z.object({
   docente: UsuarioCursoMinimalSchema.nullable().optional(),
   estudiantes: z.array(UsuarioCursoMinimalSchema).optional(),
   secciones: z.array(z.lazy(() => SeccionSchema)).optional(),
-  materia: z.object({
-    id: z.number().int().positive().nullable(),
-    nombre: FORM_CONSTRAINS.TEXT_LABEL,
-    semestre: FORM_CONSTRAINS.TEXT_LABEL,
-    estado: FORM_CONSTRAINS.TEXT_LABEL,
-  }).optional(),
+  materia: z
+    .object({
+      id: z.number().int().positive().nullable(),
+      nombre: FORM_CONSTRAINS.TEXT_LABEL,
+      semestre: FORM_CONSTRAINS.TEXT_LABEL,
+      estado: FORM_CONSTRAINS.TEXT_LABEL,
+    })
+    .optional(),
 });
 
-export type CursoSchema = z.infer<typeof CursoSchema>
+export type CursoSchema = z.infer<typeof CursoSchema>;

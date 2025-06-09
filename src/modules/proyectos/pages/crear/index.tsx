@@ -18,6 +18,7 @@ import { useAuth } from "@modules/general/context/accountContext";
 import { ParamsContext } from "@modules/general/context/paramsContext";
 import { useParamsCustom } from "@modules/general/hooks/useParamsContext";
 import { ProjectExecutionStatusContextProvider } from "@modules/proyectos/context/executionStatus.context";
+import { AlertDialogProvider } from "@modules/general/context/alertDialogContext";
 
 /**
  * CrearProyecto component – A form for creating a project, utilizing a stepper to guide the user through various stages.
@@ -91,32 +92,34 @@ export default function CrearProyecto() {
   ];
 
   return (
-    <FormProvider {...methods}>
-      <ProjectExecutionStatusContextProvider projectId={-1}>
-        <StepperContext.Provider value={{ handleNext: handleNext }}>
-          <ParamsContext.Provider
-            value={{
-              searchParams: searchParams,
-              setSearchParams: setSearchParams,
-              updateSearchParams: updateSearchParams,
-            }}
-          >
-            <Stack spacing={3} component={Paper} padding={{ xs: 1, md: 3 }}>
-              <Stack direction={"row"} spacing={1} alignItems={"center"}>
-                <Typography variant="h4" sx={{ fontWeight: "500" }}>
-                  {labelCreateProject.crearProyecto}
-                </Typography>
-                <PolylineIcon sx={{ fontSize: 32 }} />
+    <AlertDialogProvider>
+      <FormProvider {...methods}>
+        <ProjectExecutionStatusContextProvider projectId={-1}>
+          <StepperContext.Provider value={{ handleNext: handleNext }}>
+            <ParamsContext.Provider
+              value={{
+                searchParams: searchParams,
+                setSearchParams: setSearchParams,
+                updateSearchParams: updateSearchParams,
+              }}
+            >
+              <Stack spacing={3} component={Paper} padding={{ xs: 1, md: 3 }}>
+                <Stack direction={"row"} spacing={1} alignItems={"center"}>
+                  <Typography variant="h4" sx={{ fontWeight: "500" }}>
+                    {labelCreateProject.crearProyecto}
+                  </Typography>
+                  <PolylineIcon sx={{ fontSize: 32 }} />
+                </Stack>
+                <StepperStandard
+                  activeStep={activeStep}
+                  isStepSkipped={isStepSkipped}
+                  contents={contents}
+                />
               </Stack>
-              <StepperStandard
-                activeStep={activeStep}
-                isStepSkipped={isStepSkipped}
-                contents={contents}
-              />
-            </Stack>
-          </ParamsContext.Provider>
-        </StepperContext.Provider>
-      </ProjectExecutionStatusContextProvider>
-    </FormProvider>
+            </ParamsContext.Provider>
+          </StepperContext.Provider>
+        </ProjectExecutionStatusContextProvider>
+      </FormProvider>
+    </AlertDialogProvider>
   );
 }

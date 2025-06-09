@@ -33,3 +33,7 @@ export const msgDescription = (n: number) => {
   return `${n} de 500 caracteres permitidos`
 }
 
+export enum MESSAGE_ERRORS{
+  REQUIRED = "Campo obligatorio"
+}
+
