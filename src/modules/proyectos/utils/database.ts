@@ -9,11 +9,11 @@ import { BaseDeDatos } from "../types/baseDeDatos";
  * - "E" -> "No Seleccionado"
  */
 export const getDataBaseTypesMap: Map<BaseDeDatos["tipo"], string> = new Map([
-  ["S", "SQL"],
-  ["N", "MongoDB"],
   ["E", "Sin base de datos"],
+  ["S", "MySQL"],
   ['P', 'PostgreSQL'],
-  ['M', 'MariaDB']
+  ['M', 'MariaDB'],
+  ["N", "MongoDB"]
 ]);
 
 /**
@@ -25,10 +25,10 @@ export const getDataBaseTypesMap: Map<BaseDeDatos["tipo"], string> = new Map([
  * - "E" -> "No Seleccionado"
  */
 export const getDataBaseTypesArray: [BaseDeDatos["tipo"], string][] = [
-  ["S", "SQL"],
-  ["N", "MongoDB"],
   ["E", "Sin base de datos"],
+  ["S", "MySQL"],
   ['P', 'PostgreSQL'],
-  ['M', 'MariaDB']
+  ['M', 'MariaDB'],
+  ["N", "MongoDB"]
 ];
 
