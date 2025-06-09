@@ -92,7 +92,7 @@ const AlertDialog: React.FC<Props> = ({
 
   React.useEffect(() => {
     setLocked(false);
-  }, [textBody, body, type]);
+  }, [textBody, body, type, open]);
 
   const navigate = useNavigate();
 

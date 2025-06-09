@@ -366,7 +366,7 @@ function ToolbarActions({
           <Stack alignItems={"center"} paddingY={1}>
             <Box>
               <Button size="small" variant="outlined" color="info" onClick={handleNav}>
-                Ver Más
+                Ver más
               </Button>
             </Box>
           </Stack>

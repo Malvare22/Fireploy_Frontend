@@ -47,7 +47,9 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
 
   const { refetch, data } = useQuery({
     queryFn: async () => {
-      return (await getPublicProjectById(currentProjectId)).fav_usuarios.map((user) => user.id);
+      return (await getPublicProjectById(currentProjectId)).fav_usuarios.map(
+        (user) => user.id
+      );
     },
     queryKey: ["Get Project by Id", currentProjectId],
   });
@@ -57,7 +59,7 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
   const currentCheck = useMemo(() => {
     if (data) {
       return data.includes(id);
-    } else return null;
+    } else return false;
   }, [data]);
 
   const currentCount = useMemo(() => {
@@ -89,15 +91,13 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
     <Stack sx={{ width: { md: 900, xs: 300, sm: 600 } }} spacing={3}>
       <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
         <Typography variant="h3">{project.titulo}</Typography>
-        {id != -1 && currentCheck != null && (
-          <StarButton
-            callback={updateCallback}
-            check={currentCheck}
-            count={currentCount}
-            projectId={currentProjectId}
-            sx={{ fontSize: 48 }}
-          />
-        )}
+        <StarButton
+          callback={updateCallback}
+          check={currentCheck}
+          count={currentCount}
+          projectId={currentProjectId}
+          sx={{ fontSize: 48 }}
+        />
       </Box>
 
       <Grid container spacing={2}>
@@ -115,7 +115,11 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
             <Box
               component={"img"}
               src={project.imagen}
-              sx={{ objectFit: "contain", width: "100%", height: { md: 180, xs: 120 } }}
+              sx={{
+                objectFit: "contain",
+                width: "100%",
+                height: { md: 180, xs: 120 },
+              }}
             />
           ) : (
             <Box
@@ -134,10 +138,21 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
         </Grid>
         <Grid
           size={{ md: 6, xs: 12 }}
-          sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+          }}
         >
           <Stack spacing={3}>
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, alignItems: "center" }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 2,
+                alignItems: "center",
+              }}
+            >
               {project.backend && (
                 <Box>
                   <Button
@@ -177,7 +192,10 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
         </Grid>
       </Grid>
       {project.estado == "N" && (
-        <Alert severity="success" sx={{ display: "flex", alignItems: "center" }}>
+        <Alert
+          severity="success"
+          sx={{ display: "flex", alignItems: "center" }}
+        >
           <Stack direction={"row"} alignItems={"center"}>
             <Typography>{"Proyecto disponible"}</Typography>
             <Tooltip title="Visitar sitio">
@@ -189,7 +207,10 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
         </Alert>
       )}
       <Grid container spacing={2}>
-        <Grid size={12} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <Grid
+          size={12}
+          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+        >
           <Typography variant="h5">{"Descripción"}</Typography>
           {project.descripcion.trim().length > 0 ? (
             <Typography sx={{ wordBreak: "break-word" }} variant="body2">
@@ -203,7 +224,10 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
       <Typography variant="h5">{"Integrantes"}</Typography>
       <Grid container sx={{ paddingX: 1, display: "flex" }}>
         {project.integrantes.map((member) => (
-          <Grid size={{ md: 2, xs: 4 }} sx={{ display: "flex", justifyContent: "center" }}>
+          <Grid
+            size={{ md: 2, xs: 4 }}
+            sx={{ display: "flex", justifyContent: "center" }}
+          >
             <MemberCard user={member} key={member.id} />
           </Grid>
         ))}
@@ -222,7 +246,9 @@ function MemberCard({ user }: MemberCardProps) {
 
   function handleButton() {
     if (id == -1) {
-      navigate(rutasGeneral.portafolioPorUsuario.replace(":id", user.id.toString()));
+      navigate(
+        rutasGeneral.portafolioPorUsuario.replace(":id", user.id.toString())
+      );
       navigate(0);
     } else {
       navigate(rutasUsuarios.portafolio.replace(":id", user.id.toString()));
@@ -231,11 +257,23 @@ function MemberCard({ user }: MemberCardProps) {
   }
 
   return (
-    <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1}}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 1,
+      }}
+    >
       <Tooltip title={user.nombre} onClick={handleButton}>
-        <Avatar src={user.imagen} sx={{ width: 64, height: 64, cursor: "pointer" }} />
+        <Avatar
+          src={user.imagen}
+          sx={{ width: 64, height: 64, cursor: "pointer" }}
+        />
       </Tooltip>
-      <Typography variant="body1" sx={{textAlign: 'center'}}>{user.nombre}</Typography>
+      <Typography variant="body1" sx={{ textAlign: "center" }}>
+        {user.nombre}
+      </Typography>
     </Box>
   );
 }
