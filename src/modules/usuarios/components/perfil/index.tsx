@@ -9,6 +9,7 @@ import {
   useTheme,
   MenuItem,
   IconButton,
+  Tooltip,
 } from "@mui/material";
 import { Usuario, usuarioTemplate } from "@modules/usuarios/types/usuario";
 import { labelPerfil } from "@modules/usuarios/enum/labelPerfil";
@@ -34,7 +35,7 @@ import { UsuarioSchema } from "@modules/usuarios/utils/form/usuario.schema";
 import { useAuth } from "@modules/general/context/accountContext";
 import { postCreateUsuarioService } from "@modules/usuarios/services/post.crear.usuario";
 import { postChangeUsuarioService } from "@modules/usuarios/services/post.modificar.usuario";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { patchUpdatePhotoService } from "@modules/usuarios/services/patch.foto";
 import { postCreateSolicitudRolDocenteService } from "@modules/usuarios/services/post.solicitud.crear";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
@@ -43,6 +44,8 @@ import {
   hasValidExtension,
   VALID_EXTENSIONS,
 } from "@modules/general/utils/form/validExtensions";
+import { getSolicitudes } from "@modules/usuarios/services/get.solicitudes";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 interface PerfilProps {
   usuario: Usuario;
@@ -532,6 +535,25 @@ const ButtonUpdaterRol = () => {
   const { accountInformation } = useAuth();
   const { token, id } = accountInformation;
 
+  const [disable, setDisable] = useState<boolean>(true);
+
+  const { data: currentSolicitudes, refetch: refetchCurrentSolicitudes } = useQuery({
+    queryFn: async () => {
+      return await getSolicitudes(token, {
+        usuario: id,
+        estado: "P",
+      });
+    },
+    queryKey: ["Get Request", id, token],
+  });
+
+  useEffect(() => {
+    if (currentSolicitudes) {
+      setDisable(currentSolicitudes.some((x) => x.tipo_solicitud == 1));
+    }
+  }, [currentSolicitudes]);
+
+
   if (id == -1) return <></>;
 
   const theme = useTheme();
@@ -556,6 +578,7 @@ const ButtonUpdaterRol = () => {
         },
         type: "success",
       });
+      refetchCurrentSolicitudes();
     },
   });
 
@@ -579,13 +602,21 @@ const ButtonUpdaterRol = () => {
   }
 
   return (
-    <Button
-      variant="contained"
-      onClick={confirmationAlert}
-      sx={{ backgroundColor: theme.palette.terciary.main }}
-    >
-      {labelPerfil.solicitarRolDocente}
-    </Button>
+    <Stack direction={"row"} spacing={1} alignItems={"center"}>
+      <Button
+        variant="contained"
+        onClick={confirmationAlert}
+        sx={{ backgroundColor: theme.palette.terciary.main }}
+        disabled={disable}
+      >
+        {labelPerfil.solicitarRolDocente}
+      </Button>
+      {disable && (
+        <Tooltip title="Actualmente cuenta con una solicitud pendiente de rol docente">
+          <HelpOutlineIcon />
+        </Tooltip>
+      )}
+    </Stack>
   );
 };
 
