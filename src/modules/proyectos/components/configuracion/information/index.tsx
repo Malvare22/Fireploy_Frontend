@@ -48,6 +48,7 @@ import {
   VALID_EXTENSIONS,
 } from "@modules/general/utils/form/validExtensions";
 import { useAlertDialogContext } from "@modules/general/context/alertDialogContext";
+import { msgDescription } from "@modules/general/utils/formConstrains";
 
 type Props = {
   type: "edit" | "create";
@@ -320,7 +321,11 @@ export const Information = ({ type }: Props) => {
                       multiline
                       rows={4}
                       error={!!errors.descripcion}
-                      helperText={errors.descripcion?.message?.toString()}
+                      helperText={
+                        errors.descripcion?.message?.toString() ??
+                        (watch("descripcion") &&
+                          msgDescription(watch("descripcion")!.length))
+                      }
                     />
                   )}
                 />

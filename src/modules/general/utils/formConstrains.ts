@@ -2,7 +2,7 @@ import { z } from "zod";
 export const FORM_CONSTRAINS = {
   TEXT_LABEL: z.string().min(1, "Campo obligatorio"),
   LINK_LENGTH: z.string().max(256, "La longitud máxima permitida es de 256 caracteres"),
-  TEXT_DESCRIPTION: z.string().max(512, "La longitud máxima permitida es de 512 caracteres"),
+  TEXT_DESCRIPTION: z.string().max(500, "La longitud máxima permitida es de 500 caracteres"),
   DATE: z.string().date("Se requiere una fecha formal en YYYY/MM/DD"),
   DATE_MINOR:  z.string().date("Se requiere una fecha formal en YYYY/MM/DD").refine((date) => {
     const today = new Date().getTime();
@@ -29,4 +29,7 @@ export const FORM_CONSTRAINS = {
     })
 } as const;
 
+export const msgDescription = (n: number) => {
+  return `${n} de 500 caracteres permitidos`
+}
 
