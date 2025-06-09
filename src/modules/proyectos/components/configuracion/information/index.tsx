@@ -42,6 +42,12 @@ import { getProjectById } from "@modules/proyectos/services/get.project";
 import { syncErrorProject } from "../../executionState";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
+import {
+  hasValidExtension,
+  msgNoValidExtension,
+  VALID_EXTENSIONS,
+} from "@modules/general/utils/form/validExtensions";
+import { useAlertDialogContext } from "@modules/general/context/alertDialogContext";
 
 type Props = {
   type: "edit" | "create";
@@ -77,7 +83,9 @@ export const Information = ({ type }: Props) => {
   const { token, tipo, id } = useAuth().accountInformation;
   const { handleNext } = useContext(StepperContext);
 
-  const [img, setImg] = useState<null | string | undefined>(getValuesPrincipal("imagen"));
+  const [img, setImg] = useState<null | string | undefined>(
+    getValuesPrincipal("imagen")
+  );
 
   useEffect(() => {
     if (getValuesPrincipal("imagen")) setImg(getValuesPrincipal("imagen"));
@@ -111,7 +119,11 @@ export const Information = ({ type }: Props) => {
   }, [getValues("materiaInformacion.cursoId")]);
 
   useEffect(() => {
-    if (searchParams.get("materia") && searchParams.get("curso") && searchParams.get("seccion")) {
+    if (
+      searchParams.get("materia") &&
+      searchParams.get("curso") &&
+      searchParams.get("seccion")
+    ) {
       setValue(
         "materiaInformacion.materiaId",
         parseInt(searchParams.get("materia") ?? "0") ?? null
@@ -162,7 +174,9 @@ export const Information = ({ type }: Props) => {
 
   const [flagChangeImg, setFlagChangeImg] = useState<boolean>(false);
 
-  const [dataCreate, setDateCreate] = useState<undefined | { id: number }>(undefined);
+  const [dataCreate, setDateCreate] = useState<undefined | { id: number }>(
+    undefined
+  );
 
   const { mutate: mutateCreate } = useMutation({
     mutationFn: () => postCreateProject(token, getValues()),
@@ -181,7 +195,10 @@ export const Information = ({ type }: Props) => {
   const { mutate: mutateEdit, isPending: isPendingEdit } = useMutation({
     mutationFn: async () => {
       setIsLoading(true);
-      const currentStatus = await getProjectById(token, getValuesPrincipal("id") ?? -1);
+      const currentStatus = await getProjectById(
+        token,
+        getValuesPrincipal("id") ?? -1
+      );
 
       const callback = (): ProyectoInformationSchema => {
         if (img) return getValues();
@@ -190,7 +207,8 @@ export const Information = ({ type }: Props) => {
         }
       };
 
-      if (executionState && currentStatus.estado_ejecucion != executionState) syncErrorProject();
+      if (executionState && currentStatus.estado_ejecucion != executionState)
+        syncErrorProject();
       const dataForRequest = callback();
       await patchEditProject(token, getValues("id") ?? -1, {
         descripcion: dataForRequest.descripcion ?? "",
@@ -243,8 +261,13 @@ export const Information = ({ type }: Props) => {
 
   if (!dataMaterias) return <LoaderElement />;
 
-  const { getCursosByMateria, getSeccionByCurso, selectCurso, selectMaterias, selectSeccion } =
-    dataMaterias;
+  const {
+    getCursosByMateria,
+    getSeccionByCurso,
+    selectCurso,
+    selectMaterias,
+    selectSeccion,
+  } = dataMaterias;
 
   const currentMateriaId = watch("materiaInformacion.materiaId");
   const currentCursoId = watch("materiaInformacion.cursoId");
@@ -317,42 +340,47 @@ export const Information = ({ type }: Props) => {
                         error={!!errors.materiaInformacion?.materiaId}
                         helperText={errors.materiaInformacion?.materiaId?.message?.toString()}
                       >
-                        {Array.from(selectMaterias.entries()).map(([value, label]) => (
-                          <MenuItem value={value} key={value}>
-                            {label}
-                          </MenuItem>
-                        ))}
+                        {Array.from(selectMaterias.entries()).map(
+                          ([value, label]) => (
+                            <MenuItem value={value} key={value}>
+                              {label}
+                            </MenuItem>
+                          )
+                        )}
                       </TextField>
                     )}
                   />
                 </Grid>
 
                 <Grid size={{ md: 4, xs: 12 }}>
-                  {currentMateriaId && getCursosByMateria.get(currentMateriaId) && (
-                    <Controller
-                      name="materiaInformacion.cursoId"
-                      control={control}
-                      render={({ field }) => (
-                        <TextField
-                          size="small"
-                          fullWidth
-                          {...field}
-                          select
-                          label="Curso"
-                          error={!!errors.materiaInformacion?.cursoId}
-                          helperText={errors.materiaInformacion?.cursoId?.message?.toString()}
-                        >
-                          {Array.from(
-                            getCursosByMateria.get(watch("materiaInformacion.materiaId") ?? 0) || []
-                          ).map((curso) => (
-                            <MenuItem value={curso} key={curso}>
-                              {selectCurso.get(curso)}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      )}
-                    />
-                  )}
+                  {currentMateriaId &&
+                    getCursosByMateria.get(currentMateriaId) && (
+                      <Controller
+                        name="materiaInformacion.cursoId"
+                        control={control}
+                        render={({ field }) => (
+                          <TextField
+                            size="small"
+                            fullWidth
+                            {...field}
+                            select
+                            label="Curso"
+                            error={!!errors.materiaInformacion?.cursoId}
+                            helperText={errors.materiaInformacion?.cursoId?.message?.toString()}
+                          >
+                            {Array.from(
+                              getCursosByMateria.get(
+                                watch("materiaInformacion.materiaId") ?? 0
+                              ) || []
+                            ).map((curso) => (
+                              <MenuItem value={curso} key={curso}>
+                                {selectCurso.get(curso)}
+                              </MenuItem>
+                            ))}
+                          </TextField>
+                        )}
+                      />
+                    )}
                 </Grid>
                 <Grid size={{ md: 4, xs: 12 }}>
                   {currentCursoId && getSeccionByCurso.get(currentCursoId) && (
@@ -372,7 +400,10 @@ export const Information = ({ type }: Props) => {
                           {getSeccionByCurso.get(currentCursoId)?.map(
                             (seccionId) =>
                               selectSeccion.get(seccionId) && (
-                                <MenuItem value={seccionId} key={`${currentCursoId}-${seccionId}`}>
+                                <MenuItem
+                                  value={seccionId}
+                                  key={`${currentCursoId}-${seccionId}`}
+                                >
                                   {selectSeccion.get(seccionId)}
                                 </MenuItem>
                               )
@@ -400,11 +431,13 @@ export const Information = ({ type }: Props) => {
                     disabled={type == "edit" && executionState == "N"}
                     helperText={errors.tipo?.message?.toString()}
                   >
-                    {Array.from(getProjectTypesMap.entries()).map(([key, label]) => (
-                      <MenuItem value={key} key={key}>
-                        {label}
-                      </MenuItem>
-                    ))}
+                    {Array.from(getProjectTypesMap.entries()).map(
+                      ([key, label]) => (
+                        <MenuItem value={key} key={key}>
+                          {label}
+                        </MenuItem>
+                      )
+                    )}
                   </TextField>
                 )}
               />
@@ -429,7 +462,9 @@ export const Information = ({ type }: Props) => {
                       size="small"
                       loading={type === "create" ? localLoading : isPendingEdit}
                       type="submit"
-                      mode={type === "create" ? buttonTypes.next : buttonTypes.save}
+                      mode={
+                        type === "create" ? buttonTypes.next : buttonTypes.save
+                      }
                     />
                   </Box>
                 </Stack>
@@ -454,8 +489,14 @@ const ImagContainer: React.FC<PropsImageContainer> = ({
   setFile,
   setFlag,
 }) => {
-  const handlePhotoChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (event.target.files && event.target.files[0]) {
+      if (!hasValidExtension(event.target.files[0].name, "IMAGE")) {
+        showError();
+        return;
+      }
       const file = event.target.files[0];
       const reader = new FileReader();
 
@@ -471,6 +512,17 @@ const ImagContainer: React.FC<PropsImageContainer> = ({
       reader.readAsDataURL(file);
     }
   };
+
+  const { showDialog, handleClose } = useAlertDialogContext();
+
+  function showError() {
+    showDialog({
+      message: msgNoValidExtension("IMAGE"),
+      title: "Archivo no valido",
+      onAccept: handleClose,
+      type: "error",
+    });
+  }
 
   const ref = useRef<HTMLInputElement>(null);
 
@@ -514,13 +566,17 @@ const ImagContainer: React.FC<PropsImageContainer> = ({
       <Stack>
         <label htmlFor="upload-photo">
           <HiddenButton
-            accept="image/*"
+            accept={VALID_EXTENSIONS.IMAGE.join(", ")}
             id="upload-photo"
             type="file"
             onChange={handlePhotoChange}
             ref={ref}
           />
-          <Button variant="outlined" color="secondary" onClick={handleReference}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={handleReference}
+          >
             Cambiar imagen
           </Button>
           <Tooltip title="Eliminar Archivo">

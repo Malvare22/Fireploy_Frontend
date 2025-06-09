@@ -102,7 +102,6 @@ const UsuarioSchemaIncomplete = z.object({
   estado: estadoUsuarioSchema,
   sexo: sexoUsuarioSchema,
   tipo: tiposUsuarioSchema,
-  descripcion: FORM_CONSTRAINS.TEXT_DESCRIPTION,
   fotoDePerfil: FORM_CONSTRAINS.LINK_LENGTH,
   contrasenia: FORM_CONSTRAINS.PASSWORD.optional(),
   confirmarContrasenia: FORM_CONSTRAINS.PASSWORD.optional(),
@@ -137,9 +136,7 @@ export const UsuarioSchema = UsuarioSchemaIncomplete.merge(UserDatesSchema)
 
 export type UsuarioSchema = z.infer<typeof UsuarioSchema>;
 
-export const usuarioTemplate: Usuario & {
-  confirmarContrasenia?: string | undefined;
-} = {
+export const usuarioTemplate: UsuarioSchema= {
   id: 1,
   nombres: "",
   apellidos: "",
@@ -149,14 +146,6 @@ export const usuarioTemplate: Usuario & {
   estado: "A",
   sexo: "" as SexoUsuario,
   tipo: "E",
-  redSocial: {
-    facebook: "",
-    instagram: "",
-    linkedin: "",
-    x: "",
-    github: "",
-  },
-  descripcion: "",
   fotoDePerfil: "",
   contrasenia: "",
   confirmarContrasenia: "",

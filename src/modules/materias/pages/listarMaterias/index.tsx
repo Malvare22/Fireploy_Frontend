@@ -20,13 +20,20 @@ import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
-import { FilterOptions, SelectFilters } from "@modules/general/components/selects";
+import {
+  FilterOptions,
+  SelectFilters,
+} from "@modules/general/components/selects";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import HiddenButton from "@modules/materias/components/hiddenInput";
 import { postCargaMasivaMaterias } from "@modules/materias/services/post.cargar.materias";
 import useSearch from "@modules/general/hooks/useSearch";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import { rutasMaterias } from "@modules/materias/router/routes";
+import {
+  hasValidExtension,
+  msgNoValidExtension,
+} from "@modules/general/utils/form/validExtensions";
 
 /**
  * ListarMaterias component – A component that handles listing, searching, filtering, and displaying subjects (materias).
@@ -61,7 +68,10 @@ const filterOptions: FilterOptions = [
   {
     label: "Semestre",
     key: "semestre",
-    options: getMateriasSemestresLabels().map(([value, text]) => [text, (x) => x == value]),
+    options: getMateriasSemestresLabels().map(([value, text]) => [
+      text,
+      (x) => x == value,
+    ]),
   },
 ];
 
@@ -96,7 +106,6 @@ function ListarMaterias() {
     type,
     handleAccept,
     handleCancel,
-    handleOpen,
     handleClose,
     setIsLoading,
     isLoading: isLoadingAlert,
@@ -109,7 +118,9 @@ function ListarMaterias() {
   const materias = data ? data.map(adaptMateriaService) : [];
 
   function handleSearchFn(x: MateriaTabla[], s: string) {
-    return x.filter((y) => `${y.codigo}${y.nombre}`.toLowerCase().includes(s.toLowerCase()));
+    return x.filter((y) =>
+      `${y.codigo}${y.nombre}`.toLowerCase().includes(s.toLowerCase())
+    );
   }
 
   /**
@@ -153,16 +164,29 @@ function ListarMaterias() {
   function setFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files ? e.target.files[0] : null;
 
-    if (file)
+    if (file) {
+      if (!hasValidExtension(file.name, "EXCEL")) {
+        showError();
+        return;
+      }
       showDialog({
-        message: "¿Estás seguro de cargar este documento para la carga masiva de materias?",
+        message:
+          "¿Estás seguro de cargar este documento para la carga masiva de materias?",
         title: "Gestión de materias",
         onCancel: handleClose,
         onAccept: () => updateFile(file),
         type: "default",
       });
+    }
+  }
 
-    handleOpen();
+  function showError() {
+    showDialog({
+      message: msgNoValidExtension("EXCEL"),
+      type: "error",
+      onAccept: handleClose,
+      title: "Archivo no válido",
+    });
   }
 
   /**
@@ -205,7 +229,11 @@ function ListarMaterias() {
             </Grid>
           </Grid>
 
-          <SelectFilters data={materias} setRefineData={setBuffer} filterOptions={filterOptions} />
+          <SelectFilters
+            data={materias}
+            setRefineData={setBuffer}
+            filterOptions={filterOptions}
+          />
 
           {materias && <TablaMaterias materias={dataToShow} />}
           {/* Action button to navigate to create new subject */}
@@ -225,7 +253,12 @@ function ListarMaterias() {
                 startIcon={<CloudUploadIcon />}
               >
                 Carga Masiva
-                <HiddenButton type="file" onChange={setFile} multiple accept=".xlsx" />
+                <HiddenButton
+                  type="file"
+                  onChange={setFile}
+                  multiple
+                  accept=".xlsx"
+                />
               </Button>
             </Box>
           </Stack>

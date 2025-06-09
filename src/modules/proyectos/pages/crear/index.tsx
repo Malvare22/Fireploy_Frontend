@@ -17,7 +17,6 @@ import { getProjectById } from "@modules/proyectos/services/get.project";
 import { useAuth } from "@modules/general/context/accountContext";
 import { ParamsContext } from "@modules/general/context/paramsContext";
 import { useParamsCustom } from "@modules/general/hooks/useParamsContext";
-import { AlertDialogProvider } from "@modules/general/context/alertDialogContext";
 import { ProjectExecutionStatusContextProvider } from "@modules/proyectos/context/executionStatus.context";
 
 /**
@@ -43,7 +42,8 @@ import { ProjectExecutionStatusContextProvider } from "@modules/proyectos/contex
 export default function CrearProyecto() {
   const [projectId, setProjectId] = useState<number | null>(null);
 
-  const { searchParams, setSearchParams, updateSearchParams } = useParamsCustom();
+  const { searchParams, setSearchParams, updateSearchParams } =
+    useParamsCustom();
 
   useEffect(() => {
     const id = parseInt(searchParams.get("id") ?? "-1");
@@ -92,33 +92,31 @@ export default function CrearProyecto() {
 
   return (
     <FormProvider {...methods}>
-      <AlertDialogProvider>
-        <ProjectExecutionStatusContextProvider projectId={-1}>
-          <StepperContext.Provider value={{ handleNext: handleNext }}>
-            <ParamsContext.Provider
-              value={{
-                searchParams: searchParams,
-                setSearchParams: setSearchParams,
-                updateSearchParams: updateSearchParams,
-              }}
-            >
-              <Stack spacing={3} component={Paper} padding={{ xs: 1, md: 3 }}>
-                <Stack direction={"row"} spacing={1} alignItems={"center"}>
-                  <Typography variant="h4" sx={{ fontWeight: "500" }}>
-                    {labelCreateProject.crearProyecto}
-                  </Typography>
-                  <PolylineIcon sx={{ fontSize: 32 }} />
-                </Stack>
-                <StepperStandard
-                  activeStep={activeStep}
-                  isStepSkipped={isStepSkipped}
-                  contents={contents}
-                />
+      <ProjectExecutionStatusContextProvider projectId={-1}>
+        <StepperContext.Provider value={{ handleNext: handleNext }}>
+          <ParamsContext.Provider
+            value={{
+              searchParams: searchParams,
+              setSearchParams: setSearchParams,
+              updateSearchParams: updateSearchParams,
+            }}
+          >
+            <Stack spacing={3} component={Paper} padding={{ xs: 1, md: 3 }}>
+              <Stack direction={"row"} spacing={1} alignItems={"center"}>
+                <Typography variant="h4" sx={{ fontWeight: "500" }}>
+                  {labelCreateProject.crearProyecto}
+                </Typography>
+                <PolylineIcon sx={{ fontSize: 32 }} />
               </Stack>
-            </ParamsContext.Provider>
-          </StepperContext.Provider>
-        </ProjectExecutionStatusContextProvider>
-      </AlertDialogProvider>
+              <StepperStandard
+                activeStep={activeStep}
+                isStepSkipped={isStepSkipped}
+                contents={contents}
+              />
+            </Stack>
+          </ParamsContext.Provider>
+        </StepperContext.Provider>
+      </ProjectExecutionStatusContextProvider>
     </FormProvider>
   );
 }
