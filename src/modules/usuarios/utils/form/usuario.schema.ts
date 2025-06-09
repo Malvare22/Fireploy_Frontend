@@ -38,7 +38,7 @@ export const sexoUsuarioSchema = z.enum(
 );
 
 const msgRedSocial =
-  "Ingrese un link válido para la respectiva red social o deje en blanco";
+  "Ingrese un link válido para la respectiva red social";
 
 export const RedSocialUsuarioSchema = z
   .object({

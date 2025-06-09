@@ -318,7 +318,7 @@ const ModalEdit = ({ id, handleClose }: { id: number; handleClose: Function }) =
               Editar Información de Portafolio
             </Typography>
             {/* Redes Sociales */}
-            <Typography variant="h6">{labelPerfil.redesSociales}</Typography>
+            <Typography variant="h6">{"Redes Sociales (enlaces)"}</Typography>
             <Grid container spacing={2}>
               <Grid size={{ md: 6, xs: 12 }}>
                 <TextField
