@@ -106,7 +106,7 @@ export const DataBase = ({ type }: Props) => {
     mutationFn: async () => {
       const currentStatus = await getProjectById(token, getValuesProject("id") ?? -1);
       if (executionState && currentStatus.estado_ejecucion != executionState) syncErrorProject();
-      postCreateDatabase(token, getValues());
+      await postCreateDatabase(token, getValues());
     },
     mutationKey: ["Create Database", getValues(), token],
     onSuccess: () => {
@@ -308,7 +308,7 @@ type ShowCredentialsProps = {
 function ShowCredentials({ password, user }: ShowCredentialsProps) {
   return (
     <Card sx={{ maxWidth: 400 }}>
-      <Grid container rowSpacing={2} sx={{ display: "flex", padding: 1, alignItems: "center" }}>
+      <Grid container rowSpacing={2} spacing={3} sx={{ display: "flex", padding: 1, alignItems: "center" }}>
         <Grid size={3}>
           <Typography sx={{ fontWeight: 500 }}>{"Usuario:"}</Typography>
         </Grid>

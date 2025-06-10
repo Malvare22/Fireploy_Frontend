@@ -43,13 +43,17 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import EditIcon from "@mui/icons-material/Edit";
 import { GitlabIcon } from "@modules/general/components/customIcons";
-import { getUserPublicById, getUsuarioService } from "@modules/usuarios/services/get.usuario";
+import {
+  getUserPublicById,
+  getUsuarioService,
+} from "@modules/usuarios/services/get.usuario";
 import { getProjectByUserId } from "@modules/proyectos/services/get.project";
 import { adaptUsuarioPortafolio } from "@modules/usuarios/utils/adapt.usuario.portafolio";
 import { UsuarioPortafolio } from "@modules/usuarios/types/usuario.portafolio";
 import { useAlertDialogContext } from "@modules/general/context/alertDialogContext";
 import { VARIABLES_LOCAL_STORAGE } from "@modules/general/enums/variablesLocalStorage";
 import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
+import { msgDescription } from "@modules/general/utils/formConstrains";
 
 /**
  * Portfolio component – responsible for rendering a user's public profile and projects.
@@ -70,7 +74,9 @@ import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
  * ```
  */
 const Portafolio = ({ id }: { id: number }) => {
-  const [usuario, setUsuario] = useState<UsuarioPortafolio | undefined>(undefined);
+  const [usuario, setUsuario] = useState<UsuarioPortafolio | undefined>(
+    undefined
+  );
 
   const { data, isLoading, error, refetch } = useQuery({
     queryFn: async () => {
@@ -103,7 +109,9 @@ const Portafolio = ({ id }: { id: number }) => {
     if (error) setError(error);
   }, [error]);
 
-  const [selectProyecto, setSelectProyecto] = useState<ProyectoCard | undefined>(undefined);
+  const [selectProyecto, setSelectProyecto] = useState<
+    ProyectoCard | undefined
+  >(undefined);
   const {
     handleClose: handleCloseModal,
     handleOpen: handleOpenModal,
@@ -155,7 +163,10 @@ const Portafolio = ({ id }: { id: number }) => {
             <Box>
               <SpringModal handleClose={handleCloseModal} open={openModal}>
                 {selectProyecto != undefined && (
-                  <CardProjectModal project={selectProyecto} callback={refetch} />
+                  <CardProjectModal
+                    project={selectProyecto}
+                    callback={refetch}
+                  />
                 )}
               </SpringModal>
               <Card
@@ -175,41 +186,60 @@ const Portafolio = ({ id }: { id: number }) => {
                 )}
                 <Stack spacing={3}>
                   <Stack spacing={3} alignItems={"center"}>
-                    <Avatar src={usuario.fotoDePerfil} sx={{ width: 124, height: 124 }} />
+                    <Avatar
+                      src={usuario.fotoDePerfil}
+                      sx={{ width: 124, height: 124 }}
+                    />
                     <Typography variant="h4" textAlign={"center"}>
                       {`${usuario.nombres} ${usuario.apellidos}`}
                     </Typography>
-                    {usuario.descripcion && usuario.descripcion.trim().length > 0 && (
-                      <Stack alignItems={"center"} marginTop={3} spacing={4}>
-                        <Stack spacing={2}>
-                          <Typography variant="h6" textAlign={"center"}>
-                            {labelPortafolio.acercaDe}
-                          </Typography>
-                          <Typography variant="body1" textAlign={"center"} maxWidth={850}>
-                            {usuario.descripcion}
-                          </Typography>
+                    {usuario.descripcion &&
+                      usuario.descripcion.trim().length > 0 && (
+                        <Stack alignItems={"center"} marginTop={3} spacing={4}>
+                          <Stack spacing={2}>
+                            <Typography variant="h6" textAlign={"center"}>
+                              {labelPortafolio.acercaDe}
+                            </Typography>
+                            <Typography
+                              variant="body1"
+                              textAlign={"center"}
+                              maxWidth={850}
+                            >
+                              {usuario.descripcion}
+                            </Typography>
+                          </Stack>
                         </Stack>
-                      </Stack>
-                    )}
+                      )}
                   </Stack>
                   <Stack alignItems={"center"} spacing={3}>
-                    {showSocialNetworks(usuario.redSocial, { sx: { fontSize: 32 } })}
+                    {showSocialNetworks(usuario.redSocial, {
+                      sx: { fontSize: 32 },
+                    })}
                   </Stack>
                 </Stack>
               </Card>
               <Stack spacing={4} marginTop={3}>
-                <Box sx={{ width: "100%", display: "flex", alignItems: "center", gap: 2 }}>
+                <Box
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                  }}
+                >
                   <Typography variant="body1" fontWeight="bold">
                     {labelPortafolio.ordenarPor}
                   </Typography>
                   <TextField
                     select
-                    onChange={(e) => handleOrder("puntuacion", e.target.value as Order)}
+                    onChange={(e) =>
+                      handleOrder("puntuacion", e.target.value as Order)
+                    }
                     InputLabelProps={{ shrink: true }}
                     variant="outlined"
                     label={labelPortafolio.puntuacion}
                     size="small"
-                    sx={{minWidth: 300}}
+                    sx={{ minWidth: 300 }}
                   >
                     <MenuItem value="No Aplicar">
                       <em>{labelSelects.noAplicar}</em>
@@ -222,19 +252,21 @@ const Portafolio = ({ id }: { id: number }) => {
                 <Box sx={{ flexGrow: 1 }}>
                   {usuario.proyectos.length > 0 ? (
                     <Grid container spacing={1} rowSpacing={4}>
-                      {filterDataFn(orderDataFn(usuario.proyectos)).map((proyecto) => (
-                        <Grid
-                          size={{ xl: 4, sm: 6, xs: 12 }}
-                          display={"flex"}
-                          justifyContent={"center"}
-                        >
-                          <ProjectCard
-                            handleOpen={() => handleCard(proyecto)}
-                            proyecto={proyecto}
-                            callback={refetch}
-                          />
-                        </Grid>
-                      ))}
+                      {filterDataFn(orderDataFn(usuario.proyectos)).map(
+                        (proyecto) => (
+                          <Grid
+                            size={{ xl: 4, sm: 6, xs: 12 }}
+                            display={"flex"}
+                            justifyContent={"center"}
+                          >
+                            <ProjectCard
+                              handleOpen={() => handleCard(proyecto)}
+                              proyecto={proyecto}
+                              callback={refetch}
+                            />
+                          </Grid>
+                        )
+                      )}
                     </Grid>
                   ) : (
                     <Alert severity={"info"} sx={{ width: "100&" }}>
@@ -255,7 +287,13 @@ const Portafolio = ({ id }: { id: number }) => {
 
 export default Portafolio;
 
-const ModalEdit = ({ id, handleClose }: { id: number; handleClose: Function }) => {
+const ModalEdit = ({
+  id,
+  handleClose,
+}: {
+  id: number;
+  handleClose: Function;
+}) => {
   const { token } = useAuth().accountInformation;
   const { data, error, isLoading } = useQuery({
     queryFn: async () => {
@@ -271,6 +309,7 @@ const ModalEdit = ({ id, handleClose }: { id: number; handleClose: Function }) =
     handleSubmit,
     getValues,
     reset,
+    watch,
   } = useForm<Usuario>({
     resolver: zodResolver(PortafolioSchema),
     defaultValues: {} as Usuario,
@@ -294,7 +333,8 @@ const ModalEdit = ({ id, handleClose }: { id: number; handleClose: Function }) =
     onError: (err) => setError(err),
     onSuccess: () => {
       showDialog({
-        message: "Se ha modificado exitosamente la información de portafolio del usuario",
+        message:
+          "Se ha modificado exitosamente la información de portafolio del usuario",
         title: "Actualización Portafolio",
         type: "success",
         onAccept: () => handleAccept(),
@@ -318,7 +358,7 @@ const ModalEdit = ({ id, handleClose }: { id: number; handleClose: Function }) =
               Editar Información de Portafolio
             </Typography>
             {/* Redes Sociales */}
-            <Typography variant="h6">{labelPerfil.redesSociales}</Typography>
+            <Typography variant="h6">{"Redes Sociales (enlaces)"}</Typography>
             <Grid container spacing={2}>
               <Grid size={{ md: 6, xs: 12 }}>
                 <TextField
@@ -435,12 +475,26 @@ const ModalEdit = ({ id, handleClose }: { id: number; handleClose: Function }) =
               minRows={4}
               {...register("descripcion")}
               error={!!errors.descripcion}
-              helperText={errors.descripcion?.message}
+              helperText={
+                errors.descripcion?.message ??
+                (watch("descripcion") != null
+                  ? msgDescription(watch("descripcion")!.length)
+                  : undefined)
+              }
               fullWidth
             />
-            <Stack alignItems={"center"} justifyContent={"center"} direction={"row"} spacing={2}>
+            <Stack
+              alignItems={"center"}
+              justifyContent={"center"}
+              direction={"row"}
+              spacing={2}
+            >
               <Box>
-                <GeneralButton mode={buttonTypes.save} loading={isPending} type="submit" />
+                <GeneralButton
+                  mode={buttonTypes.save}
+                  loading={isPending}
+                  type="submit"
+                />
               </Box>
               <Box>
                 <GeneralButton

@@ -6,7 +6,6 @@ import { SocketProvider } from "@modules/general/context/socketContext";
 import { Box, useTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
-
 function LayoutAuthenticated() {
   const theme = useTheme();
 
@@ -19,13 +18,12 @@ function LayoutAuthenticated() {
               <Box
                 sx={{
                   backgroundColor: theme.palette.background.default,
-                  paddingY: 6,
+                  paddingY: 3,
                   marginTop: 10,
                   display: "flex",
                   justifyContent: "center",
-                  "> div": { width: "100%" },
+                  "> div": { width: "100%", marginX: 2 },
                   minHeight: "110vh",
-                  paddingX: 2,
                 }}
               >
                 <Outlet />

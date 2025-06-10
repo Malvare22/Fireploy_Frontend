@@ -11,25 +11,32 @@ import { CursoService } from "@modules/materias/types/curso.service";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
 import {
   Alert,
+  Avatar,
   Box,
+  Button,
+  Card,
   IconButton,
   ListItemIcon,
   Menu,
   MenuItem,
   MenuList,
   Stack,
+  Tooltip,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { patchEstudiantesCurso } from "@modules/materias/services/patch.curso.estudiantes";
 import { rutasProyectos } from "@modules/proyectos/router";
 import EditIcon from "@mui/icons-material/Edit";
 import { rutasMaterias } from "@modules/materias/router/routes";
 import { AlertDialogProvider } from "@modules/general/context/alertDialogContext";
+import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { ActivityAndStudents } from "@modules/materias/components/cardCurso";
 
 export const DialogContext = createContext({
   showDialog: (_x: ShowDialogParams) => {},
@@ -45,6 +52,8 @@ function VerInformacionCurso() {
   /** Get auth token from context */
   const { accountInformation } = useAuth();
   const { token, id: idUser, tipo } = accountInformation;
+
+  const theme = useTheme();
 
   /** Dialog and loading management */
   const {
@@ -111,6 +120,11 @@ function VerInformacionCurso() {
     }
   }, [data]);
 
+  function handleClickDocente() {
+    if (curso && curso.docente && curso.docente.id)
+      navigate(rutasUsuarios.portafolio.replace(":id", curso.docente.id.toString()));
+  }
+
   function MenuCurso() {
     /**
      * Mutation to remove student to a course
@@ -161,8 +175,8 @@ function VerInformacionCurso() {
 
     return (
       <div>
-        <IconButton onClick={handleClick} size="large">
-          <MoreVertIcon />
+        <IconButton onClick={handleClick} size="large" sx={{ padding: 0 }}>
+          <SettingsIcon sx={{ color: "white", fontSize: { md: 42, xs: 32 } }} />
         </IconButton>
         <Menu
           id="basic-menu"
@@ -223,25 +237,65 @@ function VerInformacionCurso() {
       {isLoadingFetch ? (
         <LoaderElement />
       ) : (
-        <>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
           {/* Render only if course is available */}
           {curso && (
-            <Stack spacing={3}>
+            <>
               {/* Subject name and course group */}
-              <Stack direction={"row"} justifyContent={"space-between"}>
-                <Typography variant="h3">
-                  {curso.materia?.nombre} - {curso.grupo}
+              <Card
+                sx={{
+                  padding: 2,
+                  color: "white",
+                  backgroundColor: theme.palette.terciary.main,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  gap: 3,
+                }}
+              >
+                <Stack direction={"row"} justifyContent={"space-between"}>
+                  <Typography variant="h3">
+                    {curso.materia?.nombre} - {curso.grupo}
+                  </Typography>
+                  <Box>
+                    <MenuCurso />
+                  </Box>
+                </Stack>
+                {/* Course description */}
+                <Typography variant="h6" sx={{ maxWidth: 800 }}>
+                  Cupidatat aute fugiat occaecat nostrud sunt proident magna non. Nulla aliqua amet
+                  exercitation labore laboris eiusmod. Lorem excepteur deserunt officia incididunt
+                  dolor ullamco commodo culpa. Occaecat voluptate officia velit officia sint est
+                  esse mollit irure aliquip est non mollit veniam.
                 </Typography>
-                <Box>
-                  <MenuCurso />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: { md: "row", xs: "column" },
+                    alignItems: "center",
+                    gap: 2,
+                  }}
+                >
+                  <ActivityAndStudents
+                    cntActities={(curso.estudiantes ?? []).length}
+                    cntStudents={(curso.secciones ?? []).length}
+                  />
+                  {curso.docente ? (
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Tooltip title={curso.docente?.nombre}>
+                        <Button onClick={handleClickDocente}>
+                          <Avatar sx={{ width: 48, height: 48 }} src={curso.docente?.imagen} />
+                        </Button>
+                      </Tooltip>
+                      <Typography variant="h5">{curso.docente?.nombre}</Typography>
+                    </Box>
+                  ) : (
+                    <Alert severity="info">
+                      {"El curso actualmente no cuenta con un docente asignado"}
+                    </Alert>
+                  )}
                 </Box>
-              </Stack>
-
-              {/* Course description */}
-              <Typography variant="h6" sx={{ maxWidth: 600 }}>
-                {curso.descripcion}
-              </Typography>
-
+              </Card>
               {/* Section title */}
               <Typography variant="h4">{LabelCurso.secciones}</Typography>
 
@@ -263,9 +317,9 @@ function VerInformacionCurso() {
                   <Alert severity="info">Este curso actualmente no tiene secciones agregadas</Alert>
                 )}
               </Stack>
-            </Stack>
+            </>
           )}
-        </>
+        </Box>
       )}
     </AlertDialogProvider>
   );

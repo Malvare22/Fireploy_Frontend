@@ -27,12 +27,17 @@ type ProjectCardProps = {
   callback: () => Promise<unknown>;
 };
 
-export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen, callback }) => {
+export const ProjectCard: React.FC<ProjectCardProps> = ({
+  proyecto,
+  handleOpen,
+  callback,
+}) => {
   const theme = useTheme();
 
   const { id } = useAuth().accountInformation;
 
-  const disableUrl = !proyecto.url || proyecto.url?.trim().length == 0 || proyecto.estado != "N";
+  const disableUrl =
+    !proyecto.url || proyecto.url?.trim().length == 0 || proyecto.estado != "N";
 
   function handleUrl() {
     if (proyecto.url) openInNewTab(proyecto.url);
@@ -154,10 +159,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen, 
                 Visitar
               </Button>
             ) : (
-              <Button
-                variant="contained"
-                color="error"
-              >
+              <Button variant="contained" color="error">
                 Sitio no disponible
               </Button>
             )}
@@ -181,7 +183,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen, 
           <ProjectTags proyecto={proyecto} />
         </Box>
 
-        <Box sx={{ marginBottom: 1 }}>
+        <Box sx={{ marginBottom: 1, width: "100%" }}>
           {proyecto.descripcion.length > 0 ? (
             <Typography
               sx={{
@@ -198,7 +200,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen, 
             </Typography>
           ) : (
             <Alert severity="info" sx={{ width: "100%" }}>
-              <Typography variant="body2">{"Descripción no disponible"}</Typography>
+              <Typography variant="body2">
+                {"Descripción no disponible"}
+              </Typography>
             </Alert>
           )}
         </Box>
@@ -212,14 +216,19 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen, 
           </Box>
         </Stack>
         <Divider />
-        <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
+        <Stack
+          direction={"row"}
+          justifyContent={"space-between"}
+          alignItems={"center"}
+        >
           <ProjectCardMembers integrantes={proyecto.integrantes} />
-          {id != -1 && currentValues && (
+          {currentValues && (
             <StarButton
               callback={callback}
               check={currentValues.check}
               count={currentValues.count}
               projectId={proyecto.id}
+              sx={{fontSize: 42}}
             />
           )}
         </Stack>

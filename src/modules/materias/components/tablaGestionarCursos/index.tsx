@@ -1,6 +1,15 @@
 import DataTable from "react-data-table-component";
 import { TableColumn } from "react-data-table-component";
-import { Alert, Box, Chip, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  capitalize,
+  Chip,
+  MenuItem,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import Status from "@modules/general/components/status";
 import InfoIcon from "@mui/icons-material/Info";
@@ -9,10 +18,18 @@ import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import { CursoTabla } from "@modules/materias/types/curso.tabla";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
 import SearchUsers from "@modules/general/components/searchUsers";
-import { useSearchUsers, UsuarioCampoBusqueda } from "@modules/general/hooks/useSearchUsers";
+import {
+  useSearchUsers,
+  UsuarioCampoBusqueda,
+} from "@modules/general/hooks/useSearchUsers";
 import { getMateriaStatesArray } from "@modules/materias/utils/materias";
 import SchoolIcon from "@mui/icons-material/School";
-import { Controller, FieldError, useForm, useFormContext } from "react-hook-form";
+import {
+  Controller,
+  FieldError,
+  useForm,
+  useFormContext,
+} from "react-hook-form";
 import { Curso, cursoTemplate } from "@modules/materias/types/curso";
 import { Materia } from "@modules/materias/types/materia";
 import { adaptCursoTabla } from "@modules/materias/utils/adapters/curso";
@@ -26,18 +43,19 @@ import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import { useCustomTableStyles } from "@modules/general/styles";
 import AlertDialog from "@modules/general/components/alertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
+import { letterOptionsForGroup } from "@modules/materias/utils/groupLetters";
 
 /**
- * TablaGestionarCursos Component – Displays a table for managing courses, including features such as editing course information, 
+ * TablaGestionarCursos Component – Displays a table for managing courses, including features such as editing course information,
  * assigning instructors, and handling course actions (e.g., add, delete, save).
- * 
+ *
  * The table includes features like row editing, selecting instructors from a search list, and managing course states (active, inactive, etc.).
  * It also integrates form handling with `react-hook-form` to manage the course data.
- * 
+ *
  * @component
- * 
+ *
  * @returns A `DataTable` component for managing courses, along with actions for adding, editing, saving, and deleting courses.
- * 
+ *
  * @example
  * ```tsx
  * <TablaGestionarCursos />
@@ -55,7 +73,6 @@ const TablaGestionarCursos = () => {
   } = useFormContext<Materia>();
 
   const {
-    register: registerCurso,
     formState: { errors: errorsCurso },
     reset: resetCurso,
     getValues: getValuesCurso,
@@ -68,7 +85,6 @@ const TablaGestionarCursos = () => {
       ...(getValues("cursos") ?? []),
       {
         ...cursoTemplate,
-        grupo: (getValues("cursos")?.length ?? 0).toString(),
       },
     ]);
   }
@@ -108,7 +124,9 @@ const TablaGestionarCursos = () => {
 
   useEffect(() => {
     if (dataFetchDocentes)
-      setDocentes(dataFetchDocentes.map((docente) => adaptUserServiceToCB(docente)));
+      setDocentes(
+        dataFetchDocentes.map((docente) => adaptUserServiceToCB(docente))
+      );
   }, [dataFetchDocentes]);
 
   function handleSave() {
@@ -143,15 +161,41 @@ const TablaGestionarCursos = () => {
     {
       name: <Typography>{labelListarCursos.grupo}</Typography>,
       cell: (row) => {
-        if (currentEdit != row.rowIndex) return <Typography>{row.grupo}</Typography>;
+        if (currentEdit != row.rowIndex)
+          return <Typography>{row.grupo}</Typography>;
         else {
           return (
-            <TextField
-              sx={{ marginLeft: -1 }}
-              error={!!errorsCurso?.grupo}
-              helperText={!!errorsCurso?.grupo?.message}
-              {...registerCurso("grupo")}
-              size="small"
+            <Controller
+              name="grupo"
+              control={controlCurso}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  select
+                  size="small"
+                  fullWidth
+                  label="Grupo"
+                  error={!!errorsCurso.grupo}
+                  helperText={errorsCurso.grupo?.message}
+                  SelectProps={{
+                    MenuProps: {
+                      PaperProps: {
+                        style: {
+                          maxHeight: 150,
+                        },
+                      },
+                    },
+                  }}
+                >
+                  {letterOptionsForGroup().map((option) => {
+                    return (
+                      <MenuItem value={option} key={option}>
+                        {option}
+                      </MenuItem>
+                    );
+                  })}
+                </TextField>
+              )}
             />
           );
         }
@@ -249,8 +293,14 @@ const TablaGestionarCursos = () => {
                 }}
                 type="button"
               />
-              <ActionButton mode={actionButtonTypes.eliminar} onClick={() => handleDelete()} />
-              <ActionButton mode={actionButtonTypes.cancelar} onClick={handleCancel} />
+              <ActionButton
+                mode={actionButtonTypes.eliminar}
+                onClick={() => handleDelete()}
+              />
+              <ActionButton
+                mode={actionButtonTypes.cancelar}
+                onClick={handleCancel}
+              />
             </Stack>
           );
         } else {
@@ -302,7 +352,11 @@ const TablaGestionarCursos = () => {
         ></DataTable>
         <Stack alignItems={"end"} padding={3}>
           <Box>
-            <GeneralButton onClick={handleAdd} mode={buttonTypes.add} size="small" />
+            <GeneralButton
+              onClick={handleAdd}
+              mode={buttonTypes.add}
+              size="small"
+            />
           </Box>
         </Stack>
         {errors?.cursos &&
@@ -311,7 +365,7 @@ const TablaGestionarCursos = () => {
             <div key={index}>
               {Object.entries(cursoError).map(([field, error]) => (
                 <Alert severity="error" key={`${index}-${field}`}>
-                  {`${field}: ${(error as FieldError)?.message || "Error desconocido"}`}
+                  {`${capitalize(field)}: ${(error as FieldError)?.message || "Error desconocido"}`}
                 </Alert>
               ))}
             </div>

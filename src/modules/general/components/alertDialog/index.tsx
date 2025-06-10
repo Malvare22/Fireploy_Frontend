@@ -64,6 +64,8 @@ const AlertDialog: React.FC<Props> = ({
   type = "default",
   reload = false,
 }) => {
+  const [locked, setLocked] = React.useState<boolean>(false);
+
   function TypeProvider({ children }: { children: React.ReactNode }) {
     switch (type) {
       case "default":
@@ -78,19 +80,21 @@ const AlertDialog: React.FC<Props> = ({
       case "warning":
         return <Alert severity="warning">{children}</Alert>;
     }
-    return <></>;
   }
 
-  const navigate = useNavigate();
-
-  function acceptAction() {
+  function handleButton() {
+    setLocked(true);
+    handleAccept();
     if (reload) {
       navigate(0);
-      handleAccept();
-    } else {
-      handleAccept();
     }
   }
+
+  React.useEffect(() => {
+    setLocked(false);
+  }, [textBody, body, type, open]);
+
+  const navigate = useNavigate();
 
   return (
     <React.Fragment>
@@ -117,14 +121,25 @@ const AlertDialog: React.FC<Props> = ({
           <Stack direction={"row"} spacing={2}>
             {
               <Box>
-                <Button variant="contained" size="small" loading={isLoading} onClick={acceptAction}>
+                <Button
+                  variant="contained"
+                  size="small"
+                  loading={isLoading || locked}
+                  onClick={handleButton}
+                >
                   Aceptar
                 </Button>
               </Box>
             }
             {handleCancel && (
               <Box>
-                <Button variant="contained" size="small" color="inherit" disabled={isLoading} onClick={handleCancel}>
+                <Button
+                  variant="contained"
+                  size="small"
+                  color="inherit"
+                  disabled={isLoading}
+                  onClick={handleCancel}
+                >
                   Cancelar
                 </Button>
               </Box>

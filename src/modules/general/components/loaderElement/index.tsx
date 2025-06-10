@@ -24,7 +24,7 @@ function LoaderElement() {
   const theme = useTheme();
 
   return (
-    <Box sx={{ width: '100%', height: '100%',display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+    <Box sx={{ width: '100%', height: '80vh',display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
       {/* Global styles for orbit and blink animations */}
       <GlobalStyles
         styles={{
@@ -90,7 +90,7 @@ function LoaderElement() {
         <RocketLaunchIcon
           sx={{
             fontSize: 36,
-            color: theme.palette.info.main,
+            color: "rgb(41, 61, 111)",
             animation: "blink 2s infinite",
           }}
         />

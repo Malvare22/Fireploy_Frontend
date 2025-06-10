@@ -73,8 +73,15 @@ export function sortDates(a: string, b: string) {
 }
 
 
-export function getFormatDayTime(a: string){
-  const aux =  a.split('T');
+export function getFormatDayTime(a: string) {
+  const aux = a.split('T');
 
   return aux[0] + ' ' + aux[1].slice(0, 8);
+}
+
+export function calculateAge(date: string) {
+  const currentDate = new Date(date);
+  var ageDifMs = Date.now() - currentDate.getTime();
+  var diff = new Date(ageDifMs);
+  return Math.abs(diff.getUTCFullYear() - 1970);
 }

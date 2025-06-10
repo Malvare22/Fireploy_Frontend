@@ -26,9 +26,7 @@ export type data = {
  * @returns {Promise<string>} The response from the server.
  */
 export const postChangePasswordForget = async (data: data, token: string) => {
-  const response = await postData<string>(`/auth/changePassword/${token}`, data, {
-    sessiontoken: token,
-  });
+  const response = await postData<string>(`/auth/changePassword/${token}`, data, {});
   return response;
 };
 

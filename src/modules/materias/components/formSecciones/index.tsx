@@ -1,9 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
+import { msgDescription } from "@modules/general/utils/formConstrains";
 import { labelFormSection } from "@modules/materias/enums/labelFormSection";
 import { Seccion } from "@modules/materias/types/seccion";
-import { SeccionesSchema, SeccionSchema } from "@modules/materias/utils/forms/form.schema";
+import {
+  SeccionesSchema,
+  SeccionSchema,
+} from "@modules/materias/utils/forms/form.schema";
 import { getMateriaStatesArray } from "@modules/materias/utils/materias";
 import { MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useEffect } from "react";
@@ -17,19 +21,19 @@ type Props = {
 
 /**
  * SeccionesForm component – allows editing a specific section (sección) of a course.
- * 
+ *
  * This form is embedded in a larger form context and provides a temporary buffer form for editing
- * individual section data. It syncs with the parent form using `useFormContext`, validates inputs with Zod, 
+ * individual section data. It syncs with the parent form using `useFormContext`, validates inputs with Zod,
  * and handles save or cancel actions for the specified section index.
- * 
+ *
  * @component
- * 
+ *
  * @param onAccept Callback function invoked after a successful save.
  * @param onCancel Callback function invoked when cancelling the form.
  * @param index Index of the section in the array being edited.
- * 
+ *
  * @returns A form UI for editing section details like title, dates, description, and status.
- * 
+ *
  * @example
  * ```tsx
  * <SeccionesForm
@@ -47,6 +51,7 @@ function SeccionesForm({ onAccept, onCancel, index }: Props) {
     formState: { errors: errorsBuffer },
     register: registerBuffer,
     handleSubmit: handleSubmitForm,
+    watch,
   } = useForm<Seccion>({
     defaultValues: getValues(`secciones.${index}`),
     resolver: zodResolver(SeccionSchema),
@@ -70,7 +75,12 @@ function SeccionesForm({ onAccept, onCancel, index }: Props) {
   }
 
   return (
-    <Stack spacing={3} padding={3} component={"form"} onSubmit={handleSubmitForm(onSaveForm)}>
+    <Stack
+      spacing={3}
+      padding={3}
+      component={"form"}
+      onSubmit={handleSubmitForm(onSaveForm)}
+    >
       <Typography variant="h5" textAlign={"center"}>
         {labelFormSection.editSection}
       </Typography>
@@ -105,7 +115,10 @@ function SeccionesForm({ onAccept, onCancel, index }: Props) {
         multiline
         minRows={2}
         error={!!errorsBuffer?.descripcion}
-        helperText={errorsBuffer?.descripcion?.message as string}
+        helperText={
+          errorsBuffer?.descripcion?.message ??
+          msgDescription(watch("descripcion").length)
+        }
         {...registerBuffer("descripcion")}
       />
 
@@ -129,7 +142,7 @@ function SeccionesForm({ onAccept, onCancel, index }: Props) {
           </TextField>
         )}
       />
-      <Stack spacing={2} direction={"row"} justifyContent={'center'}>
+      <Stack spacing={2} direction={"row"} justifyContent={"center"}>
         <GeneralButton mode={buttonTypes.save} type="submit" />
         <GeneralButton mode={buttonTypes.cancel} onClick={onCancelForm} />
       </Stack>

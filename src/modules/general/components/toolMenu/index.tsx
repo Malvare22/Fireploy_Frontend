@@ -1,8 +1,9 @@
 import * as React from "react";
 import { AppProvider, type Navigation, Router } from "@toolpad/core/AppProvider";
-import { DashboardLayout, SidebarFooterProps } from "@toolpad/core/DashboardLayout";
+import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import {
   Alert,
+  Avatar,
   Badge,
   Box,
   Button,
@@ -11,6 +12,7 @@ import {
   Menu,
   Stack,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
@@ -32,7 +34,6 @@ import { BoxesIcon, JournalPlus, PersonLinesFillIcon } from "../customIcons";
 import PlagiarismIcon from "@mui/icons-material/Plagiarism";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import { Account, AccountPreview, AccountPreviewProps } from "@toolpad/core/Account";
 import type { Session } from "@toolpad/core/AppProvider";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoaderElement from "../loaderElement";
@@ -43,6 +44,7 @@ import { NotificationMessage } from "@modules/usuarios/types/notification";
 import { useNotificationContext } from "@modules/general/context/notificationContext";
 import { rutasMaterias } from "@modules/materias/router/routes";
 import SchoolIcon from "@mui/icons-material/School";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 function getNavigationElements(userInformation: AccountInformation): Navigation {
   return [
@@ -170,9 +172,11 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
 function ToolbarActions({
   count,
   notificaciones,
+  account,
 }: {
   count: string;
   notificaciones: NotificationMessage[];
+  account: AccountInformation;
 }) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -189,10 +193,98 @@ function ToolbarActions({
     router(rutasUsuarios.notificaciones);
   }
 
+  const navigate = useNavigate();
+
+  function SessionMenu() {
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+      setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+
+    return (
+      <Box>
+        <IconButton
+          aria-label="more"
+          id="long-button"
+          aria-controls={open ? "long-menu" : undefined}
+          aria-expanded={open ? "true" : undefined}
+          aria-haspopup="true"
+          onClick={handleClick}
+        >
+          <MoreVertIcon sx={{ fontSize: 32 }} />
+        </IconButton>
+        <Menu
+          id="long-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+        >
+          <Stack direction="column" spacing={1} sx={{ padding: 2 }}>
+            <Button
+              variant="outlined"
+              startIcon={<ManageAccountsIcon />}
+              onClick={() => navigate(rutasUsuarios.perfil)}
+            >
+              Configurar Cuenta
+            </Button>
+            <Button
+              variant="outlined"
+              startIcon={<LogoutIcon />}
+              onClick={() => navigate(rutasUsuarios.logout)}
+            >
+              Cerrar Sesión
+            </Button>
+          </Stack>
+        </Menu>
+      </Box>
+    );
+  }
+
   const theme = useTheme();
 
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
+
+  const SessionPanel = React.useMemo(() => {
+    return (
+      <Box sx={{ display: "flex", alingItems: "center" }}>
+        {matches && (
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <Avatar src={account.foto} sx={{ width: 48, height: 48 }} />
+            <Typography
+              sx={{
+                maxWidth: 180,
+                wordWrap: "word-break",
+                display: "-webkit-box",
+                overflow: "hidden",
+                WebkitBoxOrient: "vertical",
+                WebkitLineClamp: 2,
+                fontSize: 17,
+              }}
+            >
+              {account.nombre}
+            </Typography>
+          </Box>
+        )}
+        <Box ><SessionMenu /></Box>
+      </Box>
+    );
+  }, [account, matches]);
+
   return (
-    <Box sx={{ paddingRight: "14px" }}>
+    <Box sx={{ paddingRight: "14px", display: "flex", alignItems: "center" }}>
+      {SessionPanel}
       <IconButton onClick={handleClick}>
         <Badge
           badgeContent={count}
@@ -247,7 +339,7 @@ function ToolbarActions({
               {notificaciones.length > 0 ? (
                 notificaciones.slice(0, 5).map((notificacion) => (
                   <Box key={notificacion.id}>
-                    <Box sx={{ paddingY: 1 }} >
+                    <Box sx={{ paddingY: 1 }}>
                       <Typography sx={{ fontWeight: 700 }} variant="subtitle2">
                         {notificacion.titulo}
                       </Typography>
@@ -274,7 +366,7 @@ function ToolbarActions({
           <Stack alignItems={"center"} paddingY={1}>
             <Box>
               <Button size="small" variant="outlined" color="info" onClick={handleNav}>
-                Ver Más
+                Ver más
               </Button>
             </Box>
           </Stack>
@@ -304,91 +396,6 @@ function useDemoRouter(): Router {
   };
 }
 
-function AccountSidebarPreview(props: AccountPreviewProps & { mini: boolean }) {
-  const { handleClick, open, mini } = props;
-  return (
-    <Stack direction="column" p={0}>
-      <Divider />
-      <AccountPreview
-        variant={mini ? "condensed" : "expanded"}
-        handleClick={handleClick}
-        open={open}
-      />
-    </Stack>
-  );
-}
-
-function SidebarFooterAccountPopover() {
-  const navigate = useNavigate();
-
-  return (
-    <Stack direction="column" spacing={1} sx={{ padding: 2 }}>
-      <Button
-        variant="outlined"
-        startIcon={<ManageAccountsIcon />}
-        onClick={() => navigate(rutasUsuarios.perfil)}
-      >
-        Configurar Cuenta
-      </Button>
-      <Button
-        variant="outlined"
-        startIcon={<LogoutIcon />}
-        onClick={() => navigate(rutasUsuarios.logout)}
-      >
-        Cerrar Sesión
-      </Button>
-    </Stack>
-  );
-}
-
-const createPreviewComponent = (mini: boolean) => {
-  return function PreviewComponent(props: AccountPreviewProps) {
-    return <AccountSidebarPreview {...props} mini={mini} />;
-  };
-};
-
-function SidebarFooterAccount({ mini }: SidebarFooterProps) {
-  const PreviewComponent = React.useMemo(() => createPreviewComponent(mini), [mini]);
-  return (
-    <Stack>
-      <Account
-        slots={{ preview: PreviewComponent, popoverContent: SidebarFooterAccountPopover }}
-        slotProps={{
-          popover: {
-            transformOrigin: { horizontal: "left", vertical: "bottom" },
-            anchorOrigin: { horizontal: "right", vertical: "bottom" },
-            disableAutoFocus: true,
-            slotProps: {
-              paper: {
-                elevation: 0,
-                sx: {
-                  overflow: "visible",
-                  filter: (theme) =>
-                    `drop-shadow(0px 2px 8px ${
-                      theme.palette.mode === "dark" ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.32)"
-                    })`,
-                  mt: 1,
-                  "&::before": {
-                    content: '""',
-                    display: "block",
-                    position: "absolute",
-                    bottom: 10,
-                    left: 0,
-                    width: 10,
-                    height: 10,
-                    bgcolor: "background.paper",
-                    transform: "translate(-50%, -50%) rotate(45deg)",
-                    zIndex: 0,
-                  },
-                },
-              },
-            },
-          },
-        }}
-      />
-    </Stack>
-  );
-}
 
 /**
  * `DashboardLayoutBasic` wraps the entire application with `AppProvider` from Toolpad,
@@ -521,11 +528,11 @@ export default function DashboardLayoutBasic(props: any) {
             }}
             slots={{
               toolbarAccount: () => null,
-              sidebarFooter: SidebarFooterAccount,
               toolbarActions: () => (
                 <ToolbarActions
                   count={getNotificationsLabel(notifications ? notifications.length : 0)}
                   notificaciones={notifications ?? []}
+                  account={accountInformation}
                 />
               ),
             }}

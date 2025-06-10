@@ -28,11 +28,14 @@ import useErrorReader from "@modules/general/hooks/useErrorReader";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { labelRegisterUser } from "@modules/general/enums/labelRegisterUser";
-import { postSignUpWithGoogle, SignUpResponse } from "@modules/general/services/post.signUp";
+import {
+  postSignUpWithGoogle,
+  SignUpResponse,
+} from "@modules/general/services/post.signUp";
 import { GoogleLogin } from "@react-oauth/google";
 import { loginUser } from "@modules/general/utils/account";
 import { rutasProyectos } from "@modules/proyectos/router";
-import { useState } from "react";
+import React, { useState } from "react";
 
 /**
  * Registrar component renders the user registration form.
@@ -72,7 +75,8 @@ function Registrar() {
     navigate(rutasGeneral.login);
   };
 
-  const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
+  const { showDialog, open, title, message, type, handleAccept } =
+    useAlertDialog();
 
   const { setError } = useErrorReader(showDialog);
 
@@ -122,7 +126,11 @@ function Registrar() {
           <Grid container spacing={4}>
             <Grid
               size={12}
-              sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
               <Typography variant="h4" textAlign={"center"}>
                 {labelUsuario.registrarUsuario}
@@ -130,7 +138,10 @@ function Registrar() {
               <AssignmentIndIcon fontSize="large" />
             </Grid>
             <Grid size={12}>
-              <Alert sx={{ display: "flex", alignItems: "center", gap: 3 }} severity="info">
+              <Alert
+                sx={{ display: "flex", alignItems: "center", gap: 3 }}
+                severity="info"
+              >
                 <Stack
                   direction={{ md: "row", xs: "column" }}
                   spacing={2}
@@ -199,7 +210,7 @@ function Registrar() {
 
             <Grid size={{ sm: 6, xs: 12 }}>
               <TextField
-                label="Fecha de Ingreso"
+                label="Fecha de Ingreso a la Universidad"
                 type="date"
                 error={!!errors.estFechaInicio}
                 helperText={errors.estFechaInicio?.message}
@@ -244,23 +255,27 @@ function Registrar() {
                 fullWidth
               />
             </Grid>
-            <Box sx={{display: 'flex', flexWrap: 'wrap', alignItems: 'center'}}>
-              <Checkbox checked={checked} onChange={() => setChecked(!checked)} />
-              <Typography variant="body2">{"He leído y acepto las "}</Typography>
-              <Link sx={{ marginLeft: 0.5 }} target='_blank' href="http://fireploy.online:3001/docs/politicas-de-servicio" color="inherit">
-                <Typography variant="body2">{"políticas de uso y privacidad"}</Typography>
-              </Link>
-              <Typography variant="body2" sx={{ marginLeft: 0.5 }}>{"del servicio de Fireploy"}</Typography>
-            </Box>
+            <CheckRegister check={checked} setCheck={setChecked} />
             {/* Buttons */}
-            <Grid size={12} sx={{ display: "flex", justifyContent: "center", gap: 3 }}>
+            <Grid
+              size={12}
+              sx={{ display: "flex", justifyContent: "center", gap: 3 }}
+            >
               <Box>
-                <Button variant="outlined" onClick={() => navigate(rutasGeneral.login)}>
+                <Button
+                  variant="outlined"
+                  onClick={() => navigate(rutasGeneral.login)}
+                >
                   {labelRegisterUser.back}
                 </Button>
               </Box>
               <Box>
-                <Button variant="contained" loading={isPending} disabled={!checked} type="submit">
+                <Button
+                  variant="contained"
+                  loading={isPending}
+                  disabled={!checked}
+                  type="submit"
+                >
                   {labelRegisterUser.register}
                 </Button>
               </Box>
@@ -274,3 +289,29 @@ function Registrar() {
 }
 
 export default Registrar;
+
+type CheckRegisterProps = {
+  check: boolean;
+  setCheck: React.Dispatch<boolean>;
+};
+export function CheckRegister({ check, setCheck }: CheckRegisterProps) {
+  return (
+    <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}>
+      <Checkbox checked={check} onChange={() => setCheck(!check)} />
+      <Typography variant="body2">{"He leído y acepto las "}</Typography>
+      <Link
+        sx={{ marginLeft: 0.5 }}
+        target="_blank"
+        href="http://fireploy.online:3001/docs/politicas-de-servicio"
+        color="inherit"
+      >
+        <Typography variant="body2">
+          {"políticas de uso y privacidad"}
+        </Typography>
+      </Link>
+      <Typography variant="body2" sx={{ marginLeft: 0.5 }}>
+        {"del servicio de Fireploy"}
+      </Typography>
+    </Box>
+  );
+}

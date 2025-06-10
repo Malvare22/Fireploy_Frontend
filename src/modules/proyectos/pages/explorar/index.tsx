@@ -129,7 +129,7 @@ function ExplorarProyectos() {
   return (
     <AlertDialogProvider>
       {/* Modal */}
-      <SpringModal open={modalOpen} handleClose={closeModal}>
+      <SpringModal open={modalOpen} handleClose={closeModal} sx={{overflow: 'scroll'}}>
         {selectProyecto && <ModalProyectoPortafolio callback={refetch} project={selectProyecto} />}
       </SpringModal>
 
@@ -163,8 +163,8 @@ function ExplorarProyectos() {
           <TextField select size="small" sx={{ width: 250 }} label="Ordenar" onChange={handleChangeOption}>
             <MenuItem value={"titulo-asc"}>{"A-Z"}</MenuItem>
             <MenuItem value={"titulo-desc"}>{"Z-A"}</MenuItem>
-            <MenuItem value={"puntuacion-asc"}>{"Mayor puntuación"}</MenuItem>
-            <MenuItem value={"puntuacion-desc"}>{"Menor puntuación"}</MenuItem>
+            <MenuItem value={"puntuacion-desc"}>{"Mayor puntuación"}</MenuItem>
+            <MenuItem value={"puntuacion-asc"}>{"Menor puntuación"}</MenuItem>
           </TextField>
           <TextField
             select

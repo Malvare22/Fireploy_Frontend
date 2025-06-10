@@ -61,7 +61,7 @@ const Status: React.FC<StatusProps> = ({ status }) => {
  * @returns {string} The corresponding label ("Active" or "Inactive").
  */
 function getStatusText(status: StatusProps["status"]): string {
-  return status === "A" ? "Active" : "Inactive";
+  return status === "A" ? "Activo" : "Inactivo";
 }
 
 export default Status;

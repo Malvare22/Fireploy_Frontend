@@ -1,6 +1,7 @@
 import AlertDialog from "@modules/general/components/alertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
 import { useAuth } from "@modules/general/context/accountContext";
+import { AlertDialogProvider } from "@modules/general/context/alertDialogContext";
 import useAlertDialog2 from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import VerPerfil from "@modules/usuarios/components/perfil";
@@ -80,7 +81,9 @@ function VistaPerfil() {
       {isLoading ? (
         <LoaderElement />
       ) : (
-        <Box paddingX={0}>{usuario && <VerPerfil usuario={usuario} />}</Box>
+        <AlertDialogProvider>
+          <Box paddingX={0}>{usuario && <VerPerfil usuario={usuario} />}</Box>
+        </AlertDialogProvider>
       )}
     </>
   );

@@ -11,8 +11,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React from "react";
-import { labelCardCurso } from "@modules/materias/enums/labelCardCurso";
+import React, { useMemo } from "react";
 import { Curso, UsuarioCurso } from "@modules/materias/types/curso";
 import { useNavigate } from "react-router";
 import { AccountInformation, useAuth } from "@modules/general/context/accountContext";
@@ -44,15 +43,16 @@ const CardCurso: React.FC<CardCursoProps> = ({
 
   const showDocentOwnerStyle = !(userType != "D" || (userType == "D" && !isRegister));
 
-  const buttonText = () => {
-    if (userType == "E") return isRegister ? "Acceder" : labelCardCurso.inscribirme;
-
-    if (userType == "D" && curso.docente == null) {
-      return "Solicitar Curso";
+  const buttonElements = useMemo((): { color: "primary" | "info"; text: string } => {
+    if (userType == "D" && curso.docente != null) {
+      return { text: "Solicitar Curso", color: "info" };
+    }
+    if (userType == "E" && !isRegister) {
+      return { text: "Inscribirme", color: "info" };
     }
 
-    return "Acceder";
-  };
+    return { text: "Acceder", color: "primary" };
+  }, [userType, isRegister]);
 
   function handleButton() {
     if (isRegister || userType == "A")
@@ -81,7 +81,7 @@ const CardCurso: React.FC<CardCursoProps> = ({
           }}
           size={{ md: 3, xs: 12 }}
         >
-          <Typography variant="h1" sx={{fontWeight: 500}} color="white">
+          <Typography variant="h1" sx={{ fontWeight: 500 }} color="white">
             {curso.grupo}
           </Typography>
         </Grid>
@@ -120,9 +120,10 @@ const CardCurso: React.FC<CardCursoProps> = ({
               disabled={buttonDisable()}
               size="small"
               variant="contained"
+              color={buttonElements.color}
               onClick={handleButton}
             >
-              {buttonText()}
+              {buttonElements.text}
             </Button>
           </Box>
         </Grid>
@@ -151,7 +152,7 @@ function FrameDocente({ docente }: PropsFrameDocente) {
     );
   } else
     return (
-      <Card sx={{ display: "flex", gap: 0, alignItems: "center" }}>
+      <Box sx={{ display: "flex", gap: 0, alignItems: "center" }}>
         <Tooltip title={docente.nombre}>
           <Button onClick={onClick}>
             <Avatar src={docente.imagen} sx={{ width: 48, height: 48 }} />
@@ -160,11 +161,11 @@ function FrameDocente({ docente }: PropsFrameDocente) {
         <Typography variant="body1" sx={{ wordBreak: "break-word" }}>
           {docente.nombre}
         </Typography>
-      </Card>
+      </Box>
     );
 }
 
-function ActivityAndStudents({
+export function ActivityAndStudents({
   cntActities,
   cntStudents,
 }: {
@@ -176,8 +177,8 @@ function ActivityAndStudents({
       <Chip
         label={`Actividades: ${cntActities}`}
         icon={<EditNoteIcon />}
-        color="error"
         size={"medium"}
+        color="primary"
       />
       <Chip
         label={`Estudiantes: ${cntStudents}`}

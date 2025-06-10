@@ -9,12 +9,13 @@ import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 import { labelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
-import { useParams } from "react-router";
+import { useSearchParams } from "react-router";
 import { CambiarContrasenaSchema } from "@modules/usuarios/utils/form/cambiarContrasenia";
 import { postChangePasswordForget } from "@modules/general/services/post.change.password";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { labelRestorePassword } from "@modules/general/enums/labelRestorePassword";
+import { useEffect, useState } from "react";
 
 /**
  * Password reset component used for users who forgot their current password.
@@ -24,9 +25,15 @@ import { labelRestorePassword } from "@modules/general/enums/labelRestorePasswor
  * @component
  */
 function ReestablecerContrasenia() {
-  const { token } = useParams();
+  const [searchParams] = useSearchParams();
 
-  /** 
+  const [currentToken, setCurrentToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (searchParams.get("token")) setCurrentToken(searchParams.get("token"));
+  }, [searchParams]);
+
+  /**
    * Type for form values based on Zod schema.
    * @typedef {Object} FormType
    */
@@ -53,7 +60,8 @@ function ReestablecerContrasenia() {
   const navigate = useNavigate();
 
   /** Custom hook for managing alert dialog state and actions */
-  const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
+  const { showDialog, open, title, message, type, handleAccept } =
+    useAlertDialog();
 
   /** Custom hook for error handling and display */
   const { setError } = useErrorReader(showDialog);
@@ -64,7 +72,10 @@ function ReestablecerContrasenia() {
    */
   const { mutate, isPending } = useMutation({
     mutationKey: ["Restore Password User", getValues("correo")],
-    mutationFn: () => postChangePasswordForget(getValues(), token ?? ""),
+    mutationFn: async () => {
+      if (currentToken)
+        await postChangePasswordForget(getValues(), currentToken);
+    },
     onSuccess: () =>
       showDialog({
         message: "Contraseña reestablecida Correctamente",
@@ -86,7 +97,7 @@ function ReestablecerContrasenia() {
   };
 
   return (
-    <Card sx={{ border: '3px solid black', maxWidth: 800, padding: 3}}>
+    <Card sx={{ border: "3px solid black", maxWidth: 800, padding: 3 }}>
       {/* Alert dialog for confirmation or error messages */}
       <AlertDialog
         handleAccept={handleAccept}
@@ -140,7 +151,10 @@ function ReestablecerContrasenia() {
 
             {/* Form actions */}
             <Stack spacing={2} direction="row" justifyContent="center">
-              <Button variant="outlined" onClick={() => navigate(rutasGeneral.login)}>
+              <Button
+                variant="outlined"
+                onClick={() => navigate(rutasGeneral.login)}
+              >
                 {labelRestorePassword.back}
               </Button>
               <Button type="submit" variant="contained" disabled={isPending}>
