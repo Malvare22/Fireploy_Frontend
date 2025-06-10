@@ -87,7 +87,7 @@ const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
       );
     return (
       <Box sx={styles}>
-        <Typography>{"Visible"}</Typography>
+        <Typography>{"Oculto"}</Typography>
         <DisabledVisibleIcon fontSize="medium" />
       </Box>
     );

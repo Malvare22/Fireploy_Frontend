@@ -60,15 +60,33 @@ type UsuarioCursoMinimalSchema = z.infer<typeof UsuarioCursoMinimalSchema>;
 
 export const MateriaSchema: z.ZodType<
   Omit<Materia, "cursos"> & { cursos?: CursoSchema[] }
-> = z.object({
-  estado: z.enum(["A", "I"]),
-  nombre: FORM_CONSTRAINS.TEXT_LABEL,
-  semestre: z.number().refine((x) => {
-    return x <= 10 && x >= 1;
-  }, "El semestre debe ser un valor numérico que se encuentre en el intervalo [1,10]"),
-  id: FORM_CONSTRAINS.ID.optional(),
-  cursos: z.array(z.lazy(() => CursoSchema)).optional(),
-});
+> = z
+  .object({
+    estado: z.enum(["A", "I"]),
+    nombre: FORM_CONSTRAINS.TEXT_LABEL,
+    semestre: z.number().refine((x) => {
+      return x <= 10 && x >= 1;
+    }, "El semestre debe ser un valor numérico que se encuentre en el intervalo [1,10]"),
+    id: FORM_CONSTRAINS.ID.optional(),
+    cursos: z.array(z.lazy(() => CursoSchema)).optional(),
+  })
+  .refine(
+    (data) => {
+      const { cursos } = data;
+      if (cursos) {
+        const st = new Set<string>();
+        cursos.forEach((curso) => {
+          st.add(curso.grupo);
+        });
+        return st.size == cursos.length;
+      }
+      return true;
+    },
+    {
+      path: ["cursos"],
+      message: "Los identificadores de grupos no pueden repetirse",
+    }
+  );
 
 type NeoCurso = Omit<Curso, "docente" | "estudiantes"> & {
   docente?: UsuarioCursoMinimalSchema | null;

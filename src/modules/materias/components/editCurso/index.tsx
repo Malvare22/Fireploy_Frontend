@@ -22,7 +22,7 @@ import { useParams, useSearchParams } from "react-router";
 import EditIcon from "@mui/icons-material/Edit";
 import { getMateriaStatesArray } from "@modules/materias/utils/materias";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getCursoById } from "@modules/materias/services/get.curso";
+import { getCursoById, getCursos } from "@modules/materias/services/get.curso";
 import { useEffect, useState } from "react";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
 import { patchEditCurso } from "@modules/materias/services/patch.curso";
@@ -52,6 +52,7 @@ import { labelEditCourse } from "@modules/materias/enums/labelEditCourse";
 import { postCreateCursoService } from "@modules/materias/services/post.crear.grupo";
 import { getSemestre } from "@modules/general/utils/fechas";
 import { msgDescription } from "@modules/general/utils/formConstrains";
+import { letterOptionsForGroup, OFF_SET_LETTERS_OF_GROUP } from "@modules/materias/utils/groupLetters";
 
 /**
  * Component for editing a course view.
@@ -91,6 +92,8 @@ function EditarCurso({ type }: EditarCursoProps) {
   const page = parseInt(searchParams.get("page") ?? "0");
   const [tabIndex, setTabIndex] = useState(page);
 
+  type LetterOption = [string, boolean];
+
   useEffect(() => {
     setTabIndex(page);
   }, [page]);
@@ -102,6 +105,12 @@ function EditarCurso({ type }: EditarCursoProps) {
     setTabIndex(value);
     setSearchParams({ ["page"]: value.toString() });
   }
+
+  const { data } = useQuery({
+    queryFn: async () =>
+      await getCursos(token, { materia: parseInt(idMateria ?? "-1") }),
+    queryKey: ["Get Curso", idMateria],
+  });
 
   // Form setup
   const methods = useForm<Curso>({
@@ -143,6 +152,27 @@ function EditarCurso({ type }: EditarCursoProps) {
     queryFn: () => getCursoById(token, idCurso ?? "-1"),
     retry: 2,
   });
+
+  const [lettersOfCourse, setLettersOfCourse] = useState<LetterOption[]>([]);
+
+  useEffect(() => {
+    setLettersOfCourse(letterOptionsForGroup().map((x) => [x, false]));
+  }, []);
+
+  const REGEX_LETTER = /^[A-Z]$/;
+
+  useEffect(() => {
+    if (data) {
+      const options = [...lettersOfCourse];
+      data.forEach((curso) => {
+        const letter = curso.grupo;
+        if (REGEX_LETTER.test(letter)) {
+          options[letter.charCodeAt(0) - OFF_SET_LETTERS_OF_GROUP][1] = false;
+        }
+      });
+      setLettersOfCourse(options);
+    }
+  }, [data]);
 
   /**
    * Mutation for editing course.
@@ -279,14 +309,40 @@ function EditarCurso({ type }: EditarCursoProps) {
               <>
                 <form onSubmit={methods.handleSubmit(onSubmit)}>
                   <Stack spacing={3}>
-                    <TextField
-                      label={labelEditCourse.identificator}
-                      {...methods.register("grupo")}
-                      error={!!methods.formState.errors.grupo}
-                      helperText={methods.formState.errors.grupo?.message}
-                      InputLabelProps={{ shrink: true }}
-                      disabled={type == "edit"}
-                      size="small"
+                    <Controller
+                      name="grupo"
+                      control={control}
+                      render={({ field }) => (
+                        <TextField
+                          {...field}
+                          select
+                          size="small"
+                          fullWidth
+                          label="Grupo"
+                          error={!!errors.grupo}
+                          helperText={errors.grupo?.message}
+                          value={watch("grupo")}
+                          disabled={type == "edit"}
+                          SelectProps={{
+                            MenuProps: {
+                              PaperProps: {
+                                style: {
+                                  maxHeight: 150,
+                                },
+                              },
+                            },
+                          }}
+                        >
+                          {lettersOfCourse.map(([option, valid]) => {
+                            if (valid)
+                              return (
+                                <MenuItem value={option} key={option}>
+                                  {option}
+                                </MenuItem>
+                              );
+                          })}
+                        </TextField>
+                      )}
                     />
                     <TeacherCard />
                     <TextField
