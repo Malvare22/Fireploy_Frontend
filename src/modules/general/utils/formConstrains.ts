@@ -34,6 +34,7 @@ export const msgDescription = (n: number) => {
 }
 
 export enum MESSAGE_ERRORS{
-  REQUIRED = "Campo obligatorio"
+  REQUIRED = "Campo obligatorio",
+  VALID = "Solo se admiten válidos"
 }
 

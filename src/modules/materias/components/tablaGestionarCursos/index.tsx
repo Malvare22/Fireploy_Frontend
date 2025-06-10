@@ -3,6 +3,7 @@ import { TableColumn } from "react-data-table-component";
 import {
   Alert,
   Box,
+  capitalize,
   Chip,
   MenuItem,
   Stack,
@@ -364,7 +365,7 @@ const TablaGestionarCursos = () => {
             <div key={index}>
               {Object.entries(cursoError).map(([field, error]) => (
                 <Alert severity="error" key={`${index}-${field}`}>
-                  {`${field}: ${(error as FieldError)?.message || "Error desconocido"}`}
+                  {`${capitalize(field)}: ${(error as FieldError)?.message || "Error desconocido"}`}
                 </Alert>
               ))}
             </div>

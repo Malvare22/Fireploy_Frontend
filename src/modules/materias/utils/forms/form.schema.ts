@@ -62,9 +62,9 @@ export const MateriaSchema: z.ZodType<
   Omit<Materia, "cursos"> & { cursos?: CursoSchema[] }
 > = z
   .object({
-    estado: z.enum(["A", "I"]),
+    estado: z.enum(["A", "I"], { message: MESSAGE_ERRORS.VALID }),
     nombre: FORM_CONSTRAINS.TEXT_LABEL,
-    semestre: z.number().refine((x) => {
+    semestre: z.number({ message: MESSAGE_ERRORS.VALID }).refine((x) => {
       return x <= 10 && x >= 1;
     }, "El semestre debe ser un valor numérico que se encuentre en el intervalo [1,10]"),
     id: FORM_CONSTRAINS.ID.optional(),
