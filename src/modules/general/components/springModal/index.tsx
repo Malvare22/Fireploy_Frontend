@@ -73,19 +73,30 @@ interface SpringModalProps {
 }
 
 /**
- * SpringModal Component
- *
- * A reusable modal component that wraps its content with a Material UI `Modal` and applies a spring animation on open/close.
- * Uses `@react-spring/web` for animated transitions and `@mui/material` for layout and theming.
- *
+ * SpringModal component – a reusable modal window with a fade-in animation and customizable content,
+ * built on top of Material-UI's Modal and Fade components.
+ * 
+ * This component is designed to center its content in the viewport, apply consistent styling,
+ * and optionally accept custom styling overrides through the `sx` prop.
+ * 
  * @component
- * @param {SpringModalProps} props - Component properties.
- * @returns {JSX.Element} A centered modal with smooth transitions.
- *
+ * 
+ * @param {React.ReactNode} children - The content to be rendered inside the modal.
+ * 
+ * @param {boolean} open - A flag indicating whether the modal is open or closed.
+ * 
+ * @param {Function} handleClose - A function to be called when the modal is requested to close,
+ * typically used to update state in the parent component.
+ * 
+ * @param {Object} [sx={}] - An optional style object to override or extend the default modal styles,
+ * using Material-UI's `sx` syntax.
+ * 
+ * @returns {Visual element} A modal dialog with fade-in transition and custom content.
+ * 
  * @example
  * ```tsx
  * <SpringModal open={isOpen} handleClose={() => setIsOpen(false)}>
- *   <YourComponent />
+ *   <p>This is the modal content.</p>
  * </SpringModal>
  * ```
  */

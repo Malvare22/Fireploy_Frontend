@@ -9,30 +9,34 @@ import useSearch from "@modules/general/hooks/useSearch";
 import SearchIcon from "@mui/icons-material/Search";
 
 type Props = {
-  /**
-   * Sets the final value used for search execution, e.g., after clicking the button or pressing Enter.
-   */
   setSearchValue: React.Dispatch<React.SetStateAction<string>>;
 } & TextFieldProps;
 
 /**
- * `TextFieldSearch` is a text input with a search button and buffered input logic.
- *
- * It captures user input and only commits it (via `setSearchValue`) when the search icon is clicked
- * or the Enter key is pressed. Internally uses `useSearch()` for debounce or buffer support.
- *
- * Accepts all standard `TextFieldProps`.
- *
+ * TextFieldSearch component – a controlled text input field with an integrated search icon button,
+ * designed for performing search operations via keyboard (Enter key) or button click.
+ * 
+ * It uses an internal buffer from a custom hook to manage input state before committing
+ * the value via the `setSearchValue` function, enabling delayed or validated search triggers.
+ * 
  * @component
+ * 
+ * @param {Function} setSearchValue - A state setter function that receives the current input value
+ * when a search is triggered (e.g., on Enter key or search button click).
+ * 
+ * @param {Object} [props] - Additional props forwarded to the underlying Material UI `TextField`,
+ * such as label, placeholder, variant, etc.
+ * 
+ * @returns {Visual element} A text input field with a search icon button and Enter key functionality.
+ * 
  * @example
  * ```tsx
- * const [search, setSearch] = useState("");
- * return <TextFieldSearch label="Buscar..." setSearchValue={setSearch} />;
+ * <TextFieldSearch
+ *   label="Search projects"
+ *   setSearchValue={setSearch}
+ *   placeholder="Type to search..."
+ * />
  * ```
- *
- * @param {Props} props - Includes MUI `TextFieldProps` and `setSearchValue` callback.
- * @param {React.Ref<HTMLInputElement>} ref - Ref to the internal input element.
- * @returns {JSX.Element} Search input field with search trigger.
  */
 const TextFieldSearch = forwardRef<HTMLInputElement, Props>(
   ({ setSearchValue, ...props }, ref) => {

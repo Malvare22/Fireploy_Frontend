@@ -62,28 +62,42 @@ type Props = {
 };
 
 /**
- * StepperStandard Component
- *
- * A responsive stepper that adapts between horizontal and vertical orientation based on screen size.
- * Displays step labels and associated content.
- *
+ * StepperStandard component – a responsive stepper that switches between horizontal
+ * and vertical layout based on screen size. Displays a sequence of steps with labels
+ * and their corresponding content.
+ * 
+ * This component leverages Material-UI's Stepper and StepContent components,
+ * and includes a custom connector to match a specific visual style. It supports
+ * skipping steps and dynamically highlights the active step.
+ * 
  * @component
- * @param {Props} props - Props for the StepperStandard component.
- * @returns {JSX.Element} A stepper with responsive layout and custom styles.
- *
+ * 
+ * @param {number} activeStep - The index of the currently active step in the stepper.
+ * 
+ * @param {Function} isStepSkipped - A function that receives a step index and returns
+ * a boolean indicating whether that step should be marked as skipped.
+ * 
+ * @param {Array} contents - An array of tuples where each tuple contains:
+ * a string as the label for the step, and a React node representing the content
+ * to be displayed for that step.
+ * 
+ * @returns {Visual element} A Material-UI Stepper component with responsive layout and
+ * optional step content display depending on screen size.
+ * 
  * @example
  * ```tsx
  * <StepperStandard
  *   activeStep={1}
- *   isStepSkipped={(step) => false}
+ *   isStepSkipped={(step) => step === 0}
  *   contents={[
- *     ['Step 1', <StepOneComponent />],
- *     ['Step 2', <StepTwoComponent />],
- *     ['Step 3', <StepThreeComponent />]
+ *     ["Step 1", <StepOne />],
+ *     ["Step 2", <StepTwo />],
+ *     ["Step 3", <StepThree />]
  *   ]}
  * />
  * ```
  */
+
 export default function StepperStandard({ activeStep, isStepSkipped, contents }: Props) {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));

@@ -18,25 +18,22 @@ type TablaCursosProps = {
 };
 
 /**
- * TablaCursos Component – Displays a table of courses with options to view, edit, and change the status of each course.
+ * TablaCursos component – a reusable course table for students or teachers, displaying key course data.
  * 
- * This component utilizes `react-data-table-component` to render a list of courses, including information about each course
- * such as its name, group, semester, status, number of students, and actions (view, edit).
- * It allows the user to view course details, edit them, or change their status based on the type of user.
+ * This component renders a styled data table showing course-related information such as subject name,
+ * group, semester, status, and student count. It includes action buttons to view or edit a course, 
+ * depending on the user type.
  * 
  * @component
  * 
- * @param {TablaCursosProps} props - The properties for the component.
- * @param {CursoTabla[]} props.cursos - List of courses to be displayed in the table.
- * @param {"E" | "D"} props.type - Defines the type of user:
- *        - "E" for view-only users (i.e., they cannot edit courses),
- *        - "D" for users with editing privileges (i.e., they can edit courses).
+ * @param {array} cursos - An array of course objects. Each course includes subject details, group, semester, status, and student count.
+ * @param {string} type - A string that determines the role of the user. "E" for student, "D" for teacher. Enables conditional actions based on role.
  * 
- * @returns A `DataTable` component displaying the list of courses with their details and actions.
+ * @returns {JSX.Element} A data table displaying course details with conditional action buttons.
  * 
  * @example
  * ```tsx
- * <TablaCursos cursos={courseList} type="E" />
+ * <TablaCursos cursos={cursoList} type="D" />
  * ```
  */
 const TablaCursos: React.FC<TablaCursosProps> = ({ cursos, type }) => {

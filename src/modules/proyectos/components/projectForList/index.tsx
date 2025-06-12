@@ -26,18 +26,20 @@ interface Props {
 }
 
 /**
- * ProjectForList component – renders a summarized card view of a project, displaying key information
- * such as title, visibility, execution status, technology stack, favorite count, and configuration access.
+ * ProjectForList component – displays a detailed, horizontally-styled card view of a single project.
  *
- * Designed to be used in lists or dashboards for quick project overviews.
+ * Includes the project image (or a fallback), metadata, visibility and execution status, tags, and a configuration button.
  *
  * @component
  *
- * @param proyecto - Object representing the project data, including ID, title, image,
- * execution state, visibility status, technology information, and favorite users.
+ * @param {Proyecto} proyecto - Project data object to be rendered.
  *
- * @returns A Paper component layout with two-column content: image and project details,
- * including configurable access through a button.
+ * @returns {JSX.Element} A responsive card-like UI component representing a single project in a list view.
+ *
+ * @example
+ * ```tsx
+ * <ProjectForList proyecto={myProject} />
+ * ```
  */
 const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
   /**

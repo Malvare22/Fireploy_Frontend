@@ -44,26 +44,23 @@ import { labelEditCourse } from "@modules/materias/enums/labelEditCourse";
 import { postCreateCursoService } from "@modules/materias/services/post.crear.grupo";
 import { getSemestre } from "@modules/general/utils/fechas";
 
-/**
- * Component for editing a course view.
- * Handles course data fetching, form submission, and tab switching between course info and students.
- */
+
 type EditarCursoProps = {
   type: "create" | "edit";
 };
 
 /**
- * EditarCurso component – handles the creation or edition of a course.
+ * EditarCurso component – manages the creation or editing of a course within a subject.
  * 
- * It manages the form to update or register a course, handles tab switching between 
- * course details and student management, and communicates with backend services 
- * to persist changes. It also provides feedback via dialog messages.
+ * This component handles form management, tab navigation, course data fetching, and mutation for
+ * creating or updating course records. It adapts UI dynamically based on the operation type (create/edit)
+ * and integrates feedback dialogs, validations, and contextual UI behavior.
  * 
  * @component
  * 
- * @param type Indicates whether the component is used to "create" a new course or "edit" an existing one.
+ * @param type A string value that defines whether the component is being used to "create" a new course or "edit" an existing one.
  * 
- * @returns Returns a React component with a form to manage a course's information and enrolled students.
+ * @returns Returns a form interface that allows the user to input or modify course data, manage sections, and handle associated students.
  * 
  * @example
  * ```tsx

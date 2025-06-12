@@ -12,24 +12,7 @@ type Props = {
   usuario: Usuario;
 };
 
-/**
- * PortafolioCard component – displays a clickable user portfolio card with avatar,
- * name, and user role. Redirects to the appropriate portfolio route when clicked.
- * 
- * The component adjusts layout responsively and uses an animated card container.
- * It distinguishes between authenticated and unauthenticated users to route accordingly.
- * 
- * @component
- * 
- * @param {an object containing user information including ID, name, profile picture, and role type} usuario - The user whose portfolio information is displayed in the card.
- * 
- * @returns {a visual card element with user information that redirects to the portfolio page when clicked}
- * 
- * @example
- * ```tsx
- * <PortafolioCard usuario={usuario} />
- * ```
- */
+
 const PortafolioCard: React.FC<Props> = ({ usuario }) => {
   const { id } = useAuth().accountInformation;
 
