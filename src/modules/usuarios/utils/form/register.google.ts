@@ -11,6 +11,27 @@ export type RegisterGoogleSchema = Pick<
   "contrasenia" | "confirmarContrasenia" | "sexo" | "estFechaInicio" | "fechaDeNacimiento"
 >;
 
+/**
+ * RegistroGoogleSchema – Zod validation schema for registering users via Google.
+ *
+ * This schema validates the necessary fields when a user is registering with a Google account.
+ * It ensures optional passwords match, validates conditional requirements based on user type,
+ * and enforces correct date relationships between birth and university entry.
+ *
+ * @typedef
+ *
+ * @property {string} [contrasenia] - Optional password input provided by the user.
+ * @property {string} [confirmarContrasenia] - Optional field to confirm the user's password.
+ * @property {"M" | "F" | "O"} sexo - Required gender of the user (Male, Female, Other).
+ * @property {string} [estFechaInicio] - Optional university entry date, required if the user type is "E".
+ * @property {string} fechaDeNacimiento - Required birth date of the user; must be earlier than university entry.
+ * @property {"E" | "A" | "D"} [tipo] - Optional user type (e.g., Estudiante, Administrador, Docente).
+ *
+ * @validation
+ * - Passwords must match if both are provided.
+ * - `estFechaInicio` is required if user type is "E".
+ * - `estFechaInicio` must be later than `fechaDeNacimiento`.
+ */
 export const RegistroGoogleSchema: z.ZodType<RegisterGoogleSchema> = z
   .object({
     id: FORM_CONSTRAINS.ID.optional(),

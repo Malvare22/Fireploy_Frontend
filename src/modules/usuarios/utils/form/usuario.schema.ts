@@ -30,6 +30,37 @@ export const sexoUsuarioSchema = z.enum(Array.from(getGender.keys()) as ["M", "F
 
 const msgRedSocial = "Ingrese un link válido para la respectiva red social o deje en blanco";
 
+/**
+ * UsuarioSchema – Full validation schema for user entity.
+ *
+ * Applies comprehensive field-level and conditional validation rules:
+ * - Valid email, name, and date formats
+ * - Gender, status, and role constraints
+ * - Password confirmation match check
+ * - For students, university entry date must be present and after birth date
+ * - Logical consistency between birth date and university entry
+ *
+ * @typedef
+ *
+ * @property {number} id - Unique identifier for the user.
+ * @property {string} correo - Valid email address for the user.
+ * @property {string} nombres - First name(s) of the user.
+ * @property {string} apellidos - Last name(s) of the user.
+ * @property {string} fechaDeNacimiento - User's birth date in ISO format; must indicate age ≥ 16.
+ * @property {string} [estFechaInicio] - Optional date of university entry; required and validated if user is a student.
+ * @property {"A" | "I"} estado - User status: Active or Inactive.
+ * @property {"M" | "F" | "O"} sexo - User gender.
+ * @property {"A" | "D" | "E"} tipo - User role: Admin, Teacher, or Student.
+ * @property {string} descripcion - A brief description or biography of the user.
+ * @property {string} fotoDePerfil - URL of the user's profile picture.
+ * @property {string} [contrasenia] - Optional password field for authentication.
+ * @property {string} [confirmarContrasenia] - Optional password confirmation; must match `contrasenia` if provided.
+ *
+ * @validation
+ * - Matching passwords if both are entered.
+ * - Valid role/type-dependent university entry date.
+ * - Logical birth/university timeline validation.
+ */
 export const RedSocialUsuarioSchema = z
   .object({
     facebook: z
@@ -71,12 +102,21 @@ export const RedSocialUsuarioSchema = z
   })
   .strict();
 
-
+/**
+ * birthSchema – Zod refinement for validating birth date.
+ *
+ * Ensures the provided date corresponds to a user who is at least 16 years old.
+ */
 const birthSchema = FORM_CONSTRAINS.DATE.refine((x) => {
 
   return (calculateAge(x) >= 16)
 }, "Se requiere una edad mínima de 16 años para registrarse al sistema");
 
+/**
+ * universityDateSchema – Zod refinement for validating university start date.
+ *
+ * Ensures the provided date corresponds to an individual aged at least 16.
+ */
 const universityDateSchema = FORM_CONSTRAINS.DATE.refine((x) => {
 
   return (calculateAge(x) >= 16)
@@ -166,11 +206,27 @@ export const usuarioTemplate: Usuario & { confirmarContrasenia?: string | undefi
   confirmarContrasenia: "",
 };
 
+/**
+ * PortafolioSchema – Zod schema for validating a user portfolio.
+ *
+ * Validates the `descripcion` field and nested `redSocial` structure
+ * using predefined constraints. Ensures all links are valid or empty.
+ *
+ * @typedef
+ *
+ * @property {string} descripcion - Text describing the user's background or portfolio.
+ * @property {object} redSocial - A set of validated social media URLs or empty strings.
+ */
 export const PortafolioSchema: z.ZodType<Pick<Usuario, 'descripcion' | 'redSocial'>> = z.object({
   redSocial: RedSocialUsuarioSchema,
   descripcion: FORM_CONSTRAINS.TEXT_DESCRIPTION
 })
 
+/**
+ * CorreoSchema – Zod schema for validating email-only input.
+ *
+ * Accepts a single email field validated using standard email constraints.
+ */
 export const CorreoSchema = z.object({
   correo: FORM_CONSTRAINS.EMAIL
 })
