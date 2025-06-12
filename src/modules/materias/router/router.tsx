@@ -13,37 +13,23 @@ import { rutasMaterias } from "./routes";
 import VistaProyectosDeMisEstudiantes from "../pages/proyectosMisEstudiantes";
 
 /**
- * Routing configuration for the "Materias" section of the application.
- *
- * This configuration defines the routes for all pages related to courses, subjects, and requests in the application.
- * The routes include pages for exploring subjects, listing courses, viewing and editing courses, creating new subjects and courses, and viewing promotion requests.
+ * routerMaterias – Array of route configuration objects used to define 
+ * the routing structure for the subject and course management module.
  * 
- * The `rutaBase` variable defines the base URL path for all routes in this section. The `rutasMaterias` enum holds the individual route paths,
- * which are then used in the `routerMaterias` array to map each route to its corresponding component.
- *
- * @module
+ * Each route maps a specific path to its corresponding page component.
+ * These routes include functionality for exploring subjects, viewing and 
+ * editing courses, listing and creating subjects, and managing student projects.
  * 
- * @constant {string} rutaBase - The base URL path for all routes related to courses and subjects.
- * 
- * @enum {string} rutasMaterias - Enum containing the route paths for different sections in the "Materias" module:
- * - explorar: Route for the exploring page.
- * - listarMaterias: Route for listing subjects.
- * - listarCursos: Route for listing courses for a specific subject.
- * - listarMisCursos: Route for listing the current user's courses.
- * - verCurso: Route for viewing details of a specific course.
- * - crearCurso: Route for creating a new course.
- * - editarCurso: Route for editing an existing course.
- * - explorarCursos: Route for exploring courses within a subject.
- * - crearMateria: Route for creating a new subject.
- * - editarMateria: Route for editing an existing subject.
- * - solicitudes: Route for viewing promotion requests.
- * 
- * @constant {RouteObject[]} routerMaterias - Array of route objects, each defining a path and the corresponding component for that route.
+ * @constant
+ * @type {Array} Array of route definitions following the RouteObject structure from React Router.
  * 
  * @example
  * ```tsx
- * const routes = routerMaterias; // Use this array in your routing configuration (e.g., with React Router)
+ * import { useRoutes } from "react-router-dom";
+ * const routes = useRoutes(routerMaterias);
  * ```
+ * 
+ * @see {@link rutasMaterias} for the list of available route paths.
  */
 export const routerMaterias: RouteObject[] = [
   {

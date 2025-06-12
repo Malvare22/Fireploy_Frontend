@@ -68,17 +68,45 @@ export function evaluateDate(a: string, b: string, c: string) {
   return valueA <= valueC && valueC <= valueB;
 }
 
+/**
+ * Sorts two date strings chronologically.
+ *
+ * @param {string} a - The first date string in a parseable format (e.g. 'YYYY-MM-DD').
+ * @param {string} b - The second date string in a parseable format.
+ * @returns {number} A negative number if `a` is earlier than `b`, positive if `a` is later, 0 if equal.
+ */
 export function sortDates(a: string, b: string) {
   return new Date(a).getTime() - new Date(b).getTime();
 }
 
-
+/**
+ * Formats a datetime string into a human-readable format 'YYYY-MM-DD HH:mm:ss'.
+ *
+ * @param {string} a - The datetime string in ISO 8601 format (e.g., '2025-06-12T14:30:00.000Z').
+ * @returns {string} A string containing only the date and time up to seconds.
+ *
+ * @example
+ * ```ts
+ * getFormatDayTime('2025-06-12T14:30:00.000Z'); // returns '2025-06-12 14:30:00'
+ * ```
+ */
 export function getFormatDayTime(a: string) {
   const aux = a.split('T');
 
   return aux[0] + ' ' + aux[1].slice(0, 8);
 }
 
+/**
+ * Calculates the age in years from a given birthdate string.
+ *
+ * @param {string} date - The birthdate string in a format parsable by `Date`.
+ * @returns {number} The calculated age in full years.
+ *
+ * @example
+ * ```ts
+ * calculateAge("2000-01-01"); // returns age based on current date
+ * ```
+ */
 export function calculateAge(date: string) {
   const currentDate = new Date(date);
   var ageDifMs = Date.now() - currentDate.getTime();

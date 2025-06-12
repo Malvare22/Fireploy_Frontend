@@ -8,7 +8,7 @@ import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import { CursoTabla } from "@modules/materias/types/curso.tabla";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
-import { useCustomTableStyles } from "@modules/general/styles";
+import { useCustomTableStyles } from "@modules/general/hooks/useCustomTableStyles";
 import { paginationComponentOptions } from "@modules/general/utils/pagination";
 import { rutasMaterias } from "@modules/materias/router/routes";
 

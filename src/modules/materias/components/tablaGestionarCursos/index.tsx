@@ -23,7 +23,7 @@ import { adaptUserServiceToCB } from "@modules/usuarios/utils/adapt.usuario";
 import { getUsuariosByTypeService } from "@modules/usuarios/services/get.usuarios.[tipo]";
 import { useQuery } from "@tanstack/react-query";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
-import { useCustomTableStyles } from "@modules/general/styles";
+import { useCustomTableStyles } from "@modules/general/hooks/useCustomTableStyles";
 import AlertDialog from "@modules/general/components/alertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 

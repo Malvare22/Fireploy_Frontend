@@ -11,7 +11,7 @@ import { buttonTypes } from "@modules/general/types/buttons";
 import { Seccion, seccionTemplate } from "@modules/materias/types/seccion";
 import { labelListarSecciones } from "@modules/materias/enums/labelListarSecciones";
 import { Curso } from "@modules/materias/types/curso";
-import { useCustomTableStyles } from "@modules/general/styles";
+import { useCustomTableStyles } from "@modules/general/hooks/useCustomTableStyles";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import SeccionesForm from "../formSecciones";
 import Modal from "@modules/general/components/modal";

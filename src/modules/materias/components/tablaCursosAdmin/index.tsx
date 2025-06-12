@@ -10,7 +10,7 @@ import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import { CursoTabla } from "@modules/materias/types/curso.tabla";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
-import { useCustomTableStyles } from "@modules/general/styles";
+import { useCustomTableStyles } from "@modules/general/hooks/useCustomTableStyles";
 import { useMutation } from "@tanstack/react-query";
 import { patchChangeStatusCurso } from "@modules/materias/services/patch.curso";
 import { useAuth } from "@modules/general/context/accountContext";

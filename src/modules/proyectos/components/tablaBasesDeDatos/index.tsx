@@ -7,7 +7,7 @@ import { BaseDeDatos } from "@modules/proyectos/types/baseDeDatos";
 import { labelBaseDeDatos } from "@modules/proyectos/enum/labelBaseDeDatos";
 import { getDataBaseTypesMap } from "@modules/proyectos/utils/database";
 import StorageIcon from "@mui/icons-material/Storage";
-import { useCustomTableStyles } from "@modules/general/styles";
+import { useCustomTableStyles } from "@modules/general/hooks/useCustomTableStyles";
 import { openInNewTab } from "@modules/general/utils/openTab";
 
 type TablaBasesDeDatosProps = {

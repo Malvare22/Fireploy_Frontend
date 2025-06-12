@@ -67,10 +67,6 @@ export const routerProyectos: RouteObject[] = [
     path: rutasProyectos.explorar,
     element: <ExplorarProyectos />,
   },
-  // {
-  //   path: rutasProyectos.repositorios,
-  //   element: <VistaRepositorios />,
-  // },
   {
     path: rutasProyectos.basesDeDatos,
     element: <VistaBasesDeDatos />,

@@ -34,6 +34,25 @@ type LocalInputs = {
   actividad: string;
 };
 
+/**
+ * VistaProyectosDeMisEstudiantes component – a dashboard view that allows teachers to 
+ * browse and filter student projects associated with their assigned courses and activities.
+ * 
+ * This component fetches course and activity data for the authenticated teacher,
+ * displays related student projects, and provides search and filter capabilities.
+ * 
+ * It uses Material-UI components for layout, includes a modal to view project details,
+ * and integrates custom hooks and context for alert dialogs and error handling.
+ * 
+ * @component
+ * 
+ * @returns A React component that renders a searchable and filterable list of student projects.
+ * 
+ * @example
+ * ```tsx
+ * <VistaProyectosDeMisEstudiantes />
+ * ```
+ */
 function VistaProyectosDeMisEstudiantes() {
   const { id, token } = useAuth().accountInformation;
 

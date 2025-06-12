@@ -21,35 +21,34 @@ interface Props {
 }
 
 /**
- * AlertDialog component - a customizable modal dialog that displays a title, body content,
- * and action buttons, with optional styling based on a type ("error", "success", "default").
- *
- * This component supports both static text and fully custom body content. It also handles
- * optional reloading behavior and button loading state.
- *
+ * AlertDialog component – a modal dialog built with Material-UI for displaying alerts or confirmations.
+ * 
+ * It supports customizable titles, body content, alert types (error, success, warning, or default),
+ * and action handlers for accepting or canceling. It can optionally reload the page upon acceptance.
+ * 
  * @component
- *
- * @param {string} title - The title displayed at the top of the dialog.
- * @param {React.ReactNode} [body] - Optional custom content to render in the dialog body. Overrides `textBody` if provided.
- * @param {string} [textBody] - Fallback plain text content shown in the dialog body if `body` is not provided.
- * @param {() => void} handleAccept - Callback triggered when the "Accept" button is clicked.
- * @param {() => void} [handleCancel] - Optional callback triggered when the "Cancel" button is clicked.
- * @param {boolean} open - Controls whether the dialog is visible or not.
- * @param {boolean} [isLoading=false] - If `true`, shows a loading state in the "Accept" button.
- * @param {"error" | "success" | "default"} [type="default"] - Determines the visual styling of the dialog content.
- * @param {boolean} [reload=false] - If `true`, triggers a full page reload when the "Accept" button is clicked.
- *
- * @returns {JSX.Element} A Material UI Dialog component with optional alert styling and customizable content.
- *
+ * 
+ * @param title The text displayed as the dialog's header.
+ * @param body Optional React element to render as custom content inside the dialog.
+ * @param textBody Optional plain text string shown as the dialog content when no custom body is provided.
+ * @param handleAccept Function to execute when the "Aceptar" button is clicked.
+ * @param handleCancel Optional function to execute when the "Cancelar" button is clicked.
+ * @param open Boolean value that determines whether the dialog is visible.
+ * @param isLoading Optional boolean indicating if the "Aceptar" button should show a loading state.
+ * @param type Optional string indicating the alert type: "error", "success", "warning", or "default".
+ * @param reload Optional boolean that, when true, reloads the page upon acceptance.
+ * 
+ * @returns A Material-UI Dialog element configured for alerting or confirming user actions.
+ * 
  * @example
  * ```tsx
  * <AlertDialog
- *   title="Error"
- *   textBody="An unexpected error occurred"
- *   handleAccept={() => console.log('Accepted')}
- *   handleCancel={() => console.log('Cancelled')}
- *   open={isDialogOpen}
- *   type="error"
+ *   title="Confirm Delete"
+ *   textBody="Are you sure you want to delete this item?"
+ *   open={true}
+ *   type="warning"
+ *   handleAccept={() => deleteItem()}
+ *   handleCancel={() => setOpen(false)}
  * />
  * ```
  */

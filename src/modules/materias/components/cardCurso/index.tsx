@@ -28,6 +28,34 @@ type CardCursoProps = {
   onClick?: () => void;
 };
 
+/**
+ * CardCurso component – renders a Material UI card displaying course details,
+ * including group, subject name, activity and student counts, and the assigned teacher.
+ * 
+ * Depending on the user type and registration status, it conditionally enables interaction
+ * to access, register, or request a course. It also styles the card accordingly.
+ * 
+ * @component
+ * 
+ * @param {object} curso - The course object containing group, assigned teacher, sections, and student data.
+ * @param {string} userType - The type of user viewing the card ("E", "D", or "A").
+ * @param {boolean} isRegister - Indicates if the user is already registered to the course.
+ * @param {string} materiaNombre - The name of the subject associated with the course.
+ * @param {Function} [onClick] - Optional click handler used for registration or request actions.
+ * 
+ * @returns {JSX.Element} A card component presenting the course overview with context-sensitive actions.
+ * 
+ * @example
+ * ```tsx
+ * <CardCurso
+ *   curso={cursoData}
+ *   userType="E"
+ *   isRegister={false}
+ *   materiaNombre="Matemáticas I"
+ *   onClick={() => handleInscription(cursoData)}
+ * />
+ * ```
+ */
 const CardCurso: React.FC<CardCursoProps> = ({
   curso,
   onClick,
@@ -137,6 +165,24 @@ export default CardCurso;
 type PropsFrameDocente = {
   docente: UsuarioCurso | undefined | null;
 };
+
+/**
+ * FrameDocente component – displays the assigned teacher for the course,
+ * including their avatar and name, with a link to their portfolio.
+ * 
+ * If no teacher is assigned, it shows an informational message instead.
+ * 
+ * @component
+ * 
+ * @param {object|null|undefined} docente - The teacher assigned to the course. If not available, a message is shown.
+ * 
+ * @returns {JSX.Element} A box showing teacher information or a fallback message.
+ * 
+ * @example
+ * ```tsx
+ * <FrameDocente docente={curso.docente} />
+ * ```
+ */
 function FrameDocente({ docente }: PropsFrameDocente) {
   const navigate = useNavigate();
 
@@ -165,6 +211,23 @@ function FrameDocente({ docente }: PropsFrameDocente) {
     );
 }
 
+/**
+ * ActivityAndStudents component – shows a summary of the course's activities and enrolled students.
+ * 
+ * It visually represents counts using Material UI chips with icons.
+ * 
+ * @component
+ * 
+ * @param {number} cntActities - Number of activities in the course.
+ * @param {number} cntStudents - Number of students enrolled in the course.
+ * 
+ * @returns {JSX.Element} A horizontal stack with labeled chips for activities and students.
+ * 
+ * @example
+ * ```tsx
+ * <ActivityAndStudents cntActities={5} cntStudents={30} />
+ * ```
+ */
 export function ActivityAndStudents({
   cntActities,
   cntStudents,

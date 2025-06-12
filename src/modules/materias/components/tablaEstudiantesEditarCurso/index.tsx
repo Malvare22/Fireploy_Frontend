@@ -5,7 +5,7 @@ import React, { useMemo } from "react";
 
 import Status from "@modules/general/components/status";
 import { labelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
-import { useCustomTableStyles } from "@modules/general/styles";
+import { useCustomTableStyles } from "@modules/general/hooks/useCustomTableStyles";
 import { UsuarioCurso } from "@modules/materias/types/curso";
 
 type TablaEstudiantesEditarCursoProps = {

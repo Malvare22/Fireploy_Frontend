@@ -43,6 +43,30 @@ export const DialogContext = createContext({
   setError: (_x: any) => {},
 });
 
+/**
+ * `VerInformacionCurso` – Course Details View Component
+ *
+ * This component displays comprehensive information about a selected course (`Curso`), including:
+ * - Subject name and group
+ * - Teacher (docente) info with avatar
+ * - Activity and student counts
+ * - Editable actions for admins or unenrollment for students
+ * - A list of associated course sections
+ *
+ * It uses React Query for data fetching, a custom alert dialog for user feedback, and conditional logic based
+ * on the authenticated user's role (`tipo`).
+ *
+ * Access control:
+ * - Admins (`A`) can always view the course.
+ * - Students (`E`) and teachers (`D`) must be enrolled/assigned to view the course.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered course information screen
+ *
+ * @example
+ * // Accessed through route: /materias/curso/:idCurso
+ * <VerInformacionCurso />
+ */
 function VerInformacionCurso() {
   /** Get course ID from route parameters */
   const { idCurso } = useParams();

@@ -25,7 +25,26 @@ interface Props {
   proyecto: Proyecto;
 }
 
+/**
+ * ProjectForList component – renders a summarized card view of a project, displaying key information
+ * such as title, visibility, execution status, technology stack, favorite count, and configuration access.
+ *
+ * Designed to be used in lists or dashboards for quick project overviews.
+ *
+ * @component
+ *
+ * @param proyecto - Object representing the project data, including ID, title, image,
+ * execution state, visibility status, technology information, and favorite users.
+ *
+ * @returns A Paper component layout with two-column content: image and project details,
+ * including configurable access through a button.
+ */
 const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
+  /**
+   * EmptyImage – fallback visual element rendered when the project has no image.
+   *
+   * @returns A box containing a RocketLaunch icon centered in a themed background.
+   */
   function EmptyImage() {
     return (
       <>
@@ -51,6 +70,11 @@ const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
 
   const navigate = useNavigate();
 
+  /**
+   * Score – component that displays the number of users who marked the project as favorite.
+   *
+   * @returns A Card with a rating icon and the favorite count.
+   */
   function Score() {
     return (
       <Card>
@@ -66,6 +90,12 @@ const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
     navigate(rutasProyectos.ver.replace(":id", (proyecto.id ?? "-1").toString()));
   }
 
+  /**
+   * Visibilitity – shows the visibility status of the project (Visible or Not Visible),
+   * styled according to the theme and status.
+   *
+   * @returns A styled Box with an icon and visibility label.
+   */
   function Visibilitity() {
     const styles: SxProps = {
       backgroundColor: theme.palette.info.main,

@@ -35,11 +35,21 @@ import { rutasProyectos } from "@modules/proyectos/router";
 import { useState } from "react";
 
 /**
- * Registrar component renders the user registration form.
- * It handles form validation, submission, and UI feedback.
- *
+ * Registrar component – renders a user registration form with support for both traditional
+ * form entry and Google Sign-In. Uses Zod for validation, React Hook Form for state management,
+ * and React Query for API interactions.
+ * 
+ * Includes real-time form validation, policy acceptance, Google OAuth, and redirects
+ * after successful account creation. Also handles error display via dialogs.
+ * 
  * @component
- * @returns {JSX.Element} User registration form component
+ * 
+ * @returns {JSX.Element} User registration interface including form fields, validation, alerts, and navigation
+ * 
+ * @example
+ * ```tsx
+ * <Route path="/auth/registro" element={<Registrar />} />
+ * ```
  */
 function Registrar() {
   const {

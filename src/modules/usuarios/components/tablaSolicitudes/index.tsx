@@ -21,7 +21,7 @@ import { useAuth } from "@modules/general/context/accountContext";
 import { useMutation } from "@tanstack/react-query";
 import { patchSolicitudService } from "@modules/usuarios/services/patch.solicitud";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
-import { useCustomTableStyles } from "@modules/general/styles";
+import { useCustomTableStyles } from "@modules/general/hooks/useCustomTableStyles";
 import { paginationComponentOptions } from "@modules/general/utils/pagination";
 
 /**

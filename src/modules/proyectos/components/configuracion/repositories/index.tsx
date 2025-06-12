@@ -51,6 +51,28 @@ type Props = {
   type: "edit" | "create";
 };
 
+/**
+ * Repositories component – handles the form for configuring project repositories.
+ *
+ * This component allows users to manage frontend, backend, and integrated repositories,
+ * including uploading compressed files (.zip or .rar), editing URLs, assigning technologies,
+ * managing environment variables, and associating additional files. It supports both
+ * creation and editing modes, with validation and visual feedback.
+ *
+ * It uses `react-hook-form` for form state, `react-query` for mutations, and custom hooks
+ * for dialog handling and error parsing.
+ *
+ * @component
+ *
+ * @param {string} type - Indicates whether the component is used for creating or editing repositories. Accepts `"edit"` or `"create"`.
+ *
+ * @returns {JSX.Element} A form-based component for managing repositories with uploading, validation, and file association features.
+ *
+ * @example
+ * ```tsx
+ * <Repositories type="edit" />
+ * ```
+ */
 export function Repositories({ type }: Props) {
   const { getValues: getValuesProject } = useFormContext<ProyectoSchema>();
   const { token } = useAuth().accountInformation;

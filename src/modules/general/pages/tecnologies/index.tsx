@@ -16,15 +16,15 @@ export enum labelTecnologiesView {
 }
 
 /**
- * TecnologiesView component – A section that displays available technologies for deployment,
- * including a list of technology cards with detailed descriptions and a search feature.
+ * TecnologiesView component – Renders a section showcasing technologies available for deployment.
+ * Includes introductory text, a carousel banner, and a grid of technology cards.
  *
- * This component allows filtering of technology cards by search input, rendering a list
- * of technologies with titles, images, descriptions, and links.
+ * This component provides an overview of technologies supported by Fireploy, 
+ * highlighting templates and links to documentation and repositories.
  *
  * @component
  *
- * @returns {JSX.Element} The TecnologiesView section that includes technology cards and search functionality.
+ * @returns A layout section containing information about deployable technologies and associated resources.
  *
  * @example
  * ```tsx

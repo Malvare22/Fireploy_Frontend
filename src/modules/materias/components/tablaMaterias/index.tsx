@@ -19,7 +19,7 @@ import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import EditarMateria from "@modules/materias/pages/editarMateria";
 import SpringModal from "@modules/general/components/springModal";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
-import { useCustomTableStyles } from "@modules/general/styles";
+import { useCustomTableStyles } from "@modules/general/hooks/useCustomTableStyles";
 import { paginationComponentOptions } from "@modules/general/utils/pagination";
 import { rutasMaterias } from "@modules/materias/router/routes";
 

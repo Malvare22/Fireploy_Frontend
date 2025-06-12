@@ -14,6 +14,31 @@ type ProjectExecutionStatusContext = {
   currentPosition: null | number;
   currentUrl: string;
 };
+
+/**
+ * ProjectExecutionStatusContextProvider – Context provider for managing and accessing
+ * the execution status of a specific project, including real-time queue position and URL updates.
+ *
+ * @component
+ * @param children - React child components that will have access to the context.
+ * @param projectId - The ID of the project whose execution status is being tracked.
+ *
+ * @description
+ * - Fetches project execution status from the backend at a regular interval (every 10 seconds).
+ * - Listens to a WebSocket event (`deploy_position`) to update the project’s position in the execution queue.
+ * - Provides access to:
+ *   - `executionState`: the current execution state (`EstadoEjecucionProyecto` or `null`),
+ *   - `refetchExecutionState`: a function to manually refetch the current status,
+ *   - `currentPosition`: the project's current queue position (or `null`),
+ *   - `currentUrl`: the current deployment URL if available.
+ *
+ * @example
+ * ```tsx
+ * <ProjectExecutionStatusContextProvider projectId={42}>
+ *   <ProjectExecutionDashboard />
+ * </ProjectExecutionStatusContextProvider>
+ * ```
+ */
 export const ProjectExecutionStatusContext = createContext<
   ProjectExecutionStatusContext | undefined
 >(undefined);
@@ -78,6 +103,22 @@ export function ProjectExecutionStatusContextProvider({
   );
 }
 
+/**
+ * useExecutionStatusContext – Custom hook to access the `ProjectExecutionStatusContext`.
+ *
+ * @returns An object containing:
+ *   - `executionState`: current execution status of the project
+ *   - `refetchExecutionState`: function to manually trigger refetching
+ *   - `currentPosition`: current queue position if in deployment queue
+ *   - `currentUrl`: current public deployment URL of the project
+ *
+ * @throws Will throw an error if called outside of the `ProjectExecutionStatusContextProvider`.
+ *
+ * @example
+ * ```tsx
+ * const { executionState, currentPosition } = useExecutionStatusContext();
+ * ```
+ */
 export const useExecutionStatusContext = (): ProjectExecutionStatusContext => {
   const context = useContext(ProjectExecutionStatusContext);
   if (!context)

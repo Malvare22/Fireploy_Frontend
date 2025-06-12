@@ -3,6 +3,24 @@ import { z } from "zod";
 import { transformStringToKV } from "@modules/general/utils/string";
 import { frameworkValidation, TECNOLOGIES } from "../technologies";
 
+/**
+ * RepositorioSchema – Zod schema used to validate a project repository object (excluding associated files).
+ * 
+ * Validates the following fields:
+ * - `id`: Numeric identifier of the repository.
+ * - `url`: URL of the repository; must be a valid GitHub or GitLab link, with a maximum of 256 characters when `file` is false.
+ * - `tipo`: Indicates the repository type. "B" = Backend, "F" = Frontend, "I" = Integrated layer.
+ * - `variables`: String containing environment variables in a key-value format; validated for syntax and restricted keywords.
+ * - `informacion`: Object containing:
+ *    - `tecnologia`: Selected technology name (required).
+ *    - `framework`: Selected framework name (required).
+ * - `file`: Optional boolean indicating whether the repository content is file-based instead of URL-based.
+ * 
+ * Applies multiple refinements:
+ * - Ensures valid and bounded URL when `file` is false.
+ * - Checks URL format to be from GitHub or GitLab.
+ * - Validates the structure and content of the `variables` field using `transformStringToKV` and `frameworkValidation`.
+ */
 export const RepositorioSchema: z.ZodType<Omit<Repositorio, 'ficheros'>> = z
   .object({
     id: z.number(),
@@ -56,5 +74,10 @@ export const RepositorioSchema: z.ZodType<Omit<Repositorio, 'ficheros'>> = z
     path: ["variables"]
   });
 
+/**
+* RepositorioSchema – Type inferred from RepositorioSchema Zod schema.
+* 
+* Represents a validated repository object excluding the attached file list.
+*/
 export type RepositorioSchema = z.infer<typeof RepositorioSchema>
 

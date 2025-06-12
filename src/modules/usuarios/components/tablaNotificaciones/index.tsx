@@ -15,7 +15,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useAuth } from "@modules/general/context/accountContext";
 import { useMutation } from "@tanstack/react-query";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
-import { useCustomTableStyles } from "@modules/general/styles";
+import { useCustomTableStyles } from "@modules/general/hooks/useCustomTableStyles";
 import { paginationComponentOptions } from "@modules/general/utils/pagination";
 import { NotificationMessage } from "@modules/usuarios/types/notification";
 import { patchNotificationCheck } from "@modules/usuarios/services/patch.notificaciones";
