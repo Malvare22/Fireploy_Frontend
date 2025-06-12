@@ -10,7 +10,6 @@ declare module "@mui/material/styles" {
   interface Palette {
     terciary: {
       main: string;
-      contrastText: string;
     };
     email: {
       main: string;
@@ -23,17 +22,10 @@ declare module "@mui/material/styles" {
   interface PaletteOptions {
     terciary?: {
       main: string;
-      contrastText: string;
     };
     email?: {
       main: string;
     };
-  }
-}
-
-declare module "@mui/material/Chip" {
-  interface ChipPropsColorOverrides {
-    terciary: true;
   }
 }
 
@@ -47,37 +39,30 @@ declare module "@mui/material/Paper" {
 
 const palette: PaletteOptions = {
   primary: {
-    main: "#614B8C", // #6C63FF
+    main: "rgb(60, 55, 147)", // #6C63FF
     contrastText: "rgb(255, 255, 255)",
   },
   secondary: {
-    main: "rgb(21,21,21)",
-    contrastText: "rgb(255, 255, 255)",
+    main: "rgb(21,21,21)", // #FF8A65
   },
   terciary: {
-    main: "#332D41",
-    contrastText: "rgb(255, 255, 255)",
+    main: "rgb(151, 60, 27)", // #C3D8FF
   },
   info: {
-    main: "#1976D2",
+    main: "rgb(41, 61, 111)", // #A5BFFF
   },
   warning: {
-    main: "#FFB74D",
+    main: "rgb(255, 209, 103)", // #FFD180
   },
   background: {
-    default: "#F5F5F5",
-    paper: "#FFFFFF"
+    default: "#fff",
   },
   email: {
     main: '#fffcf4'
   },
-  success: {
-    main: "#00897B"
-  },
-  error: {
-    main: "#E53935"
-  }
-
+  // success: {
+  //   main: "rgb(67, 106, 68)",        // #81C784
+  // },
 };
 
 /**
@@ -116,9 +101,9 @@ export const getTheme = responsiveFontSizes(
               },
 
               "& .MuiTypography-root, & .MuiSvgIcon-root, & .MuiIconButton-root, & .MuiButtonBase-root":
-              {
-                color: "inherit",
-              },
+                {
+                  color: "inherit",
+                },
             }),
           },
           {
@@ -132,15 +117,6 @@ export const getTheme = responsiveFontSizes(
         ],
       },
       MuiChip: {
-        variants: [
-          {
-            props: { color: "terciary" },
-            style: ({ theme }) => ({
-              backgroundColor: theme.palette.terciary.main,
-              color: theme.palette.terciary.contrastText, // Asegúrate de que el texto sea legible
-            }),
-          },
-        ],
         styleOverrides: {
           icon: {
             fill: "white", // Esto aplica al ícono dentro del chip
@@ -152,7 +128,7 @@ export const getTheme = responsiveFontSizes(
       },
       MuiButton: {
         styleOverrides: {
-          root: {
+          root:{
             textTransform: 'capitalize',
           },
           contained: {
