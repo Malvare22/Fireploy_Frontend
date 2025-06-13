@@ -29,23 +29,27 @@ type TablaUsuariosProps = {
 };
 
 /**
- * TablaUsuarios component – Displays a table of user data with their status and various actions.
+ * TablaUsuarios component – renders a responsive user table using react-data-table-component and Material UI.
+ * Displays a list of users with key details such as name, role, status, social networks, and available actions.
+ * Includes logic to handle user state changes (enable/disable), conditional row styling, and responsive icons.
  * 
- * This component renders a list of users, displaying their ID, names, role, status, and social network links. 
- * It includes action buttons for viewing, editing, enabling, or disabling users. Additionally, users' statuses 
- * can be toggled between active and inactive through a modal confirmation dialog. The table allows sorting and 
- * pagination.
+ * This component supports full CRUD navigation actions and state change confirmation modals.
  * 
  * @component
  * 
- * @param {Array} usuarios - An array of user objects. Each object contains information about a user, such as 
- *                            ID, name, role, status, and social networks.
+ * @param usuarios - An array of user objects. Each object should include:
+ *  - `id`: User ID number.
+ *  - `nombres`: First name.
+ *  - `apellidos`: Last name.
+ *  - `tipo`: User type (e.g., "A" for admin, "D" for director, "E" for student).
+ *  - `estado`: User state (e.g., "A" for active, "I" for inactive).
+ *  - `redSocial`: Object containing optional social media links.
  * 
- * @returns {JSX.Element} A Material UI DataTable displaying users' details with interactive actions.
+ * @returns {JSX.Element} A table listing users with their information, roles, states, social networks, and action buttons.
  * 
  * @example
  * ```tsx
- * <TablaUsuarios usuarios={userList} />
+ * <TablaUsuarios usuarios={listaDeUsuarios} />
  * ```
  */
 const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
