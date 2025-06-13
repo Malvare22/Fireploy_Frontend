@@ -21,9 +21,11 @@ import { getMateriaById } from "@modules/materias/services/get.materia.services"
 import { patchEstudiantesCurso } from "@modules/materias/services/patch.curso.estudiantes";
 import { postCreateSolicitudCurso } from "@modules/materias/services/post.solicitud.curso";
 import { Curso } from "@modules/materias/types/curso";
+import { CursoService } from "@modules/materias/types/curso.service";
 import { Materia } from "@modules/materias/types/materia";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
 import { adaptMateriaService } from "@modules/materias/utils/adapters/materia.service";
+import { getSolicitudes } from "@modules/usuarios/services/get.solicitudes";
 import { Alert, Card, Grid, Stack, Typography } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -56,9 +58,9 @@ function VerCursosMateria() {
   /** Map of course IDs the user is registered in */
   const [myGroupsIds, setMyGroupsIds] = useState<Map<string, boolean> | undefined>(undefined);
 
-    const [materia, setMateria] = useState<Materia | undefined>(undefined);
+  const [materia, setMateria] = useState<Materia | undefined>(undefined);
 
-    const [cursos, setCursos] = useState<Curso[] | undefined>(undefined);
+  const [cursos, setCursos] = useState<Curso[] | undefined>(undefined);
 
   /** Alert dialog control hook */
   const { showDialog, open, title, message, type, handleAccept, isLoading, setIsLoading } =
@@ -86,9 +88,8 @@ function VerCursosMateria() {
             return await getCursoById(token, curso.id);
           })
         );
-        
-        setCursos(updatedCursos.map((x) => adaptCursoService(x)));
 
+        setCursos(updatedCursos.map((x) => adaptCursoService(x)));
       }
 
       setMateria(adaptMateriaService(materia));
@@ -106,6 +107,8 @@ function VerCursosMateria() {
     if (error) setError(error);
   }, [error]);
 
+  type InformationCourses = { cursos: CursoService[]; activeRequest: Map<string, boolean> | null };
+
   /**
    * Query to get the user's registered courses (cursos)
    */
@@ -115,12 +118,32 @@ function VerCursosMateria() {
     error: errorMyGroups,
   } = useQuery({
     queryFn: async () => {
-      if (tipo == "E") return await getCursos(token, { estudiantes: id });
-      if (IS_TEACHER) return await getCursos(token, { docente: id });
-      return [];
+      let response: InformationCourses = { cursos: [], activeRequest: null };
+      if (tipo == "E") {
+        response = { cursos: await getCursos(token, { estudiantes: id }), activeRequest: null };
+      }
+      if (IS_TEACHER) {
+        const activesRequest = async () => {
+          const request = await getSolicitudes(token, { usuario: id, estado: "P" });
+          const mp = new Map<string, boolean>();
+          request.forEach((_request) => {
+            if (_request.tipo_solicitud == 2 && _request.curso) {
+              mp.set(_request.curso.id, true);
+            }
+          });
+          return mp;
+        };
+        return (response = {
+          cursos: await getCursos(token, { docente: id }),
+          activeRequest: await activesRequest(),
+        });
+      }
+      return response;
     },
     queryKey: ["Get My Groups For Explore", token, idMateria],
   });
+
+  const [activesRequest, setActivesRequest] = useState<Map<string, boolean> | null>(null);
 
   /** Handle API error for user groups */
   useEffect(() => {
@@ -129,9 +152,13 @@ function VerCursosMateria() {
 
   /** When user's courses are available, convert to map for lookup */
   useEffect(() => {
-    if (dataMyGroups) setMyGroupsIds(new Map(dataMyGroups.map((data) => [data.id, true])));
+    if (dataMyGroups) {
+      console.log(dataMyGroups);
+      setMyGroupsIds(new Map(dataMyGroups.cursos.map((data) => [data.id, true])));
+      setActivesRequest(dataMyGroups.activeRequest);
+    }
   }, [dataMyGroups]);
-
+  console.log(cursos);
   /**
    * Mutation to register student to a course
    */
@@ -156,8 +183,6 @@ function VerCursosMateria() {
     },
     onError: (error) => setError(error),
   });
-
-
 
   /** Confirm registration when user accepts modal */
   function handleAcceptConfirmation() {
@@ -223,7 +248,7 @@ function VerCursosMateria() {
               </Card>
 
               {/* List of course groups or warning if none available */}
-              {cursos && cursos.length > 0 ? (
+              {cursos && (tipo == "E" || activesRequest != null) && cursos.length > 0 ? (
                 <>
                   <Typography variant="h4">{labelListarCursos.titulo}</Typography>
                   <Grid container spacing={4}>
@@ -235,6 +260,7 @@ function VerCursosMateria() {
                           curso={curso}
                           materiaNombre={materia.nombre}
                           userType={tipo}
+                          hasActiveRequest={activesRequest?.get(curso.id!!)}
                         />
                       </Grid>
                     ))}

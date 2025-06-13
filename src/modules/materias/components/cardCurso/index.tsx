@@ -26,46 +26,22 @@ type CardCursoProps = {
   isRegister: boolean;
   materiaNombre: string;
   onClick?: () => void;
+  hasActiveRequest?: boolean;
 };
 
-/**
- * CardCurso component – renders a Material UI card displaying course details,
- * including group, subject name, activity and student counts, and the assigned teacher.
- *
- * Depending on the user type and registration status, it conditionally enables interaction
- * to access, register, or request a course. It also styles the card accordingly.
- *
- * @component
- *
- * @param {object} curso - The course object containing group, assigned teacher, sections, and student data.
- * @param {string} userType - The type of user viewing the card ("E", "D", or "A").
- * @param {boolean} isRegister - Indicates if the user is already registered to the course.
- * @param {string} materiaNombre - The name of the subject associated with the course.
- * @param {Function} [onClick] - Optional click handler used for registration or request actions.
- *
- * @returns {JSX.Element} A card component presenting the course overview with context-sensitive actions.
- *
- * @example
- * ```tsx
- * <CardCurso
- *   curso={cursoData}
- *   userType="E"
- *   isRegister={false}
- *   materiaNombre="Matemáticas I"
- *   onClick={() => handleInscription(cursoData)}
- * />
- * ```
- */
 const CardCurso: React.FC<CardCursoProps> = ({
   curso,
   onClick,
   userType,
   isRegister,
   materiaNombre,
+  hasActiveRequest = false,
 }) => {
   const navigate = useNavigate();
 
   const { id } = useAuth().accountInformation;
+
+  console.log(hasActiveRequest);
 
   const theme = useTheme();
 
@@ -75,22 +51,24 @@ const CardCurso: React.FC<CardCursoProps> = ({
    * Un docente no puede solicitar un curso ya ocupado por otro docente
    */
   const buttonDisable = () => {
-    return userType == "D" && curso.docente != null && curso.docente.id != id;
+    return hasActiveRequest || (userType == "D" && curso.docente != null && curso.docente.id != id);
   };
 
   const buttonElements = useMemo((): { color: "primary" | "warning"; text: string } => {
-    if (userType == "D" && curso.docente == null) {
-      return { text: "Solicitar Curso", color: "warning" };
-    }
-    if (buttonDisable()) {
-      return { text: "Curso no disponible", color: "warning" };
+    if (userType == "D") {
+      if (hasActiveRequest) {
+        return { text: "Solicitud pendiente", color: "warning" };
+      }
+      if (curso.docente == null) return { text: "Solicitar curso", color: "warning" };
+      if (curso.docente != null && curso.docente.id != id)
+        return { text: "Curso no disponible", color: "warning" };
     }
     if (userType == "E" && !isRegister) {
       return { text: "Inscribirme", color: "warning" };
     }
 
     return { text: "Acceder", color: "primary" };
-  }, [userType, isRegister]);
+  }, [userType, isRegister, hasActiveRequest]);
 
   function handleButton() {
     if (isRegister || userType == "A")
@@ -153,8 +131,8 @@ const CardCurso: React.FC<CardCursoProps> = ({
               variant="contained"
               color={buttonElements.color}
               onClick={handleButton}
-              sx= {{
-                textTransform: 'none'
+              sx={{
+                textTransform: "none",
               }}
             >
               {buttonElements.text}
