@@ -31,20 +31,20 @@ type CardCursoProps = {
 /**
  * CardCurso component – renders a Material UI card displaying course details,
  * including group, subject name, activity and student counts, and the assigned teacher.
- * 
+ *
  * Depending on the user type and registration status, it conditionally enables interaction
  * to access, register, or request a course. It also styles the card accordingly.
- * 
+ *
  * @component
- * 
+ *
  * @param {object} curso - The course object containing group, assigned teacher, sections, and student data.
  * @param {string} userType - The type of user viewing the card ("E", "D", or "A").
  * @param {boolean} isRegister - Indicates if the user is already registered to the course.
  * @param {string} materiaNombre - The name of the subject associated with the course.
  * @param {Function} [onClick] - Optional click handler used for registration or request actions.
- * 
+ *
  * @returns {JSX.Element} A card component presenting the course overview with context-sensitive actions.
- * 
+ *
  * @example
  * ```tsx
  * <CardCurso
@@ -71,12 +71,22 @@ const CardCurso: React.FC<CardCursoProps> = ({
 
   const showDocentOwnerStyle = !(userType != "D" || (userType == "D" && !isRegister));
 
-  const buttonElements = useMemo((): { color: "primary" | "info"; text: string } => {
-    if (userType == "D" && curso.docente != null) {
-      return { text: "Solicitar Curso", color: "info" };
+  /**
+   * Un docente no puede solicitar un curso ya ocupado por otro docente
+   */
+  const buttonDisable = () => {
+    return userType == "D" && curso.docente != null && curso.docente.id != id;
+  };
+
+  const buttonElements = useMemo((): { color: "primary" | "warning"; text: string } => {
+    if (userType == "D" && curso.docente == null) {
+      return { text: "Solicitar Curso", color: "warning" };
+    }
+    if (buttonDisable()) {
+      return { text: "Curso no disponible", color: "warning" };
     }
     if (userType == "E" && !isRegister) {
-      return { text: "Inscribirme", color: "info" };
+      return { text: "Inscribirme", color: "warning" };
     }
 
     return { text: "Acceder", color: "primary" };
@@ -87,13 +97,6 @@ const CardCurso: React.FC<CardCursoProps> = ({
       navigate(rutasMaterias.verCurso.replace(":idCurso", curso.id ?? "-1"));
     else if (onClick) onClick();
   }
-
-  /**
-   * Un docente no puede solicitar un curso ya ocupado por otro docente
-   */
-  const buttonDisable = () => {
-    return userType == "D" && curso.docente != null && curso.docente.id != id;
-  };
 
   return (
     <Card sx={{ width: "100%" }}>
@@ -150,6 +153,9 @@ const CardCurso: React.FC<CardCursoProps> = ({
               variant="contained"
               color={buttonElements.color}
               onClick={handleButton}
+              sx= {{
+                textTransform: 'none'
+              }}
             >
               {buttonElements.text}
             </Button>
@@ -169,15 +175,15 @@ type PropsFrameDocente = {
 /**
  * FrameDocente component – displays the assigned teacher for the course,
  * including their avatar and name, with a link to their portfolio.
- * 
+ *
  * If no teacher is assigned, it shows an informational message instead.
- * 
+ *
  * @component
- * 
+ *
  * @param {object|null|undefined} docente - The teacher assigned to the course. If not available, a message is shown.
- * 
+ *
  * @returns {JSX.Element} A box showing teacher information or a fallback message.
- * 
+ *
  * @example
  * ```tsx
  * <FrameDocente docente={curso.docente} />
@@ -213,16 +219,16 @@ function FrameDocente({ docente }: PropsFrameDocente) {
 
 /**
  * ActivityAndStudents component – shows a summary of the course's activities and enrolled students.
- * 
+ *
  * It visually represents counts using Material UI chips with icons.
- * 
+ *
  * @component
- * 
+ *
  * @param {number} cntActities - Number of activities in the course.
  * @param {number} cntStudents - Number of students enrolled in the course.
- * 
+ *
  * @returns {JSX.Element} A horizontal stack with labeled chips for activities and students.
- * 
+ *
  * @example
  * ```tsx
  * <ActivityAndStudents cntActities={5} cntStudents={30} />
