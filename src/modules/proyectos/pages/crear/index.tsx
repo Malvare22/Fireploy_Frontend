@@ -17,8 +17,8 @@ import { getProjectById } from "@modules/proyectos/services/get.project";
 import { useAuth } from "@modules/general/context/accountContext";
 import { ParamsContext } from "@modules/general/context/paramsContext";
 import { useParamsCustom } from "@modules/general/hooks/useParamsContext";
-import { AlertDialogProvider } from "@modules/general/context/alertDialogContext";
 import { ProjectExecutionStatusContextProvider } from "@modules/proyectos/context/executionStatus.context";
+import { AlertDialogProvider } from "@modules/general/context/alertDialogContext";
 
 /**
  * CrearProyecto component – A form for creating a project, utilizing a stepper to guide the user through various stages.
@@ -43,7 +43,8 @@ import { ProjectExecutionStatusContextProvider } from "@modules/proyectos/contex
 export default function CrearProyecto() {
   const [projectId, setProjectId] = useState<number | null>(null);
 
-  const { searchParams, setSearchParams, updateSearchParams } = useParamsCustom();
+  const { searchParams, setSearchParams, updateSearchParams } =
+    useParamsCustom();
 
   useEffect(() => {
     const id = parseInt(searchParams.get("id") ?? "-1");
@@ -91,8 +92,8 @@ export default function CrearProyecto() {
   ];
 
   return (
-    <FormProvider {...methods}>
-      <AlertDialogProvider>
+    <AlertDialogProvider>
+      <FormProvider {...methods}>
         <ProjectExecutionStatusContextProvider projectId={-1}>
           <StepperContext.Provider value={{ handleNext: handleNext }}>
             <ParamsContext.Provider
@@ -118,7 +119,7 @@ export default function CrearProyecto() {
             </ParamsContext.Provider>
           </StepperContext.Provider>
         </ProjectExecutionStatusContextProvider>
-      </AlertDialogProvider>
-    </FormProvider>
+      </FormProvider>
+    </AlertDialogProvider>
   );
 }

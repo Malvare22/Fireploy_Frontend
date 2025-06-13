@@ -45,7 +45,16 @@ import { GitlabIcon } from "@modules/general/components/customIcons";
 import { adaptProject } from "@modules/proyectos/utils/adapt.proyecto";
 import TransitionAlert from "@modules/general/components/transitionAlert";
 import TablaGestionarFicheros from "../../ficherosTable";
-import { deleteFichero, postFichero } from "@modules/proyectos/services/post.fichero";
+import {
+  deleteFichero,
+  postFichero,
+} from "@modules/proyectos/services/post.fichero";
+import {
+  hasValidExtension,
+  msgNoValidExtension,
+  VALID_EXTENSIONS,
+} from "@modules/general/utils/form/validExtensions";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 type Props = {
   type: "edit" | "create";
@@ -87,7 +96,11 @@ export function Repositories({ type }: Props) {
 
   useEffect(() => {
     reset(getValuesProject());
-  }, [getValuesProject("backend"), getValuesProject("frontend"), getValuesProject("integrado")]);
+  }, [
+    getValuesProject("backend"),
+    getValuesProject("frontend"),
+    getValuesProject("integrado"),
+  ]);
 
   const {
     showDialog,
@@ -108,14 +121,19 @@ export function Repositories({ type }: Props) {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
-      let fetchProject = await getProjectById(token, getValuesProject("id") ?? -1);
+      let fetchProject = await getProjectById(
+        token,
+        getValuesProject("id") ?? -1
+      );
       let front = false;
       let back = false;
       let inte = false;
       setIsLoading(true);
       if (
         type == "create" ||
-        (executionState && fetchProject && fetchProject.estado_ejecucion == executionState)
+        (executionState &&
+          fetchProject &&
+          fetchProject.estado_ejecucion == executionState)
       ) {
         if (filesRepo.backend != null) {
           await postFileToRepository(
@@ -199,7 +217,13 @@ export function Repositories({ type }: Props) {
     integrado: null,
   });
 
-  function InputFile({ layer, disabled }: { layer: KeysOfRepository; disabled: boolean }) {
+  function InputFile({
+    layer,
+    disabled,
+  }: {
+    layer: KeysOfRepository;
+    disabled: boolean;
+  }) {
     function onChange(e: React.ChangeEvent<HTMLInputElement>) {
       const { files } = e.target;
 
@@ -207,7 +231,7 @@ export function Repositories({ type }: Props) {
         setFilesRepo({ ...filesRepo, [layer]: null });
       } else {
         setFilesRepo({ ...filesRepo, [layer]: files[0] });
-        if (files[0].name.endsWith(".rar") || files[0].name.endsWith(".zip"))
+        if (hasValidExtension(files[0].name, "SOURCE_CODE"))
           setValue(`${layer}.file`, true);
         else {
           setValue(`${layer}.file`, null);
@@ -224,7 +248,7 @@ export function Repositories({ type }: Props) {
 
     function showError() {
       showDialog({
-        message: "Solo se admiten archivos .zip o .rar",
+        message: msgNoValidExtension("SOURCE_CODE"),
         type: "error",
         onAccept: handleClose,
         title: "Archivo no válido",
@@ -241,11 +265,23 @@ export function Repositories({ type }: Props) {
           tabIndex={-1}
           startIcon={<FolderZipIcon />}
         >
-          {!filesRepo[layer]?.name ? "Subir .Zip" : filesRepo[layer]?.name}
-          <HiddenButton type="file" accept=".zip,.rar" onChange={onChange} />
+          {!filesRepo[layer]?.name ? "Subir fichero" : filesRepo[layer]?.name}
+          <HiddenButton
+            type="file"
+            accept={VALID_EXTENSIONS.SOURCE_CODE.join(", ")}
+            onChange={onChange}
+          />
         </Button>
+        <Tooltip
+          title={`Código fuente en formato comprimido (${VALID_EXTENSIONS.SOURCE_CODE.join(", ")})`}
+        >
+          <HelpOutlineIcon />
+        </Tooltip>
         <Tooltip title="Eliminar Archivo">
-          <IconButton onClick={handleDelete} disabled={filesRepo[layer] == null}>
+          <IconButton
+            onClick={handleDelete}
+            disabled={filesRepo[layer] == null}
+          >
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -280,7 +316,8 @@ export function Repositories({ type }: Props) {
     if (type === "edit") {
       showDialog({
         title: "Cambios Repositorio",
-        message: "¿Está seguro de que desea modificar la información de repositorios?",
+        message:
+          "¿Está seguro de que desea modificar la información de repositorios?",
         onAccept: () => handleMutate({ isEdit: true }),
         onCancel: () => handleClose(),
         isLoading: isPending,
@@ -312,16 +349,22 @@ export function Repositories({ type }: Props) {
                   "Para que surjan efecto los cambios realizados en esta sección, se requiere volver a desplegar el aplicativo"
                 }
               </TransitionAlert>
-              <Typography variant="h5">{labelConfiguracion.repositorios}</Typography>
+              <Typography variant="h5">
+                {labelConfiguracion.repositorios}
+              </Typography>
               <Divider />
             </Stack>
-            <Typography variant="body2">{labelConfiguracion.repositoriosParrafo}</Typography>
+            <Typography variant="body2">
+              {labelConfiguracion.repositoriosParrafo}
+            </Typography>
             <Stack spacing={2}>
               {watch("frontend") && (
                 <>
-                  <Typography variant="h6">{labelConfiguracion.frontend}</Typography>
+                  <Typography variant="h6">
+                    {labelConfiguracion.frontend}
+                  </Typography>
                   <Grid container spacing={1}>
-                    <Grid size={{ md: 10, xs: 12 }}>
+                    <Grid size={{ md: 7, xs: 12 }}>
                       <Controller
                         name="frontend.url"
                         control={control}
@@ -340,7 +383,9 @@ export function Repositories({ type }: Props) {
                                 endAdornment: (
                                   <InputAdornment position="end">
                                     <GitHubIcon />
-                                    <GitlabIcon sx={{ marginLeft: 1, fontSize: 16 }} />
+                                    <GitlabIcon
+                                      sx={{ marginLeft: 1, fontSize: 16 }}
+                                    />
                                   </InputAdornment>
                                 ),
                               },
@@ -349,21 +394,32 @@ export function Repositories({ type }: Props) {
                         )}
                       />
                     </Grid>
-                    <Grid size={{ md: 2, xs: 12 }}>
+                    <Grid size={{ md: 5, xs: 12 }}>
                       <InputFile layer="frontend" disabled={isDisabled} />
                     </Grid>
                   </Grid>
-                  <TechnologyInputs fieldName="frontend" disabled={isDisabled} />
-                  <EnviromentVariablesEditor type="frontend" disabled={isDisabled} />
-                  <TablaGestionarFicheros field="frontend" disabled={isDisabled} />
+                  <TechnologyInputs
+                    fieldName="frontend"
+                    disabled={isDisabled}
+                  />
+                  <EnviromentVariablesEditor
+                    type="frontend"
+                    disabled={isDisabled}
+                  />
+                  <TablaGestionarFicheros
+                    field="frontend"
+                    disabled={isDisabled}
+                  />
                 </>
               )}
 
               {watch("backend") && (
                 <>
-                  <Typography variant="h6">{labelConfiguracion.backend}</Typography>
+                  <Typography variant="h6">
+                    {labelConfiguracion.backend}
+                  </Typography>
                   <Grid container spacing={1}>
-                    <Grid size={{ md: 10, xs: 12 }}>
+                    <Grid size={{ md: 7, xs: 12 }}>
                       <Controller
                         name="backend.url"
                         control={control}
@@ -382,7 +438,9 @@ export function Repositories({ type }: Props) {
                                 endAdornment: (
                                   <InputAdornment position="end">
                                     <GitHubIcon />
-                                    <GitlabIcon sx={{ marginLeft: 1, fontSize: 16 }} />
+                                    <GitlabIcon
+                                      sx={{ marginLeft: 1, fontSize: 16 }}
+                                    />
                                   </InputAdornment>
                                 ),
                               },
@@ -391,21 +449,29 @@ export function Repositories({ type }: Props) {
                         )}
                       />
                     </Grid>
-                    <Grid size={{ md: 2, xs: 12 }}>
+                    <Grid size={{ md: 5, xs: 12 }}>
                       <InputFile layer="backend" disabled={isDisabled} />
                     </Grid>
                   </Grid>
                   <TechnologyInputs disabled={isDisabled} fieldName="backend" />
-                  <EnviromentVariablesEditor disabled={isDisabled} type="backend" />
-                  <TablaGestionarFicheros field="backend" disabled={isDisabled} />
+                  <EnviromentVariablesEditor
+                    disabled={isDisabled}
+                    type="backend"
+                  />
+                  <TablaGestionarFicheros
+                    field="backend"
+                    disabled={isDisabled}
+                  />
                 </>
               )}
 
               {watch("integrado") && (
                 <>
-                  <Typography variant="h6">{labelConfiguracion.integrado}</Typography>
+                  <Typography variant="h6">
+                    {labelConfiguracion.integrado}
+                  </Typography>
                   <Grid container spacing={1}>
-                    <Grid size={{ md: 10, xs: 12 }}>
+                    <Grid size={{ md: 7, xs: 12 }}>
                       <Controller
                         name="integrado.url"
                         control={control}
@@ -424,7 +490,9 @@ export function Repositories({ type }: Props) {
                                 endAdornment: (
                                   <InputAdornment position="end">
                                     <GitHubIcon />
-                                    <GitlabIcon sx={{ marginLeft: 1, fontSize: 16 }} />
+                                    <GitlabIcon
+                                      sx={{ marginLeft: 1, fontSize: 16 }}
+                                    />
                                   </InputAdornment>
                                 ),
                               },
@@ -433,13 +501,22 @@ export function Repositories({ type }: Props) {
                         )}
                       />
                     </Grid>
-                    <Grid size={{ md: 2, xs: 12 }}>
+                    <Grid size={{ md: 5, xs: 12 }}>
                       <InputFile layer="integrado" disabled={isDisabled} />
                     </Grid>
                   </Grid>
-                  <TechnologyInputs disabled={isDisabled} fieldName="integrado" />
-                  <EnviromentVariablesEditor disabled={isDisabled} type="integrado" />
-                  <TablaGestionarFicheros field="integrado" disabled={isDisabled} />
+                  <TechnologyInputs
+                    disabled={isDisabled}
+                    fieldName="integrado"
+                  />
+                  <EnviromentVariablesEditor
+                    disabled={isDisabled}
+                    type="integrado"
+                  />
+                  <TablaGestionarFicheros
+                    field="integrado"
+                    disabled={isDisabled}
+                  />
                 </>
               )}
             </Stack>
@@ -449,7 +526,9 @@ export function Repositories({ type }: Props) {
                 <Box>
                   <GeneralButton
                     loading={isPending}
-                    mode={type == "create" ? buttonTypes.next : buttonTypes.save}
+                    mode={
+                      type == "create" ? buttonTypes.next : buttonTypes.save
+                    }
                     type="submit"
                   />
                 </Box>

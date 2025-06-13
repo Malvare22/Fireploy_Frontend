@@ -12,12 +12,17 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Controller, FormProvider, useForm, useFormContext } from "react-hook-form";
+import {
+  Controller,
+  FormProvider,
+  useForm,
+  useFormContext,
+} from "react-hook-form";
 import { useParams, useSearchParams } from "react-router";
 import EditIcon from "@mui/icons-material/Edit";
 import { getMateriaStatesArray } from "@modules/materias/utils/materias";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getCursoById } from "@modules/materias/services/get.curso";
+import { getCursoById, getCursos } from "@modules/materias/services/get.curso";
 import { useEffect, useState } from "react";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
 import { patchEditCurso } from "@modules/materias/services/patch.curso";
@@ -29,7 +34,10 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
 import GestionarEstudiantesCurso from "@modules/materias/components/gestionarEstudiantesCurso";
-import { useSearchUsers, UsuarioCampoBusqueda } from "@modules/general/hooks/useSearchUsers";
+import {
+  useSearchUsers,
+  UsuarioCampoBusqueda,
+} from "@modules/general/hooks/useSearchUsers";
 import SearchUsers from "@modules/general/components/searchUsers";
 import { adaptUserServiceToCB } from "@modules/usuarios/utils/adapt.usuario";
 import { getUsuariosByTypeService } from "@modules/usuarios/services/get.usuarios.[tipo]";
@@ -43,6 +51,8 @@ import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { labelEditCourse } from "@modules/materias/enums/labelEditCourse";
 import { postCreateCursoService } from "@modules/materias/services/post.crear.grupo";
 import { getSemestre } from "@modules/general/utils/fechas";
+import { msgDescription } from "@modules/general/utils/formConstrains";
+import { letterOptionsForGroup, OFF_SET_LETTERS_OF_GROUP } from "@modules/materias/utils/groupLetters";
 
 
 type EditarCursoProps = {
@@ -58,9 +68,9 @@ type EditarCursoProps = {
  * 
  * @component
  * 
- * @param type A string value that defines whether the component is being used to "create" a new course or "edit" an existing one.
+ * @param type Indicates whether the component is used to "create" a new course or "edit" an existing one.
  * 
- * @returns Returns a form interface that allows the user to input or modify course data, manage sections, and handle associated students.
+ * @returns Returns a React component with a form to manage a course's information and enrolled students.
  * 
  * @example
  * ```tsx
@@ -79,6 +89,8 @@ function EditarCurso({ type }: EditarCursoProps) {
   const page = parseInt(searchParams.get("page") ?? "0");
   const [tabIndex, setTabIndex] = useState(page);
 
+  type LetterOption = [string, boolean];
+
   useEffect(() => {
     setTabIndex(page);
   }, [page]);
@@ -90,6 +102,12 @@ function EditarCurso({ type }: EditarCursoProps) {
     setTabIndex(value);
     setSearchParams({ ["page"]: value.toString() });
   }
+
+  const { data } = useQuery({
+    queryFn: async () =>
+      await getCursos(token, { materia: parseInt(idMateria ?? "-1") }),
+    queryKey: ["Get Curso", idMateria],
+  });
 
   // Form setup
   const methods = useForm<Curso>({
@@ -132,45 +150,72 @@ function EditarCurso({ type }: EditarCursoProps) {
     retry: 2,
   });
 
-  /**
-   * Mutation for editing course.
-   */
-  const { mutate: mutatePatchCurso, isPending: isPendingPatchCurso } = useMutation({
-    mutationFn: async () => {
-      setIsLoading(true);
-      return await patchEditCurso(token, methods.getValues());
-    },
-    mutationKey: ["Patch Curso", methods.getValues(), token],
-    onSuccess: () =>
-      showDialog({
-        message: "Curso modificado correctamente",
-        title: "Modificar Curso",
-        type: "success",
-        onAccept: handleClose,
-        reload: true,
-      }),
-    onError: (err) => setError(err),
-  });
+  const [lettersOfCourse, setLettersOfCourse] = useState<LetterOption[]>([]);
+
+  useEffect(() => {
+    setLettersOfCourse(letterOptionsForGroup().map((x) => [x, false]));
+  }, []);
+
+  const REGEX_LETTER = /^[A-Z]$/;
+
+  useEffect(() => {
+    if (data) {
+      const options = [...lettersOfCourse];
+      data.forEach((curso) => {
+        const letter = curso.grupo;
+        if (REGEX_LETTER.test(letter)) {
+          options[letter.charCodeAt(0) - OFF_SET_LETTERS_OF_GROUP][1] = false;
+        }
+      });
+      setLettersOfCourse(options);
+    }
+  }, [data]);
 
   /**
    * Mutation for editing course.
    */
-  const { mutate: mutateCreateCurso, isPending: isPendingCreateCurso } = useMutation({
-    mutationFn: async () => {
-      setIsLoading(true);
-      return await postCreateCursoService(token, parseInt(idMateria || "-1"), methods.getValues());
-    },
-    mutationKey: ["Create Curso", methods.getValues(), token],
-    onSuccess: () =>
-      showDialog({
-        message: "Curso creado correctamente",
-        title: "Creación de Curso",
-        type: "success",
-        onAccept: handleClose,
-        reload: true,
-      }),
-    onError: (err) => setError(err),
-  });
+  const { mutate: mutatePatchCurso, isPending: isPendingPatchCurso } =
+    useMutation({
+      mutationFn: async () => {
+        setIsLoading(true);
+        return await patchEditCurso(token, methods.getValues());
+      },
+      mutationKey: ["Patch Curso", methods.getValues(), token],
+      onSuccess: () =>
+        showDialog({
+          message: "Curso modificado correctamente",
+          title: "Modificar Curso",
+          type: "success",
+          onAccept: handleClose,
+          reload: true,
+        }),
+      onError: (err) => setError(err),
+    });
+
+  /**
+   * Mutation for editing course.
+   */
+  const { mutate: mutateCreateCurso, isPending: isPendingCreateCurso } =
+    useMutation({
+      mutationFn: async () => {
+        setIsLoading(true);
+        return await postCreateCursoService(
+          token,
+          parseInt(idMateria || "-1"),
+          methods.getValues()
+        );
+      },
+      mutationKey: ["Create Curso", methods.getValues(), token],
+      onSuccess: () =>
+        showDialog({
+          message: "Curso creado correctamente",
+          title: "Creación de Curso",
+          type: "success",
+          onAccept: handleClose,
+          reload: true,
+        }),
+      onError: (err) => setError(err),
+    });
 
   useEffect(() => {
     if (errorFetchCurso && type == "edit") {
@@ -219,7 +264,9 @@ function EditarCurso({ type }: EditarCursoProps) {
             <Stack direction="row" alignItems="center" spacing={1}>
               <EditIcon color="primary" />
               <Typography variant="h5" fontWeight="bold">
-                {type == "edit" ? labelEditCourse.title : labelEditCourse.alternativeTitle}
+                {type == "edit"
+                  ? labelEditCourse.title
+                  : labelEditCourse.alternativeTitle}
               </Typography>
             </Stack>
 
@@ -227,7 +274,11 @@ function EditarCurso({ type }: EditarCursoProps) {
             <Tabs
               value={tabIndex}
               onChange={handleChangeTab}
-              sx={{ borderBottom: 1, borderColor: "divider", textTransform: "none" }}
+              sx={{
+                borderBottom: 1,
+                borderColor: "divider",
+                textTransform: "none",
+              }}
             >
               <Tab
                 label={
@@ -255,21 +306,50 @@ function EditarCurso({ type }: EditarCursoProps) {
               <>
                 <form onSubmit={methods.handleSubmit(onSubmit)}>
                   <Stack spacing={3}>
-                  <TextField
-                      label={labelEditCourse.identificator}
-                      {...methods.register("grupo")}
-                      error={!!methods.formState.errors.grupo}
-                      helperText={methods.formState.errors.grupo?.message}
-                      InputLabelProps={{ shrink: true }}
-                      disabled={type == "edit"}
-                      size="small"
+                    <Controller
+                      name="grupo"
+                      control={control}
+                      render={({ field }) => (
+                        <TextField
+                          {...field}
+                          select
+                          size="small"
+                          fullWidth
+                          label="Grupo"
+                          error={!!errors.grupo}
+                          helperText={errors.grupo?.message}
+                          value={watch("grupo")}
+                          disabled={type == "edit"}
+                          SelectProps={{
+                            MenuProps: {
+                              PaperProps: {
+                                style: {
+                                  maxHeight: 150,
+                                },
+                              },
+                            },
+                          }}
+                        >
+                          {lettersOfCourse.map(([option, valid]) => {
+                            if (valid)
+                              return (
+                                <MenuItem value={option} key={option}>
+                                  {option}
+                                </MenuItem>
+                              );
+                          })}
+                        </TextField>
+                      )}
                     />
                     <TeacherCard />
                     <TextField
                       label={labelEditCourse.description}
                       {...methods.register("descripcion")}
                       error={!!methods.formState.errors.descripcion}
-                      helperText={methods.formState.errors.descripcion?.message}
+                      helperText={
+                        methods.formState.errors.descripcion?.message ??
+                        msgDescription(watch("descripcion").length)
+                      }
                       fullWidth
                       InputLabelProps={{ shrink: true }}
                     />
@@ -314,7 +394,10 @@ function EditarCurso({ type }: EditarCursoProps) {
             {/* Students Tab */}
             {tabIndex == 1 && (
               <Box>
-                <GestionarEstudiantesCurso curso={getValues()} idCurso={idCurso || ""} />
+                <GestionarEstudiantesCurso
+                  curso={getValues()}
+                  idCurso={idCurso || ""}
+                />
               </Box>
             )}
           </Stack>
@@ -326,23 +409,25 @@ function EditarCurso({ type }: EditarCursoProps) {
 
 /**
  * TeacherCard component – allows displaying and editing the assigned teacher of a course.
- * 
+ *
  * It fetches available teachers, displays the current assignment using a chip,
  * and provides controls to select or remove a teacher.
- * 
+ *
  * @returns Returns a UI element that either shows the current teacher or allows the user to choose one from a list.
- * 
+ *
  * @example
  * ```tsx
  * <TeacherCard />
  * ```
  */
 function TeacherCard() {
-  const { setValue: setValuesCurso, watch: watchCurso } = useFormContext<Curso>();
+  const { setValue: setValuesCurso, watch: watchCurso } =
+    useFormContext<Curso>();
   const [docentes, setDocentes] = useState<UsuarioCampoBusqueda[]>([]);
   const token = useAuth().accountInformation.token;
 
-  const { showDialog, open, title, message, type, handleAccept, isLoading } = useAlertDialog();
+  const { showDialog, open, title, message, type, handleAccept, isLoading } =
+    useAlertDialog();
   const { setError } = useErrorReader(showDialog);
 
   /**
@@ -365,7 +450,9 @@ function TeacherCard() {
 
   useEffect(() => {
     if (dataFetchDocentes)
-      setDocentes(dataFetchDocentes.map((docente) => adaptUserServiceToCB(docente)));
+      setDocentes(
+        dataFetchDocentes.map((docente) => adaptUserServiceToCB(docente))
+      );
   }, [dataFetchDocentes]);
 
   const { selectUser, setSelectUser } = useSearchUsers();
@@ -374,7 +461,9 @@ function TeacherCard() {
   useEffect(() => {
     if (selectUser && selectUser?.nombreCompleto) {
       setValuesCurso("docente.id", selectUser?.id, { shouldDirty: true });
-      setValuesCurso("docente.nombre", selectUser?.nombreCompleto!!, { shouldDirty: true });
+      setValuesCurso("docente.nombre", selectUser?.nombreCompleto!!, {
+        shouldDirty: true,
+      });
     }
   }, [selectUser]);
 
@@ -427,7 +516,10 @@ function TeacherCard() {
     return !edit ? (
       <>
         <ActionButton mode={actionButtonTypes.editar} onClick={handleMode} />
-        <ActionButton mode={actionButtonTypes.eliminar} onClick={handleDelete} />
+        <ActionButton
+          mode={actionButtonTypes.eliminar}
+          onClick={handleDelete}
+        />
       </>
     ) : (
       <>

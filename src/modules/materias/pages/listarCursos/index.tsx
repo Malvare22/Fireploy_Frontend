@@ -16,11 +16,15 @@ import { buttonTypes } from "@modules/general/types/buttons";
 // import RefinePanel, { FilterOptions } from "@modules/general/components/selects";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
-import { FilterOptions, SelectFilters } from "@modules/general/components/selects";
+import {
+  FilterOptions,
+  SelectFilters,
+} from "@modules/general/components/selects";
 import HiddenButton from "@modules/materias/components/hiddenInput";
 import { postCargaMasivaCursos } from "@modules/materias/services/post.cargar.cursos";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { rutasMaterias } from "@modules/materias/router/routes";
+import { hasValidExtension, msgNoValidExtension } from "@modules/general/utils/form/validExtensions";
 
 const filterOptions: FilterOptions = [
   {
@@ -35,34 +39,34 @@ const filterOptions: FilterOptions = [
 
 /**
  * ListarCursos component – Displays a list of courses for a specific subject (Materia).
- * 
+ *
  * This component fetches and displays courses associated with a subject, allowing for:
  * - Viewing courses with state filters (active/inactive).
  * - Uploading courses in bulk via file upload (Excel format).
  * - Navigating to the course creation page.
- * 
+ *
  * It uses dialogs for file upload confirmations and shows alerts if there are no courses available.
- * 
+ *
  * @component
- * 
+ *
  * @example
  * ```tsx
  * <ListarCursos />
  * ```
- * 
+ *
  * @returns {JSX.Element} The rendered component displaying the list of courses.
- * 
+ *
  * @notes
  * - Displays courses associated with a subject, showing them in a table.
  * - Provides an option to upload courses in bulk.
  * - Provides filters to refine the list of courses based on status (active/inactive).
  * - Handles loading and error states, displaying appropriate feedback messages.
- * 
+ *
  * @methods
  * - `setFile(e: React.ChangeEvent<HTMLInputElement>)`: Handles file selection and triggers bulk upload confirmation dialog.
  * - `updateFile(file: File)`: Handles the bulk file upload via mutation.
  * - `setError(err)`: Handles errors related to data fetching or upload process.
- * 
+ *
  * @props
  * - `idMateria` (from route params): The ID of the subject to fetch and display courses for.
  */
@@ -97,7 +101,6 @@ function ListarCursos() {
     handleAccept,
     setIsLoading,
     handleClose,
-    handleOpen,
   } = useAlertDialog();
 
   const { mutate: updateFile } = useMutation({
@@ -120,17 +123,30 @@ function ListarCursos() {
   function setFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files ? e.target.files[0] : null;
 
-    if (file)
+    if (file){
+      if (!hasValidExtension(file.name, "EXCEL")) {
+        showError();
+        return;
+      }
       showDialog({
-        message: "¿Estás seguro de cargar este documento para la carga masiva de cursos?",
+        message:
+        "¿Estás seguro de cargar este documento para la carga masiva de cursos?",
         title: "Gestión de cursos",
         onCancel: handleClose,
         onAccept: () => updateFile(file),
         type: "default",
       });
-
-    handleOpen();
+    }
   }
+
+    function showError() {
+      showDialog({
+        message: msgNoValidExtension("EXCEL"),
+        type: "error",
+        onAccept: handleClose,
+        title: "Archivo no válido",
+      });
+    }
 
   const { setError } = useErrorReader(showDialog);
 
@@ -181,7 +197,12 @@ function ListarCursos() {
               <GeneralButton
                 mode={buttonTypes.add}
                 onClick={() =>
-                  navigate(rutasMaterias.crearCurso.replace(":idMateria", idMateria || "-1"))
+                  navigate(
+                    rutasMaterias.crearCurso.replace(
+                      ":idMateria",
+                      idMateria || "-1"
+                    )
+                  )
                 }
               />
             </Box>
@@ -194,7 +215,12 @@ function ListarCursos() {
                 startIcon={<CloudUploadIcon />}
               >
                 Carga Masiva
-                <HiddenButton type="file" onChange={setFile} multiple accept=".xlsx" />
+                <HiddenButton
+                  type="file"
+                  onChange={setFile}
+                  multiple
+                  accept=".xlsx"
+                />
               </Button>
             </Box>
           </Stack>

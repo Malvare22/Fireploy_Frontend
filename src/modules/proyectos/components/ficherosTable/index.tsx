@@ -1,6 +1,15 @@
 import DataTable from "react-data-table-component";
 import { TableColumn } from "react-data-table-component";
-import { Alert, Box, Button, Divider, IconButton, Stack, Tooltip, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import GeneralButton from "@modules/general/components/button";
@@ -16,6 +25,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { FileUpload } from "@mui/icons-material";
 import { useAlertDialogContext } from "@modules/general/context/alertDialogContext";
 import { onDownload } from "@modules/general/utils/inputs";
+import {
+  hasValidExtension,
+  msgNoValidExtension,
+} from "@modules/general/utils/form/validExtensions";
 
 type Props = {
   field: KeysOfRepository;
@@ -101,14 +114,18 @@ const TablaGestionarFicheros = ({ field, disabled }: Props) => {
       name: <Typography variant="body1">{"Nombre del fichero"}</Typography>,
       cell: (row) => (
         <Typography variant="body2">
-          {row.nombre && row.nombre.trim().length > 0 ? row.nombre : "Sin Nombre"}
+          {row.nombre && row.nombre.trim().length > 0
+            ? row.nombre
+            : "Sin Nombre"}
         </Typography>
       ),
       sortable: true,
       width: "200px",
     },
     {
-      name: <Typography variant="body1">{labelListarSecciones.acciones}</Typography>,
+      name: (
+        <Typography variant="body1">{labelListarSecciones.acciones}</Typography>
+      ),
       cell: (row) => {
         return (
           <Stack direction={"row"} spacing={2}>
@@ -119,6 +136,7 @@ const TablaGestionarFicheros = ({ field, disabled }: Props) => {
                   index={row.rowIndex}
                   setFichero={handleEditFichero}
                   disabled={false}
+                  currentFiles={files}
                 />
                 <Tooltip title="Eliminar">
                   <IconButton onClick={() => onDelete(row.rowIndex)}>
@@ -155,7 +173,9 @@ const TablaGestionarFicheros = ({ field, disabled }: Props) => {
           <>
             <Divider />
             <Alert severity="warning">
-              {"Es necesario que los archivos dispongan de un nombre y su respectiva extensión"}
+              {
+                "Es necesario que los archivos dispongan de un nombre y su respectiva extensión"
+              }
             </Alert>
             <Box sx={{ maxWidth: 500 }}>
               <DataTable
@@ -168,9 +188,14 @@ const TablaGestionarFicheros = ({ field, disabled }: Props) => {
             </Box>
           </>
         ) : (
-          <Alert severity="warning">{"Sin ficheros de configuración vinculados"}</Alert>
+          <Alert severity="warning">
+            {"Sin ficheros de configuración vinculados"}
+          </Alert>
         )}
-        <Stack alignItems={!files || files.length == 0 ? "start" : "end"} sx={{ maxWidth: 500 }}>
+        <Stack
+          alignItems={!files || files.length == 0 ? "start" : "end"}
+          sx={{ maxWidth: 500 }}
+        >
           <Box>
             <GeneralButton
               onClick={handleAdd}
@@ -189,23 +214,16 @@ type FileInputProps = {
   setFichero: (i: number, f: Fichero) => void;
   fichero: Fichero;
   index: number;
+  currentFiles: Fichero[] | null;
   disabled?: boolean;
 };
-
-/**
- * FileInput component – input control for uploading a configuration file,
- * and optionally displaying a download button if the file is already uploaded.
- *
- * @component
- *
- * @param setFichero - Function to update the file at the specified index in the parent list.
- * @param fichero - Current file object representing the file's content and name.
- * @param index - Position of the file in the files array.
- * @param disabled - Optional flag to disable input actions.
- *
- * @returns A file input UI with optional "View" button and "Upload file" button.
- */
-function FileInput({ setFichero, fichero, index, disabled = false }: FileInputProps) {
+function FileInput({
+  setFichero,
+  fichero,
+  index,
+  currentFiles,
+  disabled = false,
+}: FileInputProps) {
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { files } = e.target;
 
@@ -215,6 +233,20 @@ function FileInput({ setFichero, fichero, index, disabled = false }: FileInputPr
     }
 
     const file = files[0];
+
+    if (!hasValidExtension(file.name, "CONFIG_FILE")) {
+      showError("extension");
+      return;
+    }
+
+    if (currentFiles)
+      for (const name of currentFiles) {
+        if (name.nombre == file.name) {
+          showError("repeat_value");
+          return;
+        }
+      }
+
     const reader = new FileReader();
 
     reader.onload = (_event) => {
@@ -222,6 +254,20 @@ function FileInput({ setFichero, fichero, index, disabled = false }: FileInputPr
     };
 
     reader.readAsText(file);
+  }
+
+  const { handleClose, showDialog } = useAlertDialogContext();
+
+  function showError(type: "extension" | "repeat_value") {
+    showDialog({
+      message:
+        type == "repeat_value"
+          ? "No se admiten archivos repetidos"
+          : msgNoValidExtension("CONFIG_FILE"),
+      type: "error",
+      onAccept: handleClose,
+      title: "Archivo no válido",
+    });
   }
 
   return (
@@ -246,7 +292,12 @@ function FileInput({ setFichero, fichero, index, disabled = false }: FileInputPr
         color="secondary"
       >
         {"Subir fichero"}
-        <HiddenButton type="file" accept=".json,.env" onChange={onChange} multiple />
+        <HiddenButton
+          type="file"
+          accept=".json,.env"
+          onChange={onChange}
+          multiple
+        />
       </Button>
     </Stack>
   );

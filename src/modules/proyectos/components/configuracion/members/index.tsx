@@ -62,7 +62,8 @@ import { rutasUsuarios } from "@modules/usuarios/router/router";
 export const Members = () => {
   const theme = useTheme();
 
-  const { getValues: getValuesProject, watch } = useFormContext<ProyectoSchema>();
+  const { getValues: getValuesProject, watch } =
+    useFormContext<ProyectoSchema>();
 
   const groupId = getValuesProject("materiaInformacion.cursoId");
 
@@ -73,10 +74,12 @@ export const Members = () => {
   const { filteredData, searchValue, setSearchValue } = useSearch();
 
   function searchFn(users: UsuarioCurso[], s: string) {
-    return users.filter((x) => x.nombre.toLowerCase().includes(s.toLowerCase()));
+    return users.filter((x) =>
+      x.nombre.toLowerCase().includes(s.toLowerCase())
+    );
   }
 
-  const ID_PROPIETARY = getValuesProject("propietario")?.id ?? -1;
+  const ID_PROPRIETARY = getValuesProject("propietario")?.id ?? -1;
 
   const membersToShow = useMemo(() => {
     if (watch("integrantes") && getValuesProject("propietario")) {
@@ -108,8 +111,17 @@ export const Members = () => {
     if (errorGetGroup) setError(errorGetGroup);
   }, [errorGetGroup]);
 
-  const { handleAccept, handleClose, handleCancel, isLoading, message, open, title, type, showDialog } =
-    useAlertDialog2();
+  const {
+    handleAccept,
+    handleClose,
+    handleCancel,
+    isLoading,
+    message,
+    open,
+    title,
+    type,
+    showDialog,
+  } = useAlertDialog2();
 
   const { setError } = useErrorReader(showDialog);
 
@@ -117,9 +129,17 @@ export const Members = () => {
 
   const { mutate: mutateMembers } = useMutation({
     mutationFn: async () => {
-      const currentStatus = await getProjectById(token, getValuesProject("id") ?? -1);
-      if (executionState && currentStatus.estado_ejecucion != executionState) syncErrorProject();
-      await patchEditProjectMembers(token, getValuesProject("id") ?? -1, currentMembers);
+      const currentStatus = await getProjectById(
+        token,
+        getValuesProject("id") ?? -1
+      );
+      if (executionState && currentStatus.estado_ejecucion != executionState)
+        syncErrorProject();
+      await patchEditProjectMembers(
+        token,
+        getValuesProject("id") ?? -1,
+        currentMembers
+      );
     },
     mutationKey: ["Change Members of Project", selectUser?.id, token],
     onSuccess: () => {
@@ -203,14 +223,15 @@ export const Members = () => {
 
   const filterUsers = useMemo(() => {
     const _users = (groupInformation?.estudiantes || []).filter((user) => {
-      let flag = false;
+      if (user.id == id) {
+        return false;
+      }
       getValuesProject("integrantes").forEach((u) => {
         if (u.id == user.id) {
-          flag = true;
-          return;
+          return false;
         }
       });
-      return !flag;
+      return true
     });
     return _users.map((user) => adaptUserServiceToCB(user));
   }, [groupInformation]);
@@ -253,10 +274,16 @@ export const Members = () => {
           spacing={{ md: 0, xs: 1 }}
           justifyContent={{ md: "space-between" }}
         >
-          <Typography variant="h5">{labelConfiguracion.colaboradores}</Typography>
+          <Typography variant="h5">
+            {labelConfiguracion.colaboradores}
+          </Typography>
           <Box>
             {" "}
-            <Button variant="contained" size="small" onClick={handleOpenModalAddUsers}>
+            <Button
+              variant="contained"
+              size="small"
+              onClick={handleOpenModalAddUsers}
+            >
               {labelConfiguracion.invitarIntegrantes}
             </Button>
           </Box>
@@ -293,10 +320,10 @@ export const Members = () => {
             <CardMember
               member={user}
               key={user.id}
-              isOwner={user.id == ID_PROPIETARY}
+              isOwner={user.id == ID_PROPRIETARY}
               isMe={user.id == id}
               onClickRemove={() => showConfirmRemoveUser(user.id)}
-              editable={user.id != ID_PROPIETARY}
+              editable={user.id != ID_PROPRIETARY}
             />
             <Divider />
           </>
@@ -343,14 +370,20 @@ const CardMember: React.FC<CardMemberProps> = ({
       justifyContent={"space-between"}
       padding={2}
     >
-      <Stack direction={{ md: "row", xs: "column" }} spacing={1} alignItems={{ md: "center" }}>
+      <Stack
+        direction={{ md: "row", xs: "column" }}
+        spacing={1}
+        alignItems={{ md: "center" }}
+      >
         <Stack direction={"row"} spacing={1} alignItems={"center"}>
           <IconButton onClick={handleButton}>
-            <Tooltip  title={member.nombre}>
-            <Avatar src={member.imagen} sx={{ width: 48, height: 48 }} />
-          </Tooltip>
+            <Tooltip title={member.nombre}>
+              <Avatar src={member.imagen} sx={{ width: 48, height: 48 }} />
+            </Tooltip>
           </IconButton>
-          <Button variant="text" onClick={handleButton}><Typography variant="h6">{member.nombre}</Typography></Button>
+          <Button variant="text" onClick={handleButton}>
+            <Typography variant="h6">{member.nombre}</Typography>
+          </Button>
         </Stack>
         {isMe && (
           <Box>

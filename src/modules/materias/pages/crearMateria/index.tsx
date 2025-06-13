@@ -15,6 +15,7 @@ import {
   getMateriaStatesArray,
 } from "@modules/materias/utils/materias";
 import {
+  Alert,
   Box,
   Button,
   Card,
@@ -35,29 +36,29 @@ import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
  * VistaCrearMateria component – a view for creating a new subject (Materia).
  * This component renders a form to input the details of a new subject and optionally create associated groups (Cursos) for the subject.
  * The form validates the input and sends a request to create the subject. If successful, it can trigger the creation of related groups.
- * 
+ *
  * It utilizes hooks for form management, validation, and API calls. The component also includes dynamic content, such as rendering a table for managing groups when needed.
- * 
+ *
  * @component
- * 
+ *
  * @returns A JSX element that renders a form for creating a new subject and optionally creates groups for it.
- * 
+ *
  * @example
  * ```tsx
  * <VistaCrearMateria />
  * ```
- * 
+ *
  * @hookform
  * This component uses `react-hook-form` for form handling, including validation via Zod schema (`MateriaSchema`).
- * 
+ *
  * @mutations
  * It uses `react-query`'s `useMutation` to handle API requests for creating the subject (`postCreateMateriaService`) and its associated groups (`postCreateCursoService`).
- * 
+ *
  * @state
  * - `createGroups`: Tracks whether to create associated groups for the subject.
  * - `disableCheck`: Disables the checkbox for creating groups after submission.
  * - `idMateria`: Stores the ID of the created subject.
- * 
+ *
  * @example
  * ```tsx
  * <VistaCrearMateria />
@@ -116,28 +117,31 @@ function VistaCrearMateria() {
 
   async function createGroupsRequest(groups: Curso[]) {
     try {
-      await Promise.all(groups.map((group) => postCreateCursoService(token, idMateria!!, group)));
+      await Promise.all(
+        groups.map((group) => postCreateCursoService(token, idMateria!!, group))
+      );
     } catch (error) {
       throw error;
     }
   }
 
-  const { isPending: isPendingPostGrupos, mutate: mutatePostGrupos } = useMutation({
-    mutationFn: () => createGroupsRequest(getValues("cursos") || []),
-    mutationKey: ["Edit Grupos", getValues("cursos") || [], token],
-    onError: (err) => {
-      setError(err);
-    },
-    onSuccess: () => {
-      showDialog({
-        title: "Creación de Materia Acádemica",
-        message: "La materia y los grupos se han creado correctamente",
-        onAccept: handleClose,
-        type: "success",
-        reload: true,
-      });
-    },
-  });
+  const { isPending: isPendingPostGrupos, mutate: mutatePostGrupos } =
+    useMutation({
+      mutationFn: () => createGroupsRequest(getValues("cursos") || []),
+      mutationKey: ["Edit Grupos", getValues("cursos") || [], token],
+      onError: (err) => {
+        setError(err);
+      },
+      onSuccess: () => {
+        showDialog({
+          title: "Creación de Materia Acádemica",
+          message: "La materia y los grupos se han creado correctamente",
+          onAccept: handleClose,
+          type: "success",
+          reload: true,
+        });
+      },
+    });
 
   function handleCheck() {
     if (createGroups) {
@@ -173,7 +177,9 @@ function VistaCrearMateria() {
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <Stack>
               <Stack>
-                <Typography variant="h4">{labelGestionarMateria.titulo}</Typography>
+                <Typography variant="h4">
+                  {labelGestionarMateria.titulo}
+                </Typography>
                 <Divider />
               </Stack>
               <Grid container spacing={3} padding={2}>
@@ -220,12 +226,19 @@ function VistaCrearMateria() {
                 </Grid>
                 <Grid size={{ xs: 12, md: 8 }}>
                   <FormControlLabel
-                    control={<Checkbox onClick={handleCheck} disabled={disableCheck} />}
+                    control={
+                      <Checkbox onClick={handleCheck} disabled={disableCheck} />
+                    }
                     label={labelGestionarMateria.checkBox}
                   />
                 </Grid>
                 <Grid size={{ xl: 10, xs: 12 }}>
                   <Card>{createGroups && <TablaGestionarCursos />}</Card>
+                  {methods.formState.errors.cursos?.message?.trim() && (
+                    <Alert severity="error" sx={{ my: 2 }}>
+                      {methods.formState.errors.cursos.message}
+                    </Alert>
+                  )}
                 </Grid>
               </Grid>
               <Box>

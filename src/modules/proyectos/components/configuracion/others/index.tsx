@@ -1,4 +1,12 @@
-import { Box, Button, Divider, Grid, Stack, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Grid,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import DisabledVisibleIcon from "@mui/icons-material/DisabledVisible";
 import { useMemo } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -74,25 +82,26 @@ function DangerZone({ id, viewStatus, projectTitle }: Props) {
 
   const { token } = useAuth().accountInformation;
 
-  const { mutate: mutateDeleteProject, isPending: isPendingDelete } = useMutation({
-    mutationFn: async () => {
-      await deleteProject(token, id);
-    },
-    onSuccess: () => {
-      handleCloseModal();
-      showDialog({
-        message: "Proyecto eliminado correctamente",
-        onAccept: () => {
-          handleReturnToList();
-        },
-        title: "Eliminar Proyecto",
-        type: "success",
-      });
-    },
-    onError: (err) => {
-      setError(err);
-    },
-  });
+  const { mutate: mutateDeleteProject, isPending: isPendingDelete } =
+    useMutation({
+      mutationFn: async () => {
+        await deleteProject(token, id);
+      },
+      onSuccess: () => {
+        handleCloseModal();
+        showDialog({
+          message: "Proyecto eliminado correctamente",
+          onAccept: () => {
+            handleReturnToList();
+          },
+          title: "Eliminar Proyecto",
+          type: "success",
+        });
+      },
+      onError: (err) => {
+        setError(err);
+      },
+    });
 
   const { mutate: mutateVisibilityProject } = useMutation({
     mutationFn: async () => {
@@ -145,7 +154,8 @@ function DangerZone({ id, viewStatus, projectTitle }: Props) {
 
   const formSchema = z.object({
     title: z.string().refine((x) => x === projectTitle, {
-      message: "El título no coincide. Por favor, ingrese el título exacto del proyecto.",
+      message:
+        "El título no coincide. Por favor, ingrese el título exacto del proyecto.",
     }),
   });
 
@@ -172,11 +182,12 @@ function DangerZone({ id, viewStatus, projectTitle }: Props) {
 
   const {
     register,
-    formState: { errors },
+    formState: { errors, isValid },
     handleSubmit,
   } = useForm<FormType>({
     defaultValues: { title: "" },
     resolver: zodResolver(formSchema),
+    mode: "onChange",
   });
 
   const {
@@ -204,7 +215,9 @@ function DangerZone({ id, viewStatus, projectTitle }: Props) {
               </Typography>
               <Stack direction={"row"} alignItems={"center"} spacing={1}>
                 <Typography>{`Titulo actual:`}</Typography>
-                <Typography sx={{ fontWeight: 500 }}>{`"${projectTitle}"`}</Typography>
+                <Typography
+                  sx={{ fontWeight: 500 }}
+                >{`"${projectTitle}"`}</Typography>
               </Stack>
               <TextField
                 size="small"
@@ -225,6 +238,7 @@ function DangerZone({ id, viewStatus, projectTitle }: Props) {
                 variant="contained"
                 type="submit"
                 loading={isPendingDelete}
+                disabled={!isValid}
               >
                 {"Eliminar Proyecto"}
               </Button>
@@ -248,18 +262,20 @@ function DangerZone({ id, viewStatus, projectTitle }: Props) {
           <Divider />
         </Stack>
         <Typography>
-          {"Estos son los ajustes que repercuten en la integridad del proyecto y su visibilidad"}
+          {
+            "Estos son los ajustes que repercuten en la integridad del proyecto y su visibilidad"
+          }
         </Typography>
         <Stack direction={"row"} spacing={1} alignItems={"center"}>
           <Typography variant="h5">{"Zona de Peligro"}</Typography>
-          <WarningIcon sx={{fontSize: 32}}/>
+          <WarningIcon sx={{ fontSize: 32 }} />
         </Stack>
         <Divider />
         <Grid container spacing={2}>
-          <Grid size={{lg: 3, xs: 12}}>
+          <Grid size={{ lg: 3, xs: 12 }}>
             <Typography variant="h6">{"Visibilidad del Proyecto"}</Typography>
           </Grid>
-          <Grid size={{xs: 12, lg: 9}}>
+          <Grid size={{ xs: 12, lg: 9 }}>
             <Box>
               <Button
                 onClick={handleChangeVisibility}
@@ -272,10 +288,10 @@ function DangerZone({ id, viewStatus, projectTitle }: Props) {
               </Button>
             </Box>
           </Grid>
-          <Grid size={{lg: 3, xs: 12}}>
+          <Grid size={{ lg: 3, xs: 12 }}>
             <Typography variant="h6">{"Eliminar Proyecto"}</Typography>
           </Grid>
-          <Grid size={{lg: 9, xs: 12}}>
+          <Grid size={{ lg: 9, xs: 12 }}>
             <Box>
               <Button
                 color="error"

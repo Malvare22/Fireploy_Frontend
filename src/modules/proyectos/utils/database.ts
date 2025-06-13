@@ -13,11 +13,11 @@ import { BaseDeDatos } from "../types/baseDeDatos";
  * This map is useful for translating raw type values into labels for display purposes in UIs or reports.
  */
 export const getDataBaseTypesMap: Map<BaseDeDatos["tipo"], string> = new Map([
-  ["S", "SQL"],
-  ["N", "MongoDB"],
   ["E", "Sin base de datos"],
+  ["S", "MySQL"],
   ['P', 'PostgreSQL'],
-  ['M', 'MariaDB']
+  ['M', 'MariaDB'],
+  ["N", "MongoDB"]
 ]);
 
 /**
@@ -33,10 +33,10 @@ export const getDataBaseTypesMap: Map<BaseDeDatos["tipo"], string> = new Map([
  * - "M" → MariaDB
  */
 export const getDataBaseTypesArray: [BaseDeDatos["tipo"], string][] = [
-  ["S", "SQL"],
-  ["N", "MongoDB"],
   ["E", "Sin base de datos"],
+  ["S", "MySQL"],
   ['P', 'PostgreSQL'],
-  ['M', 'MariaDB']
+  ['M', 'MariaDB'],
+  ["N", "MongoDB"]
 ];
 

@@ -16,7 +16,15 @@
  */
 
 import { useState, useEffect, useMemo } from "react";
-import { Alert, Box, Button, Divider, Grid, Stack, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Divider,
+  Grid,
+  Stack,
+  Typography,
+} from "@mui/material";
 import useSearch from "@modules/general/hooks/useSearch";
 import TablaUsuarios from "@modules/usuarios/components/tablaUsuarios";
 import { labelListarUsuarios } from "@modules/usuarios/enum/labelListarUsuarios";
@@ -36,8 +44,15 @@ import AlertDialog from "@modules/general/components/alertDialog";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import HiddenButton from "@modules/materias/components/hiddenInput";
 import { postCargaMasivaUsuarios } from "@modules/usuarios/services/post.cargar.usuarios";
-import { FilterOptions, SelectFilters } from "@modules/general/components/selects";
+import {
+  FilterOptions,
+  SelectFilters,
+} from "@modules/general/components/selects";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
+import {
+  hasValidExtension,
+  msgNoValidExtension,
+} from "@modules/general/utils/form/validExtensions";
 
 /**
  * ListarUsuarios Component
@@ -86,7 +101,6 @@ function ListarUsuarios() {
     handleAccept,
     handleClose,
     setIsLoading,
-    handleOpen,
   } = useAlertDialog();
 
   const { setError } = useErrorReader(showDialog);
@@ -111,16 +125,29 @@ function ListarUsuarios() {
   function setFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files ? e.target.files[0] : null;
 
-    if (file)
+    if (file) {
+      if (!hasValidExtension(file.name, "EXCEL")) {
+        showError();
+        return;
+      }
       showDialog({
-        message: "¿Estás seguro de cargar este documento para la carga masiva de estudiantes?",
+        message:
+          "¿Estás seguro de cargar este documento para la carga masiva de estudiantes?",
         title: "Gestión de estudiantes",
         onCancel: handleClose,
         onAccept: () => updateFile(file),
         type: "default",
       });
+    }
+  }
 
-    handleOpen();
+  function showError() {
+    showDialog({
+      message: msgNoValidExtension("EXCEL"),
+      type: "error",
+      onAccept: handleClose,
+      title: "Archivo no válido",
+    });
   }
 
   /**
@@ -207,13 +234,19 @@ function ListarUsuarios() {
             </Grid>
           </Grid>
 
-          <SelectFilters data={usuarios} filterOptions={filterOptions} setRefineData={setBuffer} />
+          <SelectFilters
+            data={usuarios}
+            filterOptions={filterOptions}
+            setRefineData={setBuffer}
+          />
 
           {/* 📊 User table */}
           {dataToShow.length > 0 ? (
             <TablaUsuarios usuarios={dataToShow} />
           ) : (
-            <Alert severity="info">No se han encontrado usuarios (verifica los filtros)</Alert>
+            <Alert severity="info">
+              No se han encontrado usuarios (verifica los filtros)
+            </Alert>
           )}
 
           <Stack justifyContent={"end"} direction={"row"} spacing={2}>
@@ -226,7 +259,12 @@ function ListarUsuarios() {
                 startIcon={<CloudUploadIcon />}
               >
                 Carga Masiva
-                <HiddenButton type="file" onChange={setFile} multiple accept=".xls, .xsls" />
+                <HiddenButton
+                  type="file"
+                  onChange={setFile}
+                  multiple
+                  accept=".xls, .xsls"
+                />
               </Button>
             </Box>
             <Box>

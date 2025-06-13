@@ -1,8 +1,14 @@
-import { MateriaInformacion, Proyecto } from "@modules/proyectos/types/proyecto.tipo";
+import {
+  MateriaInformacion,
+  Proyecto,
+} from "@modules/proyectos/types/proyecto.tipo";
 import { z } from "zod";
 import { RepositorioSchema } from "./repositorio.schema";
 import { BaseDeDatosSchema } from "./baseDeDatos.schema";
-import { FORM_CONSTRAINS } from "@modules/general/utils/formConstrains";
+import {
+  FORM_CONSTRAINS,
+  MESSAGE_ERRORS,
+} from "@modules/general/utils/formConstrains";
 import { UsuarioCursoSchema } from "@modules/materias/utils/forms/form.schema";
 
 /**
@@ -13,11 +19,13 @@ import { UsuarioCursoSchema } from "@modules/materias/utils/forms/form.schema";
  * - Subject ID as a number.
  * - Course ID as a string.
  */
-export const MateriaInformacionSchema: z.ZodType<MateriaInformacion> = z.object({
-  seccionId: z.number(),
-  materiaId: z.number(),
-  cursoId: z.string(),
-});
+export const MateriaInformacionSchema: z.ZodType<MateriaInformacion> = z.object(
+  {
+    seccionId: z.number({ message: MESSAGE_ERRORS.REQUIRED }),
+    materiaId: z.number({ message: MESSAGE_ERRORS.REQUIRED }),
+    cursoId: z.string({ message: MESSAGE_ERRORS.REQUIRED }),
+  }
+);
 
 /**
  * ProyectoSchema – Zod schema that validates the full structure of a project, excluding favorite users.
@@ -31,19 +39,20 @@ export const MateriaInformacionSchema: z.ZodType<MateriaInformacion> = z.object(
  * - List of project participants.
  * - Optional image.
  */
-export const ProyectoSchema:  z.ZodType<Omit<Proyecto, 'fav_usuarios'>> = z.object({
-  titulo: FORM_CONSTRAINS.TEXT_LABEL,
-  descripcion: FORM_CONSTRAINS.TEXT_DESCRIPTION.optional(),
-  url: FORM_CONSTRAINS.URL,
-  baseDeDatos: BaseDeDatosSchema,
-  backend: RepositorioSchema.optional(),
-  frontend: RepositorioSchema.optional(),
-  integrado: RepositorioSchema.optional(),
-  tipo: z.enum(["M", "S"]),
-  materiaInformacion: MateriaInformacionSchema,
-  integrantes: z.array(z.lazy(() => UsuarioCursoSchema)),
-  imagen: z.string().nullable().optional(),
-});
+export const ProyectoSchema: z.ZodType<Omit<Proyecto, "fav_usuarios">> =
+  z.object({
+    titulo: FORM_CONSTRAINS.TEXT_LABEL,
+    descripcion: FORM_CONSTRAINS.TEXT_DESCRIPTION.optional(),
+    url: FORM_CONSTRAINS.URL,
+    baseDeDatos: BaseDeDatosSchema,
+    backend: RepositorioSchema.optional(),
+    frontend: RepositorioSchema.optional(),
+    integrado: RepositorioSchema.optional(),
+    tipo: z.enum(["M", "S"]),
+    materiaInformacion: MateriaInformacionSchema,
+    integrantes: z.array(z.lazy(() => UsuarioCursoSchema)),
+    imagen: z.string().nullable().optional(),
+  });
 
 /**
  * ProyectoInformationSchema – Zod schema that validates only the metadata of a project.
@@ -56,7 +65,10 @@ export const ProyectoSchema:  z.ZodType<Omit<Proyecto, 'fav_usuarios'>> = z.obje
  * - Optional image.
  */
 export const ProyectoInformationSchema: z.ZodType<
-  Pick<Proyecto, "titulo" | "descripcion" | "materiaInformacion" | "tipo" | "id" | "imagen">
+  Pick<
+    Proyecto,
+    "titulo" | "descripcion" | "materiaInformacion" | "tipo" | "id" | "imagen"
+  >
 > = z.object({
   id: FORM_CONSTRAINS.ID.optional(),
   titulo: FORM_CONSTRAINS.TEXT_LABEL,
@@ -94,11 +106,15 @@ export type ProyectoSchema = z.infer<typeof ProyectoSchema>;
  * 
  * Represents the validated metadata of a project, suitable for display or partial updates.
  */
-export type ProyectoInformationSchema = z.infer<typeof ProyectoInformationSchema>;
+export type ProyectoInformationSchema = z.infer<
+  typeof ProyectoInformationSchema
+>;
 
 /**
  * ProyectoRepositoriesSchema – Inferred type from ProyectoRepositoriesSchema Zod schema.
  * 
  * Represents the part of the project that holds repository information, with optional fields.
  */
-export type ProyectoRepositoriesSchema = z.infer<typeof ProyectoRepositoriesSchema>;
+export type ProyectoRepositoriesSchema = z.infer<
+  typeof ProyectoRepositoriesSchema
+>;

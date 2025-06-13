@@ -21,16 +21,21 @@ const passwordSchema = z.string().min(8, { message: "La contraseña debe tener a
   })
   .regex(/[0-9]/, {
     message: "La contraseña debe contener al menos un número.",
-  }).regex(/^[^@:/?&]+$/, "No puede contener ninguno de los siguientes caracteres: [@, :, /, ?, &,]");
+  })
+  .regex(
+    /^[^@:/?&]+$/,
+    "No puede contener ninguno de los siguientes caracteres: [@, :, /, ?, &,]"
+  )
+  .regex(/^\S*$/, {
+    message: "No se admiten espacios vacíos",
+  });
 
-  /**
- * userNameSchema – Zod schema for validating a text label (username or name field).
- * 
- * Restrictions:
- * - Must not include any of the following characters: @, :, /, ?, &.
- * - Follows the constraints defined in FORM_CONSTRAINS.TEXT_LABEL.
- */
-const userNameSchema = FORM_CONSTRAINS.TEXT_LABEL.regex(/^[^@:/?&]+$/, 'No puede contener ninguno de los siguientes caracteres: [@, :, /, ?, &,]')
+const userNameSchema = FORM_CONSTRAINS.TEXT_LABEL.regex(
+  /^[^@:/?&]+$/,
+  "No puede contener ninguno de los siguientes caracteres: [@, :, /, ?, &,]"
+).regex(/^\S*$/, {
+  message: "No se admiten espacios vacíos",
+});
 
 /**
  * BaseDeDatosSchema – Zod schema used to validate a database object.
@@ -47,15 +52,18 @@ const userNameSchema = FORM_CONSTRAINS.TEXT_LABEL.regex(/^[^@:/?&]+$/, 'No puede
  *   - "P" represents Proprietary.
  *   - "M" represents Mixed.
  */
-export const BaseDeDatosSchema: z.ZodType<Omit<BaseDeDatos, "proyecto">> = z.object({
-  id: FORM_CONSTRAINS.ID.optional(),
-  nombre: userNameSchema,
-  contrasenia: passwordSchema,
-  url: FORM_CONSTRAINS.URL,
-  tipo: z.enum(["S", "N", "E", 'P', 'M'], {
-    errorMap: () => ({ message: "Selecciona un tipo de base de datos válido" }),
-  }),
-});
+export const BaseDeDatosSchema: z.ZodType<Omit<BaseDeDatos, "proyecto">> =
+  z.object({
+    id: FORM_CONSTRAINS.ID.optional(),
+    nombre: userNameSchema,
+    contrasenia: passwordSchema,
+    url: FORM_CONSTRAINS.URL,
+    tipo: z.enum(["S", "N", "E", "P", "M"], {
+      errorMap: () => ({
+        message: "Selecciona un tipo de base de datos válido",
+      }),
+    }),
+  });
 
 /**
  * BaseDeDatosSchema – Type inferred from the BaseDeDatosSchema Zod schema.
@@ -80,15 +88,15 @@ export type BaseDeDatosSchema = z.infer<typeof BaseDeDatosSchema>;
  *   - "M" for Mixed.
  */
 export const BaseDeDatosRegisterSchema: z.ZodType<
-  Pick<BaseDeDatos, "contrasenia" | "nombre" | "tipo" | "proyectoId" | 'url'>
+  Pick<BaseDeDatos, "contrasenia" | "nombre" | "tipo" | "proyectoId" | "url">
 > = z.object({
   proyectoId: z.number().optional(),
   nombre: userNameSchema,
   contrasenia: passwordSchema,
-  tipo: z.enum(["S", "N", "E", 'P', 'M'], {
+  tipo: z.enum(["S", "N", "E", "P", "M"], {
     errorMap: () => ({ message: "Selecciona un tipo de base de datos válido" }),
   }),
-  url: z.string().optional()
+  url: z.string().optional(),
 });
 
 /**
@@ -97,4 +105,6 @@ export const BaseDeDatosRegisterSchema: z.ZodType<
  * Represents the shape of a validated form for registering a new database instance,
  * including its name, password, type, optional URL, and optional project ID.
  */
-export type BaseDeDatosRegisterSchema = z.infer<typeof BaseDeDatosRegisterSchema>;
+export type BaseDeDatosRegisterSchema = z.infer<
+  typeof BaseDeDatosRegisterSchema
+>;
