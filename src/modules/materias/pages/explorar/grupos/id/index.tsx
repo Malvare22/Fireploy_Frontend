@@ -338,7 +338,7 @@ function VerInformacionCurso() {
                     />
                   ))
                 ) : (
-                  <Alert severity="info">Este curso actualmente no tiene secciones agregadas</Alert>
+                  <Alert severity="info">Este curso actualmente no tiene actividades agregadas</Alert>
                 )}
               </Stack>
             </>
