@@ -250,7 +250,24 @@ const TablaGestionarSecciones = () => {
       secciones.forEach((row) => {
         const _temp = Object.entries(row)
           .map(([field, error]) => {
-            return `${field}: ${(error as FieldError)?.message || "Error desconocido"}`;
+            let label = '';
+            switch (field) {
+              case 'titulo':
+                label = 'Título'
+                break;
+              case 'fechaDeCierre':
+                label = 'Fecha de Cierre'
+                break;
+              case 'fechaDeInicio':
+                label = 'Fecha de Inicio'
+                break;
+              case 'descripcion':
+                label = 'Descripción'
+                break;
+              
+              
+            }
+            return `${label}: ${(error as FieldError)?.message || "Error desconocido"}`;
           })
           .join("\n");
         nodes.push(_temp);

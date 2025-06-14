@@ -1,12 +1,14 @@
 import AlertDialog from "@modules/general/components/alertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
 import { useAuth } from "@modules/general/context/accountContext";
+import { AlertDialogProvider } from "@modules/general/context/alertDialogContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import Perfil from "@modules/usuarios/components/perfil";
 import { getUsuarioService } from "@modules/usuarios/services/get.usuario";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
+import { Box } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -53,7 +55,7 @@ function GestionarPerfil() {
     queryKey: ["Profile Information", id, token],
   });
 
-  const { showDialog, open, title, message, handleCancel, type, handleAccept } = useAlertDialog();
+  const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
 
   // Custom hook to control the alert dialog state
   const { setError } = useErrorReader(showDialog);
@@ -79,18 +81,23 @@ function GestionarPerfil() {
 
   return (
     <>
-      {/* Display error dialog if an error occurred */}
+      {/* Error dialog for failed fetch */}
       <AlertDialog
         handleAccept={handleAccept}
-        handleCancel={handleCancel}
         open={open}
         title={title}
-        textBody={message}
         type={type}
+        textBody={message}
       />
 
-      {/* Show loading indicator or user profile if data is available */}
-      {isLoading ? <LoaderElement /> : <>{usuario && <Perfil usuario={usuario} />}</>}
+      {/* Loader or profile display */}
+      {isLoading ? (
+        <LoaderElement />
+      ) : (
+        <AlertDialogProvider>
+          <Box paddingX={0}>{usuario && <Perfil usuario={usuario} />}</Box>
+        </AlertDialogProvider>
+      )}
     </>
   );
 }
