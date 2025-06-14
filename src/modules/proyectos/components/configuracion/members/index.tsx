@@ -38,7 +38,7 @@ import { syncErrorProject } from "../../executionState";
 import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
 import { getProjectById } from "@modules/proyectos/services/get.project";
 import { useNavigate } from "react-router";
-import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { rutasUsuarios } from "@modules/usuarios/router/routes";
 
 /**
  * Members component – This component displays the list of members (collaborators) for a project

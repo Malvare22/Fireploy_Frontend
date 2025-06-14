@@ -15,7 +15,7 @@ import React, { useMemo } from "react";
 import { Curso, UsuarioCurso } from "@modules/materias/types/curso";
 import { useNavigate } from "react-router";
 import { AccountInformation, useAuth } from "@modules/general/context/accountContext";
-import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { rutasUsuarios } from "@modules/usuarios/router/routes";
 import { rutasMaterias } from "@modules/materias/router/routes";
 import SchoolIcon from "@mui/icons-material/School";
 import EditNoteIcon from "@mui/icons-material/EditNote";

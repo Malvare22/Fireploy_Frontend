@@ -4,7 +4,7 @@ import TextFieldPassword from "@modules/general/components/textFieldPassword";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import { buttonTypes } from "@modules/general/types/buttons";
-import { rutasProyectos } from "@modules/proyectos/router";
+import { rutasProyectos } from "@modules/proyectos/router/routes";
 import { postCreateDatabase } from "@modules/proyectos/services/post.base.datos";
 import { getDataBaseTypesArray, getDataBaseTypesMap } from "@modules/proyectos/utils/database";
 import { BaseDeDatosRegisterSchema } from "@modules/proyectos/utils/forms/baseDeDatos.schema";

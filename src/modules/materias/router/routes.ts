@@ -1,4 +1,6 @@
-const rutaBase = "/app/materias";
+import { BASE_PATH } from "@modules/general/router/basePath";
+
+const rutaBase = BASE_PATH.AUTH + "/materias";
 
 export enum rutasMaterias {
   explorar = rutaBase + "/explorar",

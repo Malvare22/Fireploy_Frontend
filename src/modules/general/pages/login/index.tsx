@@ -19,7 +19,7 @@ import {
   SignUpResponse,
 } from "@modules/general/services/post.signUp";
 import { useNavigate } from "react-router-dom";
-import { rutasProyectos } from "@modules/proyectos/router";
+import { rutasProyectos } from "@modules/proyectos/router/routes";
 import { useMutation } from "@tanstack/react-query";
 import TextFieldPassword from "@modules/general/components/textFieldPassword";
 import { GoogleLogin } from "@react-oauth/google";

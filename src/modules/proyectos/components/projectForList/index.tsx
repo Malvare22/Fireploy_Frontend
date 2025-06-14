@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
 import { useNavigate } from "react-router";
-import { rutasProyectos } from "@modules/proyectos/router";
+import { rutasProyectos } from "@modules/proyectos/router/routes";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { ChipExecutionState } from "../executionState";
 import { TechnologyTags } from "../showTags";

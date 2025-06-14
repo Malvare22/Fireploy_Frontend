@@ -18,7 +18,7 @@ import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { useNavigate } from "react-router";
 import { Materia } from "@modules/materias/types/materia";
-import { rutasProyectos } from "@modules/proyectos/router";
+import { rutasProyectos } from "@modules/proyectos/router/routes";
 import { Curso } from "@modules/materias/types/curso";
 import { evaluateDate, getCurrentDate } from "@modules/general/utils/fechas";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";

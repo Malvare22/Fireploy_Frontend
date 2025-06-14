@@ -31,11 +31,11 @@ import { useNavigate, useParams } from "react-router";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { patchEstudiantesCurso } from "@modules/materias/services/patch.curso.estudiantes";
-import { rutasProyectos } from "@modules/proyectos/router";
+import { rutasProyectos } from "@modules/proyectos/router/routes";
 import EditIcon from "@mui/icons-material/Edit";
 import { rutasMaterias } from "@modules/materias/router/routes";
 import { AlertDialogProvider } from "@modules/general/context/alertDialogContext";
-import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { rutasUsuarios } from "@modules/usuarios/router/routes";
 import { ActivityAndStudents } from "@modules/materias/components/cardCurso";
 
 export const DialogContext = createContext({

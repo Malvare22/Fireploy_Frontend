@@ -17,7 +17,7 @@ import { GitlabIcon } from "@modules/general/components/customIcons";
 import { GitHub } from "@mui/icons-material";
 import { UsuarioCurso } from "@modules/materias/types/curso";
 import { useNavigate } from "react-router";
-import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { rutasUsuarios } from "@modules/usuarios/router/routes";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { openInNewTab } from "@modules/general/utils/openTab";
 import { useAuth } from "@modules/general/context/accountContext";

@@ -14,7 +14,7 @@ import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import { showSocialNetworks } from "@modules/usuarios/utils/showSocialNetworks";
 import Status from "@modules/general/components/status";
 import { useNavigate } from "react-router";
-import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { rutasUsuarios } from "@modules/usuarios/router/routes";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { useAuth } from "@modules/general/context/accountContext";

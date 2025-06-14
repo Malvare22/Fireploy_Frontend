@@ -7,7 +7,7 @@ import useAlertDialog from "../hooks/useAlertDialog";
 import useErrorReader from "../hooks/useErrorReader";
 import AlertDialog from "../components/alertDialog";
 import { useNavigate } from "react-router";
-import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { rutasUsuarios } from "@modules/usuarios/router/routes";
 import { ACCOUNT_INITIAL_VALUES } from "../enums/accountInfoValues";
 
 /**

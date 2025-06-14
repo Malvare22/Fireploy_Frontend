@@ -34,7 +34,7 @@ import {
 } from "@modules/general/services/post.signUp";
 import { GoogleLogin } from "@react-oauth/google";
 import { loginUser } from "@modules/general/utils/account";
-import { rutasProyectos } from "@modules/proyectos/router";
+import { rutasProyectos } from "@modules/proyectos/router/routes";
 import React, { useState } from "react";
 
 /**
