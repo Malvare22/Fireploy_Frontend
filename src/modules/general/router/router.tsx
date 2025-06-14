@@ -42,7 +42,7 @@ export const routerGeneral: RouteObject = {
   element: <LayoutPrelogin />, // Use layout with navbar for pre-login pages
   children: [
     {
-      path: BASE_PATH.ROOT,
+      path: "/",
       element: <Navigate to={rutasGeneral.home}/>
     },
     {
