@@ -4,13 +4,14 @@ import AnimatedCard from "../animatedCard";
 import { getUserTypes } from "@modules/usuarios/utils/usuario.map";
 import { Usuario } from "@modules/usuarios/types/usuario";
 import { useNavigate } from "react-router";
-import { rutasUsuarios } from "@modules/usuarios/router/router";
 import { rutasGeneral } from "@modules/general/router/routes";
 import { useAuth } from "@modules/general/context/accountContext";
+import { rutasUsuarios } from "@modules/usuarios/router/routes";
 
 type Props = {
   usuario: Usuario;
 };
+
 
 const PortafolioCard: React.FC<Props> = ({ usuario }) => {
   const { id } = useAuth().accountInformation;

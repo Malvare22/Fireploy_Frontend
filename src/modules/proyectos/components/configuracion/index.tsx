@@ -37,6 +37,33 @@ type Props = {
   project: ProyectoSchema;
 };
 
+/**
+ * ProjectSettings component – provides a complete interface to view and manage 
+ * all configurations related to a specific project.
+ * 
+ * This component includes several tabbed sections to handle information such as:
+ * project details, connected repositories, databases, collaborators, logs, and other settings.
+ * It also reflects the current deployment status and project visibility, and handles
+ * interactive actions like status change and deployment tracking.
+ * 
+ * @component
+ * 
+ * @param {object} project - The project object containing all configuration data.
+ * @param {string} project.titulo - The title or name of the project.
+ * @param {string} project.estadoDeProyecto - The current visibility state of the project.
+ * @param {number} project.id - The unique identifier of the project.
+ * @param {object} project.backend - Backend deployment details (may include an ID).
+ * @param {object} project.frontend - Frontend deployment details (may include an ID).
+ * @param {object} project.integrado - Integrated service deployment details (may include an ID).
+ * @param {string} project.url - The base URL of the deployed project.
+ * 
+ * @returns {JSX.Element} A settings dashboard with editable project configuration sections and execution feedback.
+ * 
+ * @example
+ * ```tsx
+ * <ProjectSettings project={myProjectData} />
+ * ```
+ */
 export default function ProjectSettings({ project }: Props) {
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -160,6 +187,21 @@ export default function ProjectSettings({ project }: Props) {
   );
 }
 
+/**
+ * ConfiguracionSkeleton component – shows a loading placeholder while the project configuration is loading.
+ * 
+ * This component displays skeleton elements that mimic the final UI structure,
+ * including headings, tabs, and content areas, to improve perceived performance and avoid layout shifts.
+ * 
+ * @component
+ * 
+ * @returns {JSX.Element} A skeleton-styled placeholder for the project settings interface.
+ * 
+ * @example
+ * ```tsx
+ * {isLoading && <ConfiguracionSkeleton />}
+ * ```
+ */
 function ConfiguracionSkeleton() {
   return (
     <Container component={Paper} sx={{ p: 2 }}>

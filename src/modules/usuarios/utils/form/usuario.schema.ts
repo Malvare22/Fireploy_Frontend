@@ -158,6 +158,11 @@ export const PortafolioSchema: z.ZodType<
   descripcion: FORM_CONSTRAINS.TEXT_DESCRIPTION,
 });
 
+/**
+ * CorreoSchema – Zod schema for validating email-only input.
+ *
+ * Accepts a single email field validated using standard email constraints.
+ */
 export const CorreoSchema = z.object({
   correo: FORM_CONSTRAINS.EMAIL,
 });

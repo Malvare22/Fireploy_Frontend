@@ -17,7 +17,7 @@ import { GitlabIcon } from "@modules/general/components/customIcons";
 import { GitHub } from "@mui/icons-material";
 import { UsuarioCurso } from "@modules/materias/types/curso";
 import { useNavigate } from "react-router";
-import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { rutasUsuarios } from "@modules/usuarios/router/routes";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { openInNewTab } from "@modules/general/utils/openTab";
 import { useAuth } from "@modules/general/context/accountContext";
@@ -37,6 +37,21 @@ type CardProjectModalProps = {
   project: ProyectoCard;
   callback: () => Promise<unknown>;
 };
+
+/**
+ * CardProjectModal component – displays detailed information about a selected project,
+ * including image, description, team members, and repository links. Supports starring functionality.
+ *
+ * Designed for use in a modal or detailed project view.
+ *
+ * @component
+ *
+ * @param project - Project object containing information such as title, description,
+ * repositories (frontend, backend, integrado), image, URL, and members.
+ * @param callback - Async callback function to refresh parent or trigger updates after starring.
+ *
+ * @returns A JSX layout displaying the selected project's data and links, styled with MUI components.
+ */
 export function CardProjectModal({ project, callback }: CardProjectModalProps) {
   function getRepoButtonIcon(s: string) {
     return s.includes("gitlab") ? <GitlabIcon /> : <GitHub />;
@@ -239,6 +254,17 @@ export function CardProjectModal({ project, callback }: CardProjectModalProps) {
 type MemberCardProps = {
   user: UsuarioCurso;
 };
+
+/**
+ * MemberCard component – renders a visual card for a project member, displaying their avatar and name.
+ * Navigates to the user's portfolio page on click.
+ *
+ * @component
+ *
+ * @param user - Object containing user information including name, ID, and avatar image URL.
+ *
+ * @returns A clickable avatar and name component redirecting to the member's portfolio.
+ */
 function MemberCard({ user }: MemberCardProps) {
   const navigate = useNavigate();
 

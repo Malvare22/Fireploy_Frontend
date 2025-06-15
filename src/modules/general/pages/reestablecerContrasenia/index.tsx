@@ -18,11 +18,22 @@ import { labelRestorePassword } from "@modules/general/enums/labelRestorePasswor
 import { useEffect, useState } from "react";
 
 /**
- * Password reset component used for users who forgot their current password.
- * It allows users to provide their email, current password, and a new password.
- * Handles validation, feedback dialogs, and server interaction.
- *
+ * ReestablecerContrasenia component – handles the password reset process for users
+ * who have requested a password change via a token-based reset link.
+ * 
+ * Uses React Hook Form for form handling, Zod for validation, React Query for mutation,
+ * and custom hooks for displaying alerts and handling errors.
+ * 
+ * Provides user feedback upon success or failure and redirects to the login screen after a successful password reset.
+ * 
  * @component
+ * 
+ * @returns {a password reset form with validation, API submission, and UI feedback}
+ * 
+ * @example
+ * ```tsx
+ * <Route path="/auth/restore/:token" element={<ReestablecerContrasenia />} />
+ * ```
  */
 function ReestablecerContrasenia() {
   const [searchParams] = useSearchParams();

@@ -15,7 +15,7 @@ import React, { useMemo } from "react";
 import { Curso, UsuarioCurso } from "@modules/materias/types/curso";
 import { useNavigate } from "react-router";
 import { AccountInformation, useAuth } from "@modules/general/context/accountContext";
-import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { rutasUsuarios } from "@modules/usuarios/router/routes";
 import { rutasMaterias } from "@modules/materias/router/routes";
 import SchoolIcon from "@mui/icons-material/School";
 import EditNoteIcon from "@mui/icons-material/EditNote";
@@ -26,6 +26,7 @@ type CardCursoProps = {
   isRegister: boolean;
   materiaNombre: string;
   onClick?: () => void;
+  hasActiveRequest?: boolean;
 };
 
 const CardCurso: React.FC<CardCursoProps> = ({
@@ -34,38 +35,46 @@ const CardCurso: React.FC<CardCursoProps> = ({
   userType,
   isRegister,
   materiaNombre,
+  hasActiveRequest = false,
 }) => {
   const navigate = useNavigate();
 
   const { id } = useAuth().accountInformation;
 
+  console.log(hasActiveRequest);
+
   const theme = useTheme();
 
   const showDocentOwnerStyle = !(userType != "D" || (userType == "D" && !isRegister));
 
-  const buttonElements = useMemo((): { color: "primary" | "info"; text: string } => {
-    if (userType == "D" && curso.docente != null) {
-      return { text: "Solicitar Curso", color: "info" };
+  /**
+   * Un docente no puede solicitar un curso ya ocupado por otro docente
+   */
+  const buttonDisable = () => {
+    return hasActiveRequest || (userType == "D" && curso.docente != null && curso.docente.id != id);
+  };
+
+  const buttonElements = useMemo((): { color: "primary" | "warning"; text: string } => {
+    if (userType == "D") {
+      if (hasActiveRequest) {
+        return { text: "Solicitud pendiente", color: "warning" };
+      }
+      if (curso.docente == null) return { text: "Solicitar curso", color: "warning" };
+      if (curso.docente != null && curso.docente.id != id)
+        return { text: "Curso no disponible", color: "warning" };
     }
     if (userType == "E" && !isRegister) {
-      return { text: "Inscribirme", color: "info" };
+      return { text: "Inscribirme", color: "warning" };
     }
 
     return { text: "Acceder", color: "primary" };
-  }, [userType, isRegister]);
+  }, [userType, isRegister, hasActiveRequest]);
 
   function handleButton() {
     if (isRegister || userType == "A")
       navigate(rutasMaterias.verCurso.replace(":idCurso", curso.id ?? "-1"));
     else if (onClick) onClick();
   }
-
-  /**
-   * Un docente no puede solicitar un curso ya ocupado por otro docente
-   */
-  const buttonDisable = () => {
-    return userType == "D" && curso.docente != null && curso.docente.id != id;
-  };
 
   return (
     <Card sx={{ width: "100%" }}>
@@ -122,6 +131,9 @@ const CardCurso: React.FC<CardCursoProps> = ({
               variant="contained"
               color={buttonElements.color}
               onClick={handleButton}
+              sx={{
+                textTransform: "none",
+              }}
             >
               {buttonElements.text}
             </Button>
@@ -137,6 +149,24 @@ export default CardCurso;
 type PropsFrameDocente = {
   docente: UsuarioCurso | undefined | null;
 };
+
+/**
+ * FrameDocente component – displays the assigned teacher for the course,
+ * including their avatar and name, with a link to their portfolio.
+ *
+ * If no teacher is assigned, it shows an informational message instead.
+ *
+ * @component
+ *
+ * @param {object|null|undefined} docente - The teacher assigned to the course. If not available, a message is shown.
+ *
+ * @returns {JSX.Element} A box showing teacher information or a fallback message.
+ *
+ * @example
+ * ```tsx
+ * <FrameDocente docente={curso.docente} />
+ * ```
+ */
 function FrameDocente({ docente }: PropsFrameDocente) {
   const navigate = useNavigate();
 
@@ -165,6 +195,23 @@ function FrameDocente({ docente }: PropsFrameDocente) {
     );
 }
 
+/**
+ * ActivityAndStudents component – shows a summary of the course's activities and enrolled students.
+ *
+ * It visually represents counts using Material UI chips with icons.
+ *
+ * @component
+ *
+ * @param {number} cntActities - Number of activities in the course.
+ * @param {number} cntStudents - Number of students enrolled in the course.
+ *
+ * @returns {JSX.Element} A horizontal stack with labeled chips for activities and students.
+ *
+ * @example
+ * ```tsx
+ * <ActivityAndStudents cntActities={5} cntStudents={30} />
+ * ```
+ */
 export function ActivityAndStudents({
   cntActities,
   cntStudents,

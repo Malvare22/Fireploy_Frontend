@@ -9,21 +9,8 @@ import VistaSolicitudes from "../pages/solicitudes";
 import NewEntriesView from "../pages/newEntries";
 import NotificacionesView from "../pages/notificaciones";
 import PortafolioView from "../pages/portafolio";
+import { rutasUsuarios } from "./routes";
 
-const rutaBase = "/app/usuarios";
-
-export enum rutasUsuarios {
-  perfil = rutaBase + "/perfil",
-  explorarPortafolios = rutaBase + "/explorar",
-  portafolio = rutaBase + "/portafolio/:id",
-  listarUsuarios = rutaBase + "/listar",
-  modificarPerfil = rutaBase + "/perfil/:id",
-  agregarUsuario = rutaBase + '/agregar',
-  logout = rutaBase + '/logout',
-  solicitudes = rutaBase + '/solicitudes',
-  newEntries = rutaBase + '/newEntries',
-  notificaciones = rutaBase + '/notificaciones'
-}
 
 /**
  * Router configuration for the Usuarios (Users) module.

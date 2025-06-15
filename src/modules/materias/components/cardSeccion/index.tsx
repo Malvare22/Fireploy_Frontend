@@ -18,7 +18,7 @@ import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { useNavigate } from "react-router";
 import { Materia } from "@modules/materias/types/materia";
-import { rutasProyectos } from "@modules/proyectos/router";
+import { rutasProyectos } from "@modules/proyectos/router/routes";
 import { Curso } from "@modules/materias/types/curso";
 import { evaluateDate, getCurrentDate } from "@modules/general/utils/fechas";
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
@@ -32,31 +32,22 @@ type CardSeccionProps = {
 };
 
 /**
- * CardSeccion component – displays an expandable section (accordion) containing projects
- * related to a specific section of a course. It includes a sortable list of projects,
- * description, and an action to create new projects.
- *
- * This component fetches project data from the server using the section ID, transforms it
- * into a card format, and displays each project inside a responsive grid. It also provides
- * sorting capabilities and shows the section's metadata (title and dates).
- *
+ * CardSeccion component – displays a collapsible section containing a list of project cards related to a course section.
+ * 
+ * Each section includes metadata (title, description, dates) and renders a list of projects with interactive options,
+ * including opening project modals and adding new projects (if the section is active).
+ * 
  * @component
- *
- * @param {Object} seccion - The section object containing its metadata and identifier.
- * @param {number|string} idMateria - The unique identifier of the subject associated with the section.
- * @param {number|string} idCurso - The unique identifier of the course associated with the section.
- * @param {Function} handleCard - Callback function triggered when a project card is clicked; receives the selected project.
- *
- * @returns {JSX.Element} A collapsible UI element showing a section's details and associated projects with interactive actions.
- *
+ * 
+ * @param {Seccion} seccion - Section object including metadata like title, dates, and ID.
+ * @param {string} idMateria - ID of the related subject.
+ * @param {string} idCurso - ID of the related course.
+ * 
+ * @returns {JSX.Element} A UI block containing an accordion with a title, description, add button, and project cards.
+ * 
  * @example
  * ```tsx
- * <CardSeccion
- *   seccion={seccionObject}
- *   idMateria={1}
- *   idCurso={2}
- *   handleCard={(project) => console.log(project)}
- * />
+ * <CardSeccion seccion={mySeccion} idMateria="12" idCurso="42" />
  * ```
  */
 const CardSeccion: React.FC<CardSeccionProps> = ({ seccion, idMateria, idCurso }) => {

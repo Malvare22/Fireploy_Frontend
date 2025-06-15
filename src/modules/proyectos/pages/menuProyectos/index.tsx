@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import { useNavigate } from "react-router-dom";
-import { rutasProyectos } from "@modules/proyectos/router";
+import { rutasProyectos } from "@modules/proyectos/router/routes";
 
 /**
  * ListarProyectos component – A page that lists and navigates users to different sections related to projects.

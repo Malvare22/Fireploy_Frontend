@@ -34,7 +34,7 @@ import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { useNavigate } from "react-router";
-import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { rutasUsuarios } from "@modules/usuarios/router/routes";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import { useMutation, useQuery } from "@tanstack/react-query";

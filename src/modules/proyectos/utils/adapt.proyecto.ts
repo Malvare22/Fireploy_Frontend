@@ -24,10 +24,13 @@ import { Fichero, FicheroService } from "../types/fichero";
 // });
 
 /**
- * adaptProjectToCard – Transforms a project object into a format compatible with a project card, extracting essential data like title, description, image, and participant information. Also extracts frontend, backend, integrated repository frameworks, and database name.
+ * Transforms a complete `Proyecto` object into a simplified `ProyectoCard` format used for UI presentation.
  *
- * @param {Proyecto} proyecto - The project object to transform.
- * @returns {ProyectoCard} The project data formatted as a project card.
+ * Extracts basic project metadata (title, description, image), team members (including owner),
+ * repository URLs/frameworks, database type (when applicable), and other display-friendly attributes.
+ *
+ * @param {Proyecto} proyecto - The complete project data to convert.
+ * @returns {ProyectoCard} A simplified object ready to be rendered in a project card UI component.
  */
 export function adaptProjectToCard(proyecto: Proyecto): ProyectoCard {
   const getRepository = (field: KeysOfRepository): RepositoryForCard | undefined => {
@@ -60,10 +63,13 @@ export function adaptProjectToCard(proyecto: Proyecto): ProyectoCard {
 }
 
 /**
- * adaptProject – Transforms a partial project service object into a full project object, including adapting repository, database, and other project data.
+ * Converts a partial `ProyectoService` object (typically from an API response) into a full `Proyecto` object.
  *
- * @param {Partial<ProyectoService>} project - The partial project service data to transform.
- * @returns {Proyecto} The full project object with repositories, database, and other project details.
+ * Handles adaptation of database, repositories (single or modular type), participants, owner,
+ * academic info, and project status.
+ *
+ * @param {Partial<ProyectoService>} project - The incoming project data from backend or service.
+ * @returns {Proyecto} A fully typed and structured `Proyecto` object for internal use.
  */
 export function adaptProject(project: Partial<ProyectoService>): Proyecto {
   const repos = project.repositorios ?? [];
@@ -114,6 +120,15 @@ export function adaptProject(project: Partial<ProyectoService>): Proyecto {
     ...repositoriosAsignados,
   };
 }
+
+/**
+ * Determines the appropriate MIME type based on the file extension of the given filename.
+ *
+ * Used for Blob/File creation when decoding Base64 data into binary files.
+ *
+ * @param {string} fileName - The full filename (e.g., "report.pdf").
+ * @returns {string} The corresponding MIME type (e.g., "application/pdf").
+ */
 function getMimeTypeFromExtension(fileName: string): string {
   const extension = fileName.split(".").pop()?.toLowerCase();
 
@@ -146,6 +161,15 @@ function getMimeTypeFromExtension(fileName: string): string {
   }
 }
 
+/**
+ * Converts a `FicheroService` object (with Base64 content) into a usable `Fichero` object with a `File` instance.
+ *
+ * Handles Base64 decoding and MIME type inference based on file extension.
+ * Returns a `null` content field if the decoding fails.
+ *
+ * @param {FicheroService} f - The file object with Base64 content from the backend.
+ * @returns {Fichero} A front-end compatible file object with proper metadata and binary content.
+ */
 export function adaptFichero(f: FicheroService): Fichero {
   try {
     const binaryData = atob(f.contenido); // Decodifica Base64 a binario (string)

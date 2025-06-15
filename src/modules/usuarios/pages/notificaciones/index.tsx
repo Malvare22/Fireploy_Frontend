@@ -8,6 +8,26 @@ import { NotificationMessage } from "@modules/usuarios/types/notification";
 import { Alert, Box, Link, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
+/**
+ * `NotificacionesView` – React component for displaying and filtering user notifications.
+ *
+ * This view fetches notification messages using the `useNotificationContext` hook, displays
+ * a loader while loading, and shows the data in a filterable table format.
+ *
+ * Features include:
+ * - Filter options for read/unread notifications
+ * - Contextual alert linking to documentation for error codes
+ * - Fallback alert when no notifications match the selected filters
+ *
+ * @component
+ *
+ * @returns {JSX.Element} A component that renders a filterable list of user notifications.
+ *
+ * @example
+ * ```tsx
+ * <NotificacionesView />
+ * ```
+ */
 function NotificacionesView() {
   const { isPending, notificaciones, refetch } = useNotificationContext();
 

@@ -9,22 +9,30 @@ type CardMateriaProps = {
 };
 
 /**
- * CardMateria component – displays a subject (materia) card with its name, semester,
- * and a button to explore its related courses.
- *
- * This component presents the subject's basic information and includes a button
- * that redirects the user to the list of courses associated with the subject.
- * Styling is applied based on the MUI theme, including a highlighted semester badge.
- *
+ * CardMateria component – a visual card representation of a subject (materia),
+ * showing its name, semester, and number of associated courses.
+ * 
+ * This component includes a styled header, chips for metadata, and a button
+ * that navigates to the detail view for available courses related to the subject.
+ * 
  * @component
- *
- * @param {Object} materia - The subject object containing the name, semester, and unique identifier.
- *
- * @returns {JSX.Element} A styled subject card component with navigation to its courses.
- *
+ * 
+ * @param {Object} materia - An object representing the subject, including its ID, name,
+ * semester number, and an optional list of courses.
+ * 
+ * @returns {Visual element} A Material UI Card that displays subject information and
+ * provides navigation to its course list if available.
+ * 
  * @example
  * ```tsx
- * <CardMateria materia={materiaObject} />
+ * <CardMateria
+ *   materia={{
+ *     id: 1,
+ *     nombre: "Matemáticas Discretas",
+ *     semestre: 2,
+ *     cursos: [/* array de cursos *\/]
+ *   }}
+ * />
  * ```
  */
 const CardMateria: React.FC<CardMateriaProps> = ({ materia }) => {

@@ -1,7 +1,31 @@
 import { ConditionalStyles, TableStyles } from "react-data-table-component";
 import { useTheme } from "@mui/material";
 
-// Estilos personalizados para la tabla
+/**
+ * useCustomTableStyles hook – Provides custom styles for data tables using the current MUI theme.
+ *
+ * This hook returns style configurations to be applied to a `react-data-table-component`, 
+ * including head cell and row styling that adapts to the active MUI theme.
+ * It also includes conditional styling for alternating row backgrounds.
+ *
+ * @hook
+ *
+ * @returns An object containing:
+ * - `customStyles`: Styles for table headers and rows based on the MUI theme.
+ * - `conditionalRowStyles`: Conditional styling for even rows to improve readability.
+ *
+ * @example
+ * ```tsx
+ * const { customStyles, conditionalRowStyles } = useCustomTableStyles();
+ *
+ * <DataTable
+ *   data={data}
+ *   columns={columns}
+ *   customStyles={customStyles}
+ *   conditionalRowStyles={conditionalRowStyles}
+ * />
+ * ```
+ */
 export const useCustomTableStyles = () => {
   const theme = useTheme();
 

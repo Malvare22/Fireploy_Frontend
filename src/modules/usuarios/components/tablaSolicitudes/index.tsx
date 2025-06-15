@@ -4,7 +4,6 @@
  * using `react-data-table-component`. It allows admins to approve or reject user promotion requests.
  * Includes visual indicators and dialogs for confirmation, success, and error feedback.
  */
-
 import DataTable from "react-data-table-component";
 import { TableColumn } from "react-data-table-component";
 import { Chip, IconButton, Menu, MenuItem, Stack, Typography, useTheme } from "@mui/material";
@@ -21,7 +20,7 @@ import { useAuth } from "@modules/general/context/accountContext";
 import { useMutation } from "@tanstack/react-query";
 import { patchSolicitudService } from "@modules/usuarios/services/patch.solicitud";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
-import { useCustomTableStyles } from "@modules/general/styles";
+import { useCustomTableStyles } from "@modules/general/hooks/useCustomTableStyles";
 import { paginationComponentOptions } from "@modules/general/utils/pagination";
 
 /**
@@ -35,7 +34,7 @@ type Props = {
 
 /**
  * TablaSolicitudes component – displays a table of user promotion requests with actions to approve or reject them.
- * 
+ *
  * This component allows administrators to view promotion requests, approve or reject them,
  * and displays status indicators and contextual information. It uses the `react-data-table-component`
  * to render a table with interactive actions and status chips.

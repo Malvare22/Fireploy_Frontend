@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { Proyecto } from "@modules/proyectos/types/proyecto.tipo";
 import { useNavigate } from "react-router";
-import { rutasProyectos } from "@modules/proyectos/router";
+import { rutasProyectos } from "@modules/proyectos/router/routes";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { ChipExecutionState } from "../executionState";
 import { TechnologyTags } from "../showTags";
@@ -25,7 +25,28 @@ interface Props {
   proyecto: Proyecto;
 }
 
+/**
+ * ProjectForList component – displays a detailed, horizontally-styled card view of a single project.
+ *
+ * Includes the project image (or a fallback), metadata, visibility and execution status, tags, and a configuration button.
+ *
+ * @component
+ *
+ * @param {Proyecto} proyecto - Project data object to be rendered.
+ *
+ * @returns {JSX.Element} A responsive card-like UI component representing a single project in a list view.
+ *
+ * @example
+ * ```tsx
+ * <ProjectForList proyecto={myProject} />
+ * ```
+ */
 const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
+  /**
+   * EmptyImage – fallback visual element rendered when the project has no image.
+   *
+   * @returns A box containing a RocketLaunch icon centered in a themed background.
+   */
   function EmptyImage() {
     return (
       <>
@@ -51,6 +72,11 @@ const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
 
   const navigate = useNavigate();
 
+  /**
+   * Score – component that displays the number of users who marked the project as favorite.
+   *
+   * @returns A Card with a rating icon and the favorite count.
+   */
   function Score() {
     return (
       <Card>
@@ -66,6 +92,12 @@ const ProjectForList: React.FC<Props> = ({ proyecto }: Props) => {
     navigate(rutasProyectos.ver.replace(":id", (proyecto.id ?? "-1").toString()));
   }
 
+  /**
+   * Visibilitity – shows the visibility status of the project (Visible or Not Visible),
+   * styled according to the theme and status.
+   *
+   * @returns A styled Box with an icon and visibility label.
+   */
   function Visibilitity() {
     const styles: SxProps = {
       backgroundColor: theme.palette.info.main,

@@ -13,7 +13,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useAlertDialogContext } from "@modules/general/context/alertDialogContext";
 import { useNavigate } from "react-router";
-import { rutasProyectos } from "@modules/proyectos/router";
+import { rutasProyectos } from "@modules/proyectos/router/routes";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -38,6 +38,37 @@ type Props = {
   viewStatus: "A" | "I";
   projectTitle: string;
 };
+
+/**
+ * DangerZone – React component for managing sensitive operations on a project such as 
+ * changing its visibility status and permanently deleting it.
+ * 
+ * This component provides a user interface with warning dialogs and confirmation modals
+ * to ensure the user is fully aware of the implications of these actions.
+ * 
+ * It makes use of:
+ * - `react-hook-form` for form validation using Zod schema.
+ * - React Query for API interactions.
+ * - Custom modals and dialogs for UX confirmation.
+ * 
+ * @component
+ * @param {Object} props - Component properties.
+ * @param {number} props.id - The unique identifier of the project.
+ * @param {"A" | "I"} props.viewStatus - The current visibility status of the project ("A" = active/visible, "I" = inactive/hidden).
+ * @param {string} props.projectTitle - The exact title of the project, used for deletion confirmation.
+ * 
+ * @returns {JSX.Element} A stack of UI elements allowing the user to:
+ * - Toggle visibility of a project.
+ * - Permanently delete a project after title confirmation.
+ * 
+ * @example
+ * ```tsx
+ * <DangerZone id={123} viewStatus="A" projectTitle="My Cool Project" />
+ * ```
+ * 
+ * @see {@link deleteProject} for the deletion service.
+ * @see {@link patchEditProject} for the visibility update service.
+ */
 function DangerZone({ id, viewStatus, projectTitle }: Props) {
   const navigate = useNavigate();
 

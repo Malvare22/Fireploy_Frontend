@@ -10,7 +10,7 @@ import ActionButton from "@modules/general/components/actionButton";
 import { actionButtonTypes } from "@modules/general/types/actionButtons";
 import { CursoTabla } from "@modules/materias/types/curso.tabla";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
-import { useCustomTableStyles } from "@modules/general/styles";
+import { useCustomTableStyles } from "@modules/general/hooks/useCustomTableStyles";
 import { useMutation } from "@tanstack/react-query";
 import { patchChangeStatusCurso } from "@modules/materias/services/patch.curso";
 import { useAuth } from "@modules/general/context/accountContext";
@@ -24,22 +24,21 @@ type TablaCursosAdminProps = {
 };
 
 /**
- * TablaCursosAdmin Component – Displays a table of courses for admin users, allowing them to view, edit, and change the status of courses.
+ * TablaCursosAdmin component – a table interface to display and manage courses for administrators.
  * 
- * This component uses `react-data-table-component` to render a list of courses, including information such as the course's ID, 
- * group, semester, status, number of students, and actions (view, edit, enable/disable).
- * It also includes functionality to change the status of a course and provides appropriate dialog confirmations.
+ * This component renders a data table with course information, allowing actions such as viewing,
+ * editing, enabling, and disabling courses. It includes modals and alert dialogs for confirmation
+ * and status feedback, and integrates mutation logic to update the backend.
  * 
  * @component
  * 
- * @param {TablaCursosAdminProps} props - The properties for the component.
- * @param {CursoTabla[]} props.cursos - List of courses to be displayed in the table.
+ * @param {array} cursos - An array of course objects. Each course object contains fields such as id, group, semester, status, and student count.
  * 
- * @returns A `DataTable` component displaying the list of courses with their details and actions.
+ * @returns {JSX.Element} A table interface displaying all courses with action controls and status dialogs.
  * 
  * @example
  * ```tsx
- * <TablaCursosAdmin cursos={courseList} />
+ * <TablaCursosAdmin cursos={cursosList} />
  * ```
  */
 const TablaCursosAdmin: React.FC<TablaCursosAdminProps> = ({ cursos }) => {

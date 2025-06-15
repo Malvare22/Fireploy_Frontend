@@ -26,12 +26,38 @@ type ProjectCardProps = {
 
   callback: () => Promise<unknown>;
 };
-
-export const ProjectCard: React.FC<ProjectCardProps> = ({
-  proyecto,
-  handleOpen,
-  callback,
-}) => {
+/**
+ * ProjectCard component – a UI card for displaying summarized information
+ * about a project, including title, image, tags, description, team members,
+ * and interaction options.
+ * 
+ * It visually represents the project using a Material-UI Paper and Stack layout,
+ * conditionally showing an image or a placeholder, and offering buttons to open
+ * the project, see more details, or favorite it.
+ * 
+ * @component
+ * 
+ * @param {Object} proyecto - An object representing the project data, including title,
+ * image, URL, description, state, favorite users, and team members.
+ * 
+ * @param {Function} handleOpen - A function that triggers a UI action (like a modal or redirect)
+ * to show more details about the project.
+ * 
+ * @param {Function} callback - An asynchronous function called when the favorite button is clicked,
+ * used to update or refresh project-related data.
+ * 
+ * @returns {Visual element} A card component displaying project information and interaction controls.
+ * 
+ * @example
+ * ```tsx
+ * <ProjectCard
+ *   proyecto={someProject}
+ *   handleOpen={() => setModalOpen(true)}
+ *   callback={updateFavorites}
+ * />
+ * ```
+ */
+export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen, callback }) => {
   const theme = useTheme();
 
   const { id } = useAuth().accountInformation;

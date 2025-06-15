@@ -56,7 +56,7 @@ import { adaptUser } from "@modules/usuarios/utils/adapt.usuario";
 import { msgDescription } from "@modules/general/utils/formConstrains";
 
 /**
- * Portfolio component – responsible for rendering a user's public profile and projects.
+ * Portafolio component – responsible for rendering a user's public profile and projects.
  *
  * This component fetches and displays user information, a list of their projects, social media links,
  * and achievements. It allows sorting and filtering of the project list and opens a modal
@@ -211,10 +211,8 @@ const Portafolio = ({ id }: { id: number }) => {
                         </Stack>
                       )}
                   </Stack>
-                  <Stack alignItems={"center"} spacing={3}>
-                    {showSocialNetworks(usuario.redSocial, {
-                      sx: { fontSize: 32 },
-                    })}
+                  <Stack alignItems={"center"} justifyContent={'center'} direction={'row'} spacing={2}>
+                    {showSocialNetworks(usuario.redSocial, { sx: { fontSize: 32 } })}
                   </Stack>
                 </Stack>
               </Card>

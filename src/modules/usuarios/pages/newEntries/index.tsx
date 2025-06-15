@@ -8,7 +8,7 @@ import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { CheckRegister } from "@modules/general/pages/registro";
 import { buttonTypes } from "@modules/general/types/buttons";
-import { rutasProyectos } from "@modules/proyectos/router";
+import { rutasProyectos } from "@modules/proyectos/router/routes";
 import { getUsuarioService } from "@modules/usuarios/services/get.usuario";
 import { postChangeUsuarioService } from "@modules/usuarios/services/post.modificar.usuario";
 import { Usuario } from "@modules/usuarios/types/usuario";

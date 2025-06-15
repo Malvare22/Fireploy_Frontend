@@ -22,27 +22,23 @@ type Props = {
 };
 
 /**
- * GestionarEstudiantesCurso component – manages student enrollment for a given course.
+ * GestionarEstudiantesCurso component – interface to manage student enrollment in a course.
  * 
- * Provides functionality to add and remove students from a course using modals and confirmation dialogs.
- * Uses React Query for async mutations and displays success or error messages accordingly.
+ * Allows adding and removing students from a specific course. The component includes dialogs for 
+ * confirmations and notifications, a modal for user selection, and interactive buttons to apply changes.
+ * 
+ * It uses internal state to track selected users and employs mutation hooks to send updates to the server.
  * 
  * @component
  * 
- * @param {Curso} curso - The course data including its current list of enrolled students.
- * @param {string} idCurso - The unique identifier of the course being managed.
+ * @param {object} curso - An object representing the course, including a list of enrolled students and course metadata.
+ * @param {string} idCurso - A string representing the unique identifier of the course being edited.
  * 
- * @returns A UI that allows administrators or instructors to edit student enrollment for a course.
- * 
- * Features:
- * - Displays a table of enrolled students.
- * - Allows removal of selected students.
- * - Opens a modal to add new students via user search.
- * - Uses dialogs for confirming critical actions.
+ * @returns {JSX.Element} A user interface to view, add, or remove students from a course.
  * 
  * @example
  * ```tsx
- * <GestionarEstudiantesCurso curso={cursoData} idCurso="CURSO123" />
+ * <GestionarEstudiantesCurso curso={cursoData} idCurso="COURSE_123" />
  * ```
  */
 function GestionarEstudiantesCurso({ curso, idCurso }: Props) {

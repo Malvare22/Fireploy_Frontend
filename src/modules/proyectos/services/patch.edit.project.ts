@@ -50,6 +50,26 @@ export async function patchEditProjectMembers(token: string, projectId: number, 
   return response;
 }
 
+/**
+ * patchEditImgProject function – updates the image associated with a project.
+ *
+ * This function uploads a new image for the given project by sending a PATCH request
+ * with form data containing the image blob.
+ *
+ * @function
+ *
+ * @param token A string representing the session token used for authentication.
+ * @param projectId A number that uniquely identifies the project whose image is being updated.
+ * @param img A Blob object representing the image file to be uploaded.
+ *
+ * @returns A Promise that resolves with the API response after the image is updated.
+ *
+ * @example
+ * ```ts
+ * const imageBlob = new Blob([/* image data *\/], { type: "image/png" });
+ * await patchEditImgProject(token, 3, imageBlob);
+ * ```
+ */
 export async function patchEditImgProject(token: string, projectId: number, img: Blob) {
   const formData = new FormData();
   formData.append("image", img, `${projectId}.png`);

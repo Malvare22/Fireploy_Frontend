@@ -33,6 +33,19 @@ import StopCircleIcon from "@mui/icons-material/StopCircle";
 type Props = {
   projectStatus: EstadoEjecucionProyecto;
 };
+
+/**
+ * ExecutionState component – displays an icon representation of the current execution status of the project.
+ * 
+ * This component renders an icon with a tooltip based on the provided status code.
+ * Useful for giving users a quick visual indication of deployment or runtime state.
+ * 
+ * @component
+ * 
+ * @param {string} projectStatus - A status code representing the current execution state ("E", "N", "F", or "L").
+ * 
+ * @returns {JSX.Element} A status icon with a tooltip.
+ */
 export function ExecutionState({ projectStatus }: Props) {
   const ShowState = useMemo(() => {
     switch (projectStatus) {
@@ -67,6 +80,17 @@ export function ExecutionState({ projectStatus }: Props) {
   return <Box sx={{ display: "flex", alignItems: "center" }}>{ShowState}</Box>;
 }
 
+/**
+ * ExecutionStateWithoutStyles component – a simpler version of `ExecutionState` without color styling.
+ * 
+ * This component shows status icons with tooltips, useful for embedding inside styled elements.
+ * 
+ * @component
+ * 
+ * @param {string} projectStatus - A status code representing the current execution state ("E", "N", "F", or "L").
+ * 
+ * @returns {JSX.Element} A minimal status icon with tooltip.
+ */
 export function ExecutionStateWithoutStyles({ projectStatus }: Props) {
   const ShowState = useMemo(() => {
     switch (projectStatus) {
@@ -104,6 +128,18 @@ export function ExecutionStateWithoutStyles({ projectStatus }: Props) {
 type ChipExecutionStateProps = {
   projectStatus: EstadoEjecucionProyecto;
 };
+
+/**
+ * ChipExecutionState component – a labeled and styled visual chip indicating the current execution status.
+ * 
+ * Combines a colored box with a label and an icon that reflects the state of the project execution.
+ * 
+ * @component
+ * 
+ * @param {string} projectStatus - A status code indicating current execution state ("E", "N", "F", or "L").
+ * 
+ * @returns {JSX.Element} A chip-style label with icon showing project status.
+ */
 export function ChipExecutionState({ projectStatus }: ChipExecutionStateProps) {
   const theme = useTheme();
 
@@ -146,6 +182,19 @@ export function ChipExecutionState({ projectStatus }: ChipExecutionStateProps) {
 type ShowDeployLoadProps = {
   queuePosition: number | null;
 };
+
+/**
+ * ShowDeployLoad component – displays a UI component indicating project deployment is in progress or in queue.
+ * 
+ * If `queuePosition` is defined, the user is informed of their current position in the deployment queue.
+ * Otherwise, it shows a circular progress loader with an ongoing deployment message.
+ * 
+ * @component
+ * 
+ * @param {number|null} queuePosition - The current position in the deployment queue, or null if unknown.
+ * 
+ * @returns {JSX.Element} An alert component with either queue information or loading indicator.
+ */
 export function ShowDeployLoad({ queuePosition }: ShowDeployLoadProps) {
   const theme = useTheme();
   return (
@@ -191,6 +240,20 @@ type PropsChangeStatus = {
   id: number;
   hasUrl: boolean;
 };
+
+/**
+ * ChangeStatus component – provides controls to change the runtime status of a project.
+ * 
+ * Offers buttons to deploy, start, or stop the project. Handles user confirmation and triggers
+ * corresponding API mutations through react-query.
+ * 
+ * @component
+ * 
+ * @param {number} id - The unique identifier of the project.
+ * @param {boolean} hasUrl - Indicates whether the project has a configured URL.
+ * 
+ * @returns {JSX.Element} UI buttons and icons to trigger project state changes.
+ */
 export function ChangeStatus({ id, hasUrl }: PropsChangeStatus) {
   const { showDialog, setIsLoading, handleClose, isLoading } = useAlertDialogContext();
   const { executionState: projectStatus, refetchExecutionState } = useExecutionStatusContext();

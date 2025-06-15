@@ -15,6 +15,33 @@ type Props = {
   projectId: number;
   count: number;
 } & RatingProps;
+
+/**
+ * StarButton component – allows authenticated users to rate (star/unstar) a project.
+ * It toggles the user's rating state and triggers a callback to refresh the state after the action.
+ *
+ * This component also shows the current number of stars and includes a tooltip for guidance.
+ *
+ * @component
+ *
+ * @param check - Indicates whether the current user has already rated the project (true = starred).
+ * @param callback - A function that is called after the rating action to update external state.
+ * @param projectId - The unique identifier of the project to rate.
+ * @param count - The total number of users who have rated the project.
+ * @param props - Additional props passed to the Material UI Rating component (e.g., fontSize, sx).
+ *
+ * @returns A star icon button component that toggles rating state and displays total ratings.
+ *
+ * @example
+ * ```tsx
+ * <StarButton
+ *   check={true}
+ *   callback={refreshData}
+ *   projectId={42}
+ *   count={15}
+ * />
+ * ```
+ */
 export default function StarButton({
   check,
   callback,

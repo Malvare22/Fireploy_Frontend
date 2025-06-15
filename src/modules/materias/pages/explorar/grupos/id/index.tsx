@@ -31,11 +31,11 @@ import { useNavigate, useParams } from "react-router";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { patchEstudiantesCurso } from "@modules/materias/services/patch.curso.estudiantes";
-import { rutasProyectos } from "@modules/proyectos/router";
+import { rutasProyectos } from "@modules/proyectos/router/routes";
 import EditIcon from "@mui/icons-material/Edit";
 import { rutasMaterias } from "@modules/materias/router/routes";
 import { AlertDialogProvider } from "@modules/general/context/alertDialogContext";
-import { rutasUsuarios } from "@modules/usuarios/router/router";
+import { rutasUsuarios } from "@modules/usuarios/router/routes";
 import { ActivityAndStudents } from "@modules/materias/components/cardCurso";
 
 export const DialogContext = createContext({
@@ -43,6 +43,30 @@ export const DialogContext = createContext({
   setError: (_x: any) => {},
 });
 
+/**
+ * `VerInformacionCurso` – Course Details View Component
+ *
+ * This component displays comprehensive information about a selected course (`Curso`), including:
+ * - Subject name and group
+ * - Teacher (docente) info with avatar
+ * - Activity and student counts
+ * - Editable actions for admins or unenrollment for students
+ * - A list of associated course sections
+ *
+ * It uses React Query for data fetching, a custom alert dialog for user feedback, and conditional logic based
+ * on the authenticated user's role (`tipo`).
+ *
+ * Access control:
+ * - Admins (`A`) can always view the course.
+ * - Students (`E`) and teachers (`D`) must be enrolled/assigned to view the course.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered course information screen
+ *
+ * @example
+ * // Accessed through route: /materias/curso/:idCurso
+ * <VerInformacionCurso />
+ */
 function VerInformacionCurso() {
   /** Get course ID from route parameters */
   const { idCurso } = useParams();
@@ -263,10 +287,7 @@ function VerInformacionCurso() {
                 </Stack>
                 {/* Course description */}
                 <Typography variant="h6" sx={{ maxWidth: 800 }}>
-                  Cupidatat aute fugiat occaecat nostrud sunt proident magna non. Nulla aliqua amet
-                  exercitation labore laboris eiusmod. Lorem excepteur deserunt officia incididunt
-                  dolor ullamco commodo culpa. Occaecat voluptate officia velit officia sint est
-                  esse mollit irure aliquip est non mollit veniam.
+                  {curso.descripcion}
                 </Typography>
                 <Box
                   sx={{
@@ -314,7 +335,7 @@ function VerInformacionCurso() {
                     />
                   ))
                 ) : (
-                  <Alert severity="info">Este curso actualmente no tiene secciones agregadas</Alert>
+                  <Alert severity="info">Este curso actualmente no tiene actividades agregadas</Alert>
                 )}
               </Stack>
             </>

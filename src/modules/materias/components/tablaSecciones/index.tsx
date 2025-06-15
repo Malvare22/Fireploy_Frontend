@@ -11,7 +11,7 @@ import { buttonTypes } from "@modules/general/types/buttons";
 import { Seccion, seccionTemplate } from "@modules/materias/types/seccion";
 import { labelListarSecciones } from "@modules/materias/enums/labelListarSecciones";
 import { Curso } from "@modules/materias/types/curso";
-import { useCustomTableStyles } from "@modules/general/styles";
+import { useCustomTableStyles } from "@modules/general/hooks/useCustomTableStyles";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import SeccionesForm from "../formSecciones";
 import Modal from "@modules/general/components/modal";
@@ -250,7 +250,24 @@ const TablaGestionarSecciones = () => {
       secciones.forEach((row) => {
         const _temp = Object.entries(row)
           .map(([field, error]) => {
-            return `${field}: ${(error as FieldError)?.message || "Error desconocido"}`;
+            let label = '';
+            switch (field) {
+              case 'titulo':
+                label = 'Título'
+                break;
+              case 'fechaDeCierre':
+                label = 'Fecha de Cierre'
+                break;
+              case 'fechaDeInicio':
+                label = 'Fecha de Inicio'
+                break;
+              case 'descripcion':
+                label = 'Descripción'
+                break;
+              
+              
+            }
+            return `${label}: ${(error as FieldError)?.message || "Error desconocido"}`;
           })
           .join("\n");
         nodes.push(_temp);

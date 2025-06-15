@@ -2,9 +2,17 @@ import { z } from "zod";
 import { BaseDeDatos } from "@modules/proyectos/types/baseDeDatos";
 import { FORM_CONSTRAINS } from "@modules/general/utils/formConstrains";
 
-const passwordSchema = z
-  .string()
-  .min(8, { message: "La contraseña debe tener al menos 8 caracteres." })
+/**
+ * passwordSchema – Zod schema that validates a secure password.
+ * 
+ * Requirements:
+ * - Minimum of 8 characters.
+ * - At least one uppercase letter.
+ * - At least one lowercase letter.
+ * - At least one numeric digit.
+ * - Must not include any of the following characters: @, :, /, ?, &.
+ */
+const passwordSchema = z.string().min(8, { message: "La contraseña debe tener al menos 8 caracteres." })
   .regex(/[A-Z]/, {
     message: "La contraseña debe contener al menos una letra mayúscula.",
   })
@@ -30,7 +38,19 @@ const userNameSchema = FORM_CONSTRAINS.TEXT_LABEL.regex(
 });
 
 /**
- * BaseDeDatosSchema – Zod schema used to validate a database object (excluding its relation to a project), including optional ID, name, password, URL, and type ("S" = SQL, "N" = NoSQL, "E" = Embedded).
+ * BaseDeDatosSchema – Zod schema used to validate a database object.
+ * 
+ * It excludes the project reference and includes:
+ * - Optional ID.
+ * - Validated name using restricted characters.
+ * - Strong password validation.
+ * - Required URL.
+ * - Valid type, where:
+ *   - "S" represents SQL.
+ *   - "N" represents NoSQL.
+ *   - "E" represents Embedded.
+ *   - "P" represents Proprietary.
+ *   - "M" represents Mixed.
  */
 export const BaseDeDatosSchema: z.ZodType<Omit<BaseDeDatos, "proyecto">> =
   z.object({
@@ -46,12 +66,26 @@ export const BaseDeDatosSchema: z.ZodType<Omit<BaseDeDatos, "proyecto">> =
   });
 
 /**
- * BaseDeDatosSchema – Type inferred from BaseDeDatosSchema Zod validation, representing a validated database model without project reference.
+ * BaseDeDatosSchema – Type inferred from the BaseDeDatosSchema Zod schema.
+ * 
+ * Represents a validated database model excluding any link to a project.
  */
 export type BaseDeDatosSchema = z.infer<typeof BaseDeDatosSchema>;
 
 /**
- * BaseDeDatosRegisterSchema – Zod schema used for registering a database, validating name, password, type, and optionally the related project ID. Type values: "S" = SQL, "N" = NoSQL, "E" = Embedded.
+ * BaseDeDatosRegisterSchema – Zod schema used to validate input when registering a new database.
+ * 
+ * Includes:
+ * - Optional project ID.
+ * - Name with restricted characters.
+ * - Strong password validation.
+ * - Optional URL.
+ * - Required type with the following options:
+ *   - "S" for SQL.
+ *   - "N" for NoSQL.
+ *   - "E" for Embedded.
+ *   - "P" for Proprietary.
+ *   - "M" for Mixed.
  */
 export const BaseDeDatosRegisterSchema: z.ZodType<
   Pick<BaseDeDatos, "contrasenia" | "nombre" | "tipo" | "proyectoId" | "url">
@@ -66,7 +100,10 @@ export const BaseDeDatosRegisterSchema: z.ZodType<
 });
 
 /**
- * BaseDeDatosRegisterSchema – Type inferred from BaseDeDatosRegisterSchema, representing validated fields for registering a new database instance.
+ * BaseDeDatosRegisterSchema – Type inferred from the BaseDeDatosRegisterSchema Zod schema.
+ * 
+ * Represents the shape of a validated form for registering a new database instance,
+ * including its name, password, type, optional URL, and optional project ID.
  */
 export type BaseDeDatosRegisterSchema = z.infer<
   typeof BaseDeDatosRegisterSchema

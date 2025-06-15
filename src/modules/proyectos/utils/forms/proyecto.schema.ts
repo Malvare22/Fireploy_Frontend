@@ -12,7 +12,12 @@ import {
 import { UsuarioCursoSchema } from "@modules/materias/utils/forms/form.schema";
 
 /**
- * MateriaInformacionSchema – Zod schema to validate academic context information for a project, including section ID, subject ID, and course ID as numeric and string fields.
+ * MateriaInformacionSchema – Zod schema to validate academic context information for a project.
+ * 
+ * Includes:
+ * - Section ID as a number.
+ * - Subject ID as a number.
+ * - Course ID as a string.
  */
 export const MateriaInformacionSchema: z.ZodType<MateriaInformacion> = z.object(
   {
@@ -23,7 +28,16 @@ export const MateriaInformacionSchema: z.ZodType<MateriaInformacion> = z.object(
 );
 
 /**
- * ProyectoSchema – Zod schema that validates a complete project structure (excluding favorite users), including title, optional description, URL, database info, optional repositories (backend, frontend, integrated), type ("M" = Modular, "S" = Simple), academic info, and list of participants.
+ * ProyectoSchema – Zod schema that validates the full structure of a project, excluding favorite users.
+ * 
+ * Includes:
+ * - Title, optional description, and project URL.
+ * - Database details.
+ * - Optional backend, frontend, and integrated repositories.
+ * - Project type: "M" for Modular, "S" for Simple.
+ * - Academic information for the associated subject.
+ * - List of project participants.
+ * - Optional image.
  */
 export const ProyectoSchema: z.ZodType<Omit<Proyecto, "fav_usuarios">> =
   z.object({
@@ -41,7 +55,14 @@ export const ProyectoSchema: z.ZodType<Omit<Proyecto, "fav_usuarios">> =
   });
 
 /**
- * ProyectoInformationSchema – Zod schema that validates project metadata: optional ID, title, optional description, academic info, and type ("M" = Modular, "S" = Simple).
+ * ProyectoInformationSchema – Zod schema that validates only the metadata of a project.
+ * 
+ * Includes:
+ * - Optional ID.
+ * - Title and optional description.
+ * - Academic information (section, subject, and course).
+ * - Project type: "M" for Modular, "S" for Simple.
+ * - Optional image.
  */
 export const ProyectoInformationSchema: z.ZodType<
   Pick<
@@ -58,7 +79,12 @@ export const ProyectoInformationSchema: z.ZodType<
 });
 
 /**
- * ProyectoRepositoriesSchema – Zod schema that validates the repository section of a project, allowing optional backend, frontend, and integrated repository data.
+ * ProyectoRepositoriesSchema – Zod schema that validates the repository section of a project.
+ * 
+ * Allows:
+ * - Optional backend repository.
+ * - Optional frontend repository.
+ * - Optional integrated repository.
  */
 export const ProyectoRepositoriesSchema: z.ZodType<
   Pick<Proyecto, "backend" | "frontend" | "integrado">
@@ -69,19 +95,25 @@ export const ProyectoRepositoriesSchema: z.ZodType<
 });
 
 /**
- * ProyectoSchema – Inferred type from ProyectoSchema, representing a validated full project object without favorite users.
+ * ProyectoSchema – Inferred type from ProyectoSchema Zod schema.
+ * 
+ * Represents a validated complete project object excluding favorite users.
  */
 export type ProyectoSchema = z.infer<typeof ProyectoSchema>;
 
 /**
- * ProyectoInformationSchema – Inferred type from ProyectoInformationSchema, representing validated project metadata for updates or display.
+ * ProyectoInformationSchema – Inferred type from ProyectoInformationSchema Zod schema.
+ * 
+ * Represents the validated metadata of a project, suitable for display or partial updates.
  */
 export type ProyectoInformationSchema = z.infer<
   typeof ProyectoInformationSchema
 >;
 
 /**
- * ProyectoRepositoriesSchema – Inferred type from ProyectoRepositoriesSchema, representing the repository-related part of a project.
+ * ProyectoRepositoriesSchema – Inferred type from ProyectoRepositoriesSchema Zod schema.
+ * 
+ * Represents the part of the project that holds repository information, with optional fields.
  */
 export type ProyectoRepositoriesSchema = z.infer<
   typeof ProyectoRepositoriesSchema

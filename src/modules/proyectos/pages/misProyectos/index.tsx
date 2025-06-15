@@ -13,7 +13,7 @@ import { adaptProject } from "@modules/proyectos/utils/adapt.proyecto";
 import AlertDialog from "@modules/general/components/alertDialog";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import { useNavigate } from "react-router";
-import { rutasProyectos } from "@modules/proyectos/router";
+import { rutasProyectos } from "@modules/proyectos/router/routes";
 import useSearch from "@modules/general/hooks/useSearch";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
 import GeneralButton from "@modules/general/components/button";

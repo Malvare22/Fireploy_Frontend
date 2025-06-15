@@ -12,12 +12,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import {
-  Controller,
-  FormProvider,
-  useForm,
-  useFormContext,
-} from "react-hook-form";
+import { Controller, FormProvider, useForm, useFormContext } from "react-hook-form";
 import { useParams, useSearchParams } from "react-router";
 import EditIcon from "@mui/icons-material/Edit";
 import { getMateriaStatesArray } from "@modules/materias/utils/materias";
@@ -34,10 +29,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
 import GestionarEstudiantesCurso from "@modules/materias/components/gestionarEstudiantesCurso";
-import {
-  useSearchUsers,
-  UsuarioCampoBusqueda,
-} from "@modules/general/hooks/useSearchUsers";
+import { useSearchUsers, UsuarioCampoBusqueda } from "@modules/general/hooks/useSearchUsers";
 import SearchUsers from "@modules/general/components/searchUsers";
 import { adaptUserServiceToCB } from "@modules/usuarios/utils/adapt.usuario";
 import { getUsuariosByTypeService } from "@modules/usuarios/services/get.usuarios.[tipo]";
@@ -52,22 +44,21 @@ import { labelEditCourse } from "@modules/materias/enums/labelEditCourse";
 import { postCreateCursoService } from "@modules/materias/services/post.crear.grupo";
 import { getSemestre } from "@modules/general/utils/fechas";
 import { msgDescription } from "@modules/general/utils/formConstrains";
-import { letterOptionsForGroup, OFF_SET_LETTERS_OF_GROUP } from "@modules/materias/utils/groupLetters";
+import {
+  letterOptionsForGroup,
+  OFF_SET_LETTERS_OF_GROUP,
+} from "@modules/materias/utils/groupLetters";
 
-/**
- * Component for editing a course view.
- * Handles course data fetching, form submission, and tab switching between course info and students.
- */
 type EditarCursoProps = {
   type: "create" | "edit";
 };
 
 /**
- * EditarCurso component – handles the creation or edition of a course.
+ * EditarCurso component – manages the creation or editing of a course within a subject.
  *
- * It manages the form to update or register a course, handles tab switching between
- * course details and student management, and communicates with backend services
- * to persist changes. It also provides feedback via dialog messages.
+ * This component handles form management, tab navigation, course data fetching, and mutation for
+ * creating or updating course records. It adapts UI dynamically based on the operation type (create/edit)
+ * and integrates feedback dialogs, validations, and contextual UI behavior.
  *
  * @component
  *
@@ -107,9 +98,8 @@ function EditarCurso({ type }: EditarCursoProps) {
   }
 
   const { data } = useQuery({
-    queryFn: async () =>
-      await getCursos(token, { materia: parseInt(idMateria ?? "-1") }),
-    queryKey: ["Get Curso", idMateria],
+    queryFn: async () => await getCursos(token, { materia: parseInt(idMateria ?? "-1") }),
+    queryKey: ["Get Curso", idMateria, token],
   });
 
   // Form setup
@@ -155,15 +145,17 @@ function EditarCurso({ type }: EditarCursoProps) {
 
   const [lettersOfCourse, setLettersOfCourse] = useState<LetterOption[]>([]);
 
+  const INITIAL_LETTER_OPTIONS: LetterOption[] = letterOptionsForGroup().map((x) => [x, true]);
+
   useEffect(() => {
-    setLettersOfCourse(letterOptionsForGroup().map((x) => [x, false]));
+    setLettersOfCourse(INITIAL_LETTER_OPTIONS);
   }, []);
 
   const REGEX_LETTER = /^[A-Z]$/;
 
   useEffect(() => {
     if (data) {
-      const options = [...lettersOfCourse];
+      const options = INITIAL_LETTER_OPTIONS;
       data.forEach((curso) => {
         const letter = curso.grupo;
         if (REGEX_LETTER.test(letter)) {
@@ -177,48 +169,42 @@ function EditarCurso({ type }: EditarCursoProps) {
   /**
    * Mutation for editing course.
    */
-  const { mutate: mutatePatchCurso, isPending: isPendingPatchCurso } =
-    useMutation({
-      mutationFn: async () => {
-        setIsLoading(true);
-        return await patchEditCurso(token, methods.getValues());
-      },
-      mutationKey: ["Patch Curso", methods.getValues(), token],
-      onSuccess: () =>
-        showDialog({
-          message: "Curso modificado correctamente",
-          title: "Modificar Curso",
-          type: "success",
-          onAccept: handleClose,
-          reload: true,
-        }),
-      onError: (err) => setError(err),
-    });
+  const { mutate: mutatePatchCurso, isPending: isPendingPatchCurso } = useMutation({
+    mutationFn: async () => {
+      setIsLoading(true);
+      return await patchEditCurso(token, methods.getValues());
+    },
+    mutationKey: ["Patch Curso", methods.getValues(), token],
+    onSuccess: () =>
+      showDialog({
+        message: "Curso modificado correctamente",
+        title: "Modificar Curso",
+        type: "success",
+        onAccept: handleClose,
+        reload: true,
+      }),
+    onError: (err) => setError(err),
+  });
 
   /**
    * Mutation for editing course.
    */
-  const { mutate: mutateCreateCurso, isPending: isPendingCreateCurso } =
-    useMutation({
-      mutationFn: async () => {
-        setIsLoading(true);
-        return await postCreateCursoService(
-          token,
-          parseInt(idMateria || "-1"),
-          methods.getValues()
-        );
-      },
-      mutationKey: ["Create Curso", methods.getValues(), token],
-      onSuccess: () =>
-        showDialog({
-          message: "Curso creado correctamente",
-          title: "Creación de Curso",
-          type: "success",
-          onAccept: handleClose,
-          reload: true,
-        }),
-      onError: (err) => setError(err),
-    });
+  const { mutate: mutateCreateCurso, isPending: isPendingCreateCurso } = useMutation({
+    mutationFn: async () => {
+      setIsLoading(true);
+      return await postCreateCursoService(token, parseInt(idMateria || "-1"), methods.getValues());
+    },
+    mutationKey: ["Create Curso", methods.getValues(), token],
+    onSuccess: () =>
+      showDialog({
+        message: "Curso creado correctamente",
+        title: "Creación de Curso",
+        type: "success",
+        onAccept: handleClose,
+        reload: true,
+      }),
+    onError: (err) => setError(err),
+  });
 
   useEffect(() => {
     if (errorFetchCurso && type == "edit") {
@@ -267,9 +253,7 @@ function EditarCurso({ type }: EditarCursoProps) {
             <Stack direction="row" alignItems="center" spacing={1}>
               <EditIcon color="primary" />
               <Typography variant="h5" fontWeight="bold">
-                {type == "edit"
-                  ? labelEditCourse.title
-                  : labelEditCourse.alternativeTitle}
+                {type == "edit" ? labelEditCourse.title : labelEditCourse.alternativeTitle}
               </Typography>
             </Stack>
 
@@ -349,6 +333,7 @@ function EditarCurso({ type }: EditarCursoProps) {
                       label={labelEditCourse.description}
                       {...methods.register("descripcion")}
                       error={!!methods.formState.errors.descripcion}
+                      multiline
                       helperText={
                         methods.formState.errors.descripcion?.message ??
                         msgDescription(watch("descripcion").length)
@@ -397,10 +382,7 @@ function EditarCurso({ type }: EditarCursoProps) {
             {/* Students Tab */}
             {tabIndex == 1 && (
               <Box>
-                <GestionarEstudiantesCurso
-                  curso={getValues()}
-                  idCurso={idCurso || ""}
-                />
+                <GestionarEstudiantesCurso curso={getValues()} idCurso={idCurso || ""} />
               </Box>
             )}
           </Stack>
@@ -424,13 +406,11 @@ function EditarCurso({ type }: EditarCursoProps) {
  * ```
  */
 function TeacherCard() {
-  const { setValue: setValuesCurso, watch: watchCurso } =
-    useFormContext<Curso>();
+  const { setValue: setValuesCurso, watch: watchCurso } = useFormContext<Curso>();
   const [docentes, setDocentes] = useState<UsuarioCampoBusqueda[]>([]);
   const token = useAuth().accountInformation.token;
 
-  const { showDialog, open, title, message, type, handleAccept, isLoading } =
-    useAlertDialog();
+  const { showDialog, open, title, message, type, handleAccept, isLoading } = useAlertDialog();
   const { setError } = useErrorReader(showDialog);
 
   /**
@@ -453,9 +433,7 @@ function TeacherCard() {
 
   useEffect(() => {
     if (dataFetchDocentes)
-      setDocentes(
-        dataFetchDocentes.map((docente) => adaptUserServiceToCB(docente))
-      );
+      setDocentes(dataFetchDocentes.map((docente) => adaptUserServiceToCB(docente)));
   }, [dataFetchDocentes]);
 
   const { selectUser, setSelectUser } = useSearchUsers();
@@ -519,10 +497,7 @@ function TeacherCard() {
     return !edit ? (
       <>
         <ActionButton mode={actionButtonTypes.editar} onClick={handleMode} />
-        <ActionButton
-          mode={actionButtonTypes.eliminar}
-          onClick={handleDelete}
-        />
+        <ActionButton mode={actionButtonTypes.eliminar} onClick={handleDelete} />
       </>
     ) : (
       <>

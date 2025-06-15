@@ -29,19 +29,23 @@ type Props = {
 };
 
 /**
- * EnviromentVariablesEditor Component – A component that renders a Monaco code editor for editing environment variables in a `.env` file format.
- *
- * This component uses Monaco editor to provide a rich text editor for the environment variables associated with a specific repository type (`frontend`, `backend`, or `integrado`). The editor's content is tied to a specific field in a form, and it supports error handling if the field validation fails.
- *
- * @param {Props} props - The props for the EnviromentVariablesEditor component.
- * @param {KeysOfRepository} props.type - The type of repository (either "frontend", "backend", or "integrado") that determines which environment variable field is rendered.
- *
- * @returns {JSX.Element} The rendered environment variables editor with Monaco, including form field integration and error handling.
- *
+ * EnviromentVariablesEditor component – a form-integrated editor for managing environment variables (.env files).
+ * 
+ * This component uses the Monaco Editor for code-like editing of environment variables tied to a specific
+ * repository type (e.g., frontend, backend, integrated). It provides contextual alerts, framework-specific warnings,
+ * and enforces restrictions for reserved variables to ensure correct deployment behavior.
+ * 
+ * @component
+ * 
+ * @param {string} type - Indicates the repository type, such as "frontend", "backend", or "integrated". Determines data path and behavior.
+ * @param {boolean} disabled - If true, disables editing of the environment variables in the Monaco editor.
+ * 
+ * @returns {JSX.Element} A Monaco-based environment variable editor with contextual validations and framework-specific alerts.
+ * 
  * @example
- * <EnviromentVariablesEditor type="frontend" />
- * <EnviromentVariablesEditor type="backend" />
- * <EnviromentVariablesEditor type="integrado" />
+ * ```tsx
+ * <EnviromentVariablesEditor type="frontend" disabled={false} />
+ * ```
  */
 export default function EnviromentVariablesEditor({ type, disabled }: Props) {
   const monacoInstance = useMonaco();

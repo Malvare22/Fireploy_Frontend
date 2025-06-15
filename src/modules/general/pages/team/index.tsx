@@ -29,12 +29,25 @@ const labels: [string, string, string, string][] = [
 ];
 
 /**
- * Displays the team section including individual cards for each member.
- *
- * This component renders a section that introduces the team, with each member's card containing
- * their profile picture, name, description, and a link to their LinkedIn profile.
- *
+ * TeamView component – displays a visual introduction of the development team.
+ * 
+ * It renders individual cards for each team member showing their profile image,
+ * name, description, and a LinkedIn link. The layout uses Material UI components
+ * and custom animations/styles to enhance the visual presentation.
+ * 
+ * It includes:
+ * - A header with the section title and description
+ * - A responsive grid layout of team member cards
+ * - Decorative wave background for stylistic purposes
+ * 
  * @component
+ * 
+ * @returns {JSX.Element} A section containing information about the team
+ * 
+ * @example
+ * ```tsx
+ * <TeamView />
+ * ```
  */
 function TeamView() {
   const init = keyframes`

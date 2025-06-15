@@ -15,7 +15,7 @@ import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import GeneralButton from "@modules/general/components/button";
 import { buttonTypes } from "@modules/general/types/buttons";
 import { labelListarSecciones } from "@modules/materias/enums/labelListarSecciones";
-import { useCustomTableStyles } from "@modules/general/styles";
+import { useCustomTableStyles } from "@modules/general/hooks/useCustomTableStyles";
 import { Fichero } from "@modules/proyectos/types/fichero";
 import { RepositorioSchema } from "@modules/proyectos/utils/forms/repositorio.schema";
 import { KeysOfRepository } from "@modules/proyectos/types/keysOfRepository";
@@ -40,6 +40,20 @@ const ficheroTemplate: Fichero = {
   nombre: "",
 } as const;
 
+/**
+ * TablaGestionarFicheros component – renders and manages a list of configurable files (Fichero[]),
+ * allowing users to upload, preview, and delete configuration files such as .json or .env.
+ *
+ * Integrates with react-hook-form and synchronizes the file list with a parent form context.
+ * Used as part of project repository configuration.
+ *
+ * @component
+ *
+ * @param field - Key from the repository schema to identify where files are stored in the form.
+ * @param disabled - Flag indicating whether the component is interactive or in read-only mode.
+ *
+ * @returns A file management UI allowing add, upload, preview, and delete actions on files.
+ */
 const TablaGestionarFicheros = ({ field, disabled }: Props) => {
   const { getValues: getValuesPrincipal, setValue: setValuesPrincipal } =
     useFormContext<ProyectoRepositoriesSchema>();

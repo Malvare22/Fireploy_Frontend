@@ -1,3 +1,5 @@
+import { BASE_PATH } from "./basePath";
+
 /**
  * Base route path of the application.
  * This path is used as the root path for all routes in the app.
@@ -7,7 +9,7 @@
  * @example
  * const homeRoute = rutaBase; // '/'
  */
-export const rutaBase = "/";
+export const rutaBase = BASE_PATH.ROOT;
 
 /**
  * Enum defining the general public routes of the application.
@@ -16,7 +18,7 @@ export const rutaBase = "/";
  * @enum {string}
  */
 export enum rutasGeneral {
-  home = rutaBase,
+  home = rutaBase + "home",
   login = rutaBase + "login",
   recuperar = rutaBase + "recuperar",
   registrar = rutaBase + "registrar",

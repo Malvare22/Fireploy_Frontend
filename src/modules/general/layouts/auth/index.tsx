@@ -6,6 +6,24 @@ import { SocketProvider } from "@modules/general/context/socketContext";
 import { Box, useTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
+/**
+ * LayoutAuthenticated component – provides the main layout structure for authenticated routes,
+ * wrapping children with global providers and UI components.
+ * 
+ * Includes authentication context, socket communication, notification handling,
+ * a dashboard menu layout, and a footer. Renders nested routes using React Router's Outlet.
+ * 
+ * @component
+ * 
+ * @returns {a structured layout including authentication, notifications, and UI scaffolding for authenticated users}
+ * 
+ * @example
+ * ```tsx
+ * <Route element={<LayoutAuthenticated />}>
+ *   <Route path="/dashboard" element={<DashboardPage />} />
+ * </Route>
+ * ```
+ */
 function LayoutAuthenticated() {
   const theme = useTheme();
 

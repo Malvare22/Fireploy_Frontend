@@ -1,12 +1,16 @@
 import { BaseDeDatos } from "../types/baseDeDatos";
 
 /**
- * getDataBaseTypesMap – A Map that associates each database type with a human-readable string.
- * 
- * Types:
- * - "S" -> "SQL"
- * - "N" -> "MongoDB"
- * - "E" -> "No Seleccionado"
+ * `getDataBaseTypesMap` – A map that associates each database type key with its human-readable name.
+ *
+ * Types included:
+ * - "S" → SQL
+ * - "N" → MongoDB
+ * - "E" → No database selected
+ * - "P" → PostgreSQL
+ * - "M" → MariaDB
+ *
+ * This map is useful for translating raw type values into labels for display purposes in UIs or reports.
  */
 export const getDataBaseTypesMap: Map<BaseDeDatos["tipo"], string> = new Map([
   ["E", "Sin base de datos"],
@@ -17,12 +21,16 @@ export const getDataBaseTypesMap: Map<BaseDeDatos["tipo"], string> = new Map([
 ]);
 
 /**
- * getDataBaseTypesArray – An array of tuples where each tuple associates a database type with its human-readable string.
- * 
- * Types:
- * - "S" -> "SQL"
- * - "N" -> "MongoDB"
- * - "E" -> "No Seleccionado"
+ * `getDataBaseTypesArray` – An array of tuples, each containing a database type key and its corresponding label.
+ *
+ * Useful for building select menus, dropdowns, or filter components where users choose a database type.
+ *
+ * Types included:
+ * - "S" → SQL
+ * - "N" → MongoDB
+ * - "E" → No database selected
+ * - "P" → PostgreSQL
+ * - "M" → MariaDB
  */
 export const getDataBaseTypesArray: [BaseDeDatos["tipo"], string][] = [
   ["E", "Sin base de datos"],
