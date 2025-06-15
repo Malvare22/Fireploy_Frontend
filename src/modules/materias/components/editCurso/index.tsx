@@ -99,7 +99,7 @@ function EditarCurso({ type }: EditarCursoProps) {
 
   const { data } = useQuery({
     queryFn: async () => await getCursos(token, { materia: parseInt(idMateria ?? "-1") }),
-    queryKey: ["Get Curso", idMateria],
+    queryKey: ["Get Curso", idMateria, token],
   });
 
   // Form setup
@@ -333,6 +333,7 @@ function EditarCurso({ type }: EditarCursoProps) {
                       label={labelEditCourse.description}
                       {...methods.register("descripcion")}
                       error={!!methods.formState.errors.descripcion}
+                      multiline
                       helperText={
                         methods.formState.errors.descripcion?.message ??
                         msgDescription(watch("descripcion").length)

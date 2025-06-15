@@ -287,10 +287,7 @@ function VerInformacionCurso() {
                 </Stack>
                 {/* Course description */}
                 <Typography variant="h6" sx={{ maxWidth: 800 }}>
-                  Cupidatat aute fugiat occaecat nostrud sunt proident magna non. Nulla aliqua amet
-                  exercitation labore laboris eiusmod. Lorem excepteur deserunt officia incididunt
-                  dolor ullamco commodo culpa. Occaecat voluptate officia velit officia sint est
-                  esse mollit irure aliquip est non mollit veniam.
+                  {curso.descripcion}
                 </Typography>
                 <Box
                   sx={{
