@@ -248,7 +248,7 @@ function VerCursosMateria() {
               </Card>
 
               {/* List of course groups or warning if none available */}
-              {cursos && (tipo == "E" || activesRequest != null) && cursos.length > 0 ? (
+              {cursos && (tipo != "D" || activesRequest != null) && cursos.length > 0 ? (
                 <>
                   <Typography variant="h4">{labelListarCursos.titulo}</Typography>
                   <Grid container spacing={4}>
