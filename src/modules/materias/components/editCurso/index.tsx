@@ -2,6 +2,7 @@ import { Curso } from "@modules/materias/types/curso";
 import { CursoSchema } from "@modules/materias/utils/forms/form.schema";
 import {
   Box,
+  Button,
   Chip,
   Divider,
   MenuItem,
@@ -13,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Controller, FormProvider, useForm, useFormContext } from "react-hook-form";
-import { useParams, useSearchParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import EditIcon from "@mui/icons-material/Edit";
 import { getMateriaStatesArray } from "@modules/materias/utils/materias";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -52,6 +53,10 @@ import {
 type EditarCursoProps = {
   type: "create" | "edit";
 };
+import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import WarningIcon from "@mui/icons-material/Warning";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import { rutasMaterias } from "@modules/materias/router/routes";
 
 /**
  * EditarCurso component – manages the creation or editing of a course within a subject.
@@ -76,7 +81,7 @@ function EditarCurso({ type }: EditarCursoProps) {
   const { idCurso } = useParams();
   const { idMateria } = useParams();
   const { accountInformation } = useAuth();
-  const { token } = accountInformation;
+  const { token, tipo } = accountInformation;
   const [curso, setCurso] = useState<Curso | undefined>(undefined);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -125,6 +130,7 @@ function EditarCurso({ type }: EditarCursoProps) {
     type: typeAlert,
     handleAccept,
     isLoading,
+    handleCancel,
     setIsLoading,
   } = useAlertDialog();
 
@@ -170,11 +176,10 @@ function EditarCurso({ type }: EditarCursoProps) {
    * Mutation for editing course.
    */
   const { mutate: mutatePatchCurso, isPending: isPendingPatchCurso } = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (curso: Curso) => {
       setIsLoading(true);
-      return await patchEditCurso(token, methods.getValues());
+      return await patchEditCurso(token, curso);
     },
-    mutationKey: ["Patch Curso", methods.getValues(), token],
     onSuccess: () =>
       showDialog({
         message: "Curso modificado correctamente",
@@ -190,9 +195,9 @@ function EditarCurso({ type }: EditarCursoProps) {
    * Mutation for editing course.
    */
   const { mutate: mutateCreateCurso, isPending: isPendingCreateCurso } = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (curso: Curso) => {
       setIsLoading(true);
-      return await postCreateCursoService(token, parseInt(idMateria || "-1"), methods.getValues());
+      return await postCreateCursoService(token, parseInt(idMateria || "-1"), curso);
     },
     mutationKey: ["Create Curso", methods.getValues(), token],
     onSuccess: () =>
@@ -224,11 +229,39 @@ function EditarCurso({ type }: EditarCursoProps) {
     }
   }, [curso, methods.reset]);
 
+  const navigate = useNavigate();
+
+  function leftCourse() {
+    showDialog({
+      message: "¿Está seguro de que desea desvincularse del curso?",
+      title: "Gestionar Curso",
+      onAccept: () => {
+        mutatePatchCurso(
+          { ...methods.getValues(), docente: null },
+          {
+            onSuccess: () => {
+              showDialog({
+                message: "Te haz desvinculado del curso de manera correcta.",
+                title: "Desvinculación correcta",
+                type: "success",
+                onAccept: () => navigate(rutasMaterias.listarMisCursos),
+              });
+            },
+          }
+        );
+      },
+
+      onCancel: handleClose,
+    });
+  }
+
   /**
    * Handles form submission for course update.
    */
   const onSubmit = async () => {
-    type == "create" ? await mutateCreateCurso() : await mutatePatchCurso();
+    type == "create"
+      ? await mutateCreateCurso(methods.getValues())
+      : await mutatePatchCurso(methods.getValues());
   };
 
   return (
@@ -237,6 +270,7 @@ function EditarCurso({ type }: EditarCursoProps) {
       <AlertDialog
         handleAccept={handleAccept}
         open={open}
+        handleCancel={handleCancel}
         title={title}
         textBody={message}
         type={typeAlert}
@@ -286,6 +320,18 @@ function EditarCurso({ type }: EditarCursoProps) {
                 sx={{ textTransform: "capitalize" }}
                 disabled={type == "create"}
               />
+              {tipo == "D" && (
+                <Tab
+                  label={
+                    <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                      <SettingsSuggestIcon />
+                      <Typography fontWeight={500}>Otras Opciones</Typography>
+                    </Stack>
+                  }
+                  sx={{ textTransform: "capitalize" }}
+                  disabled={type == "create"}
+                />
+              )}
             </Tabs>
 
             {/* Course Info Tab */}
@@ -385,6 +431,28 @@ function EditarCurso({ type }: EditarCursoProps) {
                 <GestionarEstudiantesCurso curso={getValues()} idCurso={idCurso || ""} />
               </Box>
             )}
+            {tabIndex == 2 && (
+              <Stack spacing={3} justifyContent={"center"}>
+                <Stack spacing={1}>
+                  <Stack spacing={1} direction={"row"} alignItems={"center"}>
+                    <Typography variant="h4">{"Zona de Peligro"}</Typography>
+                    <WarningIcon sx={{ fontSize: 32 }} />
+                  </Stack>
+                  <Divider />
+                </Stack>
+                <Stack spacing={3} direction={"row"} alignItems={"center"}>
+                  <Typography variant="h6">{"Abandonar Curso"}</Typography>
+                  <Button
+                    color="error"
+                    variant={"contained"}
+                    onClick={leftCourse}
+                    endIcon={<ExitToAppIcon />}
+                  >
+                    {"Abandonar Curso"}
+                  </Button>
+                </Stack>
+              </Stack>
+            )}
           </Stack>
         </FormProvider>
       )}
@@ -408,9 +476,10 @@ function EditarCurso({ type }: EditarCursoProps) {
 function TeacherCard() {
   const { setValue: setValuesCurso, watch: watchCurso } = useFormContext<Curso>();
   const [docentes, setDocentes] = useState<UsuarioCampoBusqueda[]>([]);
-  const token = useAuth().accountInformation.token;
+  const { token, tipo } = useAuth().accountInformation;
 
-  const { showDialog, open, title, message, type, handleAccept, isLoading } = useAlertDialog();
+  const { showDialog, open, title, message, type, handleAccept, handleCancel, isLoading } =
+    useAlertDialog();
   const { setError } = useErrorReader(showDialog);
 
   /**
@@ -511,6 +580,7 @@ function TeacherCard() {
     <>
       <AlertDialog
         handleAccept={handleAccept}
+        handleCancel={handleCancel}
         open={open}
         title={title}
         textBody={message}
@@ -519,7 +589,7 @@ function TeacherCard() {
       />
       <Stack direction={"row"} alignItems={"center"} spacing={1} width={500}>
         <Field />
-        <ButtonMode />
+        {tipo == "A" && <ButtonMode />}
       </Stack>
     </>
   );

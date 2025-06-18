@@ -1,6 +1,5 @@
 import { Alert, Box, Grid, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
 import { getCursos } from "@modules/materias/services/get.curso";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
 import { useAuth } from "@modules/general/context/accountContext";
