@@ -1,5 +1,4 @@
 // Import all images
-import logoFireploy from "@modules/general/assets/fireploy/fireployLogo.png";
 import facebookLogo from "@modules/general/assets/redesSociales/facebookLogo.png";
 import instagramLogo from "@modules/general/assets/redesSociales/instagramLogo.png";
 import linkedinLogo from "@modules/general/assets/redesSociales/linkedinLogo.png";
@@ -58,9 +57,6 @@ import not_found_404 from "@modules/general/assets/404.png";
  * @constant {Readonly<Record<string, string>>} assetImages - Object containing image paths.
  */
 export const assetImages = {
-  // Fireploy Logo
-  logo_fireploy: logoFireploy,
-
   // Social Media Logos
   facebook_logo: facebookLogo,
   instagram_logo: instagramLogo,
