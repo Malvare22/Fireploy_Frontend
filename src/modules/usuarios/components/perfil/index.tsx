@@ -18,10 +18,7 @@ import { useState } from "react";
 import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, Container, styled } from "@mui/system";
-import {
-  getGenderArray,
-  getUserTypesArray,
-} from "@modules/usuarios/utils/usuario.map";
+import { getGenderArray, getUserTypesArray } from "@modules/usuarios/utils/usuario.map";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,10 +37,7 @@ import { patchUpdatePhotoService } from "@modules/usuarios/services/patch.foto";
 import { postCreateSolicitudRolDocenteService } from "@modules/usuarios/services/post.solicitud.crear";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { useAlertDialogContext } from "@modules/general/context/alertDialogContext";
-import {
-  hasValidExtension,
-  VALID_EXTENSIONS,
-} from "@modules/general/utils/form/validExtensions";
+import { hasValidExtension, VALID_EXTENSIONS } from "@modules/general/utils/form/validExtensions";
 import { getSolicitudes } from "@modules/usuarios/services/get.solicitudes";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
@@ -76,29 +70,17 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
   const { token, tipo } = accountInformation;
   const [id, setId] = useState<number | undefined>(undefined);
 
-  const {
-    register,
-    handleSubmit,
-    formState,
-    getValues,
-    control,
-    watch,
-    setValue,
-  } = useForm<UsuarioSchema>({
-    resolver: zodResolver(UsuarioSchema),
-    defaultValues:
-      type == "crear" ? usuarioTemplate : (usuario as UsuarioSchema),
-  });
+  const { register, handleSubmit, formState, getValues, control, setValue } =
+    useForm<UsuarioSchema>({
+      resolver: zodResolver(UsuarioSchema),
+      defaultValues: type == "crear" ? usuarioTemplate : (usuario as UsuarioSchema),
+    });
 
   async function handleGetQuery() {
     if (type == "crear") {
       return postCreateUsuarioService(token, getValues() as Usuario);
     } else {
-      return postChangeUsuarioService(
-        getValues().id!!,
-        token,
-        getValues() as Usuario
-      );
+      return postChangeUsuarioService(getValues().id!!, token, getValues() as Usuario);
     }
   }
 
@@ -126,8 +108,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
   function handleOpenSuccess() {
     showDialog({
       title: "Modificación de Usuario",
-      message:
-        "Se ha modificado la información de perfil del usuario correctamente",
+      message: "Se ha modificado la información de perfil del usuario correctamente",
       type: "success",
       reload: true,
       onAccept: handleClose,
@@ -145,8 +126,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
 
   const [showButton, setShowButton] = useState(false);
 
-  const { open: openConfirmation, setOpen: setOpenConfirmation } =
-    useAlertDialog();
+  const { open: openConfirmation, setOpen: setOpenConfirmation } = useAlertDialog();
 
   const onSubmit = () => {
     setOpenConfirmation(true);
@@ -166,6 +146,9 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
     mutationFn: async () => {
       setIsLoading(true);
       return await handleGetQuery();
+    },
+    onError: (err) => {
+      setError(err);
     },
     mutationKey: ["Change User", token],
   });
@@ -218,12 +201,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
           handleCancel={() => setOpenConfirmation(false)}
           isLoading={isPending}
         />
-        <Stack
-          direction={"row"}
-          alignItems={"center"}
-          spacing={2}
-          justifyContent={"center"}
-        >
+        <Stack direction={"row"} alignItems={"center"} spacing={2} justifyContent={"center"}>
           <Typography variant="h4">{labelPerfil.perfil}</Typography>
           <AccountBoxIcon sx={{ fontSize: 48 }} />
         </Stack>
@@ -306,7 +284,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
                   </Grid>
                 </>
               )}
-              {watch("tipo") == "E" && (
+              {
                 <Grid size={{ md: 6, xs: 12 }}>
                   <TextField
                     fullWidth
@@ -314,12 +292,11 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
                     {...register("estFechaInicio")}
                     error={!!errors.estFechaInicio}
                     helperText={errors.estFechaInicio?.message}
-                    disabled={CURRENT_USER_TYPE == "E"}
                     type="date"
                     InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
-              )}
+              }
               <Grid size={{ md: 6, xs: 12 }}>
                 {CURRENT_USER_TYPE == "E" && (
                   <Box
@@ -484,16 +461,8 @@ export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
 
   return (
     <Stack alignItems="center" spacing={3}>
-      <Avatar
-        src={photo || undefined}
-        sx={{ width: 100, height: 100, border: "1px solid #ddd" }}
-      />
-      <Stack
-        direction="row"
-        spacing={1}
-        alignItems={"center"}
-        justifyContent={"center"}
-      >
+      <Avatar src={photo || undefined} sx={{ width: 100, height: 100, border: "1px solid #ddd" }} />
+      <Stack direction="row" spacing={1} alignItems={"center"} justifyContent={"center"}>
         <label htmlFor="upload-photo">
           <HiddenInput
             accept={VALID_EXTENSIONS.IMAGE.join(", ")}
@@ -502,11 +471,7 @@ export const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({
             onChange={handlePhotoChange}
             ref={ref}
           />
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={handleReference}
-          >
+          <Button variant="outlined" color="secondary" onClick={handleReference}>
             Cambiar foto
           </Button>
         </label>
@@ -553,7 +518,6 @@ const ButtonUpdaterRol = () => {
     }
   }, [currentSolicitudes]);
 
-
   if (id == -1) return <></>;
 
   const theme = useTheme();
@@ -589,8 +553,7 @@ const ButtonUpdaterRol = () => {
   function confirmationAlert() {
     showDialog({
       title: "Solicitar promoción a Rol Docente",
-      message:
-        "¿Está seguro de que desea solicitar la promoción al rol de docente?",
+      message: "¿Está seguro de que desea solicitar la promoción al rol de docente?",
       type: "default",
       onAccept: async () => {
         setIsLoading(true);
