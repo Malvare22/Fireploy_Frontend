@@ -1,4 +1,4 @@
-import { Grid, Stack, Typography } from "@mui/material";
+import { Alert, Box, Grid, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
 import { getCursos } from "@modules/materias/services/get.curso";
@@ -107,27 +107,41 @@ function ListarMisCursos() {
       {isLoading ? (
         <LoaderElement />
       ) : (
-        <Stack spacing={3}>
-          <Typography variant="h4">{labelListarCursos.titulo}</Typography>
-          {/* <Grid container sx={{ width: "100%" }}>
+        <Box>
+          <Stack spacing={3}>
+            <Typography variant="h4">{"Tus Cursos"}</Typography>
+            <SelectFilters
+              data={cursos}
+              filterOptions={filterOptions}
+              setRefineData={setCursosBuffer}
+            />
+            {cursosBuffer.length == 0 ? (
+              <Alert severity="warning">
+                {"Actualmente no cuentas con cursos vinculados que mostrar (revisa los filtros)."}
+              </Alert>
+            ) : (
+              <>
+                {/* <Grid container sx={{ width: "100%" }}>
             <Grid size={{ md: 6, xs: 12 }}>
               <TextFieldSearch setSearchValue={setSearchValue} fullWidth />
             </Grid>
           </Grid> */}
-          <SelectFilters
-            data={cursos}
-            filterOptions={filterOptions}
-            setRefineData={setCursosBuffer}
-          />
-
-          <Grid container spacing={3}>
-            {cursosBuffer.map((curso) => (
-              <Grid size={tipo == "D" ? { md: 6, xs: 12 } : 12}>
-                <CardCurso materiaNombre={curso.materia?.nombre ?? ''} curso={curso} isRegister={true} userType={tipo} />
-              </Grid>
-            ))}
-          </Grid>
-        </Stack>
+                <Grid container spacing={3}>
+                  {cursosBuffer.map((curso) => (
+                    <Grid size={tipo == "D" ? { md: 6, xs: 12 } : 12}>
+                      <CardCurso
+                        materiaNombre={curso.materia?.nombre ?? ""}
+                        curso={curso}
+                        isRegister={true}
+                        userType={tipo}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              </>
+            )}
+          </Stack>
+        </Box>
       )}
     </>
   );
