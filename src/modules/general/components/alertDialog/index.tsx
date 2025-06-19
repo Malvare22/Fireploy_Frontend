@@ -22,12 +22,12 @@ interface Props {
 
 /**
  * AlertDialog component – a modal dialog built with Material-UI for displaying alerts or confirmations.
- * 
+ *
  * It supports customizable titles, body content, alert types (error, success, warning, or default),
  * and action handlers for accepting or canceling. It can optionally reload the page upon acceptance.
- * 
+ *
  * @component
- * 
+ *
  * @param title The text displayed as the dialog's header.
  * @param body Optional React element to render as custom content inside the dialog.
  * @param textBody Optional plain text string shown as the dialog content when no custom body is provided.
@@ -37,9 +37,9 @@ interface Props {
  * @param isLoading Optional boolean indicating if the "Aceptar" button should show a loading state.
  * @param type Optional string indicating the alert type: "error", "success", "warning", or "default".
  * @param reload Optional boolean that, when true, reloads the page upon acceptance.
- * 
+ *
  * @returns A Material-UI Dialog element configured for alerting or confirming user actions.
- * 
+ *
  * @example
  * ```tsx
  * <AlertDialog
@@ -81,8 +81,6 @@ const AlertDialog: React.FC<Props> = ({
     }
   }
 
-  console.log('-> ', isLoading)
-
   function handleButton() {
     setLocked(true);
     handleAccept();
@@ -92,8 +90,11 @@ const AlertDialog: React.FC<Props> = ({
   }
 
   React.useEffect(() => {
-    setLocked(false);
-  }, [textBody, body, type, open]);
+    if (locked && !isLoading) {
+      setLocked(false);
+      console.log(textBody, isLoading);
+    }
+  }, [textBody, body, type, open, isLoading, locked]);
 
   const navigate = useNavigate();
 
