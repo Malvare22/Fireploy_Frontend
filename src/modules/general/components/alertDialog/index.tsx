@@ -81,6 +81,8 @@ const AlertDialog: React.FC<Props> = ({
     }
   }
 
+  console.log('-> ', isLoading)
+
   function handleButton() {
     setLocked(true);
     handleAccept();
