@@ -81,9 +81,9 @@ const CardMateria: React.FC<CardMateriaProps> = ({ materia }) => {
           spacing={2}
           justifyContent={"center"}
         >
-          <Chip color="secondary" label={`Semestre: S${materia.semestre}`} />
+          <Chip color="secondary" label={`Semestre: ${materia.semestre}`} />
           {nCursos > 0 ? (
-            <Chip color="info" label={`${nCursos} cursos disponibles`} />
+            <Chip color="info" label={nCursos == 1 ? '1 Curso disponible' : `${nCursos} Cursos disponibles`} />
           ) : (
             <Chip color="default" label={`Cursos no disponibles`} />
           )}
