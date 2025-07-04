@@ -1,6 +1,6 @@
 import DataTable from "react-data-table-component";
 import { TableColumn } from "react-data-table-component";
-import { Alert, Chip, Stack, Typography, useTheme } from "@mui/material";
+import { Alert, Chip, IconButton, Stack, Tooltip, Typography, useTheme } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
@@ -22,6 +22,7 @@ import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { useCustomTableStyles } from "@modules/general/hooks/useCustomTableStyles";
 import { paginationComponentOptions } from "@modules/general/utils/pagination";
 import { rutasMaterias } from "@modules/materias/router/routes";
+import StyleIcon from '@mui/icons-material/Style';
 
 type TablaMateriasProps = {
   materias: MateriaTabla[];
@@ -134,12 +135,13 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
       cell: (row) => {
         return (
           <Stack direction={"row"} justifyContent={"center"}>
-            <ActionButton
-              mode={actionButtonTypes.ver}
-              onClick={() => {
+            <Tooltip title='Ver Cursos'>
+              <IconButton onClick={() => {
                 navigate(rutasMaterias.listarCursos.replace(":idMateria", row.codigo.toString()));
-              }}
-            />
+              }}>
+                <StyleIcon/>
+              </IconButton>
+            </Tooltip>
             <ActionButton mode={actionButtonTypes.editar} onClick={() => handleEditMateria(row)} />
             {row.estado == "A" ? (
               <ActionButton

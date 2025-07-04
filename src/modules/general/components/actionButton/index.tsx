@@ -38,15 +38,15 @@ const iconMap = {
  * @type {Record<actionButtonTypes, string>}
  */
 const labelMap = {
-  [actionButtonTypes.ver]: "ver",
-  [actionButtonTypes.editar]: "editar",
-  [actionButtonTypes.eliminar]: "eliminar",
-  [actionButtonTypes.habilitarUsuario]: "habilitar usuario",
-  [actionButtonTypes.deshabilitarUsuario]: "deshabilitar usuario",
-  [actionButtonTypes.habilitar]: "habilitar",
-  [actionButtonTypes.deshabilitar]: "deshabilitar",
-  [actionButtonTypes.cancelar]: "cancelar",
-  [actionButtonTypes.guardar]: "guardar",
+  [actionButtonTypes.ver]: "Ver",
+  [actionButtonTypes.editar]: "Editar",
+  [actionButtonTypes.eliminar]: "Eliminar",
+  [actionButtonTypes.habilitarUsuario]: "Habilitar usuario",
+  [actionButtonTypes.deshabilitarUsuario]: "Deshabilitar usuario",
+  [actionButtonTypes.habilitar]: "Habilitar",
+  [actionButtonTypes.deshabilitar]: "Deshabilitar",
+  [actionButtonTypes.cancelar]: "Cancelar",
+  [actionButtonTypes.guardar]: "Guardar",
 };
 
 /**
