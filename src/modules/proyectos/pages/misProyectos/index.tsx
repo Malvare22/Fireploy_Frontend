@@ -76,7 +76,6 @@ function MisProyectos() {
 
   useEffect(() => {
     if (data) {
-      console.log(data)
       setProjects(data.map(adaptProject));
     }
   }, [data]);

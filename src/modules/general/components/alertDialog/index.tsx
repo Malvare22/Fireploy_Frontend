@@ -92,7 +92,6 @@ const AlertDialog: React.FC<Props> = ({
   React.useEffect(() => {
     if (locked && !isLoading) {
       setLocked(false);
-      console.log(textBody, isLoading);
     }
   }, [textBody, body, type, open, isLoading, locked]);
 

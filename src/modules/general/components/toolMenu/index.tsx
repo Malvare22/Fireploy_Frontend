@@ -277,7 +277,9 @@ function ToolbarActions({
             </Typography>
           </Box>
         )}
-        <Box ><SessionMenu /></Box>
+        <Box>
+          <SessionMenu />
+        </Box>
       </Box>
     );
   }, [account, matches]);
@@ -395,7 +397,6 @@ function useDemoRouter(): Router {
     },
   };
 }
-
 
 /**
  * `DashboardLayoutBasic` wraps the entire application with `AppProvider` from Toolpad,
@@ -537,11 +538,15 @@ export default function DashboardLayoutBasic(props: any) {
               ),
             }}
           >
-            <Box marginTop={-10}>{props.children}</Box>
+            <Box marginTop={-10}>
+              {props.children}
+            </Box>
           </DashboardLayout>
         </AppProvider>
       ) : (
-        <Box sx={{ height: "100vh", display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Box
+          sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}
+        >
           <LoaderElement />
         </Box>
       )}
