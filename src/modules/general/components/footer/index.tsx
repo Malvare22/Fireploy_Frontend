@@ -1,6 +1,9 @@
-import { Box, Paper, Typography, useTheme } from "@mui/material";
+import { Box, Grid, Paper, Stack, Typography, useTheme } from "@mui/material";
 import { LabelFooter } from "@modules/general/enums/labelFooter";
 import { getImage } from "../../utils/getImage";
+import BalanceIcon from '@mui/icons-material/Balance';
+import BookIcon from '@mui/icons-material/Book';
+import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
 
 /**
  * `Footer` component that displays information about Fireploy,
@@ -9,141 +12,100 @@ import { getImage } from "../../utils/getImage";
  * @returns {JSX.Element} The footer structure with information distributed into columns.
  */
 function Footer(): JSX.Element {
-  
   // Get the Material-UI theme
   const theme = useTheme();
 
   return (
-    <Paper variant="dark"
+    <Paper
+      variant="dark"
       sx={{
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
         justifyContent: "center",
-        gap: 8,
-        padding: 5,
+        paddingX: 3,
         backgroundColor: theme.palette.secondary.main,
         color: "white",
-        fontWeight: '550',
-        borderRadius: 0
+        fontWeight: "550",
+        borderRadius: 0,
+        paddingY: 2
       }}
     >
-      {/* Fireploy Column */}
-      <Box
-        sx={{
-          width: { md: "25%" },
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-        }}
-      >
-        {/* Logo and Name */}
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Box >
-            <Typography variant="h5">{LabelFooter.fireploy}</Typography>
-          </Box>
-          <Box>
-            <Typography variant="body1">™</Typography>
-          </Box>
-        </Box>
+      <Grid container spacing={3}>
+        {/* Fireploy Column */}
+        <Grid
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+          size={{ lg: 3 }}
+        >
+          {/* Logo and Name */}
+          <Typography variant="h5">{`${LabelFooter.fireploy}™`}</Typography>
 
-        {/* Fireploy Description */}
-        <Box>
-          <Typography variant="body2">
-            {LabelFooter.descripcionFireploy}
-          </Typography>
-        </Box>
-      </Box>
+          {/* Fireploy Description */}
+          <Typography variant="body2">{LabelFooter.descripcionFireploy}</Typography>
+        </Grid>
 
-      {/* Resources Column */}
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <Box>
-          <Typography variant="h6">{LabelFooter.recursos}</Typography>
-        </Box>
-        <Box>
+        {/* Resources Column */}
+        <Grid
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+          size={{ lg: 1.5, xs: 6}}
+        >
+          <Stack alignItems={'center'} direction={'row'} spacing={1}><Typography variant="h6">{LabelFooter.recursos}</Typography><BookIcon color="action"/></Stack>
+
           <Typography variant="body2">{LabelFooter.documentacion}</Typography>
-        </Box>
-        <Box>
+
           <Typography variant="body2">{LabelFooter.plantillas}</Typography>
-        </Box>
-      </Box>
+        </Grid>
 
-      {/* Social Media Column */}
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <Box>
-          <Typography variant="h6">
-            {LabelFooter.redesSociales}
-          </Typography>
-        </Box>
-        <Box>
+        {/* Social Media Column */}
+        <Grid
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+          size={{ lg: 2, xs: 6 }}
+        >
+          <Stack alignItems={'center'} direction={'row'} spacing={1}><Typography variant="h6">{LabelFooter.redesSociales}</Typography><ConnectWithoutContactIcon color="action"/></Stack>
+
           <Typography variant="body2">{LabelFooter.linkedin}</Typography>
-        </Box>
-        <Box>
+
           <Typography variant="body2">{LabelFooter.facebook}</Typography>
-        </Box>
-      </Box>
+        </Grid>
 
-      {/* Legal Terms Column */}
-      <Box
-        sx={{
-          width: { md: "20%" },
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-        }}
-      >
-        <Box>
-          <Typography variant="h6">
-            {LabelFooter.terminosLegales}
-          </Typography>
-        </Box>
-        <Box>
+        {/* Legal Terms Column */}
+        <Grid
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+          size={{ lg: 2.5 }}
+        >
+          <Stack direction={'row'} alignItems={'center'} spacing={1}><Typography variant="h6">{LabelFooter.terminosLegales}</Typography> <BalanceIcon color="action"/></Stack>
+
           <Typography variant="body2">{LabelFooter.licencia}</Typography>
-        </Box>
-      </Box>
+        </Grid>
 
-      {/* UFPS Logo */}
-      <Box
-        sx={{
-          borderRadius: 4,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: { md: "5%" },
-          padding: 2,
-        }}
-      >
-        <Box
-          component={"img"}
-          sx={{
-            width: { sm: 90, xs: 100 },
-          }}
-          src={getImage["ufps_logo"].ruta}
-          alt={getImage["ufps_logo"].nombre}
-          width={"50%"}
-        />
-      </Box>
-
-      {/* Systems Engineering Logo */}
-      <Box
-        sx={{
-          borderRadius: 4,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: { md: "5%" },
-          padding: 2,
-        }}
-      >
-        <Box
-          component={"img"}
-          sx={{
-            width: { sm: 90, xs: 100 },
-          }}
-          src={getImage["ing_sistemas_logo"].ruta}
-          alt={getImage["ing_sistemas_logo"].nombre}
-          width={"50%"}
-        />
-      </Box>
+        {/* UFPS Logo */}
+        <Grid size={{ lg: 3 }}>
+          
+          <Box
+            component={"img"}
+            sx={{
+              width: "100%",
+              marginTop: -2
+            }}
+            src={getImage["ingSistemasLogo"].ruta}
+          ></Box>
+        </Grid>
+      </Grid>
     </Paper>
   );
 }

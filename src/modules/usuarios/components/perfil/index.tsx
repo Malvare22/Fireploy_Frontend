@@ -181,8 +181,8 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
 
   function showConfirmation(){
     showDialog({
-      message: "Modificación de usuarios",
-      title: "¿Está seguro de que desea aplicar estas modificaciones?",
+      title: "Modificación de usuarios",
+      message: "¿Está seguro de que desea aplicar estas modificaciones?",
       onAccept: () => {
                     handleUpdateUser();
       },

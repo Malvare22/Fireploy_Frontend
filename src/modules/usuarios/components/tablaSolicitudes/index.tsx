@@ -58,8 +58,6 @@ const TablaSolicitudes: React.FC<Props> = ({ solicitudes, tipo }) => {
   const { accountInformation } = useAuth();
   const { token, id } = accountInformation;
 
-  const [estadoSolicitud, setEstadoSolicitud] = useState<"A" | "R">("R");
-
   const {
     showDialog,
     open,
@@ -74,17 +72,19 @@ const TablaSolicitudes: React.FC<Props> = ({ solicitudes, tipo }) => {
 
   const { setError } = useErrorReader(showDialog);
 
+  type RequestType = 'A' | 'R'
+
   /**
    * Handles the mutation to update the status of a request (approve/reject).
    */
   const { isPending, mutate } = useMutation({
-    mutationFn: () => patchSolicitudService(selectSolicitud?.id ?? -1, estadoSolicitud, id, token),
+    mutationFn: (estadoSolicitud: RequestType) => patchSolicitudService(selectSolicitud?.id ?? -1, estadoSolicitud, id, token),
     onError: (error) => setError(error),
     onSuccess: () => {
       showDialog({
-        title: "Modificación de Rol de Usuario",
+        title: "Asignar Docente",
         message:
-          "Se ha establecido el estado correspondiente a la solicitud de modificación de rol usuario",
+          "Se ha establecido el estado correspondiente a la solicitud de modificación de asignar docente a curso",
         onAccept: () => {},
         reload: true,
         type: "success",
@@ -207,9 +207,8 @@ const TablaSolicitudes: React.FC<Props> = ({ solicitudes, tipo }) => {
         const handleClose = () => setAnchorEl(null);
 
         const handleBtn = (estado: "R" | "A") => {
-          setEstadoSolicitud(estado);
           setSelectSolicitud(row);
-          showConfirmation();
+          showConfirmation(estado);
           handleClose();
         };
 
@@ -252,19 +251,12 @@ const TablaSolicitudes: React.FC<Props> = ({ solicitudes, tipo }) => {
     [solicitudes]
   );
 
-  /**
-   * Triggers the mutation to patch request status.
-   */
-  function handlePatch() {
-    mutate();
-  }
-
-  function showConfirmation() {
+  function showConfirmation(requestType: RequestType) {
     showDialog({
       title: "Modificación de Solicitudes",
-      message: `¿Está seguro de ${estadoSolicitud !== "A" ? "aprobadar" : "rechazadar"} esta solicitud?`,
+      message: `¿Está seguro de ${requestType == "A" ? "aprobar" : "rechazar"} esta solicitud?`,
       isLoading: isPending,
-      onAccept: handlePatch,
+      onAccept: () => mutate(requestType),
       onCancel: handleClose,
       type: "default",
     });

@@ -4,8 +4,6 @@ import instagramLogo from "@modules/general/assets/redesSociales/instagramLogo.p
 import linkedinLogo from "@modules/general/assets/redesSociales/linkedinLogo.png";
 import xLogo from "@modules/general/assets/redesSociales/xLogo.png";
 import ingSistemasLogo from "@modules/general/assets/ufps/ingSistemasLogo.png";
-import ufpsLogo from "@modules/general/assets/ufps/UFPSLogo.png";
-import ufpsLogoCompleto from "@modules/general/assets/ufps/UFPSLogoCompleto.png";
 import defaultProfileImage from "@modules/general/assets/profile/defaultProfileImage.png";
 import defaultProjectImage from "@modules/general/assets/project/defaultImage.jpg";
 import team01 from "@modules/general/assets/team/reyes.jpg";
@@ -63,10 +61,8 @@ export const assetImages = {
   linkedin_logo: linkedinLogo,
   x_logo: xLogo,
 
-  // UFPS Logos
-  ing_sistemas_logo: ingSistemasLogo,
-  ufps_logo: ufpsLogo,
-  ufps_logo_completo: ufpsLogoCompleto,
+
+  ingSistemasLogo,
 
   // Default Images
   defaultProfileImage: defaultProfileImage,
