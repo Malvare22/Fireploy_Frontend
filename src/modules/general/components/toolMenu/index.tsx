@@ -541,7 +541,7 @@ export default function DashboardLayoutBasic(props: any) {
           </DashboardLayout>
         </AppProvider>
       ) : (
-        <Box sx={{ height: "100vh" }}>
+        <Box sx={{ height: "100vh", display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <LoaderElement />
         </Box>
       )}
