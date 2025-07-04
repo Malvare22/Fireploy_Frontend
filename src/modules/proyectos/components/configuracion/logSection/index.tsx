@@ -101,7 +101,7 @@ function LogsFiles({ backend, frontend, integrado, projectId }: LogsFilesProps) 
   useEffect(() => {
     if (data) {
       setLogsByField(data);
-      if (logsByField?.get("backend")) setTabIndex(1);
+      if (data?.get("backend")) setTabIndex(1);
     }
   }, [data]);
 
