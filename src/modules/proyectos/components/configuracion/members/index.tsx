@@ -21,7 +21,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useAuth } from "@modules/general/context/accountContext";
 import { useEffect, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { adaptUserServiceToCB } from "@modules/usuarios/utils/adapt.usuario";
+import { adaptUser, adaptUserServiceToCB } from "@modules/usuarios/utils/adapt.usuario";
 import { ProyectoSchema } from "@modules/proyectos/utils/forms/proyecto.schema";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
@@ -62,8 +62,7 @@ import { rutasUsuarios } from "@modules/usuarios/router/routes";
 export const Members = () => {
   const theme = useTheme();
 
-  const { getValues: getValuesProject, watch } =
-    useFormContext<ProyectoSchema>();
+  const { getValues: getValuesProject, watch } = useFormContext<ProyectoSchema>();
 
   const groupId = getValuesProject("materiaInformacion.cursoId");
 
@@ -74,9 +73,7 @@ export const Members = () => {
   const { filteredData, searchValue, setSearchValue } = useSearch();
 
   function searchFn(users: UsuarioCurso[], s: string) {
-    return users.filter((x) =>
-      x.nombre.toLowerCase().includes(s.toLowerCase())
-    );
+    return users.filter((x) => x.nombre.toLowerCase().includes(s.toLowerCase()));
   }
 
   const ID_PROPRIETARY = getValuesProject("propietario")?.id ?? -1;
@@ -121,6 +118,7 @@ export const Members = () => {
     title,
     type,
     showDialog,
+    setIsLoading,
   } = useAlertDialog2();
 
   const { setError } = useErrorReader(showDialog);
@@ -129,17 +127,10 @@ export const Members = () => {
 
   const { mutate: mutateMembers } = useMutation({
     mutationFn: async () => {
-      const currentStatus = await getProjectById(
-        token,
-        getValuesProject("id") ?? -1
-      );
-      if (executionState && currentStatus.estado_ejecucion != executionState)
-        syncErrorProject();
-      await patchEditProjectMembers(
-        token,
-        getValuesProject("id") ?? -1,
-        currentMembers
-      );
+      setIsLoading(true);
+      const currentStatus = await getProjectById(token, getValuesProject("id") ?? -1);
+      if (executionState && currentStatus.estado_ejecucion != executionState) syncErrorProject();
+      await patchEditProjectMembers(token, getValuesProject("id") ?? -1, currentMembers);
     },
     mutationKey: ["Change Members of Project", selectUser?.id, token],
     onSuccess: () => {
@@ -154,6 +145,7 @@ export const Members = () => {
     },
     onError: (error) => {
       setError(error);
+      setIsLoading(false);
     },
   });
 
@@ -181,7 +173,6 @@ export const Members = () => {
         });
       },
       onCancel: handleClose,
-      isLoading: false,
       reload: false,
       title: "Eliminar Usuario",
     });
@@ -209,7 +200,6 @@ export const Members = () => {
         });
       },
       onCancel: handleClose,
-      isLoading: false,
       reload: false,
       title: "Agregar Usuario",
     });
@@ -222,17 +212,17 @@ export const Members = () => {
   } = useAlertDialog();
 
   const filterUsers = useMemo(() => {
-    const _users = (groupInformation?.estudiantes || []).filter((user) => {
-      if (user.id == id) {
-        return false;
-      }
-      getValuesProject("integrantes").forEach((u) => {
-        if (u.id == user.id) {
+    const _users = (groupInformation?.estudiantes || []).filter((_user) => {
+      const user = adaptUser(_user);
+      if (user.tipo != "E" || user.id == id) return false;
+      for (const member of getValuesProject("integrantes")) {
+        if (member.id == user.id) {
           return false;
         }
-      });
-      return true
+      }
+      return true;
     });
+
     return _users.map((user) => adaptUserServiceToCB(user));
   }, [groupInformation]);
 
@@ -274,16 +264,9 @@ export const Members = () => {
           spacing={{ md: 0, xs: 1 }}
           justifyContent={{ md: "space-between" }}
         >
-          <Typography variant="h5">
-            {labelConfiguracion.colaboradores}
-          </Typography>
+          <Typography variant="h5">{labelConfiguracion.colaboradores}</Typography>
           <Box>
-            {" "}
-            <Button
-              variant="contained"
-              size="small"
-              onClick={handleOpenModalAddUsers}
-            >
+            <Button variant="contained" size="small" onClick={handleOpenModalAddUsers}>
               {labelConfiguracion.invitarIntegrantes}
             </Button>
           </Box>
@@ -370,11 +353,7 @@ const CardMember: React.FC<CardMemberProps> = ({
       justifyContent={"space-between"}
       padding={2}
     >
-      <Stack
-        direction={{ md: "row", xs: "column" }}
-        spacing={1}
-        alignItems={{ md: "center" }}
-      >
+      <Stack direction={{ md: "row", xs: "column" }} spacing={1} alignItems={{ md: "center" }}>
         <Stack direction={"row"} spacing={1} alignItems={"center"}>
           <IconButton onClick={handleButton}>
             <Tooltip title={member.nombre}>

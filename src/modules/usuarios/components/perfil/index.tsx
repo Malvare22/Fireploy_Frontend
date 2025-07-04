@@ -19,7 +19,6 @@ import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, Container, styled } from "@mui/system";
 import { getGenderArray, getUserTypesArray } from "@modules/usuarios/utils/usuario.map";
-import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import AlertDialog from "@modules/general/components/alertDialog";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
@@ -121,15 +120,16 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
       return await patchUpdatePhotoService(token, id ?? -1, imgFile!!);
     },
     mutationKey: ["Change Photo", id ?? -1, token],
-    onError: (err) => setError(err),
+    onError: (err) => {
+      setIsLoading(false);
+      setError(err);
+    },
   });
 
   const [showButton, setShowButton] = useState(false);
 
-  const { open: openConfirmation, setOpen: setOpenConfirmation } = useAlertDialog();
-
   const onSubmit = () => {
-    setOpenConfirmation(true);
+    showConfirmation();
   };
 
   useEffect(() => {
@@ -142,12 +142,13 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
     navigate(0);
   };
 
-  const { isSuccess, isPending, mutate, data } = useMutation({
+  const { mutate, data } = useMutation({
     mutationFn: async () => {
       setIsLoading(true);
       return await handleGetQuery();
     },
     onError: (err) => {
+      setIsLoading(false);
       setError(err);
     },
     mutationKey: ["Change User", token],
@@ -158,14 +159,14 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
   };
 
   useEffect(() => {
-    if (data && isSuccess) {
+    if (data) {
       if (imgFile != undefined) {
         setId(data.id);
       } else {
         handleOpenSuccess();
       }
     }
-  }, [data, isSuccess]);
+  }, [data]);
 
   const CURRENT_USER_TYPE = tipo ?? "E";
 
@@ -176,7 +177,18 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
 
   useEffect(() => {
     if (isSuccessPhoto) handleOpenSuccess();
-  }, [isSuccessPhoto, isSuccess]);
+  }, [isSuccessPhoto]);
+
+  function showConfirmation(){
+    showDialog({
+      title: "Modificación de usuarios",
+      message: "¿Está seguro de que desea aplicar estas modificaciones?",
+      onAccept: () => {
+                    handleUpdateUser();
+      },
+      onCancel: handleClose
+    })
+  }
 
   return (
     <Container component={"form"} onSubmit={handleSubmit(onSubmit)}>
@@ -190,16 +202,6 @@ const Perfil: React.FC<PerfilProps> = ({ usuario, type = "editar" }) => {
           textBody={message}
           type={typeOfAlert}
           handleCancel={handleCancel}
-        />
-        <AlertDialog
-          title="Modificación de usuarios"
-          textBody="¿Está seguro de que desea aplicar estas modificaciones?"
-          handleAccept={() => {
-            handleUpdateUser();
-          }}
-          open={openConfirmation}
-          handleCancel={() => setOpenConfirmation(false)}
-          isLoading={isPending}
         />
         <Stack direction={"row"} alignItems={"center"} spacing={2} justifyContent={"center"}>
           <Typography variant="h4">{labelPerfil.perfil}</Typography>
@@ -532,7 +534,10 @@ const ButtonUpdaterRol = () => {
       return await postCreateSolicitudRolDocenteService(id, token);
     },
     mutationKey: ["Update Rol", id, token],
-    onError: (err) => setError(err),
+    onError: (err) => {
+      setIsLoading(false);
+      setError(err);
+    },
     onSuccess: () => {
       showDialog({
         message: "Se ha creado su solicitud de actualización a rol docente",
@@ -556,7 +561,6 @@ const ButtonUpdaterRol = () => {
       message: "¿Está seguro de que desea solicitar la promoción al rol de docente?",
       type: "default",
       onAccept: async () => {
-        setIsLoading(true);
         await handlePost();
         handleClose();
       },

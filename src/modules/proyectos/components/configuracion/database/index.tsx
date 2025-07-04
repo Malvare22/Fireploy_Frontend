@@ -9,6 +9,7 @@ import { postCreateDatabase } from "@modules/proyectos/services/post.base.datos"
 import { getDataBaseTypesArray, getDataBaseTypesMap } from "@modules/proyectos/utils/database";
 import { BaseDeDatosRegisterSchema } from "@modules/proyectos/utils/forms/baseDeDatos.schema";
 import { ProyectoSchema } from "@modules/proyectos/utils/forms/proyecto.schema";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import {
   Alert,
   Box,
@@ -21,6 +22,7 @@ import {
   Snackbar,
   Stack,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
@@ -72,6 +74,8 @@ export const DataBase = ({ type }: Props) => {
   } = useAlertDialog();
 
   const { setError } = useErrorReader(showDialog);
+
+  const disabledFields = type == "edit" && useExecutionStatusContext().executionState == "N";
 
   const {
     reset,
@@ -171,32 +175,45 @@ export const DataBase = ({ type }: Props) => {
         isLoading={isLoading}
       />
       <Stack spacing={2}>
-        <Typography variant="h5">Base de Datos</Typography>
+        <Stack><TransitionAlert severity="warning">
+          {
+            "Para que surjan efecto los cambios realizados en esta sección, se requiere volver a desplegar el aplicativo"
+          }
+        </TransitionAlert>
+        <Typography variant="h5">{"Base de Datos"}</Typography></Stack>
         <Divider />
         {type == "create" || (type == "edit" && getValuesProject("baseDeDatos")?.id == -1) ? (
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={3}>
-              <Controller
-                name="tipo"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    select
-                    fullWidth
-                    {...field}
-                    size="small"
-                    sx={{ width: "50%" }}
-                    error={!!errors.tipo}
-                    helperText={errors.tipo?.message}
-                  >
-                    {getDataBaseTypesArray.map(([key, value]) => (
-                      <MenuItem value={key} key={key}>
-                        {value}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+              <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                <Controller
+                  name="tipo"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      select
+                      fullWidth
+                      {...field}
+                      size="small"
+                      sx={{ width: "50%" }}
+                      error={!!errors.tipo}
+                      helperText={errors.tipo?.message}
+                      disabled={disabledFields}
+                    >
+                      {getDataBaseTypesArray.map(([key, value]) => (
+                        <MenuItem value={key} key={key}>
+                          {value}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  )}
+                />
+                {disabledFields && (
+                  <Tooltip title="No puede definirse una base de datos mientras el proyecto se encuentre en ejecución">
+                    <HelpOutlineIcon />
+                  </Tooltip>
                 )}
-              />
+              </Stack>
               {watch("tipo") != "E" && (
                 <>
                   <Controller
@@ -211,6 +228,7 @@ export const DataBase = ({ type }: Props) => {
                         sx={{ width: "50%" }}
                         error={!!errors.nombre}
                         helperText={errors.nombre?.message}
+                        disabled={disabledFields}
                       />
                     )}
                   />
@@ -226,6 +244,7 @@ export const DataBase = ({ type }: Props) => {
                         sx={{ width: "50%" }}
                         error={!!errors.contrasenia}
                         helperText={errors.contrasenia?.message}
+                        disabled={disabledFields}
                       />
                     )}
                   />
@@ -237,7 +256,11 @@ export const DataBase = ({ type }: Props) => {
                   <>
                     {watch("tipo") != "E" && (
                       <Box>
-                        <GeneralButton mode={buttonTypes.accept} type="submit" />
+                        <GeneralButton
+                          mode={buttonTypes.accept}
+                          type="submit"
+                          disabled={disabledFields}
+                        />
                       </Box>
                     )}
                     <Box>
@@ -308,7 +331,12 @@ type ShowCredentialsProps = {
 function ShowCredentials({ password, user }: ShowCredentialsProps) {
   return (
     <Card sx={{ maxWidth: 400 }}>
-      <Grid container rowSpacing={2} spacing={3} sx={{ display: "flex", padding: 1, alignItems: "center" }}>
+      <Grid
+        container
+        rowSpacing={2}
+        spacing={3}
+        sx={{ display: "flex", padding: 1, alignItems: "center" }}
+      >
         <Grid size={3}>
           <Typography sx={{ fontWeight: 500 }}>{"Usuario:"}</Typography>
         </Grid>

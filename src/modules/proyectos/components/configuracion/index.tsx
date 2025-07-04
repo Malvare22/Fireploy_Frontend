@@ -32,22 +32,23 @@ import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import DangerZone from "./others";
 import DisabledVisibleIcon from "@mui/icons-material/DisabledVisible";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useAuth } from "@modules/general/context/accountContext";
 
 type Props = {
   project: ProyectoSchema;
 };
 
 /**
- * ProjectSettings component – provides a complete interface to view and manage 
+ * ProjectSettings component – provides a complete interface to view and manage
  * all configurations related to a specific project.
- * 
+ *
  * This component includes several tabbed sections to handle information such as:
  * project details, connected repositories, databases, collaborators, logs, and other settings.
  * It also reflects the current deployment status and project visibility, and handles
  * interactive actions like status change and deployment tracking.
- * 
+ *
  * @component
- * 
+ *
  * @param {object} project - The project object containing all configuration data.
  * @param {string} project.titulo - The title or name of the project.
  * @param {string} project.estadoDeProyecto - The current visibility state of the project.
@@ -56,9 +57,9 @@ type Props = {
  * @param {object} project.frontend - Frontend deployment details (may include an ID).
  * @param {object} project.integrado - Integrated service deployment details (may include an ID).
  * @param {string} project.url - The base URL of the deployed project.
- * 
+ *
  * @returns {JSX.Element} A settings dashboard with editable project configuration sections and execution feedback.
- * 
+ *
  * @example
  * ```tsx
  * <ProjectSettings project={myProjectData} />
@@ -70,6 +71,8 @@ export default function ProjectSettings({ project }: Props) {
   const methods = useForm<ProyectoSchema>({
     defaultValues: project,
   });
+
+  const { id } = useAuth().accountInformation;
 
   // function handleUrl(url: string) {
   //   if (url) openInNewTab(url);
@@ -154,7 +157,9 @@ export default function ProjectSettings({ project }: Props) {
               <Tab label="Bases de Datos" icon={<StorageIcon />} iconPosition="start" />
               <Tab label="Colaboradores" icon={<PeopleAltIcon />} iconPosition="start" />
               <Tab label="Logs" icon={<ArticleIcon />} iconPosition="start" />
-              <Tab label="Otros aspectos" icon={<SettingsSuggestIcon />} iconPosition="start" />
+              {project.propietario?.id === id && (
+                <Tab label="Otros aspectos" icon={<SettingsSuggestIcon />} iconPosition="start" />
+              )}
             </Tabs>
 
             <Stack spacing={3} padding={1} paddingTop={2}>
@@ -189,14 +194,14 @@ export default function ProjectSettings({ project }: Props) {
 
 /**
  * ConfiguracionSkeleton component – shows a loading placeholder while the project configuration is loading.
- * 
+ *
  * This component displays skeleton elements that mimic the final UI structure,
  * including headings, tabs, and content areas, to improve perceived performance and avoid layout shifts.
- * 
+ *
  * @component
- * 
+ *
  * @returns {JSX.Element} A skeleton-styled placeholder for the project settings interface.
- * 
+ *
  * @example
  * ```tsx
  * {isLoading && <ConfiguracionSkeleton />}

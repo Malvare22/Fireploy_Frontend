@@ -153,12 +153,10 @@ function VerCursosMateria() {
   /** When user's courses are available, convert to map for lookup */
   useEffect(() => {
     if (dataMyGroups) {
-      console.log(dataMyGroups);
       setMyGroupsIds(new Map(dataMyGroups.cursos.map((data) => [data.id, true])));
       setActivesRequest(dataMyGroups.activeRequest);
     }
   }, [dataMyGroups]);
-  console.log(cursos);
   /**
    * Mutation to register student to a course
    */

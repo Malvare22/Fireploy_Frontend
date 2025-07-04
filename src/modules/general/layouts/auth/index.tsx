@@ -9,14 +9,14 @@ import { Outlet } from "react-router-dom";
 /**
  * LayoutAuthenticated component – provides the main layout structure for authenticated routes,
  * wrapping children with global providers and UI components.
- * 
+ *
  * Includes authentication context, socket communication, notification handling,
  * a dashboard menu layout, and a footer. Renders nested routes using React Router's Outlet.
- * 
+ *
  * @component
- * 
+ *
  * @returns {a structured layout including authentication, notifications, and UI scaffolding for authenticated users}
- * 
+ *
  * @example
  * ```tsx
  * <Route element={<LayoutAuthenticated />}>
@@ -43,6 +43,7 @@ function LayoutAuthenticated() {
                   "> div": { width: "100%", marginX: 2 },
                   minHeight: "110vh",
                 }}
+                id="scroll-target"
               >
                 <Outlet />
               </Box>

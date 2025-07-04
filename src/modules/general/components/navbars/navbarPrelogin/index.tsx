@@ -83,6 +83,7 @@ function NavbarPrelogin(): JSX.Element {
         boxShadow: "none",
         borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
         backgroundColor: theme.palette.secondary.main,
+        borderRadius: 0
       }}
     >
       <Container maxWidth="xl" sx={{ color: "white" }}>

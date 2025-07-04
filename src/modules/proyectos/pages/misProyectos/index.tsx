@@ -56,7 +56,7 @@ function MisProyectos() {
   const { data, isLoading, error } = useQuery({
     queryFn: async () => {
       if (token) return await getProjectByUserId(id, token);
-      return await getProjectByUserId(id);
+      return [];
     },
     queryKey: ["Get All Project by User Id", id, token],
   });

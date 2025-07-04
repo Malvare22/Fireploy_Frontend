@@ -21,7 +21,7 @@ import {
 } from "@modules/proyectos/utils/technologies";
 import { openInNewTab } from "@modules/general/utils/openTab";
 import CloseIcon from "@mui/icons-material/Close";
-import { RESERVED_VARIABLES } from "@modules/proyectos/utils/technologies";
+import { REFERENCE_TO_DOC } from "@modules/general/enums/referencesToDoc";
 
 type Props = {
   type: KeysOfRepository; // "frontend" | "backend" | "integrado"
@@ -30,18 +30,18 @@ type Props = {
 
 /**
  * EnviromentVariablesEditor component – a form-integrated editor for managing environment variables (.env files).
- * 
+ *
  * This component uses the Monaco Editor for code-like editing of environment variables tied to a specific
  * repository type (e.g., frontend, backend, integrated). It provides contextual alerts, framework-specific warnings,
  * and enforces restrictions for reserved variables to ensure correct deployment behavior.
- * 
+ *
  * @component
- * 
+ *
  * @param {string} type - Indicates the repository type, such as "frontend", "backend", or "integrated". Determines data path and behavior.
  * @param {boolean} disabled - If true, disables editing of the environment variables in the Monaco editor.
- * 
+ *
  * @returns {JSX.Element} A Monaco-based environment variable editor with contextual validations and framework-specific alerts.
- * 
+ *
  * @example
  * ```tsx
  * <EnviromentVariablesEditor type="frontend" disabled={false} />
@@ -74,14 +74,20 @@ export default function EnviromentVariablesEditor({ type, disabled }: Props) {
             sx={{ mb: 2 }}
           >
             <AlertTitle>{"Restricciones de variables de entorno"}</AlertTitle>
-            <Typography>
-              {
-                "El siguiente es un listado de las variables no permitidas para el correcto funcionamiento del sistema de despliegues:"
-              }
-            </Typography>
-            <Typography>{`Cualquier tipo de proyecto: ${RESERVED_VARIABLES.GENERAL.join(", ")}`}</Typography>
-            <Typography>{`Proyectos con base de datos SQL: ${RESERVED_VARIABLES.SQL.join(", ")}`}</Typography>
-            <Typography>{`Proyectos con base de datos  NoSQL: ${RESERVED_VARIABLES.NO_SQL.join(", ")}`}</Typography>
+            <Stack direction={"row"} alignItems={"center"} spacing={1}>
+              <>
+                {
+                  "Ten en cuenta que Fireploy usa una serie de variables de entorno especiales, las cuales cumplen fines específicos y no deben volverse a declarar"
+                }
+              </>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={() => openInNewTab(REFERENCE_TO_DOC.SPECIAL_VARIABLES)}
+              >
+                {"Ver más detalles"}
+              </Button>
+            </Stack>
           </Alert>
         </Collapse>
       </Box>

@@ -40,9 +40,7 @@ const CardCurso: React.FC<CardCursoProps> = ({
   const navigate = useNavigate();
 
   const { id } = useAuth().accountInformation;
-
-  console.log(hasActiveRequest);
-
+  
   const theme = useTheme();
 
   const showDocentOwnerStyle = !(userType != "D" || (userType == "D" && !isRegister));

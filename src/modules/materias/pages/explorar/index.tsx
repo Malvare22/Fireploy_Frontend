@@ -1,12 +1,6 @@
 import CardMateria from "@modules/materias/components/cardMateria";
 import { Materia } from "@modules/materias/types/materia";
-import {
-  Grid,
-  MenuItem,
-  Select,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Grid, MenuItem, Pagination, Select, Stack, Typography } from "@mui/material";
 import useOrderSelect from "@modules/general/hooks/useOrder";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import { useEffect, useMemo, useState } from "react";
@@ -22,6 +16,7 @@ import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
 import useSearch from "@modules/general/hooks/useSearch";
 import TextFieldSearch from "@modules/general/components/textFieldSearch";
+import { usePagination } from "@modules/general/hooks/usePagination";
 
 /**
  * ExplorarMaterias component – Displays a list of available subjects (materias) with search and sorting capabilities.
@@ -29,9 +24,9 @@ import TextFieldSearch from "@modules/general/components/textFieldSearch";
  * and sorting them by different criteria (e.g., alphabetically or by semester).
  *
  * The component displays a list of materias in cards and provides user feedback with loading spinners and error dialogs.
- * 
+ *
  * @component
- * 
+ *
  * @example
  * ```tsx
  * <ExplorarMaterias />
@@ -54,10 +49,10 @@ function ExplorarMaterias() {
   // Dialog control for handling fetch errors
   const { showDialog, open, title, message, type, handleAccept } = useAlertDialog();
 
-  const {setError} = useErrorReader(showDialog);
+  const { setError } = useErrorReader(showDialog);
 
   // Hook to manage sorting behavior
-  const {handleOrder, orderDataFn,order } = useOrderSelect<Materia>();
+  const { handleOrder, orderDataFn, order } = useOrderSelect<Materia>();
 
   // Update materias state when data is fetched
   useEffect(() => {
@@ -72,7 +67,7 @@ function ExplorarMaterias() {
     }
   }, [error]);
 
-  const {filteredData, setSearchValue, searchValue} = useSearch();
+  const { filteredData, setSearchValue, searchValue } = useSearch();
 
   /**
    * Filters and sorts materias based on search input.
@@ -81,15 +76,21 @@ function ExplorarMaterias() {
    */
   const searchFn = (x: Materia[], s: string) => {
     if (s != "")
-      return x.filter((materia) =>
-        materia.nombre.toLowerCase().includes(s.toLowerCase())
-      );
+      return x.filter((materia) => materia.nombre.toLowerCase().includes(s.toLowerCase()));
     return x;
   };
 
-  const dataToLoad =useMemo( () => {
-    return orderDataFn(filteredData(materias, searchFn))
-  }, [materias, searchValue, order])
+  const dataToLoad = useMemo(() => {
+    return orderDataFn(filteredData(materias, searchFn));
+  }, [materias, searchValue, order]);
+
+  const {
+    paginatedData,
+    hasNextPage,
+    hasPrevPage,
+    goToPage,
+    totalPages,
+  } = usePagination(dataToLoad, 6);
 
   return (
     <>
@@ -117,7 +118,7 @@ function ExplorarMaterias() {
           {/* Search and sort controls */}
           <Stack direction={{ sm: "row", xs: "column" }} justifyContent={"center"} spacing={1}>
             {/* Search input */}
-            <TextFieldSearch sx={{maxWidth: '70%'}} fullWidth setSearchValue={setSearchValue}/>
+            <TextFieldSearch sx={{ maxWidth: "70%" }} fullWidth setSearchValue={setSearchValue} />
 
             {/* Sorting select */}
             <Select
@@ -148,12 +149,13 @@ function ExplorarMaterias() {
 
           {/* List of filtered/sorted materias */}
           <Grid container spacing={5} paddingX={{ md: 4 }}>
-            {dataToLoad.map((materia, key) => (
+            {paginatedData.map((materia, key) => (
               <Grid size={{ xl: 4, sm: 6, xs: 12 }} key={key}>
                 <CardMateria materia={materia} />
               </Grid>
             ))}
           </Grid>
+          <Stack alignItems={'center'}><Pagination hideNextButton={!hasNextPage} hidePrevButton={!hasPrevPage} count={totalPages} onChange={(_e, page) => goToPage(page)}/></Stack>
         </Stack>
       )}
     </>

@@ -344,11 +344,11 @@ export function Repositories({ type }: Props) {
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Stack spacing={3}>
             <Stack>
-              <TransitionAlert severity="warning">
+              {type == 'edit' && <TransitionAlert severity="warning">
                 {
                   "Para que surjan efecto los cambios realizados en esta sección, se requiere volver a desplegar el aplicativo"
                 }
-              </TransitionAlert>
+              </TransitionAlert>}
               <Typography variant="h5">
                 {labelConfiguracion.repositorios}
               </Typography>

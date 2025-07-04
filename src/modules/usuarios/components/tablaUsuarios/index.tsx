@@ -2,7 +2,15 @@ import { labelUsuario } from "@modules/usuarios/enum/labelGestionUsuarios";
 import { EstadoUsuario, Usuario } from "@modules/usuarios/types/usuario";
 import DataTable, { ConditionalStyles } from "react-data-table-component";
 import { TableColumn, TableStyles } from "react-data-table-component";
-import { Chip, Stack, Tooltip, Typography, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Chip,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import { getUserTypes } from "@modules/usuarios/utils/usuario.map";
 import SchoolIcon from "@mui/icons-material/School";
@@ -23,6 +31,7 @@ import { postChangeUserStateService } from "@modules/usuarios/services/post.modi
 import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { paginationComponentOptions } from "@modules/general/utils/pagination";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 
 type TablaUsuariosProps = {
   usuarios: Usuario[];
@@ -32,11 +41,11 @@ type TablaUsuariosProps = {
  * TablaUsuarios component – renders a responsive user table using react-data-table-component and Material UI.
  * Displays a list of users with key details such as name, role, status, social networks, and available actions.
  * Includes logic to handle user state changes (enable/disable), conditional row styling, and responsive icons.
- * 
+ *
  * This component supports full CRUD navigation actions and state change confirmation modals.
- * 
+ *
  * @component
- * 
+ *
  * @param usuarios - An array of user objects. Each object should include:
  *  - `id`: User ID number.
  *  - `nombres`: First name.
@@ -44,9 +53,9 @@ type TablaUsuariosProps = {
  *  - `tipo`: User type (e.g., "A" for admin, "D" for director, "E" for student).
  *  - `estado`: User state (e.g., "A" for active, "I" for inactive).
  *  - `redSocial`: Object containing optional social media links.
- * 
+ *
  * @returns {JSX.Element} A table listing users with their information, roles, states, social networks, and action buttons.
- * 
+ *
  * @example
  * ```tsx
  * <TablaUsuarios usuarios={listaDeUsuarios} />
@@ -74,7 +83,12 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
         selectUsuario?.id ?? -1,
         selectUsuario?.estado == "A" ? "I" : "A"
       ),
-    mutationKey: ["Update User", selectUsuario?.id ?? -1, selectUsuario?.estado == "A" ? "I" : "A", token],
+    mutationKey: [
+      "Update User",
+      selectUsuario?.id ?? -1,
+      selectUsuario?.estado == "A" ? "I" : "A",
+      token,
+    ],
     onError: (err) => setError(err),
     onSuccess: () => {
       showDialog({
@@ -188,15 +202,20 @@ const TablaUsuarios: React.FC<TablaUsuariosProps> = ({ usuarios }) => {
       name: "Acciones",
       cell: (row) => (
         <Stack direction={"row"}>
+          <Tooltip
+            title="Ver Portafolio"
+            onClick={() => navigate(rutasUsuarios.portafolio.replace(":id", row.id.toString()))}
+          >
+            <IconButton>
+              <AccountBoxIcon />
+            </IconButton>
+          </Tooltip>
           <ActionButton
-            mode={actionButtonTypes.ver}
+            mode={actionButtonTypes.editar}
             onClick={() =>
-              navigate(rutasUsuarios.portafolio.replace(":id", row.id.toString()))
+              navigate(rutasUsuarios.modificarPerfil.replace(":id", row.id.toString()))
             }
           />
-          <ActionButton mode={actionButtonTypes.editar} onClick={() =>
-              navigate(rutasUsuarios.modificarPerfil.replace(":id", row.id.toString()))
-            }/>
           {row.estado == "A" ? (
             <ActionButton
               mode={actionButtonTypes.deshabilitarUsuario}

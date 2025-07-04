@@ -90,7 +90,7 @@ function useErrorReader(showDialog: ShowDialogFn) {
       },
       onCancel: undefined,
       reload: false,
-      _closeOnAccept: true
+      _closeOnAccept: true,
     });
   }, [error]);
 
