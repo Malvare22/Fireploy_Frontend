@@ -225,7 +225,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ proyecto, handleOpen, 
               {proyecto.descripcion}
             </Typography>
           ) : (
-            <Alert severity="info" sx={{ width: "100%" }}>
+            <Alert severity="info">
               <Typography variant="body2">
                 {"Descripción no disponible"}
               </Typography>
