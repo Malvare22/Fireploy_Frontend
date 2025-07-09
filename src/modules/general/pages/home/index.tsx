@@ -87,9 +87,22 @@ export enum labelHome {
  * @returns {JSX.Element} The home page layout with sections showcasing content and actions.
  */
 export default function Home() {
+
+
+  const [counter, setCounter] = useState(0);
+
+  if(counter == 1){
+    throw new Error('???')
+  }
+
+  const throwErrorTest = () => {
+    setCounter(1)
+  }
+
   const theme = useTheme();
   return (
     <Box>
+      <Button onClick={throwErrorTest}>{"For the science!"}</Button>
       <Box sx={{ paddingX: { md: 4, xs: 2 }, minHeight: "90vh" }}>
         <Principal />
       </Box>

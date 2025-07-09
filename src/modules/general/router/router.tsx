@@ -4,7 +4,6 @@ import LayoutPrelogin from "../layouts/prelogin";
 import Login from "../pages/login";
 import Registrar from "../pages/registro";
 import LayoutAuthenticated from "../layouts/auth";
-import ErrorPage from "../pages/404";
 import RecuperarContrasenia from "../pages/recuperar";
 import ReestablecerContrasenia from "../pages/reestablecerContrasenia";
 import { routerMaterias } from "@modules/materias/router/router";
@@ -108,14 +107,6 @@ export const routerGeneralPaper: RouteObject = {
     {
       path: rutasGeneral.explorarProyectos,
       element: <ExplorarProyectos />,
-    },
-    {
-      path: rutasGeneral.detectAnomaly,
-      element: <ErrorPage />,
-    },
-    {
-      path: "*",
-      element: <ErrorPage />,
     },
   ],
 };
