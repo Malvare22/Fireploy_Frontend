@@ -31,6 +31,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import { useNavigate } from "react-router";
 import { rutasGeneral } from "@modules/general/router/routes";
 import { openInNewTab } from "@modules/general/utils/openTab";
+import { REFERENCE_TO_SITES } from "@modules/general/enums/referencesToSites";
 
 export enum labelHome {
   princialContent = "Despliega tus aplicativos web de manera automática",
@@ -136,7 +137,7 @@ function Principal() {
                   size={!matches ? "medium" : "large"}
                   endIcon={<GitHubIcon />}
                   sx={{ borderRadius: 2, backgroundColor: "rgb(64, 56, 56)" }}
-                  onClick={() => openInNewTab("https://github.com/Fireploy")}
+                  onClick={() => openInNewTab(REFERENCE_TO_SITES.GITHUB)}
                 >
                   {labelHome.github}
                 </Button>
@@ -147,7 +148,7 @@ function Principal() {
                   size={!matches ? "medium" : "large"}
                   endIcon={<DescriptionIcon />}
                   sx={{ borderRadius: 2, backgroundColor: "rgb(64, 56, 56)" }}
-                  onClick={() => openInNewTab("https://app103.proyectos.fireploy.online/docs/intro")}
+                  onClick={() => openInNewTab(REFERENCE_TO_SITES.DOCUMENTATION)}
                 >
                   {labelHome.docs}
                 </Button>

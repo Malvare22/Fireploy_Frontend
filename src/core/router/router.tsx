@@ -1,4 +1,4 @@
-import ErrorBoundary from "@core/errorCatch/errorBoundary";
+import ErrorBoundary from "@core/errorBoundary/errorBoundary";
 import { authenticatedRoutes, routerGeneral, routerGeneralPaper } from "@modules/general/router/router";
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 

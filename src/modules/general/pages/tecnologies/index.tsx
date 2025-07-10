@@ -19,7 +19,7 @@ export enum labelTecnologiesView {
  * TecnologiesView component – Renders a section showcasing technologies available for deployment.
  * Includes introductory text, a carousel banner, and a grid of technology cards.
  *
- * This component provides an overview of technologies supported by Fireploy, 
+ * This component provides an overview of technologies supported by Fireploy,
  * highlighting templates and links to documentation and repositories.
  *
  * @component
@@ -40,8 +40,16 @@ function TecnologiesView() {
     opacity: 1;
   }`;
 
-  type FilteredKeys = Exclude<keyof typeof TECNOLOGIES, "Java" | "PHP">;
+  type FilteredKeys = keyof typeof TECNOLOGIES;
   const tecnologies: [FilteredKeys, string, string, string, string, string][] = [
+    [
+      "Html",
+      getImage["html5"].ruta,
+      "Es el componente más básico de la Web. Define el significado y la estructura del contenido web. Además de HTML, generalmente se utilizan otras tecnologías para describir la apariencia/presentación de una página web (CSS) o la funcionalidad/comportamiento (JavaScript).",
+      "http://fireploy.online:3001/docs/introduccion",
+      "https://developer.mozilla.org/es/docs/Web/HTML",
+      "https://github.com/Fireploy/Html-Template",
+    ],
     [
       "Angular",
       getImage["angular"].ruta,
@@ -67,14 +75,6 @@ function TecnologiesView() {
       "https://github.com/Fireploy/NextJS-Template",
     ],
     [
-      "Laravel",
-      getImage["laravel"].ruta,
-      "Ofrece un ecosistema completo para desarrolladores web. Nuestro framework PHP de código abierto, productos, paquetes y kits de inicio ofrecen todo lo necesario para crear, implementar y supervisar aplicaciones web.",
-      "http://fireploy.online:3001/docs/introduccion",
-      "https://laravel.com/",
-      "https://github.com/Fireploy/Laravel-Template",
-    ],
-    [
       "Nodejs",
       getImage["nodejs_banner"].ruta,
       "Node.js® es un entorno de ejecución de JavaScript multiplataforma, de código abierto y gratuito que permite a los desarrolladores crear servidores, aplicaciones web, herramientas de línea de comando y scripts.",
@@ -82,14 +82,7 @@ function TecnologiesView() {
       "https://nodejs.org/es",
       "https://github.com/Fireploy/React-Template",
     ],
-    [
-      "Symfony",
-      getImage["symfony_banner"].ruta,
-      "Symfony es un conjunto de paquetes PHP, un marco de aplicaciones web, una filosofía y una comunidad, todos trabajando juntos en armonía.",
-      "http://fireploy.online:3001/docs/introduccion",
-      "https://symfony.com/",
-      "https://github.com/Fireploy/Symfony-Template",
-    ],
+
     [
       "Expressjs",
       getImage["expressjs_banner"].ruta,
@@ -97,6 +90,14 @@ function TecnologiesView() {
       "http://fireploy.online:3001/docs/introduccion",
       "https://expressjs.com/",
       "https://github.com/Fireploy/Express-Template",
+    ],
+    [
+      "Nestjs",
+      getImage["nest"].ruta,
+      "NestJS es un framework para aplicaciones Node.js escalables y mantenibles. Está construido con TypeScript y utiliza los principios de la programación orientada a objetos y funcional. Ideal para desarrollar aplicaciones del lado del servidor modernas.",
+      "http://fireploy.online:3001/docs/introduccion",
+      "https://nestjs.com/",
+      "https://github.com/Fireploy/NestJS-Template",
     ],
     [
       "Springboot",
@@ -107,13 +108,14 @@ function TecnologiesView() {
       "https://github.com/Fireploy/SpringBoot-Template",
     ],
     [
-      "Html",
-      getImage["html5"].ruta,
-      "Es el componente más básico de la Web. Define el significado y la estructura del contenido web. Además de HTML, generalmente se utilizan otras tecnologías para describir la apariencia/presentación de una página web (CSS) o la funcionalidad/comportamiento (JavaScript).",
+      "Java",
+      getImage["java"].ruta,
+      "Java es un lenguaje de programación orientado a objetos ampliamente utilizado para construir aplicaciones robustas, seguras y portables. Su plataforma permite desarrollar desde aplicaciones móviles hasta sistemas empresariales.",
       "http://fireploy.online:3001/docs/introduccion",
-      "https://developer.mozilla.org/es/docs/Web/HTML",
-      "https://github.com/Fireploy/Html-Template",
+      "https://www.oracle.com/java/",
+      "https://github.com/Fireploy/Java-Template",
     ],
+
     [
       "Django",
       getImage["django_banner"].ruta,
@@ -121,6 +123,39 @@ function TecnologiesView() {
       "http://fireploy.online:3001/docs/introduccion",
       "https://www.djangoproject.com/",
       "",
+    ],
+    [
+      "Fastapi",
+      getImage["fastAPI"].ruta,
+      "FastAPI es un framework moderno, rápido (de alto rendimiento) para construir APIs con Python 3.7+ basado en las anotaciones de tipo estándar de Python. Está enfocado en la facilidad de uso, rendimiento y validación automática de datos.",
+      "http://fireploy.online:3001/docs/introduccion",
+      "https://fastapi.tiangolo.com/",
+      "https://github.com/Fireploy/FastAPI-Template",
+    ],
+
+    [
+      "Php",
+      getImage["php_banner"].ruta,
+      "PHP es un lenguaje de programación del lado del servidor ampliamente usado para el desarrollo web. Permite crear sitios dinámicos y se integra fácilmente con bases de datos como MySQL. Es ideal para soluciones ligeras y personalizadas sin frameworks.",
+      "http://fireploy.online:3001/docs/introduccion",
+      "https://www.php.net/",
+      "https://github.com/Fireploy/PHP-Template",
+    ],
+    [
+      "Symfony",
+      getImage["symfony_banner"].ruta,
+      "Symfony es un conjunto de paquetes PHP, un marco de aplicaciones web, una filosofía y una comunidad, todos trabajando juntos en armonía.",
+      "http://fireploy.online:3001/docs/introduccion",
+      "https://symfony.com/",
+      "https://github.com/Fireploy/Symfony-Template",
+    ],
+    [
+      "Laravel",
+      getImage["laravel"].ruta,
+      "Ofrece un ecosistema completo para desarrolladores web. Nuestro framework PHP de código abierto, productos, paquetes y kits de inicio ofrecen todo lo necesario para crear, implementar y supervisar aplicaciones web.",
+      "http://fireploy.online:3001/docs/introduccion",
+      "https://laravel.com/",
+      "https://github.com/Fireploy/Laravel-Template",
     ],
   ];
 
@@ -158,13 +193,14 @@ function TecnologiesView() {
             </Grid>
           ))}
         </Grid>
-        
       </Stack>
-      <Box sx={{display: 'flex', justifyContent: 'center', paddingX: 2}}><Typography variant="caption" maxWidth={'800px'} textAlign={"center"}>
+      <Box sx={{ display: "flex", justifyContent: "center", paddingX: 2 }}>
+        <Typography variant="caption" maxWidth={"800px"} textAlign={"center"}>
           {
             "Fireploy no asume ninguna autoría sobre lo redactado en las descripciones de los frameworks y librerías plasmadas en esta vista, así como sus respectivas imágenes, dicha información fue extraída de sus sitios web oficiales y posee unicamente fines informativos y educativos."
           }
-        </Typography></Box>
+        </Typography>
+      </Box>
     </Stack>
   );
 }
@@ -187,7 +223,7 @@ export default TecnologiesView;
  * ```
  */
 function Carousel() {
-  type FilteredKeys = Exclude<keyof typeof TECNOLOGIES, "Java">;
+  type FilteredKeys = keyof typeof TECNOLOGIES;
   const tecs: [FilteredKeys, string][] = [
     ["Angular", getImage["angular_banner"].ruta],
     ["React", getImage["react"].ruta],
@@ -200,6 +236,9 @@ function Carousel() {
     ["Nodejs", getImage["nodejs_banner"].ruta],
     ["Django", getImage["django_banner"].ruta],
     ["Html", getImage["html5"].ruta],
+    ["Nestjs", getImage["nest_banner"].ruta],
+    ["Java", getImage["java_banner"].ruta],
+    ["Fastapi", getImage["fastapi_banner"].ruta],
   ];
 
   const scrollRightToLeft = keyframes`
@@ -322,7 +361,7 @@ function CardTecnology({
           </Box>
         </Grid>
         <Grid size={8}>
-          <Stack spacing={2} sx={{height: '100%'}} justifyContent={'space-between'}>
+          <Stack spacing={2} sx={{ height: "100%" }} justifyContent={"space-between"}>
             <Stack spacing={1}>
               <Stack direction={"row"} justifyContent={"space-between"}>
                 <Typography variant="h4">{title}</Typography>
@@ -332,7 +371,7 @@ function CardTecnology({
               </Stack>
               <Typography variant="body2">{subtitle}</Typography>
             </Stack>
-            <Stack spacing={1} sx={{paddingBottom: 2}}>
+            <Stack spacing={1} sx={{ paddingBottom: 2 }}>
               <Box>
                 <Button
                   endIcon={<RocketLaunchIcon />}
