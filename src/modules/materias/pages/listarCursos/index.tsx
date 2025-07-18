@@ -16,15 +16,15 @@ import { buttonTypes } from "@modules/general/types/buttons";
 // import RefinePanel, { FilterOptions } from "@modules/general/components/selects";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
-import {
-  FilterOptions,
-  SelectFilters,
-} from "@modules/general/components/selects";
+import { FilterOptions, SelectFilters } from "@modules/general/components/selects";
 import HiddenButton from "@modules/materias/components/hiddenInput";
 import { postCargaMasivaCursos } from "@modules/materias/services/post.cargar.cursos";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { rutasMaterias } from "@modules/materias/router/routes";
-import { hasValidExtension, msgNoValidExtension } from "@modules/general/utils/form/validExtensions";
+import {
+  hasValidExtension,
+  msgNoValidExtension,
+} from "@modules/general/utils/form/validExtensions";
 
 const filterOptions: FilterOptions = [
   {
@@ -123,30 +123,32 @@ function ListarCursos() {
   function setFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files ? e.target.files[0] : null;
 
-    if (file){
+    if (file) {
       if (!hasValidExtension(file.name, "EXCEL")) {
         showError();
         return;
       }
       showDialog({
-        message:
-        "¿Estás seguro de cargar este documento para la carga masiva de cursos?",
+        message: "¿Estás seguro de cargar este documento para la carga masiva de cursos?",
         title: "Gestión de cursos",
-        onCancel: handleClose,
+        onCancel: () => {
+          e.target.files = null;
+          handleClose();
+        },
         onAccept: () => updateFile(file),
         type: "default",
       });
     }
   }
 
-    function showError() {
-      showDialog({
-        message: msgNoValidExtension("EXCEL"),
-        type: "error",
-        onAccept: handleClose,
-        title: "Archivo no válido",
-      });
-    }
+  function showError() {
+    showDialog({
+      message: msgNoValidExtension("EXCEL"),
+      type: "error",
+      onAccept: handleClose,
+      title: "Archivo no válido",
+    });
+  }
 
   const { setError } = useErrorReader(showDialog);
 
@@ -197,12 +199,7 @@ function ListarCursos() {
               <GeneralButton
                 mode={buttonTypes.add}
                 onClick={() =>
-                  navigate(
-                    rutasMaterias.crearCurso.replace(
-                      ":idMateria",
-                      idMateria || "-1"
-                    )
-                  )
+                  navigate(rutasMaterias.crearCurso.replace(":idMateria", idMateria || "-1"))
                 }
               />
             </Box>
@@ -215,12 +212,7 @@ function ListarCursos() {
                 startIcon={<CloudUploadIcon />}
               >
                 Carga Masiva
-                <HiddenButton
-                  type="file"
-                  onChange={setFile}
-                  multiple
-                  accept=".xlsx"
-                />
+                <HiddenButton type="file" onChange={setFile} multiple accept=".xlsx" />
               </Button>
             </Box>
           </Stack>
