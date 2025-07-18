@@ -1,4 +1,5 @@
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import DnsIcon from '@mui/icons-material/Dns';
 import {
   Box,
   Button,
@@ -16,6 +17,7 @@ import {
   DatabaseFillGearIcon,
   PaletteIcon,
   PersonLinesFillIcon,
+  ShareFillIcon,
 } from "@modules/general/components/customIcons";
 import React, { ReactNode, useState } from "react";
 // import { useNavigate } from "react-router";
@@ -59,7 +61,7 @@ export enum labelHome {
   deployHTTPSTitle = "Seguridad",
   deployDBTitle = "Base de datos",
   deployLayersTitle = "Arquitectura dos capas",
-  deployShareBody = "Compartir proyectos es importante porque permite colaborar con otros, recibir retroalimentación, generar oportunidades, demostrar tus habilidades y, además, puede inspirar a quienes te rodean.",
+  deployShareBody = "Compartir proyectos es importante porque permite colaborar con otros, recibir retroalimentación, generar oportunidades, demostrar tus habilidades y, además, ayuda a inspirar a los demás.",
   deployHTTPSBody = "Protege la información que se transmite entre tu navegador y un sitio web mediante cifrado. Esto evita que terceros puedan interceptar o modificar datos sensibles, como contraseñas, tarjetas de crédito o información personal",
   deployDBBody = "Crear, administrar y consultar bases de datos desde cualquier lugar con conexión a internet, sin necesidad de instalar software localmente.",
   deployLayersBody = "Esta arquitectura facilita el desarrollo, la implementación y el mantenimiento del sistema, ya que separa claramente las responsabilidades.",
@@ -262,8 +264,8 @@ function Deploy() {
       labelHome.deployHTTPSTitle,
       labelHome.deployHTTPSBody,
     ],
-    [<SchoolIcon sx={{ fontSize: 72 }} />, labelHome.deployLayersTitle, labelHome.deployLayersBody],
-    [<SchoolIcon sx={{ fontSize: 72 }} />, labelHome.deployShareTitle, labelHome.deployShareBody],
+    [<DnsIcon sx={{ fontSize: 72 }} />, labelHome.deployLayersTitle, labelHome.deployLayersBody],
+    [<ShareFillIcon sx={{ fontSize: 72 }} />, labelHome.deployShareTitle, labelHome.deployShareBody],
   ];
 
   const navigate = useNavigate();
