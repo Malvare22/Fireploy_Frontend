@@ -20,10 +20,7 @@ import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import LoaderElement from "@modules/general/components/loaderElement";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import AlertDialog from "@modules/general/components/alertDialog";
-import {
-  FilterOptions,
-  SelectFilters,
-} from "@modules/general/components/selects";
+import { FilterOptions, SelectFilters } from "@modules/general/components/selects";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import HiddenButton from "@modules/materias/components/hiddenInput";
 import { postCargaMasivaMaterias } from "@modules/materias/services/post.cargar.materias";
@@ -68,10 +65,7 @@ const filterOptions: FilterOptions = [
   {
     label: "Semestre",
     key: "semestre",
-    options: getMateriasSemestresLabels().map(([value, text]) => [
-      text,
-      (x) => x == value,
-    ]),
+    options: getMateriasSemestresLabels().map(([value, text]) => [text, (x) => x == value]),
   },
 ];
 
@@ -119,9 +113,7 @@ function ListarMaterias() {
   const materias = data ? data.map(adaptMateriaService) : [];
 
   function handleSearchFn(x: MateriaTabla[], s: string) {
-    return x.filter((y) =>
-      `${y.codigo}${y.nombre}`.toLowerCase().includes(s.toLowerCase())
-    );
+    return x.filter((y) => `${y.codigo}${y.nombre}`.toLowerCase().includes(s.toLowerCase()));
   }
 
   /**
@@ -171,10 +163,12 @@ function ListarMaterias() {
         return;
       }
       showDialog({
-        message:
-          "¿Estás seguro de cargar este documento para la carga masiva de materias?",
+        message: "¿Estás seguro de cargar este documento para la carga masiva de materias?",
         title: "Gestión de materias",
-        onCancel: handleClose,
+        onCancel: () => {
+          e.target.files = null;
+          handleClose();
+        },
         onAccept: () => updateFile(file),
         type: "default",
       });
@@ -230,11 +224,7 @@ function ListarMaterias() {
             </Grid>
           </Grid>
 
-          <SelectFilters
-            data={materias}
-            setRefineData={setBuffer}
-            filterOptions={filterOptions}
-          />
+          <SelectFilters data={materias} setRefineData={setBuffer} filterOptions={filterOptions} />
 
           {materias && <TablaMaterias materias={dataToShow} />}
           {/* Action button to navigate to create new subject */}
@@ -254,12 +244,7 @@ function ListarMaterias() {
                 startIcon={<CloudUploadIcon />}
               >
                 Carga Masiva
-                <HiddenButton
-                  type="file"
-                  onChange={setFile}
-                  multiple
-                  accept=".xlsx"
-                />
+                <HiddenButton type="file" onChange={setFile} multiple accept=".xlsx" />
               </Button>
             </Box>
           </Stack>

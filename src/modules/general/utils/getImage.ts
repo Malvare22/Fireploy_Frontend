@@ -21,8 +21,9 @@ import react from "@modules/general/assets/bannerLogos/react.png";
 import springboot_banner from "@modules/general/assets/bannerLogos/springboot.png";
 import symfony_banner from "@modules/general/assets/bannerLogos/symphony.png";
 import django_banner from "@modules/general/assets/bannerLogos/django.png";
-
-
+import fastapi_banner from "@modules/general/assets/bannerLogos/fastAPI_banner.png";
+import java_banner from "@modules/general/assets/bannerLogos/java_banner.png";
+import nest_banner from "@modules/general/assets/bannerLogos/nest_banner.png";
 
 // Logos
 import nextjs from "@modules/general/assets/tecnologiesLogos/nextjs.png";
@@ -30,6 +31,9 @@ import angular from "@modules/general/assets/tecnologiesLogos/angular.png";
 import laravel from "@modules/general/assets/tecnologiesLogos/laravel.png";
 import springboot from "@modules/general/assets/tecnologiesLogos/springBoot.png";
 import html5 from "@modules/general/assets/tecnologiesLogos/html5.png";
+import nest from "@modules/general/assets/tecnologiesLogos/nest_logo.png";
+import java from "@modules/general/assets/tecnologiesLogos/java_logo.png";
+import fastAPI from "@modules/general/assets/tecnologiesLogos/fastAPI_logo.png";
 
 
 
@@ -82,6 +86,9 @@ export const assetImages = {
   springboot_banner,
   symfony_banner,
   django_banner,
+  nest_banner,
+  java_banner,
+  fastapi_banner,
 
   // Technology Logos
   angular,
@@ -89,6 +96,9 @@ export const assetImages = {
   nextjs,
   springboot,
   html5,
+  nest,
+  fastAPI,
+  java,
 
   mongodb,
   mysql,

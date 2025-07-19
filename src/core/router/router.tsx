@@ -1,3 +1,4 @@
+import ErrorBoundary from "@core/errorBoundary/errorBoundary";
 import { authenticatedRoutes, routerGeneral, routerGeneralPaper } from "@modules/general/router/router";
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 
@@ -12,6 +13,7 @@ import { createBrowserRouter, RouteObject } from "react-router-dom";
 const allRoutes: RouteObject = {
   path: "/",
   children: [routerGeneral, routerGeneralPaper, authenticatedRoutes],
+  errorElement: <ErrorBoundary/>
 };
 
 /**

@@ -134,7 +134,10 @@ function ListarUsuarios() {
         message:
           "¿Estás seguro de cargar este documento para la carga masiva de estudiantes?",
         title: "Gestión de estudiantes",
-        onCancel: handleClose,
+        onCancel: () => {
+          e.target.files = null;
+          handleClose();
+        },
         onAccept: () => updateFile(file),
         type: "default",
       });

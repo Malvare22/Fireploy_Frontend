@@ -1,9 +1,11 @@
 import { Box, Grid, Paper, Stack, Typography, useTheme } from "@mui/material";
 import { LabelFooter } from "@modules/general/enums/labelFooter";
 import { getImage } from "../../utils/getImage";
-import BalanceIcon from '@mui/icons-material/Balance';
-import BookIcon from '@mui/icons-material/Book';
-import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
+import BalanceIcon from "@mui/icons-material/Balance";
+import BookIcon from "@mui/icons-material/Book";
+import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
+import { openInNewTab } from "@modules/general/utils/openTab";
+import { REFERENCE_TO_SITES } from "@modules/general/enums/referencesToSites";
 
 /**
  * `Footer` component that displays information about Fireploy,
@@ -27,7 +29,7 @@ function Footer(): JSX.Element {
         color: "white",
         fontWeight: "550",
         borderRadius: 0,
-        paddingY: 2
+        paddingY: 2,
       }}
     >
       <Grid container spacing={3}>
@@ -54,9 +56,12 @@ function Footer(): JSX.Element {
             flexDirection: "column",
             gap: 2,
           }}
-          size={{ lg: 1.5, xs: 6}}
+          size={{ lg: 1.5, xs: 6 }}
         >
-          <Stack alignItems={'center'} direction={'row'} spacing={1}><Typography variant="h6">{LabelFooter.recursos}</Typography><BookIcon color="action"/></Stack>
+          <Stack alignItems={"center"} direction={"row"} spacing={1}>
+            <Typography variant="h6">{LabelFooter.recursos}</Typography>
+            <BookIcon color="action" />
+          </Stack>
 
           <Typography variant="body2">{LabelFooter.documentacion}</Typography>
 
@@ -72,11 +77,25 @@ function Footer(): JSX.Element {
           }}
           size={{ lg: 2, xs: 6 }}
         >
-          <Stack alignItems={'center'} direction={'row'} spacing={1}><Typography variant="h6">{LabelFooter.redesSociales}</Typography><ConnectWithoutContactIcon color="action"/></Stack>
+          <Stack alignItems={"center"} direction={"row"} spacing={1}>
+            <Typography variant="h6">{LabelFooter.redesSociales}</Typography>
+            <ConnectWithoutContactIcon color="action" />
+          </Stack>
 
-          <Typography variant="body2">{LabelFooter.linkedin}</Typography>
+          <Typography component={"a"} onClick={() => openInNewTab(REFERENCE_TO_SITES.FACEBOOK)} variant="body2">
+            {LabelFooter.facebook}
+          </Typography>
 
-          <Typography variant="body2">{LabelFooter.facebook}</Typography>
+          <Typography
+            component={"a"}
+            sx={{
+              cursor: "pointer",
+            }}
+            onClick={() => openInNewTab(REFERENCE_TO_SITES.YOUTUBE)}
+            variant="body2"
+          >
+            {LabelFooter.youtube}
+          </Typography>
         </Grid>
 
         {/* Legal Terms Column */}
@@ -88,19 +107,21 @@ function Footer(): JSX.Element {
           }}
           size={{ lg: 2.5 }}
         >
-          <Stack direction={'row'} alignItems={'center'} spacing={1}><Typography variant="h6">{LabelFooter.terminosLegales}</Typography> <BalanceIcon color="action"/></Stack>
+          <Stack direction={"row"} alignItems={"center"} spacing={1}>
+            <Typography variant="h6">{LabelFooter.terminosLegales}</Typography>{" "}
+            <BalanceIcon color="action" />
+          </Stack>
 
           <Typography variant="body2">{LabelFooter.licencia}</Typography>
         </Grid>
 
         {/* UFPS Logo */}
         <Grid size={{ lg: 3 }}>
-          
           <Box
             component={"img"}
             sx={{
               width: "100%",
-              marginTop: -2
+              marginTop: -2,
             }}
             src={getImage["ingSistemasLogo"].ruta}
           ></Box>
