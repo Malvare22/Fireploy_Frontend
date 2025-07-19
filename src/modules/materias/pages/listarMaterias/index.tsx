@@ -69,6 +69,7 @@ const filterOptions: FilterOptions = [
   },
 ];
 
+
 /**
  * Handles subject listing, search, filtering, error handling, and navigation.
  * It fetches subjects using a token and supports file upload functionality.
