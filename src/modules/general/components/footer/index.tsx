@@ -63,9 +63,27 @@ function Footer(): JSX.Element {
             <BookIcon color="action" />
           </Stack>
 
-          <Typography variant="body2">{LabelFooter.documentacion}</Typography>
+          <Typography
+            component={"a"}
+            sx={{
+              cursor: "pointer",
+            }}
+            onClick={() => openInNewTab(REFERENCE_TO_SITES.DOCUMENTATION)}
+            variant="body2"
+          >
+            {LabelFooter.documentacion}
+          </Typography>
 
-          <Typography variant="body2">{LabelFooter.plantillas}</Typography>
+          <Typography
+            component={"a"}
+            sx={{
+              cursor: "pointer",
+            }}
+            onClick={() => openInNewTab(REFERENCE_TO_SITES.TEMPLATES_REPOSITORIES)}
+            variant="body2"
+          >
+            {LabelFooter.plantillas}
+          </Typography>
         </Grid>
 
         {/* Social Media Column */}
@@ -82,7 +100,14 @@ function Footer(): JSX.Element {
             <ConnectWithoutContactIcon color="action" />
           </Stack>
 
-          <Typography component={"a"} onClick={() => openInNewTab(REFERENCE_TO_SITES.FACEBOOK)} variant="body2">
+          <Typography
+            component={"a"}
+            sx={{
+              cursor: "pointer",
+            }}
+            onClick={() => openInNewTab(REFERENCE_TO_SITES.FACEBOOK)}
+            variant="body2"
+          >
             {LabelFooter.facebook}
           </Typography>
 

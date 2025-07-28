@@ -1,7 +1,8 @@
 export enum REFERENCE_TO_SITES {
-    FACEBOOK = '',
+    FACEBOOK = 'https://web.facebook.com/people/Fireploy-DevOps/61578960564476/',
     YOUTUBE = 'https://www.youtube.com/channel/UCoUaSi5mrKEDXKALglJz_uA',
     GITHUB = 'https://github.com/FireployOfficial',
+    TEMPLATES_REPOSITORIES = 'https://github.com/FireployOfficial?tab=repositories',
     DOCUMENTATION = 'https://app103.proyectos.fireploy.online',
     TEMPLATE_HTML = "https://github.com/FireployOfficial/Template-HTML",
     TEMPLATE_ANGULAR = "https://github.com/FireployOfficial/Template-Angular",
