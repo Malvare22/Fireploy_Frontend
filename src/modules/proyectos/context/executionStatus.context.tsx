@@ -55,6 +55,7 @@ export function ProjectExecutionStatusContextProvider({
   const { data, error, refetch } = useQuery({
     queryFn: async () => {
       if (projectId != -1) return await getProjectById(token, projectId);
+      return null;
     },
     queryKey: ["Get Status Project", projectId, token],
     refetchInterval: 10000,
