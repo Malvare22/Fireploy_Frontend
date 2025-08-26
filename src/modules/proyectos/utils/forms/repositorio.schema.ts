@@ -39,9 +39,9 @@ export const RepositorioSchema: z.ZodType<Omit<Repositorio, 'ficheros'>> = z
   .refine(
     (data) => {
       if (!data.file) {
-        return !!data.url && data.url.length <= 256;
+        return data.url && data.url.length <= 256;
       }
-      return false;
+      return true;
     },
     {
       message: "La longitud máxima permitida es de 256 caracteres",
@@ -55,7 +55,7 @@ export const RepositorioSchema: z.ZodType<Omit<Repositorio, 'ficheros'>> = z
         }).safeParse(data.url);
         return urlCheck.success;
       }
-      return false;
+      return true;
     },
     {
       message: "Debe ser una dirección URL válida de GitHub o GitLab",
