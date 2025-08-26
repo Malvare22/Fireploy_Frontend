@@ -45,6 +45,7 @@ import { useNotificationContext } from "@modules/general/context/notificationCon
 import { rutasMaterias } from "@modules/materias/router/routes";
 import SchoolIcon from "@mui/icons-material/School";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 function getNavigationElements(userInformation: AccountInformation): Navigation {
   return [
@@ -108,6 +109,15 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
           title: "Crear Proyectos",
           icon: <NoteAddIcon sx={{ fill: "white" }} />,
         },
+        ...(userInformation.tipo !== "A"
+          ? []
+          : [
+              {
+                segment: rutasProyectos.adminProyectos as string,
+                title: "Administrar Proyectos",
+                icon: <AdminPanelSettingsIcon sx={{ fill: "white" }} />,
+              },
+            ]),
       ],
     },
     ...(userInformation.tipo !== "A"
@@ -538,9 +548,7 @@ export default function DashboardLayoutBasic(props: any) {
               ),
             }}
           >
-            <Box marginTop={-10}>
-              {props.children}
-            </Box>
+            <Box marginTop={-10}>{props.children}</Box>
           </DashboardLayout>
         </AppProvider>
       ) : (

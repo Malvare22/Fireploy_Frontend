@@ -29,6 +29,8 @@ import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import { getProjectById } from "@modules/proyectos/services/get.project";
 import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import { openInNewTab } from "@modules/general/utils/openTab";
 
 type Props = {
   projectStatus: EstadoEjecucionProyecto;
@@ -36,14 +38,14 @@ type Props = {
 
 /**
  * ExecutionState component – displays an icon representation of the current execution status of the project.
- * 
+ *
  * This component renders an icon with a tooltip based on the provided status code.
  * Useful for giving users a quick visual indication of deployment or runtime state.
- * 
+ *
  * @component
- * 
+ *
  * @param {string} projectStatus - A status code representing the current execution state ("E", "N", "F", or "L").
- * 
+ *
  * @returns {JSX.Element} A status icon with a tooltip.
  */
 export function ExecutionState({ projectStatus }: Props) {
@@ -82,13 +84,13 @@ export function ExecutionState({ projectStatus }: Props) {
 
 /**
  * ExecutionStateWithoutStyles component – a simpler version of `ExecutionState` without color styling.
- * 
+ *
  * This component shows status icons with tooltips, useful for embedding inside styled elements.
- * 
+ *
  * @component
- * 
+ *
  * @param {string} projectStatus - A status code representing the current execution state ("E", "N", "F", or "L").
- * 
+ *
  * @returns {JSX.Element} A minimal status icon with tooltip.
  */
 export function ExecutionStateWithoutStyles({ projectStatus }: Props) {
@@ -131,13 +133,13 @@ type ChipExecutionStateProps = {
 
 /**
  * ChipExecutionState component – a labeled and styled visual chip indicating the current execution status.
- * 
+ *
  * Combines a colored box with a label and an icon that reflects the state of the project execution.
- * 
+ *
  * @component
- * 
+ *
  * @param {string} projectStatus - A status code indicating current execution state ("E", "N", "F", or "L").
- * 
+ *
  * @returns {JSX.Element} A chip-style label with icon showing project status.
  */
 export function ChipExecutionState({ projectStatus }: ChipExecutionStateProps) {
@@ -169,7 +171,7 @@ export function ChipExecutionState({ projectStatus }: ChipExecutionStateProps) {
           color: "white",
           maxWidth: "fit-content",
           paddingX: 2,
-          paddingY: 0.5
+          paddingY: 0.5,
         }}
       >
         <Typography>{label.text}</Typography>
@@ -185,14 +187,14 @@ type ShowDeployLoadProps = {
 
 /**
  * ShowDeployLoad component – displays a UI component indicating project deployment is in progress or in queue.
- * 
+ *
  * If `queuePosition` is defined, the user is informed of their current position in the deployment queue.
  * Otherwise, it shows a circular progress loader with an ongoing deployment message.
- * 
+ *
  * @component
- * 
+ *
  * @param {number|null} queuePosition - The current position in the deployment queue, or null if unknown.
- * 
+ *
  * @returns {JSX.Element} An alert component with either queue information or loading indicator.
  */
 export function ShowDeployLoad({ queuePosition }: ShowDeployLoadProps) {
@@ -243,15 +245,15 @@ type PropsChangeStatus = {
 
 /**
  * ChangeStatus component – provides controls to change the runtime status of a project.
- * 
+ *
  * Offers buttons to deploy, start, or stop the project. Handles user confirmation and triggers
  * corresponding API mutations through react-query.
- * 
+ *
  * @component
- * 
+ *
  * @param {number} id - The unique identifier of the project.
  * @param {boolean} hasUrl - Indicates whether the project has a configured URL.
- * 
+ *
  * @returns {JSX.Element} UI buttons and icons to trigger project state changes.
  */
 export function ChangeStatus({ id, hasUrl }: PropsChangeStatus) {
@@ -409,4 +411,177 @@ export function ChangeStatus({ id, hasUrl }: PropsChangeStatus) {
 
 export function syncErrorProject() {
   throw new Error("El proyecto se encuentra desincronizado, por favor actualiza la vista");
+}
+
+type PropsChangeStatusTable = {
+  id: number;
+  hasUrl: boolean;
+  currentStatus: EstadoEjecucionProyecto;
+  refetch: Function;
+  urlOfSite?: string;
+};
+
+export function ChangeStatusForTable({
+  id,
+  hasUrl,
+  currentStatus,
+  refetch,
+  urlOfSite,
+}: PropsChangeStatusTable) {
+  const { showDialog, setIsLoading, handleClose, isLoading } = useAlertDialogContext();
+
+  async function handleAction(newStatus: EstadoEjecucionProyecto | "D") {
+    switch (newStatus) {
+      case "F":
+        showDialog({
+          message: "¿Está seguro de que desea detener la ejecución de este proyecto?",
+          onAccept: () => {
+            stopProject(id);
+            handleClose();
+          },
+          onCancel: () => {
+            handleClose();
+          },
+          title: "Estado de Proyecto",
+          type: "default",
+        });
+        break;
+
+      case "D":
+        showDialog({
+          message: "¿Está seguro de que desea desplegar este proyecto?",
+          onAccept: () => {
+            loadProject(id);
+            handleClose();
+          },
+          onCancel: () => {
+            handleClose();
+          },
+          title: "Estado de Proyecto",
+          type: "default",
+        });
+
+        break;
+
+      case "N":
+        showDialog({
+          message: "¿Está seguro de que desea reanudar la ejecución de este proyecto?",
+          onAccept: () => {
+            startProject(id);
+            handleClose();
+          },
+          onCancel: () => {
+            handleClose();
+          },
+          title: "Estado de Proyecto",
+          type: "default",
+        });
+
+        break;
+    }
+  }
+
+  const { setError } = useErrorReader(showDialog);
+
+  const { token } = useAuth().accountInformation;
+
+  const { mutate: loadProject } = useMutation({
+    mutationFn: async (id: number) => {
+      const getCurrent = await getProjectById(token, id);
+      if (getCurrent.estado_ejecucion == currentStatus) {
+        postDeployProject(id, token);
+        await setTimeout(async () => {
+          await refetch();
+        }, 1500);
+        return;
+      }
+
+      syncErrorProject();
+    },
+    mutationKey: ["Load Project", id, token],
+    onError: (error) => setError(error),
+  });
+
+  const { mutate: startProject } = useMutation({
+    mutationFn: async (id: number) => {
+      setIsLoading(true);
+      const getCurrent = await getProjectById(token, id);
+      if (getCurrent.estado_ejecucion == currentStatus) {
+        await postStartProject(id, token);
+        await setTimeout(async () => {
+          await refetch();
+        }, 1500);
+        return;
+      }
+      syncErrorProject();
+    },
+    mutationKey: ["Start Project", id, token],
+    onError: (error) => setError(error),
+    onSuccess: () => {
+      showDialog({
+        message: "Se ha reanudado el proyecto correctamente",
+        onAccept: () => handleClose(),
+        title: "Despliegue Proyecto",
+        type: "success",
+      });
+    },
+  });
+
+  const { mutate: stopProject } = useMutation({
+    mutationFn: async (id: number) => {
+      setIsLoading(true);
+      const getCurrent = await getProjectById(token, id);
+      if (getCurrent.estado_ejecucion == currentStatus) {
+        await postStopProject(id, token);
+        await setTimeout(async () => {
+          await refetch();
+        }, 1500);
+        return;
+      }
+      syncErrorProject();
+    },
+    mutationKey: ["Stop Project", id, token],
+    onError: (error) => setError(error),
+    onSuccess: () => {
+      showDialog({
+        message: "Se ha detenido el proyecto correctamente",
+        onAccept: () => handleClose(),
+        title: "Modificación de estado Proyecto",
+        type: "success",
+      });
+    },
+  });
+
+  return (
+    <>
+      <Tooltip title="Desplegar Proyecto">
+        <IconButton onClick={() => handleAction("D")} loading={isLoading || currentStatus == "L"}>
+          <RocketLaunchIcon fontSize="medium" />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Reanudar Proyecto">
+        <IconButton
+          disabled={currentStatus != "F" || !hasUrl || isLoading}
+          onClick={() => handleAction("N")}
+        >
+          <PlayCircleFilledWhiteIcon fontSize="medium" />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Detener Proyecto">
+        <IconButton disabled={currentStatus != "N" || isLoading} onClick={() => handleAction("F")}>
+          <StopCircleIcon fontSize="medium" />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Ver Sitio">
+        <IconButton
+          disabled={currentStatus != "N"}
+          onClick={() => {
+            if (urlOfSite) openInNewTab(urlOfSite);
+          }}
+        >
+          <OpenInNewIcon fontSize="medium" />
+        </IconButton>
+      </Tooltip>
+    </>
+  );
 }

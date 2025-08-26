@@ -32,7 +32,7 @@ import { useParams } from "react-router";
  */
 function VerProyecto() {
   function View() {
-    const { token, id:userId } = useAuth().accountInformation;
+    const { token, id: userId, tipo: rolDeUsuario } = useAuth().accountInformation;
 
     const { id } = useParams();
 
@@ -45,7 +45,11 @@ function VerProyecto() {
       queryFn: async () => {
         const project = await getProjectById(token, parseInt(id ?? "-1"));
         const ID = userId || -1;
-        if (project.creador?.id === ID || project.estudiantes.some((p) => p.id == ID)) {
+        if (
+          project.creador?.id === ID ||
+          project.estudiantes.some((p) => p.id == ID) ||
+          rolDeUsuario == "A"
+        ) {
           return project;
         } else {
           throw new Error("Usted no figura como integrante de este proyecto");

@@ -80,7 +80,10 @@ const SignIn: React.FC = () => {
   });
 
   const { mutate: mutateGoogle } = useMutation({
-    mutationFn: (googleToken: string) => postSignUpWithGoogle(googleToken),
+    mutationFn: async (googleToken: string) => {
+      console.log(googleToken);
+      return await postSignUpWithGoogle(googleToken);
+    },
     mutationKey: ["Login with Google"],
     onSuccess: (data) => onSuccess(data),
     onError: (error) => setError(error),
@@ -93,6 +96,7 @@ const SignIn: React.FC = () => {
    * @param data SignUpResponse from backend
    */
   const onSuccess = (data: SignUpResponse) => {
+    console.log(data);
     loginUser(data);
     navigate(rutasProyectos.menu);
   };

@@ -6,6 +6,7 @@ import VistaBasesDeDatos from "../pages/basesDeDatos";
 import ListarProyectos from "../pages/menuProyectos";
 import MisProyectos from "../pages/misProyectos";
 import { rutasProyectos } from "./routes";
+import VistaAdministrarProyectos from "../pages/adminProjects";
 
 /**
  * Array of route objects that define the routes and their corresponding components for the projects section.
@@ -47,5 +48,9 @@ export const routerProyectos: RouteObject[] = [
   {
     path: rutasProyectos.misProyectos,
     element: <MisProyectos />,
+  },
+  {
+    path: rutasProyectos.adminProyectos,
+    element: <VistaAdministrarProyectos />,
   },
 ];
