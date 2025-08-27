@@ -57,7 +57,9 @@ function ExplorarMaterias() {
   // Update materias state when data is fetched
   useEffect(() => {
     if (data) {
-      setMaterias(data.map((materia) => adaptMateriaServiceToMateria(materia)));
+      const materiasConsultadas = data.map((materia) => adaptMateriaServiceToMateria(materia));
+      const materiasDisponibles = materiasConsultadas.filter((materia) => materia.estado == 'A');
+      setMaterias(materiasDisponibles);
     }
   }, [data]);
 

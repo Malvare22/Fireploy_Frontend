@@ -11,18 +11,18 @@ type CardMateriaProps = {
 /**
  * CardMateria component – a visual card representation of a subject (materia),
  * showing its name, semester, and number of associated courses.
- * 
+ *
  * This component includes a styled header, chips for metadata, and a button
  * that navigates to the detail view for available courses related to the subject.
- * 
+ *
  * @component
- * 
+ *
  * @param {Object} materia - An object representing the subject, including its ID, name,
  * semester number, and an optional list of courses.
- * 
+ *
  * @returns {Visual element} A Material UI Card that displays subject information and
  * provides navigation to its course list if available.
- * 
+ *
  * @example
  * ```tsx
  * <CardMateria
@@ -44,7 +44,7 @@ const CardMateria: React.FC<CardMateriaProps> = ({ materia }) => {
     navigate(rutasMaterias.explorarCursos.replace(":idMateria", (materia.id ?? -1).toString()));
   }
 
-  const nCursos = (materia.cursos || []).length;
+  const nCursos = (materia.cursos?.filter((curso) => curso.estado == "A") || []).length;
 
   return (
     <Card sx={{ padding: 0 }}>
@@ -83,14 +83,19 @@ const CardMateria: React.FC<CardMateriaProps> = ({ materia }) => {
         >
           <Chip color="secondary" label={`Semestre: ${materia.semestre}`} />
           {nCursos > 0 ? (
-            <Chip color="info" label={nCursos == 1 ? '1 Curso disponible' : `${nCursos} Cursos disponibles`} />
+            <Chip
+              color="info"
+              label={nCursos == 1 ? "1 Curso disponible" : `${nCursos} Cursos disponibles`}
+            />
           ) : (
             <Chip color="default" label={`Cursos no disponibles`} />
           )}
         </Stack>
         <Stack alignItems={"center"} paddingBottom={2}>
           <Box>
-            <Button onClick={handleButton} variant="outlined">{"Ver más"}</Button>
+            <Button onClick={handleButton} variant="outlined">
+              {"Ver más"}
+            </Button>
           </Box>
         </Stack>
       </Stack>
