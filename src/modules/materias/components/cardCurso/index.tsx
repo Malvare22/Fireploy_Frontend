@@ -115,8 +115,8 @@ const CardCurso: React.FC<CardCursoProps> = ({
             </Box>
 
             <ActivityAndStudents
-              cntActities={(curso.estudiantes ?? []).length}
-              cntStudents={(curso.secciones ?? []).length}
+              cntStudents={(curso.estudiantes ?? []).length}
+              cntActities={(curso.secciones ?? []).length}
             />
             {!showDocentOwnerStyle && (
               <FrameDocente docente={!curso.docente ? null : (curso.docente as UsuarioCurso)} />

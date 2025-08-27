@@ -298,8 +298,8 @@ function VerInformacionCurso() {
                   }}
                 >
                   <ActivityAndStudents
-                    cntActities={(curso.estudiantes ?? []).length}
-                    cntStudents={(curso.secciones ?? []).length}
+                    cntStudents={(curso.estudiantes ?? []).length}
+                    cntActities={(curso.secciones ?? []).length}
                   />
                   {curso.docente ? (
                     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
