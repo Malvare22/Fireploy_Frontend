@@ -25,17 +25,17 @@ type TablaCursosAdminProps = {
 
 /**
  * TablaCursosAdmin component – a table interface to display and manage courses for administrators.
- * 
+ *
  * This component renders a data table with course information, allowing actions such as viewing,
  * editing, enabling, and disabling courses. It includes modals and alert dialogs for confirmation
  * and status feedback, and integrates mutation logic to update the backend.
- * 
+ *
  * @component
- * 
+ *
  * @param {array} cursos - An array of course objects. Each course object contains fields such as id, group, semester, status, and student count.
- * 
+ *
  * @returns {JSX.Element} A table interface displaying all courses with action controls and status dialogs.
- * 
+ *
  * @example
  * ```tsx
  * <TablaCursosAdmin cursos={cursosList} />
@@ -67,7 +67,7 @@ const TablaCursosAdmin: React.FC<TablaCursosAdminProps> = ({ cursos }) => {
       "Change Status Curso",
       selectCurso?.id || "",
       selectCurso?.estado == "I" ? "A" : "I",
-      token
+      token,
     ],
     onSuccess: () => {
       showDialog({
@@ -116,16 +116,25 @@ const TablaCursosAdmin: React.FC<TablaCursosAdminProps> = ({ cursos }) => {
       name: <Typography>{labelListarCursos.id}</Typography>,
       cell: (row) => <Typography>{row.id}</Typography>,
       sortable: true,
+      sortFunction: (a, b) => {
+        return a.id.localeCompare(b.id);
+      },
     },
     {
       name: <Typography>{labelListarCursos.grupo}</Typography>,
       cell: (row) => <Typography>{row.grupo}</Typography>,
       sortable: true,
+      sortFunction: (a, b) => {
+        return a.grupo.localeCompare(b.grupo);
+      },
     },
     {
       name: <Typography>{labelListarCursos.semestre}</Typography>,
       cell: (row) => <Typography>{row.semestre}</Typography>,
       sortable: true,
+      sortFunction: (a, b) => {
+        return a.semestre.localeCompare(b.semestre);
+      },
     },
     {
       name: <Typography>{labelListarCursos.estado}</Typography>,
@@ -137,6 +146,9 @@ const TablaCursosAdmin: React.FC<TablaCursosAdminProps> = ({ cursos }) => {
       name: <Typography>{labelListarCursos.cantidad}</Typography>,
       cell: (row) => <Typography>{row.cantidadEstudiantes}</Typography>,
       sortable: true,
+      sortFunction: (a, b) => {
+        return a.cantidadEstudiantes - b.cantidadEstudiantes;
+      },
     },
     {
       name: <Typography>{labelListarCursos.acciones}</Typography>,

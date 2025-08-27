@@ -14,6 +14,7 @@ import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
+import { getSemestreActual } from "@modules/general/utils/fechas";
 import CardCurso from "@modules/materias/components/cardCurso";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
 import { getCursoById, getCursos } from "@modules/materias/services/get.curso";
@@ -88,8 +89,11 @@ function VerCursosMateria() {
             return await getCursoById(token, curso.id);
           })
         );
-
-        setCursos(updatedCursos.map((x) => adaptCursoService(x)));
+        const cursosConsultados = updatedCursos.map((x) => adaptCursoService(x));
+        const cursosDisponibles = cursosConsultados.filter(
+          (curso) => curso.semestre == getSemestreActual() && curso.estado == "A"
+        );
+        setCursos(cursosDisponibles);
       }
 
       setMateria(adaptMateriaService(materia));

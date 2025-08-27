@@ -26,17 +26,6 @@ import {
   msgNoValidExtension,
 } from "@modules/general/utils/form/validExtensions";
 
-const filterOptions: FilterOptions = [
-  {
-    key: "estado",
-    label: "Estado",
-    options: [
-      ["Activo", (x: any) => x == "A"],
-      ["Inactivo", (x: any) => x == "I"],
-    ],
-  },
-];
-
 /**
  * ListarCursos component – Displays a list of courses for a specific subject (Materia).
  *
@@ -165,6 +154,35 @@ function ListarCursos() {
   useEffect(() => {
     setCursosBuffer(cursos);
   }, [cursos]);
+
+  const filterOptions: FilterOptions = [
+    {
+      key: "estado",
+      label: "Estado",
+      options: [
+        ["Activo", (x: any) => x === "A"],
+        ["Inactivo", (x: any) => x === "I"],
+      ],
+    },
+    {
+      key: "semestre",
+      label: "Semestre",
+      options: cursos
+        // Eliminamos duplicados si los hay
+        .map((curso) => curso.semestre)
+        .filter((value, index, self) => self.indexOf(value) === index)
+        // Ordenamos por año y semestre
+        .sort((a, b) => {
+          const [anioA, semA] = a.split("-").map(Number);
+          const [anioB, semB] = b.split("-").map(Number);
+
+          if (anioA !== anioB) return (anioA - anioB);
+          return semA - semB;
+        })
+        // Convertimos a la estructura [label, función de filtrado]
+        .map((semestre) => [semestre, (x: any) => x === semestre] as [string, (x: any) => boolean]),
+    },
+  ];
 
   return (
     <>

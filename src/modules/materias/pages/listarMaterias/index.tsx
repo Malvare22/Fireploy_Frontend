@@ -31,6 +31,8 @@ import {
   hasValidExtension,
   msgNoValidExtension,
 } from "@modules/general/utils/form/validExtensions";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import { postEditMateriaService } from "@modules/materias/services/patch.editar.materia";
 
 /**
  * ListarMaterias component – A component that handles listing, searching, filtering, and displaying subjects (materias).
@@ -68,7 +70,6 @@ const filterOptions: FilterOptions = [
     options: getMateriasSemestresLabels().map(([value, text]) => [text, (x) => x == value]),
   },
 ];
-
 
 /**
  * Handles subject listing, search, filtering, error handling, and navigation.
@@ -197,6 +198,44 @@ function ListarMaterias() {
   /** React Router navigation hook */
   const navigate = useNavigate();
 
+  function showConfirmCerrarSemestre() {
+    showDialog({
+      message: "¿Está seguro de que desea finalizar el semestre en curso?",
+      title: "Gestión de Semestre",
+      onAccept: cerrarSemestreRequest,
+      onCancel: handleClose,
+      type: "warning",
+      reload: true,
+    });
+  }
+
+  const { mutate: cerrarSemestreRequest } = useMutation({
+    mutationFn: cerrarSemestreFunction,
+    onSuccess: () => {
+      showDialog({
+        message: "Se ha cerrado el semestre correctamente",
+        title: "Gestión de Semestre",
+        onAccept: handleAccept,
+        type: "success",
+        reload: true,
+      });
+    },
+    onError: (err) => {
+      setError(err);
+    },
+  });
+
+  async function cerrarSemestreFunction() {
+    return await Promise.all(
+      (materias ?? []).map((materia) =>
+        postEditMateriaService(token, {
+          ...materia,
+          estado: "I",
+        })
+      )
+    );
+  }
+
   return (
     <>
       {/* Alert Dialog for errors or confirmations */}
@@ -245,6 +284,17 @@ function ListarMaterias() {
               >
                 Carga Masiva
                 <HiddenButton type="file" onChange={setFile} multiple accept=".xlsx" />
+              </Button>
+            </Box>
+            <Box>
+              <Button
+                component="label"
+                variant="contained"
+                tabIndex={-1}
+                startIcon={<CancelPresentationIcon />}
+                onClick={showConfirmCerrarSemestre}
+              >
+                Cerrar Semestre
               </Button>
             </Box>
           </Stack>

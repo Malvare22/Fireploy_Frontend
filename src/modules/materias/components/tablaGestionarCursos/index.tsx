@@ -200,7 +200,6 @@ const TablaGestionarCursos = () => {
           );
         }
       },
-      sortable: true,
       maxWidth: "120px",
     },
     {

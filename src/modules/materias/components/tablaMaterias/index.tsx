@@ -22,7 +22,7 @@ import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { useCustomTableStyles } from "@modules/general/hooks/useCustomTableStyles";
 import { paginationComponentOptions } from "@modules/general/utils/pagination";
 import { rutasMaterias } from "@modules/materias/router/routes";
-import StyleIcon from '@mui/icons-material/Style';
+import StyleIcon from "@mui/icons-material/Style";
 
 type TablaMateriasProps = {
   materias: MateriaTabla[];
@@ -88,6 +88,9 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
     {
       name: labelTablaMaterias.id,
       cell: (row) => <Typography>{row.codigo}</Typography>,
+      sortFunction: (a, b) => {
+        return a.codigo - b.codigo;
+      },
       sortable: true,
       width: "90px",
     },
@@ -95,11 +98,17 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
       name: labelTablaMaterias.nombre,
       cell: (row) => <Typography>{row.nombre}</Typography>,
       sortable: true,
+      sortFunction: (a, b) => {
+        return a.nombre.localeCompare(b.nombre);
+      },
     },
     {
       name: labelTablaMaterias.semestre,
       cell: (row) => <Typography>{row.semestre}</Typography>,
       sortable: true,
+      sortFunction: (a, b) => {
+        return a.semestre - b.semestre;
+      },
       center: true,
     },
     {
@@ -135,11 +144,13 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
       cell: (row) => {
         return (
           <Stack direction={"row"} justifyContent={"center"}>
-            <Tooltip title='Ver Cursos'>
-              <IconButton onClick={() => {
-                navigate(rutasMaterias.listarCursos.replace(":idMateria", row.codigo.toString()));
-              }}>
-                <StyleIcon/>
+            <Tooltip title="Ver Cursos">
+              <IconButton
+                onClick={() => {
+                  navigate(rutasMaterias.listarCursos.replace(":idMateria", row.codigo.toString()));
+                }}
+              >
+                <StyleIcon />
               </IconButton>
             </Tooltip>
             <ActionButton mode={actionButtonTypes.editar} onClick={() => handleEditMateria(row)} />
@@ -226,16 +237,24 @@ const TablaMaterias: React.FC<TablaMateriasProps> = ({ materias }) => {
         <EditarMateria id={selectMateria?.codigo ?? -1} handleCloseModal={handleCloseEdit} />
       </SpringModal>
       {isPending && <LoaderElement />}
-      {!isPending && (dataConIndice.length > 0 ? <DataTable
-          columns={columns}
-          data={dataConIndice}
-          customStyles={customStyles}
-          conditionalRowStyles={conditionalRowStyles}
-          pagination
-          paginationPerPage={20}
-          paginationRowsPerPageOptions={[20, 50, 100]}
-          paginationComponentOptions={paginationComponentOptions}
-        ></DataTable> : <Alert severity="warning">No se han encontrado materias disponibles (revisa que tus datos coincidan con los filtros)</Alert>)}
+      {!isPending &&
+        (dataConIndice.length > 0 ? (
+          <DataTable
+            columns={columns}
+            data={dataConIndice}
+            customStyles={customStyles}
+            conditionalRowStyles={conditionalRowStyles}
+            pagination
+            paginationPerPage={20}
+            paginationRowsPerPageOptions={[20, 50, 100]}
+            paginationComponentOptions={paginationComponentOptions}
+          ></DataTable>
+        ) : (
+          <Alert severity="warning">
+            No se han encontrado materias disponibles (revisa que tus datos coincidan con los
+            filtros)
+          </Alert>
+        ))}
     </>
   );
 };
