@@ -23,16 +23,16 @@ const passwordSchema = z.string().min(8, { message: "La contraseña debe tener a
     message: "La contraseña debe contener al menos un número.",
   })
   .regex(
-    /^[^@:/?&]+$/,
-    "No puede contener ninguno de los siguientes caracteres: [@, :, /, ?, &,]"
+    /^[^:\/?#\[\]@!$&'()*+,;=]+$/,
+    "No puede contener ninguno de los siguientes caracteres: [: / ? # [ ] @ ! $ & ' ( ) * + , ; =]"
   )
   .regex(/^\S*$/, {
     message: "No se admiten espacios vacíos",
   });
 
 const userNameSchema = FORM_CONSTRAINS.TEXT_LABEL.regex(
-  /^[^@:/?&]+$/,
-  "No puede contener ninguno de los siguientes caracteres: [@, :, /, ?, &,]"
+  /^[^:\/?#\[\]@!$&'()*+,;=]+$/,
+  "No puede contener ninguno de los siguientes caracteres: [: / ? # [ ] @ ! $ & ' ( ) * + , ; =]"
 ).regex(/^\S*$/, {
   message: "No se admiten espacios vacíos",
 });
