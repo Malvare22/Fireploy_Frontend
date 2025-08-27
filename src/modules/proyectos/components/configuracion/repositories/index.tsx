@@ -92,7 +92,7 @@ export function Repositories({ type }: Props) {
     resolver: zodResolver(ProyectoRepositoriesSchema),
   });
 
-  const { getValues, control, watch, reset, setValue } = methods;
+  const { getValues, control, reset, setValue, watch } = methods;
 
   useEffect(() => {
     reset(getValuesProject());

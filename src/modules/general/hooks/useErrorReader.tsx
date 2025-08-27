@@ -71,7 +71,7 @@ function useErrorReader(showDialog: ShowDialogFn) {
   useEffect(() => {
     // If there is no error, exit the effect early
     if (!error) return;
-
+    console.log(error)
     // Show the error dialog with the provided error details
     showDialog({
       type: "error",

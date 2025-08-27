@@ -26,4 +26,5 @@ export const rutasProyectos = {
   explorar: rutaBase + "/explorar",
   repositorios: rutaBase + "/repositorios",
   basesDeDatos: rutaBase + "/basesDeDatos",
+  adminProyectos: rutaBase + "/administrar/proyectos"
 };
