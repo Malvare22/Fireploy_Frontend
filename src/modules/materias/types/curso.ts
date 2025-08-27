@@ -1,3 +1,4 @@
+import { getSemestreActual } from "@modules/general/utils/fechas";
 import { Seccion } from "./seccion";
 
 /**
@@ -61,7 +62,7 @@ export type Curso = {
 export const cursoTemplate: Curso = {
   id: "-1",
   grupo: "",
-  semestre: "2025-1",
+  semestre: getSemestreActual(),
   descripcion: " ",
   estado: "A",
 };

@@ -35,8 +35,16 @@ export const adaptDateBackend = (fecha: string) => {
   return `${_fecha[0]}-${_fecha[1]}-${_fecha[2].slice(0, 2)}`;
 };
 
-export function getSemestre() {
-  return "2025-1";
+export function getSemestreActual() {
+  const hoy = new Date();
+  const anio = hoy.getFullYear();
+  const mes = hoy.getMonth() + 1; // getMonth() devuelve 0-11
+
+  // Primer semestre: enero (1) a junio (6)
+  // Segundo semestre: julio (7) a diciembre (12)
+  const semestre = mes <= 6 ? 1 : 2;
+
+  return `${anio}-${semestre}`;
 }
 
 /**

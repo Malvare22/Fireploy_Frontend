@@ -19,7 +19,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { getMateriaStatesArray } from "@modules/materias/utils/materias";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getCursoById, getCursos } from "@modules/materias/services/get.curso";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { adaptCursoService } from "@modules/materias/utils/adapters/curso.service";
 import { patchEditCurso } from "@modules/materias/services/patch.curso";
 import GeneralButton from "@modules/general/components/button";
@@ -43,7 +43,7 @@ import AlertDialog from "@modules/general/components/alertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
 import { labelEditCourse } from "@modules/materias/enums/labelEditCourse";
 import { postCreateCursoService } from "@modules/materias/services/post.crear.grupo";
-import { getSemestre } from "@modules/general/utils/fechas";
+import { getSemestreActual } from "@modules/general/utils/fechas";
 import { msgDescription } from "@modules/general/utils/formConstrains";
 import {
   letterOptionsForGroup,
@@ -112,7 +112,7 @@ function EditarCurso({ type }: EditarCursoProps) {
     resolver: zodResolver(CursoSchema),
     defaultValues: {
       descripcion: "",
-      semestre: getSemestre(),
+      semestre: getSemestreActual(),
       estado: "A",
       grupo: "",
     },
@@ -149,29 +149,6 @@ function EditarCurso({ type }: EditarCursoProps) {
     retry: 2,
   });
 
-  const [lettersOfCourse, setLettersOfCourse] = useState<LetterOption[]>([]);
-
-  const INITIAL_LETTER_OPTIONS: LetterOption[] = letterOptionsForGroup().map((x) => [x, true]);
-
-  useEffect(() => {
-    setLettersOfCourse(INITIAL_LETTER_OPTIONS);
-  }, []);
-
-  const REGEX_LETTER = /^[A-Z]$/;
-
-  useEffect(() => {
-    if (data) {
-      const options = INITIAL_LETTER_OPTIONS;
-      data.forEach((curso) => {
-        const letter = curso.grupo;
-        if (REGEX_LETTER.test(letter)) {
-          options[letter.charCodeAt(0) - OFF_SET_LETTERS_OF_GROUP][1] = false;
-        }
-      });
-      setLettersOfCourse(options);
-    }
-  }, [data]);
-
   /**
    * Mutation for editing course.
    */
@@ -199,7 +176,6 @@ function EditarCurso({ type }: EditarCursoProps) {
       setIsLoading(true);
       return await postCreateCursoService(token, parseInt(idMateria || "-1"), curso);
     },
-    mutationKey: ["Create Curso", methods.getValues(), token],
     onSuccess: () =>
       showDialog({
         message: "Curso creado correctamente",
@@ -263,6 +239,25 @@ function EditarCurso({ type }: EditarCursoProps) {
       ? await mutateCreateCurso(methods.getValues())
       : await mutatePatchCurso(methods.getValues());
   };
+
+  // Mapa[semestre] -> [letra, disponibilidad]
+  //Obtengo el semestre actual
+  const avaliableLetters = useMemo(() => {
+    const INITIAL_LETTER_OPTIONS: LetterOption[] = letterOptionsForGroup().map((x) => [x, true]);
+    const REGEX_LETTER = /^[A-Z]$/;
+    const options = INITIAL_LETTER_OPTIONS;
+    const semestreSeleccionado: string = watch("semestre");
+    const coursesInSameSemestre = data?.filter((x) => x.semestre == semestreSeleccionado);
+
+    coursesInSameSemestre?.forEach((curso) => {
+      const letter = curso.grupo;
+      if (REGEX_LETTER.test(letter)) {
+        options[letter.charCodeAt(0) - OFF_SET_LETTERS_OF_GROUP][1] = false;
+      }
+    });
+
+    return options.filter((letter) => letter[1] == true);
+  }, [watch("semestre"), data]);
 
   return (
     <>
@@ -363,13 +358,12 @@ function EditarCurso({ type }: EditarCursoProps) {
                             },
                           }}
                         >
-                          {lettersOfCourse.map(([option, valid]) => {
-                            if (valid)
-                              return (
-                                <MenuItem value={option} key={option}>
-                                  {option}
-                                </MenuItem>
-                              );
+                          {avaliableLetters.map(([option]) => {
+                            return (
+                              <MenuItem value={option} key={option}>
+                                {option}
+                              </MenuItem>
+                            );
                           })}
                         </TextField>
                       )}
