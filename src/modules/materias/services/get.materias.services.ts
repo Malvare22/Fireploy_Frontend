@@ -84,6 +84,9 @@ export const getAllAcademicInformation = async (
   const selectSeccion = new Map<number, string>();
 
   for (const curso of cursos) {
+
+    if(curso.estado == 'I') continue;
+
     let currentCursos = getCursosByMateria.get(curso.materia.id) ?? [];
 
     if (!getCursosByMateria.has(curso.materia.id)) {
@@ -92,7 +95,7 @@ export const getAllAcademicInformation = async (
 
     getCursosByMateria.set(curso.materia.id, [...currentCursos, curso.id]);
 
-    selectCurso.set(curso.id, curso.grupo);
+    selectCurso.set(curso.id, `${curso.grupo} - ${curso.semestre}`);
 
     getSeccionByCurso.set(
       curso.id,
