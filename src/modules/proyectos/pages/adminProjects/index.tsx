@@ -6,8 +6,10 @@ import TablaProyectos from "@modules/proyectos/components/tablaProyectos";
 import { getAllPublicProjects } from "@modules/proyectos/services/get.project";
 import { EstadoEjecucionProyecto, Proyecto } from "@modules/proyectos/types/proyecto.tipo";
 import { adaptProject } from "@modules/proyectos/utils/adapt.proyecto";
+import { getDataBaseTypesMap } from "@modules/proyectos/utils/database";
 import { getExecutionState } from "@modules/proyectos/utils/getExecutionState";
 import {
+  Box,
   Container,
   FormControl,
   InputLabel,
@@ -31,24 +33,34 @@ function VistaAdministrarProyectos() {
 
   const [selectMateria, setSelectMateria] = useState("");
   const [selectEstado, setSelectEstado] = useState("");
+  const [selectTechnologies, setSelectTechnologies] = useState("");
+  const [selectDatabase, setSelectDatabase] = useState("");
   const { filteredData, setSearchValue, searchValue } = useSearch();
 
   const filterByText = (a: String, b: String) => {
     return a.toLowerCase().includes(b.toLowerCase());
   };
 
-  const { materias, estados } = useMemo(() => {
+  const { materias, estados, basesDeDatos, tecnologias } = useMemo(() => {
     const materiasSet = new Set<string>();
     const estadosSet = new Set<string>();
+    const tecnologiasSet = new Set<string>();
+    const basesDeDatosSet = new Set<string>();
 
     projectList?.forEach((p: Proyecto) => {
       if (p.materiaInformacion?.nombre) materiasSet.add(p.materiaInformacion.nombre);
       if (p.estadoDeEjecucion) estadosSet.add(p.estadoDeEjecucion);
+      if (p.frontend?.informacion?.framework) tecnologiasSet.add(p.frontend.informacion.framework);
+      if (p.backend?.informacion?.framework) tecnologiasSet.add(p.backend.informacion.framework);
+      if (p.baseDeDatos?.tipo)
+        basesDeDatosSet.add(getDataBaseTypesMap.get(p.baseDeDatos.tipo) as string);
     });
 
     return {
       materias: Array.from(materiasSet),
       estados: Array.from(estadosSet),
+      tecnologias: Array.from(tecnologiasSet),
+      basesDeDatos: Array.from(basesDeDatosSet),
     };
   }, [projectList]);
 
@@ -63,9 +75,23 @@ function VistaAdministrarProyectos() {
     if (selectEstado) {
       data = data.filter((p: Proyecto) => p.estadoDeEjecucion === selectEstado);
     }
+    if (selectTechnologies) {
+      data = data.filter((p: Proyecto) =>
+        [p.frontend?.informacion?.framework, p.backend?.informacion?.framework].includes(
+          selectTechnologies
+        )
+      );
+    }
+
+    if (selectDatabase) {
+      data = data.filter((p: Proyecto) => {
+        if (p.baseDeDatos?.tipo)
+          return selectDatabase === (getDataBaseTypesMap.get(p.baseDeDatos.tipo) as string);
+      });
+    }
 
     return data;
-  }, [searchValue, selectMateria, selectEstado, projectList]);
+  }, [searchValue, selectMateria, selectEstado, projectList, selectDatabase, selectTechnologies]);
 
   return (
     <>
@@ -79,20 +105,50 @@ function VistaAdministrarProyectos() {
               <Stack>
                 <TextFieldSearch setSearchValue={setSearchValue} label="Buscar proyecto" />
               </Stack>
-              <Stack direction="row" spacing={2}>
-                {/* Select Materia */}
-                <FormControl sx={{ minWidth: 160 }}>
+              <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 2}}>
+                <FormControl sx={{ minWidth: {xs: 160, md: 240} }}>
                   <InputLabel>Materia</InputLabel>
                   <Select
                     value={selectMateria}
                     label="Materia"
                     onChange={(e) => setSelectMateria(e.target.value)}
-                    
                   >
                     <MenuItem value="">Todas</MenuItem>
                     {materias.map((materia) => (
                       <MenuItem key={materia} value={materia}>
                         {materia}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <FormControl sx={{ minWidth: 160 }}>
+                  <InputLabel>Tecnología</InputLabel>
+                  <Select
+                    value={selectTechnologies}
+                    label="Tecnología"
+                    onChange={(e) => setSelectTechnologies(e.target.value)}
+                  >
+                    <MenuItem value="">Todas</MenuItem>
+                    {tecnologias.map((tecnologia) => (
+                      <MenuItem key={tecnologia} value={tecnologia}>
+                        {tecnologia}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <FormControl sx={{ minWidth: 160 }}>
+                  <InputLabel>Base de Datos</InputLabel>
+                  <Select
+                    value={selectDatabase}
+                    label="Base de Datos"
+                    onChange={(e) => setSelectDatabase(e.target.value)}
+                  >
+                    <MenuItem value="">Todas</MenuItem>
+                    {basesDeDatos.map((db) => (
+                      <MenuItem key={db} value={db}>
+                        {db}
                       </MenuItem>
                     ))}
                   </Select>
@@ -114,7 +170,7 @@ function VistaAdministrarProyectos() {
                     ))}
                   </Select>
                 </FormControl>
-              </Stack>
+              </Box>
             </Stack>
             <TablaProyectos proyectos={dataToRender ?? []} trigger={refetch} />
           </Container>

@@ -10,6 +10,8 @@ import { ChangeStatusForTable, ChipExecutionState } from "../executionState";
 import { rutasProyectos } from "@modules/proyectos/router/routes";
 import { useAlertDialogContext } from "@modules/general/context/alertDialogContext";
 import AlertDialog from "@modules/general/components/alertDialog";
+import { ProjectTagsForList } from "@modules/general/components/projectTags";
+import { adaptProjectToCard } from "@modules/proyectos/utils/adapt.proyecto";
 
 type TablaProyectosProps = {
   proyectos: Proyecto[];
@@ -86,7 +88,13 @@ const TablaProyectos: React.FC<TablaProyectosProps> = ({ proyectos, trigger }) =
         const [a, b] = [rowA.estadoDeEjecucion ?? "E", rowB.estadoDeEjecucion ?? "E"];
         return a.localeCompare(b);
       },
+      width: "180px",
       sortable: true,
+    },
+    {
+      name: <Typography>{"Tecnología"}</Typography>,
+      cell: (row) => <ProjectTagsForList proyecto={adaptProjectToCard(row)} />,
+      width: "260px",
     },
     {
       name: <Typography>{"Acciones"}</Typography>,

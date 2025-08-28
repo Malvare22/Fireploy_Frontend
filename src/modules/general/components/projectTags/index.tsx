@@ -73,6 +73,55 @@ function ProjectTags({ proyecto }: { proyecto: ProyectoCard }) {
       </Box>
     </Box>
   );
+};
+
+
+export function ProjectTagsForList({ proyecto }: { proyecto: ProyectoCard }) {
+  return (
+    <Box sx={{ display: "flex", gap: 0.5 }}>
+      {proyecto.integrado && (
+        <Box>
+          <Chip
+            label={<Typography variant="caption">{proyecto.integrado.framework}</Typography>}
+            key={proyecto.integrado.framework}
+            color="info"
+          />
+        </Box>
+      )}
+      {proyecto.backend && (
+        <Box>
+          <Chip
+            label={<Typography variant="caption">{proyecto.backend.framework}</Typography>}
+            key={proyecto.backend.framework}
+            color="info"
+          />
+        </Box>
+      )}
+      {proyecto.frontend && (
+        <Box>
+          <Chip
+            label={<Typography variant="caption">{proyecto.frontend.framework}</Typography>}
+            key={proyecto.frontend.framework}
+            color="info"
+          />
+        </Box>
+      )}
+      {proyecto.dataBase && (
+        <Box>
+          <Chip
+            color="warning"
+            label={
+              <Typography color="white" variant="caption">
+                {proyecto.dataBase}
+              </Typography>
+            }
+            key={proyecto.dataBase}
+          />
+        </Box>
+      )}
+    </Box>
+  );
 }
 
 export default ProjectTags;
+
