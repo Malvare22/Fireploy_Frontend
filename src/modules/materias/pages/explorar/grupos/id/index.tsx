@@ -300,6 +300,7 @@ function VerInformacionCurso() {
                   <ActivityAndStudents
                     cntStudents={(curso.estudiantes ?? []).length}
                     cntActities={(curso.secciones ?? []).length}
+                    semester={curso.semestre}
                   />
                   {curso.docente ? (
                     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -335,7 +336,9 @@ function VerInformacionCurso() {
                     />
                   ))
                 ) : (
-                  <Alert severity="info">Este curso actualmente no tiene actividades agregadas</Alert>
+                  <Alert severity="info">
+                    Este curso actualmente no tiene actividades agregadas
+                  </Alert>
                 )}
               </Stack>
             </>
