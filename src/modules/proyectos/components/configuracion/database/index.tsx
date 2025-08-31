@@ -177,7 +177,7 @@ export const DataBase = ({ type }: Props) => {
       <Stack spacing={2}>
         <Stack><TransitionAlert severity="warning">
           {
-            "Para que surjan efecto los cambios realizados en esta sección, se requiere volver a desplegar el aplicativo"
+            "Para que surjan efecto los cambios realizados en esta sección, se requiere sincronizar el aplicativo"
           }
         </TransitionAlert>
         <Typography variant="h5">{"Base de Datos"}</Typography></Stack>

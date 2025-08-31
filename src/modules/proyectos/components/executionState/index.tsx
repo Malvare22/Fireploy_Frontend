@@ -279,7 +279,7 @@ export function ChangeStatus({ id, hasUrl }: PropsChangeStatus) {
 
       case "D":
         showDialog({
-          message: "¿Está seguro de que desea desplegar este proyecto?",
+          message: "¿Está seguro de que desea sincronizar este proyecto?",
           onAccept: () => {
             loadProject(id);
             handleClose();
@@ -449,7 +449,7 @@ export function ChangeStatusForTable({
 
       case "D":
         showDialog({
-          message: "¿Está seguro de que desea desplegar este proyecto?",
+          message: "¿Está seguro de que desea sincronizar este proyecto?",
           onAccept: () => {
             loadProject(id);
             handleClose();
