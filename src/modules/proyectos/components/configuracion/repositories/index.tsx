@@ -1,18 +1,6 @@
 import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
-import {
-  Box,
-  Button,
-  Divider,
-  Grid,
-  IconButton,
-  InputAdornment,
-  Stack,
-  TextField,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Divider, Grid, InputAdornment, Stack, TextField, Typography } from "@mui/material";
 import { Controller, useForm, useFormContext } from "react-hook-form";
-import EnviromentVariablesEditor from "../enviroment";
 import { TechnologyInputs } from "../../technologyInputs";
 import {
   ProyectoRepositoriesSchema,
@@ -36,25 +24,15 @@ import { FormProvider } from "react-hook-form";
 import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
 import { getProjectById } from "@modules/proyectos/services/get.project";
 import { syncErrorProject } from "../../executionState";
-import FolderZipIcon from "@mui/icons-material/FolderZip";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import HiddenButton from "@modules/materias/components/hiddenInput";
 import { KeysOfRepository } from "@modules/proyectos/types/keysOfRepository";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { GitlabIcon } from "@modules/general/components/customIcons";
 import { adaptProject } from "@modules/proyectos/utils/adapt.proyecto";
 import TransitionAlert from "@modules/general/components/transitionAlert";
-import TablaGestionarFicheros from "../../ficherosTable";
-import {
-  deleteFichero,
-  postFichero,
-} from "@modules/proyectos/services/post.fichero";
-import {
-  hasValidExtension,
-  msgNoValidExtension,
-  VALID_EXTENSIONS,
-} from "@modules/general/utils/form/validExtensions";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import { deleteFichero, postFichero } from "@modules/proyectos/services/post.fichero";
+import InputFileForRepository, { FilesRepository } from "./components/inputFile";
+import SelectorLayer from "./components/options";
+import ExtraFiles from "./components/extraFiles";
 
 type Props = {
   type: "edit" | "create";
@@ -94,211 +72,118 @@ export function Repositories({ type }: Props) {
 
   const { getValues, control, reset, setValue, watch } = methods;
 
+  //Reset form
   useEffect(() => {
     reset(getValuesProject());
-  }, [
-    getValuesProject("backend"),
-    getValuesProject("frontend"),
-    getValuesProject("integrado"),
-  ]);
+  }, [getValuesProject("backend"), getValuesProject("frontend"), getValuesProject("integrado")]);
 
-  const {
-    showDialog,
-    handleAccept,
-    handleClose,
-    open,
-    isLoading,
-    title,
-    message,
-    type: dialogType,
-    setIsLoading,
-    handleCancel,
-  } = useAlertDialog2();
+  const alertVariables = useAlertDialog2();
 
-  const { setError } = useErrorReader(showDialog);
+  const { setError: setErrorInDialogElement } = useErrorReader(alertVariables.showDialog);
 
-  const { executionState } = useExecutionStatusContext();
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: async () => {
-      let fetchProject = await getProjectById(
-        token,
-        getValuesProject("id") ?? -1
-      );
-      let front = false;
-      let back = false;
-      let inte = false;
-      setIsLoading(true);
-      if (
-        type == "create" ||
-        (executionState &&
-          fetchProject &&
-          fetchProject.estado_ejecucion == executionState)
-      ) {
-        if (filesRepo.backend != null) {
-          await postFileToRepository(
-            token,
-            filesRepo.backend,
-            getValuesProject("backend.id") ?? -1
-          );
-          back = true;
-        }
-        if (filesRepo.frontend != null) {
-          await postFileToRepository(
-            token,
-            filesRepo.frontend,
-            getValuesProject("frontend.id") ?? -1
-          );
-          front = true;
-        }
-        if (filesRepo.integrado != null) {
-          await postFileToRepository(
-            token,
-            filesRepo.integrado,
-            getValuesProject("integrado.id") ?? -1
-          );
-          inte = true;
-        }
-
-        const { frontend, backend, integrado } = adaptProject(
-          await getProjectById(token, getValuesProject("id") ?? -1)
-        );
-
-        const myData = getValues();
-
-        if (myData.frontend && front) {
-          myData.frontend.url = frontend?.url ?? "";
-        }
-
-        if (myData.backend && back) {
-          myData.backend.url = backend?.url ?? "";
-        }
-
-        if (myData.integrado && inte) {
-          myData.integrado.url = integrado?.url ?? "";
-        }
-
-        const setFicheros = async (field: KeysOfRepository) => {
-          const ficheros = getValuesProject(`${field}.ficheros`);
-
-          const id = getValuesProject(`${field}.id`) ?? -1;
-          if (ficheros) {
-            for (const fichero of ficheros) {
-              if (fichero.id) await deleteFichero(token, fichero.id);
-            }
-          }
-          const currentFicheros = getValues(`${field}.ficheros`);
-
-          if (currentFicheros) {
-            for (const fichero of currentFicheros) {
-              await postFichero(token, fichero, id);
-            }
-          }
-        };
-
-        await patchEditRepository(token, myData);
-
-        await setFicheros("backend");
-        await setFicheros("frontend");
-        await setFicheros("integrado");
-
-        return;
-      }
-
-      syncErrorProject();
-    },
-  });
-
-  type FilesRepo = Record<KeysOfRepository, File | null>;
-
-  const [filesRepo, setFilesRepo] = useState<FilesRepo>({
+  const [filesRepo, setFilesRepo] = useState<FilesRepository>({
     backend: null,
     frontend: null,
     integrado: null,
   });
 
-  function InputFile({
-    layer,
-    disabled,
-  }: {
-    layer: KeysOfRepository;
-    disabled: boolean;
-  }) {
-    function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-      const { files } = e.target;
+  const { executionState: currentStateOfProject } = useExecutionStatusContext();
 
-      if (!files || !files[0]) {
-        setFilesRepo({ ...filesRepo, [layer]: null });
-      } else {
-        setFilesRepo({ ...filesRepo, [layer]: files[0] });
-        if (hasValidExtension(files[0].name, "SOURCE_CODE"))
-          setValue(`${layer}.file`, true);
-        else {
-          setValue(`${layer}.file`, null);
-          setFilesRepo({ ...filesRepo, [layer]: null });
-          showError();
-        }
+  async function setChangeInProjectRepositories() {
+    let fetchProject = await getProjectById(token, getValuesProject("id") ?? -1);
+    let front = false;
+    let back = false;
+    let inte = false;
+    alertVariables.setIsLoading(true);
+    if (
+      type == "create" ||
+      (currentStateOfProject &&
+        fetchProject &&
+        fetchProject.estado_ejecucion == currentStateOfProject)
+    ) {
+      if (filesRepo.backend != null) {
+        await postFileToRepository(token, filesRepo.backend, getValuesProject("backend.id") ?? -1);
+        back = true;
       }
+      if (filesRepo.frontend != null) {
+        await postFileToRepository(
+          token,
+          filesRepo.frontend,
+          getValuesProject("frontend.id") ?? -1
+        );
+        front = true;
+      }
+      if (filesRepo.integrado != null) {
+        await postFileToRepository(
+          token,
+          filesRepo.integrado,
+          getValuesProject("integrado.id") ?? -1
+        );
+        inte = true;
+      }
+
+      const { frontend, backend, integrado } = adaptProject(
+        await getProjectById(token, getValuesProject("id") ?? -1)
+      );
+
+      const myData = getValues();
+
+      if (myData.frontend && front) {
+        myData.frontend.url = frontend?.url ?? "";
+      }
+
+      if (myData.backend && back) {
+        myData.backend.url = backend?.url ?? "";
+      }
+
+      if (myData.integrado && inte) {
+        myData.integrado.url = integrado?.url ?? "";
+      }
+
+      const setFicheros = async (field: KeysOfRepository) => {
+        const ficheros = getValuesProject(`${field}.ficheros`);
+
+        const id = getValuesProject(`${field}.id`) ?? -1;
+        if (ficheros) {
+          for (const fichero of ficheros) {
+            if (fichero.id) await deleteFichero(token, fichero.id);
+          }
+        }
+        const currentFicheros = getValues(`${field}.ficheros`);
+
+        if (currentFicheros) {
+          for (const fichero of currentFicheros) {
+            await postFichero(token, fichero, id);
+          }
+        }
+      };
+
+      await patchEditRepository(token, myData);
+
+      await setFicheros("backend");
+      await setFicheros("frontend");
+      await setFicheros("integrado");
+
+      return;
     }
 
-    function handleDelete() {
-      setValue(`${layer}.file`, null);
-      setFilesRepo({ ...filesRepo, [layer]: null });
-    }
-
-    function showError() {
-      showDialog({
-        message: msgNoValidExtension("SOURCE_CODE"),
-        type: "error",
-        onAccept: handleClose,
-        title: "Archivo no válido",
-      });
-    }
-
-    return (
-      <Stack direction={"row"} alignItems={"center"} spacing={1}>
-        <Button
-          component="label"
-          role={undefined}
-          variant="contained"
-          disabled={disabled}
-          tabIndex={-1}
-          startIcon={<FolderZipIcon />}
-        >
-          {!filesRepo[layer]?.name ? "Subir fichero" : filesRepo[layer]?.name}
-          <HiddenButton
-            type="file"
-            accept={VALID_EXTENSIONS.SOURCE_CODE.join(", ")}
-            onChange={onChange}
-          />
-        </Button>
-        <Tooltip
-          title={`Código fuente en formato comprimido (${VALID_EXTENSIONS.SOURCE_CODE.join(", ")})`}
-        >
-          <HelpOutlineIcon />
-        </Tooltip>
-        <Tooltip title="Eliminar Archivo">
-          <IconButton
-            onClick={handleDelete}
-            disabled={filesRepo[layer] == null}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      </Stack>
-    );
+    syncErrorProject();
   }
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: setChangeInProjectRepositories,
+  });
 
   function handleMutate(options: { isEdit: boolean }) {
     mutate(undefined, {
       onSuccess: () => {
         if (options.isEdit) {
-          showDialog({
+          alertVariables.showDialog({
             message: "Repositorios actualizados correctamente",
             type: "success",
             title: "Éxito",
             onAccept: () => {
-              handleClose;
+              alertVariables.handleClose;
             },
             reload: true,
           });
@@ -307,19 +192,18 @@ export function Repositories({ type }: Props) {
         }
       },
       onError: (error) => {
-        setError(error);
+        setErrorInDialogElement(error);
       },
     });
   }
 
   function onSubmit() {
     if (type === "edit") {
-      showDialog({
+      alertVariables.showDialog({
         title: "Cambios Repositorio",
-        message:
-          "¿Está seguro de que desea modificar la información de repositorios?",
+        message: "¿Está seguro de que desea modificar la información de repositorios?",
         onAccept: () => handleMutate({ isEdit: true }),
-        onCancel: () => handleClose(),
+        onCancel: () => alertVariables.handleClose(),
         isLoading: isPending,
       });
     } else {
@@ -327,208 +211,205 @@ export function Repositories({ type }: Props) {
     }
   }
 
-  const isDisabled = executionState === "N";
+  const isDisabled = currentStateOfProject === "N";
+
+  const [selectLayer, setSelectLayer] = useState<KeysOfRepository | undefined>(undefined);
+
+  useEffect(() => {
+    if (getValuesProject("integrado")) setSelectLayer("integrado");
+
+    if (getValuesProject("backend")) setSelectLayer("backend");
+
+    if (getValuesProject("frontend")) setSelectLayer("frontend");
+  }, [getValuesProject("backend"), getValuesProject("frontend"), getValuesProject("integrado")]);
 
   return (
     <>
       <AlertDialog
-        open={open}
-        title={title}
-        textBody={message}
-        isLoading={isLoading}
-        type={dialogType}
-        handleAccept={handleAccept}
-        handleCancel={handleCancel}
+        open={alertVariables.open}
+        title={alertVariables.title}
+        textBody={alertVariables.message}
+        isLoading={alertVariables.isLoading}
+        type={alertVariables.type}
+        handleAccept={alertVariables.handleAccept}
+        handleCancel={alertVariables.handleCancel}
       />
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Stack spacing={3}>
             <Stack>
-              {type == 'edit' && <TransitionAlert severity="warning">
-                {
-                  "Para que surjan efecto los cambios realizados en esta sección, se requiere volver a desplegar el aplicativo"
-                }
-              </TransitionAlert>}
-              <Typography variant="h5">
-                {labelConfiguracion.repositorios}
-              </Typography>
+              {type == "edit" && (
+                <TransitionAlert severity="warning">
+                  {
+                    "Para que surjan efecto los cambios realizados en esta sección, se requiere volver a sincronizar el aplicativo"
+                  }
+                </TransitionAlert>
+              )}
+              <Typography variant="h5">{labelConfiguracion.repositorios}</Typography>
               <Divider />
             </Stack>
-            <Typography variant="body2">
-              {labelConfiguracion.repositoriosParrafo}
-            </Typography>
-            <Stack spacing={2}>
-              {watch("frontend") && (
-                <>
-                  <Typography variant="h6">
-                    {labelConfiguracion.frontend}
-                  </Typography>
-                  <Grid container spacing={1}>
-                    <Grid size={{ md: 7, xs: 12 }}>
-                      <Controller
-                        name="frontend.url"
-                        control={control}
-                        render={({ field, fieldState }) => (
-                          <TextField
-                            size="small"
-                            {...field}
-                            fullWidth
-                            disabled={filesRepo.frontend != null || isDisabled}
-                            label={labelConfiguracion.urlFrontend}
-                            error={!!fieldState.error}
-                            helperText={fieldState.error?.message}
-                            inputRef={field.ref}
-                            slotProps={{
-                              input: {
-                                endAdornment: (
-                                  <InputAdornment position="end">
-                                    <GitHubIcon />
-                                    <GitlabIcon
-                                      sx={{ marginLeft: 1, fontSize: 16 }}
-                                    />
-                                  </InputAdornment>
-                                ),
-                              },
-                            }}
-                          />
-                        )}
-                      />
-                    </Grid>
-                    <Grid size={{ md: 5, xs: 12 }}>
-                      <InputFile layer="frontend" disabled={isDisabled} />
-                    </Grid>
-                  </Grid>
-                  <TechnologyInputs
-                    fieldName="frontend"
-                    disabled={isDisabled}
-                  />
-                  <EnviromentVariablesEditor
-                    type="frontend"
-                    disabled={isDisabled}
-                  />
-                  <TablaGestionarFicheros
-                    field="frontend"
-                    disabled={isDisabled}
-                  />
-                </>
-              )}
+            <Typography variant="body2">{labelConfiguracion.repositoriosParrafo}</Typography>
 
-              {watch("backend") && (
-                <>
-                  <Typography variant="h6">
-                    {labelConfiguracion.backend}
-                  </Typography>
-                  <Grid container spacing={1}>
-                    <Grid size={{ md: 7, xs: 12 }}>
-                      <Controller
-                        name="backend.url"
-                        control={control}
-                        render={({ field, fieldState }) => (
-                          <TextField
-                            size="small"
-                            {...field}
-                            fullWidth
-                            disabled={filesRepo.backend != null || isDisabled}
-                            label={labelConfiguracion.urlRepositorio}
-                            error={!!fieldState.error}
-                            helperText={fieldState.error?.message}
-                            inputRef={field.ref}
-                            slotProps={{
-                              input: {
-                                endAdornment: (
-                                  <InputAdornment position="end">
-                                    <GitHubIcon />
-                                    <GitlabIcon
-                                      sx={{ marginLeft: 1, fontSize: 16 }}
-                                    />
-                                  </InputAdornment>
-                                ),
-                              },
-                            }}
-                          />
-                        )}
-                      />
-                    </Grid>
-                    <Grid size={{ md: 5, xs: 12 }}>
-                      <InputFile layer="backend" disabled={isDisabled} />
-                    </Grid>
-                  </Grid>
-                  <TechnologyInputs disabled={isDisabled} fieldName="backend" />
-                  <EnviromentVariablesEditor
-                    disabled={isDisabled}
-                    type="backend"
-                  />
-                  <TablaGestionarFicheros
-                    field="backend"
-                    disabled={isDisabled}
-                  />
-                </>
-              )}
+            <TransitionAlert severity="info">
+              {"Se requiere que los repositorios se encuentren en estado público"}
+            </TransitionAlert>
 
-              {watch("integrado") && (
-                <>
-                  <Typography variant="h6">
-                    {labelConfiguracion.integrado}
-                  </Typography>
-                  <Grid container spacing={1}>
-                    <Grid size={{ md: 7, xs: 12 }}>
-                      <Controller
-                        name="integrado.url"
-                        control={control}
-                        render={({ field, fieldState }) => (
-                          <TextField
-                            size="small"
-                            {...field}
-                            fullWidth
-                            label={labelConfiguracion.urlRepositorio}
-                            error={!!fieldState.error}
-                            helperText={fieldState.error?.message}
-                            disabled={filesRepo.integrado != null || isDisabled}
-                            inputRef={field.ref}
-                            slotProps={{
-                              input: {
-                                endAdornment: (
-                                  <InputAdornment position="end">
-                                    <GitHubIcon />
-                                    <GitlabIcon
-                                      sx={{ marginLeft: 1, fontSize: 16 }}
-                                    />
-                                  </InputAdornment>
-                                ),
-                              },
-                            }}
-                          />
-                        )}
-                      />
-                    </Grid>
-                    <Grid size={{ md: 5, xs: 12 }}>
-                      <InputFile layer="integrado" disabled={isDisabled} />
-                    </Grid>
+            {selectLayer && selectLayer != "integrado" && (
+              <>
+                <SelectorLayer selectLayer={selectLayer} setSelectLayer={setSelectLayer} />
+              </>
+            )}
+
+            {selectLayer == "frontend" && watch("frontend") && (
+              <>
+                <Typography variant="h6">{labelConfiguracion.frontend}</Typography>
+                <Grid container spacing={1}>
+                  <Grid size={{ md: 7, xs: 12 }}>
+                    <Controller
+                      name="frontend.url"
+                      control={control}
+                      render={({ field, fieldState }) => (
+                        <TextField
+                          size="small"
+                          {...field}
+                          fullWidth
+                          disabled={filesRepo.frontend != null || isDisabled}
+                          label={labelConfiguracion.urlRepositorio}
+                          error={!!fieldState.error}
+                          helperText={fieldState.error?.message}
+                          inputRef={field.ref}
+                          slotProps={{
+                            input: {
+                              endAdornment: (
+                                <InputAdornment position="end">
+                                  <GitHubIcon />
+                                  <GitlabIcon sx={{ marginLeft: 1, fontSize: 16 }} />
+                                </InputAdornment>
+                              ),
+                            },
+                          }}
+                        />
+                      )}
+                    />
                   </Grid>
-                  <TechnologyInputs
-                    disabled={isDisabled}
-                    fieldName="integrado"
-                  />
-                  <EnviromentVariablesEditor
-                    disabled={isDisabled}
-                    type="integrado"
-                  />
-                  <TablaGestionarFicheros
-                    field="integrado"
-                    disabled={isDisabled}
-                  />
-                </>
-              )}
-            </Stack>
+                  <Grid size={{ md: 5, xs: 12 }}>
+                    <InputFileForRepository
+                      layer="frontend"
+                      disabled={isDisabled}
+                      alertVariables={alertVariables}
+                      files={filesRepo}
+                      setFiles={setFilesRepo}
+                      setValue={setValue}
+                    />
+                  </Grid>
+                </Grid>
+                <TechnologyInputs fieldName="frontend" disabled={isDisabled} />
+                <ExtraFiles isDisabled={isDisabled} layer="frontend" />
+              </>
+            )}
+
+            {selectLayer == "backend" && watch("backend") && (
+              <>
+                <Typography variant="h6">{labelConfiguracion.backend}</Typography>
+                <Grid container spacing={1}>
+                  <Grid size={{ md: 7, xs: 12 }}>
+                    <Controller
+                      name="backend.url"
+                      control={control}
+                      render={({ field, fieldState }) => (
+                        <TextField
+                          size="small"
+                          {...field}
+                          fullWidth
+                          disabled={filesRepo.backend != null || isDisabled}
+                          label={labelConfiguracion.urlRepositorio}
+                          error={!!fieldState.error}
+                          helperText={fieldState.error?.message}
+                          inputRef={field.ref}
+                          slotProps={{
+                            input: {
+                              endAdornment: (
+                                <InputAdornment position="end">
+                                  <GitHubIcon />
+                                  <GitlabIcon sx={{ marginLeft: 1, fontSize: 16 }} />
+                                </InputAdornment>
+                              ),
+                            },
+                          }}
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid size={{ md: 5, xs: 12 }}>
+                    <InputFileForRepository
+                      layer="backend"
+                      disabled={isDisabled}
+                      alertVariables={alertVariables}
+                      files={filesRepo}
+                      setFiles={setFilesRepo}
+                      setValue={setValue}
+                    />
+                  </Grid>
+                </Grid>
+                <TechnologyInputs disabled={isDisabled} fieldName="backend" />
+                <ExtraFiles isDisabled={isDisabled} layer="backend" />
+              </>
+            )}
+
+            {selectLayer == "integrado" && watch("integrado") && (
+              <>
+                <Typography variant="h6">{labelConfiguracion.integrado}</Typography>
+                <Grid container spacing={1}>
+                  <Grid size={{ md: 7, xs: 12 }}>
+                    <Controller
+                      name="integrado.url"
+                      control={control}
+                      render={({ field, fieldState }) => (
+                        <TextField
+                          size="small"
+                          {...field}
+                          fullWidth
+                          label={labelConfiguracion.urlRepositorio}
+                          error={!!fieldState.error}
+                          helperText={fieldState.error?.message}
+                          disabled={filesRepo.integrado != null || isDisabled}
+                          inputRef={field.ref}
+                          slotProps={{
+                            input: {
+                              endAdornment: (
+                                <InputAdornment position="end">
+                                  <GitHubIcon />
+                                  <GitlabIcon sx={{ marginLeft: 1, fontSize: 16 }} />
+                                </InputAdornment>
+                              ),
+                            },
+                          }}
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid size={{ md: 5, xs: 12 }}>
+                    <InputFileForRepository
+                      layer="integrado"
+                      disabled={isDisabled}
+                      alertVariables={alertVariables}
+                      files={filesRepo}
+                      setFiles={setFilesRepo}
+                      setValue={setValue}
+                    />
+                  </Grid>
+                </Grid>
+                <TechnologyInputs disabled={isDisabled} fieldName="integrado" />
+                <ExtraFiles isDisabled={isDisabled} layer="integrado" />
+              </>
+            )}
 
             <Stack alignItems={"end"}>
               {!isDisabled && (
                 <Box>
                   <GeneralButton
                     loading={isPending}
-                    mode={
-                      type == "create" ? buttonTypes.next : buttonTypes.save
-                    }
+                    mode={type == "create" ? buttonTypes.next : buttonTypes.save}
                     type="submit"
                   />
                 </Box>

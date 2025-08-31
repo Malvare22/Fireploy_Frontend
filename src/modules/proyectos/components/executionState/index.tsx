@@ -18,7 +18,6 @@ import {
   useTheme,
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import ErrorIcon from "@mui/icons-material/Error";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -31,6 +30,7 @@ import { useExecutionStatusContext } from "@modules/proyectos/context/executionS
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { openInNewTab } from "@modules/general/utils/openTab";
+import CloudSyncIcon from "@mui/icons-material/CloudSync";
 
 type Props = {
   projectStatus: EstadoEjecucionProyecto;
@@ -385,11 +385,11 @@ export function ChangeStatus({ id, hasUrl }: PropsChangeStatus) {
       <Box>
         <Button
           variant="contained"
-          endIcon={<RocketLaunchIcon />}
+          endIcon={<CloudSyncIcon />}
           onClick={() => handleAction("D")}
           loading={isLoading || projectStatus == "L"}
         >
-          {"Desplegar"}
+          {"Sincronizar"}
         </Button>
       </Box>
       <Tooltip title="Reanudar Proyecto">
@@ -554,9 +554,9 @@ export function ChangeStatusForTable({
 
   return (
     <>
-      <Tooltip title="Desplegar Proyecto">
+      <Tooltip title="Sincronizar Proyecto">
         <IconButton onClick={() => handleAction("D")} loading={isLoading || currentStatus == "L"}>
-          <RocketLaunchIcon fontSize="medium" />
+          <CloudSyncIcon fontSize="medium" />
         </IconButton>
       </Tooltip>
       <Tooltip title="Reanudar Proyecto">

@@ -81,3 +81,37 @@ export const RepositorioSchema: z.ZodType<Omit<Repositorio, 'ficheros'>> = z
 */
 export type RepositorioSchema = z.infer<typeof RepositorioSchema>
 
+/**
+ * EnvTester – Zod schema to validate environment variables 
+ * and related repository information.
+ * 
+ * - `variables`: must be a string (can be empty).
+ * - `informacion`: requires both `tecnologia` and `framework`.
+ * - Refinement: validates variables using transformStringToKV 
+ *   and frameworkValidation.
+ */
+export const EnvValidator = z
+  .object({
+    variables: z.string(),
+    framework: z.string({ message: "Es obligatorio seleccionar un framework" }),
+
+  })
+  .refine((data) => {
+    if (data.variables.length === 0) return true;
+
+    const transformed = transformStringToKV(data.variables);
+
+    if (transformed) {
+      return frameworkValidation(
+        data.framework as TECNOLOGIES,
+        transformed.map(({ clave }) => clave)
+      );
+    }
+    return true;
+  }, {
+    message:
+      "Una o más variables coinciden con las que se encuentran restringidas o presentan errores de sintaxis",
+    path: ["variables"],
+  });
+
+export type EnvValidator = z.infer<typeof EnvValidator>;
