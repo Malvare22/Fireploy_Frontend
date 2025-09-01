@@ -20,7 +20,7 @@ export enum REFERENCE_TO_SITES {
     TEMPLATE_LARAVEL = "https://github.com/FireployOfficial/Template-Laravel",
 
     //DOCs
-    DOC_TEMPLATES = "http://fireploy.online:3001/docs/introduccion",
+    DOC_TEMPLATES = "https://github.com/FireployOfficialhttps://app103.proyectos.fireploy.online/docs/estudiante/usuario-general/proyectos/introduccion/#templates",
     DOC_HTML = "https://developer.mozilla.org/es/docs/Web/HTML",
     DOC_ANGULAR = "https://angular.dev/",
     DOC_REACT = "https://es.react.dev/",
@@ -35,4 +35,6 @@ export enum REFERENCE_TO_SITES {
     DOC_PHP = "https://www.php.net/",
     DOC_SYMFONY = "https://symfony.com/",
     DOC_LARAVEL = "https://laravel.com/",
+
+    BLOG_TUTORIAL_DEPLOY = 'https://app103.proyectos.fireploy.online/blog/2025/08/31/Despliegue'
 }
