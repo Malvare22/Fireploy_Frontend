@@ -139,7 +139,7 @@ function CardTecnology({
                   endIcon={<OpenInNewIcon />}
                   onClick={handleOfficial}
                   variant="contained"
-                  color="secondary"
+                  color={mode == "dark" ? "secondary" : "info"}
                   sx={{ borderRadius: 2 }}
                 >
                   <Typography variant="caption">{"Ver Documentación oficial"}</Typography>
