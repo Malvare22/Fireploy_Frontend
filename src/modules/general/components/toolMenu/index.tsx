@@ -46,6 +46,7 @@ import { rutasMaterias } from "@modules/materias/router/routes";
 import SchoolIcon from "@mui/icons-material/School";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import IntegrationInstructionsIcon from "@mui/icons-material/IntegrationInstructions";
 
 function getNavigationElements(userInformation: AccountInformation): Navigation {
   return [
@@ -108,6 +109,11 @@ function getNavigationElements(userInformation: AccountInformation): Navigation 
           segment: rutasProyectos.crear as string,
           title: "Crear Proyectos",
           icon: <NoteAddIcon sx={{ fill: "white" }} />,
+        },
+        {
+          segment: rutasProyectos.plantillas as string,
+          title: "Plantillas para Proyectos",
+          icon: <IntegrationInstructionsIcon sx={{ fill: "white" }} />,
         },
         ...(userInformation.tipo !== "A"
           ? []

@@ -193,20 +193,7 @@ function MisProyectos() {
                 <MenuItem value={""}>{labelSelects.noAplicar}</MenuItem>
               </TextField>
             </Stack>
-            <Stack alignItems={"end"}>
-              <Box>
-                <GeneralButton mode={buttonTypes.add} onClick={handleButtonAdd} />
-              </Box>
-            </Stack>
-          </Stack>
-          <Grid container spacing={4} paddingX={{ md: 6, xs: 2 }}>
-            {renderData && renderData.length > 0 ? (
-              renderData.map((proyecto, key) => (
-                <Grid size={12}>
-                  <ProjectForList proyecto={proyecto} key={key} />
-                </Grid>
-              ))
-            ) : (
+            {renderData?.length == 0 && (
               <Alert
                 severity="info"
                 color="warning"
@@ -220,6 +207,19 @@ function MisProyectos() {
                 </Stack>
               </Alert>
             )}
+            <Stack alignItems={"end"}>
+              <Box>
+                <GeneralButton mode={buttonTypes.add} onClick={handleButtonAdd} />
+              </Box>
+            </Stack>
+          </Stack>
+          <Grid container spacing={4} paddingX={{ md: 6, xs: 2 }}>
+            {renderData?.length > 0 &&
+              renderData.map((proyecto, key) => (
+                <Grid size={12}>
+                  <ProjectForList proyecto={proyecto} key={key} />
+                </Grid>
+              ))}
           </Grid>
         </Stack>
       )}
