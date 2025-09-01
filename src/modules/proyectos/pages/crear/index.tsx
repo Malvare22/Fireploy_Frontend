@@ -1,4 +1,4 @@
-import { Stack, Paper, Typography } from "@mui/material";
+import { Stack, Paper, Typography, Button, Box } from "@mui/material";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import PolylineIcon from "@mui/icons-material/Polyline";
@@ -19,6 +19,9 @@ import { ParamsContext } from "@modules/general/context/paramsContext";
 import { useParamsCustom } from "@modules/general/hooks/useParamsContext";
 import { ProjectExecutionStatusContextProvider } from "@modules/proyectos/context/executionStatus.context";
 import { AlertDialogProvider } from "@modules/general/context/alertDialogContext";
+import { openInNewTab } from "@modules/general/utils/openTab";
+import { REFERENCE_TO_SITES } from "@modules/general/enums/referencesToSites";
+import ArticleIcon from "@mui/icons-material/Article";
 
 /**
  * CrearProyecto component – A form for creating a project, utilizing a stepper to guide the user through various stages.
@@ -43,8 +46,7 @@ import { AlertDialogProvider } from "@modules/general/context/alertDialogContext
 export default function CrearProyecto() {
   const [projectId, setProjectId] = useState<number | null>(null);
 
-  const { searchParams, setSearchParams, updateSearchParams } =
-    useParamsCustom();
+  const { searchParams, setSearchParams, updateSearchParams } = useParamsCustom();
 
   useEffect(() => {
     const id = parseInt(searchParams.get("id") ?? "-1");
@@ -104,11 +106,22 @@ export default function CrearProyecto() {
               }}
             >
               <Stack spacing={3} component={Paper} padding={{ xs: 1, md: 3 }}>
-                <Stack direction={"row"} spacing={1} alignItems={"center"}>
-                  <Typography variant="h4" sx={{ fontWeight: "500" }}>
-                    {labelCreateProject.crearProyecto}
-                  </Typography>
-                  <PolylineIcon sx={{ fontSize: 32 }} />
+                <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
+                  <Stack direction={"row"} spacing={1} alignItems={"center"}>
+                    <Typography variant="h4" sx={{ fontWeight: "500" }}>
+                      {labelCreateProject.crearProyecto}
+                    </Typography>
+                    <PolylineIcon sx={{ fontSize: 32 }} />
+                  </Stack>
+                  <Box>
+                    <Button
+                      variant="contained"
+                      onClick={() => openInNewTab(REFERENCE_TO_SITES.BLOG_TUTORIAL_DEPLOY)}
+                      endIcon={<ArticleIcon />}
+                    >
+                      {"Ver Tutorial"}
+                    </Button>
+                  </Box>
                 </Stack>
                 <StepperStandard
                   activeStep={activeStep}

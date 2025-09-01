@@ -11,6 +11,8 @@ import {
   Alert,
   Link,
   Tooltip,
+  Box,
+  Button,
 } from "@mui/material";
 import { labelConfiguracion } from "@modules/proyectos/enum/labelConfiguracion";
 import { Information } from "./information";
@@ -27,12 +29,15 @@ import { ChangeStatus, ExecutionState, ShowDeployLoad } from "../executionState"
 import { useExecutionStatusContext } from "@modules/proyectos/context/executionStatus.context";
 import { Skeleton } from "@mui/material";
 import LogsFiles from "./logSection";
-import ArticleIcon from "@mui/icons-material/Article";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import DangerZone from "./others";
 import DisabledVisibleIcon from "@mui/icons-material/DisabledVisible";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useAuth } from "@modules/general/context/accountContext";
+import TransitionAlert from "@modules/general/components/transitionAlert";
+import ArticleIcon from "@mui/icons-material/Article";
+import { openInNewTab } from "@modules/general/utils/openTab";
+import { REFERENCE_TO_SITES } from "@modules/general/enums/referencesToSites";
 
 type Props = {
   project: ProyectoSchema;
@@ -137,7 +142,21 @@ export default function ProjectSettings({ project }: Props) {
               {labelConfiguracion.configuracion}
             </Typography>
             <Typography variant="subtitle1">{labelConfiguracion.configuracionParrafo}</Typography>
-
+            <TransitionAlert severity="info" >
+              <Box sx={{ display: "flex", alignItems: "center", alignContent: 'center', gap: 1}}>
+                <Typography variant="body2" >
+                  {"En caso de tener inquietudes resulta indispensable revisar el tutorial:"}
+                </Typography>
+                <Button
+                  variant="contained"
+                  onClick={() => openInNewTab(REFERENCE_TO_SITES.BLOG_TUTORIAL_DEPLOY)}
+                  endIcon={<ArticleIcon />}
+                  size='small'
+                >
+                  {"Ver Tutorial"}
+                </Button>
+              </Box>
+            </TransitionAlert>
             <Tabs
               value={tabIndex}
               onChange={(_e, newIndex) => setTabIndex(newIndex)}
