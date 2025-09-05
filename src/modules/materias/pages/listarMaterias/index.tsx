@@ -32,7 +32,7 @@ import {
   msgNoValidExtension,
 } from "@modules/general/utils/form/validExtensions";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import { postEditMateriaService } from "@modules/materias/services/patch.editar.materia";
+import { patchChangeStatusCurso } from "@modules/materias/services/patch.curso";
 
 /**
  * ListarMaterias component – A component that handles listing, searching, filtering, and displaying subjects (materias).
@@ -112,6 +112,15 @@ function ListarMaterias() {
 
   /** Transformed subject data for display */
   const materias = data ? data.map(adaptMateriaService) : [];
+
+  const bufferCursosIds = useMemo(() => {
+    if (!data) return [];
+
+    const bufferCursosIds: string[] = [];
+
+    data.forEach((materia) => materia.cursos?.forEach((curso) => bufferCursosIds.push(curso.id)));
+    return bufferCursosIds;
+  }, [data]);
 
   function handleSearchFn(x: MateriaTabla[], s: string) {
     return x.filter((y) => `${y.codigo}${y.nombre}`.toLowerCase().includes(s.toLowerCase()));
@@ -202,10 +211,9 @@ function ListarMaterias() {
     showDialog({
       message: "¿Está seguro de que desea finalizar el semestre en curso?",
       title: "Gestión de Semestre",
-      onAccept: cerrarSemestreRequest,
+      onAccept: () => cerrarSemestreRequest(),
       onCancel: handleClose,
       type: "warning",
-      reload: true,
     });
   }
 
@@ -226,13 +234,13 @@ function ListarMaterias() {
   });
 
   async function cerrarSemestreFunction() {
+    setIsLoading(true);
     return await Promise.all(
-      (materias ?? []).map((materia) =>
-        postEditMateriaService(token, {
-          ...materia,
-          estado: "I",
-        })
-      )
+      (bufferCursosIds ?? []).map((idCurso) => {
+        if (idCurso) {
+          patchChangeStatusCurso(token, idCurso, "I");
+        }
+      })
     );
   }
 
