@@ -20,7 +20,7 @@ export enum REFERENCE_TO_SITES {
     TEMPLATE_LARAVEL = "https://github.com/FireployOfficial/Template-Laravel",
 
     //DOCs
-    DOC_TEMPLATES = "https://github.com/FireployOfficialhttps://app103.proyectos.fireploy.online/docs/estudiante/usuario-general/proyectos/introduccion/#templates",
+    DOC_TEMPLATES = "https://app103.proyectos.fireploy.online/docs/estudiante/usuario-general/proyectos/introduccion/#templates",
     DOC_HTML = "https://developer.mozilla.org/es/docs/Web/HTML",
     DOC_ANGULAR = "https://angular.dev/",
     DOC_REACT = "https://es.react.dev/",

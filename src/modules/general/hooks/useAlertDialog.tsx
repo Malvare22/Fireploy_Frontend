@@ -80,7 +80,6 @@ function useAlertDialog() {
     } = options;
 
     // Update dialog state with provided options
-    console.log(message)
     setType(type);
     setMessage(message);
     setTitle(title);

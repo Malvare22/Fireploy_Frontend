@@ -22,6 +22,7 @@ export const postEditMateriaService = async (token: string, data: Materia) => {
     semestre: string;
     estado: string;
   };
+  console.log(data);
 
   const body: Body = {
     nombre: data.nombre,
