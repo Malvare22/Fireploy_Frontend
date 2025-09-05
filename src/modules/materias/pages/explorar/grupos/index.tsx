@@ -247,7 +247,7 @@ function VerCursosMateria() {
 
               <Typography variant="h4">{labelListarCursos.titulo}</Typography>
 
-              {avaliableCourses ? (
+              {avaliableCourses && avaliableCourses.length > 0 ? (
                 <>
                   <Grid container spacing={4}>
                     {avaliableCourses.map((curso) => (
