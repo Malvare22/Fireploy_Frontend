@@ -14,7 +14,6 @@ import { useModal } from "@modules/general/components/modal/hooks/useModal";
 import { useAuth } from "@modules/general/context/accountContext";
 import useAlertDialog from "@modules/general/hooks/useAlertDialog";
 import useErrorReader from "@modules/general/hooks/useErrorReader";
-import { getSemestreActual } from "@modules/general/utils/fechas";
 import CardCurso from "@modules/materias/components/cardCurso";
 import { labelListarCursos } from "@modules/materias/enums/labelListarCursos";
 import { getCursoById, getCursos } from "@modules/materias/services/get.curso";
@@ -26,10 +25,7 @@ import { adaptMateriaService } from "@modules/materias/utils/adapters/materia.se
 import { getSolicitudes } from "@modules/usuarios/services/get.solicitudes";
 import {
   Alert,
-  Box,
   Card,
-  Checkbox,
-  FormControlLabel,
   Grid,
   Stack,
   Typography,
@@ -199,25 +195,14 @@ function VerCursosMateria() {
 
   const { cursos, materia } = data ?? {};
 
-  const [showOldSemesters, setShowOldSemesters] = useState<boolean>(false);
-
   const avaliableCourses = useMemo(() => {
-    if (!data) return [];
+    if (!data || !materia) return [];
 
-    if (showOldSemesters) {
       const cursosDisponibles = cursos?.filter((curso) => curso.estado == "A");
+     
       return cursosDisponibles;
-    } else {
-      const cursosDisponibles = cursos?.filter(
-        (curso) => curso.estado == "A" && curso.semestre == getSemestreActual()
-      );
-      return cursosDisponibles;
-    }
-  }, [data, showOldSemesters]);
-
-  const toggleShowOldSemesters = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setShowOldSemesters(event.target.checked);
-  };
+    
+  }, [data]);
 
   return (
     <>
@@ -261,12 +246,6 @@ function VerCursosMateria() {
               </Card>
 
               <Typography variant="h4">{labelListarCursos.titulo}</Typography>
-              <Box sx={{ display: "inline-flex" }}>
-                <FormControlLabel
-                  control={<Checkbox onChange={toggleShowOldSemesters} />}
-                  label="Mostrar semestres anteriores"
-                />
-              </Box>
 
               {avaliableCourses ? (
                 <>
