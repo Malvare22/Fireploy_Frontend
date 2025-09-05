@@ -1,5 +1,5 @@
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
-import DnsIcon from '@mui/icons-material/Dns';
+import DnsIcon from "@mui/icons-material/Dns";
 import {
   Box,
   Button,
@@ -14,6 +14,7 @@ import {
 import styles from "./home.module.css";
 import {
   BracesAsteriskIcon,
+  CodeSquareIcon,
   DatabaseFillGearIcon,
   PaletteIcon,
   PersonLinesFillIcon,
@@ -37,7 +38,7 @@ import { REFERENCE_TO_SITES } from "@modules/general/enums/referencesToSites";
 
 export enum labelHome {
   princialContent = "Despliega tus aplicativos web de manera automática",
-  principalButton = "Comienza tu viaje",
+  principalButton = "Mi primer proyecto",
 
   offersTitle = "Ofrecemos",
   offersContent1 = "Despliegue de aplicaciones",
@@ -90,8 +91,6 @@ export enum labelHome {
  * @returns {JSX.Element} The home page layout with sections showcasing content and actions.
  */
 export default function Home() {
-
-
   const theme = useTheme();
   return (
     <Box>
@@ -117,7 +116,9 @@ function Principal() {
   // const navigate = useNavigate();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
 
-  const navigate = useNavigate();
+  const handleMyFirstProject = () => {
+    openInNewTab(REFERENCE_TO_SITES.BLOG_TUTORIAL_DEPLOY);
+  };
 
   return (
     <>
@@ -159,7 +160,8 @@ function Principal() {
                 <Button
                   variant="contained"
                   size={!matches ? "medium" : "large"}
-                  onClick={() => navigate(rutasGeneral.login)}
+                  endIcon={<CodeSquareIcon />}
+                  onClick={() => handleMyFirstProject()}
                 >
                   {labelHome.principalButton}
                 </Button>
@@ -265,7 +267,11 @@ function Deploy() {
       labelHome.deployHTTPSBody,
     ],
     [<DnsIcon sx={{ fontSize: 72 }} />, labelHome.deployLayersTitle, labelHome.deployLayersBody],
-    [<ShareFillIcon sx={{ fontSize: 72 }} />, labelHome.deployShareTitle, labelHome.deployShareBody],
+    [
+      <ShareFillIcon sx={{ fontSize: 72 }} />,
+      labelHome.deployShareTitle,
+      labelHome.deployShareBody,
+    ],
   ];
 
   const navigate = useNavigate();
@@ -299,7 +305,7 @@ function Deploy() {
           {content.map(([icono, titulo, subtitulo]) => {
             return (
               <Grid
-                size={{md:6, xs: 12}}
+                size={{ md: 6, xs: 12 }}
                 component={Paper}
                 variant="dark"
                 sx={{
@@ -308,9 +314,14 @@ function Deploy() {
                   borderRadius: 2,
                 }}
               >
-                <Grid container spacing={2} sx={{height: '100%'}}>
-                  <Grid size={{xs: 12, sm: 2}} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>{icono}</Grid>
-                  <Grid size={{xs: 12, sm: 10}} sx={{height: '100%'}}>
+                <Grid container spacing={2} sx={{ height: "100%" }}>
+                  <Grid
+                    size={{ xs: 12, sm: 2 }}
+                    sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+                  >
+                    {icono}
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 10 }} sx={{ height: "100%" }}>
                     <Stack spacing={1}>
                       <Typography variant="h5">{titulo}</Typography>
                       <Typography>{subtitulo}</Typography>
@@ -341,7 +352,12 @@ function PortafolioSection() {
   }
 
   return (
-    <Grid container sx={{ color: "white", marginX: { md: 20 }, padding: 4 }} direction={{xs: 'column-reverse', md: 'row'}} spacing={4}>
+    <Grid
+      container
+      sx={{ color: "white", marginX: { md: 20 }, padding: 4 }}
+      direction={{ xs: "column-reverse", md: "row" }}
+      spacing={4}
+    >
       <Grid size={{ md: 5, xs: 12 }}>
         <Box
           component={"img"}
