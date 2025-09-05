@@ -145,7 +145,7 @@ export default function ProjectSettings({ project }: Props) {
             <TransitionAlert severity="info" >
               <Box sx={{ display: "flex", alignItems: "center", alignContent: 'center', gap: 1}}>
                 <Typography variant="body2" >
-                  {"En caso de tener inquietudes resulta indispensable revisar el tutorial:"}
+                  {"En caso de tener inquietudes recomendamos revisar el tutorial:"}
                 </Typography>
                 <Button
                   variant="contained"
